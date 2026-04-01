@@ -1,5 +1,58 @@
 export const businessItems = [
-  // ── COURSES ──────────────────────────────────────────────────────────────
+  // ── COURSES
+  {
+    category: "Course",
+    title: "The 4 Vectors: Bearden's Foundation of Physical Reality",
+    tagline: "The single conflation error that hid vacuum energy from physics for 140 years",
+    price: "$147",
+    audience: "Engineers, physicists, advanced students, inventors",
+    description: "A focused 5-module course on Bearden's Parts 3 & 4 vector taxonomy. Walks through the four distinct vector types, shows why conflating them breaks vacuum energy theory, and demonstrates how separating massless spatial vectors from charged mass vectors opens the door to scalar engineering. Includes worked examples from the original 1983 diagrams.",
+    modules: [
+      "Module 1 – Why One Symbol Broke Physics: The 4-Vector Conflation",
+      "Module 2 – Massless Spatial vs Mass System Vectors (Geometer vs Mechanic)",
+      "Module 3 – Charged Mass vs Charged Spatial Vectors (Electrician's Trap)",
+      "Module 4 – Force Is an Effect: F = [Ma + mv] Unpacked",
+      "Module 5 – E-Fields Don't Exist in Vacuum: What Does",
+    ],
+    source: "Bearden 'Toward a New Electromagnetics Part 3' (1983)",
+    color: "#3b82f6", icon: "📐",
+  },
+  {
+    category: "Course",
+    title: "Scalar Longitudinal Wave Engineering: Theory to Device",
+    tagline: "Build, detect, and apply EM waves with no E or B field",
+    price: "$247",
+    audience: "Electrical engineers, RF engineers, advanced experimenters, defense R&D",
+    description: "Covers Bearden's Part 4 longitudinal wave mechanics: production via Translator devices, why normal detectors are blind, scalar pulse radar (range from scalar-vs-Hertz time difference), energy bottle formation, and nonlinear media conversion between transverse and scalar wave modes. All original 1983 circuit diagrams included.",
+    modules: [
+      "Module 1 – What Makes a Wave Longitudinal: E=0, B=0, gradient-phi ≠ −E",
+      "Module 2 – The Translator Device: Converting Transverse to Scalar",
+      "Module 3 – Why Normal Detectors Are Blind (and How to Build a Special One)",
+      "Module 4 – Scalar Pulse Radar: Range Without Hertz Reflection",
+      "Module 5 – Energy Bottle: Two-Transmitter Interference Architecture",
+      "Module 6 – Standing Scalar Waves in Magnetic Materials",
+    ],
+    source: "Bearden 'Toward a New Electromagnetics Part 4' (1983)",
+    color: "#3b82f6", icon: "📡",
+  },
+  {
+    category: "Course",
+    title: "Anenergy: Engineering the Phi-Field for Free Energy Extraction",
+    tagline: "The Moray Effect, Kervran Effect, and Reich Effect — one unified mechanism",
+    price: "$197",
+    audience: "Free energy researchers, inventors, vacuum energy engineers",
+    description: "Deep dive into Bearden's anenergy pump from Part 4. Covers: phi-field vs energy distinction, the free anenergy pump circuit, trapped charge extraction, oscillated phi for Moray-type emission, nuclear effects (Kervran transmutation, Reich radioactivity acceleration), and the full massless charge cycle.",
+    modules: [
+      "Module 1 – Phi vs Energy: The Anenergy Distinction",
+      "Module 2 – The Free Anenergy Pump Circuit (with original diagrams)",
+      "Module 3 – Trapped Charge Extraction: Getting Work from Vacuum",
+      "Module 4 – Oscillated Phi: The Moray Steady-State Mechanism",
+      "Module 5 – Nuclear Phi-Effects: Kervran, Reich, and Element Transmutation",
+      "Module 6 – The Massless Charge Cycle: Full Conservation Picture",
+    ],
+    source: "Bearden 'Toward a New Electromagnetics Part 4' (1983); Moray, Kervran, Reich references",
+    color: "#22c55e", icon: "⚡",
+  },
   {
     category: "Course",
     title: "Scalar Electromagnetics: From Maxwell to Bearden",
@@ -79,7 +132,18 @@ export const businessItems = [
     source: "Bearden Gravitobiology (1991/2019 Energetic Productions)",
     color: "#a855f7", icon: "🧫",
   },
-  // ── BOOKS / PDFs ─────────────────────────────────────────────────────────
+  // ── BOOKS / PDFs
+  {
+    category: "Book/PDF",
+    title: "Vectors & Mechanisms Clarified: Parts 3 & 4 Annotated",
+    tagline: "The 1983 papers that rebuilt physics from first principles — decoded",
+    price: "$39 PDF / $69 print",
+    audience: "Physicists, engineers, researchers, inventors",
+    description: "Fully annotated edition of Bearden's 'Toward a New Electromagnetics' Parts 3 & 4 (1983). Every diagram reproduced with modern plain-English commentary: 4-vector taxonomy, force-as-effect framework, anenergy pump, energy bottle architecture, scalar pulse radar, and standing scalar wave patterns. Includes all original figures.",
+    modules: [],
+    source: "Bearden Parts 3 & 4 (1983); all uploaded figures",
+    color: "#f59e0b", icon: "📐",
+  },
   {
     category: "Book/PDF",
     title: "The Annotated Bearden: Primary Sources with Commentary",
@@ -124,7 +188,7 @@ export const businessItems = [
     source: "Bearden Gravitobiology 1991; Cheniere Media 2019 edition",
     color: "#f59e0b", icon: "📗",
   },
-  // ── PRODUCTS ─────────────────────────────────────────────────────────────
+  // ── PRODUCTS
   {
     category: "Product",
     title: "Bearden Concept Research Deck (Card Set)",
@@ -158,7 +222,37 @@ export const businessItems = [
     source: "Bearden 1982 technical papers",
     color: "#06b6d4", icon: "📝",
   },
-  // ── INVENTIONS ───────────────────────────────────────────────────────────
+  // ── INVENTIONS
+  {
+    category: "Invention",
+    title: "Anenergy Pump Demonstration Circuit",
+    tagline: "Physical demonstration of phi-field extraction — the Moray mechanism in a kit",
+    price: "$129 kit / $49 plans PDF",
+    audience: "Free energy researchers, electrical engineers, advanced hobbyists, university labs",
+    description: "Tabletop demonstration circuit implementing Bearden's Part 4 anenergy pump: shielded toroidal coil geometry where gradient-phi inside = 0 while phi > phi-zero is maintained by oscillated phi-application. Includes pulse controller, phi-differential measurement points, and Moray-type oscillation cycle documentation.",
+    modules: [],
+    source: "Bearden 'Toward a New Electromagnetics Part 4' (1983) — anenergy pump figures",
+    color: "#ef4444", icon: "🔋",
+    problem: "No commercial instrument demonstrates the phi-field / anenergy distinction from conventional EM energy. University labs have no hands-on apparatus for Bearden's Part 4 vacuum extraction mechanism.",
+    beardenSolution: "Part 4: free anenergy pump creates gradient-phi=0 internally but phi>phi-zero — trapped charges connected via wire to ground produce gradient-phi in the wire and conventional current. Oscillating phi-application produces steady Moray-type emission.",
+    market: "Alternative energy research equipment ($340M); university physics demonstration market ($220M); advanced hobbyist electronics ($45M plans market on Gumroad/Tindie).",
+    feasibility: "Standard toroidal coil winding. DDS pulse controller. All COTS components. Buildable for under $80 in components.",
+  },
+  {
+    category: "Invention",
+    title: "Scalar Energy Bottle Interferometer (Research Prototype)",
+    tagline: "Two-transmitter zero-vector interference zone — tabletop energy capture demonstration",
+    price: "$2,800 prototype / $349 engineering plans",
+    audience: "Defense R&D labs, scalar EM researchers, advanced physics experimenters",
+    description: "Two-transmitter scalar EM system creating a controlled Energy Bottle interference zone with E=0, B=0 output from each transmitter. Includes scalar pulse timing circuit for range determination (scalar pulse arrives instantaneously; Hertz pulse delayed by range = c*Δt), and dual-detector panel showing conventional spectrum analyzer vs scalar detector differential.",
+    modules: [],
+    source: "Bearden 'Toward a New Electromagnetics Part 4' (1983) — energy bottle figures, scalar pulse radar diagrams",
+    color: "#ef4444", icon: "🎯",
+    problem: "Scalar EM weapon/sensor concepts (Energy Bottle, ō-wave transmitter pairs, scalar pulse radar) exist only in Bearden's 1983 diagrams. No prototype demonstrates the interference zone or scalar pulse timing mechanism.",
+    beardenSolution: "Part 4 shows exact geometry: two zero-vector transmitters create target interference zone. Scalar pulse arrives instantaneously; Hertz pulse delayed by range = c*delta-t. Dual-detector system demonstrates differential detection signature invisible to standard instruments.",
+    market: "DoD directed energy research ($9.3B); DARPA unconventional EM ($340M); defense electronics test equipment ($2.1B).",
+    feasibility: "Zero-vector transmitter uses balanced push-pull coil topology to cancel transverse EM output. FPGA timing at nanosecond resolution. All COTS sub-components. Plans include interference zone calculation software.",
+  },
   {
     category: "Invention",
     title: "Vacuum Potential Oscillator (VPO) Circuit Kit",
@@ -264,7 +358,7 @@ export const businessItems = [
     market: "Secure military communications ($28B); directed energy countermeasures ($9.3B DARPA interest); advanced photonics ($850M phase conjugate optics research). Dual-use civilian/defense creates multiple investor tracks.",
     feasibility: "Phase conjugate mirrors are validated laboratory technology (documented in mainstream physics literature). The Bearden extension adds Whittaker wave structure analysis. Initial prototype uses nonlinear optical medium (BaTiO₃ crystal) — commercially available.",
   },
-  // ── SERVICES ─────────────────────────────────────────────────────────────
+  // ── SERVICES
   {
     category: "Service",
     title: "Private Research Consultation (1-on-1)",

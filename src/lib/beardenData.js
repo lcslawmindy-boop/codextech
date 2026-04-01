@@ -1,6 +1,79 @@
 export const nodes = [
   {
+    id: "vector_concept",
+    label: "Vector Taxonomy",
+    group: "physics",
+    description: "Bearden's 4-type vector clarification: massless spatial, mass, charged mass, charged spatial",
+    fragments: [
+      "There are four fundamentally different types of vectors: (1) Massless Spatial System Vector — the geometer's vector; (2) Mass System Vector — the mechanic's vector; (3) Charged Mass System Vector — the electrician's vector; (4) Charged Spatial System Vector — the advanced electrician's vector.",
+      "Standard physics conflates all four vector types into one symbol. This conflation is the root cause of the vacuum energy blind spot: massless charge (type 4) behaves completely differently from charged mass (type 3) — V=IR does NOT apply to massless charge flow.",
+      "A force vector F-bar at the microscopic level: Force consists of a smeared mass — it IS mass-acceleration, it does NOT cause it. Force is an effect, not a cause.",
+      "The distinction between epsilon-s (massless spatial EM field) and E-m (mass-system E-field) is the key to understanding why E-fields do NOT exist in the vacuum — only massless charge gradients exist there."
+    ]
+  },
+  {
+    id: "force_as_effect",
+    label: "Force as Effect",
+    group: "physics",
+    description: "Force is mass-acceleration, not a cause — and E-fields do not exist in vacuum",
+    fragments: [
+      "Fp = [Mp * ap]. Without M, there is no Mp, nor Fp. Hence force does not exist in vacuum. E-field does not exist in vacuum. B and G do not exist in vacuum. No force field exists in vacuum.",
+      "Energy = Work Capacity. dW = F*ds. But force is an effect, not a cause — thus work is an effect. A more fundamental mechanism generates energy. Energy is an effect, not a cause.",
+      "Conservation of charge: |Mc| + |AEc| = K1. Conservation of energy: |E| + |ME| = K2. The three conserved quantities are: Massless charge, dynamic energy, and mass-energy — not energy alone.",
+      "The cycle: Massless Charge → Energy → Mass → back to Massless Charge. The scalar EM 'new path' converts massless charge directly to energy. Standard physics only knows the energy-mass path."
+    ]
+  },
+  {
+    id: "anenergy",
+    label: "Anenergy / Phi-Field",
+    group: "physics",
+    description: "Massless scalar potential engineering — the free anenergy pump and trapped charge mechanism",
+    fragments: [
+      "A free anenergy pump: gradient-phi inside = 0, phi inside > phi-zero. Virtual particle flux enters but does not exit — anenergy accumulates inside without conventional energy input.",
+      "Trapped anenergy: when a wire connects trapped charge to ground, gradient-phi appears in the wire and conventional current flows — extracted from the vacuum via the phi-field differential.",
+      "If properly oscillated phi-application, get steady emission (Moray Effect). Anenergy (phi-field) is converted to energy, yielding free energy from the vacuum.",
+      "Similar effects in the nucleus: transmute elements (Kervran Effect), speed up radioactivity (Reich Effect). The phi-field is the common mechanism behind multiple anomalous nuclear effects."
+    ]
+  },
+  {
+    id: "energy_bottle",
+    label: "Energy Bottle",
+    group: "weapons",
+    description: "Scalar EM interference zone — energy capture without reflection",
+    fragments: [
+      "Two scalar EM transmitters produce zero-vector EM waves (E=0, B=0). At the interference zone: Energy Zones (constructive) and Zero Energy Lines form the Energy Bottle — an invisible energy trap at a distance.",
+      "Standard radar detectors see nothing because E and B fields are zero. The target experiences explosive energy release from within, with no external EM signature detectable by conventional instruments.",
+      "ACQ Radar + TRACK Radar configuration creates an energy bottle at the target location. Energy captured with no reflection — the scalar pulse arrives instantaneously, the Hertz pulse is delayed by range = c*delta-t.",
+      "The gradient-phi region is curved spacetime where energy is not conserved. Range can be determined from the time difference between scalar pulse and Hertz pulse returns — scalar pulse radar principle."
+    ]
+  },
+  {
+    id: "scalar_longitudinal",
+    label: "Scalar Longitudinal Wave",
+    group: "physics",
+    description: "Longitudinal EM wave with no E or B field — only scalar phi-field gradient",
+    fragments: [
+      "A scalar longitudinal wave: E=0, B=0, gradient-phi is not equal to minus-E. Produced by a Translator device converting a transverse vector wave into a longitudinal scalar wave. Normal detectors see nothing.",
+      "Normal transmitter produces transverse EM wave → oscillations induced in electron gas → detection. Scalar transmitter produces longitudinal wave → no transverse oscillations → normal detector: nothing → special detector: detects.",
+      "Any nonlinear medium converts between transverse vector waves and scalar longitudinal waves. Transverse wave + nonlinear object = vector wave + scalar component output.",
+      "The massless spatial EM field (epsilon-s) and mass-system E-field (E-m) are fundamentally different. epsilon-s = minus gradient of scalar potential, but E-m only approximately equals this. They are not identical."
+    ]
+  },
+  {
+    id: "vacuum_structure",
+    label: "Vacuum Structure",
+    group: "physics",
+    description: "Massless charge as the substrate of spacetime, energy, and mass",
+    fragments: [
+      "There is no emptiness filled with charge. Rather, there is massless charge, from which emptiness is constructed, and from which spacetime is constructed, and from which mass and motion are constructed.",
+      "The vacuum absolute electrical potential is ~200 million volts of massless charge. Standard EM theory sets this to zero and loses the entire energy reservoir.",
+      "The gradient-phi RIVER flows from higher to lower massless charge potential. Charged particles actualize this flow into conventional current.",
+      "The spinning charged particle in 4-space: phi-flux sprays on and off as the particle spins. The particle IS its spin times its virtual photon spray — inseparable at the quantum level."
+    ]
+  },
+  {
     id: "scalar_em",
+
     label: "Scalar EM",
     group: "physics",
     description: "Scalar Electromagnetics",
@@ -230,7 +303,21 @@ export const nodes = [
 ];
 
 export const links = [
+  { source: "vector_concept", target: "scalar_em", label: "clarifies basis of" },
+  { source: "vector_concept", target: "force_as_effect", label: "leads to" },
+  { source: "force_as_effect", target: "vacuum_structure", label: "reveals" },
+  { source: "force_as_effect", target: "scalar_longitudinal", label: "enables" },
+  { source: "anenergy", target: "negentropy", label: "mechanism for" },
+  { source: "anenergy", target: "scalar_em", label: "engineering of" },
+  { source: "anenergy", target: "vacuum_structure", label: "extracts from" },
+  { source: "energy_bottle", target: "scalar_em", label: "application of" },
+  { source: "energy_bottle", target: "weather_warfare", label: "weapon class" },
+  { source: "scalar_longitudinal", target: "scalar_em", label: "is type of" },
+  { source: "scalar_longitudinal", target: "energy_bottle", label: "creates" },
+  { source: "vacuum_structure", target: "scalar_em", label: "substrate of" },
+  { source: "vacuum_structure", target: "quantum_potential", label: "same as" },
   { source: "scalar_em", target: "kindling", label: "enables" },
+
   { source: "scalar_em", target: "kaznacheyev", label: "explains mechanism" },
   { source: "scalar_em", target: "biological_warfare", label: "weaponized as" },
   { source: "scalar_em", target: "maxwell_equations", label: "extends" },
