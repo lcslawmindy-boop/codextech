@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { ShieldAlert, Lock, Eye, FileText, AlertTriangle, CheckCircle2 } from "lucide-react";
 
 const AGREEMENT_VERSION = "1.0";
@@ -9,7 +8,6 @@ export default function LegalAgreement() {
   const [checked1, setChecked1] = useState(false);
   const [checked2, setChecked2] = useState(false);
   const [checked3, setChecked3] = useState(false);
-  const navigate = useNavigate();
 
   const allChecked = checked1 && checked2 && checked3;
 
@@ -22,7 +20,7 @@ export default function LegalAgreement() {
       userAgent: navigator.userAgent,
     };
     localStorage.setItem("bearden_nda_accepted", JSON.stringify(record));
-    navigate("/");
+    window.location.href = "/";
   };
 
   return (
