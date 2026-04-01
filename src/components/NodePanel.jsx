@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { X, BookOpen, Sparkles, Loader2 } from "lucide-react";
+import { X, BookOpen, Sparkles, Loader2, Bookmark, BookmarkCheck } from "lucide-react";
 import ExportToDocButton from "./ExportToDocButton";
 import { base44 } from "@/api/base44Client";
 import { groupColors } from "../lib/beardenData";
@@ -7,8 +7,23 @@ import { groupColors } from "../lib/beardenData";
 export default function NodePanel({ node, onClose }) {
   const [summary, setSummary] = useState(null);
   const [loadingSummary, setLoadingSummary] = useState(false);
+  const [saved, setSaved] = useState(false);
+  const [saving, setSaving] = useState(false);
 
   if (!node) return null;
+
+  const handleSave = async () => {
+    setSaving(true);
+    await base44.entities.ResearchActivity.create({
+      type: "saved_node",
+      node_id: node.id,
+      node_label: node.label,
+      node_group: node.group,
+      node_description: node.description,
+    });
+    setSaved(true);
+    setSaving(false);
+  };
 
   const handleSummarize = async () => {
     setLoadingSummary(true);
@@ -17,6 +32,14 @@ export default function NodePanel({ node, onClose }) {
       prompt: `You are a scholarly assistant analyzing the theoretical work of Lt. Col. Thomas E. Bearden. Synthesize the following text fragments about "${node.label}" into a concise, readable 3-4 sentence overview. Be accurate, neutral, and informative. Do not add opinions or judgments.\n\nFragments:\n${node.fragments.map((f, i) => `${i + 1}. ${f}`).join("\n")}`,
     });
     setSummary(result);
+    // Track summary
+    await base44.entities.ResearchActivity.create({
+      type: "ai_summary",
+      node_id: node.id,
+      node_label: node.label,
+      node_group: node.group,
+      summary_text: result,
+    });
     setLoadingSummary(false);
   };
 
@@ -35,9 +58,19 @@ export default function NodePanel({ node, onClose }) {
           <h2 className="text-white font-bold text-lg leading-tight">{node.label}</h2>
           <p className="text-gray-400 text-sm mt-1">{node.description}</p>
         </div>
-        <button onClick={onClose} className="text-gray-500 hover:text-white ml-2 mt-1 flex-shrink-0">
-          <X size={18} />
-        </button>
+        <div className="flex items-center gap-2 ml-2 mt-1 flex-shrink-0">
+          <button
+            onClick={handleSave}
+            disabled={saving || saved}
+            title={saved ? "Saved!" : "Save to My Research"}
+            className="text-gray-500 hover:text-yellow-400 disabled:opacity-50 transition-colors"
+          >
+            {saved ? <BookmarkCheck size={16} className="text-yellow-400" /> : <Bookmark size={16} />}
+          </button>
+          <button onClick={onClose} className="text-gray-500 hover:text-white">
+            <X size={18} />
+          </button>
+        </div>
       </div>
 
       <div className="p-4 space-y-3">

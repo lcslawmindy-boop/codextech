@@ -1,0 +1,43 @@
+{
+  "name": "ResearchActivity",
+  "type": "object",
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": [
+        "saved_node",
+        "exported_doc",
+        "ai_summary"
+      ]
+    },
+    "node_id": {
+      "type": "string"
+    },
+    "node_label": {
+      "type": "string"
+    },
+    "node_group": {
+      "type": "string"
+    },
+    "node_description": {
+      "type": "string"
+    },
+    "doc_url": {
+      "type": "string"
+    },
+    "doc_title": {
+      "type": "string"
+    },
+    "summary_text": {
+      "type": "string"
+    },
+    "note": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "type",
+    "node_id",
+    "node_label"
+  ]
+}

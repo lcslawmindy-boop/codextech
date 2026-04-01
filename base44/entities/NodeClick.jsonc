@@ -1,0 +1,25 @@
+{
+  "name": "NodeClick",
+  "type": "object",
+  "properties": {
+    "node_id": {
+      "type": "string"
+    },
+    "label": {
+      "type": "string"
+    },
+    "group": {
+      "type": "string"
+    },
+    "click_count": {
+      "type": "integer",
+      "default": 0
+    }
+  },
+  "required": [
+    "node_id",
+    "label",
+    "group",
+    "click_count"
+  ]
+}

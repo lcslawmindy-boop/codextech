@@ -14,6 +14,15 @@ export default function ExportToDocButton({ node, aiSummary }) {
     const res = await base44.functions.invoke("generateResearchDoc", { node, aiSummary });
     if (res.data?.url) {
       setDocUrl(res.data.url);
+      // Track export
+      await base44.entities.ResearchActivity.create({
+        type: "exported_doc",
+        node_id: node.id,
+        node_label: node.label,
+        node_group: node.group,
+        doc_url: res.data.url,
+        doc_title: res.data.title,
+      });
     } else {
       setError(res.data?.error || "Export failed");
     }
