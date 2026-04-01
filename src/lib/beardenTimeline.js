@@ -99,6 +99,15 @@ export const timelineEvents = [
     color: "#ef4444",
   },
   {
+    year: 1985,
+    era: "development",
+    title: "Arrow DC-8 / China Airlines 006 — EM Missile Analysis",
+    type: "geopolitical",
+    description: "Bearden analyzes two 1985 aviation disasters as EM weapon strikes. The Arrow Air DC-8 crash at Gander (Dec 12, 1985): Bearden's annotated flight recorder data shows electrical spikes on two independent sensors consistent with an EM missile strike during liftoff rotation, followed by graviton charging of atomic nuclei, electrostatic cooling of engine combustion, explosive plastics ignition, and graviton radiation decay. China Airlines Flight 006 (Feb 19, 1985): engines disabled in sequence consistent with scalar EM interference, jet drops 30,000 ft. Both are documented with original Figure 21, 22, 23 diagrams.",
+    concepts: ["soviet_woodpecker", "em_biological_warfare", "scalar_em", "kindling"],
+    color: "#ef4444",
+  },
+  {
     year: 1986,
     era: "publication",
     title: "Chernobyl & Scalar EM Weapons",
@@ -106,6 +115,15 @@ export const timelineEvents = [
     description: "Following the Chernobyl nuclear disaster, Bearden alleges the accident was caused by the tail-end discharge of a giant standing scalar EM wave, claiming Soviet safety circuits were bypassed electromagnetically.",
     concepts: ["scalar_em", "weather_warfare"],
     color: "#ef4444",
+  },
+  {
+    year: 1988,
+    era: "publication",
+    title: "Gravitobiology First Edition (1988/1991)",
+    type: "publication",
+    description: "Bearden's landmark synthesis of EM and gravitational field theory applied to living systems. Introduces: gravitons as coupled photon/antiphoton spin-2 pairs; Whittaker standing potential waves as the hidden variable structure of the vacuum; the quantum potential as a non-local EM information carrier; Soviet Woodpecker signals as scalar EM biological warfare delivery systems; EM trigger windows for disease induction; morphogenetic field as species-level quantum potential; and gravitobiological mechanisms for evolution and the Gaia hypothesis. Published by Tesla Book Company; 2019 edition by Energetic Productions / Cheniere Media.",
+    concepts: ["gravitobiology", "graviton", "quantum_potential", "soviet_woodpecker", "em_biological_warfare", "morphogenetic_field"],
+    color: "#22c55e",
   },
   {
     year: 1988,

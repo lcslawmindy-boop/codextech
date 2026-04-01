@@ -144,6 +144,78 @@ export const nodes = [
     ]
   },
   {
+    id: "gravitobiology",
+    label: "Gravitobiology",
+    group: "biology",
+    description: "Unified EM + Gravitation applied to living systems",
+    fragments: [
+      "Gravitobiology is the application of a unified field theory conception of electromagnetics (EM) and gravitation (G) to the total energetics exchanges between a living organism and its external environment (interexchanges) and inside the living organism (intra-exchanges).",
+      "In gravitobiology, physical reality itself becomes deterministically tuneable, changeable, engineerable, and not fixed at all. Physical reality is not like a stone, but rather it is like a stabilized bubble lightly floating on a rushing torrent of water.",
+      "The part exchanges with and conditions the whole, and the whole exchanges with and conditions the part — a completely holographic situation that demolishes the reductionist superposition principle in biology.",
+      "Although secretly well-known and highly developed in the Soviet Union for decades, this new technology ushers in a completely new area to the West: electrogravitobiology, or shortened, gravitobiology — which infolds and drastically extends present photobiology."
+    ]
+  },
+  {
+    id: "graviton",
+    label: "Graviton / Whittaker Waves",
+    group: "physics",
+    description: "Spin-2 coupled photon pairs; Whittaker standing potential waves",
+    fragments: [
+      "The graviton has spin-2 and the photon has spin-1. Two photons ought to couple together to produce a graviton, if the resultants of the E- and B-fields of the coupled photons are reduced to zero. A bound (coupled, as in a standing wave) photon/antiphoton pair makes a basic spin-2 graviton.",
+      "In the vacuum, virtual photons are appearing (creation) and disappearing (annihilation) all the time, at incredible rates. These virtual photons are also coupling and decoupling all the time — hence the number of instantaneously coupled photons at a point in the vacuum is always dynamically changing over a very great range of values.",
+      "Whittaker rediscovered Tesla's standing columnar wave. The Whittaker standing potential wave is the key to scalar EM engineering of the vacuum potential itself.",
+      "The Whittaker-structured graviton lattice of vacuum/spacetime: Figure 20 shows how the entire fabric of spacetime is a structured lattice of gravitons whose internal Whittaker wave structures carry hidden EM information."
+    ]
+  },
+  {
+    id: "soviet_woodpecker",
+    label: "Soviet Woodpecker",
+    group: "weapons",
+    description: "Soviet OTH scalar EM transmitters used for BW and weather warfare",
+    fragments: [
+      "Woodpeckers: A Soviet Bicentennial Present to the U.S. The Soviet Woodpecker signals were misidentified as OTH radar. In reality they were scalar EM transmitters capable of immediate weather engineering over North America, launch-phase antibomber weapons, and EM biological warfare delivery systems.",
+      "Strategic EM BW implications of world-wide targeting transmitters such as the Soviet Woodpeckers (Figure 16): The Woodpecker beams intersect over North America, creating standing scalar EM wave interference zones — 'kindling' zones — over targeted population centers.",
+      "The Soviet Woodpecker signals contain scalar EM (Whittaker wave) components inside the carrier. Detection of scalar EM in Woodpecker signals was confirmed by analysis of the quantum potential structure of the transmitted waveform.",
+      "Targeting U.S. Embassy personnel in Moscow: The Johns Hopkins investigation documented anomalous biological effects in Embassy staff. Bearden reinterprets this as a field test of EM biological warfare using quantum-potential-modulated signals."
+    ]
+  },
+  {
+    id: "em_biological_warfare",
+    label: "EM Biological Warfare",
+    group: "weapons",
+    description: "Inducing disease electromagnetically via quantum potential",
+    fragments: [
+      "Electromagnetic biological warfare (EMBW): Table 5 catalogs the mechanisms. The quantum potential can carry infolded EM disease patterns to any targeted biological system within the interference zone of two Woodpecker-type beams.",
+      "Real-time anomalous EMI interference via quantum potential (Table 6): Pentagon EMI studies confirmed anomalous EM interference patterns that cannot be explained by classical EM theory but are consistent with Whittaker-structured quantum potential transmission.",
+      "EM trigger windows (Table 12): Specific frequency windows exist at which EM fields couple maximally to biological tissue — 'trigger windows' documented by Lisitsyn's report, Beck, Hunt, and Soviet researchers. These windows are the mechanism for remote disease induction.",
+      "How the drug culture was really created (p.50): Bearden alleges that low-level scalar EM irradiation of population centers alters neurochemistry, increasing susceptibility to addiction — a gravitobiological mechanism for social control."
+    ]
+  },
+  {
+    id: "quantum_potential",
+    label: "Quantum Potential",
+    group: "physics",
+    description: "Hidden variable EM structure of the vacuum potential (Whittaker/Bohm)",
+    fragments: [
+      "The quantum potential (QP) characteristics (Table 2): The quantum potential is non-local, instantaneous, and carries structured EM information inside its Whittaker wave decomposition — the hidden variable structure that Bohm theorized and Bearden engineers.",
+      "Hidden variable theory quantum potential (Table 3): The Aharonov-Bohm effect demonstrates that the quantum potential acts on particles even in regions where E and B fields are zero — confirming the physical reality of scalar potential engineering.",
+      "Pieces of the vacuum medium (p.32): The vacuum is not empty but a structured medium composed of gravitons, virtual photon flux, and quantum potential — all carrying Whittaker-structured EM information that can be engineered.",
+      "Detection is actually binary (p.58): A macroscopic detector averages over vast numbers of virtual-state quantum events. The quantum potential is detected as a statistical shift in the average — a 'fireflies effect' (Figure 14) where quantum potential EMI appears as anomalous noise bursts."
+    ]
+  },
+  {
+    id: "morphogenetic_field",
+    label: "Morphogenetic Field / Gaia",
+    group: "biology",
+    description: "Gravitobiological mechanism for evolution and species-level EM coupling",
+    fragments: [
+      "Mechanisms for evolution, Gaia, and morphogenetic field (p.45): The morphogenetic field is a real physical field — a species-level quantum potential structure carried in the Whittaker wave decomposition of the graviton lattice. It guides embryological development and species evolution.",
+      "Earth, Sun, and Moon are Whittaker-coupled (Figure 18): The three-body gravitational system forms a Whittaker scalar feedback triangle, continually exchanging structured EM information through their mutual quantum potentials — the physical basis for Gaia-level EM coupling.",
+      "The unsuspected deadly nature of internal EM pollution (p.48): Internal EM pollution — from powerlines, electronic devices, and scalar transmitters — disrupts the morphogenetic field guidance of cellular development, providing a gravitobiological mechanism for cancer and developmental disorders.",
+      "Chaos: Hidden order underlying randomness (p.21). Gravitobiology shows that biological chaos is not random but carries hidden Whittaker-structured order — the same order that guides morphogenetic development and maintains species-level coherence."
+    ]
+  },
+  {
     id: "weather_warfare",
     label: "Weather / EM Warfare",
     group: "weapons",
@@ -178,6 +250,19 @@ export const links = [
   { source: "negentropy", target: "kindling", label: "maintained by" },
   { source: "negentropy", target: "consciousness", label: "underlies" },
   { source: "biological_warfare", target: "weather_warfare", label: "related weapons" },
+  { source: "gravitobiology", target: "kindling", label: "extends" },
+  { source: "gravitobiology", target: "kaznacheyev", label: "formalizes" },
+  { source: "gravitobiology", target: "morphogenetic_field", label: "explains" },
+  { source: "gravitobiology", target: "negentropy", label: "unifies with" },
+  { source: "graviton", target: "scalar_em", label: "underlies" },
+  { source: "graviton", target: "quantum_potential", label: "carries" },
+  { source: "quantum_potential", target: "em_biological_warfare", label: "delivery mechanism" },
+  { source: "quantum_potential", target: "kaznacheyev", label: "explains" },
+  { source: "soviet_woodpecker", target: "em_biological_warfare", label: "delivers" },
+  { source: "soviet_woodpecker", target: "weather_warfare", label: "same platform" },
+  { source: "em_biological_warfare", target: "biological_warfare", label: "generalizes" },
+  { source: "morphogenetic_field", target: "bioframe", label: "species-level" },
+  { source: "morphogenetic_field", target: "consciousness", label: "collective layer" },
 ];
 
 export const groupColors = {
