@@ -1,12 +1,13 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import SearchPanel from "../components/SearchPanel";
-import ResearchOpportunities from "../components/ResearchOpportunities";
 import ConceptNetworkGraph from "../components/ConceptNetworkGraph";
 import NodePanel from "../components/NodePanel";
 import TimelineView from "../components/TimelineView";
 import ClusterSummaryPanel from "../components/ClusterSummaryPanel";
+import TopConceptsPanel from "../components/TopConceptsPanel";
 import { groupColors, nodes } from "../lib/beardenData";
+import { base44 } from "@/api/base44Client";
 
 export default function ConceptGraph() {
   const [selectedNode, setSelectedNode] = useState(null);
@@ -15,8 +16,23 @@ export default function ConceptGraph() {
   const [clusterMode, setClusterMode] = useState(false);
   const [clusterNodes, setClusterNodes] = useState([]);
   const [view, setView] = useState("graph");
+  const [showTopConcepts, setShowTopConcepts] = useState(false);
 
   const groups = [...new Set(nodes.map(n => n.group))];
+
+  const handleNodeClick = (node) => {
+    // Track click silently
+    base44.functions.invoke("trackNodeClick", { node_id: node.id, label: node.label, group: node.group });
+    if (clusterMode) {
+      setClusterNodes(prev =>
+        prev.find(n => n.id === node.id)
+          ? prev.filter(n => n.id !== node.id)
+          : [...prev, node]
+      );
+    } else {
+      setSelectedNode(node);
+    }
+  };
 
   return (
     <div className="w-screen h-screen bg-gray-950 flex flex-col overflow-hidden">
@@ -27,6 +43,16 @@ export default function ConceptGraph() {
           <p className="text-gray-500 text-xs">Click any node to explore source fragments · Drag to rearrange · Scroll to zoom</p>
         </div>
         <div className="flex items-center gap-4">
+          <button
+            onClick={() => setShowTopConcepts(s => !s)}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-xs font-medium transition-colors ${
+              showTopConcepts
+                ? "bg-yellow-700 border-yellow-500 text-white"
+                : "bg-yellow-900/40 hover:bg-yellow-800/50 border-yellow-800 text-yellow-300"
+            }`}
+          >
+            📊 Top Concepts
+          </button>
           <button
             onClick={() => {
               setClusterMode(m => {
@@ -50,12 +76,6 @@ export default function ConceptGraph() {
           >
             🔬 Diagnostics
           </button>
-          <Link
-            to="/my-research"
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-yellow-900/40 hover:bg-yellow-800/50 border border-yellow-800 text-yellow-300 text-xs font-medium transition-colors"
-          >
-            🔖 My Research
-          </Link>
           <Link
             to="/business"
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-green-900/40 hover:bg-green-800/50 border border-green-800 text-green-300 text-xs font-medium transition-colors"
@@ -134,20 +154,19 @@ export default function ConceptGraph() {
               />
             )}
             <ConceptNetworkGraph
-              onNodeClick={(node) => {
-                if (clusterMode) {
-                  setClusterNodes(prev =>
-                    prev.find(n => n.id === node.id)
-                      ? prev.filter(n => n.id !== node.id)
-                      : [...prev, node]
-                  );
-                } else {
-                  setSelectedNode(node);
-                }
-              }}
+              onNodeClick={handleNodeClick}
               selectedNodeId={selectedNode?.id}
             />
             <NodePanel node={selectedNode} onClose={() => setSelectedNode(null)} />
+            {showTopConcepts && (
+              <TopConceptsPanel
+                onClose={() => setShowTopConcepts(false)}
+                onNodeClick={(nodeId) => {
+                  const node = nodes.find(n => n.id === nodeId);
+                  if (node) { setSelectedNode(node); setShowTopConcepts(false); }
+                }}
+              />
+            )}
             {!selectedNode && (
               <div className="absolute bottom-6 left-1/2 -translate-x-1/2 bg-gray-900/80 border border-gray-700 rounded-full px-4 py-2 text-gray-400 text-xs pointer-events-none">
                 ← Click a node to view source text fragments →
