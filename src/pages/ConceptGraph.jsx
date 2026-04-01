@@ -5,12 +5,15 @@ import ResearchOpportunities from "../components/ResearchOpportunities";
 import ConceptNetworkGraph from "../components/ConceptNetworkGraph";
 import NodePanel from "../components/NodePanel";
 import TimelineView from "../components/TimelineView";
+import ClusterSummaryPanel from "../components/ClusterSummaryPanel";
 import { groupColors, nodes } from "../lib/beardenData";
 
 export default function ConceptGraph() {
   const [selectedNode, setSelectedNode] = useState(null);
   const [showSearch, setShowSearch] = useState(false);
   const [showDiagnostics, setShowDiagnostics] = useState(false);
+  const [clusterMode, setClusterMode] = useState(false);
+  const [clusterNodes, setClusterNodes] = useState([]);
   const [view, setView] = useState("graph");
 
   const groups = [...new Set(nodes.map(n => n.group))];
@@ -24,6 +27,23 @@ export default function ConceptGraph() {
           <p className="text-gray-500 text-xs">Click any node to explore source fragments · Drag to rearrange · Scroll to zoom</p>
         </div>
         <div className="flex items-center gap-4">
+          <button
+            onClick={() => {
+              setClusterMode(m => {
+                if (m) setClusterNodes([]);
+                return !m;
+              });
+              setShowSearch(false);
+              setShowDiagnostics(false);
+            }}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-xs font-medium transition-colors ${
+              clusterMode
+                ? "bg-indigo-700 border-indigo-500 text-white"
+                : "bg-indigo-900/40 hover:bg-indigo-800/50 border-indigo-800 text-indigo-300"
+            }`}
+          >
+            🔗 {clusterMode ? `Cluster (${clusterNodes.length})` : "Cluster"}
+          </button>
           <button
             onClick={() => { setShowDiagnostics(s => !s); setShowSearch(false); }}
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-purple-900/40 hover:bg-purple-800/50 border border-purple-800 text-purple-300 text-xs font-medium transition-colors"
@@ -90,13 +110,15 @@ export default function ConceptGraph() {
           />
         ) : (
           <>
-            {showDiagnostics && (
-              <ResearchOpportunities
-                onClose={() => setShowDiagnostics(false)}
-                onNodeClick={(node) => { setSelectedNode(node); setShowDiagnostics(false); }}
+            {clusterMode && clusterNodes.length > 0 && (
+              <ClusterSummaryPanel
+                nodes={clusterNodes}
+                onRemoveNode={(id) => setClusterNodes(prev => prev.filter(n => n.id !== id))}
+                onClear={() => setClusterNodes([])}
+                onClose={() => { setClusterMode(false); setClusterNodes([]); }}
               />
             )}
-            {showSearch && (
+            {showDiagnostics && (
               <SearchPanel
                 onResultClick={(nodeId) => {
                   const node = nodes.find(n => n.id === nodeId);
@@ -106,7 +128,17 @@ export default function ConceptGraph() {
               />
             )}
             <ConceptNetworkGraph
-              onNodeClick={setSelectedNode}
+              onNodeClick={(node) => {
+                if (clusterMode) {
+                  setClusterNodes(prev =>
+                    prev.find(n => n.id === node.id)
+                      ? prev.filter(n => n.id !== node.id)
+                      : [...prev, node]
+                  );
+                } else {
+                  setSelectedNode(node);
+                }
+              }}
               selectedNodeId={selectedNode?.id}
             />
             <NodePanel node={selectedNode} onClose={() => setSelectedNode(null)} />
