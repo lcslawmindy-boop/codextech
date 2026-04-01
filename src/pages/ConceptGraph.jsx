@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import SearchPanel from "../components/SearchPanel";
+import ResearchOpportunities from "../components/ResearchOpportunities";
 import ConceptNetworkGraph from "../components/ConceptNetworkGraph";
 import NodePanel from "../components/NodePanel";
 import TimelineView from "../components/TimelineView";
@@ -9,6 +10,7 @@ import { groupColors, nodes } from "../lib/beardenData";
 export default function ConceptGraph() {
   const [selectedNode, setSelectedNode] = useState(null);
   const [showSearch, setShowSearch] = useState(false);
+  const [showDiagnostics, setShowDiagnostics] = useState(false);
   const [view, setView] = useState("graph");
 
   const groups = [...new Set(nodes.map(n => n.group))];
@@ -22,6 +24,12 @@ export default function ConceptGraph() {
           <p className="text-gray-500 text-xs">Click any node to explore source fragments · Drag to rearrange · Scroll to zoom</p>
         </div>
         <div className="flex items-center gap-4">
+          <button
+            onClick={() => { setShowDiagnostics(s => !s); setShowSearch(false); }}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-purple-900/40 hover:bg-purple-800/50 border border-purple-800 text-purple-300 text-xs font-medium transition-colors"
+          >
+            🔬 Diagnostics
+          </button>
           <Link
             to="/business"
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-green-900/40 hover:bg-green-800/50 border border-green-800 text-green-300 text-xs font-medium transition-colors"
@@ -82,6 +90,12 @@ export default function ConceptGraph() {
           />
         ) : (
           <>
+            {showDiagnostics && (
+              <ResearchOpportunities
+                onClose={() => setShowDiagnostics(false)}
+                onNodeClick={(node) => { setSelectedNode(node); setShowDiagnostics(false); }}
+              />
+            )}
             {showSearch && (
               <SearchPanel
                 onResultClick={(nodeId) => {
