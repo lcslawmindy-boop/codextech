@@ -7,14 +7,18 @@ import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 // Add page imports here
 import ConceptGraph from './pages/ConceptGraph';
+import LegalAgreement from './pages/LegalAgreement';
+import CopyProtection from './components/CopyProtection';
+import { useNdaGate } from './hooks/useNdaGate';
 import BusinessModels from './pages/BusinessModels';
 import PitchBuilder from './pages/PitchBuilder';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
+  const { accepted: ndaAccepted, loading: ndaLoading } = useNdaGate();
 
   // Show loading spinner while checking app public settings or auth
-  if (isLoadingPublicSettings || isLoadingAuth) {
+  if (isLoadingPublicSettings || isLoadingAuth || ndaLoading) {
     return (
       <div className="fixed inset-0 flex items-center justify-center">
         <div className="w-8 h-8 border-4 border-slate-200 border-t-slate-800 rounded-full animate-spin"></div>
@@ -33,15 +37,26 @@ const AuthenticatedApp = () => {
     }
   }
 
+  // Redirect to NDA gate if not accepted
+  if (!ndaAccepted) {
+    return (
+      <Routes>
+        <Route path="*" element={<LegalAgreement />} />
+      </Routes>
+    );
+  }
+
   // Render the main app
   return (
-    <Routes>
-      {/* Add your page Route elements here */}
-      <Route path="/" element={<ConceptGraph />} />
-      <Route path="/business" element={<BusinessModels />} />
-      <Route path="/pitch" element={<PitchBuilder />} />
-      <Route path="*" element={<PageNotFound />} />
-    </Routes>
+    <>
+      <CopyProtection />
+      <Routes>
+        <Route path="/" element={<ConceptGraph />} />
+        <Route path="/business" element={<BusinessModels />} />
+        <Route path="/pitch" element={<PitchBuilder />} />
+        <Route path="*" element={<PageNotFound />} />
+      </Routes>
+    </>
   );
 };
 
