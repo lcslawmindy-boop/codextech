@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import SearchPanel from "../components/SearchPanel";
 import ConceptNetworkGraph from "../components/ConceptNetworkGraph";
 import NodePanel from "../components/NodePanel";
@@ -21,6 +22,12 @@ export default function ConceptGraph() {
           <p className="text-gray-500 text-xs">Click any node to explore source fragments · Drag to rearrange · Scroll to zoom</p>
         </div>
         <div className="flex items-center gap-4">
+          <Link
+            to="/business"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-green-900/40 hover:bg-green-800/50 border border-green-800 text-green-300 text-xs font-medium transition-colors"
+          >
+            💼 Business Models
+          </Link>
           {/* View toggle */}
           <div className="flex items-center bg-gray-800 border border-gray-700 rounded-lg p-0.5 gap-0.5">
             <button
