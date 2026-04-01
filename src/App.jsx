@@ -8,6 +8,7 @@ import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 // Add page imports here
 import ConceptGraph from './pages/ConceptGraph';
 import BusinessModels from './pages/BusinessModels';
+import PitchBuilder from './pages/PitchBuilder';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -38,6 +39,7 @@ const AuthenticatedApp = () => {
       {/* Add your page Route elements here */}
       <Route path="/" element={<ConceptGraph />} />
       <Route path="/business" element={<BusinessModels />} />
+      <Route path="/pitch" element={<PitchBuilder />} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
   );
