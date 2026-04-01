@@ -13,6 +13,7 @@ import { useNdaGate } from './hooks/useNdaGate';
 import BusinessModels from './pages/BusinessModels';
 import PitchBuilder from './pages/PitchBuilder';
 import MarketDeck from './pages/MarketDeck';
+import Subscribe from './pages/Subscribe';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -56,6 +57,7 @@ const AuthenticatedApp = () => {
         <Route path="/business" element={<BusinessModels />} />
         <Route path="/pitch" element={<PitchBuilder />} />
         <Route path="/market-deck" element={<MarketDeck />} />
+        <Route path="/subscribe" element={<Subscribe />} />
         <Route path="*" element={<PageNotFound />} />
       </Routes>
     </>

@@ -1,0 +1,31 @@
+{
+  "name": "User",
+  "type": "object",
+  "properties": {
+    "role": {
+      "type": "string",
+      "enum": [
+        "admin",
+        "user"
+      ],
+      "default": "user"
+    },
+    "subscription_status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "canceled",
+        "past_due",
+        "trialing",
+        "inactive"
+      ],
+      "default": "inactive"
+    },
+    "stripe_customer_id": {
+      "type": "string"
+    },
+    "subscription_id": {
+      "type": "string"
+    }
+  }
+}
