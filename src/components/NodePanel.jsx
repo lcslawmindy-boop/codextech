@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { X, BookOpen, Sparkles, Loader2 } from "lucide-react";
+import ExportToDocButton from "./ExportToDocButton";
 import { base44 } from "@/api/base44Client";
 import { groupColors } from "../lib/beardenData";
 
@@ -51,6 +52,7 @@ export default function NodePanel({ node, onClose }) {
             {loadingSummary ? <Loader2 size={11} className="animate-spin" /> : <Sparkles size={11} />}
             {loadingSummary ? "Summarizing…" : "AI Summary"}
           </button>
+          <ExportToDocButton node={node} aiSummary={summary} />
         </div>
 
         {summary && (
