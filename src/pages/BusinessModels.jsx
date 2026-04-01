@@ -98,6 +98,12 @@ export default function BusinessModels() {
         </div>
         <div className="flex items-center gap-3 text-xs text-gray-400">
           <Link
+            to="/courses"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-900/40 hover:bg-blue-800/50 border border-blue-700 text-blue-300 text-xs font-medium transition-colors"
+          >
+            🎓 Courses & PDFs
+          </Link>
+          <Link
             to="/pitch"
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-purple-900/40 hover:bg-purple-800/50 border border-purple-700 text-purple-300 text-xs font-medium transition-colors"
           >

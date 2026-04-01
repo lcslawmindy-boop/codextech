@@ -15,6 +15,7 @@ import PitchBuilder from './pages/PitchBuilder';
 import MarketDeck from './pages/MarketDeck';
 import Subscribe from './pages/Subscribe';
 import MyResearch from './pages/MyResearch';
+import CourseCatalog from './pages/CourseCatalog';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -60,6 +61,7 @@ const AuthenticatedApp = () => {
         <Route path="/market-deck" element={<MarketDeck />} />
         <Route path="/subscribe" element={<Subscribe />} />
         <Route path="/my-research" element={<MyResearch />} />
+        <Route path="/courses" element={<CourseCatalog />} />
         <Route path="*" element={<PageNotFound />} />
       </Routes>
     </>
