@@ -12,6 +12,7 @@ import CopyProtection from './components/CopyProtection';
 import { useNdaGate } from './hooks/useNdaGate';
 import BusinessModels from './pages/BusinessModels';
 import PitchBuilder from './pages/PitchBuilder';
+import MarketDeck from './pages/MarketDeck';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -54,6 +55,7 @@ const AuthenticatedApp = () => {
         <Route path="/" element={<ConceptGraph />} />
         <Route path="/business" element={<BusinessModels />} />
         <Route path="/pitch" element={<PitchBuilder />} />
+        <Route path="/market-deck" element={<MarketDeck />} />
         <Route path="*" element={<PageNotFound />} />
       </Routes>
     </>

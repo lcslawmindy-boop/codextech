@@ -103,6 +103,12 @@ export default function BusinessModels() {
           >
             🎯 Pitch Builder
           </Link>
+          <Link
+            to="/market-deck"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-900/40 hover:bg-blue-800/50 border border-blue-700 text-blue-300 text-xs font-medium transition-colors"
+          >
+            📊 Market Deck
+          </Link>
           <div className="flex items-center gap-1.5"><GraduationCap size={13} className="text-blue-400" /><span>{totalRevenuePotential.Course} courses</span></div>
           <div className="flex items-center gap-1.5"><BookOpen size={13} className="text-yellow-400" /><span>{totalRevenuePotential["Book/PDF"]} books</span></div>
           <div className="flex items-center gap-1.5"><Package size={13} className="text-cyan-400" /><span>{totalRevenuePotential.Product} products</span></div>
