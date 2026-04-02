@@ -79,6 +79,12 @@ export default function ConceptGraph() {
             🔬 Diagnostics
           </button>
           <Link
+            to="/emf-impact"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-red-900/40 hover:bg-red-800/50 border border-red-800 text-red-300 text-xs font-medium transition-colors"
+          >
+            ☠️ EMF Impact
+          </Link>
+          <Link
             to="/lab"
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-teal-900/40 hover:bg-teal-800/50 border border-teal-800 text-teal-300 text-xs font-medium transition-colors"
           >
