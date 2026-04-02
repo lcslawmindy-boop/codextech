@@ -23,6 +23,7 @@ import MyLearning from './pages/MyLearning';
 import LabSimulation from './pages/LabSimulation';
 import InventionPlans from './pages/InventionPlans';
 import EMFImpact from './pages/EMFImpact';
+import ScalarEMLab from './pages/ScalarEMLab';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -76,6 +77,7 @@ const AuthenticatedApp = () => {
         <Route path="/lab" element={<LabSimulation />} />
         <Route path="/invention-plans" element={<InventionPlans />} />
         <Route path="/emf-impact" element={<EMFImpact />} />
+        <Route path="/scalar-lab" element={<ScalarEMLab />} />
         <Route path="*" element={<PageNotFound />} />
       </Routes>
     </>

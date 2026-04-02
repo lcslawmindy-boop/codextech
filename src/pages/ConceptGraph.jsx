@@ -85,6 +85,12 @@ export default function ConceptGraph() {
             ☠️ EMF Impact
           </Link>
           <Link
+            to="/scalar-lab"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-purple-900/40 hover:bg-purple-800/50 border border-purple-800 text-purple-300 text-xs font-medium transition-colors"
+          >
+            ⚗️ Scalar EM Lab
+          </Link>
+          <Link
             to="/lab"
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-teal-900/40 hover:bg-teal-800/50 border border-teal-800 text-teal-300 text-xs font-medium transition-colors"
           >
