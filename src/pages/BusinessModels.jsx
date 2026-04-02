@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { ArrowLeft, BookOpen, Zap, FlaskConical, DollarSign, Package, GraduationCap, Lightbulb, ChevronDown, ChevronUp } from "lucide-react";
 import { businessItems as items } from "../lib/businessItems";
+import NewsletterSignup from "../components/NewsletterSignup";
 
 const CATEGORIES = ["All", "Course", "Book/PDF", "Product", "Invention", "Service"];
 
@@ -165,6 +166,9 @@ export default function BusinessModels() {
             <ItemCard key={i} item={item} />
           ))}
         </div>
+      </div>
+      <div className="px-6 py-10 border-t border-gray-800">
+        <NewsletterSignup source="business-models" />
       </div>
     </div>
   );

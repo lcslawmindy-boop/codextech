@@ -8,6 +8,7 @@ import ClusterSummaryPanel from "../components/ClusterSummaryPanel";
 import TopConceptsPanel from "../components/TopConceptsPanel";
 import BusinessConceptGraph from "../components/BusinessConceptGraph";
 import { groupColors, nodes } from "../lib/beardenData";
+import NewsletterSignup from "../components/NewsletterSignup";
 import { base44 } from "@/api/base44Client";
 
 export default function ConceptGraph() {
@@ -185,9 +186,14 @@ export default function ConceptGraph() {
               />
             )}
             {!selectedNode && (
-              <div className="absolute bottom-6 left-1/2 -translate-x-1/2 bg-gray-900/80 border border-gray-700 rounded-full px-4 py-2 text-gray-400 text-xs pointer-events-none">
-                ← Click a node to view source text fragments →
-              </div>
+              <>
+                <div className="absolute bottom-6 left-1/2 -translate-x-1/2 bg-gray-900/80 border border-gray-700 rounded-full px-4 py-2 text-gray-400 text-xs pointer-events-none">
+                  ← Click a node to view source text fragments →
+                </div>
+                <div className="absolute bottom-20 right-6 w-80">
+                  <NewsletterSignup source="concept-graph" compact />
+                </div>
+              </>
             )}
           </>
         )}
