@@ -107,71 +107,76 @@ export default function MarketingPlan() {
     prev.includes(id) ? prev.filter(o => o !== id) : [...prev, id]
   );
 
-  const [progress, setProgress] = useState(0);
+  const [progress, setProgress] = useState({ done: 0, total: 0 });
 
   const handleGenerate = async () => {
     setLoading(true);
     setPosts([]);
     setGenerated(false);
-    setProgress(0);
 
     const platformList = PLATFORMS.filter(p => selectedPlatforms.includes(p.id));
     const objectiveList = OBJECTIVES.filter(o => selectedObjectives.includes(o.id));
+    const totalCalls = selectedPlatforms.length * 4;
+    setProgress({ done: 0, total: totalCalls });
+
     const allPosts = [];
+    let done = 0;
 
-    for (let weekNum = 1; weekNum <= 4; weekNum++) {
-      const theme = WEEK_THEMES[weekNum - 1];
-      const dayStart = (weekNum - 1) * 7 + 1;
-      const dayEnd = weekNum === 4 ? 30 : weekNum * 7;
+    for (const platform of platformList) {
+      for (let weekNum = 1; weekNum <= 4; weekNum++) {
+        const theme = WEEK_THEMES[weekNum - 1];
+        const dayStart = (weekNum - 1) * 7 + 1;
+        const dayEnd = weekNum === 4 ? 30 : weekNum * 7;
+        const days = dayEnd - dayStart + 1;
 
-      const prompt = `You are a world-class content strategist for deep tech and alternative energy marketing.
+        const platformGuide = {
+          linkedin: "professional, 100-120 words, investor tone",
+          twitter: "1-2 punchy sentences + hashtags #ScalarEM #Bearden",
+          instagram: "emoji-rich, 3 sentences + hashtags",
+          tiktok: "3-second hook + 3 bullet talking points",
+          youtube: "video title + 1-sentence description + thumbnail idea",
+          facebook: "conversational, question-based, 2 short paragraphs",
+        }[platform.id] || "concise and compelling";
 
-BRAND: Bearden Scalar EM Research Platform — "The suppressed physics that changes everything"
-PRODUCTS: Video courses ($147-$397), PDF books ($19-$67), Invention kits ($89)
-PLATFORMS: ${platformList.map(p => p.label + " (" + p.goal + ")").join(", ")}
-OBJECTIVES: ${objectiveList.map(o => o.label).join("; ")}
+        const prompt = `Content strategist for deep tech marketing. Generate ${days} social media posts (one per day) for ${platform.label}.
 
-Generate posts for WEEK ${weekNum} ONLY (Days ${dayStart}-${dayEnd}).
-Week theme: "${theme.theme}" — ${theme.desc}
+Brand: Bearden Scalar EM Research Platform — "The suppressed physics that changes everything"
+Products: Video courses ($147-$397), PDFs ($19-$67), Invention kits ($89)
+Objectives: ${objectiveList.map(o => o.label).join(", ")}
+Week ${weekNum} theme: "${theme.theme}" — ${theme.desc}
+Days: ${dayStart} to ${dayEnd}
+Style: ${platformGuide}
 
-Create exactly one post per platform per day for days ${dayStart} through ${dayEnd}.
-That is ${selectedPlatforms.length} posts per day × ${dayEnd - dayStart + 1} days = ${selectedPlatforms.length * (dayEnd - dayStart + 1)} total posts.
+Return JSON: {"posts": [{"day": number, "week": ${weekNum}, "platform": "${platform.id}", "content": string}]}
+Generate exactly ${days} posts for days ${dayStart}-${dayEnd}.`;
 
-Platform guidelines:
-- linkedin: professional, 100-150 words, investor/thought-leader tone
-- twitter: 1-2 punchy sentences, hashtags #ScalarEM #Bearden #FreeEnergy
-- instagram: emoji-rich, 3-4 sentences + hashtags
-- tiktok: hook (first 3 seconds) + 3 talking points
-- youtube: video title + 2-sentence description + thumbnail concept
-- facebook: conversational, question-based, 2 paragraphs
-
-Return JSON: {"posts": [{"day": number, "week": ${weekNum}, "platform": string, "content": string}]}`;
-
-      const result = await base44.integrations.Core.InvokeLLM({
-        prompt,
-        model: "gpt_5",
-        response_json_schema: {
-          type: "object",
-          properties: {
-            posts: {
-              type: "array",
-              items: {
-                type: "object",
-                properties: {
-                  day: { type: "number" },
-                  week: { type: "number" },
-                  platform: { type: "string" },
-                  content: { type: "string" },
+        const result = await base44.integrations.Core.InvokeLLM({
+          prompt,
+          model: "gpt_5_mini",
+          response_json_schema: {
+            type: "object",
+            properties: {
+              posts: {
+                type: "array",
+                items: {
+                  type: "object",
+                  properties: {
+                    day: { type: "number" },
+                    week: { type: "number" },
+                    platform: { type: "string" },
+                    content: { type: "string" },
+                  },
                 },
               },
             },
           },
-        },
-      });
+        });
 
-      allPosts.push(...(result?.posts || []));
-      setProgress(weekNum);
-      setPosts([...allPosts]);
+        allPosts.push(...(result?.posts || []));
+        done++;
+        setProgress({ done, total: totalCalls });
+        setPosts([...allPosts]);
+      }
     }
 
     setGenerated(true);
@@ -267,10 +272,10 @@ Return JSON: {"posts": [{"day": number, "week": ${weekNum}, "platform": string, 
               className="flex items-center gap-2 px-6 py-3 rounded-xl font-bold text-sm text-white bg-purple-700 hover:bg-purple-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
             >
               {loading ? <Loader2 size={15} className="animate-spin" /> : <Sparkles size={15} />}
-              {loading ? `Generating week ${progress + 1} of 4…` : `Generate ${totalPosts}-Post Calendar`}
+              {loading ? `Generating… (${progress.done}/${progress.total})` : `Generate ${totalPosts}-Post Calendar`}
             </button>
             {loading && (
-              <p className="text-xs text-gray-500">Generating week by week (4 calls) — {progress}/4 weeks done…</p>
+              <p className="text-xs text-gray-500">{progress.done} of {progress.total} batches done — posts appear as they generate…</p>
             )}
             {generated && !loading && (
               <p className="text-xs text-green-400 flex items-center gap-1.5">
