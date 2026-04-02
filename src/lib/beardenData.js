@@ -299,8 +299,117 @@ export const nodes = [
       "Bearden alleges the Chernobyl nuclear accident was caused by a tail-end discharge of a giant standing scalar EM wave — the safety circuits were bypassed electromagnetically.",
       "Soviet scalar EM applications catalogued by Bearden include: weather control, tectonic weapons (earthquakes), mind control via ELF modulation, and biological warfare."
     ]
+  },
+  {
+    id: "priors_device",
+    label: "Prioré Device",
+    group: "history",
+    description: "French government-funded EM cancer cure device using multichannel modulation (1960s–1970s)",
+    fragments: [
+      "Figure 10 (Excalibur Briefing): The Prioré device used a simplified multichannel modulation architecture — F1/F2/F3 inputs → derivative carrier/modulator → primary carrier output Fz. Each modulation level corresponds to a hyperspatial component: S‴ (highest derivative modulation), S″ (lower), S (carrier).",
+      "The Prioré device was funded by the French government and reportedly cured terminal cancers in animals. It was suppressed after Prioré's death despite documented experimental results with official French scientific witnesses.",
+      "Bearden interprets the Prioré device as a practical implementation of his nested modulation hierarchy: L³→L²→LT→T. The device impressed a structured virtual-state template onto the target organism's quantum potential, reversing disease patterns.",
+      "The device achieved healing by time-reversing the disease pattern: since F≡[Mā+ṁv] and force is an effect not a cause, the Prioré device restructured the virtual-state template of the organism, causing cells to regenerate to a healthy prior state."
+    ]
+  },
+  {
+    id: "moray_device",
+    label: "Moray Sea-of-Energy Device",
+    group: "history",
+    description: "T.H. Moray's physical vacuum energy extraction device — documented 50kW output with no fuel input",
+    fragments: [
+      "T.H. Moray's photographs (1930s) show the physical device: a compact box unit with valve/tube electronics, and separately a large panel of incandescent bulbs (his output demonstration panel) running without connection to any external power source.",
+      "Moray described his device as tapping the 'sea of energy' — the quantum vacuum. Bearden identifies this as the anenergy pump mechanism: oscillated phi-application at resonance produces steady-state massless charge emission, converted to conventional current via trapped charges in the output circuit.",
+      "The device reportedly output 50kW of light from the bulb panel with no conventional fuel. Multiple witnesses are documented. The device was destroyed by a Soviet agent who infiltrated Moray's laboratory.",
+      "Bearden's anenergy pump circuit (Part 4, Fig. showing trapped charges/wire/ground) is a formal scalar EM explanation of the Moray mechanism — the first rigorous theoretical account of what Moray had empirically discovered."
+    ]
+  },
+  {
+    id: "elf_entrainment",
+    label: "ELF Brain Entrainment",
+    group: "weapons",
+    description: "10 Hz carrier synchronization locking brains in phase — mass mind-influence mechanism",
+    fragments: [
+      "Excalibur Briefing diagram: Multiple carriers in 5–30 MHz band, each modulated at ≤10 Hz and synchronized in phase. When broadcast simultaneously, this locks all brains within range into phase with the 10 Hz modulation — mass synchronized brain state.",
+      "With additional detrimental modulations added to the synchronized carrier system, the locked brain state can be driven into pathological territory. This is Bearden's technical explanation for Soviet psychotronic weapons targeting large populations.",
+      "The ELF entrainment mechanism depends on the nested modulation hierarchy: the 10 Hz ELF pattern is modulated onto a UHF carrier (S' frame), which carries hyperspatial components (S''/S''' frames) that interact directly with the virtual-state structure of the nervous system.",
+      "This is the mass-mind control mechanism Bearden alleges was deployed against the West via Soviet Woodpecker transmitters operating in the 5–30 MHz band with a characteristic 10 Hz modulation signature detected by researchers worldwide."
+    ]
+  },
+  {
+    id: "temporal_logic",
+    label: "Temporal Logic & 4th Law",
+    group: "philosophy",
+    description: "Bearden's extension of Aristotelian logic with a 4th law: binocular perception and the boundary identity of exact opposites",
+    fragments: [
+      "Fig. 4 (Excalibur Briefing): Aristotle's law of excluded middle (A v Ā) fails for perception. Perception is a finite operation requiring finite time. Define □ as 'is perceived'. The law becomes [A]₁ V₃ [Ā]₂ — perception is monocular in time; only one-thing-at-a-time is perceived.",
+      "The 4th Law of Logic: (A₁, Ā₂)₃ =₅ B₄ — the simultaneous perceiving of A and Ā in a single act (binocular perception) constitutes a new logical entity B. This is the boundary identity of exact opposites — forbidden in classical 3-valued logic.",
+      "Implication for physics: quantum superposition IS the 4th law in operation. The double-slit experiment (Fig. 7) shows the electron occupying both slits simultaneously — the 4th law state — until a photon interaction (a perception act) collapses it to a classical 3-valued state.",
+      "The 4th law explains why consciousness cannot be fully described by classical logic: consciousness operates across the boundary of the virtual (quantum) and observable states simultaneously, constituting a permanent 4th-law operation."
+    ]
+  },
+  {
+    id: "hyperspatial_worlds",
+    label: "Clustered Orthogonal Worlds",
+    group: "consciousness",
+    description: "Fig. 20/21: Multiple orthogonal reference frames (S, S', S'', S''') with crosstalk — the physical model of parallel realities",
+    fragments: [
+      "Fig. 20 (Excalibur Briefing — Clustered Orthogonal Worlds): The laboratory frame S contains matter/particles. EM field (photon) exists in S'. DeBroglie wave region in S''. Neutrino flux lines in S'''. Each S''' and higher bioframe is a MIND. A particle in one of these frames is a 'thought' or 'thoughtform' in a mind.",
+      "Fig. 21 (Crosstalk Between Multiple Realities): A velocity vector V in the physical frame S decomposes into components V', V'', V''' in the orthogonal hyperspatial frames. This crosstalk between frames is the mechanism by which mind influences matter — the inception/intent mechanism.",
+      "The clustered orthogonal worlds model provides the physical framework for paranormal phenomena (Excalibur Briefing focus): telepathy = S''' crosstalk; psychokinesis = S'' crosstalk into S; precognition = T-axis crosstalk. All are natural consequences of the hyperspatial frame structure.",
+      "This is Bearden's most ambitious theoretical contribution: a single framework unifying physics, biology, consciousness, and paranormal phenomena using orthogonal hyperspatial reference frames and the nested modulation hierarchy."
+    ]
+  },
+  {
+    id: "inception_intent",
+    label: "Inception / Intent Mechanics",
+    group: "consciousness",
+    description: "Fig. 25: How consciousness slightly deviates causal trajectories — the physical mechanism of free will",
+    fragments: [
+      "Fig. 25 (Consciousness, Life, and Intent): Inception or intent can slightly deviate from a causal trajectory. At the inception, both the past and the future are shifted slightly. Over sufficient collections of physical changes, 'intentional behavior' or 'limited free will' emerges.",
+      "Fig. 24 (Life and Death): A living system is defined as A(Sⁿ) — a physical body A coupled to a mind Sⁿ. When the body dies, Sᵏ is a 'disembodied mind' — 'dead' since it cannot preferentially incept its former body. Reincarnation = Sᵏ re-establishing coherent crosstalk with a new body E.",
+      "The functioning of time and consciousness are mutual creators of each other (Fig. 25B): Causal physical world frame S and mental world frame S''' interact bidirectionally — (1)→(2)→(3) physical causation, (4)→(5)→(6) mental inception feedback. They co-create experienced reality.",
+      "Bearden's inception mechanics give a rigorous physical basis for prayer, meditation, and intentional healing: structured S''' → S'' → S' → S modulation impressed by a focused mind onto its own body or a target body reorganizes the quantum potential of the target organism."
+    ]
+  },
+  {
+    id: "phi_river",
+    label: "Phi-River & Virtual Particle Flux",
+    group: "physics",
+    description: "The gradient-phi 'river' of virtual particles flowing between two phi-sources of different magnitudes",
+    fragments: [
+      "Provide two 'locked-in' separated phi-sources of different magnitudes: a gradient-phi river of virtual particles flows from phi₁ to phi₂. This ∇φ region is a region of CURVED SPACETIME and energy is NOT conserved.",
+      "Standard phi-river circuit (electron spray nozzle): has losses, does not break even, does not produce free energy — electrons are dissipated at the spray nozzle. This is the conventional EM circuit.",
+      "The free anenergy pump solves the spray nozzle problem: by shielding the phi-source so that ∇φ inside = 0 while φ inside > φ₀, the virtual particle flux is trapped. Connecting trapped charges to ground via a wire creates ∇φ in the wire only — conventional current without the dissipative spray nozzle loss.",
+      "The spinning charged particle attached to virtual particle flux by its spin (figure): The particle's spin couples it to the φ-flux. The φ-flux is an intensity/spray of virtual photons. 'Spinning off' this flux couples normal EM scalar waves into the particle's precession axis — the electron as a transducer between scalar and vector EM."
+    ]
+  },
+  {
+    id: "conservation_charge",
+    label: "Conservation of Charge (Extended)",
+    group: "physics",
+    description: "Bearden's extended conservation laws: charge = mass component + charge component; energy = dynamic E + mass-energy equivalence",
+    fragments: [
+      "Conservation of Charge: 'Charge' = mass (Mc) + charge (AEc). |Mc| + |AEc| = K₁. This separates massless charge from charged mass — the fundamental distinction missing from all standard EM theory.",
+      "Conservation of Energy: Dynamic energy (E) + energy equivalence of mass (ME). |E| + |ME| = K₂. Adding (1) and (2): |Mc| + |AEc| + |E| + |ME| = K₃ — a unified conservation law covering all three quantities.",
+      "Letting |M| = AE₁, |E| = AE₂, |AEc| = AE₃: then AE₁ + AE₂ + AE₃ = K₃. All three conserved quantities are forms of action-equivalent energy, unified under a single generalized conservation constant K₃.",
+      "Massless Charge ↔ Energy ↔ Mass (cycle diagram): The NEW cycle (massless charge → energy) was not present in classical physics. Only the PRESENT cycle (energy ↔ mass via E=mc²) was known. Bearden's extended conservation law completes the triangle and opens the vacuum energy extraction pathway."
+    ]
+  },
+  {
+    id: "excalibur_briefing",
+    label: "Excalibur Briefing",
+    group: "history",
+    description: "Bearden's 1980/1988 book unifying scalar EM, paranormal phenomena, UFOs, psychokinesis, and consciousness theory",
+    fragments: [
+      "Excalibur Briefing (1st ed. 1980, 2nd ed. 1988, revised & expanded): Lt. Col. Thomas E. Bearden presents UFO phenomena as just one aspect of the interrelationship of humans with their collective species. He treats scalar electromagnetics, Soviet psychotronics, Tesla free energy, and anomalous phenomena as a unified subject.",
+      "UFO sightings are shown to precisely fit predictions for the future via a direct explanation of mind and matter in UFO activity. Bearden shows what UFOs are, how they form, discusses thought photography, psychic surgery, psychokinesis, cattle mutilations, ghost rockets, contactees, and space-suited beings — all as hyperspatial frame phenomena.",
+      "The back cover: 'A COMPELLING BOOK — NOT TO BE MISSED!' ISBN 0-89407-050-4. The 2nd edition is revised and expanded with additional material on scalar EM weapons and Soviet psychotronic research. Currently available from Tesla Book Company and Cheniere Media.",
+      "Excalibur Briefing is the most accessible entry point into Bearden's full theoretical framework — it bridges the gap between his technical scalar EM papers and his consciousness/paranormal research, making it the ideal onramp product for the general public market."
+    ]
   }
 ];
+
 
 export const links = [
   { source: "vector_concept", target: "scalar_em", label: "clarifies basis of" },
@@ -350,6 +459,26 @@ export const links = [
   { source: "em_biological_warfare", target: "biological_warfare", label: "generalizes" },
   { source: "morphogenetic_field", target: "bioframe", label: "species-level" },
   { source: "morphogenetic_field", target: "consciousness", label: "collective layer" },
+  { source: "priors_device", target: "kindling", label: "reverses via" },
+  { source: "priors_device", target: "negentropy", label: "restores" },
+  { source: "priors_device", target: "bioframe", label: "restructures" },
+  { source: "moray_device", target: "anenergy", label: "empirical proof of" },
+  { source: "moray_device", target: "vacuum_structure", label: "tapped" },
+  { source: "elf_entrainment", target: "soviet_woodpecker", label: "mechanism of" },
+  { source: "elf_entrainment", target: "mind_field", label: "targets" },
+  { source: "temporal_logic", target: "consciousness", label: "describes" },
+  { source: "temporal_logic", target: "quantum_potential", label: "corresponds to" },
+  { source: "hyperspatial_worlds", target: "bioframe", label: "formalizes" },
+  { source: "hyperspatial_worlds", target: "mind_field", label: "locates" },
+  { source: "inception_intent", target: "consciousness", label: "mechanism of" },
+  { source: "inception_intent", target: "hyperspatial_worlds", label: "operates via" },
+  { source: "phi_river", target: "anenergy", label: "substrate of" },
+  { source: "phi_river", target: "vacuum_structure", label: "maps" },
+  { source: "conservation_charge", target: "scalar_em", label: "formalizes" },
+  { source: "conservation_charge", target: "anenergy", label: "enables" },
+  { source: "excalibur_briefing", target: "hyperspatial_worlds", label: "presents" },
+  { source: "excalibur_briefing", target: "inception_intent", label: "explains" },
+  { source: "excalibur_briefing", target: "temporal_logic", label: "develops" },
 ];
 
 export const groupColors = {
