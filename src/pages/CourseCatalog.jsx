@@ -198,6 +198,9 @@ export default function CourseCatalog() {
           <span className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-yellow-900/30 border border-yellow-800 text-yellow-300">
             <BookOpen size={11} /> {pdfs.length} PDF Books
           </span>
+          <Link to="/my-learning" className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-purple-900/30 border border-purple-700 text-purple-300 hover:bg-purple-800/40 transition-colors text-xs font-semibold">
+            🎓 My Learning
+          </Link>
         </div>
       </div>
 

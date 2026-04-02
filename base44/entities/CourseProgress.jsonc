@@ -1,0 +1,29 @@
+{
+  "name": "CourseProgress",
+  "type": "object",
+  "properties": {
+    "user_email": {
+      "type": "string"
+    },
+    "course_title": {
+      "type": "string"
+    },
+    "completed_lessons": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "last_lesson": {
+      "type": "string"
+    },
+    "completed": {
+      "type": "boolean",
+      "default": false
+    }
+  },
+  "required": [
+    "user_email",
+    "course_title"
+  ]
+}
