@@ -28,6 +28,7 @@ import PatentDraftingTool from './pages/PatentDraftingTool';
 import TimelinePitchDeck from './pages/TimelinePitchDeck';
 import PriorArtArchive from './pages/PriorArtArchive';
 import InvestorPortal from './pages/InvestorPortal';
+import PatentLandscapeGraph from './pages/PatentLandscapeGraph';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -86,6 +87,7 @@ const AuthenticatedApp = () => {
         <Route path="/timeline-pitch" element={<TimelinePitchDeck />} />
         <Route path="/prior-art" element={<PriorArtArchive />} />
         <Route path="/investors" element={<InvestorPortal />} />
+        <Route path="/patent-landscape" element={<PatentLandscapeGraph />} />
         <Route path="/investor-portal" element={<InvestorPortal />} />
         <Route path="*" element={<PageNotFound />} />
       </Routes>

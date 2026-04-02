@@ -397,7 +397,8 @@ export default function PriorArtArchive() {
       </div>
 
       {/* Tabs */}
-      <div className="flex border-b border-gray-800 px-5">
+      <div className="flex border-b border-gray-800 px-5 items-center justify-between">
+        <div className="flex">
         {[["archive", "📚 Archive", `${filtered.length} entries`], ["crossref", "🎯 Cross-Reference Tool", "AI patent risk analysis"]].map(([id, label, sub]) => (
           <button key={id} onClick={() => setTab(id)}
             className={`flex items-center gap-2 px-4 py-3 text-sm font-semibold border-b-2 transition-colors ${tab === id ? "border-blue-500 text-white" : "border-transparent text-gray-500 hover:text-gray-300"}`}>
@@ -405,6 +406,11 @@ export default function PriorArtArchive() {
             <span className="text-xs text-gray-600 font-normal hidden sm:block">{sub}</span>
           </button>
         ))}
+        </div>
+        <Link to="/patent-landscape"
+          className="flex items-center gap-1.5 px-3 py-1.5 mb-1 rounded-lg bg-purple-900/30 border border-purple-800 text-purple-300 text-xs font-bold hover:bg-purple-900/50 transition-colors">
+          🕸 Landscape Graph
+        </Link>
       </div>
 
       <div className="flex-1 flex flex-col lg:flex-row min-h-0 overflow-hidden">
