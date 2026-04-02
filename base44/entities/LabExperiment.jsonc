@@ -1,0 +1,62 @@
+{
+  "name": "LabExperiment",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "source1_freq": {
+      "type": "number"
+    },
+    "source1_phase": {
+      "type": "number"
+    },
+    "source1_amplitude": {
+      "type": "number"
+    },
+    "source1_x": {
+      "type": "number"
+    },
+    "source1_y": {
+      "type": "number"
+    },
+    "source2_freq": {
+      "type": "number"
+    },
+    "source2_phase": {
+      "type": "number"
+    },
+    "source2_amplitude": {
+      "type": "number"
+    },
+    "source2_x": {
+      "type": "number"
+    },
+    "source2_y": {
+      "type": "number"
+    },
+    "color_scheme": {
+      "type": "string",
+      "enum": [
+        "plasma",
+        "cyan",
+        "green",
+        "orange"
+      ],
+      "default": "plasma"
+    },
+    "show_vectors": {
+      "type": "boolean",
+      "default": false
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "name"
+  ]
+}

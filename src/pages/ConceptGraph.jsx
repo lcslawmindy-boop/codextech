@@ -79,6 +79,12 @@ export default function ConceptGraph() {
             🔬 Diagnostics
           </button>
           <Link
+            to="/lab"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-teal-900/40 hover:bg-teal-800/50 border border-teal-800 text-teal-300 text-xs font-medium transition-colors"
+          >
+            🧪 Wave Lab
+          </Link>
+          <Link
             to="/simulator"
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-cyan-900/40 hover:bg-cyan-800/50 border border-cyan-800 text-cyan-300 text-xs font-medium transition-colors"
           >
