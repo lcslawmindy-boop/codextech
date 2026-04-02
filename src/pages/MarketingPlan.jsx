@@ -107,79 +107,73 @@ export default function MarketingPlan() {
     prev.includes(id) ? prev.filter(o => o !== id) : [...prev, id]
   );
 
+  const [progress, setProgress] = useState(0);
+
   const handleGenerate = async () => {
     setLoading(true);
     setPosts([]);
     setGenerated(false);
+    setProgress(0);
 
     const platformList = PLATFORMS.filter(p => selectedPlatforms.includes(p.id));
     const objectiveList = OBJECTIVES.filter(o => selectedObjectives.includes(o.id));
+    const allPosts = [];
 
-    const prompt = `You are a world-class content strategist and copywriter specializing in deep tech, alternative energy, and investor marketing.
+    for (let weekNum = 1; weekNum <= 4; weekNum++) {
+      const theme = WEEK_THEMES[weekNum - 1];
+      const dayStart = (weekNum - 1) * 7 + 1;
+      const dayEnd = weekNum === 4 ? 30 : weekNum * 7;
 
-Generate a 30-day social media content calendar for the following brand:
+      const prompt = `You are a world-class content strategist for deep tech and alternative energy marketing.
 
-BRAND: Bearden Scalar EM Research Platform
-TAGLINE: "The suppressed physics that changes everything"
-PRODUCTS: 
-- Video courses ($147–$397): Scalar EM, Anenergy Pump, Gravitobiology, Vector Taxonomy, Bioelectromagnetics, Mind/Consciousness
-- PDF books ($19–$67): Annotated Bearden papers, Suppressed Science history, Vacuum Energy Engineering
-- Physical invention kits: Anenergy Pump Demo Circuit ($89), Vacuum Potential Oscillator ($89)
-
+BRAND: Bearden Scalar EM Research Platform — "The suppressed physics that changes everything"
+PRODUCTS: Video courses ($147-$397), PDF books ($19-$67), Invention kits ($89)
 PLATFORMS: ${platformList.map(p => p.label + " (" + p.goal + ")").join(", ")}
-OBJECTIVES: ${objectiveList.map(o => o.label + " — " + o.desc).join("; ")}
+OBJECTIVES: ${objectiveList.map(o => o.label).join("; ")}
 
-WEEK THEMES:
-- Week 1 (Days 1-7): "${WEEK_THEMES[0].theme}" — ${WEEK_THEMES[0].desc}
-- Week 2 (Days 8-14): "${WEEK_THEMES[1].theme}" — ${WEEK_THEMES[1].desc}
-- Week 3 (Days 15-21): "${WEEK_THEMES[2].theme}" — ${WEEK_THEMES[2].desc}
-- Week 4 (Days 22-30): "${WEEK_THEMES[3].theme}" — ${WEEK_THEMES[3].desc}
+Generate posts for WEEK ${weekNum} ONLY (Days ${dayStart}-${dayEnd}).
+Week theme: "${theme.theme}" — ${theme.desc}
 
-Generate exactly one post per platform per day for the selected platforms. Each post must be platform-appropriate:
-- LinkedIn: professional, data-driven, 150-200 words, investor/thought-leader tone
-- X/Twitter: punchy, 1-3 sentences max, hook-first, use hashtags like #ScalarEM #FreeEnergy #Bearden
-- Instagram: visual caption, emoji-rich, storytelling, 3-5 sentences + hashtags
-- TikTok: script hook (first 3 seconds), then talking points, energetic tone
-- YouTube: video title + description outline + thumbnail concept
-- Facebook: community-style, conversational, question-based, 2-3 paragraphs
+Create exactly one post per platform per day for days ${dayStart} through ${dayEnd}.
+That is ${selectedPlatforms.length} posts per day × ${dayEnd - dayStart + 1} days = ${selectedPlatforms.length * (dayEnd - dayStart + 1)} total posts.
 
-Return a JSON object with this schema:
-{
-  "posts": [
-    {
-      "day": number (1-30),
-      "week": number (1-4),
-      "platform": string (one of: ${selectedPlatforms.join(", ")}),
-      "content": string (the full post text)
-    }
-  ]
-}
+Platform guidelines:
+- linkedin: professional, 100-150 words, investor/thought-leader tone
+- twitter: 1-2 punchy sentences, hashtags #ScalarEM #Bearden #FreeEnergy
+- instagram: emoji-rich, 3-4 sentences + hashtags
+- tiktok: hook (first 3 seconds) + 3 talking points
+- youtube: video title + 2-sentence description + thumbnail concept
+- facebook: conversational, question-based, 2 paragraphs
 
-Generate posts for all 30 days across all selected platforms. That is ${selectedPlatforms.length * 30} total posts. Make each post unique, compelling, and directly tied to the week theme. Include specific course names, prices, and CTAs where appropriate.`;
+Return JSON: {"posts": [{"day": number, "week": ${weekNum}, "platform": string, "content": string}]}`;
 
-    const result = await base44.integrations.Core.InvokeLLM({
-      prompt,
-      model: "claude_sonnet_4_6",
-      response_json_schema: {
-        type: "object",
-        properties: {
-          posts: {
-            type: "array",
-            items: {
-              type: "object",
-              properties: {
-                day: { type: "number" },
-                week: { type: "number" },
-                platform: { type: "string" },
-                content: { type: "string" },
+      const result = await base44.integrations.Core.InvokeLLM({
+        prompt,
+        model: "gpt_5",
+        response_json_schema: {
+          type: "object",
+          properties: {
+            posts: {
+              type: "array",
+              items: {
+                type: "object",
+                properties: {
+                  day: { type: "number" },
+                  week: { type: "number" },
+                  platform: { type: "string" },
+                  content: { type: "string" },
+                },
               },
             },
           },
         },
-      },
-    });
+      });
 
-    setPosts(result?.posts || []);
+      allPosts.push(...(result?.posts || []));
+      setProgress(weekNum);
+      setPosts([...allPosts]);
+    }
+
     setGenerated(true);
     setLoading(false);
   };
@@ -273,10 +267,10 @@ Generate posts for all 30 days across all selected platforms. That is ${selected
               className="flex items-center gap-2 px-6 py-3 rounded-xl font-bold text-sm text-white bg-purple-700 hover:bg-purple-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
             >
               {loading ? <Loader2 size={15} className="animate-spin" /> : <Sparkles size={15} />}
-              {loading ? `Generating ${totalPosts} posts…` : `Generate ${totalPosts}-Post Calendar`}
+              {loading ? `Generating week ${progress + 1} of 4…` : `Generate ${totalPosts}-Post Calendar`}
             </button>
             {loading && (
-              <p className="text-xs text-gray-500">This uses AI (Claude Sonnet) — takes ~30 seconds for a full calendar…</p>
+              <p className="text-xs text-gray-500">Generating week by week (4 calls) — {progress}/4 weeks done…</p>
             )}
             {generated && !loading && (
               <p className="text-xs text-green-400 flex items-center gap-1.5">
