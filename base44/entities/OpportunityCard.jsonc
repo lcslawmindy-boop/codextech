@@ -1,0 +1,83 @@
+{
+  "name": "OpportunityCard",
+  "type": "object",
+  "properties": {
+    "alias": {
+      "type": "string"
+    },
+    "category": {
+      "type": "string"
+    },
+    "stage": {
+      "type": "string",
+      "enum": [
+        "Concept",
+        "Prototype",
+        "Patent Pending",
+        "Patent Granted",
+        "Seeking Co-Inventor",
+        "Seeking Funding"
+      ]
+    },
+    "funding_ask": {
+      "type": "number"
+    },
+    "equity_offered": {
+      "type": "number"
+    },
+    "headline": {
+      "type": "string"
+    },
+    "problem_statement": {
+      "type": "string"
+    },
+    "solution_summary": {
+      "type": "string"
+    },
+    "market_size": {
+      "type": "string"
+    },
+    "ip_valuation": {
+      "type": "number"
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "jurisdiction": {
+      "type": "string"
+    },
+    "alignment_flags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "live",
+        "matched",
+        "closed"
+      ],
+      "default": "draft"
+    },
+    "matched_investors": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "contact_email_encrypted": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "alias",
+    "headline",
+    "category"
+  ]
+}

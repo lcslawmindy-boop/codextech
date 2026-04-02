@@ -85,6 +85,7 @@ const AuthenticatedApp = () => {
         <Route path="/patent-tool" element={<PatentDraftingTool />} />
         <Route path="/timeline-pitch" element={<TimelinePitchDeck />} />
         <Route path="/prior-art" element={<PriorArtArchive />} />
+        <Route path="/investors" element={<InvestorPortal />} />
         <Route path="/investor-portal" element={<InvestorPortal />} />
         <Route path="*" element={<PageNotFound />} />
       </Routes>

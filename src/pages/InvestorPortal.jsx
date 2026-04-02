@@ -1,471 +1,524 @@
 import { useState, useMemo } from "react";
 import { Link } from "react-router-dom";
-import { ArrowLeft, Plus, Target, Shield, DollarSign, Loader2, ChevronDown, ChevronUp, Users, Zap, CheckCircle2, Edit2, Eye, EyeOff } from "lucide-react";
+import { ArrowLeft, Shield, Zap, DollarSign, Plus, Loader2, CheckCircle2, Eye, EyeOff, Star, Globe, Lock, ChevronDown, ChevronUp, Send } from "lucide-react";
+import { INVESTORS, ALIGNMENT_FLAGS, INVESTOR_CATEGORIES } from "../lib/investorData";
 import { base44 } from "@/api/base44Client";
-import { VETTED_INVESTORS, SUPPRESSION_RISK_COLORS } from "../lib/investorData";
 
-// ── Opportunity Card Form ─────────────────────────────────────────────
-function OpportunityForm({ onSave, onClose, initial }) {
-  const CATEGORIES = ["Vacuum Energy", "Scalar EM", "Bioelectromagnetics", "Resonance Devices", "Free Energy", "Defense Technology", "Health Technology", "Other"];
-  const STAGES = ["Concept", "Prototype", "Patent Filed", "Patent Granted", "Pre-Revenue", "Revenue Stage"];
+const CATEGORIES = ["Vacuum Energy", "Scalar EM", "Bioelectromagnetics", "Phase Conjugation", "Resonance Devices", "Free Energy", "Tesla Technology", "Atmospheric EM", "Other"];
+const STAGES = ["Concept", "Prototype", "Patent Pending", "Patent Granted", "Seeking Co-Inventor", "Seeking Funding"];
+const RISK_COLOR = { low: "text-green-400", medium: "text-yellow-400", high: "text-orange-400", very_high: "text-red-400" };
 
-  const [form, setForm] = useState(initial || {
-    title: "", anon_handle: "", category: "Vacuum Energy", stage: "Concept",
-    summary: "", problem_solved: "", tech_approach: "", seeking_usd: "",
-    equity_offered: "", use_of_funds: "", ip_status: "", tam_usd_millions: "",
-    contact_method: "", is_anonymous: true, status: "Draft", tags: "",
+function AlignmentBadge({ id }) {
+  const flag = ALIGNMENT_FLAGS.find(f => f.id === id);
+  if (!flag) return null;
+  return (
+    <span className="text-xs px-2 py-0.5 rounded-full font-semibold border" style={{ backgroundColor: flag.color + "20", color: flag.color, borderColor: flag.color + "40" }}>
+      {flag.label}
+    </span>
+  );
+}
+
+function MatchScore({ investor, card }) {
+  let score = 0;
+  const reasons = [];
+  if (investor.focus.some(f => card.category?.toLowerCase().includes(f.toLowerCase()) || f.toLowerCase().includes(card.category?.toLowerCase()))) { score += 35; reasons.push("Category match"); }
+  if (investor.stage_fit.includes(card.stage)) { score += 25; reasons.push("Stage fit"); }
+  if ((card.alignment_flags || []).some(f => investor.alignment.includes(f))) { score += 20; reasons.push("Alignment match"); }
+  const ask = card.funding_ask || 0;
+  if (ask >= investor.check_range[0] && ask <= investor.check_range[1]) { score += 20; reasons.push("Check size fit"); }
+  else if (ask < investor.check_range[1]) { score += 8; reasons.push("Within max check"); }
+  if ((card.tags || []).some(t => investor.tags.includes(t.toLowerCase()))) { score += 10; reasons.push("Tag overlap"); }
+  const pct = Math.min(100, score);
+  return { pct, reasons };
+}
+
+// ── Opportunity Card Creator ───────────────────────────────────────────
+function CreateCardForm({ onCreated, onClose }) {
+  const [form, setForm] = useState({
+    alias: "", headline: "", category: "Scalar EM", stage: "Concept",
+    funding_ask: "", equity_offered: "", problem_statement: "", solution_summary: "",
+    market_size: "", ip_valuation: "", jurisdiction: "US (USPTO)",
+    alignment_flags: [], tags: "", contact_email_encrypted: ""
   });
   const [saving, setSaving] = useState(false);
+  const [aiLoading, setAiLoading] = useState(false);
+  const [patentContext, setPatentContext] = useState("");
 
-  const f = (label, key, type = "text", placeholder = "") => (
+  const toggleFlag = (id) => setForm(f => ({
+    ...f, alignment_flags: f.alignment_flags.includes(id) ? f.alignment_flags.filter(x => x !== id) : [...f.alignment_flags, id]
+  }));
+
+  const handleAIFill = async () => {
+    if (!patentContext) return;
+    setAiLoading(true);
+    const res = await base44.integrations.Core.InvokeLLM({
+      prompt: `You are a startup pitch specialist. Based on this patent/invention context, generate an anonymized investment opportunity card. Be compelling but accurate. DO NOT include the inventor's name, location, or any identifying information.
+
+PATENT/INVENTION CONTEXT:
+${patentContext}
+
+Generate a compelling, anonymized investment opportunity card:`,
+      response_json_schema: {
+        type: "object",
+        properties: {
+          alias: { type: "string" },
+          headline: { type: "string" },
+          problem_statement: { type: "string" },
+          solution_summary: { type: "string" },
+          market_size: { type: "string" },
+          tags: { type: "string" },
+          suggested_alignment_flags: { type: "array", items: { type: "string" } },
+        },
+      },
+    });
+    setForm(f => ({
+      ...f,
+      alias: res.alias || f.alias,
+      headline: res.headline || f.headline,
+      problem_statement: res.problem_statement || f.problem_statement,
+      solution_summary: res.solution_summary || f.solution_summary,
+      market_size: res.market_size || f.market_size,
+      tags: res.tags || f.tags,
+      alignment_flags: (res.suggested_alignment_flags || []).filter(id => ALIGNMENT_FLAGS.find(a => a.id === id)),
+    }));
+    setAiLoading(false);
+  };
+
+  const handleSave = async (publish) => {
+    setSaving(true);
+    const data = {
+      ...form,
+      funding_ask: parseFloat(form.funding_ask) || 0,
+      equity_offered: parseFloat(form.equity_offered) || 0,
+      ip_valuation: parseFloat(form.ip_valuation) || 0,
+      tags: form.tags.split(",").map(t => t.trim()).filter(Boolean),
+      status: publish ? "live" : "draft",
+    };
+    const saved = await base44.entities.OpportunityCard.create(data);
+    onCreated({ ...data, id: saved.id });
+    setSaving(false);
+    onClose();
+  };
+
+  const inp = (label, key, type = "text", placeholder = "") => (
     <div>
       <label className="text-gray-400 text-xs block mb-1">{label}</label>
-      <input type={type} value={form[key]} onChange={e => setForm(x => ({ ...x, [key]: e.target.value }))}
+      <input type={type} value={form[key]} onChange={e => setForm(f => ({ ...f, [key]: e.target.value }))}
         placeholder={placeholder}
         className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-xs text-white placeholder-gray-600 focus:outline-none focus:border-blue-500" />
     </div>
   );
 
-  const ta = (label, key, placeholder = "", rows = 3) => (
+  const ta = (label, key, placeholder = "") => (
     <div>
       <label className="text-gray-400 text-xs block mb-1">{label}</label>
-      <textarea value={form[key]} onChange={e => setForm(x => ({ ...x, [key]: e.target.value }))}
-        rows={rows} placeholder={placeholder}
+      <textarea value={form[key]} onChange={e => setForm(f => ({ ...f, [key]: e.target.value }))}
+        rows={3} placeholder={placeholder}
         className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-xs text-white placeholder-gray-600 focus:outline-none focus:border-blue-500 resize-none" />
     </div>
   );
 
-  const handleSave = async () => {
-    setSaving(true);
-    const data = { ...form, seeking_usd: parseFloat(form.seeking_usd) || 0, equity_offered: parseFloat(form.equity_offered) || 0, tam_usd_millions: parseFloat(form.tam_usd_millions) || 0, tags: form.tags ? form.tags.split(",").map(t => t.trim()).filter(Boolean) : [] };
-    let saved;
-    if (initial?.id) {
-      await base44.entities.InvestmentOpportunity.update(initial.id, data);
-      saved = { ...data, id: initial.id };
-    } else {
-      saved = await base44.entities.InvestmentOpportunity.create({ ...data, status: "Active" });
-    }
-    onSave(saved);
-    setSaving(false);
-    onClose();
-  };
-
   return (
-    <div className="fixed inset-0 bg-black/75 flex items-center justify-center z-50 p-4">
+    <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4">
       <div className="bg-gray-900 border border-gray-700 rounded-2xl w-full max-w-2xl max-h-[92vh] overflow-y-auto">
-        <div className="flex items-center justify-between px-5 py-4 border-b border-gray-800 sticky top-0 bg-gray-900 z-10">
-          <h2 className="text-white font-bold text-sm">Create Investment Opportunity Card</h2>
-          <button onClick={onClose} className="text-gray-500 hover:text-white text-lg leading-none">×</button>
+        <div className="flex items-center justify-between px-5 py-4 border-b border-gray-800">
+          <div>
+            <h2 className="text-white font-bold">Create Opportunity Card</h2>
+            <p className="text-gray-500 text-xs mt-0.5">All cards are anonymized — no personal data is visible to investors</p>
+          </div>
+          <button onClick={onClose} className="text-gray-500 hover:text-white text-xl">×</button>
         </div>
-        <div className="p-5 space-y-4">
-          {/* Anonymity toggle */}
-          <div className={`flex items-center justify-between p-3 rounded-xl border transition-all ${form.is_anonymous ? "bg-green-950/30 border-green-800" : "bg-gray-800 border-gray-700"}`}>
-            <div className="flex items-center gap-2">
-              {form.is_anonymous ? <Shield size={14} className="text-green-400" /> : <Eye size={14} className="text-gray-400" />}
-              <div>
-                <p className="text-white text-xs font-bold">{form.is_anonymous ? "Anonymous Mode" : "Named Mode"}</p>
-                <p className="text-gray-500 text-xs">{form.is_anonymous ? "Your identity is hidden from investors until you choose to reveal" : "Investors can see your identity"}</p>
-              </div>
-            </div>
-            <button onClick={() => setForm(x => ({ ...x, is_anonymous: !x.is_anonymous }))}
-              className={`w-10 h-5 rounded-full transition-all relative ${form.is_anonymous ? "bg-green-600" : "bg-gray-600"}`}>
-              <span className={`w-4 h-4 bg-white rounded-full absolute top-0.5 transition-all ${form.is_anonymous ? "right-0.5" : "left-0.5"}`} />
+
+        <div className="p-5 space-y-5">
+          {/* AI autofill */}
+          <div className="bg-blue-950/30 border border-blue-900/40 rounded-xl p-4">
+            <p className="text-blue-300 font-bold text-xs mb-2 flex items-center gap-1.5"><Zap size={12} /> AI Autofill from Patent Disclosure</p>
+            <textarea value={patentContext} onChange={e => setPatentContext(e.target.value)}
+              rows={3} placeholder="Paste your patent abstract, claims summary, or description here to auto-fill the card..."
+              className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-xs text-white placeholder-gray-600 focus:outline-none focus:border-blue-500 resize-none mb-2" />
+            <button onClick={handleAIFill} disabled={aiLoading || !patentContext}
+              className="flex items-center gap-2 px-4 py-1.5 rounded-lg text-xs font-bold bg-blue-700 hover:bg-blue-600 text-white disabled:opacity-50 transition-all">
+              {aiLoading ? <Loader2 size={11} className="animate-spin" /> : <Zap size={11} />}
+              {aiLoading ? "Generating…" : "Auto-fill from Patent"}
             </button>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {f("Opportunity Title *", "title", "text", "e.g. Toroidal Vacuum Energy Extraction Circuit")}
-            {f("Anonymous Handle *", "anon_handle", "text", "e.g. QuantumFounder42")}
+            {inp("Anonymous Alias *", "alias", "text", "e.g. Project Aurora, Inventor X-7")}
+            {inp("Investment Headline *", "headline", "text", "e.g. Vacuum energy extraction circuit — patent pending")}
           </div>
-          <div className="grid grid-cols-2 gap-4">
+
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <div>
               <label className="text-gray-400 text-xs block mb-1">Category</label>
-              <select value={form.category} onChange={e => setForm(x => ({ ...x, category: e.target.value }))}
+              <select value={form.category} onChange={e => setForm(f => ({ ...f, category: e.target.value }))}
                 className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-xs text-white focus:outline-none">
                 {CATEGORIES.map(c => <option key={c}>{c}</option>)}
               </select>
             </div>
             <div>
               <label className="text-gray-400 text-xs block mb-1">Stage</label>
-              <select value={form.stage} onChange={e => setForm(x => ({ ...x, stage: e.target.value }))}
+              <select value={form.stage} onChange={e => setForm(f => ({ ...f, stage: e.target.value }))}
                 className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-xs text-white focus:outline-none">
                 {STAGES.map(s => <option key={s}>{s}</option>)}
               </select>
             </div>
+            {inp("Funding Ask ($)", "funding_ask", "number", "e.g. 150000")}
+            {inp("Equity Offered (%)", "equity_offered", "number", "e.g. 15")}
           </div>
-          {ta("Executive Summary *", "summary", "Describe your invention and opportunity in 2-4 sentences. This is what investors see first.", 3)}
-          {ta("Problem Solved", "problem_solved", "What specific problem does this solve and why hasn't it been solved before?", 2)}
-          {ta("Technical Approach", "tech_approach", "High-level technical description. Enough to show it's real without revealing trade secrets.", 3)}
-          <div className="grid grid-cols-3 gap-3">
-            {f("Seeking ($)", "seeking_usd", "number", "e.g. 250000")}
-            {f("Equity Offered (%)", "equity_offered", "number", "e.g. 15")}
-            {f("TAM ($ millions)", "tam_usd_millions", "number", "e.g. 340")}
+
+          {ta("Problem Statement", "problem_statement", "What specific problem does this solve?")}
+          {ta("Solution Summary (no identifying info)", "solution_summary", "Describe the technical solution anonymously...")}
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {inp("Market Size", "market_size", "text", "e.g. $340M TAM")}
+            {inp("IP Valuation ($M)", "ip_valuation", "number", "e.g. 4.2")}
+            {inp("Jurisdiction", "jurisdiction", "text", "e.g. US (USPTO)")}
           </div>
-          {ta("Use of Funds", "use_of_funds", "Prototype development: 40%, Patent filing: 20%, Lab equipment: 40%", 2)}
-          {f("IP Status", "ip_status", "text", "e.g. Provisional patent filed June 2024, PCT application pending")}
-          {f("Contact Method (anonymous-friendly)", "contact_method", "text", "e.g. Signal username, ProtonMail address, Keybase")}
-          {f("Tags (comma separated)", "tags", "text", "e.g. toroid, vacuum energy, non-Ohmic, scalar")}
-        </div>
-        <div className="flex justify-end gap-3 px-5 py-4 border-t border-gray-800 sticky bottom-0 bg-gray-900">
-          <button onClick={onClose} className="px-4 py-2 rounded-lg border border-gray-700 text-gray-400 text-xs hover:border-gray-500 transition-colors">Cancel</button>
-          <button onClick={handleSave} disabled={saving || !form.title || !form.summary}
-            className="flex items-center gap-2 px-5 py-2 rounded-lg bg-blue-700 hover:bg-blue-600 text-white text-xs font-bold disabled:opacity-50 transition-all">
-            {saving ? <Loader2 size={12} className="animate-spin" /> : <CheckCircle2 size={12} />}
-            {saving ? "Saving…" : "Save Opportunity Card"}
-          </button>
+
+          {inp("Tags (comma-separated)", "tags", "text", "e.g. vacuum energy, toroid, scalar")}
+
+          <div>
+            <label className="text-gray-400 text-xs block mb-2">Alignment Flags <span className="text-gray-600">(select all that apply)</span></label>
+            <div className="flex flex-wrap gap-2">
+              {ALIGNMENT_FLAGS.map(flag => (
+                <button key={flag.id} onClick={() => toggleFlag(flag.id)} title={flag.desc}
+                  className="text-xs px-2.5 py-1 rounded-full border font-semibold transition-all"
+                  style={form.alignment_flags.includes(flag.id)
+                    ? { backgroundColor: flag.color + "25", color: flag.color, borderColor: flag.color }
+                    : { backgroundColor: "transparent", color: "#6b7280", borderColor: "#374151" }}>
+                  {flag.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div>
+            <label className="text-gray-400 text-xs block mb-1">Secure Contact Email <span className="text-gray-600">(encrypted, never shown publicly)</span></label>
+            <input type="email" value={form.contact_email_encrypted}
+              onChange={e => setForm(f => ({ ...f, contact_email_encrypted: e.target.value }))}
+              placeholder="your@email.com — investors contact via platform only"
+              className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-xs text-white placeholder-gray-600 focus:outline-none focus:border-blue-500" />
+          </div>
+
+          <div className="flex justify-end gap-3 pt-2 border-t border-gray-800">
+            <button onClick={() => handleSave(false)} disabled={saving || !form.alias || !form.headline}
+              className="px-4 py-2 rounded-lg border border-gray-700 text-gray-400 text-xs hover:border-gray-500 transition-colors disabled:opacity-50">
+              Save Draft
+            </button>
+            <button onClick={() => handleSave(true)} disabled={saving || !form.alias || !form.headline}
+              className="flex items-center gap-2 px-5 py-2 rounded-lg bg-green-700 hover:bg-green-600 text-white text-xs font-bold disabled:opacity-50 transition-all">
+              {saving ? <Loader2 size={12} className="animate-spin" /> : <Send size={12} />}
+              {saving ? "Publishing…" : "Publish & Match"}
+            </button>
+          </div>
         </div>
       </div>
     </div>
   );
 }
 
-// ── Investor Card ────────────────────────────────────────────────────
-function InvestorCard({ investor, matchScore, matchReasons }) {
+// ── Investor Card ──────────────────────────────────────────────────────
+function InvestorCard({ investor, card, showMatch }) {
   const [expanded, setExpanded] = useState(false);
-  const risk = SUPPRESSION_RISK_COLORS[investor.suppression_risk] || SUPPRESSION_RISK_COLORS.low;
-  const alignColor = investor.alignment_score >= 90 ? "text-green-400" : investor.alignment_score >= 75 ? "text-yellow-400" : "text-orange-400";
+  const match = card ? MatchScore({ investor, card }) : null;
 
   return (
-    <div className={`bg-gray-900 border rounded-xl overflow-hidden transition-all ${matchScore >= 80 ? "border-green-700/60" : matchScore >= 50 ? "border-blue-700/40" : "border-gray-800"}`}>
-      {matchScore !== undefined && (
-        <div className={`h-1 ${matchScore >= 80 ? "bg-green-600" : matchScore >= 50 ? "bg-blue-600" : "bg-gray-700"}`}
-          style={{ width: `${matchScore}%` }} />
-      )}
+    <div className="bg-gray-900 border border-gray-800 rounded-xl overflow-hidden hover:border-gray-600 transition-all">
       <div className="p-4">
-        <div className="flex items-start gap-3 mb-2">
-          <span className="text-2xl flex-shrink-0">{investor.logo_emoji}</span>
+        <div className="flex items-start gap-3 mb-3">
+          <div className="w-10 h-10 rounded-xl bg-gray-800 flex items-center justify-center text-xl flex-shrink-0">{investor.logo}</div>
           <div className="flex-1 min-w-0">
             <div className="flex items-start justify-between gap-2">
               <div>
-                <h3 className="text-white font-bold text-sm leading-tight">{investor.name}</h3>
-                <p className="text-gray-500 text-xs mt-0.5">{investor.type} · {investor.location}</p>
+                <h3 className="text-white font-bold text-sm leading-snug">{investor.name}</h3>
+                <p className="text-gray-500 text-xs">{investor.type} · {investor.geography}</p>
               </div>
-              {matchScore !== undefined && (
-                <div className="flex flex-col items-end flex-shrink-0">
-                  <span className={`text-lg font-black ${alignColor}`}>{matchScore}%</span>
-                  <span className="text-gray-600 text-xs">match</span>
+              {showMatch && match && (
+                <div className={`text-lg font-black flex-shrink-0 ${match.pct >= 70 ? "text-green-400" : match.pct >= 40 ? "text-yellow-400" : "text-gray-500"}`}>
+                  {match.pct}%
                 </div>
               )}
             </div>
           </div>
         </div>
 
-        <div className="flex flex-wrap gap-1.5 mb-2">
-          <span className={`text-xs px-2 py-0.5 rounded font-semibold ${risk.bg} ${risk.text}`}>
-            {risk.label} suppression risk
-          </span>
-          {investor.anonymity_friendly && (
-            <span className="text-xs px-2 py-0.5 rounded bg-green-900/30 text-green-300 font-semibold">Anon-friendly</span>
-          )}
-          <span className="text-xs px-2 py-0.5 rounded bg-gray-800 text-gray-400">
-            ${(investor.check_size_min / 1000).toFixed(0)}K–${(investor.check_size_max / 1000000).toFixed(1)}M
+        <p className="text-gray-400 text-xs leading-relaxed mb-3 line-clamp-2">{investor.description}</p>
+
+        <div className="flex items-center justify-between mb-3 text-xs">
+          <span className="text-green-400 font-bold">${investor.check_range[0].toLocaleString()} – ${investor.check_range[1].toLocaleString()}</span>
+          <span className={`font-semibold ${RISK_COLOR[investor.risk_tolerance] || "text-gray-400"}`}>
+            {investor.risk_tolerance.replace("_", " ")} risk tolerance
           </span>
         </div>
 
-        {matchReasons && matchReasons.length > 0 && (
-          <div className="bg-green-950/20 border border-green-900/30 rounded-lg p-2 mb-2">
-            <p className="text-green-400 text-xs font-bold mb-1">Why matched:</p>
-            <ul className="space-y-0.5">
-              {matchReasons.map((r, i) => <li key={i} className="text-green-200 text-xs flex gap-1"><span>•</span>{r}</li>)}
-            </ul>
-          </div>
-        )}
+        <div className="flex flex-wrap gap-1.5 mb-3">
+          {investor.alignment.slice(0, 3).map(a => <AlignmentBadge key={a} id={a} />)}
+          {investor.alignment.length > 3 && <span className="text-xs text-gray-600">+{investor.alignment.length - 3} more</span>}
+        </div>
 
-        <p className="text-gray-400 text-xs leading-relaxed line-clamp-2">{investor.description}</p>
+        <div className="flex items-center gap-3 text-xs">
+          <span className={`flex items-center gap-1 ${investor.anonymity_respected ? "text-green-400" : "text-yellow-400"}`}>
+            {investor.anonymity_respected ? <Lock size={10} /> : <Eye size={10} />}
+            {investor.anonymity_respected ? "Anonymity OK" : "Identity required"}
+          </span>
+          <span className="text-gray-600">·</span>
+          <span className="text-gray-500">{investor.contact_method}</span>
+        </div>
 
-        <button onClick={() => setExpanded(e => !e)} className="flex items-center gap-1 text-xs text-gray-600 hover:text-gray-300 mt-2 transition-colors">
-          {expanded ? <ChevronUp size={11} /> : <ChevronDown size={11} />}
-          {expanded ? "Less" : "Full profile"}
+        <button onClick={() => setExpanded(x => !x)}
+          className="flex items-center gap-1 text-xs text-gray-600 hover:text-gray-300 mt-2 transition-colors">
+          {expanded ? <ChevronUp size={11} /> : <ChevronDown size={11} />} {expanded ? "Less" : "Stage fit & focus"}
         </button>
       </div>
 
       {expanded && (
-        <div className="px-4 pb-4 space-y-3 border-t border-gray-800 pt-3">
+        <div className="px-4 pb-4 border-t border-gray-800 pt-3 space-y-2">
           <div>
-            <p className="text-gray-500 text-xs font-bold uppercase tracking-wider mb-1">Investment Focus</p>
-            <div className="flex flex-wrap gap-1">
-              {investor.focus.map((f, i) => <span key={i} className="bg-gray-800 text-gray-400 text-xs px-2 py-0.5 rounded">{f}</span>)}
+            <p className="text-gray-500 text-xs font-bold mb-1">Stage Fit</p>
+            <div className="flex flex-wrap gap-1.5">
+              {investor.stage_fit.map(s => <span key={s} className="text-xs bg-gray-800 text-gray-400 px-2 py-0.5 rounded">{s}</span>)}
             </div>
           </div>
           <div>
-            <p className="text-gray-500 text-xs font-bold uppercase tracking-wider mb-1">Stage Preference</p>
-            <div className="flex flex-wrap gap-1">
-              {investor.stage_preference.map((s, i) => <span key={i} className="bg-blue-900/30 text-blue-300 text-xs px-2 py-0.5 rounded border border-blue-800">{s}</span>)}
+            <p className="text-gray-500 text-xs font-bold mb-1">Technology Focus</p>
+            <div className="flex flex-wrap gap-1.5">
+              {investor.focus.map(f => <span key={f} className="text-xs bg-blue-900/30 text-blue-400 px-2 py-0.5 rounded">{f}</span>)}
             </div>
           </div>
-          <div>
-            <p className="text-gray-500 text-xs font-bold uppercase tracking-wider mb-1">How to Approach</p>
-            <p className="text-gray-400 text-xs leading-relaxed">{investor.contact_approach}</p>
-          </div>
-          <div className="flex flex-wrap gap-1">
-            {investor.tags.map((t, i) => <span key={i} className="bg-gray-800/50 text-gray-500 text-xs px-1.5 py-0.5 rounded">{t}</span>)}
-          </div>
+          {showMatch && match && match.reasons.length > 0 && (
+            <div>
+              <p className="text-gray-500 text-xs font-bold mb-1">Match Reasons</p>
+              <div className="flex flex-wrap gap-1.5">
+                {match.reasons.map(r => <span key={r} className="text-xs bg-green-900/30 text-green-400 px-2 py-0.5 rounded">✓ {r}</span>)}
+              </div>
+            </div>
+          )}
+          <a href={investor.website} target="_blank" rel="noopener noreferrer"
+            className="flex items-center gap-1.5 text-xs text-blue-400 hover:text-blue-300 transition-colors">
+            <Globe size={10} /> {investor.website}
+          </a>
         </div>
       )}
     </div>
   );
 }
 
-// ── Opportunity Card Display ─────────────────────────────────────────
-function OpportunityCardDisplay({ opp, onEdit, onMatch }) {
-  const stageColor = { Concept: "text-gray-400", Prototype: "text-blue-400", "Patent Filed": "text-purple-400", "Patent Granted": "text-green-400", "Pre-Revenue": "text-yellow-400", "Revenue Stage": "text-emerald-400" };
+// ── Opportunity Card Preview ──────────────────────────────────────────
+function OpportunityCardPreview({ card }) {
+  const [showEmail, setShowEmail] = useState(false);
+  const stageColor = { Concept: "#6b7280", Prototype: "#3b82f6", "Patent Pending": "#a855f7", "Patent Granted": "#22c55e", "Seeking Funding": "#f59e0b" };
+  const color = stageColor[card.stage] || "#6b7280";
 
   return (
-    <div className="bg-gray-900 border border-gray-800 rounded-xl p-4 hover:border-gray-600 transition-all">
-      <div className="flex items-start justify-between gap-2 mb-2">
-        <div className="flex items-center gap-2">
-          {opp.is_anonymous ? <Shield size={12} className="text-green-400 flex-shrink-0" /> : <Eye size={12} className="text-gray-400 flex-shrink-0" />}
-          <span className="text-gray-500 text-xs font-mono">{opp.anon_handle || "Anonymous"}</span>
+    <div className="bg-gray-900 border border-gray-800 rounded-xl overflow-hidden">
+      <div className="h-1" style={{ backgroundColor: color }} />
+      <div className="p-4">
+        <div className="flex items-start justify-between gap-2 mb-2">
+          <div>
+            <div className="flex items-center gap-2 mb-1">
+              <span className="text-xs px-2 py-0.5 rounded font-bold" style={{ backgroundColor: color + "20", color }}>
+                {card.stage}
+              </span>
+              <span className="text-gray-600 text-xs">{card.category}</span>
+            </div>
+            <h3 className="text-white font-black text-sm leading-snug">{card.headline}</h3>
+          </div>
+          <div className="flex items-center gap-1 text-xs">
+            <Shield size={10} className="text-green-400" />
+            <span className="text-green-400 font-semibold">Anonymous</span>
+          </div>
         </div>
-        <div className="flex items-center gap-1.5">
-          <button onClick={() => onEdit(opp)} className="text-gray-600 hover:text-gray-300 transition-colors p-1"><Edit2 size={11} /></button>
-          <span className={`text-xs font-bold ${stageColor[opp.stage] || "text-gray-400"}`}>{opp.stage}</span>
+
+        <p className="text-gray-500 text-xs font-mono mb-2">{card.alias}</p>
+
+        {card.problem_statement && <p className="text-gray-400 text-xs leading-relaxed mb-3 line-clamp-3">{card.problem_statement}</p>}
+
+        <div className="flex items-center gap-4 text-xs mb-3">
+          {card.funding_ask > 0 && <span className="text-green-400 font-bold">${card.funding_ask.toLocaleString()} ask</span>}
+          {card.equity_offered > 0 && <span className="text-gray-400">{card.equity_offered}% equity</span>}
+          {card.ip_valuation > 0 && <span className="text-blue-400">${card.ip_valuation}M IP val</span>}
+        </div>
+
+        {(card.alignment_flags || []).length > 0 && (
+          <div className="flex flex-wrap gap-1.5 mb-3">
+            {card.alignment_flags.map(f => <AlignmentBadge key={f} id={f} />)}
+          </div>
+        )}
+
+        {(card.tags || []).length > 0 && (
+          <div className="flex flex-wrap gap-1 mb-3">
+            {card.tags.map((t, i) => <span key={i} className="bg-gray-800 text-gray-500 text-xs px-2 py-0.5 rounded">{t}</span>)}
+          </div>
+        )}
+
+        <div className="flex items-center gap-2 pt-2 border-t border-gray-800">
+          <span className={`text-xs px-2 py-0.5 rounded font-bold ${card.status === "live" ? "bg-green-900/30 text-green-300" : card.status === "matched" ? "bg-blue-900/30 text-blue-300" : "bg-gray-800 text-gray-500"}`}>
+            {card.status}
+          </span>
+          {card.status === "live" && (
+            <span className="text-xs text-gray-600 flex items-center gap-1"><Star size={10} className="text-yellow-500" /> Visible to investors</span>
+          )}
         </div>
       </div>
-      <h3 className="text-white font-bold text-sm leading-snug mb-1">{opp.title}</h3>
-      <p className="text-gray-400 text-xs leading-relaxed mb-3 line-clamp-3">{opp.summary}</p>
-      <div className="flex items-center gap-3 text-xs text-gray-600 mb-3">
-        {opp.seeking_usd > 0 && <span className="flex items-center gap-1 text-green-400"><DollarSign size={10} />${(opp.seeking_usd / 1000).toFixed(0)}K</span>}
-        {opp.equity_offered > 0 && <span>{opp.equity_offered}% equity</span>}
-        {opp.tam_usd_millions > 0 && <span>${opp.tam_usd_millions}M TAM</span>}
-      </div>
-      <div className="flex flex-wrap gap-1 mb-3">
-        {(opp.tags || []).slice(0, 4).map((t, i) => <span key={i} className="bg-gray-800 text-gray-500 text-xs px-1.5 py-0.5 rounded">{t}</span>)}
-      </div>
-      <button onClick={() => onMatch(opp)}
-        className="w-full flex items-center justify-center gap-1.5 py-2 rounded-lg bg-blue-900/40 hover:bg-blue-800/50 border border-blue-800 text-blue-300 text-xs font-bold transition-all">
-        <Target size={12} /> Match to Investors
-      </button>
     </div>
   );
 }
 
-// ── Match Engine ─────────────────────────────────────────────────────
-function computeMatches(opp) {
-  return VETTED_INVESTORS.map(inv => {
-    let score = 0;
-    const reasons = [];
-
-    // Category match
-    if (inv.categories.includes(opp.category)) { score += 35; reasons.push(`Invests in ${opp.category}`); }
-    // Stage match
-    if (inv.stage_preference.includes(opp.stage)) { score += 25; reasons.push(`Active at ${opp.stage} stage`); }
-    // Anonymity
-    if (opp.is_anonymous && inv.anonymity_friendly) { score += 20; reasons.push("Accepts anonymous disclosures"); }
-    // Check size
-    const seek = opp.seeking_usd || 0;
-    if (seek >= inv.check_size_min && seek <= inv.check_size_max) { score += 15; reasons.push("Check size matches request"); }
-    else if (seek > 0 && seek < inv.check_size_min && inv.check_size_min <= 100000) { score += 5; }
-    // Suppression risk bonus
-    if (inv.suppression_risk === "very_low") { score += 5; }
-
-    return { investor: inv, score: Math.min(100, score), reasons: reasons.slice(0, 3) };
-  }).sort((a, b) => b.score - a.score);
-}
-
-// ── Main Page ─────────────────────────────────────────────────────────
+// ── Main Page ──────────────────────────────────────────────────────────
 export default function InvestorPortal() {
-  const [tab, setTab] = useState("board");
-  const [opportunities, setOpportunities] = useState([]);
-  const [showForm, setShowForm] = useState(false);
-  const [editingOpp, setEditingOpp] = useState(null);
-  const [matchingOpp, setMatchingOpp] = useState(null);
-  const [matches, setMatches] = useState([]);
-  const [loadingMatch, setLoadingMatch] = useState(false);
-  const [filterType, setFilterType] = useState("All");
+  const [tab, setTab] = useState("investors"); // investors | myCards | matched
+  const [showCreate, setShowCreate] = useState(false);
+  const [myCards, setMyCards] = useState([]);
+  const [selectedCard, setSelectedCard] = useState(null);
+  const [typeFilter, setTypeFilter] = useState("All");
 
-  const handleSave = (opp) => {
-    setOpportunities(prev => {
-      const idx = prev.findIndex(o => o.id === opp.id);
-      return idx >= 0 ? prev.map((o, i) => i === idx ? opp : o) : [opp, ...prev];
-    });
-  };
-
-  const handleMatch = async (opp) => {
-    setMatchingOpp(opp);
-    setLoadingMatch(true);
-    setTab("matches");
-    // Compute algorithmic matches
-    const computed = computeMatches(opp);
-    setMatches(computed);
-    setLoadingMatch(false);
-  };
+  const activeCard = selectedCard ? myCards.find(c => c.id === selectedCard) : null;
 
   const filteredInvestors = useMemo(() => {
-    if (filterType === "All") return VETTED_INVESTORS;
-    return VETTED_INVESTORS.filter(i => i.type === filterType);
-  }, [filterType]);
+    let list = typeFilter === "All" ? INVESTORS : INVESTORS.filter(i => i.type === typeFilter);
+    if (activeCard) {
+      list = list.map(i => ({ ...i, _match: MatchScore({ investor: i, card: activeCard }) }))
+        .sort((a, b) => b._match.pct - a._match.pct);
+    }
+    return list;
+  }, [typeFilter, activeCard]);
 
-  const INVESTOR_TYPES = ["All", "Foundation", "Grant Program", "Research DAO", "Angel / Foundation", "Angel Network", "Angel / Crypto Fund", "VC Fund"];
+  const topMatches = activeCard ? filteredInvestors.filter(i => i._match?.pct >= 40) : [];
 
   return (
     <div className="w-screen min-h-screen bg-gray-950 flex flex-col text-white">
       {/* Header */}
       <div className="flex items-center justify-between px-5 py-3 border-b border-gray-800 flex-shrink-0">
         <div className="flex items-center gap-4">
-          <Link to="/" className="flex items-center gap-2 text-gray-400 hover:text-white text-sm transition-colors">
+          <Link to="/" className="flex items-center gap-2 text-gray-400 hover:text-white text-sm">
             <ArrowLeft size={14} /> Back
           </Link>
           <div className="w-px h-5 bg-gray-700" />
           <div>
-            <h1 className="text-white font-bold text-base tracking-tight">Investor Matching Portal</h1>
-            <p className="text-gray-500 text-xs">Anonymous opportunity cards · Vetted alignment-friendly investors · Protected matching</p>
+            <h1 className="text-white font-bold text-base tracking-tight flex items-center gap-2">
+              <Shield size={16} className="text-green-400" /> Investor Matching Portal
+            </h1>
+            <p className="text-gray-500 text-xs">Anonymized opportunity cards · {INVESTORS.length} vetted alignment-friendly investors & foundations</p>
           </div>
         </div>
-        <div className="flex items-center gap-3">
-          <div className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-full bg-green-900/30 border border-green-800 text-green-300">
-            <Shield size={10} /> {VETTED_INVESTORS.filter(i => i.anonymity_friendly).length} Anon-Friendly Investors
-          </div>
-          <button onClick={() => { setEditingOpp(null); setShowForm(true); }}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-700 hover:bg-blue-600 text-white text-xs font-bold transition-colors">
-            <Plus size={12} /> New Opportunity
-          </button>
-        </div>
+        <button onClick={() => setShowCreate(true)}
+          className="flex items-center gap-2 px-4 py-2 rounded-xl bg-green-700 hover:bg-green-600 text-white text-xs font-bold transition-all">
+          <Plus size={13} /> Create Opportunity Card
+        </button>
+      </div>
+
+      {/* Privacy banner */}
+      <div className="bg-green-950/30 border-b border-green-900/30 px-5 py-2 flex items-center gap-3">
+        <Lock size={12} className="text-green-400 flex-shrink-0" />
+        <p className="text-green-300 text-xs">
+          <strong>Privacy by design:</strong> All opportunity cards are fully anonymized. Your name, location, and contact details are never revealed. Investors connect through the platform only.
+        </p>
       </div>
 
       {/* Tabs */}
       <div className="flex border-b border-gray-800 px-5">
         {[
-          ["board", "🃏 My Opportunities", opportunities.length],
-          ["investors", "🤝 Investor Database", VETTED_INVESTORS.length],
-          ["matches", "🎯 Matches", matchingOpp ? matches.length : null],
-        ].map(([id, label, count]) => (
+          ["investors", `🌍 Investor Database`, `${INVESTORS.length} vetted`],
+          ["myCards", `🃏 My Opportunity Cards`, `${myCards.length} cards`],
+          ...(activeCard ? [["matched", `🎯 Matches for "${activeCard.alias}"`, `${topMatches.length} matches`]] : []),
+        ].map(([id, label, sub]) => (
           <button key={id} onClick={() => setTab(id)}
             className={`flex items-center gap-2 px-4 py-3 text-sm font-semibold border-b-2 transition-colors ${tab === id ? "border-blue-500 text-white" : "border-transparent text-gray-500 hover:text-gray-300"}`}>
             {label}
-            {count !== null && <span className="text-xs bg-gray-800 text-gray-400 px-1.5 py-0.5 rounded-full">{count}</span>}
+            <span className="text-xs text-gray-600 font-normal hidden sm:block">{sub}</span>
           </button>
         ))}
       </div>
 
-      <div className="flex-1 overflow-y-auto p-5">
-
-        {/* Board tab */}
-        {tab === "board" && (
-          <div>
-            {opportunities.length === 0 ? (
-              <div className="flex flex-col items-center justify-center py-24 text-center">
-                <div className="w-16 h-16 rounded-2xl bg-gray-900 border border-gray-800 flex items-center justify-center mb-4 text-3xl">🃏</div>
-                <h2 className="text-white font-bold text-xl mb-2">Create Your First Opportunity Card</h2>
-                <p className="text-gray-500 text-sm max-w-md mb-6">Build an anonymized investment opportunity card from your patent disclosures. Your identity is protected — investors see only what you choose to share.</p>
-                <button onClick={() => setShowForm(true)}
-                  className="flex items-center gap-2 px-6 py-3 rounded-xl bg-blue-700 hover:bg-blue-600 text-white font-bold text-sm transition-all">
-                  <Plus size={15} /> Create Opportunity Card
-                </button>
-              </div>
-            ) : (
-              <>
-                <div className="flex items-center justify-between mb-4">
-                  <p className="text-gray-400 text-sm">{opportunities.length} active {opportunities.length === 1 ? "opportunity" : "opportunities"}</p>
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-                  {opportunities.map(opp => (
-                    <OpportunityCardDisplay key={opp.id} opp={opp}
-                      onEdit={o => { setEditingOpp(o); setShowForm(true); }}
-                      onMatch={handleMatch} />
-                  ))}
-                  <button onClick={() => setShowForm(true)}
-                    className="border-2 border-dashed border-gray-800 rounded-xl p-6 flex flex-col items-center justify-center gap-2 text-gray-600 hover:border-gray-600 hover:text-gray-400 transition-all min-h-[200px]">
-                    <Plus size={20} />
-                    <span className="text-xs font-semibold">Add Opportunity</span>
-                  </button>
-                </div>
-              </>
-            )}
-          </div>
-        )}
-
-        {/* Investor database tab */}
+      <div className="flex-1 overflow-y-auto">
+        {/* ── Investor Database ── */}
         {tab === "investors" && (
-          <div>
-            <div className="flex items-center gap-2 mb-4 flex-wrap">
-              <p className="text-gray-500 text-xs mr-2">Filter:</p>
-              {INVESTOR_TYPES.map(t => (
-                <button key={t} onClick={() => setFilterType(t)}
-                  className={`px-3 py-1.5 rounded-lg text-xs border transition-all ${filterType === t ? "bg-blue-900/40 border-blue-600 text-blue-300 font-semibold" : "border-gray-700 text-gray-500 hover:border-gray-500"}`}>
-                  {t}
-                </button>
-              ))}
-            </div>
-
-            {/* Stats banner */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-5">
-              {[
-                { label: "Total Vetted", value: VETTED_INVESTORS.length, color: "text-white", emoji: "🏦" },
-                { label: "Anon-Friendly", value: VETTED_INVESTORS.filter(i => i.anonymity_friendly).length, color: "text-green-400", emoji: "🛡️" },
-                { label: "DAOs / Decentralized", value: VETTED_INVESTORS.filter(i => i.type.includes("DAO")).length, color: "text-purple-400", emoji: "🌐" },
-                { label: "Very Low Risk", value: VETTED_INVESTORS.filter(i => i.suppression_risk === "very_low").length, color: "text-blue-400", emoji: "✅" },
-              ].map(({ label, value, color, emoji }) => (
-                <div key={label} className="bg-gray-900 border border-gray-800 rounded-xl p-3 text-center">
-                  <p className="text-xl mb-1">{emoji}</p>
-                  <p className={`font-black text-2xl ${color}`}>{value}</p>
-                  <p className="text-gray-500 text-xs">{label}</p>
+          <div className="p-5">
+            <div className="flex items-center justify-between mb-4 flex-wrap gap-3">
+              <div className="flex flex-wrap gap-2">
+                {INVESTOR_CATEGORIES.map(c => (
+                  <button key={c} onClick={() => setTypeFilter(c)}
+                    className={`text-xs px-3 py-1.5 rounded-full border transition-all ${typeFilter === c ? "bg-blue-900/40 border-blue-600 text-blue-300 font-bold" : "border-gray-700 text-gray-500 hover:border-gray-500"}`}>
+                    {c}
+                  </button>
+                ))}
+              </div>
+              {myCards.filter(c => c.status === "live").length > 0 && (
+                <div className="flex items-center gap-2">
+                  <label className="text-gray-500 text-xs">Match against:</label>
+                  <select value={selectedCard || ""} onChange={e => setSelectedCard(e.target.value || null)}
+                    className="bg-gray-800 border border-gray-700 rounded-lg px-3 py-1.5 text-xs text-white focus:outline-none">
+                    <option value="">— No card selected —</option>
+                    {myCards.filter(c => c.status === "live").map(c => (
+                      <option key={c.id} value={c.id}>{c.alias}</option>
+                    ))}
+                  </select>
                 </div>
-              ))}
+              )}
             </div>
-
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-              {filteredInvestors.map(inv => <InvestorCard key={inv.id} investor={inv} />)}
+              {filteredInvestors.map(investor => (
+                <InvestorCard key={investor.id} investor={investor} card={activeCard} showMatch={!!activeCard} />
+              ))}
             </div>
           </div>
         )}
 
-        {/* Matches tab */}
-        {tab === "matches" && (
-          <div>
-            {!matchingOpp ? (
+        {/* ── My Cards ── */}
+        {tab === "myCards" && (
+          <div className="p-5">
+            {myCards.length === 0 ? (
               <div className="flex flex-col items-center justify-center py-24 text-center">
-                <Target size={40} className="text-gray-700 mb-3" />
-                <p className="text-white font-bold text-lg mb-2">No opportunity selected for matching</p>
-                <p className="text-gray-500 text-sm">Go to My Opportunities, select a card, and click "Match to Investors".</p>
+                <div className="text-5xl mb-4">🃏</div>
+                <h2 className="text-white font-bold text-xl mb-2">No Opportunity Cards Yet</h2>
+                <p className="text-gray-500 text-sm max-w-md mb-6">Create an anonymized investment card from your patent disclosures to get matched with vetted, alignment-friendly investors and research foundations.</p>
+                <button onClick={() => setShowCreate(true)}
+                  className="flex items-center gap-2 px-5 py-3 rounded-xl bg-green-700 hover:bg-green-600 text-white font-bold text-sm transition-all">
+                  <Plus size={14} /> Create Your First Card
+                </button>
               </div>
             ) : (
-              <div>
-                <div className="bg-gray-900 border border-gray-800 rounded-xl p-4 mb-5 flex items-start justify-between gap-4">
-                  <div>
-                    <p className="text-gray-500 text-xs uppercase tracking-wider font-semibold mb-1">Matching for</p>
-                    <h2 className="text-white font-bold text-base">{matchingOpp.title}</h2>
-                    <p className="text-gray-400 text-xs mt-0.5">{matchingOpp.category} · {matchingOpp.stage} · {matchingOpp.is_anonymous ? "🛡️ Anonymous" : "👤 Named"}</p>
+              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+                {myCards.map(card => (
+                  <div key={card.id}>
+                    <OpportunityCardPreview card={card} />
+                    {card.status === "live" && (
+                      <button onClick={() => { setSelectedCard(card.id); setTab("matched"); }}
+                        className="w-full mt-2 py-2 rounded-lg bg-blue-900/30 border border-blue-800 text-blue-300 text-xs font-bold hover:bg-blue-900/50 transition-all flex items-center justify-center gap-1.5">
+                        <Star size={11} /> View Investor Matches
+                      </button>
+                    )}
                   </div>
-                  <div className="text-right">
-                    <p className="text-green-400 font-black text-2xl">{matches.filter(m => m.score >= 70).length}</p>
-                    <p className="text-gray-500 text-xs">strong matches</p>
-                  </div>
-                </div>
-
-                {loadingMatch ? (
-                  <div className="flex items-center justify-center py-12 gap-3 text-gray-400">
-                    <Loader2 size={18} className="animate-spin" />
-                    <span className="text-sm">Computing matches…</span>
-                  </div>
-                ) : (
-                  <div>
-                    <div className="flex items-center gap-3 mb-4">
-                      <p className="text-gray-400 text-sm">{matches.length} investors ranked by match score</p>
-                      <div className="flex items-center gap-2 text-xs">
-                        <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-green-600 inline-block" />Strong (70%+)</span>
-                        <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-blue-600 inline-block" />Good (50–69%)</span>
-                        <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-gray-600 inline-block" />Possible</span>
-                      </div>
-                    </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-                      {matches.map(({ investor, score, reasons }) => (
-                        <InvestorCard key={investor.id} investor={investor} matchScore={score} matchReasons={reasons} />
-                      ))}
-                    </div>
-                  </div>
-                )}
+                ))}
               </div>
             )}
+          </div>
+        )}
+
+        {/* ── Matched Investors ── */}
+        {tab === "matched" && activeCard && (
+          <div className="p-5">
+            <div className="bg-gray-900 border border-gray-800 rounded-xl p-4 mb-5 flex items-start gap-4">
+              <Shield size={24} className="text-green-400 flex-shrink-0 mt-0.5" />
+              <div>
+                <p className="text-white font-bold text-sm mb-0.5">Matching: <span className="text-blue-300">{activeCard.alias}</span></p>
+                <p className="text-gray-500 text-xs">{topMatches.length} investors scored ≥40% match · sorted by fit score</p>
+              </div>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+              {filteredInvestors.map(investor => (
+                <InvestorCard key={investor.id} investor={investor} card={activeCard} showMatch />
+              ))}
+            </div>
           </div>
         )}
       </div>
 
-      {showForm && (
-        <OpportunityForm
-          initial={editingOpp}
-          onSave={handleSave}
-          onClose={() => { setShowForm(false); setEditingOpp(null); }}
+      {showCreate && (
+        <CreateCardForm
+          onCreated={card => { setMyCards(prev => [...prev, card]); setTab("myCards"); }}
+          onClose={() => setShowCreate(false)}
         />
       )}
     </div>
