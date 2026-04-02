@@ -1,0 +1,131 @@
+{
+  "name": "InvestorRelationship",
+  "type": "object",
+  "properties": {
+    "card_id": {
+      "type": "string"
+    },
+    "card_alias": {
+      "type": "string"
+    },
+    "investor_name": {
+      "type": "string"
+    },
+    "investor_type": {
+      "type": "string"
+    },
+    "contact_email": {
+      "type": "string"
+    },
+    "stage": {
+      "type": "string",
+      "enum": [
+        "Initial Outreach",
+        "Responded",
+        "Due Diligence",
+        "Term Sheet Received",
+        "Negotiating",
+        "Funded",
+        "Passed"
+      ],
+      "default": "Initial Outreach"
+    },
+    "priority": {
+      "type": "string",
+      "enum": [
+        "low",
+        "medium",
+        "high"
+      ],
+      "default": "medium"
+    },
+    "deal_amount": {
+      "type": "number"
+    },
+    "notes": {
+      "type": "string"
+    },
+    "next_follow_up": {
+      "type": "string"
+    },
+    "communication_log": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "date": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "summary": {
+            "type": "string"
+          },
+          "outcome": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "meetings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "date": {
+            "type": "string"
+          },
+          "time": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "notes": {
+            "type": "string"
+          },
+          "completed": {
+            "type": "boolean"
+          }
+        }
+      }
+    },
+    "tasks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "due_date": {
+            "type": "string"
+          },
+          "priority": {
+            "type": "string"
+          },
+          "completed": {
+            "type": "boolean"
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "investor_name",
+    "stage"
+  ]
+}

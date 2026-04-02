@@ -1,6 +1,6 @@
 import { useState, useMemo } from "react";
 import { Link } from "react-router-dom";
-import { ArrowLeft, Shield, Zap, DollarSign, Plus, Loader2, CheckCircle2, Eye, EyeOff, Star, Globe, Lock, ChevronDown, ChevronUp, Send, FileText } from "lucide-react";
+import { ArrowLeft, Shield, Zap, DollarSign, Plus, Loader2, CheckCircle2, Eye, EyeOff, Star, Globe, Lock, ChevronDown, ChevronUp, Send, FileText, TrendingUp } from "lucide-react";
 import { INVESTORS, ALIGNMENT_FLAGS, INVESTOR_CATEGORIES } from "../lib/investorData";
 import { base44 } from "@/api/base44Client";
 
@@ -403,6 +403,10 @@ export default function InvestorPortal() {
           </div>
         </div>
         <div className="flex items-center gap-2">
+          <Link to="/investor-crm"
+            className="flex items-center gap-2 px-4 py-2 rounded-xl bg-purple-900/40 hover:bg-purple-800/60 border border-purple-700 text-purple-300 text-xs font-bold transition-all">
+            <TrendingUp size={13} /> CRM
+          </Link>
           <Link to="/patent-wizard"
             className="flex items-center gap-2 px-4 py-2 rounded-xl bg-blue-900/40 hover:bg-blue-800/60 border border-blue-700 text-blue-300 text-xs font-bold transition-all">
             <FileText size={13} /> Filing Wizard

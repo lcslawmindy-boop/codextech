@@ -31,6 +31,7 @@ import InvestorPortal from './pages/InvestorPortal';
 import PatentLandscapeGraph from './pages/PatentLandscapeGraph';
 import MonitoringDashboard from './pages/MonitoringDashboard';
 import PatentFilingWizard from './pages/PatentFilingWizard';
+import InvestorCRM from './pages/InvestorCRM';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -92,6 +93,7 @@ const AuthenticatedApp = () => {
         <Route path="/patent-landscape" element={<PatentLandscapeGraph />} />
         <Route path="/monitoring" element={<MonitoringDashboard />} />
         <Route path="/patent-wizard" element={<PatentFilingWizard />} />
+        <Route path="/investor-crm" element={<InvestorCRM />} />
         <Route path="/investor-portal" element={<InvestorPortal />} />
         <Route path="*" element={<PageNotFound />} />
       </Routes>
