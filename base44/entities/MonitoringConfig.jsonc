@@ -1,0 +1,60 @@
+{
+  "name": "MonitoringConfig",
+  "type": "object",
+  "properties": {
+    "user_email": {
+      "type": "string"
+    },
+    "watch_categories": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "custom_keywords": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "suppression_sensitivity": {
+      "type": "string",
+      "enum": [
+        "low",
+        "medium",
+        "high"
+      ],
+      "default": "medium"
+    },
+    "notify_on": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "email_alerts": {
+      "type": "boolean",
+      "default": true
+    },
+    "min_risk_for_email": {
+      "type": "string",
+      "enum": [
+        "low",
+        "medium",
+        "high",
+        "critical"
+      ],
+      "default": "high"
+    },
+    "is_active": {
+      "type": "boolean",
+      "default": true
+    },
+    "last_scan": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "user_email"
+  ]
+}

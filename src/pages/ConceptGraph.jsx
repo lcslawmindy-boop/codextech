@@ -85,6 +85,12 @@ export default function ConceptGraph() {
             💰 Investors
           </Link>
           <Link
+            to="/monitoring"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-900/40 hover:bg-blue-800/50 border border-blue-800 text-blue-300 text-xs font-medium transition-colors"
+          >
+            🛡 Monitor
+          </Link>
+          <Link
             to="/investors"
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-green-900/40 hover:bg-green-800/50 border border-green-800 text-green-300 text-xs font-medium transition-colors"
           >

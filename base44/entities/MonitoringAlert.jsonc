@@ -1,0 +1,78 @@
+{
+  "name": "MonitoringAlert",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string"
+    },
+    "source_type": {
+      "type": "string",
+      "enum": [
+        "Patent Filing",
+        "Legal Challenge",
+        "News",
+        "Regulatory Action",
+        "Academic Publication",
+        "Corporate Activity"
+      ]
+    },
+    "source_url": {
+      "type": "string"
+    },
+    "source_name": {
+      "type": "string"
+    },
+    "category": {
+      "type": "string"
+    },
+    "matched_keywords": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "suppression_pattern": {
+      "type": "string"
+    },
+    "risk_level": {
+      "type": "string",
+      "enum": [
+        "critical",
+        "high",
+        "medium",
+        "low"
+      ]
+    },
+    "risk_score": {
+      "type": "integer"
+    },
+    "summary": {
+      "type": "string"
+    },
+    "recommended_action": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "new",
+        "reviewed",
+        "dismissed",
+        "actioned"
+      ],
+      "default": "new"
+    },
+    "scan_run_id": {
+      "type": "string"
+    },
+    "published_date": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "title",
+    "source_type",
+    "risk_level",
+    "category"
+  ]
+}
