@@ -79,6 +79,12 @@ export default function ConceptGraph() {
             🔬 Diagnostics
           </button>
           <Link
+            to="/investor-portal"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-green-900/40 hover:bg-green-800/50 border border-green-800 text-green-300 text-xs font-medium transition-colors"
+          >
+            💰 Investors
+          </Link>
+          <Link
             to="/prior-art"
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-amber-900/40 hover:bg-amber-800/50 border border-amber-800 text-amber-300 text-xs font-medium transition-colors"
           >
