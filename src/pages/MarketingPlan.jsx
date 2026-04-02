@@ -150,27 +150,32 @@ Style: ${platformGuide}
 Return JSON: {"posts": [{"day": number, "week": ${weekNum}, "platform": "${platform.id}", "content": string}]}
 Generate exactly ${days} posts for days ${dayStart}-${dayEnd}.`;
 
-        const result = await base44.integrations.Core.InvokeLLM({
-          prompt,
-          model: "gpt_5_mini",
-          response_json_schema: {
-            type: "object",
-            properties: {
-              posts: {
-                type: "array",
-                items: {
-                  type: "object",
-                  properties: {
-                    day: { type: "number" },
-                    week: { type: "number" },
-                    platform: { type: "string" },
-                    content: { type: "string" },
+        let result = null;
+        try {
+          result = await base44.integrations.Core.InvokeLLM({
+            prompt,
+            model: "gpt_5_mini",
+            response_json_schema: {
+              type: "object",
+              properties: {
+                posts: {
+                  type: "array",
+                  items: {
+                    type: "object",
+                    properties: {
+                      day: { type: "number" },
+                      week: { type: "number" },
+                      platform: { type: "string" },
+                      content: { type: "string" },
+                    },
                   },
                 },
               },
             },
-          },
-        });
+          });
+        } catch (err) {
+          console.warn(`Skipping ${platform.id} week ${weekNum}:`, err.message);
+        }
 
         allPosts.push(...(result?.posts || []));
         done++;
