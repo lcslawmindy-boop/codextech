@@ -6,6 +6,7 @@ import NodePanel from "../components/NodePanel";
 import TimelineView from "../components/TimelineView";
 import ClusterSummaryPanel from "../components/ClusterSummaryPanel";
 import TopConceptsPanel from "../components/TopConceptsPanel";
+import BusinessConceptGraph from "../components/BusinessConceptGraph";
 import { groupColors, nodes } from "../lib/beardenData";
 import { base44 } from "@/api/base44Client";
 
@@ -106,6 +107,14 @@ export default function ConceptGraph() {
             >
               Timeline
             </button>
+            <button
+              onClick={() => setView("business")}
+              className={`px-3 py-1 rounded text-xs font-medium transition-colors ${
+                view === "business" ? "bg-gray-600 text-white" : "text-gray-400 hover:text-gray-200"
+              }`}
+            >
+              Business
+            </button>
           </div>
 
           {view === "graph" && (
@@ -133,7 +142,9 @@ export default function ConceptGraph() {
 
       {/* Content area */}
       <div className="flex-1 relative overflow-hidden">
-        {view === "timeline" ? (
+        {view === "business" ? (
+          <BusinessConceptGraph />
+        ) : view === "timeline" ? (
           <TimelineView
             onConceptClick={(nodeId) => {
               const node = nodes.find(n => n.id === nodeId);
