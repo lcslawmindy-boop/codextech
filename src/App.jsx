@@ -24,6 +24,7 @@ import LabSimulation from './pages/LabSimulation';
 import InventionPlans from './pages/InventionPlans';
 import EMFImpact from './pages/EMFImpact';
 import ScalarEMLab from './pages/ScalarEMLab';
+import TimelinePitchDeck from './pages/TimelinePitchDeck';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -78,6 +79,7 @@ const AuthenticatedApp = () => {
         <Route path="/invention-plans" element={<InventionPlans />} />
         <Route path="/emf-impact" element={<EMFImpact />} />
         <Route path="/scalar-lab" element={<ScalarEMLab />} />
+        <Route path="/timeline-pitch" element={<TimelinePitchDeck />} />
         <Route path="*" element={<PageNotFound />} />
       </Routes>
     </>
