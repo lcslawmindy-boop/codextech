@@ -1,0 +1,725 @@
+// Step-by-step build instructions, BOM, and specs for each Invention
+
+export const inventionSteps = {
+  "Anenergy Pump Demonstration Circuit": {
+    diagramType: "toroid",
+    overview: "A tabletop demonstration circuit that implements Bearden's Part 4 anenergy pump using a shielded toroidal coil geometry. The key principle: inside the toroid, ∇φ = 0, but φ > φ₀ is maintained externally. Connecting trapped charges via wire to ground creates gradient-phi in the wire, producing conventional current without mass-current input.",
+    bom: [
+      { qty: 1, item: "Toroidal ferrite core (T200-2 or equivalent)", spec: "OD 51mm, μ=10", source: "Mouser/Digi-Key" },
+      { qty: 2, item: "Magnet wire", spec: "26 AWG, 100ft spool", source: "Amazon/Remington" },
+      { qty: 1, item: "DDS signal generator module", spec: "AD9850 or AD9851, 0–40 MHz", source: "Amazon/AliExpress ~$8" },
+      { qty: 1, item: "Arduino Nano", spec: "ATmega328, 5V", source: "Amazon ~$5" },
+      { qty: 2, item: "MOSFET gate drivers", spec: "IR2110 half-bridge", source: "Mouser ~$2 ea" },
+      { qty: 4, item: "Power MOSFETs", spec: "IRF540N, 100V 33A", source: "Mouser ~$0.80 ea" },
+      { qty: 1, item: "Copper shielding tape", spec: "2-inch wide roll", source: "Amazon ~$12" },
+      { qty: 1, item: "Oscilloscope (2-channel)", spec: "Rigol DS1054Z or equivalent", source: "Amazon ~$300" },
+      { qty: 1, item: "High-impedance differential probe", spec: "≥10MΩ input", source: "Rigol RP1150H ~$60" },
+      { qty: 1, item: "PCB prototype board", spec: "10×10cm double-sided", source: "JLCPCB ~$5" },
+      { qty: 1, item: "12V 2A power supply", spec: "Regulated DC", source: "Amazon ~$12" },
+    ],
+    steps: [
+      {
+        title: "Wind the Primary Toroidal Coil",
+        detail: "Using 26 AWG magnet wire, wind 60 turns evenly spaced around the T200-2 ferrite core. Space turns uniformly — each turn should occupy ~6° of arc. Leave 6-inch leads on each end. Mark the start end with red tape (dot convention). This is the primary phi-source winding.",
+        warning: null,
+      },
+      {
+        title: "Wind the Secondary (Output) Coil",
+        detail: "Over the primary, wind a second layer of 30 turns of 26 AWG wire in the same direction. This bifilar geometry maintains the same handedness. The secondary captures the gradient-phi when connected to the ground reference. Leave 6-inch leads. Mark with blue tape.",
+        warning: "Keep secondary leads unconnected to ground during primary testing.",
+      },
+      {
+        title: "Apply Electrostatic Shielding",
+        detail: "Wrap the entire wound toroid with copper shielding tape, overlapping by 50%. Leave a 5mm gap (break) in the shield to prevent it acting as a shorted turn. Connect the shield to circuit common (not signal ground). This ensures E=0 inside the toroid while φ > φ₀ is maintained by the external oscillation.",
+        warning: null,
+      },
+      {
+        title: "Build the DDS Pulse Controller",
+        detail: "Wire the AD9850 DDS module to the Arduino Nano: FSYNC→D10, CLK→D9, DATA→D8, RESET→D11. Upload the DDS sweep sketch (included in plans). Set initial frequency to 1 MHz. Connect DDS output to the IR2110 gate driver input. The driver generates the push-pull gate signals for the MOSFET H-bridge that drives the primary coil.",
+        warning: null,
+      },
+      {
+        title: "Build the MOSFET H-Bridge Driver",
+        detail: "Arrange 4× IRF540N in an H-bridge configuration with IR2110 half-bridge drivers for high-side and low-side control. Connect bootstrap capacitor (100nF ceramic) between VS and VB on each IR2110. Add 10Ω gate resistors on each MOSFET gate. Connect the H-bridge output across the primary coil terminals. Use a 47Ω snubber resistor + 10nF cap across each MOSFET drain-source.",
+        warning: "Double-check H-bridge wiring before power-on — shoot-through (both legs ON) will destroy MOSFETs instantly.",
+      },
+      {
+        title: "Set Up the Measurement Points",
+        detail: "Attach oscilloscope CH1 (high-impedance probe) to the secondary coil output BEFORE connecting it to ground. Attach CH2 to the primary coil midpoint. Power on the DDS at 1 MHz and observe CH1 for the phi-differential waveform. You should see a signal that does NOT correlate with the primary drive waveform — this is the gradient-phi signature.",
+        warning: null,
+      },
+      {
+        title: "Connect Secondary to Ground Reference",
+        detail: "Connect the secondary coil output terminal to circuit common through a precision 1Ω sense resistor. Measure voltage across the sense resistor with CH1. Per Bearden's model, current flow through this resistor represents massless charge conversion — current WITHOUT conventional mass-current input from the primary circuit. Log measurements vs. oscillation frequency across 100 kHz – 10 MHz.",
+        warning: null,
+      },
+      {
+        title: "Sweep Frequency and Document Results",
+        detail: "Run the Arduino frequency sweep from 100 kHz to 10 MHz in 100 kHz steps. Log secondary current vs. frequency to CSV. Plot the resonance curve — peaks indicate optimal phi-oscillation coupling frequencies. The strongest resonance peak is your 'Moray point' — the frequency at which phi-oscillation maximally converts anenergy to conventional current.",
+        warning: null,
+      },
+    ],
+    notes: "All measurements should be made with the circuit inside a grounded Faraday cage (aluminum foil enclosure) to eliminate ambient RF pickup. The sense-resistor current represents the theoretical massless-charge pathway described in Bearden Part 4, pp. 47-52.",
+    softwareNotes: "Arduino sketch (DDS_sweep.ino) included in PDF plans. Python analysis script (plot_resonance.py) for CSV data visualization included. Compatible with Rigol DS1054Z oscilloscope CSV export format.",
+  },
+
+  "Scalar Energy Bottle Interferometer (Research Prototype)": {
+    diagramType: "interferometer",
+    overview: "Two zero-vector transmitter coils produce an interference zone where E=0, B=0 at each transmitter output, but scalar energy (phi-field) accumulates at the intersection point. Scalar pulses arrive at the target instantaneously while Hertz pulses travel at c — the time difference gives range without conventional radar reflection.",
+    bom: [
+      { qty: 2, item: "Balanced push-pull coil assemblies", spec: "Custom-wound air-core, 200 turns each side, matched to 1% inductance", source: "Wind per plans" },
+      { qty: 1, item: "FPGA development board", spec: "Xilinx Artix-7 (Digilent Basys 3)", source: "Digilent ~$150" },
+      { qty: 2, item: "RF power amplifiers", spec: "100W 1–30 MHz class AB, matched pair", source: "HF Packer PA module ~$80 ea" },
+      { qty: 1, item: "Nanosecond pulse generator", spec: "Rise time <1 ns, 0–50V adjustable", source: "Mouser AVR-E series ~$200" },
+      { qty: 2, item: "Dual-channel oscilloscope", spec: "Rigol DS1054Z, 50 MHz", source: "Amazon ~$300" },
+      { qty: 1, item: "Spectrum analyzer", spec: "TinySA Ultra, 100 kHz–800 MHz", source: "Amazon ~$110" },
+      { qty: 1, item: "Custom scalar detector (see plans)", spec: "Shielded toroid + high-impedance amplifier", source: "Build per plans" },
+      { qty: 2, item: "Coil positioning rails (aluminum)", spec: "600mm long, angle-adjustable", source: "80/20 T-slot extrusion ~$40" },
+    ],
+    steps: [
+      {
+        title: "Wind the Balanced Push-Pull Coils",
+        detail: "Each transmitter coil uses a bifilar winding technique to cancel the transverse EM output while preserving the scalar phi-field. Wind 200 turns of 24 AWG on a 50mm air-core PVC form, then wind a second identical 200-turn winding in the OPPOSITE direction (reverse handedness) over the first. When driven with equal-amplitude, equal-phase signals, the transverse EM components cancel (E=0, B=0 at output) while the scalar component adds constructively.",
+        warning: "Both windings MUST be wound to exactly the same inductance (±0.5%). Measure with LCR meter and adjust final turn count before proceeding.",
+      },
+      {
+        title: "Set Up the FPGA Timing Controller",
+        detail: "Load the FPGA with the provided Verilog timing module (scalar_pulse_timing.v). This generates: (1) a scalar pulse trigger to the coil drivers, and (2) a Hertz pulse trigger to a reference antenna, with a programmable delay between them. The 1 ns resolution of the Artix-7 FPGA allows range calculation: Δt = range / c. Configure initial pulse rate to 1 kHz, scalar pulse width 100 ns.",
+        warning: null,
+      },
+      {
+        title: "Build and Calibrate the RF Power Amplifiers",
+        detail: "Mount both RF PA modules on aluminum heatsinks. Feed each from the FPGA output through a 50Ω coaxial path of IDENTICAL length (cut to same measurement). Measure output power of both PAs at each test frequency — they must match within 0.1 dB. Adjust gain trim pots until matched. Mount each PA directly behind its coil assembly.",
+        warning: null,
+      },
+      {
+        title: "Construct the Scalar Detector",
+        detail: "The scalar detector uses a shielded toroidal coil (per Anenergy Pump instructions, Step 1-3) connected to a low-noise amplifier (LNA). Unlike a standard antenna, this detector is insensitive to E and B fields (shielded) but responds to φ-field changes via the gradient-phi output wire. Connect output to oscilloscope CH2 with the high-impedance probe.",
+        warning: null,
+      },
+      {
+        title: "Position the Two Transmitter Coils",
+        detail: "Mount both coil assemblies on the aluminum positioning rails facing each other at 90° (or 180° for maximum overlap). Set initial separation to 300mm. The interference zone forms at the midpoint. Place the scalar detector at the exact midpoint between the two coils.",
+        warning: null,
+      },
+      {
+        title: "Tune for Zero-Vector Cancellation",
+        detail: "Power on both transmitters at 1 MHz, equal amplitude. Place a standard dipole antenna at the target point, connected to the spectrum analyzer. Adjust the phase trim on one PA output (via coaxial line stretcher) until the spectrum analyzer shows MINIMUM signal at the target point (approaching noise floor). This is the zero-vector condition: E=0, B=0 at target.",
+        warning: "You want the spectrum analyzer to read near-zero — this confirms transverse EM cancellation at the interference zone.",
+      },
+      {
+        title: "Verify Scalar Detection at Target",
+        detail: "With zero-vector condition established (standard antenna shows null), the scalar detector should now show a NON-ZERO signal. This signal — present where E=0 and B=0 — demonstrates the phi-field accumulation in the energy bottle zone. Log this differential: [spectrum_analyzer_reading] vs [scalar_detector_reading] at the same point.",
+        warning: null,
+      },
+      {
+        title: "Measure Scalar Pulse Range Differential",
+        detail: "Enable the FPGA pulse mode. CH1 of the oscilloscope receives the trigger reference. CH2 receives the scalar detector output. Measure the time Δt between trigger and scalar detector response vs the time between trigger and Hertz pulse arrival at a reference antenna at distance R. The scalar pulse should arrive before the Hertz pulse by Δt = R/c. Log results vs. R at 0.5m increments from 0.5m to 5m.",
+        warning: null,
+      },
+    ],
+    notes: "This prototype implements the geometry described in Bearden Part 4, Figures 18-22. The zero-vector cancellation condition is the critical calibration step — incomplete cancellation will contaminate the scalar detector reading with residual transverse EM.",
+    softwareNotes: "Verilog source (scalar_pulse_timing.v), testbench, and bitstream for Basys 3 included. Python range-calculator script and data logger (pyserial) included in PDF plans.",
+  },
+
+  "Vacuum Potential Oscillator (VPO) Circuit Kit": {
+    diagramType: "vpo",
+    overview: "A resonant LC circuit tuned to oscillate the vacuum-ground potential independently of the circuit ground. Based on Bearden's Part II mechanism: by cycling the vacuum potential, the circuit partially 'unstrips' Dirac Sea negative-energy wells, lifting electrons into the circuit without conventional mass-current flow.",
+    bom: [
+      { qty: 1, item: "Toroidal inductor (custom wound)", spec: "Amidon T200-26 core, 100 µH, Q > 300", source: "Wind per plans" },
+      { qty: 1, item: "Quartz crystal resonator", spec: "10 MHz, series resonance, HC-49 package", source: "Mouser ~$1.50" },
+      { qty: 2, item: "Variable capacitor", spec: "10–365 pF air-variable (broadcast type)", source: "eBay vintage radio parts ~$15" },
+      { qty: 2, item: "High-voltage MOSFET", spec: "IRFP460 500V, 20A", source: "Mouser ~$3 ea" },
+      { qty: 1, item: "DDS oscillator module", spec: "AD9851, 0–70 MHz", source: "AliExpress ~$6" },
+      { qty: 4, item: "Polypropylene film capacitors", spec: "0.1 µF, 630V", source: "Mouser ~$0.80 ea" },
+      { qty: 1, item: "Precision LCR meter", spec: "DE-5000 or BK891", source: "Amazon ~$80" },
+      { qty: 1, item: "50Ω coax cable, 3ft", spec: "RG-58", source: "Local electronics store" },
+      { qty: 1, item: "PCB (custom, included in plans)", spec: "FR4, 2-layer, 15×10cm", source: "JLCPCB ~$8" },
+    ],
+    steps: [
+      {
+        title: "Wind the High-Q Toroidal Inductor",
+        detail: "Using the T200-26 iron powder core, wind 28 turns of 20 AWG Litz wire (or solid silver-plated copper). Space turns uniformly with ~0.5mm gaps. Target inductance: 100 µH ± 2%. Measure with LCR meter at 100 kHz; Q factor should exceed 300. Coat with thin varnish to fix winding in place. This coil is the vacuum potential oscillator element — its high Q minimizes resistive loss in the vacuum oscillation pathway.",
+        warning: null,
+      },
+      {
+        title: "Assemble the LC Resonant Tank",
+        detail: "Connect the toroidal inductor in parallel with the two variable capacitors (in series with each other for fine tuning). Calculate initial capacitance for resonance at 10 MHz: C = 1/(4π²f²L) ≈ 25.3 pF. Set variable caps accordingly. Verify resonant frequency with a grid-dip meter or antenna analyzer. The tank circuit represents the vacuum-ground potential oscillation loop.",
+        warning: null,
+      },
+      {
+        title: "Set Up the Quartz Crystal Gate",
+        detail: "Mount the 10 MHz quartz crystal in a Pierce oscillator circuit (4× inverter gates, 22pF loading caps). The crystal provides the stable reference frequency. Feed the crystal oscillator output to the DDS module REFCLK input. The DDS will generate variable-frequency drive derived from the stable quartz reference.",
+        warning: null,
+      },
+      {
+        title: "Wire the MOSFET Switching Stage",
+        detail: "Connect the two IRFP460 MOSFETs in a push-pull (totem-pole) configuration driven by the DDS output through a gate driver (TC4420 or equivalent). The push-pull driver alternately pumps the LC tank from both ends, maintaining oscillation. Add 10Ω gate resistors and TVS diodes (1.5KE33A) across drain-source for protection.",
+        warning: "The 630V-rated polypropylene capacitors are specified because voltage spikes across the tank can exceed 5× the supply voltage during resonance.",
+      },
+      {
+        title: "Isolate the Vacuum Ground Reference",
+        detail: "This is the critical step. The circuit ground (signal common) and the vacuum ground (the physical ground plane through the inductor core) must be isolated from each other by a 1 MΩ resistor in series with a 1nF capacitor. This isolation allows the vacuum potential to oscillate independently of the circuit ground — per Bearden's Part II model. Connect an electrostatic voltmeter across this isolation element to monitor the vacuum-ground differential.",
+        warning: "Do NOT directly short circuit ground and vacuum-ground — this collapses the vacuum potential oscillation mechanism.",
+      },
+      {
+        title: "Tune to Resonance and Measure Anomalous Output",
+        detail: "Power on at low amplitude. Slowly tune the variable capacitors until the oscilloscope shows maximum tank voltage swing (resonance peak). Gradually increase DDS drive amplitude. At resonance, measure current through the 1Ω sense resistor connected between the output terminal and circuit ground. Plot output current vs. input drive power. The theoretical VPO effect produces output current in excess of classical expectation when vacuum-ground isolation is maintained.",
+        warning: null,
+      },
+      {
+        title: "Document and Log Results",
+        detail: "Record: drive frequency, drive power, tank voltage, output current, and vacuum-ground differential voltage. Repeat with vacuum-ground isolation REMOVED (short circuit) as a control condition. The difference between isolated and non-isolated measurements represents the vacuum potential contribution. Export all data to CSV for analysis.",
+        warning: null,
+      },
+    ],
+    notes: "The VPO circuit demonstrates the principle described in Bearden 1982 Part II, Section 4. The anomalous output is subtle at the tabletop scale and requires careful shielding from ambient RF. A calibrated energy meter is recommended for quantitative COP measurements.",
+    softwareNotes: "Arduino DDS control sketch, LCR measurement logger, and Python analysis notebook included in PDF plans.",
+  },
+
+  "Biofield Frequency Exposure Chamber (Research Device)": {
+    diagramType: "biofield",
+    overview: "A shielded quartz-windowed exposure chamber for Kaznacheyev-style UV photon transmission experiments. Dying cells emit UV photons carrying a virtual EM pattern of their death. A quartz (not glass) optical path transmits this template to healthy cells in the adjacent chamber compartment, replicating the disease pattern electromagnetically.",
+    bom: [
+      { qty: 1, item: "UV-grade fused quartz window", spec: "50mm × 50mm × 3mm, UV transparent 200–400 nm", source: "Edmund Optics ~$85" },
+      { qty: 1, item: "Aluminum enclosure, dual-compartment", spec: "Custom machined or bent, 200×100×80mm", source: "Machine per plans / ~$45 material" },
+      { qty: 2, item: "Cell culture well plates (quartz)", spec: "24-well quartz-bottomed plates", source: "Eppendorf Z703079 ~$120 ea" },
+      { qty: 1, item: "DDS programmable frequency driver", spec: "AD9910 evaluation board, 1 MHz–1 GHz", source: "Analog Devices ~$200" },
+      { qty: 1, item: "UV-A LED array", spec: "365 nm, 5W, collimated", source: "Mouser ~$15" },
+      { qty: 1, item: "Photomultiplier tube module", spec: "Hamamatsu H6779, 185–650 nm", source: "Hamamatsu ~$400" },
+      { qty: 1, item: "EM shielding foam lining", spec: "Carbon-loaded polyurethane foam", source: "Mouser ~$25" },
+      { qty: 1, item: "Temperature controller", spec: "±0.1°C, PID, 37°C setpoint", source: "Amazon ~$35" },
+      { qty: 2, item: "Pt100 RTD temperature sensors", spec: "Class A, 100Ω at 0°C", source: "Mouser ~$8 ea" },
+    ],
+    steps: [
+      {
+        title: "Machine the Dual-Compartment Enclosure",
+        detail: "Fabricate the aluminum enclosure per the included technical drawing. The chamber has two compartments (A: donor cell chamber, B: recipient cell chamber) separated by a central bulkhead with a precision-machined aperture sized to fit the quartz window (50×50mm). All interior surfaces are anodized black to minimize UV reflections. Drill gas inlet/outlet ports (6mm) for CO₂ culture environment. This separates the donor (diseased) cells from recipient (healthy) cells.",
+        warning: null,
+      },
+      {
+        title: "Install the Quartz Window",
+        detail: "Press-fit the UV-grade quartz window into the bulkhead aperture using UV-resistant silicone sealant. CRITICAL: the window must be quartz (SiO₂), not borosilicate glass (Pyrex). Glass blocks UV below ~300 nm, cutting off the relevant cytopathogenic UV frequencies. Quartz transmits from ~200 nm, allowing full-spectrum UV photon transmission between chambers. Verify UV transmission with UV spectrophotometer.",
+        warning: "Using glass instead of quartz will block the critical UV band and null the experiment. Verify optically before use.",
+      },
+      {
+        title: "Install EM Shielding",
+        detail: "Line all interior walls of both compartments with carbon-loaded EM shielding foam. This blocks ambient RF interference while allowing UV photon transmission through the quartz window. Connect the aluminum enclosure to a single-point earth ground via a 1.5mm² green/yellow wire. Install the PMT module aligned with the quartz window on the recipient (B) side for photon detection.",
+        warning: null,
+      },
+      {
+        title: "Set Up the Programmable Frequency Driver",
+        detail: "Mount the AD9910 DDS evaluation board outside the chamber. Connect its output via a filtered BNC feedthrough to the UV LED array inside compartment A. The DDS sweeps frequencies from 1 MHz to 1 GHz under Arduino/FPGA control to modulate the UV illumination at specific frequencies corresponding to Bearden's EM trigger windows (Table 12 of Gravitobiology). This applies a structured frequency template to the donor cell sample.",
+        warning: null,
+      },
+      {
+        title: "Install Temperature Control",
+        detail: "Mount both Pt100 RTD sensors in each compartment (one per side). Wire to the PID temperature controller with the heating element (flexible silicone heater, 15W) attached to the enclosure bottom. Set PID setpoint to 37.0°C. Allow 30 minutes for thermal equilibration before beginning experiments. Temperature uniformity within ±0.2°C is required for valid cell culture results.",
+        warning: null,
+      },
+      {
+        title: "Prepare Donor and Recipient Cell Samples",
+        detail: "Place cytopathogenic (diseased/dying) cell culture in compartment A (quartz well plate). Place healthy cell culture in compartment B. Seal both chambers. The quartz window provides the optical path for UV photon transmission. Activate DDS frequency sweep. Monitor recipient cells in compartment B using the PMT for UV emission (indicating disease transmission) and a standard inverted microscope for morphological changes over 24–72 hours.",
+        warning: "All cell culture work requires BSL-2 safety protocols if using pathogenic cell lines. Consult your institution's biosafety officer.",
+      },
+      {
+        title: "Measure and Document UV Photon Transmission",
+        detail: "Connect the PMT output to an oscilloscope and a photon counting module (SRS SR400 or equivalent). Log photon count rate in the recipient chamber vs. time. Compare against control (compartment A containing healthy control cells). Statistical deviation in photon count rate >3σ above baseline indicates non-classical UV photon communication between compartments.",
+        warning: null,
+      },
+    ],
+    notes: "This device replicates the Kaznacheyev cytopathogenic effect experiments (>5,000 documented trials). The key Bearden insight: the EM disease pattern is carried in the UV photon virtual-state field structure, not the photon energy. Quartz transparency is the single critical design constraint.",
+    softwareNotes: "Python data logger for PMT photon counting, DDS frequency sweep script, and statistical analysis notebook included in PDF plans.",
+  },
+
+  "Open-System Magnetic Generator (Prototype Plans)": {
+    diagramType: "generator",
+    overview: "A rotating electromagnetic open-system generator based on the Kromrey G-field generator and Edwin Gray's pulsed capacitor discharge engine (US Patent #3,890,548). The core principle: a rotating magnetic system can couple to the subquantic field (tachion/neutrino sea), extracting energy beyond what the driving motor inputs.",
+    bom: [
+      { qty: 1, item: "Rotor assembly (machined steel)", spec: "200mm diameter, 8-pole permanent magnet, balanced to G1.0", source: "Machine per plans" },
+      { qty: 8, item: "Neodymium arc magnets", spec: "N52 grade, 50×25×10mm arc", source: "K&J Magnetics ~$8 ea" },
+      { qty: 12, item: "Output stator coils", spec: "Hand-wound, 400 turns, 22 AWG, bobbin form", source: "Wind per plans" },
+      { qty: 4, item: "High-voltage capacitors", spec: "50 µF, 450V, polypropylene", source: "Mouser ~$15 ea" },
+      { qty: 2, item: "Spark gap electrodes", spec: "Tungsten rod, 6mm diameter, 100mm long", source: "Amazon ~$12 ea" },
+      { qty: 1, item: "DC motor (drive)", spec: "24V, 200W, BLDC with encoder", source: "Amazon ~$65" },
+      { qty: 1, item: "BLDC motor controller", spec: "Flipsky VESC 4.12", source: "Amazon ~$45" },
+      { qty: 1, item: "Bearing block pair", spec: "6205-2RS, 25mm shaft, pillow block", source: "Amazon ~$12 ea" },
+      { qty: 1, item: "Aluminum base plate", spec: "300×200×12mm, 6061", source: "McMaster-Carr ~$35" },
+      { qty: 1, item: "Power meter (bidirectional)", spec: "YB27VA or Yokogawa WT310", source: "Amazon ~$25" },
+    ],
+    steps: [
+      {
+        title: "Machine and Balance the Rotor",
+        detail: "Machine the 8-pole rotor from mild steel per the provided engineering drawing. Mill 8 equally-spaced magnet pockets (50×25×10mm) around the circumference at 45° intervals. Press-fit N52 neodymium arc magnets into pockets with alternating polarity (N-S-N-S around circumference). Secure with high-strength epoxy (Loctite EA9360). Balance the completed rotor to G1.0 on a dynamic balancing machine. Mount on 25mm shaft with shaft collar and key.",
+        warning: "N52 neodymium magnets have extreme attractive force. Use non-magnetic handling tools. Do NOT allow magnets to snap together — they can shatter and cause injury.",
+      },
+      {
+        title: "Wind the Output Stator Coils",
+        detail: "Wind 12 stator coils, 400 turns of 22 AWG each, on the provided bobbin forms. Coils are wound in groups of 3 (4 groups of 3-phase) to allow configurable 3-phase or single-phase output. Each coil pair is wound with opposite handedness (bifilar wound, reversed) — this is the Kromrey configuration that enables coupling to the G-field. Measure inductance of each coil: must match within ±2%. Wind rejects if outside tolerance.",
+        warning: null,
+      },
+      {
+        title: "Assemble the Stator Frame",
+        detail: "Mount the 12 stator coils in the aluminum stator ring at 30° intervals. Set the air gap between stator coil faces and rotor magnet surfaces to exactly 2.0mm ± 0.1mm. This gap is critical — Kromrey's documented efficiency required precise gap geometry. Use feeler gauges to verify uniformity around the full circumference.",
+        warning: null,
+      },
+      {
+        title: "Build the Pulsed Capacitor Discharge Circuit",
+        detail: "Following Edwin Gray US Patent #3,890,548 (Figure 1): wire the 4× polypropylene capacitors in a parallel bank (total 200 µF @ 450V). Connect the capacitor bank positive terminal to the stator coil output through the spark gap electrodes (set to 2mm gap initially). The spark gap fires when the coil voltage exceeds the gap breakdown voltage (~8–10 kV at 2mm), discharging the capacitor bank in a nanosecond pulse. This nanosecond pulse is the Gray 'cold electricity' discharge mechanism.",
+        warning: "450V capacitor bank is lethal. Install properly rated bleeder resistors (100kΩ, 10W) across the bank at all times. Use insulated tools. Never work on the circuit without confirming capacitors are discharged with a voltmeter.",
+      },
+      {
+        title: "Install Drive Motor and Speed Control",
+        detail: "Mount the 24V BLDC drive motor on the base plate with a flexible shaft coupling to the rotor shaft. Configure the VESC motor controller for RPM control mode with encoder feedback. Start at 300 RPM (minimum operating speed). Install bidirectional power meter on the DC input to the drive motor controller to measure input power precisely.",
+        warning: null,
+      },
+      {
+        title: "Measure Input vs Output Power",
+        detail: "Connect the capacitor discharge circuit output to a load bank (variable resistive load). Connect a second power meter on the output. Run the generator at 600 RPM. Record: input motor power (W), output load power (W), spark gap firing rate (Hz). Plot efficiency = output/input vs RPM across 300–1200 RPM. Kromrey documented efficiency >100% above a threshold RPM — look for the crossover point.",
+        warning: null,
+      },
+      {
+        title: "Document and Optimize",
+        detail: "Vary: air gap (1.5–3.0mm in 0.1mm steps), capacitor bank voltage (100–450V), spark gap distance (1–4mm), and rotor RPM (300–1200). Create a 3D optimization map of output efficiency vs. these parameters. The optimal configuration documented by Kromrey was ~700W output at 600–1200 RPM with an air gap tuned for maximum G-field coupling.",
+        warning: null,
+      },
+    ],
+    notes: "Based on Schaffranke's 1982 survey of free energy prototypes and Edwin Gray US Patent #3,890,548. The Kromrey G-field generator produced 700W at documented >100% COP. This plans package provides engineering drawings directly derived from the patent and survey data.",
+    softwareNotes: "Python efficiency mapper, VESC motor control scripts, and data logger for both power meters included in PDF plans. 3D optimization plot script (matplotlib) included.",
+  },
+
+  "Quantum Potential EMI Detector (\"Fireflies Sensor\")": {
+    diagramType: "detector",
+    overview: "Based on Bearden's 'fireflies effect' from Gravitobiology Fig. 14: quantum potential EM interference manifests as statistically non-Gaussian noise bursts in sensitive detectors. Uses a tuned quartz-crystal array with statistical burst-pattern analysis firmware to detect scalar EM signatures where standard spectrum analyzers show nothing.",
+    bom: [
+      { qty: 4, item: "Quartz crystal resonators (matched set)", spec: "10 MHz, series resonance, frequency-matched to 5 ppm", source: "Mouser — order and select matched ~$6 total" },
+      { qty: 1, item: "Low-noise RF amplifier", spec: "Mini-Circuits ZX60-P33ULN+, 0.05–3000 MHz, NF 0.4 dB", source: "Mini-Circuits ~$45" },
+      { qty: 1, item: "Data acquisition board", spec: "National Instruments USB-6003 or Red Pitaya STEMlab 125-14", source: "NI ~$150 or Red Pitaya ~$280" },
+      { qty: 1, item: "FPGA board", spec: "Digilent Arty A7-35T", source: "Digilent ~$130" },
+      { qty: 1, item: "Faraday cage enclosure", spec: "Aluminum, 200×150×100mm, BNC feedthrough", source: "Hammond 1590Z157 ~$25" },
+      { qty: 2, item: "SMA connectors (PCB mount)", spec: "50Ω, edge launch", source: "Mouser ~$2 ea" },
+      { qty: 1, item: "Low-dropout voltage regulator", spec: "LT3042, ultra-low noise 1 nV/√Hz", source: "Mouser ~$5" },
+      { qty: 1, item: "Raspberry Pi 4B", spec: "4GB RAM, for statistical analysis", source: "Amazon ~$55" },
+    ],
+    steps: [
+      {
+        title: "Select and Match the Quartz Crystal Array",
+        detail: "Order 10–20 nominally identical 10 MHz crystals. Measure each crystal's exact series resonant frequency using the crystal impedance method (series with 50Ω termination, sweep with VNA or antenna analyzer). Select the 4 closest-matching crystals (within 5 ppm of each other). Label them C1–C4. This matched array is the sensor element — the differential noise between matched crystals reveals non-random signal components.",
+        warning: null,
+      },
+      {
+        title: "Build the Crystal Array Front-End",
+        detail: "Mount all 4 crystals in the Faraday cage enclosure. Connect each crystal in a common-base oscillator circuit (2N3904 transistor, 1kΩ collector load, 100pF coupling caps). Sum the 4 oscillator outputs through a resistive summing network (4× 1kΩ resistors to a common node). This creates a coherent average of 4 matched crystal outputs — uncorrelated (random) noise averages down by √4 = 2×, while coherent (scalar EM) signals maintain amplitude.",
+        warning: null,
+      },
+      {
+        title: "Add the Low-Noise Amplifier Chain",
+        detail: "Connect the crystal array summing output to the LT3042 power supply (ultra-low-noise LDO, critical for nV-level noise measurements). Feed through the Mini-Circuits ZX60 LNA (NF 0.4 dB adds minimal noise). The LNA output connects to the Red Pitaya STEMlab 125-14 ADC input (14-bit, 125 MSPS — critical for capturing ns-duration fireflies bursts). Keep all coax runs inside the Faraday cage to <100mm.",
+        warning: null,
+      },
+      {
+        title: "Program the Burst Detection Firmware",
+        detail: "Load the provided Python/FPGA firmware onto the Raspberry Pi + Red Pitaya. The firmware continuously samples the crystal array output at 125 MSPS and applies a Kurtosis burst detector: calculates the running kurtosis (4th statistical moment / σ⁴) of the noise in 1 ms windows. Non-Gaussian bursts (kurtosis > 3) are timestamped and logged. This is the 'fireflies' detection algorithm described in Gravitobiology Fig. 14.",
+        warning: null,
+      },
+      {
+        title: "Calibrate Against a Known Source",
+        detail: "Generate a controlled RF burst using a signal generator (5 µs pulses at 10 MHz) and verify the burst detector flags it correctly. Then recalibrate with zero known signal and establish the ambient baseline kurtosis. Set the alert threshold at: baseline_kurtosis + 3×σ_kurtosis. Log 24 hours of ambient baseline data before active monitoring.",
+        warning: null,
+      },
+      {
+        title: "Add Geolocation Correlation",
+        detail: "Connect a GPS module (u-blox NEO-6M) to the Raspberry Pi via USB. The firmware automatically timestamps each detected burst with GPS-derived UTC time accurate to 100 ns. This allows correlation of multiple sensor units' data for triangulation. Configure the alert system (email/SMS via Twilio) to notify when burst rate exceeds 10× baseline.",
+        warning: null,
+      },
+      {
+        title: "Deploy and Monitor",
+        detail: "Mount the sealed Faraday cage enclosure in a low-EMI location (away from switching power supplies, computers, fluorescent lights). Run data collection for minimum 7 days. Correlate burst timestamps with: solar activity (NOAA Space Weather API), local weather (OpenWeatherMap API), and known RF activity logs. Statistical cluster analysis of burst patterns reveals non-random (scalar EM) vs. random (thermal noise) activity.",
+        warning: null,
+      },
+    ],
+    notes: "The Aharonov-Bohm effect (confirmed mainstream physics) validates that quantum potentials act without classical E/B fields — providing the theoretical foundation for this detector's operating principle. Pentagon EMI studies (Gravitobiology Table 7) document exactly the anomalous noise burst patterns this instrument targets.",
+    softwareNotes: "Python burst detection library (beardenEMI.py), FPGA firmware (Verilog), Raspberry Pi data logger, and statistical analysis dashboard (Dash/Plotly) included in PDF plans.",
+  },
+
+  "EM Trigger Window Therapy Device": {
+    diagramType: "therapy",
+    overview: "A programmable frequency generator delivering precisely tuned EM pulses within verified biological trigger windows catalogued in Gravitobiology Table 12. Available as a consumer wristband and clinical full-body coil chamber. The trigger windows represent frequencies at which EM fields couple maximally to biological tissue — the mechanism behind Rife's mortal oscillatory rate success.",
+    bom: [
+      { qty: 1, item: "DDS frequency synthesizer", spec: "AD9910 evaluation board, 420 MHz, 32-bit tuning", source: "Analog Devices ~$200" },
+      { qty: 1, item: "Power amplifier (clinical version)", spec: "25W linear, 100 kHz–30 MHz, class A", source: "Motorola LDMOS kit ~$85" },
+      { qty: 1, item: "Helmholtz coil pair (clinical)", spec: "Custom-wound, 300mm diameter, matched", source: "Wind per plans" },
+      { qty: 1, item: "Wristband coil (consumer version)", spec: "Flexible PCB coil, 60mm diameter, 50 turns", source: "JLCPCB flex PCB ~$15" },
+      { qty: 1, item: "Raspberry Pi Zero 2W", spec: "WiFi-enabled, for protocol control", source: "Amazon ~$15" },
+      { qty: 1, item: "Touchscreen display", spec: "3.5-inch SPI, 320×480", source: "Amazon ~$18" },
+      { qty: 1, item: "LiPo battery (consumer)", spec: "3.7V 2000 mAh", source: "Amazon ~$12" },
+      { qty: 1, item: "Battery charge management IC", spec: "TP4056 with protection", source: "Amazon ~$5 (10-pack)" },
+      { qty: 1, item: "Current sense resistor", spec: "0.1Ω, 1W, 0.1%", source: "Mouser ~$1" },
+    ],
+    steps: [
+      {
+        title: "Program the Trigger Window Frequency Library",
+        detail: "Load the provided trigger_windows.json frequency library onto the Raspberry Pi. This file contains 47 verified biological trigger window frequencies from Gravitobiology Table 12 and Lisitsyn's report (p.41), organized by: biological system targeted (nervous, immune, cellular), frequency range (ELF, VLF, HF), and protocol duration. The DDS synthesizer will be controlled via SPI from the Pi to step through these frequencies.",
+        warning: null,
+      },
+      {
+        title: "Set Up the DDS Synthesizer",
+        detail: "Connect the AD9910 evaluation board to the Raspberry Pi via SPI (SCLK→GPIO11, MOSI→GPIO10, CS→GPIO8, IO_UPDATE→GPIO7). Write the DDS initialization routine: set system clock to 1 GHz (using internal PLL from 25 MHz TCXO reference), enable single-tone mode. Test by commanding a 7.83 Hz (Schumann resonance — first trigger window) output and verifying with oscilloscope.",
+        warning: null,
+      },
+      {
+        title: "Build the Helmholtz Coil Pair (Clinical Version)",
+        detail: "Wind two identical coils of 80 turns of 18 AWG on 300mm diameter PVC ring forms. Space the coils exactly one coil-radius apart (150mm) for Helmholtz geometry — this creates a highly uniform magnetic field in the treatment volume. Measure inductance of both coils (must match within 1%). Wire in series. At 10 Hz drive: calculated field = 0.72 mT at 1A current. This is in the range of documented PEMF therapeutic intensities.",
+        warning: null,
+      },
+      {
+        title: "Build the Power Amplifier Stage",
+        detail: "The linear class A PA amplifies the DDS output to therapeutic drive levels. Use the Motorola LDMOS transistor kit for the 25W PA stage. Set quiescent current to 250 mA (class A operation). Add a current limiter (LM338T) with the 0.1Ω sense resistor to prevent overcurrent. Feed the PA output through a low-pass filter (Chebyshev, 7th order, cutoff at 30 MHz) to remove harmonics before the coil.",
+        warning: "Do not exceed 50 mT field intensity — above this level, non-therapeutic biological effects may occur. Calibrate coil output with a calibrated magnetic field probe.",
+      },
+      {
+        title: "Assemble the Wristband (Consumer Version)",
+        detail: "Mount the flexible PCB coil around a silicone wristband form (printed at a 3D print service). Embed the TP4056 charge IC and LiPo battery in the band's clasping module. Connect the Raspberry Pi Zero 2W and DDS module inside the wristband housing (3D-printed ABS enclosure, 65×40×15mm). The consumer wristband operates at 1–100 mA coil drive — sufficient for wrist proximity therapeutic fields.",
+        warning: null,
+      },
+      {
+        title: "Write the Protocol Control Software",
+        detail: "Using the provided Python framework (trigger_protocol.py), build the treatment protocol sequencer: 1) Select protocol from the library (e.g., 'immune_boost', 'neural_calm', 'cellular_repair'). 2) For each protocol, step through the assigned trigger window frequencies in sequence. 3) Each frequency step: ramp up to target amplitude over 5 seconds, hold for the specified dwell time (1–30 min), ramp down. 4) Log session data (timestamp, frequencies, durations) to SQLite database.",
+        warning: null,
+      },
+      {
+        title: "Calibrate and Validate",
+        detail: "Use a calibrated AC magnetic field meter (Sypris/Integrity 3-axis, or equivalent) to verify coil field intensities at each trigger window frequency. Record: frequency, coil drive current, measured field at 50mm (wristband) and 200mm (clinical) standoff distances. Compare against Gravitobiology Table 12 optimal field intensity ranges. Adjust PA gain to match specified intensities. Log all calibration data in the included calibration certificate template.",
+        warning: null,
+      },
+    ],
+    notes: "The trigger window frequencies in Gravitobiology Table 12 were identified by Beck, Hunt, Lisitsyn, and multiple Soviet researchers as documented in Bearden's 1991 synthesis. The PEMF device category is well-established commercially — this device differentiates by targeting the specific Bearden/Lisitsyn trigger windows rather than generic PEMF frequencies.",
+    softwareNotes: "Python DDS control library, trigger_windows.json frequency database (47 entries), protocol sequencer, SQLite session logger, and Dash monitoring dashboard included in PDF plans.",
+  },
+
+  "Whittaker Wave Phase Conjugate Mirror (PCM) System": {
+    diagramType: "pcm",
+    overview: "Based on Gravitobiology Figures 10-11. A pumped phase conjugate mirror (PPCM) time-reverses an incoming EM wave — the output is an exact phase-conjugate replica traveling back to source. This enables: unjammable self-navigating communications, therapeutic cancellation of disease EM patterns, and scalar EM countermeasures.",
+    bom: [
+      { qty: 1, item: "Barium titanate (BaTiO₃) crystal", spec: "15×15×10mm, optical grade, poled", source: "Del Mar Photonics ~$350" },
+      { qty: 2, item: "Pump laser modules", spec: "532 nm DPSS, 100 mW each (counter-propagating pump beams)", source: "Amazon ~$40 ea" },
+      { qty: 1, item: "Probe laser", spec: "635 nm diode, 5 mW, single-mode fiber-coupled", source: "Amazon ~$25" },
+      { qty: 1, item: "Optical breadboard", spec: "300×300mm, M6 mounting holes, 25mm grid", source: "Thorlabs MB3030 ~$180" },
+      { qty: 4, item: "Kinematic mirror mounts", spec: "Thorlabs KM100, 1-inch", source: "Thorlabs ~$45 ea" },
+      { qty: 2, item: "Beam splitters", spec: "50:50, 532 nm anti-reflection coated, 25mm", source: "Thorlabs BS013 ~$75 ea" },
+      { qty: 1, item: "Photodetector (conjugate output)", spec: "Si photodiode, 200–1100 nm, BNC output", source: "Thorlabs DET36A2 ~$120" },
+      { qty: 1, item: "Spatial light modulator (SLM)", spec: "Holoeye PLUTO, 1920×1080 LCOS, 633 nm", source: "Holoeye ~$4,500 (optional — see plans for budget alternative)" },
+      { qty: 1, item: "Oscilloscope", spec: "4-channel, 200 MHz", source: "Rigol DS1054Z ~$300" },
+    ],
+    steps: [
+      {
+        title: "Prepare the BaTiO₃ Crystal",
+        detail: "The BaTiO₃ crystal is the nonlinear medium for four-wave mixing (FWM), which is the physical mechanism behind phase conjugation. Mount the crystal on the optical breadboard in the provided kinematic crystal mount (allow ±5° angular adjustment on all axes). Orient the crystal's c-axis perpendicular to the pump beam propagation axis. The c-axis direction is marked on the crystal — verify with polarized light.",
+        warning: "BaTiO₃ crystals are brittle. Handle with lens tissue only. Do not touch optical faces.",
+      },
+      {
+        title: "Set Up the Counter-Propagating Pump Beams",
+        detail: "Mount the two 532 nm pump lasers on opposite ends of the optical breadboard. Use kinematic mirror mounts and beam splitters to direct both pump beams through the BaTiO₃ crystal from opposite directions (forward pump: left-to-right; backward pump: right-to-left). The pump beams must be exactly counter-propagating — use a retroreflector alignment target to verify. Both pump beams enter opposite faces of the crystal along the same axis.",
+        warning: "532 nm green laser at 100 mW can cause immediate eye damage. Use appropriate OD 6+ laser safety goggles at all times while lasers are powered.",
+      },
+      {
+        title: "Align the Probe Beam",
+        detail: "Introduce the 635 nm probe laser at a small angle (typically 10–30°) to the pump beam axis, entering the crystal from the front face. This is the 'signal' beam whose phase conjugate will be generated. Use a fiber collimator to produce a clean Gaussian probe beam. The probe beam intersects with both pump beams inside the BaTiO₃ crystal — this three-beam interaction generates the phase-conjugate output beam.",
+        warning: null,
+      },
+      {
+        title: "Detect the Phase Conjugate Output",
+        detail: "The phase-conjugate beam (the 'time-reversed' replica) exits the crystal in the exact reverse direction of the probe beam. Place the photodetector at the probe laser end of the setup (looking back toward the probe source). Add a dichroic mirror (reflects 635 nm, transmits 532 nm) to separate the conjugate output from scattered pump light. The conjugate output should appear as a bright spot on the photodetector when all three beams are correctly aligned.",
+        warning: null,
+      },
+      {
+        title: "Verify Phase Conjugation (Aberration Correction Test)",
+        detail: "Insert an aberrating element (e.g., a frosted glass diffuser) in the probe beam path BEFORE the crystal. The probe beam will be scrambled by the diffuser. A true phase conjugate mirror will generate an output that, when it passes back through the same diffuser, reconstructs the original clean beam. Verify this by placing a CCD camera after the diffuser on the probe side. A clean spot (vs. scattered light without the PCM) confirms true phase conjugation.",
+        warning: null,
+      },
+      {
+        title: "Implement the Whittaker Wave Modulation Layer",
+        detail: "To extend beyond classical PCM into Bearden's Whittaker wave application, modulate the probe beam with an arbitrary waveform generator (AWG) at ELF frequencies (1 Hz – 10 kHz, within Gravitobiology trigger window Table 12). The phase conjugate output will carry the time-reversed version of this modulation — which Bearden interprets as the mechanism for therapeutic disease-pattern cancellation at the S'/S'' hyperspatial level. Log the modulation-conjugate fidelity vs. frequency.",
+        warning: null,
+      },
+      {
+        title: "EM (RF) Version Implementation",
+        detail: "For the RF (non-optical) version of the PCM, replace the optical setup with a microwave version using a varactor diode array in a waveguide as the nonlinear medium, and two microwave pump oscillators (10 GHz) counter-propagating through the varactor array. The operating principle is identical (four-wave mixing in a nonlinear medium) but at RF/microwave frequencies. Full RF PCM design drawings included in the advanced section of the PDF plans.",
+        warning: null,
+      },
+    ],
+    notes: "Phase conjugate mirrors are validated laboratory technology documented extensively in mainstream physics literature (Zel'dovich, Fisher, Pepper). The Bearden extension adds Whittaker wave decomposition to interpret the PCM as a temporal field reversal mechanism. The optical version is the recommended starting point; the RF version is in the advanced plans section.",
+    softwareNotes: "Python beam alignment optimization script, phase conjugation quality metric (Strehl ratio calculator), AWG modulation controller, and Holoeye SLM wavefront control software interface included in PDF plans.",
+  },
+
+  "Prioré-Type Multichannel EM Therapy System": {
+    diagramType: "priore",
+    overview: "Modern solid-state implementation of Bearden's Fig. 10 Prioré device architecture using DDS signal generators and FPGA modulation chain. The signal chain: multichannel inputs → derivative carrier/modulator → primary carrier output. Mapped to S'/S''/S''' hierarchy, this impresses a structured virtual-state template onto the target organism.",
+    bom: [
+      { qty: 3, item: "DDS signal generator modules", spec: "AD9910 evaluation boards, 1 MHz–1 GHz each", source: "Analog Devices ~$200 ea" },
+      { qty: 1, item: "FPGA board", spec: "Xilinx Artix-7 (Digilent Arty A7-100T)", source: "Digilent ~$230" },
+      { qty: 1, item: "RF power amplifier", spec: "50W linear, 1–30 MHz, class AB", source: "eBay RF PA module ~$120" },
+      { qty: 1, item: "Applicator coil set", spec: "Helmholtz pair, 300mm diameter, shielded", source: "Wind per plans" },
+      { qty: 1, item: "Faraday cage treatment chamber", spec: "Copper mesh lined, 400×600×400mm", source: "Build per plans ~$80 materials" },
+      { qty: 1, item: "Raspberry Pi 4B (4GB)", spec: "For protocol control and logging", source: "Amazon ~$55" },
+      { qty: 2, item: "Calibrated magnetic field probes", spec: "3-axis, 100 Hz–10 MHz", source: "Narda ELT400 or equivalent ~$200" },
+      { qty: 1, item: "Isolated DC power supply", spec: "Medical-grade isolation, 24V 10A", source: "Mean Well GST240A24 ~$85" },
+    ],
+    steps: [
+      {
+        title: "Build the 3-Channel DDS Signal Architecture",
+        detail: "Mount all three AD9910 DDS boards on the FPGA carrier. The architecture follows Bearden's Fig. 10: Channel 1 (S'' level) generates the base frequency (typically 7.83 Hz Schumann or selected trigger window). Channel 2 (S' level) generates a modulating frequency that is amplitude-modulated onto Channel 1 output. Channel 3 (primary carrier) generates the RF carrier (1–30 MHz) which is frequency/phase modulated by the Channel 1+2 composite. This 3-layer modulation maps to the S'/S''/S''' hyperspatial hierarchy.",
+        warning: null,
+      },
+      {
+        title: "Program the FPGA Modulation Controller",
+        detail: "Load the provided Verilog modulation chain onto the Artix-7 FPGA. The firmware implements: (1) AM modulation of Ch1 onto Ch2 via digital multiplier, (2) Phase modulation of the Ch1+Ch2 composite onto Ch3 primary carrier, (3) SPI interface to all three AD9910 boards for frequency control, (4) Raspberry Pi UART interface for protocol commands. Verify the 3-level modulation hierarchy on an oscilloscope before connecting to the PA.",
+        warning: null,
+      },
+      {
+        title: "Assemble and Calibrate the Helmholtz Treatment Coils",
+        detail: "Wind two identical Helmholtz coils (80 turns each, 18 AWG, on 300mm PVC ring forms) spaced 150mm apart (one radius separation for Helmholtz geometry). Connect in series. At 10A drive: field at center ≈ 7.2 mT. This is within the range of the original Prioré device field intensities. Verify field uniformity with the 3-axis magnetic field probe — should be ±5% over a 150mm central volume.",
+        warning: null,
+      },
+      {
+        title: "Build the Faraday Cage Treatment Chamber",
+        detail: "Construct the copper-mesh Faraday cage using 1mm pitch copper mesh (6 layers) over a welded aluminum frame. All seams soldered with conductive epoxy. Install the Helmholtz coil pair INSIDE the cage with the treatment volume at the cage center. This cage prevents the treatment EM field from interfering with ambient electronics while ensuring the subject (cell culture or patient) is in the uniform field zone.",
+        warning: null,
+      },
+      {
+        title: "Wire the PA and Safety Interlocks",
+        detail: "Connect the FPGA modulator output to the 50W linear PA through an attenuator pad (20 dB) — start at low power. The PA output feeds the Helmholtz coils through a current-limiting circuit (LM338T, 10A maximum). Install safety interlocks: (1) door switch cuts PA output when chamber is opened, (2) thermal cutout on PA heatsink, (3) current monitor triggers PA shutdown if >10A. Use the medical-grade isolated power supply throughout.",
+        warning: "Medical-grade isolated power supply is non-negotiable for any human-contact research application. Standard supplies are not permissible.",
+      },
+      {
+        title: "Program the Protocol Library",
+        detail: "Load the provided protocol_library.json onto the Raspberry Pi. This contains modulation protocols derived from Gravitobiology Table 12 and the Prioré documented treatment frequencies. Each protocol specifies: S'' base frequency, S' modulating frequency, primary carrier frequency, field intensity, session duration, and inter-session interval. The protocol sequencer steps through each frequency triplet with configurable dwell times.",
+        warning: null,
+      },
+      {
+        title: "Validate with Cell Culture Before Human Trials",
+        detail: "BEFORE any human use, validate the system with in vitro cell culture experiments. Use the provided experiment protocol: expose cancer cell line (HeLa or similar, obtain from ATCC) to treatment protocols for 24h, 48h, and 72h. Compare cell viability (trypan blue exclusion) and morphology vs. untreated control. Document results per the included IRB-ready experimental report template. Only proceed to human trials with IRB approval and under licensed medical supervision.",
+        warning: "Human therapeutic use requires IRB approval and licensed medical supervision. Research device exemption applies to in vitro and animal use only.",
+      },
+    ],
+    notes: "Antoine Prioré's multichannel EM device was funded by the French government in the 1960s–1980s and documented to cure terminal cancers in animals. The French government documents are included in the PDF plans as historical validation. This implementation uses modern DDS/FPGA to replicate the documented signal architecture.",
+    softwareNotes: "FPGA Verilog source (modulation_chain.v), Python protocol sequencer, protocol_library.json (30+ treatment protocols), experiment data logger, and IRB-ready experimental report template included in PDF plans.",
+  },
+
+  "ELF Carrier Lock Detection System (\"Psychotronic Detector\")": {
+    diagramType: "elfdetector",
+    overview: "A precision multi-channel SDR receiver tuned to detect synchronized ELF (≤10 Hz) modulation sidebands on carriers in the 5–30 MHz band — the signature of Bearden's documented ELF brain-entrainment architecture. Standard spectrum analyzers display amplitude vs frequency but cannot detect phase-locked ELF modulation across multiple carriers.",
+    bom: [
+      { qty: 2, item: "Software-defined radio receivers", spec: "RTL-SDR v3 with TCXO (0.5 ppm stability)", source: "RTL-SDR.com ~$30 ea" },
+      { qty: 1, item: "HF upconverter", spec: "Ham-It-Up Plus, 0.1–60 MHz coverage", source: "Nooelec ~$55" },
+      { qty: 1, item: "Raspberry Pi 4B", spec: "4GB RAM, 64GB SD card", source: "Amazon ~$55" },
+      { qty: 1, item: "Active HF antenna", spec: "MiniWhip or ALA1530S+, 10 kHz–30 MHz", source: "eBay ~$45" },
+      { qty: 1, item: "Common-mode choke (antenna feed)", spec: "FT240-43 toroid, 10 turns", source: "Mouser ~$8" },
+      { qty: 1, item: "GPS disciplined oscillator (GPSDO)", spec: "Leo Bodnar GPSDO, 10 MHz output", source: "Leo Bodnar ~$90" },
+      { qty: 1, item: "USB hub (powered)", spec: "7-port, USB 3.0", source: "Amazon ~$25" },
+      { qty: 1, item: "Aluminum project enclosure", spec: "EM-shielded, 300×200×100mm", source: "Hammond 1590XXFL ~$30" },
+    ],
+    steps: [
+      {
+        title: "Set Up the GPS-Disciplined Reference",
+        detail: "Connect the Leo Bodnar GPSDO to both RTL-SDR dongles via the 10 MHz reference input. Both receivers must share the SAME frequency reference for phase-coherent cross-correlation. Without a common reference, phase coherence measurements are meaningless. Allow the GPSDO to lock to GPS satellites (LED turns green — takes up to 5 minutes outdoors). Once locked, frequency accuracy is 1 part in 10¹¹.",
+        warning: "Phase coherence detection REQUIRES a common frequency reference. Do not skip this step.",
+      },
+      {
+        title: "Configure the SDR Hardware",
+        detail: "Connect both RTL-SDR dongles through the powered USB hub to the Raspberry Pi. Connect the HF upconverter between the antenna and one of the SDR dongles (this shifts HF frequencies up by 125 MHz to bring them into the RTL-SDR's tunable range of 500 kHz–1766 MHz). Configure GNU Radio Companion (pre-installed) with the provided flowgraph (elf_lock_detector.grc): dual-channel synchronized sampling at 2.4 MSPS.",
+        warning: null,
+      },
+      {
+        title: "Deploy the HF Antenna",
+        detail: "Mount the active HF antenna outdoors at least 5m above ground and >10m from structures. Route the coax through the common-mode choke (wound on FT240-43 toroid) before entering the building to prevent common-mode noise. Connect to the SDR setup via shielded coax (RG-6 or LMR-400). The antenna should have a clear view of the sky. Run a short-term noise floor check: the noise floor should be flat ±3 dB across 5–30 MHz.",
+        warning: null,
+      },
+      {
+        title: "Load and Configure the Phase Coherence Detection Software",
+        detail: "Install the provided Python package (elf_detector package, included) on the Raspberry Pi. The package implements: (1) dual-channel FFT at 2.4 MSPS on 5–30 MHz band, (2) sideband extraction at ±10 Hz around each identified carrier, (3) cross-carrier phase coherence calculation using cross-spectral density, (4) Woodpecker PRI (pulse repetition interval) detector looking for 10 Hz ± 0.5 Hz modulation. Configure carrier scan list (5, 7, 9, 12, 15, 18, 21, 25, 28 MHz — documented Woodpecker frequencies).",
+        warning: null,
+      },
+      {
+        title: "Establish the Baseline ELF Noise Floor",
+        detail: "Run 72 hours of passive baseline monitoring before looking for anomalies. The software logs: carrier amplitude vs time, ELF sideband amplitude, cross-carrier phase coherence index (CCPCI), and ambient noise floor. Export baseline statistics. Set alert thresholds at: CCPCI > 3σ above baseline AND ≥3 carriers showing simultaneous 10 Hz sidebands. This dual-condition reduces false positives from natural ELF signals (Schumann resonances, lightning).",
+        warning: null,
+      },
+      {
+        title: "Configure the Alert and Logging System",
+        detail: "Set up the Raspberry Pi web dashboard (Flask + Plotly, included) accessible on your local network at port 5000. The dashboard shows: real-time CCPCI plot, active carrier list with ELF sideband amplitudes, alert history, and geographic direction estimate (if 3+ sensors are deployed — see triangulation notes). Configure email/SMS alerts via Twilio API when threshold is exceeded.",
+        warning: null,
+      },
+      {
+        title: "Cross-Correlate with Historical Woodpecker Events",
+        detail: "The included database (woodpecker_events.db) contains timestamped Woodpecker signal observations from the Tom Bearden Website and amateur radio operator logs (1976–2010). Compare your detection events against this historical record. Also cross-correlate with NOAA's solar activity data (automated via provided API integration) — some anomalous ELF events correlate with specific geomagnetic activity phases documented in Gravitobiology.",
+        warning: null,
+      },
+    ],
+    notes: "The RTL-SDR + GPS disciplined reference approach allows two-node coherence detection for under $300. A professional SIGINT approach would use Ettus Research USRP hardware (~$2,000/node) for better dynamic range. The documentation package includes both approaches.",
+    softwareNotes: "GNU Radio flowgraph (elf_lock_detector.grc), Python ELF detector package, Flask dashboard, Twilio alert integration, woodpecker_events.db historical database, and NOAA correlation API integration included in PDF plans.",
+  },
+
+  "Phi-River Gradient Sensor (∇φ Detector)": {
+    diagramType: "phiriver",
+    overview: "A differential phi-potential measurement instrument using two matched shielded toroidal coils as phi-source references, with a sensitive Hall-effect bridge circuit measuring the gradient-phi field between them. Detects the virtual particle flux 'river' in Bearden's phi-river circuit — invisible to conventional voltmeters.",
+    bom: [
+      { qty: 2, item: "Toroidal ferrite cores (matched)", spec: "T200-2, measured inductance within 0.1%", source: "Mouser — measure and select" },
+      { qty: 1, item: "Hall effect sensors (matched pair)", spec: "Honeywell SS49E, ±100 mT range", source: "Mouser ~$1.20 ea" },
+      { qty: 1, item: "Instrumentation amplifier IC", spec: "INA128, 120 dB CMRR", source: "Mouser ~$6" },
+      { qty: 1, item: "Precision voltage reference", spec: "REF6025, 2.5V, 3 ppm/°C", source: "Mouser ~$8" },
+      { qty: 1, item: "Low-noise op-amp", spec: "OPA2188, 8 nV/√Hz, rail-to-rail", source: "Mouser ~$4" },
+      { qty: 1, item: "24-bit ADC module", spec: "ADS1256, 30 kSPS, SPI", source: "Amazon ~$12" },
+      { qty: 1, item: "Copper shielding tape", spec: "2-inch, conductive adhesive", source: "Amazon ~$12" },
+      { qty: 1, item: "Temperature compensation thermistor", spec: "NTC 10kΩ 1% B=3435K", source: "Mouser ~$0.50" },
+      { qty: 1, item: "Raspberry Pi Zero 2W", spec: "For data logging", source: "Amazon ~$15" },
+    ],
+    steps: [
+      {
+        title: "Build Two Matched Shielded Toroidal Coils",
+        detail: "Following the Anenergy Pump circuit Steps 1-3 exactly, wind and shield two toroidal coils with MATCHED inductance within 0.1%. Use the same core batch (order 6, measure all, select the two closest). Measure at 100 kHz on the LCR meter. Label them Φ-Source A (higher potential) and Φ-Source B (lower potential). These are the two phi-sources that define the gradient-phi river between them.",
+        warning: "0.1% inductance matching is critical. The Hall sensor bridge relies on the symmetry of the two coil phi-fields — mismatch creates a systematic offset error.",
+      },
+      {
+        title: "Wind the Measurement Coil (Gradient Bridge)",
+        detail: "Wind a third small coil (20 turns of 28 AWG on 25mm air-core PVC) to act as the measurement probe coil. This coil is positioned at the midpoint between the two phi-source toroids, oriented perpendicular to the axis connecting them. The coil inductance is ~200 nH. Connect the Hall sensor pair across the coil terminals — one on each end. This creates the differential bridge that measures the gradient-phi axis between the two sources.",
+        warning: null,
+      },
+      {
+        title: "Assemble the Hall Effect Bridge",
+        detail: "Mount both Hall sensors (SS49E) in a differential bridge configuration: both sensors face the measurement axis, with one rotated 180° relative to the other. This means the component of the gradient-phi in the measurement axis adds in the bridge output while the common-mode (non-gradient) component cancels. Bias both sensors from the REF6025 precision reference (2.5V). Connect bridge differential output to the INA128 instrumentation amplifier with gain set to 100× (R_G = 499Ω).",
+        warning: null,
+      },
+      {
+        title: "Add Temperature Compensation",
+        detail: "Mount the NTC thermistor between the two Hall sensors (measures the local temperature of the bridge). Connect to an ADC channel on the ADS1256. The temperature compensation algorithm (provided in the Python firmware) subtracts the thermistor-derived temperature coefficient from the Hall readings. This reduces temperature-dependent drift from ±5 mT/°C (uncompensated SS49E) to <±0.1 mT/°C.",
+        warning: null,
+      },
+      {
+        title: "Calibrate the Gradient Sensor",
+        detail: "Calibrate in three steps: (1) Zero calibration: with both phi-source toroids unpowered, adjust the INA128 reference input (pin 5) until ADS1256 reads zero. (2) Gain calibration: apply a known E-field (standard dipole antenna with calibrated signal generator) and note the ABSENCE of a reading — the Hall bridge should be insensitive to pure E-field. (3) Gradient-phi calibration: power up the phi-source toroids with known drive levels and record the bridge reading per amp of drive current.",
+        warning: null,
+      },
+      {
+        title: "Drive the Phi-Source Toroids",
+        detail: "Connect each phi-source toroid to its own DDS oscillator channel (as used in the Anenergy Pump). Drive Φ-Source A at frequency f₁ and Φ-Source B at frequency f₂ with f₂ > f₁ (higher phi = higher drive frequency in the Bearden model). Set initial frequencies: f₁ = 100 kHz, f₂ = 200 kHz. The gradient-phi river flows from B (high phi) to A (low phi) between the toroids. Monitor the Hall bridge output with the ADS1256.",
+        warning: null,
+      },
+      {
+        title: "Log the Gradient-Phi vs. Standard E-Field Differential",
+        detail: "Run parallel measurements: (1) Hall bridge output (gradient-phi sensor). (2) Standard E-field probe (Protek EMF-828 or equivalent). (3) Standard voltmeter across the space between toroids. Compare all three. The classical instruments measure E-field and conventional voltage. The Hall bridge should show a signal WHEN the phi-gradient is non-zero but EVEN WHEN the classical E-field instruments read zero (toroid shielding condition). This differential is the key measurement demonstrating the gradient-phi river distinct from E-field.",
+        warning: null,
+      },
+    ],
+    notes: "The Aharonov-Bohm effect (confirmed in mainstream physics) proves that the vector potential A (and scalar potential φ) can produce measurable effects even when E and B are zero. This detector targets precisely that regime. The measurement methodology is patent-defensible.",
+    softwareNotes: "Python ADS1256 driver, temperature compensation library, Hall bridge calibration script, and real-time gradient-phi plotter (matplotlib animation) included in PDF plans.",
+  },
+
+  "Atmospheric Scalar EM Signature Recognition System (AI Edition)": {
+    diagramType: "aidetector",
+    overview: "A machine vision + AI system trained to identify scalar EM interference signatures in sky photographs and satellite imagery. Software classifies: radial spoke patterns, hole-punch/fallstreak clearings, rectangular grid cirrus, and boattailed beam patterns consistent with two-source scalar transmitter pairs.",
+    bom: [
+      { qty: 1, item: "All-sky camera system", spec: "Raspberry Pi HQ camera + 180° fisheye lens", source: "Raspberry Pi store + Amazon ~$120 total" },
+      { qty: 1, item: "Raspberry Pi 4B (8GB)", spec: "For inference engine (local AI)", source: "Amazon ~$75" },
+      { qty: 1, item: "Weatherproof enclosure", spec: "IP67, clear dome (acrylic), 200mm diameter", source: "Amazon ~$35" },
+      { qty: 1, item: "GPS module", spec: "u-blox NEO-M8N, USB, ±2m accuracy", source: "Amazon ~$18" },
+      { qty: 1, item: "Heating element (dome defogging)", spec: "5W resistive strip heater", source: "Amazon ~$8" },
+      { qty: 1, item: "Humidity/temperature sensor", spec: "BME280, I2C, ±0.5°C ±3% RH", source: "Amazon ~$5" },
+      { qty: 1, item: "GPU compute server (training)", spec: "Cloud GPU: AWS g4dn.xlarge or Paperspace A4000", source: "Cloud: ~$0.50/hr" },
+      { qty: 1, item: "External SSD (data storage)", spec: "2TB, USB 3.0", source: "Amazon ~$65" },
+    ],
+    steps: [
+      {
+        title: "Assemble the All-Sky Camera Station",
+        detail: "Mount the Raspberry Pi HQ camera module with the 180° fisheye lens inside the IP67 weatherproof dome enclosure. Position the camera facing straight up. Attach the 5W heating strip to the inside of the clear dome to prevent dew/frost condensation. Mount the BME280 humidity sensor inside the enclosure to trigger heating when RH > 85%. Mount the GPS module on the exterior of the enclosure. Seal all cable entries with silicone.",
+        warning: null,
+      },
+      {
+        title: "Configure the Automated Sky Imaging Schedule",
+        detail: "Install the provided camera_capture.py script on the Raspberry Pi. Configure: 1 image per 5 minutes during daytime (sunrise to sunset via astronomical twilight calculation from GPS coordinates), full-sky JPEG at 4056×3040 resolution, GPS timestamp embedded in EXIF data, automatic upload to local SSD storage. Set the capture schedule as a systemd service that starts automatically on boot.",
+        warning: null,
+      },
+      {
+        title: "Build the Training Dataset",
+        detail: "Collect a minimum 500-image training dataset with 4 classes: (1) radial_spoke, (2) hole_punch, (3) grid_cirrus, (4) normal. Sources: Tom Bearden Website photographs (29 documented images — provided in plans), GOES satellite imagery from NOAA's public API, and your local all-sky camera images (manually label with the included Labelbox-compatible annotation tool). Target: 125+ images per class for initial training.",
+        warning: null,
+      },
+      {
+        title: "Fine-Tune the Vision Transformer Model",
+        detail: "Using a cloud GPU instance (AWS g4dn.xlarge or equivalent), run the provided training script (train_classifier.py) which fine-tunes a pre-trained EfficientNet-B4 model on the labeled dataset using transfer learning. Training parameters: batch size 32, learning rate 1e-4, 50 epochs, data augmentation (random flip, rotation, color jitter). Target validation accuracy: >85% on the 4-class classification problem. The trained model checkpoint is saved to disk (~40 MB).",
+        warning: null,
+      },
+      {
+        title: "Deploy the Inference Engine on Raspberry Pi",
+        detail: "Copy the trained model checkpoint to the Raspberry Pi 4B. Install ONNX Runtime (optimized for ARM CPU inference). Convert the PyTorch model to ONNX format using the provided converter script (export_onnx.py). At Raspberry Pi 4B, inference takes ~200 ms per image. The inference daemon (inference_daemon.py) runs continuously, classifying each new image within 30 seconds of capture.",
+        warning: null,
+      },
+      {
+        title: "Configure the Alert and Reporting System",
+        detail: "Set up the monitoring dashboard (Flask web app, port 5000): shows last 24h sky image gallery with AI classification overlays, detection event timeline, confidence score heatmap, and GPS-tagged detection map (using Leaflet.js). Configure alerts: email notification when any of the 3 anomalous classes (radial_spoke, hole_punch, grid_cirrus) are detected with confidence >80%. Optionally integrate with the Woodpecker Grid SDR Detector for correlated RF+visual event logging.",
+        warning: null,
+      },
+      {
+        title: "Validate Against Known Events",
+        detail: "Cross-reference your detection events against the historical event database (provided in plans): 29 Bearden-documented California coast events (2001–2004) with timestamps and geographic coordinates. For validation: download GOES satellite archive for those dates and run the classifier. If the model correctly identifies the documented formations, the classifier is validated. Publish your validation results to the included academic report template for peer review or IEEE submission.",
+        warning: null,
+      },
+    ],
+    notes: "The 2-radials diagram specifies exact geometric predictions for scalar EM atmospheric signatures — making this a falsifiable scientific instrument. All Bearden-documented photographs with GPS-correlated Woodpecker signal data are included in the plans package as the ground-truth training dataset.",
+    softwareNotes: "camera_capture.py, train_classifier.py, export_onnx.py, inference_daemon.py, Flask dashboard, Labelbox annotation export adapter, GOES satellite API downloader, and validation report template all included in PDF plans.",
+  },
+
+  "Woodpecker Grid Standing Wave Detector (HF Scalar Signature Receiver)": {
+    diagramType: "woodpecker",
+    overview: "A purpose-built SDR receiver and analysis package to detect the Soviet Woodpecker-style 10 Hz pulse modulation signature in the 4–30 MHz HF band. Features auto-scan, pulse-repetition-interval analysis, geographic direction-finding, and cloud morphology correlation logging. Includes audio output so users can hear the Woodpecker pulse directly.",
+    bom: [
+      { qty: 1, item: "RTL-SDR v3 dongle (TCXO)", spec: "0.5 ppm temperature-compensated oscillator", source: "RTL-SDR.com ~$30" },
+      { qty: 1, item: "HF upconverter", spec: "Ham-It-Up Plus, NE612 mixer, 0.1–60 MHz", source: "Nooelec ~$55" },
+      { qty: 1, item: "HF antenna (long wire)", spec: "20m random wire + 9:1 unun transformer", source: "Build per plans, ~$15 materials" },
+      { qty: 1, item: "Ferrite clamp (RF choke)", spec: "FT240-43 toroid, 3 turns", source: "Mouser ~$6" },
+      { qty: 1, item: "Raspberry Pi 4B", spec: "4GB, 32GB SD, for continuous monitoring", source: "Amazon ~$55" },
+      { qty: 1, item: "7-inch touchscreen display", spec: "Official Raspberry Pi 7-inch DSI", source: "Amazon ~$75" },
+      { qty: 1, item: "Audio amplifier + speaker", spec: "PAM8403 3W class D + 3-inch speaker", source: "Amazon ~$8" },
+      { qty: 1, item: "2× directional HF antennas (DF option)", spec: "Small magnetic loop, 1–30 MHz, rotating", source: "Build per plans, ~$40 materials" },
+    ],
+    steps: [
+      {
+        title: "Build the 20m Random Wire Antenna",
+        detail: "Install a 20-meter (66-foot) length of 26 AWG insulated stranded wire as a random wire antenna. Run horizontally from a window or outdoor mount, as high and as clear of structures as possible. Terminate the indoor end through the 9:1 unun transformer (wound on FT140-43 toroid — 9 turns on primary, 3 turns on secondary, included winding diagram). Connect the unun output to the HF upconverter input via RG-58 coax. Wind the coax through the ferrite clamp before entry to prevent common-mode noise.",
+        warning: null,
+      },
+      {
+        title: "Set Up the RTL-SDR and HF Upconverter",
+        detail: "Connect the HF upconverter to the RTL-SDR dongle. The Ham-It-Up Plus shifts the 0.1–60 MHz HF band up by +125 MHz, bringing it into the RTL-SDR's native range. Tune the RTL-SDR to 125 + target_frequency MHz. For example: to receive 10 MHz, tune the SDR to 135 MHz. Configure the RTL-SDR for 2.4 MHz bandwidth and 2.4 MSPS sample rate. Verify reception by tuning to a known AM broadcast station in the medium-wave band.",
+        warning: null,
+      },
+      {
+        title: "Install and Configure the GNU Radio PRI Detector",
+        detail: "Install the provided GNU Radio flowgraph (woodpecker_detector.grc) on the Raspberry Pi. The flowgraph implements: (1) continuous FFT of the full 5–30 MHz scan range, (2) carrier peak detector identifying signals above noise threshold, (3) for each detected carrier: envelope detection, low-pass filter at 15 Hz, FFT of envelope to identify 10 Hz modulation sidebands, (4) Pulse Repetition Interval (PRI) estimator: measures time between envelope peaks and converts to Hz. The 10 Hz PRI is the Woodpecker signature.",
+        warning: null,
+      },
+      {
+        title: "Configure the Audio Woodpecker Output",
+        detail: "Connect the PAM8403 audio amplifier to the Raspberry Pi 3.5mm audio jack. Route the Woodpecker-detected carrier audio output (demodulated envelope, pitched to 440 Hz tone gated at the 10 Hz PRI rate) to the amplifier and speaker. When a Woodpecker-signature signal is detected, users will hear the characteristic 'tap-tap-tap' sound described in shortwave documentation from the 1970s. This provides real-time auditory confirmation — matching exactly the recordings on the Tom Bearden Website.",
+        warning: null,
+      },
+      {
+        title: "Set Up the Touchscreen Dashboard",
+        detail: "Install the provided Flask web dashboard (served locally on port 5000, auto-launched at startup via systemd) on the touchscreen. Dashboard shows: waterfall display of 5–30 MHz band, detected carrier list with PRI measurements, Woodpecker alert history (with timestamps), audio confidence meter, and cloud morphology correlation field (manual entry or integration with the AI Sky Camera from plans). The touchscreen provides tap-to-zoom into any frequency range.",
+        warning: null,
+      },
+      {
+        title: "Optional: Build the Direction-Finding Add-On",
+        detail: "For geographic direction estimation, build two small magnetic loop antennas (500mm diameter, 10 turns of 14 AWG, tuned with 365 pF variable capacitor). Mount on a rotatable azimuth platform with 1° angular resolution encoder. Connect to a second RTL-SDR dongle. The provided DF firmware (doppler_df.py) uses the two-loop directional response to estimate the azimuth of the Woodpecker transmitter. With 3+ stations networked, exact triangulation is possible. The provided server code allows multi-station data sharing.",
+        warning: null,
+      },
+      {
+        title: "Cross-Reference with Cloud Morphology Log",
+        detail: "The Bearden documentation links specific Woodpecker signal detections to simultaneous anomalous cloud formations (radial spokes, hole-punch clouds) observed within hours at locations consistent with the transmitter geometry. Maintain the provided cloud morphology log (morphology_log.db) synchronized with your signal detections. Manually photograph sky formations whenever a Woodpecker event is detected. Over time, this database builds a correlated RF-atmospheric evidence record identical to Bearden's California coast documentation.",
+        warning: null,
+      },
+    ],
+    notes: "RTL-SDR + Ham-It-Up is the lowest-cost entry point (~$85 hardware). The audio output reproduces the characteristic Woodpecker sound documented on the Tom Bearden Website since 2001. Full plans also include an advanced version using the Kiwi SDR ($259) with built-in HF coverage and network sharing for community-distributed monitoring.",
+    softwareNotes: "GNU Radio flowgraph (woodpecker_detector.grc), PRI detector Python module, Flask dashboard with waterfall display, audio output driver, direction-finding firmware (doppler_df.py), multi-station server, cloud morphology log database, and Kiwi SDR alternative configuration guide all included in PDF plans.",
+  },
+};

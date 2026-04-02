@@ -21,6 +21,7 @@ import Simulator from './pages/Simulator';
 import Checkout from './pages/Checkout';
 import MyLearning from './pages/MyLearning';
 import LabSimulation from './pages/LabSimulation';
+import InventionPlans from './pages/InventionPlans';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -72,6 +73,7 @@ const AuthenticatedApp = () => {
         <Route path="/checkout" element={<Checkout />} />
         <Route path="/my-learning" element={<MyLearning />} />
         <Route path="/lab" element={<LabSimulation />} />
+        <Route path="/invention-plans" element={<InventionPlans />} />
         <Route path="*" element={<PageNotFound />} />
       </Routes>
     </>

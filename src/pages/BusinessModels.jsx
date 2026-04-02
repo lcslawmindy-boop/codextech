@@ -99,6 +99,12 @@ export default function BusinessModels() {
         </div>
         <div className="flex items-center gap-3 text-xs text-gray-400">
           <Link
+            to="/invention-plans"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-red-900/40 hover:bg-red-800/50 border border-red-700 text-red-300 text-xs font-medium transition-colors"
+          >
+            🔧 Build Plans
+          </Link>
+          <Link
             to="/marketing"
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-green-900/40 hover:bg-green-800/50 border border-green-700 text-green-300 text-xs font-medium transition-colors"
           >
