@@ -79,6 +79,12 @@ export default function ConceptGraph() {
             🔬 Diagnostics
           </button>
           <Link
+            to="/patent-tool"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-900/40 hover:bg-blue-800/50 border border-blue-800 text-blue-300 text-xs font-medium transition-colors"
+          >
+            📄 Patent Tool
+          </Link>
+          <Link
             to="/timeline-pitch"
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-orange-900/40 hover:bg-orange-800/50 border border-orange-800 text-orange-300 text-xs font-medium transition-colors"
           >
