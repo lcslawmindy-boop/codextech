@@ -1,0 +1,81 @@
+{
+  "name": "PriorArtEntry",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string"
+    },
+    "inventor": {
+      "type": "string"
+    },
+    "year": {
+      "type": "integer"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "Vacuum Energy",
+        "Scalar EM",
+        "Bioelectromagnetics",
+        "Phase Conjugation",
+        "Resonance Devices",
+        "Atmospheric EM",
+        "Free Energy",
+        "Tesla Technology",
+        "Other"
+      ]
+    },
+    "description": {
+      "type": "string"
+    },
+    "outcome": {
+      "type": "string",
+      "enum": [
+        "Success (demonstrated)",
+        "Suppressed",
+        "Partial Success",
+        "Failed",
+        "Patent Granted",
+        "Patent Denied",
+        "Unknown"
+      ]
+    },
+    "patent_numbers": {
+      "type": "string"
+    },
+    "source_document": {
+      "type": "string"
+    },
+    "key_claims": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "failure_reasons": {
+      "type": "string"
+    },
+    "rejection_grounds": {
+      "type": "string"
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "is_custom": {
+      "type": "boolean",
+      "default": false
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "title",
+    "inventor",
+    "year",
+    "category"
+  ]
+}

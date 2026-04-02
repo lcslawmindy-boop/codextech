@@ -26,6 +26,7 @@ import EMFImpact from './pages/EMFImpact';
 import ScalarEMLab from './pages/ScalarEMLab';
 import PatentDraftingTool from './pages/PatentDraftingTool';
 import TimelinePitchDeck from './pages/TimelinePitchDeck';
+import PriorArtArchive from './pages/PriorArtArchive';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -82,6 +83,7 @@ const AuthenticatedApp = () => {
         <Route path="/scalar-lab" element={<ScalarEMLab />} />
         <Route path="/patent-tool" element={<PatentDraftingTool />} />
         <Route path="/timeline-pitch" element={<TimelinePitchDeck />} />
+        <Route path="/prior-art" element={<PriorArtArchive />} />
         <Route path="*" element={<PageNotFound />} />
       </Routes>
     </>
