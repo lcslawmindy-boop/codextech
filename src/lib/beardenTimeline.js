@@ -251,11 +251,6 @@ export const timelineEvents = [
     concepts: ["scalar_em", "negentropy", "mind_field"],
     color: "#3b82f6",
   },
-    type: "publication",
-    description: "Major synthesis work connecting scalar EM theory to free energy extraction from the vacuum. Bearden argues the vacuum is a vast reservoir of ordered scalar EM energy that can be tapped via resonant scalar transmitters — unifying his physics, biology, and consciousness models.",
-    concepts: ["scalar_em", "negentropy", "mind_field"],
-    color: "#3b82f6",
-  },
 ];
 
 export const eraLabels = {
