@@ -1,6 +1,6 @@
 import { useState, useMemo } from "react";
 import { Link } from "react-router-dom";
-import { ArrowLeft, Shield, Zap, DollarSign, Plus, Loader2, CheckCircle2, Eye, EyeOff, Star, Globe, Lock, ChevronDown, ChevronUp, Send } from "lucide-react";
+import { ArrowLeft, Shield, Zap, DollarSign, Plus, Loader2, CheckCircle2, Eye, EyeOff, Star, Globe, Lock, ChevronDown, ChevronUp, Send, FileText } from "lucide-react";
 import { INVESTORS, ALIGNMENT_FLAGS, INVESTOR_CATEGORIES } from "../lib/investorData";
 import { base44 } from "@/api/base44Client";
 
@@ -402,10 +402,16 @@ export default function InvestorPortal() {
             <p className="text-gray-500 text-xs">Anonymized opportunity cards · {INVESTORS.length} vetted alignment-friendly investors & foundations</p>
           </div>
         </div>
-        <button onClick={() => setShowCreate(true)}
-          className="flex items-center gap-2 px-4 py-2 rounded-xl bg-green-700 hover:bg-green-600 text-white text-xs font-bold transition-all">
-          <Plus size={13} /> Create Opportunity Card
-        </button>
+        <div className="flex items-center gap-2">
+          <Link to="/patent-wizard"
+            className="flex items-center gap-2 px-4 py-2 rounded-xl bg-blue-900/40 hover:bg-blue-800/60 border border-blue-700 text-blue-300 text-xs font-bold transition-all">
+            <FileText size={13} /> Filing Wizard
+          </Link>
+          <button onClick={() => setShowCreate(true)}
+            className="flex items-center gap-2 px-4 py-2 rounded-xl bg-green-700 hover:bg-green-600 text-white text-xs font-bold transition-all">
+            <Plus size={13} /> Create Opportunity Card
+          </button>
+        </div>
       </div>
 
       {/* Privacy banner */}
@@ -483,6 +489,10 @@ export default function InvestorPortal() {
                 {myCards.map(card => (
                   <div key={card.id}>
                     <OpportunityCardPreview card={card} />
+                    <Link to={`/patent-wizard?card=${card.id}`}
+                      className="w-full mt-2 py-2 rounded-lg bg-blue-900/20 border border-blue-900 text-blue-400 text-xs font-bold hover:bg-blue-900/40 transition-all flex items-center justify-center gap-1.5">
+                      <FileText size={11} /> Generate USPTO Provisional Draft
+                    </Link>
                     {card.status === "live" && (
                       <button onClick={() => { setSelectedCard(card.id); setTab("matched"); }}
                         className="w-full mt-2 py-2 rounded-lg bg-blue-900/30 border border-blue-800 text-blue-300 text-xs font-bold hover:bg-blue-900/50 transition-all flex items-center justify-center gap-1.5">
