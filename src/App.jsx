@@ -32,6 +32,7 @@ import PatentLandscapeGraph from './pages/PatentLandscapeGraph';
 import MonitoringDashboard from './pages/MonitoringDashboard';
 import PatentFilingWizard from './pages/PatentFilingWizard';
 import InvestorCRM from './pages/InvestorCRM';
+import ZenithApex from './pages/ZenithApex';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -94,6 +95,7 @@ const AuthenticatedApp = () => {
         <Route path="/monitoring" element={<MonitoringDashboard />} />
         <Route path="/patent-wizard" element={<PatentFilingWizard />} />
         <Route path="/investor-crm" element={<InvestorCRM />} />
+        <Route path="/zenith-apex" element={<ZenithApex />} />
         <Route path="/investor-portal" element={<InvestorPortal />} />
         <Route path="*" element={<PageNotFound />} />
       </Routes>
