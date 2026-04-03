@@ -1,13 +1,68 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { ArrowLeft, Download, ChevronDown, ChevronUp, AlertTriangle, CheckCircle2, Package, Loader2, FileText, Lock, ShoppingCart } from "lucide-react";
+import { ArrowLeft, Download, ChevronDown, ChevronUp, AlertTriangle, CheckCircle2, Package, Loader2, FileText, Lock, ShoppingCart, Lightbulb, Eye } from "lucide-react";
 import { base44 } from "@/api/base44Client";
+import { inventionVisuals } from "../lib/inventionVisuals";
 import { businessItems } from "../lib/businessItems";
 import { inventionSteps } from "../lib/inventionSteps";
 import InventionDiagram from "../components/InventionDiagram";
 import { jsPDF } from "jspdf";
 
 const inventions = businessItems.filter(i => i.category === "Invention");
+
+function VisualExplainer({ visual }) {
+  if (!visual) return null;
+  return (
+    <div className="bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden mb-6">
+      <div className="flex items-center gap-3 px-5 py-4 border-b border-gray-800">
+        <Eye size={15} className="text-cyan-400" />
+        <h3 className="text-white font-bold text-sm">What It Looks Like & What It Does</h3>
+      </div>
+      <div className="p-5 space-y-5">
+        {/* What it is */}
+        <div className="bg-blue-950/30 border border-blue-900/40 rounded-xl p-4">
+          <p className="text-blue-300 font-bold text-xs uppercase tracking-wider mb-2 flex items-center gap-1.5"><Lightbulb size={11} /> What It Is</p>
+          <p className="text-gray-300 text-sm leading-relaxed">{visual.whatItIs}</p>
+        </div>
+
+        {/* How it works */}
+        <div className="bg-gray-800/50 rounded-xl p-4">
+          <p className="text-cyan-400 font-bold text-xs uppercase tracking-wider mb-2">How It Works</p>
+          <p className="text-gray-300 text-sm leading-relaxed">{visual.howItWorks}</p>
+        </div>
+
+        {/* Component breakdown */}
+        <div>
+          <p className="text-gray-400 font-bold text-xs uppercase tracking-wider mb-3">Key Components</p>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+            {visual.components.map((c, i) => (
+              <div key={i} className="flex items-start gap-3 p-3 rounded-xl bg-gray-800/40 border border-gray-700/50">
+                <div className="w-2.5 h-2.5 rounded-full flex-shrink-0 mt-1" style={{ backgroundColor: c.color }} />
+                <div>
+                  <p className="text-white text-xs font-bold leading-snug">{c.label}</p>
+                  <p className="text-gray-500 text-xs mt-0.5 leading-snug">{c.desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Key principle */}
+        <div className="bg-green-950/20 border border-green-900/30 rounded-xl p-4">
+          <p className="text-green-400 font-bold text-xs uppercase tracking-wider mb-2">Key Principle</p>
+          <p className="text-gray-300 text-sm leading-relaxed italic">{visual.keyPrinciple}</p>
+        </div>
+
+        {/* Size */}
+        {visual.realWorldSize && (
+          <p className="text-gray-600 text-xs">
+            <span className="text-gray-500 font-semibold">Physical size: </span>{visual.realWorldSize}
+          </p>
+        )}
+      </div>
+    </div>
+  );
+}
 
 function BomTable({ bom }) {
   return (
@@ -358,6 +413,7 @@ export default function InventionPlans() {
   }, []);
 
   const data = inventionSteps[selected?.title];
+  const visual = inventionVisuals[selected?.title];
 
   const handleDownload = async () => {
     if (!data || !selected) return;
@@ -456,6 +512,9 @@ export default function InventionPlans() {
                   <p className="text-gray-400 text-sm mt-1 italic">"{selected.tagline}"</p>
                 </div>
               </div>
+
+              {/* Visual Explainer */}
+              <VisualExplainer visual={visual} />
 
               {/* Diagram + overview */}
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
