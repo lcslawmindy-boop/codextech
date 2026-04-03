@@ -1,5 +1,65 @@
 export const nodes = [
   {
+    id: "energetics_framework",
+    label: "Energetics / Bioenergetics / Psychoenergetics",
+    group: "physics",
+    description: "Bearden's 1996 unified framework dividing all EM interactions into three domains: Energetics (nonliving systems), Bioenergetics (living bodies), and Psychoenergetics (living minds)",
+    fragments: [
+      "Energetics (nonliving systems): scalar interferometry, action-at-a-distance, quantum potential, vacuum engines, spacetime structuring, material & field effects, nuclei & lattice changes, hidden EM variables, SWZ effects.",
+      "Bioenergetics (living bodies/cells): cells and cellular changes, master cell control (Popp), spacetime structuring, disease induction and remission, action-at-a-distance, quantum potentials, scalar interferometry, hidden EM variables, SWZ effects.",
+      "Psychoenergetics (living minds): thoughts, memories, emotions, conscious/unconscious minds, spacetime structuring, species & biospheric minds, action-at-a-distance, quantum potentials, scalar interferometry, hidden EM variables, SWZ effects.",
+      "The three domains share identical underlying mechanisms (scalar interferometry, QP, SWZ) operating at different substrate levels: inert matter, living matter, and living mind. This is Bearden's 1996 synthesis diagram."
+    ]
+  },
+  {
+    id: "t_polarized_photons",
+    label: "T-Polarized Photons / Scalar EM Waves",
+    group: "physics",
+    description: "The fourth photon polarization — along the time axis — producing scalar (t-polarized) EM waves carrying time-energy at 9x10^16 J/second density",
+    fragments: [
+      "In quantum field theory there are four polarizations of photons. The fourth polarization occurs when energy is frozen in all three spatial dimensions — the photon oscillates its energy in the t-direction, providing the t-polarized photon.",
+      "The t-polarized photon or EM wave is called the scalar photon or scalar EM wave. Time is totally electromagnetic in nature — the flow of time is generated directly on every mass by its total set of photon interactions, both virtual and observable.",
+      "Time can be taken to be energy compressed by at least c^2, so it has at least the same energy density as mass. One second is 9x10^16 joules of time-energy (energy compressed into time). This makes the time domain enormously powerful as an engineering medium.",
+      "The t-polarized EM wave is the rarest form of electrodynamics, almost untouched by Western physicists. Russian KGB psychoenergetics scientists have known and used methods of transducing one wave polarization into another for at least two decades."
+    ]
+  },
+  {
+    id: "wave_transduction",
+    label: "EM Wave Polarization Transduction",
+    group: "physics",
+    description: "The process of transforming one EM wave polarization into another — particularly transverse to longitudinal to time-polarized — enabling mind engineering",
+    fragments: [
+      "Wave transduction or polarization transduction: the process of transforming an EM wave's particular polarization into another polarization type. Transduction to other than transverse polarization forms is little known in the West.",
+      "One can iteratively transduce ordinary transverse EM waves first into longitudinally-polarized EM waves and then into time-polarized EM waves. Both methods are possible. This is the key to engineering the mind domain directly.",
+      "Transduction mechanisms whereby differing EM wave polarizations can be transformed one-into-the-other are presented. Figure 2 shows: Transverse EM + Phase Conjugate Replica → Longitudinal EM Surge Wave; Longitudinal EM + Phase Conjugate Replica → Time Density Wave (oscillates rate of flow of time).",
+      "Significant transduction in experiments also produces 'strange' and unexplained anomalies in the instruments being used for experimental measurements — because the transduced wave type is invisible to standard instruments."
+    ]
+  },
+  {
+    id: "mind_body_coupling",
+    label: "Mind-Body Coupling Loop",
+    group: "consciousness",
+    description: "The closed-loop physical mechanism connecting mind domain (intent) to body domain (behavior) via coherent EM rotations in 4-space — Figure 5 of the 1999 Explore paper",
+    fragments: [
+      "Figure 5 — Mind-to-body and body-to-mind coupling: START → Coherent Mind Changes (Intent) → DIFFER? YES → Coherent Rotations in 4-Space produce Coherent Virtual 3-Space Projections → Coherent Integration in Brain/Body produces Coherent Observable ST Curvature Engines.",
+      "The body loop: Coherent ST Curvature Engines → Coherent Virtual ST Engines → Coherent Physical Changes & Behavior → ZERO? NO → observable body changes → Coherent Body Changes produce Observable Curvature Anti-Engines (feedback to mind).",
+      "The mind loop: ZERO? YES → Coherent Integration in Mind Domain produces Coherent Observable Mind Changes → Coherent Rotations produce Coherent Time-Like Virtual Projections in Mind Domain → back to DIFFER? check.",
+      "This is the rigorous physical solution to the age-old philosophical problem of intent — how the nonmaterial mind induces a 3-spatial, observable energy change upon the 3-spatial body. The mechanism is coherent rotation in 4-space projecting into both domains."
+    ]
+  },
+  {
+    id: "time_as_energy",
+    label: "Time as Dense EM Energy",
+    group: "physics",
+    description: "Time is compressed EM energy at c^2 density — 9x10^16 joules per second — making the time domain the most powerful engineering medium available",
+    fragments: [
+      "Time is totally electromagnetic in nature. The flow of time is not a separate external river on which a mass floats along like a boat drifting down the current of a great flowing river. Instead, the flow of time is generated directly on every mass by its total set of photon interactions.",
+      "In the t-polarization along the time axis, the 3-spatial energy is not oscillating at all. Instead, the time or time-energy is oscillating. Time can be taken to be energy compressed by at least c^2 — one second = 9x10^16 joules of time-energy compressed into time.",
+      "Using t-polarized EM photons and waves as ST curvature agents gives an amplification of 9x10^16 over the use of transverse-polarized EM waves for spacetime curvature purposes — making time-polarized EM 10^40 times stronger than weak G-force for spacetime curvature.",
+      "Relativistically, any velocity change in 4-space is a rotation. Any such rotation in the time-domain creates a tiny projection component into 3-space. A sufficient series of coherent time-domain (mental) changes produces a coherent series of virtual changes in 3-space (the body) — coherently integrating into an observable energy change."
+    ]
+  },
+  {
     id: "vector_concept",
     label: "Vector Taxonomy",
     group: "physics",
@@ -479,6 +539,21 @@ export const links = [
   { source: "excalibur_briefing", target: "hyperspatial_worlds", label: "presents" },
   { source: "excalibur_briefing", target: "inception_intent", label: "explains" },
   { source: "excalibur_briefing", target: "temporal_logic", label: "develops" },
+  { source: "energetics_framework", target: "scalar_em", label: "unifies under" },
+  { source: "energetics_framework", target: "kindling", label: "bioenergetics layer" },
+  { source: "energetics_framework", target: "consciousness", label: "psychoenergetics layer" },
+  { source: "t_polarized_photons", target: "scalar_em", label: "is the scalar photon of" },
+  { source: "t_polarized_photons", target: "mind_field", label: "couples to" },
+  { source: "t_polarized_photons", target: "wave_transduction", label: "produced by" },
+  { source: "wave_transduction", target: "scalar_longitudinal", label: "converts between" },
+  { source: "wave_transduction", target: "mind_body_coupling", label: "mechanism of" },
+  { source: "mind_body_coupling", target: "consciousness", label: "physical model of" },
+  { source: "mind_body_coupling", target: "inception_intent", label: "formalizes" },
+  { source: "time_as_energy", target: "scalar_em", label: "t-polarization of" },
+  { source: "time_as_energy", target: "t_polarized_photons", label: "carried by" },
+  { source: "time_as_energy", target: "vacuum_structure", label: "9e16 J per second" },
+  { source: "energetics_framework", target: "gravitobiology", label: "extends into" },
+  { source: "wave_transduction", target: "elf_entrainment", label: "delivery layer" },
 ];
 
 export const groupColors = {
