@@ -35,6 +35,7 @@ import InvestorCRM from './pages/InvestorCRM';
 import ZenithApex from './pages/ZenithApex';
 import ScalarFieldSim from './pages/ScalarFieldSim';
 import BrandArchitecture from './pages/BrandArchitecture';
+import EMFProtectionShop from './pages/EMFProtectionShop';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -100,6 +101,7 @@ const AuthenticatedApp = () => {
         <Route path="/zenith-apex" element={<ZenithApex />} />
         <Route path="/scalar-sim" element={<ScalarFieldSim />} />
         <Route path="/brand" element={<BrandArchitecture />} />
+        <Route path="/emf-shop" element={<EMFProtectionShop />} />
         <Route path="/investor-portal" element={<InvestorPortal />} />
         <Route path="*" element={<PageNotFound />} />
       </Routes>
