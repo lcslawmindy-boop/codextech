@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { ArrowLeft, Plus, Trash2, Loader2, Activity, Zap, Moon, Battery } from "lucide-react";
+import FloorPlanHeatmap from "../components/FloorPlanHeatmap";
 import { base44 } from "@/api/base44Client";
 import {
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, BarChart, Bar
@@ -42,7 +43,7 @@ export default function EMFExposureLog() {
   const [saving, setSaving] = useState(false);
   const [form, setForm] = useState(DEFAULT_FORM);
   const [showForm, setShowForm] = useState(false);
-  const [tab, setTab] = useState("chart"); // chart | log
+  const [tab, setTab] = useState("chart"); // chart | log | heatmap
 
   useEffect(() => {
     base44.entities.EMFLog.list("-date", 90).then(data => {
@@ -242,7 +243,7 @@ export default function EMFExposureLog() {
           <>
             {/* Tabs */}
             <div className="flex gap-1 bg-gray-900 border border-gray-800 rounded-xl p-1 mb-6 w-fit">
-              {[["chart", "📈 Charts"], ["log", "📋 Log"]].map(([id, label]) => (
+              {[["chart", "📈 Charts"], ["log", "📋 Log"], ["heatmap", "🗺️ Floor Plan"]].map(([id, label]) => (
                 <button key={id} onClick={() => setTab(id)}
                   className={`px-4 py-2 rounded-lg text-sm font-semibold transition-colors ${tab === id ? "bg-gray-700 text-white" : "text-gray-500 hover:text-gray-300"}`}>
                   {label}
@@ -337,6 +338,10 @@ export default function EMFExposureLog() {
                   </div>
                 ))}
               </div>
+            )}
+
+            {tab === "heatmap" && (
+              <FloorPlanHeatmap logs={logs} />
             )}
           </>
         )}
