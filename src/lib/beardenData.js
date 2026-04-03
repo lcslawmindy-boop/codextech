@@ -1,5 +1,77 @@
 export const nodes = [
   {
+    id: "vacuum_engine_type2",
+    label: "Type 2 Engineering / Vacuum Engines",
+    group: "physics",
+    description: "Bearden's Type 2 engineering: gating and structuring the vacuum flux itself rather than using external energy upon matter. COP far greater than 1.0 is permitted.",
+    fragments: [
+      "Type 1 Engineering: Vacuum Quiescent, Use External Energy Upon Matter. Does not involve mind, thought, life, time streams. Time is not an observable. Must furnish all the energy. Western science uses this method.",
+      "Type 2 Engineering: Gate and Structure the Vacuum Flux Itself. Involves mind, thought, life, time streams. Time is an observable. Furnish only initial energy and maintenance. Use vacuum's energy (vacuum engines). COP far greater than 1.0.",
+      "Vacuum Engine Concept (Figure 2): A vacuum engine template added to Mass Structure and Dynamics #1 — with NO TIME DELAY — produces a DELTA ENGINE TEMPLATE change in Mass Structure and Dynamics #2. The vacuum itself does the work; we only furnish the gating energy.",
+      "Wheeler-MTW Corollary: Trapped EM energy tells spacetime how to curve. Curved spacetime tells mass and energy how to structure and move. By forming vacuum engines deterministically, one may use them to affect, alter, and change local mass, energy, and mind in any manner desired."
+    ]
+  },
+  {
+    id: "mccs_cellular_control",
+    label: "Master Cellular Control System (MCCS)",
+    group: "biology",
+    description: "The body's master cellular control system using t-polarized photons and spacetime curvature engines — not ordinary EM signals — to control every cell at all levels",
+    fragments: [
+      "The Master Cellular Control System (MCCS) in the body utilizes these photon-gravitons, their corresponding EM wave polarizations, and transductions between them. By using very powerfully condensed gravitons and supergravitons, it utilizes small but highly significant direct curvatures of spacetime in precise patterns — spacetime curvature engines, not EM photon signals.",
+      "The MCCS does not merely send a 'signal' and hope the cell acts on it. Instead, it sends an 'engine' which alters the local spacetime in which the cell and all its components are embedded. This 'local ST curvature engine' then physically works directly upon the cell and all its parts, to alter the cell according to the specific 'template' of the engine.",
+      "Cellular division, biochemical processes, growth and growth control, cell differentiation and dedifferentiation, etc. are all controlled by the MCCS or one of its subsystems, using spacetime curvature engines. The ordinary TW electronic activity our biophysicists detect and correlate are simply intermediate components of the actual ongoing polarization transductions.",
+      "The regenerative subsystem of the MCCS controls healing and restoring damaged or diseased cells. By determining the correlate for the precise telomere loss in the aging body's emitted radiation spectrum, an effective telomere regeneration process immediately emerges — one simply amplifies the 'aging precise telomere reduction' correlate and reirradiates the body with it, adding the phase conjugate replicas."
+    ]
+  },
+  {
+    id: "time_reversal_zone",
+    label: "Time-Reversal Zone (TRZ)",
+    group: "physics",
+    description: "A volume or area in a reaction environment where phase conjugate waves predominate over time-forward waves — enabling impossible nuclear reactions, healing, and cold fusion",
+    fragments: [
+      "Time-Reversal Zone (TRZ) Definition: A volume or area in a reaction environment where phase conjugate waves predominate over time-forward waves. In a given reaction, time-reversal may apply. If so, like charges attract and unlike charges repel. Coulomb barrier becomes Coulomb assistant.",
+      "Electronuclear Reaction in TR-Zones (1): Nucleon interchange — changes neutron into proton and vice versa at high rate (flat spacetime assumed). Statistics become skewed due to curved ST. Can bias statistics toward either neutron or proton end — biases toward transmutation of elements along isomer chains. 'Isomer' concept is vastly expanded.",
+      "TR-Zone dynamics: Normal dynamics may reverse — like charges attract, unlike charges repel, H+ ions (protons) may form quasi-nuclei, Coulomb barrier becomes Coulomb assistant. Many 'impossible' reactions now possible: quark access, quark flipping by EM, ion clustering, positive charges as phase conjugate mirrors, time-density waves and time-energy charging.",
+      "China Lake anomalies in cold fusion electrolysis: anomalous radiation from electrolysis in ionization processes, dental X-ray film showed exposure, several GM tubes gave anomalous detection reaching 73 sigma above background, no anomalies when experiment off. Consistent with LW-to-TW transduction, time-density charging, and new conservation of energy law."
+    ]
+  },
+  {
+    id: "asymmetric_regauging",
+    label: "Asymmetric Regauging / COP>1 Circuits",
+    group: "physics",
+    description: "Overunity energy circuits enabled by asymmetric self-regauging — extracting the Poynting energy flow discarded by the Lorentz surface integration",
+    fragments: [
+      "Asymmetric Regauging produces excess force which can be used to do work on the system. The 'bird on the power line' analogy: net asymmetric regauging produces net excess force across the bird — violently translating its body parts and doing lots of work. This is the basic principle of all COP>1 electrical systems.",
+      "Demonstration of an Overunity Concept (By Asymmetrical Self-Regauging) — Patent Pending: Energy extracted from local vacuum and sent out as Poynting flow via spherical conducting shell. Switch #1 and Switch #2 control asymmetric regauging phases. Assumptions: capacitances of A and B very small; charge B large, power-free switching.",
+      "Bridging enables COP>1: S-flow, dφ/dt flow, and EMF flow from current loop A cross bridge to current loop B (asymmetrically regauged). dQ/dt blocker (conductor) separates the two loops. Current loop B is asymmetrically regauged by S, dφ/dt, and EMF flow from current loop A — permitting permissible overunity.",
+      "Chung's Carbon Filament Negative Resistor (University at Buffalo, NY): Crossed carbon filament layers produce Wout > Win. A solid-state implementation of the asymmetric regauging principle. The crossed anisotropic carbon structure creates a local asymmetry in the Poynting flow — allowing collection of more energy than is conventionally input."
+    ]
+  },
+  {
+    id: "telomere_rejuvenation",
+    label: "Telomere Regeneration & Rejuvenation",
+    group: "biology",
+    description: "Using MCCS time-reversal of aging cells via amplified antiengines — restoring telomeres and reversing the aging process by pumping the internal EM channel",
+    fragments: [
+      "The gradual loss of the telomeres — the natural ends of chromosomes — in a cell's chromosomes is what causes the cell to age. The gradual loss of the telomeres and the resulting shortening of the chromosomes represents a cellular 'disease state' or 'disorder state' accompanied by a precise delta in the spacetime curvature engine accompanying every affected (aging) cell.",
+      "By determining the correlate for that precise telomere loss in the aging body's emitted radiation spectrum, an effective telomere regeneration process immediately emerges. One simply amplifies the aging 'precise telomere reduction' correlate and reirradiates the body with it, passing an amplified correlate back into every cell — including the chromosomes — adding the phase conjugate replicas.",
+      "The cells and their parts — including the chromosomes — add the phase conjugate replicas, converting the incoming TW EM correlates to longitudinal LW signals, converting these LW signals to time-polarized EM waves, and pumping the aging cells. The cellular matter itself produces the amplified 'aging antiengine' for each and every cell and telomere ending. The result is to again add telomeres, converting the cell back to a younger, more vigorous cell, and reversing the process of aging.",
+      "Portable Priore-type treatment machines for mass casualties: three precisely determined 30-second 'AIDS correlate' irradiations a week apart should be sufficient to completely cure AIDS, including removal of all HIV-genetics changes from every previously infected cell. Also would accomplish considerable rejuvenation of the body (making the body younger). With second generation equipment, 90% of stricken casualties could be saved."
+    ]
+  },
+  {
+    id: "dielectric_body_portholes",
+    label: "Dielectric Body as Ship With Portholes",
+    group: "biology",
+    description: "The body dielectric model: every external EM wave entering through 'portholes' is mixed and transduced throughout the body — the basis for scalar bioeffects and porthole therapy",
+    fragments: [
+      "Think of the body dielectric as a 'ship' with lots of portholes. When it gets irradiated, certain operations happen internally — certain 'processes' and 'interactions' occur, which change both the mental and physical states. The output emissions back from the body dielectric, out through the filtering 'portholes,' will directly correlate to what has happened inside the ship.",
+      "One can use the same frequencies and spectra coming back out of those 'portholes' to insert EM signals and waves back in there, into the deepest processes going on in the body and in the mind (at all levels, including the deep unconscious). Remember, whatever you put back in there is going back through the 'mixmaster' hopper — iteratively phase conjugated and transduced.",
+      "A specifically diseased body has a specifically tailored change in its 'normal' emission spectra, because the disease condition alteration of its resident spacetime curvature engine. By having a database of normal emission spectra of the healthy body, one can subtract it from the actual emitted spectra to obtain the 'delta spectrum.' Simply reintroduce the amplified 'delta spectrum' into the body, i.e., through the portholes — this will immediately time-excite the cells and their components throughout the body, particularly where the disease does exist.",
+      "Fraction of Casualties Surviving: Conventional treatment 0.1 survival. 1st generation P-treatment: 0.7. 2nd generation: 0.9. 3rd generation P-treatment: 0.95 survival fraction. This applies to WMD (weapons of mass destruction) attack on 1-40 million casualties."
+    ]
+  },
+  {
     id: "energetics_framework",
     label: "Energetics / Bioenergetics / Psychoenergetics",
     group: "physics",
@@ -554,6 +626,26 @@ export const links = [
   { source: "time_as_energy", target: "vacuum_structure", label: "9e16 J per second" },
   { source: "energetics_framework", target: "gravitobiology", label: "extends into" },
   { source: "wave_transduction", target: "elf_entrainment", label: "delivery layer" },
+  // Type 2 / Vacuum Engine / MCCS / TRZ / Regauging / Telomere links
+  { source: "vacuum_engine_type2", target: "anenergy", label: "implements" },
+  { source: "vacuum_engine_type2", target: "graviton", label: "spacetime curvature via" },
+  { source: "vacuum_engine_type2", target: "mccs_cellular_control", label: "biological application" },
+  { source: "vacuum_engine_type2", target: "priors_device", label: "physical implementation" },
+  { source: "vacuum_engine_type2", target: "asymmetric_regauging", label: "enables" },
+  { source: "mccs_cellular_control", target: "kindling", label: "extends" },
+  { source: "mccs_cellular_control", target: "t_polarized_photons", label: "uses" },
+  { source: "mccs_cellular_control", target: "telomere_rejuvenation", label: "enables" },
+  { source: "mccs_cellular_control", target: "dielectric_body_portholes", label: "models as" },
+  { source: "time_reversal_zone", target: "priors_device", label: "mechanism of" },
+  { source: "time_reversal_zone", target: "wave_transduction", label: "created by" },
+  { source: "time_reversal_zone", target: "mccs_cellular_control", label: "therapeutic tool of" },
+  { source: "time_reversal_zone", target: "negentropy", label: "restores" },
+  { source: "asymmetric_regauging", target: "vacuum_structure", label: "taps" },
+  { source: "asymmetric_regauging", target: "moray_device", label: "explains" },
+  { source: "telomere_rejuvenation", target: "mccs_cellular_control", label: "applied via" },
+  { source: "telomere_rejuvenation", target: "priors_device", label: "could be done by" },
+  { source: "dielectric_body_portholes", target: "wave_transduction", label: "governed by" },
+  { source: "dielectric_body_portholes", target: "kaznacheyev", label: "explains mechanism" },
 ];
 
 export const groupColors = {
