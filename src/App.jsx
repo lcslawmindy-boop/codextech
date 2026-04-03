@@ -34,6 +34,7 @@ import PatentFilingWizard from './pages/PatentFilingWizard';
 import InvestorCRM from './pages/InvestorCRM';
 import ZenithApex from './pages/ZenithApex';
 import ScalarFieldSim from './pages/ScalarFieldSim';
+import BrandArchitecture from './pages/BrandArchitecture';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -98,6 +99,7 @@ const AuthenticatedApp = () => {
         <Route path="/investor-crm" element={<InvestorCRM />} />
         <Route path="/zenith-apex" element={<ZenithApex />} />
         <Route path="/scalar-sim" element={<ScalarFieldSim />} />
+        <Route path="/brand" element={<BrandArchitecture />} />
         <Route path="/investor-portal" element={<InvestorPortal />} />
         <Route path="*" element={<PageNotFound />} />
       </Routes>
