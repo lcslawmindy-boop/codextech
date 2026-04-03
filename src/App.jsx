@@ -102,6 +102,7 @@ const AuthenticatedApp = () => {
         <Route path="/scalar-sim" element={<ScalarFieldSim />} />
         <Route path="/brand" element={<BrandArchitecture />} />
         <Route path="/emf-shop" element={<EMFProtectionShop />} />
+        <Route path="/emf-shop" element={<EMFProtectionShop />} />
         <Route path="/investor-portal" element={<InvestorPortal />} />
         <Route path="*" element={<PageNotFound />} />
       </Routes>

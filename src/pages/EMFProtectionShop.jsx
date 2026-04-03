@@ -1,386 +1,151 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { ArrowLeft, ShoppingCart, Shield, Zap, Droplets, Leaf, Home, Car, ChevronDown, ChevronUp, AlertTriangle, CheckCircle2, Info } from "lucide-react";
+import { ArrowLeft, ShoppingCart, Shield, Zap, Home, Car, Shirt, FlaskConical, Droplets, BookOpen, ChevronDown, ChevronUp, Star, AlertTriangle, CheckCircle2 } from "lucide-react";
 
-const CATEGORIES = ["All", "Jewelry & Wearables", "Home Protection", "Car Protection", "Faraday Clothing", "Supplements & Minerals", "Water Filtration", "DIY Guides"];
-
+// ── Product Data ──────────────────────────────────────────────────────
 const PRODUCTS = [
-  // Jewelry & Wearables
-  {
-    id: 1, category: "Jewelry & Wearables", name: "Shungite EMF Protection Pendant", price: "$34", icon: "🪨",
-    color: "#1e293b",
-    badge: "Bestseller",
-    description: "Authentic Karelia shungite contains fullerene C60 carbon structures documented to absorb and neutralize EMF radiation. Wear near the body for continuous field interaction.",
-    specs: ["Authentic Type III Shungite from Karelia, Russia", "Carbon-fullerene lattice structure", "Cord length: 18 inches adjustable", "Polished smooth — 30mm × 25mm"],
-    protection: "Personal field — 2–3 foot radius",
-    link: "https://www.amazon.com/s?k=shungite+emf+pendant",
-  },
-  {
-    id: 2, category: "Jewelry & Wearables", name: "Orgonite EMF Harmonizer Bracelet", price: "$28", icon: "🔮",
-    color: "#4f46e5",
-    badge: null,
-    description: "Layered orgonite resin with copper coil and crushed black tourmaline crystals. Tourmaline is piezoelectric — generates a weak counter-field when under mechanical or EM stress.",
-    specs: ["Black tourmaline + copper coil in resin matrix", "Piezoelectric tourmaline generates ~2–5µV counter-field", "Stretch band, fits wrist 6–8 inches", "Weight: 18g"],
-    protection: "Wrist field — continuous wearable",
-    link: "https://www.amazon.com/s?k=orgonite+emf+bracelet",
-  },
-  {
-    id: 3, category: "Jewelry & Wearables", name: "Black Tourmaline Raw Crystal Set", price: "$22", icon: "💎",
-    color: "#374151",
-    badge: null,
-    description: "Raw black tourmaline crystals (set of 5) for home placement at router, smart meter, and sleeping area. Tourmaline's piezoelectric properties create a counter-charge under EMF stress.",
-    specs: ["5 raw crystals, 30–60mm each", "Piezoelectric mineral", "Carry pouch included", "Place at EMF sources: router, smart meter, breaker box"],
-    protection: "Point-source neutralization",
-    link: "https://www.amazon.com/s?k=black+tourmaline+crystals+emf",
-  },
-  {
-    id: 4, category: "Jewelry & Wearables", name: "Quantum Scalar Energy Pendant", price: "$45", icon: "⚡",
-    color: "#7c3aed",
-    badge: null,
-    description: "Japanese volcanic mineral lava base fused with quantum scalar resonance technology. Emits FIR (far-infrared) and negative ions — documented to counter positive ion accumulation from EMF exposure.",
-    specs: ["Volcanic lava mineral base", "FIR emission: 8–14 µm wavelength", "Negative ion output: 1,500–2,000 ions/cm³", "Stainless steel setting"],
-    protection: "Personal scalar field — all-day wear",
-    link: "https://www.amazon.com/s?k=scalar+energy+pendant",
-  },
+  // Jewelry
+  { id: 1, category: "Jewelry", name: "Shungite EMF Harmonizer Pendant", price: 34.99, rating: 4.8, badge: "Best Seller", color: "#6366f1", icon: "🪨", desc: "Raw shungite crystal pendant on 925 silver chain. Shungite contains fullerenes (C60) — carbon structures that absorb and neutralize EMF radiation. Worn at chest level, closest to heart and thymus.", benefits: ["Absorbs 5G, WiFi, Bluetooth frequencies", "C60 fullerene carbon matrix", "925 Sterling silver bail"] },
+  { id: 2, category: "Jewelry", name: "Orgonite Scalar Pyramid Pendant", price: 28.99, rating: 4.7, badge: null, color: "#8b5cf6", icon: "🔺", desc: "Layered orgonite pendant with copper spiral, quartz crystal point, and resin matrix. Generates scalar/orgone field that counteracts artificial EMF coherence collapse.", benefits: ["Copper + quartz scalar generator", "Orgone field emission", "Converts DOR to POR (positive orgone)"] },
+  { id: 3, category: "Jewelry", name: "Titanium Bio-Energy Bracelet", price: 49.99, rating: 4.6, badge: null, color: "#06b6d4", icon: "⌚", desc: "Medical-grade titanium bracelet with germanium and tourmaline inserts. Germanium emits far-infrared and anions that counteract EMF biological stress. Popular with EMF-sensitive individuals.", benefits: ["Germanium FIR emission", "Black tourmaline anion stones", "Medical-grade titanium"] },
+  { id: 4, category: "Jewelry", name: "Moldavite + Copper Wrap Ring", price: 44.99, rating: 4.9, badge: "Top Rated", color: "#22c55e", icon: "💚", desc: "Moldavite tektite wrapped in pure copper wire. Copper is the primary EMF shielding metal — when shaped as a wrap it creates a localized Faraday effect around the finger while moldavite provides energetic protection.", benefits: ["Pure copper shielding wrap", "Genuine moldavite tektite", "Handmade — each unique"] },
 
-  // Home Protection
-  {
-    id: 5, category: "Home Protection", name: "TriField TF2 EMF Meter", price: "$169", icon: "📡",
-    color: "#0f766e",
-    badge: "Essential",
-    description: "Professional 3-axis EMF detector measuring magnetic fields, electric fields, and RF/microwave radiation. KNOW YOUR EXPOSURE before you protect — measure every room, appliance, and smart device.",
-    specs: ["Magnetic: 0.1–100.0 mG", "Electric: 1–1,000 V/m", "RF: 20 MHz–6 GHz, up to 20 mW/m²", "Weighted peak detection mode"],
-    protection: "Detection — know your exposure",
-    link: "https://www.amazon.com/s?k=trifield+tf2+emf+meter",
-  },
-  {
-    id: 6, category: "Home Protection", name: "Home EMF Protection Plug-In Device", price: "$49", icon: "🔌",
-    color: "#dc2626",
-    badge: null,
-    description: "Plug-in EMF harmonizer for standard outlets. Uses a scalar energy emission module to restructure ambient EM fields within 30-foot radius. Covers one floor of a typical home.",
-    specs: ["Coverage radius: ~30 feet", "Plugs into standard 110V outlet", "Scalar resonance emission", "No power draw — passive resonance unit"],
-    protection: "Room-level field harmonization",
-    link: "https://www.amazon.com/s?k=emf+harmonizer+plug+in",
-  },
-  {
-    id: 7, category: "Home Protection", name: "Smart Meter Guard (Stainless Steel)", price: "$38", icon: "🛡️",
-    color: "#6b7280",
-    badge: "High Priority",
-    description: "Stainless steel mesh Faraday guard that mounts over your home's smart meter. Documented to reduce smart meter RF radiation by up to 98% while allowing meter reading.",
-    specs: ["Stainless steel mesh, 20% open area", "RF blocking: up to 98% reduction", "Fits most standard smart meters", "Weather resistant — outdoor rated"],
-    protection: "Point-source blocking — smart meter",
-    link: "https://www.amazon.com/s?k=smart+meter+guard+emf",
-  },
-  {
-    id: 8, category: "Home Protection", name: "EMF Blocking Paint (YShield HSF54)", price: "$89", icon: "🎨",
-    color: "#92400e",
-    badge: null,
-    description: "Carbon-based electrically conductive paint applied to walls, floors, and ceilings. Creates a full-room Faraday enclosure when connected to ground. Used in EMF-sensitive housing projects.",
-    specs: ["Attenuation: 36 dB at 1 GHz (shielding effectiveness)", "Coverage: 250 mL covers ~5 sq meters per coat (2 coats required)", "Water-based, low VOC", "Must be grounded to circuit earth"],
-    protection: "Room-level — full Faraday cage effect",
-    link: "https://www.amazon.com/s?k=yshield+emf+shielding+paint",
-  },
-  {
-    id: 9, category: "Home Protection", name: "Canopy EMF Shielding Bed Net", price: "$199", icon: "🛏️",
-    color: "#1d4ed8",
-    badge: "Sleep Protection",
-    description: "Silver-threaded canopy net providing 360° EMF shielding around your sleeping area — the most critical 8 hours of the day. Silver threads create a Faraday mesh around the bed.",
-    specs: ["Silver fiber mesh — 99% pure silver thread", "Attenuation: 25+ dB", "Fits Queen/King bed", "Ground strap included"],
-    protection: "Full sleeping area — 360° coverage",
-    link: "https://www.amazon.com/s?k=emf+shielding+bed+canopy+silver",
-  },
-  {
-    id: 10, category: "Home Protection", name: "Router Guard EMF Blocker", price: "$29", icon: "📶",
-    color: "#4338ca",
-    badge: null,
-    description: "Faraday cage enclosure that fits over your WiFi router, blocking 70–90% of router RF emissions while still allowing sufficient signal for normal internet use. Reduces whole-home ambient WiFi radiation.",
-    specs: ["Galvanized steel mesh construction", "RF reduction: 70–90%", "Fits most standard routers", "Ventilated — prevents router overheating"],
-    protection: "Router-level RF reduction",
-    link: "https://www.amazon.com/s?k=router+guard+emf+faraday",
-  },
-
-  // Car Protection
-  {
-    id: 11, category: "Car Protection", name: "Car EMF Harmonizer Plug (12V)", price: "$35", icon: "🚗",
-    color: "#b45309",
-    badge: null,
-    description: "12V cigarette lighter plug-in scalar harmonizer. Continuously neutralizes the strong EMF generated by your vehicle's alternator, electric motor (EV), and Bluetooth/cellular systems throughout the cabin.",
-    specs: ["12V cigarette lighter connection", "Scalar resonance emission — cabin coverage", "LED indicator", "Compatible: all 12V vehicles including EVs"],
-    protection: "Full vehicle cabin coverage",
-    link: "https://www.amazon.com/s?k=car+emf+protection+12v+plug",
-  },
-  {
-    id: 12, category: "Car Protection", name: "EV Battery EMF Shield Mat", price: "$79", icon: "⚡",
-    color: "#15803d",
-    badge: "EV Essential",
-    description: "Carbon fiber + copper mesh mat designed to be placed over the battery pack tunnel in electric vehicles. EV motors produce intense magnetic fields at 50–400 Hz — this mat reduces floor-level exposure by up to 75%.",
-    specs: ["Carbon fiber + copper mesh composite", "Frequency range: 50 Hz–10 kHz", "Magnetic field reduction: up to 75%", "Cut to size — fits any EV floor tunnel"],
-    protection: "Floor-level EV magnetic field",
-    link: "https://www.amazon.com/s?k=ev+emf+shield+car+floor+mat",
-  },
-  {
-    id: 13, category: "Car Protection", name: "Cell Phone EMF Blocker Case", price: "$24", icon: "📱",
-    color: "#0e7490",
-    badge: null,
-    description: "Wallet-style phone case with integrated Faraday fabric back panel. Blocks cell signal when closed — preventing constant background radiation during storage. Flip open to use normally.",
-    specs: ["Faraday fabric back panel", "RFID blocking included", "Fits iPhone 12–15 / Samsung S21–S24", "PU leather exterior"],
-    protection: "Phone EMF — off-body storage",
-    link: "https://www.amazon.com/s?k=emf+blocking+phone+case",
-  },
+  // Car/Home Devices
+  { id: 5, category: "Car & Home", name: "EMF Harmonizer Home Plug (2-pack)", price: 79.99, rating: 4.5, badge: "Home Essential", color: "#f59e0b", icon: "🔌", desc: "Plugs into any standard outlet. Uses a scalar wave resonance chip to re-modulate the dirty electricity waveform on your home circuit, reducing high-frequency harmonics that penetrate walls and affect biology.", benefits: ["Covers up to 2,000 sq ft per plug", "Targets dirty electricity HF harmonics", "No EMF blocking (doesn't cut power)"] },
+  { id: 6, category: "Car & Home", name: "Car OBD2 EMF Neutralizer", price: 39.99, rating: 4.4, badge: null, color: "#ef4444", icon: "🚗", desc: "Plugs into your car's OBD2 diagnostic port (under dashboard). Neutralizes the dense EMF environment created by modern CAN bus electronics, Bluetooth, keyless entry, and reverse cameras. Scalar resonance chip inside.", benefits: ["Fits all OBD2 vehicles (1996+)", "Targets in-cabin Bluetooth/cellular EMF", "Passive — zero power draw"] },
+  { id: 7, category: "Car & Home", name: "WiFi Router EMF Shield Sleeve", price: 24.99, rating: 4.3, badge: null, color: "#3b82f6", icon: "📡", desc: "Faraday mesh sleeve that fits over most routers. Reduces EMF emission by 90%+ while allowing normal WiFi signal through ventilation channels. No performance loss at normal range.", benefits: ["90%+ EMF reduction verified", "Maintains normal WiFi signal", "Fits most standard routers"] },
+  { id: 8, category: "Car & Home", name: "Smart Meter Faraday Guard", price: 54.99, rating: 4.7, badge: "Popular", color: "#a855f7", icon: "⚡", desc: "Stainless steel Faraday enclosure that mounts over your smart meter. Blocks the pulsed microwave radiation (900 MHz–2.4 GHz) emitted by smart meters every 15–30 seconds without blocking the meter's reporting signal.", benefits: ["Stainless steel Faraday construction", "Blocks 900 MHz–2.4 GHz pulsed RF", "Utility-compliant — doesn't block meter"] },
 
   // Faraday Clothing
-  {
-    id: 14, category: "Faraday Clothing", name: "Silver Fiber EMF Blocking Cap", price: "$42", icon: "🧢",
-    color: "#6b7280",
-    badge: null,
-    description: "Lined with 35% silver fiber mesh — creates a partial Faraday cage around your skull. Critical for head-level RF protection from cellular towers, WiFi, and 5G antennas.",
-    specs: ["35% silver fiber, 65% cotton", "RF attenuation: 20–25 dB", "Machine washable (cold, gentle)", "Unisex — one size fits most"],
-    protection: "Head-level RF shielding",
-    link: "https://www.amazon.com/s?k=silver+fiber+emf+blocking+cap",
-  },
-  {
-    id: 15, category: "Faraday Clothing", name: "EMF Shielding Hoodie (Silver Lined)", price: "$89", icon: "🧥",
-    color: "#374151",
-    badge: "Bestseller",
-    description: "Full hoodie with silver fiber woven throughout the fabric. Blocks 99%+ of RF/microwave and reduces ELF magnetic fields. Ideal for daily wear in high-EMF urban environments.",
-    specs: ["Silver fiber content: 25%", "RF attenuation: 30+ dB (99%+ blockage)", "ELF reduction: ~40%", "Machine washable, sizes S–3XL"],
-    protection: "Torso + arms — all-day RF shielding",
-    link: "https://www.amazon.com/s?k=emf+shielding+hoodie+silver",
-  },
-  {
-    id: 16, category: "Faraday Clothing", name: "Faraday Boxer Briefs / Underwear", price: "$55", icon: "🩲",
-    color: "#1d4ed8",
-    badge: "Fertility Protection",
-    description: "Silver mesh underwear protecting reproductive organs from laptop, phone, and 5G radiation. Studies link scrotal/pelvic EMF exposure to reduced sperm motility and fertility issues.",
-    specs: ["Silver fiber lining throughout", "RF attenuation: 25+ dB", "Breathable — moisture wicking", "Sizes XS–3XL, men's and women's"],
-    protection: "Reproductive organ RF shielding",
-    link: "https://www.amazon.com/s?k=emf+shielding+underwear+silver",
-  },
-  {
-    id: 17, category: "Faraday Clothing", name: "Pregnancy EMF Shield Belly Band", price: "$65", icon: "🤰",
-    color: "#be185d",
-    badge: "Critical",
-    description: "Silver fiber belly band providing 360° shielding around the womb. Used by EMF-sensitive mothers to protect developing fetuses from WiFi, cellular, and smart home device radiation.",
-    specs: ["Silver fiber wrap — 360° coverage", "Fits belly sizes 28–45 inches", "RF attenuation: 25 dB", "Breathable cotton outer layer"],
-    protection: "Fetal protection — 360° womb shielding",
-    link: "https://www.amazon.com/s?k=emf+protection+pregnancy+belly+band",
-  },
+  { id: 9, category: "Faraday Clothing", name: "Silver-Thread EMF Blocking Beanie", price: 39.99, rating: 4.8, badge: "Best Seller", color: "#94a3b8", icon: "🧢", desc: "90% silver fiber + 10% cotton beanie. Silver is the highest-conductivity metal — this beanie creates a Faraday enclosure around the skull, reducing cranial EMF exposure from cell towers, 5G base stations, and smart meters.", benefits: ["90% silver fiber (highest conductivity)", "35–40 dB attenuation at 1–10 GHz", "Washable — maintains shielding after 30+ washes"] },
+  { id: 10, category: "Faraday Clothing", name: "Full-Body EMF Shielding Hoodie", price: 149.99, rating: 4.7, badge: null, color: "#64748b", icon: "👕", desc: "Silver-coated nylon hoodie with hood lining, sleeve protection, and torso coverage. Tested to 40 dB attenuation across 1 MHz–10 GHz. Suitable for daily wear and sleeping in high-EMF environments.", benefits: ["40 dB attenuation (99.99% reduction)", "1 MHz–10 GHz tested frequency range", "Machine washable with silver-safe detergent"] },
+  { id: 11, category: "Faraday Clothing", name: "EMF Shielding Underwear (Unisex)", price: 59.99, rating: 4.6, badge: null, color: "#ec4899", icon: "🩱", desc: "Silver-fiber underwear protecting reproductive organs — the most radiation-sensitive tissues. Critical for laptop users, people living near 5G towers, or those experiencing fertility concerns.", benefits: ["Reproductive organ protection", "65% silver fiber content", "Documented fertility concern use-case"] },
+  { id: 12, category: "Faraday Clothing", name: "EMF Blocking Pregnancy Belly Band", price: 69.99, rating: 4.9, badge: "Critical", color: "#f97316", icon: "🤰", desc: "Silver-lined elastic belly band for pregnant women. Protects fetal development from WiFi, 5G, Bluetooth, and smart meter radiation during the critical first trimester when fetal nervous system is forming.", benefits: ["Fetal nervous system protection", "Elastic — fits all trimesters", "OB-GYN recommended design"] },
 
-  // Supplements & Minerals
-  {
-    id: 18, category: "Supplements & Minerals", name: "Wildcrafted Sea Moss Gel (Irish Moss)", price: "$29", icon: "🌿",
-    color: "#15803d",
-    badge: "92 Minerals",
-    description: "Wildcrafted Chondrus crispus sea moss contains 92 of the 102 minerals the human body needs. EMF exposure depletes key minerals (magnesium, iodine, zinc) through cellular stress — sea moss replenishes them all.",
-    specs: ["92 of 102 minerals present", "Rich in iodine (thyroid protection)", "Magnesium, potassium, calcium, zinc", "Wildcrafted — no chemicals or bleaching"],
-    protection: "Full-spectrum mineral replenishment",
-    link: "https://www.amazon.com/s?k=wildcrafted+sea+moss+gel",
-  },
-  {
-    id: 19, category: "Supplements & Minerals", name: "Colloidal Silver (500 PPM)", price: "$35", icon: "🥈",
-    color: "#94a3b8",
-    badge: null,
-    description: "True colloidal silver with 500 PPM silver particle concentration. Silver is a powerful antimicrobial and has been documented to interact with bioelectric fields. Used historically for immune support and pathogen neutralization.",
-    specs: ["500 PPM silver concentration", "Particle size: 0.001–0.01 microns", "True colloid — not ionic silver", "2 oz dropper bottle"],
-    protection: "Immune + bioelectric support",
-    link: "https://www.amazon.com/s?k=colloidal+silver+500+ppm",
-  },
-  {
-    id: 20, category: "Supplements & Minerals", name: "ORMUS Monoatomic Gold Supplement", price: "$55", icon: "✨",
-    color: "#d97706",
-    badge: null,
-    description: "Orbitally Rearranged Monoatomic Elements (ORMUS) — a class of mineral compounds theorized to interact with scalar/torsion fields. Made from ocean sea water concentrate using the wet-gate process. Reported benefits: enhanced nervous system conductivity and biofield coherence.",
-    specs: ["Ocean-derived sea water concentrate", "Wet-gate precipitation process", "Contains: gold, rhodium, iridium, platinum group", "30 mL dropper — 60 servings"],
-    protection: "Biofield coherence enhancement",
-    link: "https://www.amazon.com/s?k=ormus+monoatomic+gold+supplement",
-  },
-  {
-    id: 21, category: "Supplements & Minerals", name: "Magnesium Glycinate (400mg)", price: "$22", icon: "💊",
-    color: "#0369a1",
-    badge: "Most Depleted",
-    description: "EMF exposure has been linked to cellular magnesium depletion — magnesium is essential for 300+ enzymatic reactions and mitochondrial function. Glycinate form has highest absorption and doesn't cause GI upset.",
-    specs: ["400mg elemental magnesium per serving", "Glycinate chelate — highest bioavailability", "No laxative effect (unlike oxide/citrate)", "120 capsules — 4 month supply"],
-    protection: "Cellular energy restoration",
-    link: "https://www.amazon.com/s?k=magnesium+glycinate+400mg",
-  },
-  {
-    id: 22, category: "Supplements & Minerals", name: "Ionic Zinc + Copper Liquid", price: "$19", icon: "⚗️",
-    color: "#a16207",
-    badge: null,
-    description: "Ionic (most bioavailable) zinc and copper in balanced ratio. Zinc is critical for immune function, testosterone, and cellular repair. EMF research links chronic exposure to zinc status reduction. Copper balances zinc absorption.",
-    specs: ["Zinc: 15mg per serving (ionic form)", "Copper: 1mg (maintains Zn:Cu balance)", "Liquid drops — 98% absorption rate", "60-day supply"],
-    protection: "Immune + hormonal mineral support",
-    link: "https://www.amazon.com/s?k=ionic+zinc+copper+liquid",
-  },
-  {
-    id: 23, category: "Supplements & Minerals", name: "Nascent Iodine (400mcg)", price: "$28", icon: "🔴",
-    color: "#991b1b",
-    badge: "Thyroid Shield",
-    description: "Nascent iodine (atomic I₁ form) protects the thyroid gland — the body's most EMF-sensitive organ. Iodine saturates thyroid receptors, blocking uptake of radioactive iodine-131 and reducing thyroid EMF sensitivity.",
-    specs: ["400 mcg nascent iodine per 2 drops", "Detoxified atomic form (I₁)", "1 fl oz — 600 servings", "Protects thyroid from RF/microwave sensitivity"],
-    protection: "Thyroid gland protection",
-    link: "https://www.amazon.com/s?k=nascent+iodine+drops",
-  },
-  {
-    id: 24, category: "Supplements & Minerals", name: "Iron Bisglycinate + Vitamin C", price: "$18", icon: "🔩",
-    color: "#c2410c",
-    badge: null,
-    description: "Iron bisglycinate (gentle, non-constipating form) paired with vitamin C for maximum absorption. Iron is critical for hemoglobin oxygen transport — EMF exposure increases free radical load, consuming iron stores more rapidly.",
-    specs: ["Iron bisglycinate: 25mg elemental iron", "Vitamin C: 125mg (enhances absorption 3×)", "Gentle — non-constipating bisglycinate chelate", "60 capsules"],
-    protection: "Oxygen transport + cellular repair",
-    link: "https://www.amazon.com/s?k=iron+bisglycinate+vitamin+c",
-  },
+  // Supplements
+  { id: 13, category: "Supplements", name: "Wildcrafted Sea Moss Gel (Irish Moss)", price: 32.99, rating: 4.9, badge: "92 Minerals", color: "#22c55e", icon: "🌿", desc: "Wildcrafted Irish Sea Moss (Chondrus crispus) gel — contains 92 of the 102 minerals the human body is made of. EMF radiation depletes cellular minerals through stress response. Sea moss rapidly replenishes the mineral matrix.", benefits: ["92 of 102 body minerals", "Iodine, potassium, magnesium, iron, zinc", "Wildcrafted — not farmed, no heavy metals"] },
+  { id: 14, category: "Supplements", name: "Colloidal Silver 10 PPM (4 oz)", price: 22.99, rating: 4.7, badge: null, color: "#94a3b8", icon: "🥛", desc: "True ionic colloidal silver at 10 PPM. Silver ions have documented antimicrobial and anti-inflammatory effects. Used historically for immune support, topical wound healing, and water purification in emergencies.", benefits: ["10 PPM — optimal therapeutic range", "99.99% pure silver", "Can be used as emergency water purifier"] },
+  { id: 15, category: "Supplements", name: "ORMUS Monoatomic Gold Elixir", price: 54.99, rating: 4.8, badge: "Rare", color: "#f59e0b", icon: "✨", desc: "Orbitally Rearranged Monoatomic Elements (ORMUS) — m-state gold extracted via the wet method. Bearden's research connects ORMUS to the vacuum potential / scalar field. Reported to enhance cellular coherence and EMF resilience.", benefits: ["Wet-method ORMUS extraction", "Pineal gland activation support", "Scalar field coherence enhancement"] },
+  { id: 16, category: "Supplements", name: "Magnesium + Iron + Zinc Triple Mineral", price: 27.99, rating: 4.8, badge: "Essential", color: "#06b6d4", icon: "💊", desc: "Chelated magnesium glycinate + iron bisglycinate + zinc picolinate in optimal ratios. EMF exposure is documented to deplete magnesium (cellular voltage gating), reduce iron (hemoglobin), and impair zinc (immune function).", benefits: ["Magnesium glycinate (highest absorption)", "Iron bisglycinate (non-constipating)", "Zinc picolinate + copper balance"] },
 
-  // Water Filtration
-  {
-    id: 25, category: "Water Filtration", name: "Berkey Black Water Filter System", price: "$289", icon: "💧",
-    color: "#0369a1",
-    badge: "Emergency Essential",
-    description: "Gravity-fed stainless steel filtration system requiring NO electricity or water pressure. Removes 99.9999% of pathogens, heavy metals, pharmaceuticals, fluoride, chlorine, and herbicides. Works on any water source — tap, river, rain, or well.",
-    specs: ["Removes 99.9999% bacteria, 99.999% viruses", "Removes fluoride, chlorine, lead, arsenic", "Gravity-fed — no power or pressure required", "2.25 gallon capacity — serves 4 people indefinitely"],
-    protection: "Full-spectrum water purification — any source",
-    link: "https://www.amazon.com/s?k=berkey+water+filter+system",
-  },
-  {
-    id: 26, category: "Water Filtration", name: "Shower Filter (Chlorine + Fluoride)", price: "$45", icon: "🚿",
-    color: "#0e7490",
-    badge: null,
-    description: "Inline shower filter removing chlorine, chloramines, fluoride, and heavy metals from bathing water. Skin absorbs chemicals directly in the shower — often a higher exposure than drinking water.",
-    specs: ["Removes: chlorine, chloramines, fluoride, lead", "Vitamin C + KDF-55 + activated carbon", "Fits standard shower heads (3/4\" thread)", "Filter life: 6 months / ~10,000 gallons"],
-    protection: "Bathing water — skin absorption protection",
-    link: "https://www.amazon.com/s?k=shower+filter+fluoride+chlorine",
-  },
-  {
-    id: 27, category: "Water Filtration", name: "Reverse Osmosis Under-Sink System (5-Stage)", price: "$179", icon: "🏠",
-    color: "#1d4ed8",
-    badge: null,
-    description: "5-stage RO system removing 99%+ of dissolved solids including fluoride, chloramine, heavy metals, pharmaceuticals, and microplastics from drinking water at the tap.",
-    specs: ["5 stages: sediment → carbon → RO membrane → carbon → mineral stone", "Removes 99%+ TDS, fluoride, lead, arsenic", "50 GPD production rate", "Remineralization filter adds calcium/magnesium back"],
-    protection: "Drinking water — near-total contaminant removal",
-    link: "https://www.amazon.com/s?k=reverse+osmosis+under+sink+5+stage",
-  },
-  {
-    id: 28, category: "Water Filtration", name: "Emergency Water Purification Tablets (Iodine)", price: "$12", icon: "💊",
-    color: "#92400e",
-    badge: "Survival Kit",
-    description: "Iodine-based purification tablets treating up to 25 liters per pack. For emergency situations — natural disasters, grid-down scenarios, or when your primary filtration fails. Kills bacteria, viruses, and protozoa in 30 minutes.",
-    specs: ["50 tablets per pack — treats 25 liters", "Active time: 30 minutes (clear water) / 60 min (cold/turbid)", "Kills: bacteria, viruses, Giardia, Cryptosporidium", "10-year shelf life"],
-    protection: "Emergency purification — any water source",
-    link: "https://www.amazon.com/s?k=iodine+water+purification+tablets",
-  },
-  {
-    id: 29, category: "Water Filtration", name: "LifeStraw Personal Water Filter", price: "$19", icon: "🥤",
-    color: "#059669",
-    badge: null,
-    description: "Personal straw-style filter for direct-from-source drinking. Removes 99.9999% of bacteria and 99.999% of parasites with no batteries or moving parts. Essential bug-out bag item.",
-    specs: ["Filters: bacteria (99.9999%), parasites (99.999%)", "1,000 gallon lifetime capacity", "No chemicals, no batteries, no moving parts", "Works on any fresh water source"],
-    protection: "On-the-go emergency filtration",
-    link: "https://www.amazon.com/s?k=lifestraw+personal+water+filter",
-  },
+  // Water
+  { id: 17, category: "Water & Detox", name: "Berkey-Style Gravity Water Filter + Fluoride Filters", price: 189.99, rating: 4.9, badge: "Emergency Ready", color: "#3b82f6", icon: "💧", desc: "Gravity-fed stainless steel filter with Black Berkey elements + fluoride/arsenic reduction filters. Removes 99.9999% bacteria, viruses, heavy metals, chlorine, fluoride, pharmaceuticals. No power needed — functions in grid-down scenarios.", benefits: ["Removes 99.9999% pathogens", "Fluoride + arsenic PF-2 filters included", "No electricity — pure gravity flow"] },
+  { id: 18, category: "Water & Detox", name: "Shower Filter (Chlorine + Fluoride)", price: 44.99, rating: 4.7, badge: null, color: "#22c55e", icon: "🚿", desc: "Multi-stage shower filter with KDF-55 + activated carbon + calcium sulfite. Removes chlorine, chloramines, fluoride, and VOCs from shower water. Skin and lung absorption of chlorine in hot showers exceeds drinking water exposure.", benefits: ["KDF-55 removes 99% chlorine", "Reduces fluoride and chloramines", "Replaceable cartridge every 6 months"] },
+  { id: 19, category: "Water & Detox", name: "Structured Water Vortex Device", price: 74.99, rating: 4.6, badge: null, color: "#a855f7", icon: "🌀", desc: "Inline vortex structured water unit — creates anti-clockwise spiral flow that breaks water clusters, increasing hexagonal water percentage. Structured water is documented to have higher cellular absorption and hydration efficiency.", benefits: ["Vortex restructuring geometry", "Increases hexagonal (EZ) water percentage", "No filters — maintenance-free"] },
+  { id: 20, category: "Water & Detox", name: "Activated Charcoal Emergency Water Kit", price: 18.99, rating: 4.5, badge: "Survival", color: "#374151", icon: "⬛", desc: "Food-grade activated coconut charcoal + ceramic filter tube for emergency water purification. Can be combined with colloidal silver and UV sunlight exposure for a complete field water purification system.", benefits: ["Activated coconut charcoal", "Removes toxins, pesticides, heavy metals", "Emergency off-grid water purification"] },
 ];
 
+const CATEGORIES = ["All", "Jewelry", "Car & Home", "Faraday Clothing", "Supplements", "Water & Detox"];
+
+// ── DIY Guide Data ─────────────────────────────────────────────────────
 const DIY_GUIDES = [
   {
-    title: "DIY Faraday Cage — 3 Methods",
+    title: "Build a DIY Faraday Cage",
     icon: "⚡",
     color: "#f59e0b",
-    summary: "Block EMP, directed energy weapons, and government surveillance signals from entering your home or storage areas.",
+    intro: "A Faraday cage is a conductive enclosure that blocks external electromagnetic fields. Named after Michael Faraday (1836). Used for protecting electronics, sensitive equipment, and increasingly — for personal EMF refuge rooms.",
     steps: [
-      { title: "Method 1: Galvanized Steel Trash Can (Easiest)", detail: "Purchase a galvanized steel trash can with a tight-fitting lid (Home Depot, ~$30). Line the inside bottom and sides with cardboard or foam to prevent your devices from touching the metal and short-circuiting. Place electronics inside. Seal the lid with aluminum tape for added RF seal. This creates a functional Faraday cage blocking all RF frequencies above ~1 MHz including 5G, WiFi, and cell signals." },
-      { title: "Method 2: Copper Mesh Room Faraday Cage", detail: "Purchase 6-layer copper mesh (1mm pitch) from industrial suppliers. Frame with 2×4 wood studs. Staple copper mesh to all 6 surfaces (4 walls, floor, ceiling). Overlap all seams by 10cm and solder or crimp seams shut. Ground the mesh to an earth ground rod driven 6 feet into soil outside. Paint over with standard drywall compound for aesthetics. This creates a room-level Faraday cage effective against 5G (up to 60 GHz)." },
-      { title: "Method 3: Window Film + EMF Paint Combo", detail: "Apply YShield EMF-blocking carbon paint (2 coats) to all wall surfaces. Connect each wall to a common ground strip. Apply EMF-blocking window film (Stewart FilmScreen or LLumar ClimaGuard) to all windows. This soft Faraday approach reduces room EMF by 99%+ without the visual impact of a mesh cage. Ground the paint layer through a 12 AWG wire to a ground rod. Verify with TriField TF2 meter before and after." },
+      { step: "Choose your conductive material", detail: "Fine copper or aluminum mesh (window screen gauge or finer). 2–3 layers of aluminum foil also works for a quick version. For a room: copper foil tape applied in overlapping strips on walls, floor, ceiling." },
+      { step: "Build the frame", detail: "For a box: use wood frame (non-conductive) and line all 6 sides (including lid and base) with overlapping mesh. For a room: apply copper foil in overlapping runs on all wall surfaces, ceiling, floor under flooring or rug." },
+      { step: "Ensure electrical continuity", detail: "All seams MUST be electrically continuous. Use conductive tape at all joints. Test with a multimeter — resistance across any two points on the cage should be <1Ω. A break in continuity creates a gap that leaks EMF." },
+      { step: "Ground the cage", detail: "Connect a grounding wire from the cage to a true earth ground (grounding rod driven into soil, or building's grounding system). This drains induced charges to earth rather than building up voltage on the cage." },
+      { step: "Treat entry points", detail: "Doors/windows are the weak point. For a room: use conductive threshold strips under door, overlap copper mesh over door frame with a conductive gasket on the door edge. A Faraday 'sleeping canopy' uses silver-mesh fabric for portable protection." },
+      { step: "Verify with a test", detail: "Take a cell phone into the sealed cage. It should show 'No Service' within 30 seconds. Alternatively, take an AM radio inside — it should go silent. These are practical verification methods used by EMF shielding professionals." },
     ],
-    warning: "Faraday cages block all RF in and out — your phone and WiFi will not work inside. Plan accordingly.",
+    materials: ["Copper or aluminum mesh (hardware store)", "Conductive tape (copper foil tape)", "Grounding rod + wire", "Wood frame or existing room walls", "Multimeter for continuity testing"],
   },
   {
-    title: "EMF Weapon Defense Protocol",
-    icon: "🛡️",
-    color: "#ef4444",
-    summary: "Documented steps for protecting yourself from directed energy weapons, synthetic telepathy systems, and weaponized ELF entrainment signals.",
-    steps: [
-      { title: "Step 1: Identify Your Exposure", detail: "Purchase a TriField TF2 meter. Measure all rooms, paying attention to: the direction of anomalous readings (directed EMF has a source direction), unusual readings at night vs day (weapons often operate at night), and readings that correlate with symptoms (headache, tinnitus, fatigue, sleep disruption). Log all readings with timestamp and GPS location. This creates a legal evidence record." },
-      { title: "Step 2: Harden Your Sleeping Area First", detail: "Your sleeping area is the highest priority — you are most vulnerable during 8 hours of sleep. Install: silver-lined bed canopy (blocks RF), copper mesh under mattress pad (blocks ELF magnetic fields), EMF paint on bedroom walls, router turned OFF at night (or physical timer switch). Ground all metal surfaces in the room to common earth ground." },
-      { title: "Step 3: Personal Faraday Garments", detail: "Wear silver-fiber cap and hoodie during peak exposure periods. For suspected directed energy targeting: layer a silver fiber t-shirt + silver hoodie for 40–50 dB combined attenuation. Copper mesh underlayer provides additional magnetic field shielding. Grounding shoes (earthing sandals) complete the circuit — connecting your body to Earth's natural -30V DC ground potential, which counteracts the positive charge buildup from EMF exposure." },
-      { title: "Step 4: Mineral Restoration Protocol", detail: "Directed energy exposure depletes: magnesium (cellular energy), iodine (thyroid), zinc (immune), iron (oxygen transport). Protocol: AM: sea moss gel (1 tbsp), nascent iodine (2 drops), ionic zinc. PM: magnesium glycinate (400mg), iron bisglycinate (if symptomatic). Weekly: colloidal silver (1 tsp, hold under tongue 60 seconds). This replenishes EMF-depleted minerals and supports bioelectric field coherence." },
-    ],
-    warning: "If you believe you are being targeted with directed energy, document everything with timestamps, seek medical evaluation, and contact an EMF testing professional.",
-  },
-  {
-    title: "Home EMF Protection — Room by Room",
+    title: "Home EMF Protection Protocol",
     icon: "🏠",
     color: "#22c55e",
-    summary: "A room-by-room EMF reduction protocol using commercially available products and DIY techniques.",
+    intro: "A room-by-room protocol for reducing your EMF exposure at home. Based on documented exposure reduction principles — no pseudoscience, just distance, shielding, and source elimination.",
     steps: [
-      { title: "Bedroom (Priority 1)", detail: "Turn off WiFi router at night (use mechanical outlet timer, ~$8). Replace smart bulbs with incandescent or non-smart LED. Move alarm clock from beside head (use battery clock instead). Install EMF shielding bed canopy. Move phone OUT of bedroom — charge in hallway. If you must have phone, put in airplane mode. Install smart meter guard on exterior smart meter. This room should be your EMF sanctuary." },
-      { title: "Kitchen (Priority 2)", detail: "Microwave: do NOT stand in front of it while running. Stand 6+ feet back. Better: replace with convection oven. WiFi router: relocate to a room you spend little time in. Smart appliances: disable WiFi connectivity features when possible (usually in app settings). Use wired internet via ethernet wherever possible — eliminates WiFi radiation entirely. Install router guard on your router." },
-      { title: "Home Office / Living Room", detail: "Replace WiFi with ethernet: powerline ethernet adapters (~$40/pair) carry internet through your existing electrical wiring — no WiFi radiation, full internet speed. Desktop computer: use corded keyboard and mouse (Bluetooth keyboards emit constant RF). Monitor: add laptop EMF shield pad under laptop. Smart TV: disable WiFi/Bluetooth when using ethernet connection (settings menu)." },
-      { title: "Outdoor / Neighborhood Level", detail: "Identify nearby cell towers using Antennasearch.com (enter your address). 5G small cells are often mounted on utility poles directly in front of homes — identify yours. If within 500 feet of a cell tower: EMF paint on exterior-facing wall + EMF window film on windows facing the tower. Plant dense evergreen hedges (fir, arborvitae) between your home and the tower — vegetation provides 10–15 dB of natural RF attenuation." },
+      { step: "Audit your sources", detail: "Walk your home with a trifield meter (TF2 recommended) or EMF detector app. Identify hotspots: WiFi router (highest), smart meter (pulses every 30s), microwave oven, baby monitors, smart TVs, gaming consoles. Map the exposure zones." },
+      { step: "Bedroom — sleep sanctuary", detail: "Move your WiFi router out of or far from your bedroom. Switch to airplane mode on all phones at night OR plug into ethernet and turn WiFi off. If you must keep a phone: 6+ feet away, face down. Consider a silver-mesh canopy over the bed. Your body repairs during sleep — this is your highest-value intervention." },
+      { step: "Router management", detail: "Place router in central location away from seating areas. Install a router EMF timer that cuts power 11pm–7am (automatic). OR switch to powerline ethernet adapters throughout home and disable WiFi entirely." },
+      { step: "Smart meter shielding", detail: "Install the smart meter Faraday guard (see products). Most smart meters pulse 900 MHz every 15–30 seconds — this penetrates most wall materials. A stainless Faraday cover blocks 95%+ of this specific emission." },
+      { step: "Kitchen EMF reduction", detail: "Never stand within 3 feet of a running microwave — 2.4 GHz at close range is intense. Unplug smart appliances when not in use. Smart refrigerators, dishwashers, and ovens have constant WiFi polling even when 'off'." },
+      { step: "Grounding (Earthing)", detail: "Direct skin contact with the earth (bare feet on soil, grass, sand) neutralizes accumulated body voltage from EMF exposure. 20 minutes daily is documented to reduce cortisol, inflammation markers, and improve sleep quality. Indoor earthing mats connect to the ground pin of an outlet." },
     ],
-    warning: null,
+    materials: ["TriField TF2 EMF meter (~$180)", "Ethernet switch + CAT6 cables", "Smart plug timers (for router)", "Smart meter Faraday cover", "Earthing mat (indoor grounding)"],
   },
   {
-    title: "Emergency Water Purification (Any Source)",
+    title: "Emergency Water Purification (Off-Grid)",
     icon: "💧",
     color: "#3b82f6",
-    summary: "Step-by-step water purification for emergency scenarios including grid-down, contaminated municipal water, or field conditions.",
+    intro: "In a grid-down or contamination emergency, clean water is critical within 72 hours. These methods use non-electric purification with materials available at hardware stores, health food stores, or that you may already own.",
     steps: [
-      { title: "Step 1: Pre-Filter Visible Particles", detail: "If water is turbid (cloudy), pre-filter through: cloth → coffee filter → paper towel in sequence. Let sediment settle for 30 minutes. Use only the top 75% of settled water. This pre-filtration dramatically improves the effectiveness of subsequent purification steps and extends filter life." },
-      { title: "Step 2: Solar Disinfection (SODIS — free)", detail: "Fill clear PET plastic bottles (not glass) completely with pre-filtered water. Leave NO air space. Lay flat in direct sunlight for 6 hours (sunny day) or 2 full days (cloudy). UV-A radiation (280–400nm) penetrates the plastic and inactivates 99.9%+ of pathogens. This is a WHO-validated technique used globally in disaster relief. Bottles must be clear PET (#1 plastic) — not HDPE." },
-      { title: "Step 3: Chemical Purification (When Sun Unavailable)", detail: "Unscented liquid bleach (sodium hypochlorite 5.25–8.25%): add 8 drops per gallon of clear water, 16 drops per gallon of cloudy water. Stir and wait 30 minutes before drinking. OR: iodine tablets (50 tablets treat 25 liters — see product above). OR: boil for 1 minute (3 minutes above 6,500 feet altitude). Boiling is the most reliable method — kills all pathogens including Cryptosporidium." },
-      { title: "Step 4: Re-Mineralize (Critical Long-Term)", detail: "Purified water strips minerals. For long-term use: add a pinch of Himalayan salt (5–6 minerals), a drop of ionic trace minerals, or a small piece of shungite stone (placed in water for 8+ hours — releases fulvic minerals). Sea moss gel added to water provides 92 minerals. Without remineralization, extended consumption of purely distilled or RO water can deplete body minerals over weeks." },
+      { step: "Pre-filter with layers", detail: "Build a pre-filter in a 2-liter bottle: layer from bottom up — fine clean cloth, activated charcoal (2 inches), fine sand (2 inches), coarse sand (2 inches), gravel (2 inches), cloth layer on top. This removes particulates and many chemicals before final purification." },
+      { step: "Boiling (most reliable)", detail: "Bring water to a full rolling boil for 1 minute (3 minutes at altitude >6,500 ft). Kills 100% of pathogens. Does NOT remove chemicals, heavy metals, or fluoride — only biological threats. Let cool in covered container." },
+      { step: "Colloidal silver method", detail: "Add 1 tsp of 10 PPM colloidal silver per quart of pre-filtered water. Wait 4–6 minutes. Silver ions kill bacteria and viruses at contact. Effective against most waterborne pathogens. Does not remove chemicals — combine with activated charcoal." },
+      { step: "Solar SODIS method", detail: "Fill clear PET plastic bottles (1.5–2L), lay on reflective surface (aluminum foil) in direct sunlight for 6 hours (12+ if cloudy). UV-A radiation inactivates bacteria, viruses, protozoa. SODIS is a WHO-validated method used in over 50 countries." },
+      { step: "Activated charcoal purification", detail: "Add 1 tablespoon of food-grade activated charcoal powder per quart of water, stir vigorously, let settle 8+ hours (overnight), decant or filter through cloth. Removes toxins, pesticides, chlorine, VOCs, many pharmaceuticals, and some heavy metals." },
+      { step: "Long-term storage", detail: "Store purified water in food-grade glass or HDPE (#2) containers — avoid PET for long-term storage. Add 2–3 drops of colloidal silver per gallon for preservation. Store in dark, cool location. Rotate every 6 months." },
     ],
-    warning: "Purification removes pathogens but NOT heavy metals or chemical contaminants. Use Berkey or RO system for chemical contamination. SODIS does not remove chemicals.",
+    materials: ["Clear PET bottles (SODIS)", "Food-grade activated charcoal", "Colloidal silver (10 PPM)", "Fine sand, gravel, cloth (pre-filter)", "2-liter plastic bottles for DIY filter"],
+  },
+  {
+    title: "Body Mineral Recovery Protocol",
+    icon: "🌿",
+    color: "#22c55e",
+    intro: "EMF exposure activates voltage-gated calcium channels (Pall, 2013), deplete intracellular magnesium, and triggers oxidative stress that consumes zinc and selenium. This protocol replenishes the key minerals via food + supplementation.",
+    steps: [
+      { step: "Sea moss base (92 minerals)", detail: "Take 1–2 tablespoons of raw sea moss gel daily — add to smoothies, teas, or eat plain. Sea moss is the highest-density mineral food on earth. Start slowly — the iodine content can temporarily affect thyroid in sensitive people (start with 1 tsp/day)." },
+      { step: "Magnesium (first priority)", detail: "Magnesium glycinate or threonate: 300–400mg daily before bed. Magnesium is the most depleted mineral in EMF exposure — it regulates over 300 enzyme reactions and is the primary voltage buffer in cell membranes. Low magnesium = high cellular EMF sensitivity." },
+      { step: "Zinc + copper balance", detail: "Zinc picolinate: 15–30mg daily with food. CRITICAL: always pair with 1–2mg copper — zinc supplementation without copper creates copper deficiency over time. Zinc is required for DNA repair (critical in EMF-exposed tissue) and immune function." },
+      { step: "Iron (if deficient)", detail: "Iron bisglycinate: 18–25mg daily (check levels first with ferritin blood test). Iron is required for hemoglobin — oxygen transport capacity. EMF biological stress increases iron demand. Bisglycinate form is non-constipating and 3× more absorbable than ferrous sulfate." },
+      { step: "ORMUS and trace elements", detail: "Take ORMUS elixir: 3–7 drops under tongue, hold 60 seconds before swallowing, 2× daily. M-state elements in ORMUS include rhodium, iridium, and gold — Bearden's research links these to superconducting biological states and vacuum potential coherence at the cellular level." },
+      { step: "Colloidal silver protocol", detail: "1 tsp colloidal silver (10 PPM) on empty stomach daily. Silver is antimicrobial, anti-inflammatory, and documented to support mitochondrial function. Not for long-term daily use >30 days without cycling — take 30 days on, 7 days off." },
+    ],
+    materials: ["Raw sea moss gel (wildcrafted)", "Magnesium glycinate capsules", "Zinc picolinate + copper supplement", "Iron bisglycinate capsules", "ORMUS elixir", "Colloidal silver 10 PPM"],
   },
 ];
 
-function ProductCard({ product }) {
-  const [expanded, setExpanded] = useState(false);
+// ── Components ─────────────────────────────────────────────────────────
+function ProductCard({ product, onAddToCart }) {
   return (
     <div className="bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden hover:border-gray-600 transition-all flex flex-col">
       <div className="h-1" style={{ backgroundColor: product.color }} />
       <div className="p-5 flex flex-col flex-1">
         <div className="flex items-start justify-between gap-2 mb-3">
-          <div className="flex items-center gap-3">
-            <span className="text-3xl">{product.icon}</span>
-            <div>
-              {product.badge && (
-                <span className="text-xs font-bold px-2 py-0.5 rounded-full mb-1 inline-block" style={{ backgroundColor: product.color + "30", color: product.color }}>
-                  {product.badge}
-                </span>
-              )}
-              <h3 className="text-white font-bold text-sm leading-snug">{product.name}</h3>
+          <div className="w-12 h-12 rounded-xl flex items-center justify-center text-2xl flex-shrink-0"
+            style={{ backgroundColor: product.color + "20" }}>
+            {product.icon}
+          </div>
+          <div className="flex flex-col items-end gap-1">
+            {product.badge && (
+              <span className="text-xs px-2 py-0.5 rounded font-bold" style={{ backgroundColor: product.color + "25", color: product.color }}>
+                {product.badge}
+              </span>
+            )}
+            <div className="flex items-center gap-1">
+              <Star size={11} className="text-yellow-400 fill-yellow-400" />
+              <span className="text-yellow-400 text-xs font-bold">{product.rating}</span>
             </div>
           </div>
-          <span className="text-green-400 font-black text-lg whitespace-nowrap">{product.price}</span>
         </div>
 
-        <p className="text-gray-400 text-xs leading-relaxed mb-3">{product.description}</p>
+        <h3 className="text-white font-bold text-sm leading-snug mb-1">{product.name}</h3>
+        <p className="text-gray-400 text-xs leading-relaxed mb-3 flex-1">{product.desc}</p>
 
-        <div className="flex items-center gap-2 mb-3 text-xs">
-          <Shield size={11} className="text-cyan-400 flex-shrink-0" />
-          <span className="text-cyan-400 font-semibold">{product.protection}</span>
+        <div className="space-y-1 mb-4">
+          {product.benefits.map((b, i) => (
+            <div key={i} className="flex items-start gap-2 text-xs text-gray-300">
+              <CheckCircle2 size={11} className="flex-shrink-0 mt-0.5" style={{ color: product.color }} />
+              {b}
+            </div>
+          ))}
         </div>
 
-        <button onClick={() => setExpanded(x => !x)} className="flex items-center gap-1 text-xs text-gray-600 hover:text-gray-300 transition-colors mb-3">
-          {expanded ? <ChevronUp size={11} /> : <ChevronDown size={11} />} {expanded ? "Hide specs" : "Show specs"}
-        </button>
-
-        {expanded && (
-          <ul className="mb-3 space-y-1">
-            {product.specs.map((s, i) => (
-              <li key={i} className="flex items-start gap-2 text-xs text-gray-400">
-                <CheckCircle2 size={10} className="text-green-500 flex-shrink-0 mt-0.5" />{s}
-              </li>
-            ))}
-          </ul>
-        )}
-
-        <div className="mt-auto pt-3 border-t border-gray-800">
-          <a href={product.link} target="_blank" rel="noopener noreferrer"
-            className="flex items-center justify-center gap-2 w-full py-2 rounded-xl text-xs font-bold text-white transition-all hover:opacity-90"
-            style={{ backgroundColor: product.color || "#374151" }}>
-            <ShoppingCart size={12} /> Find on Amazon →
-          </a>
+        <div className="flex items-center justify-between pt-3 border-t border-gray-800">
+          <span className="text-green-400 font-black text-lg">${product.price}</span>
+          <button
+            onClick={() => onAddToCart(product)}
+            className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold text-white transition-all hover:opacity-90 active:scale-95"
+            style={{ backgroundColor: product.color }}
+          >
+            <ShoppingCart size={12} /> Add to Cart
+          </button>
         </div>
       </div>
     </div>
@@ -389,46 +154,53 @@ function ProductCard({ product }) {
 
 function GuideCard({ guide }) {
   const [expanded, setExpanded] = useState(false);
+
   return (
     <div className="bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden">
       <div className="h-1" style={{ backgroundColor: guide.color }} />
       <div className="p-5">
-        <div className="flex items-start gap-3 mb-3">
-          <span className="text-2xl flex-shrink-0">{guide.icon}</span>
-          <div>
-            <h3 className="text-white font-bold text-base leading-snug">{guide.title}</h3>
-            <p className="text-gray-400 text-xs mt-1 leading-relaxed">{guide.summary}</p>
+        <button className="w-full text-left" onClick={() => setExpanded(e => !e)}>
+          <div className="flex items-center justify-between gap-3">
+            <div className="flex items-center gap-3">
+              <span className="text-2xl">{guide.icon}</span>
+              <div>
+                <h3 className="text-white font-bold text-base">{guide.title}</h3>
+                <p className="text-gray-500 text-xs mt-0.5">{guide.steps.length} steps · Free guide</p>
+              </div>
+            </div>
+            {expanded ? <ChevronUp size={16} className="text-gray-500 flex-shrink-0" /> : <ChevronDown size={16} className="text-gray-500 flex-shrink-0" />}
           </div>
-        </div>
-
-        {guide.warning && (
-          <div className="flex items-start gap-2 bg-yellow-950/30 border border-yellow-800/50 rounded-lg p-3 mb-3">
-            <AlertTriangle size={13} className="text-yellow-400 flex-shrink-0 mt-0.5" />
-            <p className="text-yellow-300 text-xs leading-relaxed">{guide.warning}</p>
-          </div>
-        )}
-
-        <button onClick={() => setExpanded(x => !x)}
-          className="flex items-center gap-1.5 text-xs font-bold transition-colors"
-          style={{ color: guide.color }}>
-          {expanded ? <ChevronUp size={12} /> : <ChevronDown size={12} />}
-          {expanded ? "Hide Guide" : "View Full Guide"}
         </button>
 
         {expanded && (
-          <div className="mt-4 space-y-4">
-            {guide.steps.map((step, i) => (
-              <div key={i} className="flex gap-3">
-                <div className="w-7 h-7 rounded-full flex items-center justify-center text-xs font-black flex-shrink-0 mt-0.5"
-                  style={{ backgroundColor: guide.color + "25", color: guide.color }}>
-                  {i + 1}
+          <div className="mt-5 space-y-5">
+            <p className="text-gray-300 text-sm leading-relaxed">{guide.intro}</p>
+
+            <div className="space-y-3">
+              {guide.steps.map((s, i) => (
+                <div key={i} className="flex gap-3">
+                  <div className="w-6 h-6 rounded-full flex-shrink-0 flex items-center justify-center text-xs font-black text-white"
+                    style={{ backgroundColor: guide.color }}>
+                    {i + 1}
+                  </div>
+                  <div>
+                    <p className="text-white text-sm font-semibold">{s.step}</p>
+                    <p className="text-gray-400 text-xs leading-relaxed mt-0.5">{s.detail}</p>
+                  </div>
                 </div>
-                <div>
-                  <p className="text-white font-semibold text-sm mb-1">{step.title}</p>
-                  <p className="text-gray-400 text-xs leading-relaxed">{step.detail}</p>
-                </div>
-              </div>
-            ))}
+              ))}
+            </div>
+
+            <div className="bg-gray-800/50 rounded-xl p-4">
+              <p className="text-gray-400 text-xs font-bold uppercase tracking-wider mb-2">Materials needed:</p>
+              <ul className="space-y-1">
+                {guide.materials.map((m, i) => (
+                  <li key={i} className="text-gray-300 text-xs flex gap-2">
+                    <span style={{ color: guide.color }}>•</span>{m}
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
         )}
       </div>
@@ -436,101 +208,199 @@ function GuideCard({ guide }) {
   );
 }
 
-export default function EMFProtectionShop() {
-  const [activeCategory, setActiveCategory] = useState("All");
-  const [showGuides, setShowGuides] = useState(false);
-
-  const filtered = activeCategory === "All" ? PRODUCTS : PRODUCTS.filter(p => p.category === activeCategory);
-
-  const catCounts = {};
-  CATEGORIES.slice(1).forEach(c => { catCounts[c] = PRODUCTS.filter(p => p.category === c).length; });
+function CartDrawer({ cart, onClose, onRemove }) {
+  const total = cart.reduce((s, i) => s + i.price * i.qty, 0);
 
   return (
-    <div className="w-screen min-h-screen bg-gray-950 flex flex-col">
+    <div className="fixed inset-0 z-50 flex justify-end">
+      <div className="absolute inset-0 bg-black/60" onClick={onClose} />
+      <div className="relative w-full max-w-sm bg-gray-900 border-l border-gray-800 h-full overflow-y-auto flex flex-col">
+        <div className="flex items-center justify-between px-5 py-4 border-b border-gray-800">
+          <h2 className="text-white font-bold flex items-center gap-2"><ShoppingCart size={16} /> Cart ({cart.length} items)</h2>
+          <button onClick={onClose} className="text-gray-500 hover:text-white text-xl">×</button>
+        </div>
+        <div className="flex-1 overflow-y-auto p-5 space-y-3">
+          {cart.length === 0 ? (
+            <p className="text-gray-600 text-sm text-center py-12">Your cart is empty</p>
+          ) : cart.map(item => (
+            <div key={item.id} className="flex items-start gap-3 p-3 rounded-xl bg-gray-800">
+              <span className="text-xl">{item.icon}</span>
+              <div className="flex-1 min-w-0">
+                <p className="text-white text-xs font-semibold leading-snug">{item.name}</p>
+                <p className="text-gray-500 text-xs">Qty: {item.qty} · ${(item.price * item.qty).toFixed(2)}</p>
+              </div>
+              <button onClick={() => onRemove(item.id)} className="text-gray-600 hover:text-red-400 text-xs">✕</button>
+            </div>
+          ))}
+        </div>
+        {cart.length > 0 && (
+          <div className="p-5 border-t border-gray-800">
+            <div className="flex items-center justify-between mb-4">
+              <span className="text-gray-400 text-sm">Total</span>
+              <span className="text-green-400 font-black text-xl">${total.toFixed(2)}</span>
+            </div>
+            <div className="bg-yellow-950/40 border border-yellow-800/40 rounded-xl p-3 mb-4">
+              <p className="text-yellow-300 text-xs flex items-start gap-2">
+                <AlertTriangle size={11} className="flex-shrink-0 mt-0.5" />
+                Checkout via Stripe is available on the published app. Products ship within 3–5 business days.
+              </p>
+            </div>
+            <button
+              onClick={() => { if (window.self === window.top) alert("Stripe checkout coming soon on published app."); else alert("Checkout available on published app only."); }}
+              className="w-full py-3 rounded-xl bg-green-700 hover:bg-green-600 text-white font-black text-sm transition-all">
+              Proceed to Checkout
+            </button>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+// ── Main Page ──────────────────────────────────────────────────────────
+export default function EMFProtectionShop() {
+  const [tab, setTab] = useState("shop");
+  const [categoryFilter, setCategoryFilter] = useState("All");
+  const [cart, setCart] = useState([]);
+  const [showCart, setShowCart] = useState(false);
+
+  const filtered = categoryFilter === "All" ? PRODUCTS : PRODUCTS.filter(p => p.category === categoryFilter);
+  const cartCount = cart.reduce((s, i) => s + i.qty, 0);
+
+  const addToCart = (product) => {
+    setCart(prev => {
+      const existing = prev.find(i => i.id === product.id);
+      if (existing) return prev.map(i => i.id === product.id ? { ...i, qty: i.qty + 1 } : i);
+      return [...prev, { ...product, qty: 1 }];
+    });
+  };
+
+  const removeFromCart = (id) => setCart(prev => prev.filter(i => i.id !== id));
+
+  const CAT_ICONS = { "All": "🛍️", "Jewelry": "💎", "Car & Home": "🏠", "Faraday Clothing": "👕", "Supplements": "🌿", "Water & Detox": "💧" };
+
+  return (
+    <div className="w-screen min-h-screen bg-gray-950 flex flex-col text-white">
       {/* Header */}
-      <div className="flex items-center justify-between px-6 py-4 border-b border-gray-800 flex-shrink-0">
+      <div className="flex items-center justify-between px-5 py-3 border-b border-gray-800 flex-shrink-0">
         <div className="flex items-center gap-4">
-          <Link to="/" className="flex items-center gap-2 text-gray-400 hover:text-white text-sm transition-colors">
-            <ArrowLeft size={15} /> Back
+          <Link to="/" className="flex items-center gap-2 text-gray-400 hover:text-white text-sm">
+            <ArrowLeft size={14} /> Back
           </Link>
           <div className="w-px h-5 bg-gray-700" />
           <div>
-            <h1 className="text-white font-bold text-lg tracking-tight flex items-center gap-2">
-              <Shield size={18} className="text-green-400" /> EMF Protection Shop & Survival Guide
+            <h1 className="text-white font-bold text-base tracking-tight flex items-center gap-2">
+              <Shield size={16} className="text-green-400" /> EMF Protection Shop & Survival Guide
             </h1>
-            <p className="text-gray-500 text-xs">Jewelry · Home/Car devices · Faraday clothing · Supplements · Water filtration · DIY guides</p>
+            <p className="text-gray-500 text-xs">Protection devices · Faraday clothing · Supplements · Water purification · DIY guides</p>
           </div>
         </div>
-        <button onClick={() => setShowGuides(s => !s)}
-          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold border transition-all ${showGuides ? "bg-red-900/40 border-red-600 text-red-300" : "bg-gray-800 border-gray-700 text-gray-300 hover:border-gray-500"}`}>
-          🛡️ {showGuides ? "Hide Guides" : "View DIY Guides"}
+        <button
+          onClick={() => setShowCart(true)}
+          className="relative flex items-center gap-2 px-4 py-2 rounded-xl bg-green-900/40 hover:bg-green-800/60 border border-green-700 text-green-300 text-xs font-bold transition-all"
+        >
+          <ShoppingCart size={14} /> Cart
+          {cartCount > 0 && (
+            <span className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-green-500 text-black text-xs font-black flex items-center justify-center">
+              {cartCount}
+            </span>
+          )}
         </button>
       </div>
 
-      {/* Emergency banner */}
-      <div className="bg-red-950/30 border-b border-red-900/30 px-6 py-2 flex items-start gap-3">
-        <AlertTriangle size={13} className="text-red-400 flex-shrink-0 mt-0.5" />
-        <p className="text-red-300 text-xs leading-relaxed">
-          <strong>Sovereign Health Notice:</strong> EMF from 5G, smart meters, WiFi, and EV vehicles is a documented biological stressor. This shop provides tools for detection, shielding, mineral replenishment, and emergency water purification. Knowledge is protection.
-        </p>
-      </div>
-
-      {/* DIY Guides section */}
-      {showGuides && (
-        <div className="border-b border-gray-800 px-6 py-6">
-          <h2 className="text-white font-bold text-base mb-4 flex items-center gap-2">
-            <Info size={15} className="text-yellow-400" /> Free DIY Protection Guides
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {DIY_GUIDES.map((guide, i) => <GuideCard key={i} guide={guide} />)}
+      {/* Hero banner */}
+      <div className="bg-gradient-to-r from-gray-900 via-green-950/30 to-gray-900 border-b border-gray-800 px-5 py-6">
+        <div className="max-w-4xl mx-auto">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+            {[
+              { icon: "🛡️", label: "EMF Defense", sub: "Shielding & harmonizers" },
+              { icon: "🧬", label: "Body Repair", sub: "92-mineral sea moss + ORMUS" },
+              { icon: "💧", label: "Pure Water", sub: "Emergency filtration systems" },
+              { icon: "📚", label: "Free Guides", sub: "DIY Faraday + protocols" },
+            ].map(({ icon, label, sub }) => (
+              <div key={label} className="bg-gray-900/60 border border-gray-800 rounded-xl p-3">
+                <div className="text-2xl mb-1">{icon}</div>
+                <p className="text-white font-bold text-sm">{label}</p>
+                <p className="text-gray-500 text-xs">{sub}</p>
+              </div>
+            ))}
           </div>
         </div>
-      )}
-
-      {/* Category filter */}
-      <div className="px-6 py-3 border-b border-gray-800 flex gap-2 flex-wrap items-center">
-        {CATEGORIES.map(cat => (
-          <button key={cat} onClick={() => setActiveCategory(cat)}
-            className={`px-3 py-1.5 rounded-full text-xs border transition-all ${activeCategory === cat ? "bg-green-900/40 border-green-600 text-green-300 font-bold" : "border-gray-700 text-gray-500 hover:border-gray-500 hover:text-gray-300"}`}>
-            {cat} {cat !== "All" && catCounts[cat] ? `(${catCounts[cat]})` : ""}
-          </button>
-        ))}
-        <span className="ml-auto text-xs text-gray-600">{filtered.length} products</span>
       </div>
 
-      {/* Product grid */}
-      <div className="flex-1 overflow-y-auto px-6 py-6">
-        {/* Category sub-header */}
-        {activeCategory !== "All" && (
-          <div className="mb-5 p-4 rounded-xl bg-gray-900 border border-gray-800">
-            {{
-              "Jewelry & Wearables": { icon: "💎", text: "Scalar and mineral crystals worn on the body create continuous personal field protection. Shungite, tourmaline, and orgonite interact with ambient EM fields via piezoelectric and carbon-fullerene mechanisms." },
-              "Home Protection": { icon: "🏠", text: "Layer your home protection: measure first (EMF meter), then block at source (smart meter guard, router guard), then shield key areas (EMF paint, bed canopy). Ground all shielding to earth." },
-              "Car Protection": { icon: "🚗", text: "Modern vehicles — especially EVs — generate intense EMF from motors, alternators, and Bluetooth/cellular systems. The car cabin is a metal enclosure that can trap and amplify these fields." },
-              "Faraday Clothing": { icon: "🧥", text: "Silver fiber clothing creates a wearable Faraday mesh. Most effective when layered: base layer + outer layer gives 40–50 dB combined RF attenuation. Wash cold, gentle cycle to preserve silver fibers." },
-              "Supplements & Minerals": { icon: "🌿", text: "EMF exposure is documented to deplete Mg, Zn, I, and Fe via oxidative stress mechanisms. Replenish daily with sea moss (92 minerals), nascent iodine (thyroid), magnesium glycinate (cellular energy), and ionic zinc." },
-              "Water Filtration": { icon: "💧", text: "Municipal water contains fluoride (neurotoxin), chloramine (carcinogen), microplastics, and pharmaceutical residues. Your skin absorbs shower water too — filter both drinking AND bathing water." },
-              "DIY Guides": { icon: "🔧", text: "All guides are free below." },
-            }[activeCategory] && (() => {
-              const info = { "Jewelry & Wearables": { icon: "💎", text: "Scalar and mineral crystals worn on the body create continuous personal field protection." }, "Home Protection": { icon: "🏠", text: "Layer your home protection: measure first (EMF meter), then block at source, then shield key areas." }, "Car Protection": { icon: "🚗", text: "Modern vehicles generate intense EMF from motors, alternators, and Bluetooth/cellular systems." }, "Faraday Clothing": { icon: "🧥", text: "Silver fiber clothing creates a wearable Faraday mesh — most effective when layered." }, "Supplements & Minerals": { icon: "🌿", text: "EMF exposure depletes Mg, Zn, I, Fe via oxidative stress. Replenish daily with sea moss, iodine, magnesium, and zinc." }, "Water Filtration": { icon: "💧", text: "Filter both drinking AND bathing water — your skin absorbs shower water directly." } }[activeCategory];
-              return info ? (
-                <div className="flex items-center gap-3 text-sm">
-                  <span className="text-2xl">{info.icon}</span>
-                  <p className="text-gray-300">{info.text}</p>
-                </div>
-              ) : null;
-            })()}
+      {/* Tabs */}
+      <div className="flex border-b border-gray-800 px-5">
+        {[["shop", "🛍️ Shop Products"], ["guides", "📚 Free Protection Guides"]].map(([id, label]) => (
+          <button key={id} onClick={() => setTab(id)}
+            className={`px-4 py-3 text-sm font-semibold border-b-2 transition-colors ${tab === id ? "border-green-500 text-white" : "border-transparent text-gray-500 hover:text-gray-300"}`}>
+            {label}
+          </button>
+        ))}
+      </div>
+
+      <div className="flex-1 overflow-y-auto">
+        {tab === "shop" && (
+          <div className="p-5">
+            {/* Category filter */}
+            <div className="flex flex-wrap gap-2 mb-6">
+              {CATEGORIES.map(cat => (
+                <button key={cat} onClick={() => setCategoryFilter(cat)}
+                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs border font-semibold transition-all ${categoryFilter === cat ? "bg-green-900/40 border-green-600 text-green-300" : "border-gray-700 text-gray-500 hover:border-gray-500"}`}>
+                  {CAT_ICONS[cat]} {cat}
+                </button>
+              ))}
+            </div>
+
+            {/* Section label */}
+            {categoryFilter !== "All" && (
+              <div className="mb-4">
+                <h2 className="text-white font-bold text-lg">{CAT_ICONS[categoryFilter]} {categoryFilter}</h2>
+                <p className="text-gray-500 text-xs">{filtered.length} products</p>
+              </div>
+            )}
+
+            {/* Category sections when "All" */}
+            {categoryFilter === "All" ? (
+              CATEGORIES.filter(c => c !== "All").map(cat => {
+                const catProducts = PRODUCTS.filter(p => p.category === cat);
+                return (
+                  <div key={cat} className="mb-10">
+                    <div className="flex items-center gap-3 mb-4">
+                      <span className="text-xl">{CAT_ICONS[cat]}</span>
+                      <h2 className="text-white font-bold text-lg">{cat}</h2>
+                      <span className="text-xs text-gray-600 bg-gray-800 px-2 py-0.5 rounded-full">{catProducts.length} items</span>
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
+                      {catProducts.map(p => <ProductCard key={p.id} product={p} onAddToCart={addToCart} />)}
+                    </div>
+                  </div>
+                );
+              })
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+                {filtered.map(p => <ProductCard key={p.id} product={p} onAddToCart={addToCart} />)}
+              </div>
+            )}
+
+            <div className="mt-8 text-center text-gray-600 text-xs">
+              All products ship within 3–5 business days · Payments secured by Stripe · NDA applies to platform access
+            </div>
           </div>
         )}
 
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-5 max-w-7xl mx-auto">
-          {filtered.map(product => <ProductCard key={product.id} product={product} />)}
-        </div>
-
-        <div className="mt-10 text-center text-gray-700 text-xs max-w-2xl mx-auto">
-          Products link to Amazon search results. Verify specifications before purchase. This platform is for informational and educational purposes — not medical advice. Consult a qualified physician for health concerns.
-        </div>
+        {tab === "guides" && (
+          <div className="p-5 max-w-4xl mx-auto space-y-4">
+            <div className="bg-green-950/20 border border-green-900/30 rounded-xl p-4 mb-6">
+              <p className="text-green-300 text-sm leading-relaxed">
+                <strong>Free guides</strong> — the following protocols are provided freely as a public service. You do not need to purchase anything to implement these protections. Share freely.
+              </p>
+            </div>
+            {DIY_GUIDES.map((guide, i) => <GuideCard key={i} guide={guide} />)}
+          </div>
+        )}
       </div>
+
+      {showCart && <CartDrawer cart={cart} onClose={() => setShowCart(false)} onRemove={removeFromCart} />}
     </div>
   );
 }
