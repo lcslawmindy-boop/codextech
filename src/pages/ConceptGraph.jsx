@@ -39,135 +39,13 @@ export default function ConceptGraph() {
   return (
     <div className="w-screen h-screen bg-gray-950 flex flex-col overflow-hidden">
       {/* Header */}
-      <div className="flex items-center justify-between px-6 py-3 border-b border-gray-800 flex-shrink-0">
+      <div className="flex flex-col border-b border-gray-800 flex-shrink-0">
+        <div className="flex items-center justify-between px-6 py-3">
         <div>
           <h1 className="text-white font-bold text-lg tracking-tight">Bearden Concept Network</h1>
           <p className="text-gray-500 text-xs">Click any node to explore source fragments · Drag to rearrange · Scroll to zoom</p>
         </div>
-        <div className="flex items-center gap-4">
-          <button
-            onClick={() => setShowTopConcepts(s => !s)}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-xs font-medium transition-colors ${
-              showTopConcepts
-                ? "bg-yellow-700 border-yellow-500 text-white"
-                : "bg-yellow-900/40 hover:bg-yellow-800/50 border-yellow-800 text-yellow-300"
-            }`}
-          >
-            📊 Top Concepts
-          </button>
-          <button
-            onClick={() => {
-              setClusterMode(m => {
-                if (m) setClusterNodes([]);
-                return !m;
-              });
-              setShowSearch(false);
-              setShowDiagnostics(false);
-            }}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-xs font-medium transition-colors ${
-              clusterMode
-                ? "bg-indigo-700 border-indigo-500 text-white"
-                : "bg-indigo-900/40 hover:bg-indigo-800/50 border-indigo-800 text-indigo-300"
-            }`}
-          >
-            🔗 {clusterMode ? `Cluster (${clusterNodes.length})` : "Cluster"}
-          </button>
-          <button
-            onClick={() => { setShowDiagnostics(s => !s); setShowSearch(false); }}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-purple-900/40 hover:bg-purple-800/50 border border-purple-800 text-purple-300 text-xs font-medium transition-colors"
-          >
-            🔬 Diagnostics
-          </button>
-          <Link
-            to="/investor-portal"
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-green-900/40 hover:bg-green-800/50 border border-green-800 text-green-300 text-xs font-medium transition-colors"
-          >
-            💰 Investors
-          </Link>
-          <Link
-            to="/monitoring"
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-900/40 hover:bg-blue-800/50 border border-blue-800 text-blue-300 text-xs font-medium transition-colors"
-          >
-            🛡 Monitor
-          </Link>
-          <Link
-            to="/investors"
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-green-900/40 hover:bg-green-800/50 border border-green-800 text-green-300 text-xs font-medium transition-colors"
-          >
-            💰 Investors
-          </Link>
-          <Link
-            to="/prior-art"
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-amber-900/40 hover:bg-amber-800/50 border border-amber-800 text-amber-300 text-xs font-medium transition-colors"
-          >
-            🗄️ Prior Art
-          </Link>
-          <Link
-            to="/patent-tool"
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-900/40 hover:bg-blue-800/50 border border-blue-800 text-blue-300 text-xs font-medium transition-colors"
-          >
-            📄 Patent Tool
-          </Link>
-          <Link
-            to="/timeline-pitch"
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-orange-900/40 hover:bg-orange-800/50 border border-orange-800 text-orange-300 text-xs font-medium transition-colors"
-          >
-            📊 Timeline Deck
-          </Link>
-          <Link
-            to="/health-analytics"
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-cyan-900/40 hover:bg-cyan-800/50 border border-cyan-800 text-cyan-300 text-xs font-medium transition-colors"
-          >
-            📈 Health Analytics
-          </Link>
-          <Link
-            to="/heavy-metal-detox"
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-green-900/40 hover:bg-green-800/50 border border-green-800 text-green-300 text-xs font-medium transition-colors"
-          >
-            🌿 Metal Detox
-          </Link>
-          <Link
-            to="/emf-log"
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-rose-900/40 hover:bg-rose-800/50 border border-rose-800 text-rose-300 text-xs font-medium transition-colors"
-          >
-            📊 EMF Log
-          </Link>
-          <Link
-            to="/emf-shop"
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-900/40 hover:bg-emerald-800/50 border border-emerald-700 text-emerald-300 text-xs font-medium transition-colors"
-          >
-            🛒 Shop
-          </Link>
-          <Link
-            to="/emf-impact"
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-red-900/40 hover:bg-red-800/50 border border-red-800 text-red-300 text-xs font-medium transition-colors"
-          >
-            ☠️ EMF Impact
-          </Link>
-          <Link
-            to="/scalar-lab"
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-purple-900/40 hover:bg-purple-800/50 border border-purple-800 text-purple-300 text-xs font-medium transition-colors"
-          >
-            ⚗️ Scalar EM Lab
-          </Link>
-          <Link
-            to="/lab"
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-teal-900/40 hover:bg-teal-800/50 border border-teal-800 text-teal-300 text-xs font-medium transition-colors"
-          >
-            🧪 Wave Lab
-          </Link>
-          <Link
-            to="/simulator"
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-cyan-900/40 hover:bg-cyan-800/50 border border-cyan-800 text-cyan-300 text-xs font-medium transition-colors"
-          >
-            ⚗️ Simulator
-          </Link>
-          <Link
-            to="/business"
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-green-900/40 hover:bg-green-800/50 border border-green-800 text-green-300 text-xs font-medium transition-colors"
-          >
-            💼 Business Models
-          </Link>
+        <div className="flex items-center gap-2">
           {/* View toggle */}
           <div className="flex items-center bg-gray-800 border border-gray-700 rounded-lg p-0.5 gap-0.5">
             <button
@@ -195,7 +73,6 @@ export default function ConceptGraph() {
               Business
             </button>
           </div>
-
           {view === "graph" && (
             <button
               onClick={() => setShowSearch(s => !s)}
@@ -205,9 +82,60 @@ export default function ConceptGraph() {
               Search
             </button>
           )}
-
+        </div>
+      </div>
+      {/* Scrollable nav links row */}
+      <div className="flex items-center gap-2 px-4 py-2 overflow-x-auto border-t border-gray-800/60" style={{scrollbarWidth: 'thin'}}>
+          <button
+            onClick={() => setShowTopConcepts(s => !s)}
+            className={`flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-xs font-medium transition-colors ${
+              showTopConcepts
+                ? "bg-yellow-700 border-yellow-500 text-white"
+                : "bg-yellow-900/40 hover:bg-yellow-800/50 border-yellow-800 text-yellow-300"
+            }`}
+          >
+            📊 Top Concepts
+          </button>
+          <button
+            onClick={() => {
+              setClusterMode(m => {
+                if (m) setClusterNodes([]);
+                return !m;
+              });
+              setShowSearch(false);
+              setShowDiagnostics(false);
+            }}
+            className={`flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-xs font-medium transition-colors ${
+              clusterMode
+                ? "bg-indigo-700 border-indigo-500 text-white"
+                : "bg-indigo-900/40 hover:bg-indigo-800/50 border-indigo-800 text-indigo-300"
+            }`}
+          >
+            🔗 {clusterMode ? `Cluster (${clusterNodes.length})` : "Cluster"}
+          </button>
+          <button
+            onClick={() => { setShowDiagnostics(s => !s); setShowSearch(false); }}
+            className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-purple-900/40 hover:bg-purple-800/50 border border-purple-800 text-purple-300 text-xs font-medium transition-colors"
+          >
+            🔬 Diagnostics
+          </button>
+          <Link to="/investor-portal" className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-green-900/40 hover:bg-green-800/50 border border-green-800 text-green-300 text-xs font-medium transition-colors">💰 Investors</Link>
+          <Link to="/monitoring" className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-900/40 hover:bg-blue-800/50 border border-blue-800 text-blue-300 text-xs font-medium transition-colors">🛡 Monitor</Link>
+          <Link to="/prior-art" className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-amber-900/40 hover:bg-amber-800/50 border border-amber-800 text-amber-300 text-xs font-medium transition-colors">🗄️ Prior Art</Link>
+          <Link to="/patent-tool" className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-900/40 hover:bg-blue-800/50 border border-blue-800 text-blue-300 text-xs font-medium transition-colors">📄 Patent Tool</Link>
+          <Link to="/timeline-pitch" className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-orange-900/40 hover:bg-orange-800/50 border border-orange-800 text-orange-300 text-xs font-medium transition-colors">📊 Timeline Deck</Link>
+          <Link to="/health-analytics" className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-cyan-900/40 hover:bg-cyan-800/50 border border-cyan-800 text-cyan-300 text-xs font-medium transition-colors">📈 Health Analytics</Link>
+          <Link to="/heavy-metal-detox" className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-green-900/40 hover:bg-green-800/50 border border-green-800 text-green-300 text-xs font-medium transition-colors">🌿 Metal Detox</Link>
+          <Link to="/emf-log" className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-rose-900/40 hover:bg-rose-800/50 border border-rose-800 text-rose-300 text-xs font-medium transition-colors">📊 EMF Log</Link>
+          <Link to="/emf-shop" className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-900/40 hover:bg-emerald-800/50 border border-emerald-700 text-emerald-300 text-xs font-medium transition-colors">🛒 Shop</Link>
+          <Link to="/emf-impact" className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-red-900/40 hover:bg-red-800/50 border border-red-800 text-red-300 text-xs font-medium transition-colors">☠️ EMF Impact</Link>
+          <Link to="/scalar-lab" className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-purple-900/40 hover:bg-purple-800/50 border border-purple-800 text-purple-300 text-xs font-medium transition-colors">⚗️ Scalar EM Lab</Link>
+          <Link to="/lab" className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-teal-900/40 hover:bg-teal-800/50 border border-teal-800 text-teal-300 text-xs font-medium transition-colors">🧪 Wave Lab</Link>
+          <Link to="/simulator" className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-cyan-900/40 hover:bg-cyan-800/50 border border-cyan-800 text-cyan-300 text-xs font-medium transition-colors">⚗️ Simulator</Link>
+          <Link to="/business" className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-green-900/40 hover:bg-green-800/50 border border-green-800 text-green-300 text-xs font-medium transition-colors">💼 Business Models</Link>
+          <Link to="/investors" className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-green-900/40 hover:bg-green-800/50 border border-green-800 text-green-300 text-xs font-medium transition-colors">💰 Investors</Link>
           {view === "graph" && (
-            <div className="flex flex-wrap gap-3">
+            <div className="flex flex-wrap gap-2 flex-shrink-0">
               {groups.map(g => (
                 <div key={g} className="flex items-center gap-1.5">
                   <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: groupColors[g] }} />
