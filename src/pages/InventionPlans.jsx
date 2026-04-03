@@ -1,6 +1,7 @@
-import { useState, useRef } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { ArrowLeft, Download, ChevronDown, ChevronUp, AlertTriangle, CheckCircle2, Package, Loader2, FileText } from "lucide-react";
+import { ArrowLeft, Download, ChevronDown, ChevronUp, AlertTriangle, CheckCircle2, Package, Loader2, FileText, Lock, ShoppingCart } from "lucide-react";
+import { base44 } from "@/api/base44Client";
 import { businessItems } from "../lib/businessItems";
 import { inventionSteps } from "../lib/inventionSteps";
 import InventionDiagram from "../components/InventionDiagram";
@@ -295,11 +296,66 @@ function generatePDF(invention, data) {
   doc.save(`Bearden_Plans_${filename}.pdf`);
 }
 
+function PaywallGate({ invention }) {
+  return (
+    <div className="flex-1 flex items-center justify-center p-12">
+      <div className="max-w-md text-center">
+        <div className="w-20 h-20 rounded-2xl bg-gray-800 border border-gray-700 flex items-center justify-center text-4xl mx-auto mb-6">
+          {invention?.icon || "🔒"}
+        </div>
+        <div className="flex items-center justify-center gap-2 mb-3">
+          <Lock size={16} className="text-red-400" />
+          <span className="text-red-400 font-bold text-sm uppercase tracking-wider">Purchase Required</span>
+        </div>
+        <h2 className="text-white font-black text-2xl mb-3">
+          {invention?.title || "Invention Build Plans"}
+        </h2>
+        <p className="text-gray-400 text-sm leading-relaxed mb-6">
+          Full build plans — including step-by-step instructions, bill of materials, schematics, and downloadable PDF — are available after purchase.
+        </p>
+        <div className="bg-gray-900 border border-gray-700 rounded-2xl p-5 mb-6 text-left space-y-2">
+          <p className="text-gray-500 text-xs font-bold uppercase tracking-wider mb-3">What's included after purchase:</p>
+          {["Step-by-step build instructions", "Full bill of materials with sources", "Schematic diagrams", "Software & firmware notes", "Downloadable PDF"].map((item, i) => (
+            <div key={i} className="flex items-center gap-2 text-sm text-gray-300">
+              <CheckCircle2 size={13} className="text-green-500 flex-shrink-0" />{item}
+            </div>
+          ))}
+        </div>
+        <Link to="/checkout"
+          className="flex items-center justify-center gap-2 w-full py-3 rounded-xl font-black text-white text-sm bg-red-700 hover:bg-red-600 transition-all">
+          <ShoppingCart size={15} /> Purchase Access — {invention?.price || "See Pricing"}
+        </Link>
+        <Link to="/courses" className="block mt-3 text-xs text-gray-600 hover:text-gray-400 transition-colors">
+          View all courses & plans →
+        </Link>
+      </div>
+    </div>
+  );
+}
+
 export default function InventionPlans() {
   const [selected, setSelected] = useState(inventions[0]);
   const [showBom, setShowBom] = useState(true);
   const [showSteps, setShowSteps] = useState(true);
   const [generating, setGenerating] = useState(false);
+  const [hasPurchased, setHasPurchased] = useState(false);
+  const [checkingPurchase, setCheckingPurchase] = useState(true);
+
+  useEffect(() => {
+    base44.functions.invoke("getUserPurchases", {})
+      .then(res => {
+        const purchases = res?.data?.purchases || [];
+        const paid = purchases.some(p =>
+          p.category === "Invention" ||
+          p.title?.toLowerCase().includes("invention") ||
+          p.title?.toLowerCase().includes("plan") ||
+          p.title?.toLowerCase().includes("build")
+        );
+        setHasPurchased(paid);
+      })
+      .catch(() => setHasPurchased(false))
+      .finally(() => setCheckingPurchase(false));
+  }, []);
 
   const data = inventionSteps[selected?.title];
 
@@ -373,8 +429,14 @@ export default function InventionPlans() {
         </div>
 
         {/* Main content */}
-        <div className="flex-1 overflow-y-auto">
-          {selected && data ? (
+        <div className="flex-1 overflow-y-auto flex flex-col">
+          {checkingPurchase ? (
+            <div className="flex items-center justify-center flex-1">
+              <Loader2 size={24} className="animate-spin text-gray-600" />
+            </div>
+          ) : !hasPurchased ? (
+            <PaywallGate invention={selected} />
+          ) : selected && data ? (
             <div className="p-6 max-w-5xl">
               {/* Invention header */}
               <div className="flex items-start gap-4 mb-6">
