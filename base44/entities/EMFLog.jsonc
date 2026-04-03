@@ -1,0 +1,34 @@
+{
+  "name": "EMFLog",
+  "type": "object",
+  "properties": {
+    "date": {
+      "type": "string"
+    },
+    "reading_mG": {
+      "type": "number"
+    },
+    "location": {
+      "type": "string"
+    },
+    "symptoms": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "sleep_quality": {
+      "type": "integer"
+    },
+    "energy_level": {
+      "type": "integer"
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "date",
+    "reading_mG"
+  ]
+}
