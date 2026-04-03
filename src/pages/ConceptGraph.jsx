@@ -115,6 +115,12 @@ export default function ConceptGraph() {
             📊 Timeline Deck
           </Link>
           <Link
+            to="/health-analytics"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-cyan-900/40 hover:bg-cyan-800/50 border border-cyan-800 text-cyan-300 text-xs font-medium transition-colors"
+          >
+            📈 Health Analytics
+          </Link>
+          <Link
             to="/heavy-metal-detox"
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-green-900/40 hover:bg-green-800/50 border border-green-800 text-green-300 text-xs font-medium transition-colors"
           >

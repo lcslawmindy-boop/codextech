@@ -37,6 +37,7 @@ import ScalarFieldSim from './pages/ScalarFieldSim';
 import BrandArchitecture from './pages/BrandArchitecture';
 import EMFExposureLog from './pages/EMFExposureLog';
 import HeavyMetalDetox from './pages/HeavyMetalDetox';
+import HealthAnalytics from './pages/HealthAnalytics';
 import EMFProtectionShop from './pages/EMFProtectionShop';
 
 const AuthenticatedApp = () => {
@@ -106,6 +107,7 @@ const AuthenticatedApp = () => {
         <Route path="/emf-shop" element={<EMFProtectionShop />} />
         <Route path="/emf-log" element={<EMFExposureLog />} />
         <Route path="/heavy-metal-detox" element={<HeavyMetalDetox />} />
+        <Route path="/health-analytics" element={<HealthAnalytics />} />
         <Route path="/investor-portal" element={<InvestorPortal />} />
         <Route path="*" element={<PageNotFound />} />
       </Routes>
