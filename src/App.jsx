@@ -34,6 +34,7 @@ import PatentFilingWizard from './pages/PatentFilingWizard';
 import InvestorCRM from './pages/InvestorCRM';
 import InvestorPackage from './pages/InvestorPackage';
 import ZenithApex from './pages/ZenithApex';
+import ScalarWaveSimulatorPage from './pages/ScalarWaveSimulatorPage';
 import ScalarFieldSim from './pages/ScalarFieldSim';
 import BrandArchitecture from './pages/BrandArchitecture';
 import EMFExposureLog from './pages/EMFExposureLog';
@@ -104,6 +105,7 @@ const AuthenticatedApp = () => {
         <Route path="/investor-crm" element={<InvestorCRM />} />
         <Route path="/zenith-apex" element={<ZenithApex />} />
         <Route path="/scalar-sim" element={<ScalarFieldSim />} />
+        <Route path="/scalar-wave-sim" element={<ScalarWaveSimulatorPage />} />
         <Route path="/brand" element={<BrandArchitecture />} />
         <Route path="/emf-shop" element={<EMFProtectionShop />} />
         <Route path="/emf-log" element={<EMFExposureLog />} />
