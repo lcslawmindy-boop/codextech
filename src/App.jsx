@@ -44,6 +44,7 @@ import EMFProtectionShop from './pages/EMFProtectionShop';
 import DarkTimeline from './pages/DarkTimeline';
 import InventionForge from './pages/InventionForge';
 import ProvisionalPatent from './pages/ProvisionalPatent';
+import ScalarPotentialMap from './pages/ScalarPotentialMap';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -118,6 +119,7 @@ const AuthenticatedApp = () => {
         <Route path="/dark-timeline" element={<DarkTimeline />} />
         <Route path="/inventor-forge" element={<InventionForge />} />
         <Route path="/provisional-patent" element={<ProvisionalPatent />} />
+        <Route path="/scalar-potential" element={<ScalarPotentialMap />} />
         <Route path="/investor-portal" element={<InvestorPortal />} />
         <Route path="*" element={<PageNotFound />} />
       </Routes>
