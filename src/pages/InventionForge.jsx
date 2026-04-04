@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { ArrowLeft, Loader2, Sparkles, Download, DollarSign, Rocket, TrendingUp, Shield } from "lucide-react";
+import { ArrowLeft, Loader2, Sparkles, Download, DollarSign, Rocket, TrendingUp, Shield, CheckSquare, Square, FileDown, X } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 
 const SEED_DOMAINS = [
@@ -47,7 +47,95 @@ function FinancialTable({ fin }) {
   );
 }
 
-function InventionCard({ inv, index }) {
+function ExportBar({ inventions, selected, onToggle, onSelectAll, onClear }) {
+  const count = selected.size;
+  const [exporting, setExporting] = useState(false);
+  const [exportError, setExportError] = useState("");
+
+  const handleExport = async () => {
+    if (!count) return;
+    setExporting(true);
+    setExportError("");
+    const selectedInventions = inventions.filter((_, i) => selected.has(i));
+    const response = await base44.functions.invoke("exportInventionBrochure", {
+      inventions: selectedInventions,
+      title: `scalar-em-investment-brochure-${Date.now()}`,
+    });
+    // response.data is the axios response; for binary we need to handle blob
+    // Since base44 functions return JSON by default, we call fetch directly
+    try {
+      const { data } = await base44.functions.invoke("exportInventionBrochure", {
+        inventions: selectedInventions,
+        title: `scalar-em-brochure`,
+      });
+      setExportError("Use direct download below.");
+    } catch(e) {
+      // Fallback: direct fetch for binary PDF
+    }
+    setExporting(false);
+  };
+
+  const handleDirectExport = async () => {
+    if (!count) return;
+    setExporting(true);
+    setExportError("");
+    const selectedInventions = inventions.filter((_, i) => selected.has(i));
+    const res = await fetch(`/functions/exportInventionBrochure`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify({ inventions: selectedInventions, title: "zenith-apex-scalar-em-brochure" }),
+    });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({ error: "Export failed" }));
+      setExportError(err.error || "Export failed");
+      setExporting(false);
+      return;
+    }
+    const blob = await res.blob();
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "zenith-apex-scalar-em-brochure.pdf";
+    a.click();
+    URL.revokeObjectURL(url);
+    setExporting(false);
+  };
+
+  if (!inventions.length) return null;
+
+  return (
+    <div className={`sticky top-14 z-30 transition-all ${count > 0 ? "opacity-100" : "opacity-60"}  border-b border-gray-800 bg-gray-950/95 backdrop-blur-sm px-5 py-2.5`}>
+      <div className="flex items-center gap-3 flex-wrap">
+        <button onClick={onSelectAll} className="flex items-center gap-1.5 text-xs text-gray-400 hover:text-white transition-colors">
+          <CheckSquare size={13} /> Select All ({inventions.length})
+        </button>
+        {count > 0 && (
+          <button onClick={onClear} className="flex items-center gap-1.5 text-xs text-gray-500 hover:text-white transition-colors">
+            <X size={11} /> Clear
+          </button>
+        )}
+        <div className="flex-1" />
+        {count > 0 && (
+          <div className="flex items-center gap-2">
+            <span className="text-xs text-gray-400">{count} selected</span>
+            <button
+              onClick={handleDirectExport}
+              disabled={exporting}
+              className="flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-green-700 to-cyan-700 hover:from-green-600 hover:to-cyan-600 text-white font-black text-xs disabled:opacity-60 disabled:cursor-not-allowed transition-all shadow-[0_0_20px_rgba(0,200,100,0.3)]"
+            >
+              {exporting ? <Loader2 size={13} className="animate-spin" /> : <FileDown size={13} />}
+              {exporting ? "Generating PDF…" : `Export ${count} Invention${count > 1 ? "s" : ""} as PDF Brochure`}
+            </button>
+          </div>
+        )}
+        {exportError && <span className="text-red-400 text-xs">{exportError}</span>}
+      </div>
+    </div>
+  );
+}
+
+function InventionCard({ inv, index, selected, onToggle }) {
   const [tab, setTab] = useState("overview");
   const tabs = ["overview", "specs", "ip", "financials", "launch"];
 
@@ -55,10 +143,16 @@ function InventionCard({ inv, index }) {
   const color = colors[index % colors.length];
 
   return (
-    <div className="bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden"
-      style={{ borderLeftColor: color, borderLeftWidth: 3 }}>
+    <div className={`bg-gray-900 border rounded-2xl overflow-hidden transition-all ${selected ? "ring-2" : "border-gray-800"}`}
+      style={{ borderLeftColor: color, borderLeftWidth: 3, ringColor: color, boxShadow: selected ? `0 0 0 2px ${color}` : "none" }}>
       {/* Header */}
       <div className="px-5 py-4 border-b border-gray-800">
+        <div className="flex items-start gap-3">
+        {/* Selection checkbox */}
+        <button onClick={onToggle} className="mt-1 flex-shrink-0 transition-colors" style={{ color: selected ? color : "#4b5563" }}>
+          {selected ? <CheckSquare size={16} /> : <Square size={16} />}
+        </button>
+        <div className="flex-1">
         <div className="flex items-start justify-between gap-3">
           <div className="flex-1">
             <div className="flex items-center gap-2 mb-1 flex-wrap">
@@ -74,6 +168,8 @@ function InventionCard({ inv, index }) {
             <p className="text-white font-black text-sm">{inv.fundingAsk}</p>
             <p className="text-gray-500 text-xs">{inv.equity} equity</p>
           </div>
+        </div>
+        </div>
         </div>
         {/* Tabs */}
         <div className="flex gap-1 mt-3 flex-wrap">
@@ -229,6 +325,15 @@ export default function InventionForge() {
   const [generating, setGenerating] = useState(false);
   const [inventions, setInventions] = useState([]);
   const [error, setError] = useState("");
+  const [selectedForExport, setSelectedForExport] = useState(new Set());
+
+  const toggleExportSelection = (i) => setSelectedForExport(prev => {
+    const next = new Set(prev);
+    next.has(i) ? next.delete(i) : next.add(i);
+    return next;
+  });
+  const selectAll = () => setSelectedForExport(new Set(inventions.map((_, i) => i)));
+  const clearSelection = () => setSelectedForExport(new Set());
 
   const toggleDomain = (id) => setSelectedDomains(d => d.includes(id) ? d.filter(x => x !== id) : [...d, id]);
   const toggleMarket = (m) => setSelectedMarkets(ms => ms.includes(m) ? ms.filter(x => x !== m) : [...ms, m]);
@@ -292,6 +397,7 @@ Be specific with numbers. All inventions must be grounded in documented Bearden 
     });
 
     setInventions(result.inventions || []);
+    setSelectedForExport(new Set((result.inventions || []).map((_, i) => i)));
     setGenerating(false);
   };
 
@@ -410,9 +516,16 @@ Be specific with numbers. All inventions must be grounded in documented Bearden 
             <div className="bg-red-950/40 border border-red-800 rounded-xl p-4 mb-4 text-red-300 text-sm">{error}</div>
           )}
 
-          <div className="space-y-5">
+          <ExportBar
+            inventions={inventions}
+            selected={selectedForExport}
+            onToggle={toggleExportSelection}
+            onSelectAll={selectAll}
+            onClear={clearSelection}
+          />
+          <div className="space-y-5 mt-4">
             {inventions.map((inv, i) => (
-              <InventionCard key={i} inv={inv} index={i} />
+              <InventionCard key={i} inv={inv} index={i} selected={selectedForExport.has(i)} onToggle={() => toggleExportSelection(i)} />
             ))}
           </div>
 
