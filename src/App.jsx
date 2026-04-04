@@ -32,6 +32,7 @@ import PatentLandscapeGraph from './pages/PatentLandscapeGraph';
 import MonitoringDashboard from './pages/MonitoringDashboard';
 import PatentFilingWizard from './pages/PatentFilingWizard';
 import InvestorCRM from './pages/InvestorCRM';
+import InvestorPackage from './pages/InvestorPackage';
 import ZenithApex from './pages/ZenithApex';
 import ScalarFieldSim from './pages/ScalarFieldSim';
 import BrandArchitecture from './pages/BrandArchitecture';
@@ -39,7 +40,6 @@ import EMFExposureLog from './pages/EMFExposureLog';
 import HeavyMetalDetox from './pages/HeavyMetalDetox';
 import HealthAnalytics from './pages/HealthAnalytics';
 import EMFProtectionShop from './pages/EMFProtectionShop';
-import InvestorPackage from './pages/InvestorPackage';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
