@@ -343,61 +343,46 @@ export default function InventionForge() {
     setGenerating(true);
     setError("");
     setInventions([]);
+    setSelectedForExport(new Set());
 
     const domainLabels = SEED_DOMAINS.filter(d => selectedDomains.includes(d.id)).map(d => `${d.label} (${d.desc})`).join(", ");
+    const collected = [];
 
-    const result = await base44.integrations.Core.InvokeLLM({
-      prompt: `You are a senior IP attorney and deep-tech venture capitalist with expertise in Bearden scalar electromagnetics, vacuum energy extraction, and bioelectromagnetics. Generate ${inventionCount} novel, investor-ready invention concepts derived from Lt. Col. Thomas E. Bearden's published works.
-
-Technology domains to explore: ${domainLabels}
-Target markets: ${selectedMarkets.join(", ")}
-
-For EACH invention, generate a complete investor package. Return a JSON array of ${inventionCount} invention objects. Each object must have ALL these fields:
-
-- name: string (compelling, specific product name)
-- tagline: string (one punchy line)
-- category: string (one of: ${selectedMarkets.join(" | ")})
-- stage: string (one of: Concept | Prototype | Patent-Ready)
-- description: string (3-4 sentences, non-technical overview)
-- problem: string (clear problem statement, 1-2 sentences)
-- solution: string (specific scalar EM / Bearden-based solution, 1-2 sentences)
-- marketSize: string (TAM/SAM/SOM with specific $ figures and sources cited)
-- ipValuation: string (e.g. "$4.2M" — use income approach or market comparables)
-- valuationMethod: string (Income Approach | Market Comparables | Cost Approach)
-- valuationRationale: string (2-3 sentence justification with comparable patent sale data)
-- ipType: string (Utility Patent | Design Patent | Trade Secret | PCT Application)
-- priorArtDiff: string (how this differs from Bearden's existing patents + other prior art)
-- filingStrategy: string (provisional → PCT → national phase strategy)
-- jurisdictions: array of 4-6 strings (target patent jurisdictions, e.g. "US", "EU", "China", "Japan")
-- fundingAsk: string (e.g. "$2.5M")
-- equity: string (e.g. "18%")
-- preSeed: string ($ amount)
-- seriesA: string ($ amount)
-- fiveYrRevenue: string ($ amount)
-- specs: array of 6-8 objects {label: string, value: string} (technical specifications)
-- principles: array of 5-7 strings (Bearden concepts applied, e.g. "Asymmetric Regauging", "O(3) B(3) Field")
-- manufacturing: string (manufacturing/production pathway, 2-3 sentences)
-- financials: object with:
-  - projections: array of 5 objects {year: "Year 1" through "Year 5", revenue: "$Xm", cogs: "$Xm", grossProfit: "$Xm", ebitda: "$Xm", cumulativeInvestment: "$Xm"}
-  - assumptions: array of 4-6 strings (key financial model assumptions)
-- launchPlan: array of 4-5 objects {phase: string, timeline: string, actions: string, milestone: string}
-- channels: array of 5-7 strings (go-to-market channels)
-
-Be specific with numbers. All inventions must be grounded in documented Bearden theory with precise technical references. Make the financial projections aggressive but defensible for Series A investors.`,
-      response_json_schema: {
-        type: "object",
-        properties: {
-          inventions: {
-            type: "array",
-            items: { type: "object" }
+    // Generate one invention at a time to avoid timeout
+    for (let i = 0; i < inventionCount; i++) {
+      const existingNames = collected.map(inv => inv.name).join(", ");
+      const result = await base44.integrations.Core.InvokeLLM({
+        prompt: `You are a senior IP attorney and deep-tech venture capitalist specializing in Bearden scalar electromagnetics. Generate ONE novel, investor-ready invention concept (invention ${i + 1} of ${inventionCount}).\n\nDomains: ${domainLabels}\nTarget markets: ${selectedMarkets.join(", ")}\n${existingNames ? `Already generated (do NOT repeat): ${existingNames}\n` : ""}\nReturn a JSON object with these fields:\n- name, tagline, category (one of: ${selectedMarkets.join(" | ")}), stage (Concept|Prototype|Patent-Ready)\n- description (3 sentences), problem (1 sentence), solution (1-2 sentences)\n- marketSize (TAM/SAM/SOM with $ figures), ipValuation (e.g. "$4.2M"), valuationMethod, valuationRationale (2 sentences)\n- ipType, priorArtDiff (1-2 sentences), filingStrategy (1 sentence)\n- jurisdictions (array of 4 strings), fundingAsk, equity, preSeed, seriesA, fiveYrRevenue\n- specs: array of 6 objects {label, value}\n- principles: array of 5 strings (Bearden concepts)\n- manufacturing (2 sentences)\n- financials: {projections: array of 5 {year, revenue, cogs, grossProfit, ebitda, cumulativeInvestment}, assumptions: array of 4 strings}\n- launchPlan: array of 4 {phase, timeline, actions, milestone}\n- channels: array of 5 strings\n\nUse specific $ numbers. Ground in Bearden's documented theory.`,
+        response_json_schema: {
+          type: "object",
+          properties: {
+            name: { type: "string" }, tagline: { type: "string" },
+            category: { type: "string" }, stage: { type: "string" },
+            description: { type: "string" }, problem: { type: "string" },
+            solution: { type: "string" }, marketSize: { type: "string" },
+            ipValuation: { type: "string" }, valuationMethod: { type: "string" },
+            valuationRationale: { type: "string" }, ipType: { type: "string" },
+            priorArtDiff: { type: "string" }, filingStrategy: { type: "string" },
+            jurisdictions: { type: "array", items: { type: "string" } },
+            fundingAsk: { type: "string" }, equity: { type: "string" },
+            preSeed: { type: "string" }, seriesA: { type: "string" },
+            fiveYrRevenue: { type: "string" },
+            specs: { type: "array", items: { type: "object" } },
+            principles: { type: "array", items: { type: "string" } },
+            manufacturing: { type: "string" },
+            financials: { type: "object" },
+            launchPlan: { type: "array", items: { type: "object" } },
+            channels: { type: "array", items: { type: "string" } },
           }
-        }
-      },
-      model: "claude_sonnet_4_6"
-    });
+        },
+        model: "gpt_5"
+      });
+      collected.push(result);
+      // Show inventions as they arrive
+      setInventions([...collected]);
+      setSelectedForExport(new Set(collected.map((_, idx) => idx)));
+    }
 
-    setInventions(result.inventions || []);
-    setSelectedForExport(new Set((result.inventions || []).map((_, i) => i)));
     setGenerating(false);
   };
 
@@ -472,9 +457,9 @@ Be specific with numbers. All inventions must be grounded in documented Bearden 
 
           {generating && (
             <div className="bg-blue-950/30 border border-blue-900/40 rounded-xl p-3 text-xs text-blue-300">
-              <p className="font-bold mb-1">AI is synthesizing…</p>
-              <p>Analyzing Bearden's documented physics · Generating novel IP clusters · Computing financial models · Building launch plans</p>
-              <p className="text-blue-500 mt-1">Uses Claude Sonnet (enhanced model) — may take 20–40 seconds.</p>
+              <p className="font-bold mb-1">Generating inventions one by one…</p>
+              <p className="text-blue-200">{inventions.length} / {inventionCount} complete — new inventions appear as they arrive.</p>
+              <p className="text-blue-500 mt-1">Each invention takes ~15 seconds. Total ~{inventionCount * 15}s.</p>
             </div>
           )}
 
