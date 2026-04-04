@@ -41,6 +41,8 @@ import EMFExposureLog from './pages/EMFExposureLog';
 import HeavyMetalDetox from './pages/HeavyMetalDetox';
 import HealthAnalytics from './pages/HealthAnalytics';
 import EMFProtectionShop from './pages/EMFProtectionShop';
+import DarkTimeline from './pages/DarkTimeline';
+import InventionForge from './pages/InventionForge';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -112,6 +114,8 @@ const AuthenticatedApp = () => {
         <Route path="/heavy-metal-detox" element={<HeavyMetalDetox />} />
         <Route path="/health-analytics" element={<HealthAnalytics />} />
         <Route path="/investor-package" element={<InvestorPackage />} />
+        <Route path="/dark-timeline" element={<DarkTimeline />} />
+        <Route path="/inventor-forge" element={<InventionForge />} />
         <Route path="/investor-portal" element={<InvestorPortal />} />
         <Route path="*" element={<PageNotFound />} />
       </Routes>
