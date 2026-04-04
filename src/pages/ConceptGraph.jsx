@@ -119,6 +119,7 @@ export default function ConceptGraph() {
           >
             🔬 Diagnostics
           </button>
+          <Link to="/investor-package" className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-yellow-900/40 hover:bg-yellow-800/50 border border-yellow-800 text-yellow-300 text-xs font-medium transition-colors">💼 Investor Package</Link>
           <Link to="/investor-portal" className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-green-900/40 hover:bg-green-800/50 border border-green-800 text-green-300 text-xs font-medium transition-colors">💰 Investors</Link>
           <Link to="/monitoring" className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-900/40 hover:bg-blue-800/50 border border-blue-800 text-blue-300 text-xs font-medium transition-colors">🛡 Monitor</Link>
           <Link to="/prior-art" className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-amber-900/40 hover:bg-amber-800/50 border border-amber-800 text-amber-300 text-xs font-medium transition-colors">🗄️ Prior Art</Link>
