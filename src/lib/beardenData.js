@@ -1,5 +1,112 @@
 export const nodes = [
   {
+    id: "brush_kinetic_gravitation",
+    label: "Brush Kinetic Theory of Gravitation (1910-1929)",
+    group: "physics",
+    description: "Charles F. Brush: ether waves of gravitation push matter together via differential shadow pressure. Heat-generating substances (silicates, nickel-cobalt, barium aluminate) show measurably impaired gravitational acceleration — the first experimental link between vacuum energy absorption and gravitational coupling.",
+    fragments: [
+      "The Kinetic Theory clearly indicates that the energy acquired by falling bodies is derived from the ether; and in subsequent papers I have submitted most convincing argument that this is true. The ether waves exert motive action on atoms or particles of matter whereby the latter are buffeted about in all directions with some absorption of etherial energy. A lump of matter casts a spherical energy shadow into space — depth of shadow diminishing with the square of distance from its origin. The energy shadows of two or more bodies blend, so that energy density between them is less than elsewhere, and they are pushed toward each other by the superior wave energy from directions beyond them.",
+      "Correlation of continual generation of heat in some substances and impairment of their gravitational acceleration is regarded as very strong evidence in support of the kinetic theory of gravitation. Substances which have shown no generation of heat in the calorimeters show no impairment of their falling velocity when compared with lead. Substances exhibiting small, moderate or large generation of heat have shown comparatively small, moderate or large impairment of their gravitational acceleration. I have yet found no exception to this remarkable phenomenon.",
+      "The materials which appear to be endowed with persistent heat generating activity are complex silicates. A silicate of the protoxides of nickel and cobalt showed very large activity — larger than either silicate alone — and this activity, after nearly two years aging of the silicate, appears to be permanent. The Bureau of Standards, with a calorimeter of its own design, has confirmed my finding that Sandusky clay does continually generate a measurable amount of heat.",
+      "The class of isotropic ether waves postulated as the cause of persistent generation of heat in some substances is the same class, perhaps having a wide range of frequency, postulated as the cause of gravitation. Conversion into heat of some of the energy of the gravitation ether-waves might be expected to impair, to some extent, the falling velocity of a heat generating substance — and all such substances thus far tested have clearly shown impairment."
+    ]
+  },
+  {
+    id: "meg_device",
+    label: "Motionless Electromagnetic Generator (MEG)",
+    group: "physics",
+    description: "Bearden et al. MEG device: outputs more energy than is input by the operator — COP far in excess of unity — by extracting electromagnetic energy from curved spacetime (vacuum) via permanent magnet flux gating. Independently replicated by Naudin. Published in Foundations of Physics Letters 2001.",
+    fragments: [
+      "Bearden et al. recently produced a device which they describe as a motionless electromagnetic generator (MEG), which outputs more energy than is input by the operator, and therefore produces a coefficient of performance (COP) well in excess of unity. The device has been independently replicated by Naudin and is therefore reproducible and repeatable, meeting the requirements of scientific rigor.",
+      "The fundamental operational principle of the MEG is explained using a version of higher symmetry electrodynamics known as O(3) electrodynamics, which is based on the empirical existence of two circular polarization states of electromagnetic radiation. The theoretical explanation with O(3) electrodynamics is straightforward: Magnetic energy is taken directly ex vacua and used to replenish the permanent magnets of the MEG device, which therefore produces a source of energy that, in theory, can be replenished indefinitely from the vacuum.",
+      "The MEG does not violate Noether's theorem because the current J^ν is conserved and acts as a reservoir of energy. The MEG therefore utilizes this energy in the same way as water is drawn from a faucet. The fundamental reason the MEG operates is that in flat spacetime, the electromagnetic field does not propagate because the curvature tensor is zero. The B(3) component vanishes if the scalar curvature vanished in flat spacetime.",
+      "Using Sachs's theory: electromagnetic energy can be extracted from Riemannian curved spacetime and in consequence outputs about twenty times more energy than inputted. It is shown in the most general manner that electromagnetic energy can be extracted from vacuum and used to power working devices such as the MEG, devices which are reproducible and repeatable."
+    ]
+  },
+  {
+    id: "o3_electrodynamics",
+    label: "O(3) Electrodynamics & B(3) Vacuum Field",
+    group: "physics",
+    description: "Higher-symmetry electrodynamics (M.W. Evans et al.) based on two circularly polarized states of EM radiation — reveals the B(3) longitudinal vacuum magnetic field missing from U(1) Maxwell-Heaviside theory. Explains MEG, scalar potential structure, and vacuum energy extraction.",
+    fragments: [
+      "O(3) electrodynamics is a Yang-Mills gauge field theory with internal space ((1),(2),(3)). The vacuum charge-current twelve-vector J^ν is a physical charge-current density that gives rise to energy En = -(1/μ₀)∫J^ν · A_ν dV. In Maxwell-Heaviside theory, the only vacuum current is the Maxwell displacement current — there is no vacuum current J^ν and therefore no equivalent of the energy (24a). The current J^ν is conserved, and so Noether's theorem is not violated.",
+      "The three-vector magnetic field B(3) is defined fundamentally in O(3) electrodynamics as B(3)* := -igA(1) × A(2). This concept is absent from Maxwell-Heaviside electrodynamics, in which there is no vacuum current. The B(3) field is one component out of many possible longitudinal components in vacua. Empirical evidence for the B(3) field is revised elsewhere, where it is demonstrated that O(3) electrodynamics explains anomalies that are not explicable with U(1) electrodynamics.",
+      "The explanation of the MEG from O(3): the magnetic energy En = (1/μ₀)∫B(3)·B(3)dV is transferred into the magnetic energy Ens = (1/μ₀)∫B·BdV, where B is the permanent magnetic field of the core of the MEG. Therefore, the energy is continuously replenished from the vacuum, so that in theory, the MEG takes energy from the vacuum, which is effectively an infinite source of energy.",
+      "Sachs's theory: The electromagnetic field tensor exists and propagates through the vacuum if and only if the spacetime being considered is curved, with a non-zero curvature tensor R_μν. The Maxwell-Heaviside theory is developed in flat spacetime, in which there is no curvature tensor. Sachs has shown that in the theory of general relativity, the electromagnetic field cannot propagate through the vacuum. This result refutes the Maxwell-Heaviside theory."
+    ]
+  },
+  {
+    id: "priore_onr",
+    label: "ONR Priore Report (1978) & Esquire Documentation",
+    group: "biology",
+    description: "U.S. Office of Naval Research London Branch Report R-5-78 (J.B. Bateman, 16 August 1978): official US government validation of Priore machine cures — cancer regression, trypanosomiasis elimination — in controlled animal experiments. Paired with 1975 Esquire magazine investigation by David Rorvik.",
+    fragments: [
+      "ONR Report R-5-78 Abstract: A generator invented by A. Priore of Bordeaux is said to produce radiation which causes certain implanted tumors to regress and cures trypanosomiasis in animals. The published biological data are briefly reviewed and thought to be persuasive. The scanty information available on the nature of the active radiation is also reviewed critically. A heavily funded effort to build a machine of greatly enhanced power output is mentioned. Key words: microwaves, biological activity; magnetic fields, biological activity; trypanosomiasis, electromagnetic cure; tumors, inhibition of growth by electromagnetic fields.",
+      "French Patent No. 1,342,772 (Antoine Priore, filed 1 June 1962, Paris): Procedure and assemblage for production of radiation especially serviceable for the treatment of living cells. The invention emits in a cavity a stream of electrically charged particles upon which one superposes electromagnetic radiation of the centimeter wavelength range (3 cm to 80 cm). The cathode emits a stream of positively charged particles concentrated and accelerated by a cyclotron. Superimposed on this particle stream is the electromagnetic radiation from the magnetron, adjusted to the wavelength found by experience to be most appropriate to the cells — e.g., 14 cm for liver, 19.5 cm for spleen.",
+      "Esquire, July 1975: 48 rats with identical uterine T8 cancer tumor grafted. Half controls. The experimentals were exposed to the Priore machine radiation. Among those given immediate treatment, tumors were quickly and totally absorbed. Those given delayed treatment were exposed longer to obliterate cancer. But obliterated it was — until all of these animals, as well, were in perfect health, with no trace of cancer. The experimentals were observed for several months with no recurrence. ALL of the controls died between the twenty-second and thirtieth days.",
+      "Esquire 1975: Pautrizel found that after two years of first being exposed to and healed of trypanosomiasis, mice could be injected with dosages of two hundred million live trypanosomes and never develop any sign of the affliction. This immunity was transferable. 80% of experimentals using the more powerful second machine survived — all controls died within five days. Nobel Prize winner André Lwoff (1965 Nobel, formerly director of Institute for Cancer Research at Villejuif) became a supporter and confirmed authenticity of the experiments."
+    ]
+  },
+  {
+    id: "gulf_war_qp",
+    label: "Gulf War Disease as KGB QP Weapon Test",
+    group: "biology",
+    description: "Bearden's analysis: Gulf War Syndrome was a deliberate KGB test of quantum potential (QP) biological weapons — a 'cocktail mix' shadow-state engine timed against temporarily-depressed ABC (American, British, Canadian) immune systems lowered by harsh inoculation mix before deployment",
+    fragments: [
+      "Gulf War Disease (1): KGB test of closely controlled immune system spreading by QP weapon with 'cocktail mix' in shadow state. Americans, British, Canadians (ABC) were given harsh inoculation mix; French (and native populace) were not. ABC immune systems were temporarily depressed for some months, but not French or native populace. Shadow state effects in inoculation-lowered ABC troop immune systems much more pronounced than in French and natives. Russians thus could lower shadow state QP 'cocktail mix' necessary to produce a reactionable effect — would still affect ABC troop's immune systems, would not affect French and native immune systems.",
+      "Gulf War Disease (2): Lowered ABC immune systems still form statistical distribution. Further lowered magnitude of shadow state cocktail mix, so only a percentage of ABC immune systems would be permanently affected. With 45 years (9 generations of weaponization) experience in disease induction, this was simple for Russian bioenergetics scientists. Opportunistic diseases such as mycoplasma did the rest. French and natives were unaffected. A deliberate probe, so Russians could see if U.S. understood QP weapons and immune system spreading. They didn't. QP exposure also charged the veteran's bodies with the cocktail mix engines — exchange of body fluids or sometimes prolonged exposure to presence of body emanations could later induce symptoms and diseases in some wives and children.",
+      "Indications of testing 'immune system spreading': Subsequently, immune system spreading was tested in entire U.S. very carefully and at low level. Various diseases such as necrotizing fasciitis used. Signature is absence of disease vector 'path' record, but simultaneous statistical distribution of cases appearing throughout entire U.S. Again, a probe to see if NIH and the U.S. had their heads out of the sand. They didn't, and they don't. Some diseases such as mad cow disease in Canada and Europe almost certainly have KGB 'steering' and 'augmentation' effects.",
+      "This represents the first documented operational test of quantum potential biological weapons against a population of known susceptibility. The cocktail mix of real opportunistic diseases (mycoplasma prominent) plus shadow-state QP immune-depressing engines created a syndrome indistinguishable from natural disease by conventional analysis — the perfect deniable weapon."
+    ]
+  },
+  {
+    id: "scalar_em_weapons",
+    label: "Scalar EM Weapons: Baghdad M1A1 Evidence (2003)",
+    group: "physics",
+    description: "TACOM IOP FSO-3 report (29 September 2003): M1A1 Tank (Baghdad, 28 August 2003) penetrated by an unknown weapon leaving pencil-diameter holes through Chobham armor, copper/bronze residue, but minimal crew injury — consistent with Bearden's scalar EM penetrator weapon signature",
+    fragments: [
+      "TACOM Memorandum for Record, Baghdad Iraq: M1A1 Tank serial L13170 was hit by 'something' at 5:20 AM, 28 August 2003. Hole in #4 right-hand skirt about the diameter of a pencil — little finger will not go into it. From there the 'something' traveled over the track and below the deck entering the hull with the same size hole. It then tore the NBC hose behind the Gunner's Seat, passed through the Gunner's seat back at a very oblique angle. Gunner said it felt like someone hit him in the back with a hammer. He is not even bruised. Please notice the residue of what appears to be copper or bronze.",
+      "Bearden context: This is consistent with a scalar EM penetrator — a weapon that creates a time-reversal zone at the target surface, allowing the Coulomb barrier to become a Coulomb assistant. The pencil-diameter entry/exit holes with minimal spalling, copper/bronze residue, and minimal crew injury despite penetration of Chobham armor is the signature of a phase-conjugate longitudinal wave focused on a small aperture — not a conventional kinetic penetrator (which would show massive spalling) or HEAT (which would show jet wash damage).",
+      "The unit is very anxious to have this 'SOMETHING' identified. It seems clear that a penetrator of a yellow molten metal is what caused the damage, but what weapon fires such a round and precisely what sort of round is it? The bad guys are using something unknown and the guys facing it want very much to know what it is and how they can defend themselves against it. The launch point appeared to be about 100 meters away. Everything, even the .50 CAL brass from the second tank, was gone.",
+      "The entry hole shows the skin protrudes slightly around the hole — inward deformation from external pressure rather than impact mechanics. The holes at safety guard show what appears to be copper or bronze residue on exit side. Final impact dug a hole one and a half to two inches deep in hull. No conventional weapon produces this wound profile — consistent with scalar EM vortex penetrator operating via time-density wave focusing at 100 meter standoff range."
+    ]
+  },
+  {
+    id: "bohren_cop1",
+    label: "Bohren 1983: Particle COP>1 via Poynting Convergence",
+    group: "physics",
+    description: "Craig F. Bohren (Penn State, 1983): A small metallic sphere at its Fröhlich resonance frequency presents an absorption cross-section 18 times its geometric cross-section — COP>1 at particle scale, directly analogous to Bearden's asymmetric regauging principle and Heaviside energy convergence",
+    fragments: [
+      "Bohren, Am. J. Phys. 51(4), April 1983: A particle can indeed absorb more than the light incident on it. Metallic particles at ultraviolet frequencies are one class of such particles. At the Fröhlich frequency, a small aluminum sphere presents a target area about 18 times greater than its geometrical cross-sectional area. The absorption efficiency Q_abs can be much greater than unity — a normalized cross section much greater than the geometrical cross section.",
+      "The Poynting vector field lines in the vicinity of a small sphere illuminated by a plane wave: those field lines extending to about 3.9 times the particle radius converge onto the particle. From the point of view of ray optics, light that would have passed the sphere without impediment is deflected toward it. This strikingly demonstrates COP>1 at particle scale — the particle intercepts and absorbs Poynting energy from a volume much larger than its geometric size.",
+      "Paul and Fischer (East Berlin, 1982): independently verified Bohren's finding at the atomic scale. In the presence of an intense coherent monochromatic electromagnetic field, an atom acquires an electric dipole moment — the atom's effective absorption cross section can be much greater than its geometrical cross-section. The wave picture quite naturally accounts for the well-known large effective absorption cross sections of atomic systems, while the particle picture certainly fails to do so.",
+      "Bearden connection: This is the single-particle experimental and mathematical proof of Bearden's claim that conventional circuits using the Lorentz surface integration arbitrarily discard the enormous Heaviside non-diverged energy flow. At the Fröhlich frequency, the particle (like an asymmetrically regauging circuit) collects Poynting energy from a volume far greater than its geometric cross-section — COP>1 is not a violation of thermodynamics but a result of the correct energy accounting."
+    ]
+  },
+  {
+    id: "chronotopology",
+    label: "Chronotopology: Time Topology & Mind-Entropy (Muses)",
+    group: "physics",
+    description: "Charles Muses (1951): chronotopology — the topological analysis of time, treating time as having multiple dimension-like aspects. Critical link between Bearden's time-as-energy concept, negative entropy, and the role of mind as an ordering function operating on the vacuum",
+    fragments: [
+      "Muses Foreword (Rothstein, 1958): 'Mind is that which orders awareness.' Mind, whether mediately through the invention and construction of machines or directly through the vehicle of its super-machine, the organismic physiological body, is that factor in nature capable of initiating arrangements that impose, via increasing negative entropy, some ordering process — orderly transfer of mass and energy — upon an environment or situation. Such imposition wherever found implies the ultimate presence of mind in the situation.",
+      "Chronotopology: The topological analysis of time — several dimension-like aspects of time emerge. The transitional zeroth dimension of time — the time point — may be partially specified in chronotopological terms. Resuming the discussion of dimensionality in terms of the topology of time, we can treat the time point analogously to the geometric point in space. The Critical Probability Sequence Calculator (CPSC) built in 1949-1950 — its input data consist solely of known past times, output solely of most probable future times — like a Hamiltonian analysis of action, concerned with more general quantities connected with the structure of the temporal process itself.",
+      "One of the bridges from ordinary physics to chronotopology is the bridge on which these analyses also lie: the generalized conception of entropy. And in some of what follows, mind can be seen as the bridge — the negative entropy ordering function that connects chronotopological time structure to observable physical change. Situations themselves have quite general laws of temporal structure, apart from their particular contents, a conclusion that must be meaningful to the working scientist.",
+      "The century of power: power can be measured as energy-release per time-unit, the century of time becomes, and so it has proved, the Century of Power. Great amounts of energy delivered in minimal times demand (a) extreme accuracy of knowledge and knowledge-application concerning production of the phenomena, and (b) increasing unification of scientific and practical knowledge. This connects directly to Bearden's concept that 1 microsecond of time transduced to spatial energy per second yields 9×10^10 watts."
+    ]
+  },
+  {
+    id: "kawai_motor",
+    label: "Kawai COP>1 Motor Patent (19-Sheet Diagram)",
+    group: "physics",
+    description: "Kawai's patented rotating machine that achieves COP>1 via controlled asymmetric switching of magnetic reluctance — the rotating-machine equivalent of Bearden's asymmetric regauging circuit. 19 patent diagram sheets preserved on Bearden's website",
+    fragments: [
+      "Kawai Patent Diagrams (19 sheets): Bearden referenced the Kawai motor as a prime example of an overunity rotating machine that uses asymmetric regauging in the magnetic circuit. By carefully controlling the switching geometry and timing, the back-EMF that would normally destroy the source dipole's energy advantage is prevented — allowing the motor to collect more energy from the vacuum flux than is expended driving the motor's rotation.",
+      "The Kawai motor operates on the same principle as Bearden's asymmetric regauging: the permanent magnet provides the broken-symmetry source dipole; the switching geometry ensures that the mechanical power extracted from the rotating field is greater than the electrical input power required to gate the reluctance changes. Like the MEG for electrical circuits, the Kawai motor is the rotating-machine proof that COP>1 is achievable in practice.",
+      "Howard Johnson's Quantum Mechanical Molecular Energy (QMME) paper (private communication, July 2005): Documents Johnson's analysis of permanent magnet motors that extract energy from the 'quantum mechanical molecular energy' of the permanent magnet's ferromagnetic domains — consistent with the O(3) electrodynamics explanation that permanent magnets continuously replenished from the vacuum B(3) field."
+    ]
+  },
+  {
     id: "vacuum_engine_type2",
     label: "Type 2 Engineering / Vacuum Engines",
     group: "physics",
@@ -627,6 +734,29 @@ export const links = [
   { source: "energetics_framework", target: "gravitobiology", label: "extends into" },
   { source: "wave_transduction", target: "elf_entrainment", label: "delivery layer" },
   // Type 2 / Vacuum Engine / MCCS / TRZ / Regauging / Telomere links
+  // ── New source batch nodes inserted here ──
+  { source: "brush_kinetic_gravitation", target: "vacuum_structure", label: "ether wave basis" },
+  { source: "brush_kinetic_gravitation", target: "negentropy", label: "reverse entropy analog" },
+  { source: "meg_device", target: "asymmetric_regauging", label: "implemented by" },
+  { source: "meg_device", target: "vacuum_structure", label: "taps" },
+  { source: "meg_device", target: "o3_electrodynamics", label: "explained by" },
+  { source: "o3_electrodynamics", target: "maxwell_equations", label: "extends" },
+  { source: "o3_electrodynamics", target: "vacuum_structure", label: "reveals B(3) in" },
+  { source: "o3_electrodynamics", target: "scalar_potential", label: "unifies via" },
+  { source: "priore_onr", target: "priors_device", label: "validates" },
+  { source: "priore_onr", target: "mccs_cellular_control", label: "clinical evidence for" },
+  { source: "priore_onr", target: "kaznacheyev", label: "parallels" },
+  { source: "gulf_war_qp", target: "elf_entrainment", label: "weaponized via" },
+  { source: "gulf_war_qp", target: "wave_transduction", label: "exploits" },
+  { source: "scalar_em_weapons", target: "time_reversal_zone", label: "evidenced by" },
+  { source: "scalar_em_weapons", target: "gulf_war_qp", label: "operational proof of" },
+  { source: "bohren_cop1", target: "asymmetric_regauging", label: "particle-scale proof of" },
+  { source: "bohren_cop1", target: "vacuum_structure", label: "Poynting convergence from" },
+  { source: "chronotopology", target: "time_as_energy", label: "mathematical basis" },
+  { source: "chronotopology", target: "mccs_cellular_control", label: "models mind-body link" },
+  { source: "kawai_motor", target: "asymmetric_regauging", label: "motor implementation of" },
+  { source: "kawai_motor", target: "meg_device", label: "rotating analog of" },
+  // ── original links ──
   { source: "vacuum_engine_type2", target: "anenergy", label: "implements" },
   { source: "vacuum_engine_type2", target: "graviton", label: "spacetime curvature via" },
   { source: "vacuum_engine_type2", target: "mccs_cellular_control", label: "biological application" },
