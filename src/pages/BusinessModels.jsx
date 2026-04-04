@@ -2,14 +2,57 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { ArrowLeft, BookOpen, Zap, FlaskConical, DollarSign, Package, GraduationCap, Lightbulb, ChevronDown, ChevronUp } from "lucide-react";
 import { businessItems as items } from "../lib/businessItems";
+import { inventionVisuals } from "../lib/inventionVisuals";
 import NewsletterSignup from "../components/NewsletterSignup";
 
 const CATEGORIES = ["All", "Course", "Book/PDF", "Product", "Invention", "Service"];
 
 // items now imported from lib/businessItems
 
+function InventionVisualPanel({ title }) {
+  const v = inventionVisuals[title];
+  if (!v) return null;
+  return (
+    <div className="mt-3 space-y-3">
+      {/* How It Works */}
+      <div className="bg-gray-800/60 rounded-xl p-3">
+        <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1">How It Works</p>
+        <p className="text-gray-300 text-xs leading-relaxed">{v.howItWorks}</p>
+      </div>
+      {/* Components */}
+      <div>
+        <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Components</p>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+          {v.components.map((c, i) => (
+            <div key={i} className="flex items-start gap-2 bg-gray-800/50 rounded-lg p-2">
+              <div className="w-2.5 h-2.5 rounded-full flex-shrink-0 mt-0.5" style={{ backgroundColor: c.color }} />
+              <div>
+                <p className="text-white text-xs font-semibold">{c.label}</p>
+                <p className="text-gray-400 text-xs leading-snug">{c.desc}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+      {/* Key Principle */}
+      <div className="bg-blue-950/30 border border-blue-800/40 rounded-xl p-3">
+        <p className="text-xs font-semibold text-blue-400 uppercase tracking-wider mb-1">Key Principle</p>
+        <p className="text-blue-200 text-xs leading-relaxed">{v.keyPrinciple}</p>
+      </div>
+      {/* Size */}
+      {v.realWorldSize && (
+        <div className="text-gray-500 text-xs italic">
+          📐 {v.realWorldSize}
+        </div>
+      )}
+    </div>
+  );
+}
+
 function ItemCard({ item }) {
   const [expanded, setExpanded] = useState(false);
+  const [showVisuals, setShowVisuals] = useState(false);
+  const hasVisuals = item.category === "Invention" && !!inventionVisuals[item.title];
   return (
     <div
       className="bg-gray-900 border border-gray-800 rounded-xl p-5 hover:border-gray-600 transition-colors flex flex-col gap-3"
@@ -36,15 +79,29 @@ function ItemCard({ item }) {
 
       <p className="text-gray-300 text-sm leading-relaxed">{item.description}</p>
 
-      {item.modules.length > 0 && (
-        <button
-          onClick={() => setExpanded(e => !e)}
-          className="flex items-center gap-1.5 text-xs text-gray-400 hover:text-gray-200 transition-colors self-start"
-        >
-          {expanded ? <ChevronUp size={13} /> : <ChevronDown size={13} />}
-          {expanded ? "Hide" : "Show"} {item.modules.length} modules
-        </button>
-      )}
+      <div className="flex flex-wrap gap-2">
+        {item.modules.length > 0 && (
+          <button
+            onClick={() => setExpanded(e => !e)}
+            className="flex items-center gap-1.5 text-xs text-gray-400 hover:text-gray-200 transition-colors"
+          >
+            {expanded ? <ChevronUp size={13} /> : <ChevronDown size={13} />}
+            {expanded ? "Hide" : "Show"} {item.modules.length} modules
+          </button>
+        )}
+        {hasVisuals && (
+          <button
+            onClick={() => setShowVisuals(v => !v)}
+            className={`flex items-center gap-1.5 text-xs px-2 py-0.5 rounded-lg border transition-colors ${
+              showVisuals
+                ? "bg-blue-900/40 border-blue-700 text-blue-300"
+                : "border-gray-700 text-gray-400 hover:border-blue-700 hover:text-blue-300"
+            }`}
+          >
+            🔬 {showVisuals ? "Hide" : "Show"} Visuals
+          </button>
+        )}
+      </div>
 
       {expanded && item.modules.length > 0 && (
         <ol className="list-decimal list-inside space-y-1 pl-1">
@@ -53,6 +110,8 @@ function ItemCard({ item }) {
           ))}
         </ol>
       )}
+
+      {showVisuals && <InventionVisualPanel title={item.title} />}
 
       <div className="mt-auto pt-2 border-t border-gray-800">
         <p className="text-gray-600 text-xs">
