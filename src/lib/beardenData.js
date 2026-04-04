@@ -826,7 +826,7 @@ export const links = [
   { source: "meg_device", target: "o3_electrodynamics", label: "explained by" },
   { source: "o3_electrodynamics", target: "maxwell_equations", label: "extends" },
   { source: "o3_electrodynamics", target: "vacuum_structure", label: "reveals B(3) in" },
-  { source: "o3_electrodynamics", target: "scalar_potential", label: "unifies via" },
+
   { source: "priore_onr", target: "priors_device", label: "validates" },
   { source: "priore_onr", target: "mccs_cellular_control", label: "clinical evidence for" },
   { source: "priore_onr", target: "kaznacheyev", label: "parallels" },
