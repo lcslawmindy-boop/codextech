@@ -195,6 +195,18 @@ export default function BusinessModels() {
         </div>
       </div>
 
+      {/* Bearden Attribution */}
+      <div className="px-6 py-2 bg-yellow-950/20 border-b border-yellow-900/30 flex items-center gap-3">
+        <span className="text-yellow-500 text-xs font-bold uppercase tracking-widest flex-shrink-0">Attribution</span>
+        <p className="text-gray-400 text-xs">
+          All business models, inventions, and course content are derived from the published works of{" "}
+          <span className="text-yellow-300 font-semibold">Lt. Col. Thomas E. Bearden (US Army, Ret.)</span>.
+          Sources include <em>Gravitobiology</em> (1991), <em>Excalibur Briefing</em> (1980/1988),
+          <em> Toward a New Electromagnetics</em> Parts 1–4 (1983), <em>Explore!</em> Vol. 6 &amp; 9 (1995/1999),
+          and <em>Foundations of Physics Letters</em> (2001). Educational use only — no medical claims implied.
+        </p>
+      </div>
+
       {/* Intro banner */}
       <div className="px-6 py-4 bg-gray-900/60 border-b border-gray-800">
         <div className="max-w-4xl">
