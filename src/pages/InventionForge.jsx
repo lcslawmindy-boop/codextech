@@ -414,6 +414,7 @@ Be specific with numbers. All inventions must be grounded in documented Bearden 
           </div>
         </div>
         <div className="flex items-center gap-2">
+          <Link to="/provisional-patent" className="px-3 py-1.5 rounded-lg bg-yellow-900/50 border border-yellow-700 text-yellow-300 text-xs font-bold">📋 Draft Patent</Link>
           <Link to="/dark-timeline" className="px-3 py-1.5 rounded-lg bg-red-900/50 border border-red-700 text-red-300 text-xs font-bold">🌍 Dark Timeline</Link>
           <Link to="/business" className="px-3 py-1.5 rounded-lg bg-green-900/50 border border-green-700 text-green-300 text-xs font-bold">💼 Business Models</Link>
         </div>

@@ -43,6 +43,7 @@ import HealthAnalytics from './pages/HealthAnalytics';
 import EMFProtectionShop from './pages/EMFProtectionShop';
 import DarkTimeline from './pages/DarkTimeline';
 import InventionForge from './pages/InventionForge';
+import ProvisionalPatent from './pages/ProvisionalPatent';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -116,6 +117,7 @@ const AuthenticatedApp = () => {
         <Route path="/investor-package" element={<InvestorPackage />} />
         <Route path="/dark-timeline" element={<DarkTimeline />} />
         <Route path="/inventor-forge" element={<InventionForge />} />
+        <Route path="/provisional-patent" element={<ProvisionalPatent />} />
         <Route path="/investor-portal" element={<InvestorPortal />} />
         <Route path="*" element={<PageNotFound />} />
       </Routes>
