@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { ArrowLeft, Loader2, Sparkles, Download, DollarSign, Rocket, TrendingUp, Shield, CheckSquare, Square, FileDown, X, Video } from "lucide-react";
+import { ArrowLeft, Loader2, Sparkles, Download, DollarSign, Rocket, TrendingUp, Shield, CheckSquare, Square, FileDown, X, Film } from "lucide-react";
 import InventionBuildVideo from "../components/InventionBuildVideo";
 import { base44 } from "@/api/base44Client";
 
@@ -184,9 +184,9 @@ function InventionCard({ inv, index, selected, onToggle, onBuildVideo }) {
           ))}
           </div>
           <button onClick={onBuildVideo}
-            className="flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-bold border transition-all hover:opacity-90 flex-shrink-0"
-            style={{ borderColor: color + "66", backgroundColor: color + "11", color }}>
-            <Video size={11} /> Build Video
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all hover:opacity-90 flex-shrink-0 text-white"
+            style={{ backgroundColor: color }}>
+            <Film size={11} /> 🎬 Build Video
           </button>
         </div>
       </div>
