@@ -404,7 +404,7 @@ Use formal patent legal language throughout. Be highly technical and specific. R
           </Link>
           <div className="w-px h-5 bg-gray-700" />
           <div>
-            <h1 className="text-white font-bold text-base tracking-tight">Patent Drafting & IP Valuation Tool</h1>
+            <h1 className="text-white font-bold text-base tracking-tight">Zenith Apex Research Database — Patent Drafting & IP Valuation Generator</h1>
             <p className="text-gray-500 text-xs">Bearden invention blueprints → formal legal-ready patent disclosures</p>
           </div>
         </div>
