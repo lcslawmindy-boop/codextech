@@ -4,6 +4,7 @@ import { ArrowLeft, Loader2, Sparkles, Download, DollarSign, Rocket, TrendingUp,
 import InventionBuildVideo from "../components/InventionBuildVideo";
 import PitchDeckExporter from "../components/PitchDeckExporter";
 import InventionPatentDrafter from "../components/InventionPatentDrafter";
+import MarketResearchScanner from "../components/MarketResearchScanner";
 import { base44 } from "@/api/base44Client";
 
 const SEED_DOMAINS = [
@@ -138,7 +139,7 @@ function ExportBar({ inventions, selected, onToggle, onSelectAll, onClear }) {
   );
 }
 
-function InventionCard({ inv, index, selected, onToggle, onBuildVideo, onDraftPatent }) {
+function InventionCard({ inv, index, selected, onToggle, onBuildVideo, onDraftPatent, onResearch }) {
   const [tab, setTab] = useState("overview");
   const tabs = ["overview", "specs", "ip", "financials", "launch"];
 
@@ -193,6 +194,10 @@ function InventionCard({ inv, index, selected, onToggle, onBuildVideo, onDraftPa
           <button onClick={onDraftPatent}
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all hover:opacity-90 flex-shrink-0 bg-yellow-700 hover:bg-yellow-600 text-white">
             📋 Draft Patent
+          </button>
+          <button onClick={onResearch}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all hover:opacity-90 flex-shrink-0 bg-cyan-700 hover:bg-cyan-600 text-white">
+            🔬 Market Research
           </button>
         </div>
       </div>
@@ -336,6 +341,7 @@ export default function InventionForge() {
   const [buildVideoInvention, setBuildVideoInvention] = useState(null);
   const [showPitchDeck, setShowPitchDeck] = useState(false);
   const [patentInvention, setPatentInvention] = useState(null);
+  const [researchInvention, setResearchInvention] = useState(null);
   const [selectedDomains, setSelectedDomains] = useState(["vacuum_energy", "bioelectromagnetics"]);
   const [selectedMarkets, setSelectedMarkets] = useState(["Medical / Health", "Energy / Utilities"]);
   const [inventionCount, setInventionCount] = useState(3);
@@ -535,7 +541,7 @@ export default function InventionForge() {
           />
           <div className="space-y-5 mt-4">
             {inventions.map((inv, i) => (
-              <InventionCard key={i} inv={inv} index={i} selected={selectedForExport.has(i)} onToggle={() => toggleExportSelection(i)} onBuildVideo={() => setBuildVideoInvention(inv)} onDraftPatent={() => setPatentInvention(inv)} />
+              <InventionCard key={i} inv={inv} index={i} selected={selectedForExport.has(i)} onToggle={() => toggleExportSelection(i)} onBuildVideo={() => setBuildVideoInvention(inv)} onDraftPatent={() => setPatentInvention(inv)} onResearch={() => setResearchInvention(inv)} />
             ))}
           </div>
 
@@ -547,6 +553,15 @@ export default function InventionForge() {
           )}
           {patentInvention && (
             <InventionPatentDrafter invention={patentInvention} onClose={() => setPatentInvention(null)} />
+          )}
+          {researchInvention && (
+            <MarketResearchScanner
+              invention={researchInvention}
+              onClose={() => setResearchInvention(null)}
+              onUpdateInvention={(updates) => {
+                setInventions(prev => prev.map(inv => inv.name === researchInvention.name ? { ...inv, ...updates } : inv));
+              }}
+            />
           )}
           {inventions.length > 0 && (
             <div className="mt-6 text-center text-gray-600 text-xs border-t border-gray-800 pt-4">
