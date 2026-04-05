@@ -5,127 +5,244 @@ import { jsPDF } from "jspdf";
 
 function downloadStepsAsPDF(invention, steps) {
   const doc = new jsPDF({ orientation: "portrait", unit: "mm", format: "a4" });
-  const W = 210, margin = 22, cW = 210 - 44;
+  const W = 210, margin = 20, cW = W - margin * 2;
   let y = 0;
   let pageCount = 0;
+
+  const FONT_BODY = 11;
+  const FONT_SMALL = 9;
+  const FONT_LABEL = 10;
+  const LINE_H = 6.5;
 
   const addPage = () => {
     if (pageCount > 0) doc.addPage();
     pageCount++;
     doc.setFillColor(255, 255, 255);
     doc.rect(0, 0, W, 297, "F");
+    // Header band
     doc.setFillColor(10, 10, 10);
-    doc.rect(0, 0, W, 18, "F");
-    doc.setFontSize(8); doc.setFont("helvetica", "bold"); doc.setTextColor(255, 255, 255);
-    doc.text("ZENITH APEX RESEARCH PORTFOLIO", margin, 8);
-    doc.text("INVENTION BUILD VIDEO GUIDE", W - margin, 8, { align: "right" });
-    doc.setFont("helvetica", "normal"); doc.setFontSize(7); doc.setTextColor(200, 200, 200);
-    doc.text("CONFIDENTIAL — NDA APPLIES — NOT FOR DISTRIBUTION", W / 2, 14, { align: "center" });
-    y = 26;
+    doc.rect(0, 0, W, 16, "F");
+    doc.setFontSize(8);
+    doc.setFont("helvetica", "bold");
+    doc.setTextColor(255, 255, 255);
+    doc.text("ZENITH APEX RESEARCH PORTFOLIO", margin, 7);
+    doc.text("INVENTION BUILD GUIDE", W - margin, 7, { align: "right" });
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(7);
+    doc.setTextColor(190, 190, 190);
+    doc.text("CONFIDENTIAL — NDA APPLIES — NOT FOR DISTRIBUTION", W / 2, 13, { align: "center" });
+    y = 24;
   };
 
-  const check = (need = 14) => { if (y + need > 282) addPage(); };
+  const check = (need = 14) => { if (y + need > 280) addPage(); };
 
-  // Cover page
-  doc.setFillColor(255, 255, 255); doc.rect(0, 0, W, 297, "F"); pageCount++;
-  doc.setFillColor(0, 0, 0); doc.rect(0, 0, W, 55, "F");
-  doc.setFontSize(9); doc.setFont("helvetica", "normal"); doc.setTextColor(200, 200, 200);
+  const bodyText = (txt, indent = 0) => {
+    doc.setFontSize(FONT_BODY);
+    doc.setFont("helvetica", "normal");
+    doc.setTextColor(20, 20, 20);
+    const lines = doc.splitTextToSize(txt, cW - indent);
+    lines.forEach(l => { check(LINE_H + 2); doc.text(l, margin + indent, y); y += LINE_H; });
+  };
+
+  const boldLabel = (lbl, val, indent = 0) => {
+    check(LINE_H + 2);
+    doc.setFontSize(FONT_LABEL);
+    doc.setFont("helvetica", "bold");
+    doc.setTextColor(0, 0, 0);
+    doc.text(lbl, margin + indent, y);
+    doc.setFont("helvetica", "normal");
+    doc.setTextColor(30, 30, 30);
+    const valLines = doc.splitTextToSize(val, cW - indent - doc.getTextWidth(lbl) - 2);
+    doc.text(valLines[0], margin + indent + doc.getTextWidth(lbl) + 2, y);
+    y += LINE_H;
+  };
+
+  // ── COVER PAGE ──────────────────────────────────────────────────────────
+  doc.setFillColor(255, 255, 255);
+  doc.rect(0, 0, W, 297, "F");
+  pageCount++;
+
+  doc.setFillColor(0, 0, 0);
+  doc.rect(0, 0, W, 52, "F");
+  doc.setFontSize(9);
+  doc.setFont("helvetica", "normal");
+  doc.setTextColor(200, 200, 200);
   doc.text("ZENITH APEX RESEARCH PORTFOLIO", W / 2, 16, { align: "center" });
-  doc.setFontSize(7); doc.text("Invention Build Plans  ·  Step-by-Step Engineering Guide", W / 2, 23, { align: "center" });
-  doc.setFontSize(20); doc.setFont("helvetica", "bold"); doc.setTextColor(255, 255, 255);
-  doc.text("BUILD VIDEO GUIDE", W / 2, 40, { align: "center" });
-  doc.setFontSize(11); doc.text("Step-by-Step Assembly Instructions", W / 2, 49, { align: "center" });
+  doc.setFontSize(7);
+  doc.text("Invention Build Plans  ·  Step-by-Step Engineering Guide", W / 2, 23, { align: "center" });
+  doc.setFontSize(18);
+  doc.setFont("helvetica", "bold");
+  doc.setTextColor(255, 255, 255);
+  doc.text("BUILD VIDEO GUIDE", W / 2, 38, { align: "center" });
+  doc.setFontSize(10);
+  doc.setFont("helvetica", "normal");
+  doc.text("Step-by-Step Assembly Instructions", W / 2, 47, { align: "center" });
 
-  y = 70;
-  doc.setDrawColor(0); doc.setLineWidth(1); doc.rect(margin, y, cW, 22, "D");
-  doc.setFontSize(14); doc.setFont("helvetica", "bold"); doc.setTextColor(0, 0, 0);
+  y = 66;
+  // Title box
+  doc.setDrawColor(0);
+  doc.setLineWidth(0.8);
+  doc.rect(margin, y, cW, 24, "D");
+  doc.setFontSize(13);
+  doc.setFont("helvetica", "bold");
+  doc.setTextColor(0, 0, 0);
   const nameLines = doc.splitTextToSize(invention.name || "Invention", cW - 6);
-  nameLines.forEach((l, i) => doc.text(l, margin + 3, y + 8 + i * 8));
-  y += 28;
+  nameLines.slice(0, 2).forEach((l, i) => doc.text(l, margin + 4, y + 10 + i * 8));
+  y += 30;
 
   if (invention.tagline) {
-    doc.setFontSize(10); doc.setFont("helvetica", "italic"); doc.setTextColor(60, 60, 60);
-    doc.text(`"${invention.tagline}"`, margin, y); y += 10;
+    doc.setFontSize(10);
+    doc.setFont("helvetica", "italic");
+    doc.setTextColor(60, 60, 60);
+    const tLines = doc.splitTextToSize(`"${invention.tagline}"`, cW);
+    tLines.forEach(l => { doc.text(l, margin, y); y += 6; });
+    y += 4;
   }
 
-  doc.setFontSize(9); doc.setFont("helvetica", "normal"); doc.setTextColor(40, 40, 40);
-  doc.text(`Total Steps: ${steps.length}`, margin, y); y += 6;
-  doc.text(`Generated: ${new Date().toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}`, margin, y); y += 6;
-  doc.text(`Category: ${invention.category || "Invention Build Plan"}`, margin, y); y += 10;
+  doc.setFontSize(10);
+  doc.setFont("helvetica", "normal");
+  doc.setTextColor(40, 40, 40);
+  doc.text(`Total Steps: ${steps.length}`, margin, y); y += 7;
+  doc.text(`Category: ${invention.category || "Invention Build Plan"}`, margin, y); y += 7;
+  doc.text(`Generated: ${new Date().toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}`, margin, y); y += 12;
 
-  doc.setDrawColor(0); doc.setLineWidth(0.3); doc.rect(margin, y, cW, 18, "D");
-  doc.setFontSize(9); doc.setFont("helvetica", "bold"); doc.setTextColor(0, 0, 0);
-  doc.text("CONFIDENTIALITY NOTICE", margin + 3, y + 6);
-  doc.setFont("helvetica", "normal"); doc.setFontSize(8); doc.setTextColor(40, 40, 40);
-  const confLines = doc.splitTextToSize("This document contains proprietary trade secrets of Zenith Apex Research Portfolio. Unauthorized disclosure subject to $2,500,000 liquidated damages per incident.", cW - 6);
-  confLines.forEach((l, i) => doc.text(l, margin + 3, y + 11 + i * 4)); 
+  doc.setLineWidth(0.3);
+  doc.rect(margin, y, cW, 16, "D");
+  doc.setFontSize(9);
+  doc.setFont("helvetica", "bold");
+  doc.setTextColor(0, 0, 0);
+  doc.text("CONFIDENTIALITY NOTICE", margin + 4, y + 6);
+  doc.setFont("helvetica", "normal");
+  doc.setTextColor(40, 40, 40);
+  const confText = "Proprietary trade secrets of Zenith Apex Research Portfolio. Unauthorized disclosure subject to $2,500,000 liquidated damages per incident.";
+  const confLines = doc.splitTextToSize(confText, cW - 8);
+  confLines.slice(0, 2).forEach((l, i) => doc.text(l, margin + 4, y + 11 + i * 4));
 
-  // Steps
+  // ── STEPS PAGES ─────────────────────────────────────────────────────────
   addPage();
 
   // Section header
-  doc.setFillColor(10, 10, 10); doc.rect(margin - 3, y - 2, cW + 6, 12, "F");
-  doc.setFontSize(11); doc.setFont("helvetica", "bold"); doc.setTextColor(255, 255, 255);
+  doc.setFillColor(10, 10, 10);
+  doc.rect(margin - 2, y - 2, cW + 4, 12, "F");
+  doc.setFontSize(11);
+  doc.setFont("helvetica", "bold");
+  doc.setTextColor(255, 255, 255);
   doc.text(`BUILD INSTRUCTIONS — ${steps.length} STEPS`, margin, y + 6);
   y += 16;
 
   steps.forEach((step, i) => {
-    check(30);
-    // Step band
-    doc.setFillColor(20, 20, 20); doc.rect(margin - 3, y - 2, cW + 6, 13, "F");
-    doc.setFillColor(255, 255, 255); doc.circle(margin + 5, y + 4.5, 4.5, "F");
-    doc.setFont("helvetica", "bold"); doc.setFontSize(10); doc.setTextColor(0, 0, 0);
+    check(32);
+
+    // Step header band
+    doc.setFillColor(20, 20, 20);
+    doc.rect(margin - 2, y - 2, cW + 4, 13, "F");
+    // Circle number
+    doc.setFillColor(255, 255, 255);
+    doc.circle(margin + 5, y + 4.5, 4, "F");
+    doc.setFontSize(9);
+    doc.setFont("helvetica", "bold");
+    doc.setTextColor(0, 0, 0);
     doc.text(String(i + 1), margin + 5, y + 6.5, { align: "center" });
-    doc.setTextColor(255, 255, 255); doc.setFontSize(11);
-    doc.text(`Step ${i + 1}: ${step.title || ""}`, margin + 13, y + 6);
-    doc.setFont("helvetica", "normal"); doc.setFontSize(8); doc.setTextColor(200, 200, 200);
-    if (step.duration) doc.text(step.duration, W - margin, y + 6, { align: "right" });
-    y += 16;
+    // Step title
+    doc.setFontSize(11);
+    doc.setFont("helvetica", "bold");
+    doc.setTextColor(255, 255, 255);
+    const stepTitle = doc.splitTextToSize(`Step ${i + 1}: ${step.title || ""}`, cW - 30);
+    doc.text(stepTitle[0], margin + 13, y + 6);
+    // Duration right-aligned
+    if (step.duration) {
+      doc.setFont("helvetica", "normal");
+      doc.setFontSize(8);
+      doc.setTextColor(180, 180, 180);
+      doc.text(step.duration, W - margin - 2, y + 6, { align: "right" });
+    }
+    y += 17;
 
     // Description
-    doc.setFontSize(11); doc.setFont("helvetica", "normal"); doc.setTextColor(15, 15, 15);
-    const descLines = doc.splitTextToSize(step.description || "", cW - 4);
-    descLines.forEach(l => { check(8); doc.text(l, margin + 2, y); y += 7; });
+    bodyText(step.description || "", 2);
     y += 2;
 
-    // Warning
+    // Warning box
     if (step.warning) {
       check(16);
-      doc.setDrawColor(0); doc.setLineWidth(0.3); doc.rect(margin, y, cW, 13, "D");
-      doc.setFontSize(9); doc.setFont("helvetica", "bold"); doc.setTextColor(0, 0, 0);
-      doc.text("⚠ WARNING:", margin + 3, y + 6);
+      doc.setLineWidth(0.3);
+      doc.setDrawColor(0);
+      doc.rect(margin, y, cW, 13, "D");
+      doc.setFontSize(FONT_SMALL);
+      doc.setFont("helvetica", "bold");
+      doc.setTextColor(0, 0, 0);
+      doc.text("WARNING:", margin + 3, y + 6);
       doc.setFont("helvetica", "normal");
-      const wLines = doc.splitTextToSize(step.warning, cW - 35);
-      doc.text(wLines[0], margin + 28, y + 6);
+      const wLines = doc.splitTextToSize(step.warning, cW - 30);
+      doc.text(wLines[0], margin + 26, y + 6);
       y += 17;
     }
 
-    // Materials + Tools inline
-    const mats = (step.materials || []).join("  ·  ");
-    const tools = (step.tools || []).join("  ·  ");
-    if (mats) { check(6); doc.setFontSize(8.5); doc.setFont("helvetica", "bold"); doc.setTextColor(0,0,0); doc.text("Materials:", margin, y); doc.setFont("helvetica", "normal"); doc.setTextColor(40,40,40); const ml = doc.splitTextToSize(mats, cW - 22); doc.text(ml[0], margin + 20, y); y += 5.5; }
-    if (tools) { check(6); doc.setFontSize(8.5); doc.setFont("helvetica", "bold"); doc.setTextColor(0,0,0); doc.text("Tools:", margin, y); doc.setFont("helvetica", "normal"); doc.setTextColor(40,40,40); const tl = doc.splitTextToSize(tools, cW - 16); doc.text(tl[0], margin + 14, y); y += 5.5; }
+    // Materials
+    if ((step.materials || []).length > 0) {
+      check(LINE_H + 2);
+      doc.setFontSize(FONT_SMALL);
+      doc.setFont("helvetica", "bold");
+      doc.setTextColor(0, 0, 0);
+      doc.text("Materials:", margin + 2, y);
+      doc.setFont("helvetica", "normal");
+      doc.setTextColor(30, 30, 30);
+      const matText = step.materials.join("  ·  ");
+      const matLines = doc.splitTextToSize(matText, cW - 28);
+      doc.text(matLines[0], margin + 26, y);
+      y += LINE_H;
+      if (matLines[1]) { check(LINE_H); doc.text(matLines[1], margin + 26, y); y += LINE_H; }
+    }
+
+    // Tools
+    if ((step.tools || []).length > 0) {
+      check(LINE_H + 2);
+      doc.setFontSize(FONT_SMALL);
+      doc.setFont("helvetica", "bold");
+      doc.setTextColor(0, 0, 0);
+      doc.text("Tools:", margin + 2, y);
+      doc.setFont("helvetica", "normal");
+      doc.setTextColor(30, 30, 30);
+      const toolText = step.tools.join("  ·  ");
+      const toolLines = doc.splitTextToSize(toolText, cW - 20);
+      doc.text(toolLines[0], margin + 18, y);
+      y += LINE_H;
+      if (toolLines[1]) { check(LINE_H); doc.text(toolLines[1], margin + 18, y); y += LINE_H; }
+    }
 
     // Checkpoint
     if (step.checkpoint) {
-      check(8);
-      doc.setFontSize(8.5); doc.setFont("helvetica", "bold"); doc.setTextColor(0,0,0);
-      doc.text("✓ Checkpoint:", margin, y);
-      doc.setFont("helvetica", "italic"); doc.setTextColor(30,30,30);
-      const cl = doc.splitTextToSize(step.checkpoint, cW - 30);
-      doc.text(cl[0], margin + 28, y); y += 5.5;
+      check(LINE_H + 2);
+      doc.setFontSize(FONT_SMALL);
+      doc.setFont("helvetica", "bold");
+      doc.setTextColor(0, 0, 0);
+      doc.text("Checkpoint:", margin + 2, y);
+      doc.setFont("helvetica", "italic");
+      doc.setTextColor(30, 30, 30);
+      const cpLines = doc.splitTextToSize(step.checkpoint, cW - 30);
+      doc.text(cpLines[0], margin + 28, y);
+      y += LINE_H;
+      if (cpLines[1]) { check(LINE_H); doc.text(cpLines[1], margin + 28, y); y += LINE_H; }
     }
 
+    // Divider
+    y += 4;
+    check(4);
+    doc.setDrawColor(180, 180, 180);
+    doc.setLineWidth(0.2);
+    doc.line(margin, y, W - margin, y);
     y += 6;
-    check(4); doc.setDrawColor(0); doc.setLineWidth(0.2); doc.line(margin, y, W - margin, y); y += 6;
   });
 
   // Footer on all pages
   const total = doc.getNumberOfPages();
   for (let p = 1; p <= total; p++) {
     doc.setPage(p);
-    doc.setFillColor(240, 240, 240); doc.rect(0, 287, W, 10, "F");
-    doc.setFontSize(7.5); doc.setFont("helvetica", "normal"); doc.setTextColor(80, 80, 80);
+    doc.setFillColor(235, 235, 235);
+    doc.rect(0, 287, W, 10, "F");
+    doc.setFontSize(7.5);
+    doc.setFont("helvetica", "normal");
+    doc.setTextColor(80, 80, 80);
     doc.text("Zenith Apex Research Portfolio — Invention Build Guide — CONFIDENTIAL", margin, 293);
     doc.text(`Page ${p} of ${total}`, W - margin, 293, { align: "right" });
   }
