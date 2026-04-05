@@ -336,6 +336,22 @@ export default function InvestorPackage() {
       </div>
 
       <div className="flex-1 overflow-y-auto p-5 max-w-7xl mx-auto w-full">
+        {/* PDF Download Banner */}
+        <div className="bg-gradient-to-r from-gray-900 via-blue-950/30 to-gray-900 border border-blue-800/50 rounded-2xl p-5 mb-6">
+          <p className="text-white font-black text-base mb-1">📄 Generate Official Documents</p>
+          <p className="text-gray-400 text-xs mb-4">Download professionally formatted PDFs ready to send to investors</p>
+          <div className="flex flex-wrap gap-3">
+            <div className="flex flex-col gap-1.5">
+              <NdaPdfGenerator />
+              <p className="text-gray-600 text-xs">Mutual NDA with $2.5M liquidated damages clause, signature blocks & notary</p>
+            </div>
+            <div className="flex flex-col gap-1.5">
+              <DueDiligencePdfGenerator />
+              <p className="text-gray-600 text-xs">100+ page technical & financial portfolio — full platform deep-dive</p>
+            </div>
+          </div>
+        </div>
+
         {/* Valuation */}
         <ValuationTable />
 
