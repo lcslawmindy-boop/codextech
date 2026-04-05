@@ -45,6 +45,7 @@ import DarkTimeline from './pages/DarkTimeline';
 import InventionForge from './pages/InventionForge';
 import ProvisionalPatent from './pages/ProvisionalPatent';
 import ScalarPotentialMap from './pages/ScalarPotentialMap';
+import AdminVideos from './pages/AdminVideos';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -120,6 +121,7 @@ const AuthenticatedApp = () => {
         <Route path="/inventor-forge" element={<InventionForge />} />
         <Route path="/provisional-patent" element={<ProvisionalPatent />} />
         <Route path="/scalar-potential" element={<ScalarPotentialMap />} />
+        <Route path="/admin-videos" element={<AdminVideos />} />
         <Route path="/investor-portal" element={<InvestorPortal />} />
         <Route path="*" element={<PageNotFound />} />
       </Routes>

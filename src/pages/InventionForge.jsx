@@ -408,6 +408,7 @@ export default function InventionForge() {
           </div>
         </div>
         <div className="flex items-center gap-2">
+          <Link to="/admin-videos" className="px-3 py-1.5 rounded-lg bg-purple-900/50 border border-purple-700 text-purple-300 text-xs font-bold">🎬 Video Library</Link>
           <Link to="/provisional-patent" className="px-3 py-1.5 rounded-lg bg-yellow-900/50 border border-yellow-700 text-yellow-300 text-xs font-bold">📋 Draft Patent</Link>
           <Link to="/dark-timeline" className="px-3 py-1.5 rounded-lg bg-red-900/50 border border-red-700 text-red-300 text-xs font-bold">🌍 Dark Timeline</Link>
           <Link to="/business" className="px-3 py-1.5 rounded-lg bg-green-900/50 border border-green-700 text-green-300 text-xs font-bold">💼 Business Models</Link>

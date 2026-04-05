@@ -1,6 +1,34 @@
 import { useState, useEffect, useRef } from "react";
-import { X, Play, Pause, SkipForward, SkipBack, Loader2, ChevronRight, Clock, Wrench, Package, AlertTriangle } from "lucide-react";
+import { X, Play, Pause, SkipForward, SkipBack, Loader2, ChevronRight, Clock, Wrench, Package, AlertTriangle, Download } from "lucide-react";
 import { base44 } from "@/api/base44Client";
+import { jsPDF } from "jspdf";
+
+function downloadStepsAsPDF(invention, steps) {
+  const doc = new jsPDF({ orientation: "portrait", unit: "mm", format: "a4" });
+  const W = 210, margin = 15;
+  let y = margin;
+  doc.setFillColor(10, 10, 20);
+  doc.rect(0, 0, 210, 297, "F");
+  doc.setFontSize(22); doc.setFont("helvetica", "bold"); doc.setTextColor(255,255,255);
+  doc.text(invention.name || "Build Guide", margin, y + 10); y += 20;
+  doc.setFontSize(9); doc.setFont("helvetica", "normal"); doc.setTextColor(150,150,180);
+  doc.text(`${steps.length} Steps · Generated ${new Date().toLocaleDateString()}`, margin, y); y += 12;
+  steps.forEach((step, i) => {
+    if (y > 250) { doc.addPage(); doc.setFillColor(10,10,20); doc.rect(0,0,210,297,"F"); y = margin; }
+    doc.setFontSize(10); doc.setFont("helvetica", "bold"); doc.setTextColor(96,184,255);
+    doc.text(`Step ${i+1}: ${step.title || ""}`, margin, y); y += 6;
+    doc.setFontSize(8); doc.setFont("helvetica", "normal"); doc.setTextColor(200,200,210);
+    const desc = doc.splitTextToSize(step.description || "", W - margin*2);
+    desc.forEach(l => { doc.text(l, margin, y); y += 4; }); y += 2;
+    if (step.warning) { doc.setTextColor(248,113,113); doc.text(`⚠ ${step.warning}`, margin, y); y += 5; }
+    doc.setTextColor(130,130,160); doc.text("Materials: " + (step.materials||[]).join(", "), margin, y); y += 4;
+    doc.text("Tools: " + (step.tools||[]).join(", "), margin, y); y += 4;
+    doc.setTextColor(52,211,153); doc.text(`✓ ${step.checkpoint||""}`, margin, y); y += 7;
+    doc.setDrawColor(40,40,60); doc.setLineWidth(0.2); doc.line(margin, y, W-margin, y); y += 4;
+  });
+  const name = (invention.name||"build").toLowerCase().replace(/[^a-z0-9]/g,"-").slice(0,50);
+  doc.save(`${name}-build-guide.pdf`);
+}
 
 const STEP_DURATION = 8; // seconds per step
 
@@ -175,7 +203,16 @@ Return a JSON object with a "steps" array. Each step object:
       },
       model: "gpt_5"
     });
-    setSteps(result.steps || []);
+    const generatedSteps = result.steps || [];
+    setSteps(generatedSteps);
+    // Auto-save to database
+    base44.entities.BuildVideo.create({
+      invention_name: invention.name,
+      invention_category: invention.category || "",
+      invention_tagline: invention.tagline || "",
+      steps: generatedSteps,
+      step_count: generatedSteps.length,
+    });
     setLoading(false);
     setPlaying(true);
   };
@@ -232,9 +269,17 @@ Return a JSON object with a "steps" array. Each step object:
             <span className="text-gray-400 text-xs font-mono uppercase tracking-widest">Build Video</span>
             <span className="text-white font-black text-sm truncate max-w-xs">{invention.name}</span>
           </div>
-          <button onClick={onClose} className="text-gray-500 hover:text-white transition-colors p-1">
-            <X size={16} />
-          </button>
+          <div className="flex items-center gap-2">
+            {steps.length > 0 && (
+              <button onClick={() => downloadStepsAsPDF(invention, steps)}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-800 hover:bg-blue-700 text-white text-xs font-bold transition-colors">
+                <Download size={11} /> Download PDF
+              </button>
+            )}
+            <button onClick={onClose} className="text-gray-500 hover:text-white transition-colors p-1">
+              <X size={16} />
+            </button>
+          </div>
         </div>
 
         {loading ? (

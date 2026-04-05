@@ -1,0 +1,28 @@
+{
+  "name": "BuildVideo",
+  "type": "object",
+  "properties": {
+    "invention_name": {
+      "type": "string"
+    },
+    "invention_category": {
+      "type": "string"
+    },
+    "invention_tagline": {
+      "type": "string"
+    },
+    "steps": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "step_count": {
+      "type": "integer"
+    }
+  },
+  "required": [
+    "invention_name",
+    "steps"
+  ]
+}
