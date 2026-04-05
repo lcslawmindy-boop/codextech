@@ -53,7 +53,7 @@ export default function ConceptGraph() {
       <div className="flex flex-col border-b border-gray-800 flex-shrink-0">
         <div className="flex items-center justify-between px-6 py-3">
         <div>
-          <h1 className="text-white font-bold text-lg tracking-tight">Bearden Concept Network</h1>
+          <h1 className="text-white font-bold text-lg tracking-tight">Zenith Apex Advanced Research Portfolio Network</h1>
           <p className="text-gray-500 text-xs">Click any node to explore source fragments · Drag to rearrange · Scroll to zoom</p>
         </div>
         <div className="flex items-center gap-2">
