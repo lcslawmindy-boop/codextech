@@ -48,6 +48,7 @@ import ScalarPotentialMap from './pages/ScalarPotentialMap';
 import AdminVideos from './pages/AdminVideos';
 import OpportunityMonitor from './pages/OpportunityMonitor';
 import AdminDownloadCenter from './pages/AdminDownloadCenter';
+import InventionLibrary from './pages/InventionLibrary';
 import DownloadCenter from './pages/DownloadCenter';
 
 const AuthenticatedApp = () => {
@@ -127,6 +128,7 @@ const AuthenticatedApp = () => {
         <Route path="/admin-videos" element={<AdminVideos />} />
         <Route path="/opportunity-monitor" element={<OpportunityMonitor />} />
         <Route path="/admin-downloads" element={<AdminDownloadCenter />} />
+        <Route path="/invention-library" element={<InventionLibrary />} />
         <Route path="/download-center" element={<DownloadCenter />} />
         <Route path="/investor-portal" element={<InvestorPortal />} />
         <Route path="*" element={<PageNotFound />} />
