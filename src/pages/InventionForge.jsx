@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { ArrowLeft, Loader2, Sparkles, Download, DollarSign, Rocket, TrendingUp, Shield, CheckSquare, Square, FileDown, X } from "lucide-react";
+import { ArrowLeft, Loader2, Sparkles, Download, DollarSign, Rocket, TrendingUp, Shield, CheckSquare, Square, FileDown, X, Video } from "lucide-react";
+import InventionBuildVideo from "../components/InventionBuildVideo";
 import { base44 } from "@/api/base44Client";
 
 const SEED_DOMAINS = [
@@ -135,7 +136,7 @@ function ExportBar({ inventions, selected, onToggle, onSelectAll, onClear }) {
   );
 }
 
-function InventionCard({ inv, index, selected, onToggle }) {
+function InventionCard({ inv, index, selected, onToggle, onBuildVideo }) {
   const [tab, setTab] = useState("overview");
   const tabs = ["overview", "specs", "ip", "financials", "launch"];
 
@@ -171,8 +172,9 @@ function InventionCard({ inv, index, selected, onToggle }) {
         </div>
         </div>
         </div>
-        {/* Tabs */}
-        <div className="flex gap-1 mt-3 flex-wrap">
+        {/* Tabs + Build Video */}
+        <div className="flex items-center gap-2 mt-3 flex-wrap">
+          <div className="flex gap-1 flex-wrap flex-1">
           {tabs.map(t => (
             <button key={t} onClick={() => setTab(t)}
               className={`px-3 py-1 rounded-lg text-xs font-semibold capitalize transition-all ${tab === t ? "text-white" : "text-gray-500 hover:text-gray-300 bg-gray-800/50"}`}
@@ -180,6 +182,12 @@ function InventionCard({ inv, index, selected, onToggle }) {
               {t === "ip" ? "IP & Patents" : t === "financials" ? "📊 Financials" : t === "launch" ? "🚀 Launch Plan" : t}
             </button>
           ))}
+          </div>
+          <button onClick={onBuildVideo}
+            className="flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-bold border transition-all hover:opacity-90 flex-shrink-0"
+            style={{ borderColor: color + "66", backgroundColor: color + "11", color }}>
+            <Video size={11} /> Build Video
+          </button>
         </div>
       </div>
 
@@ -319,6 +327,7 @@ function InventionCard({ inv, index, selected, onToggle }) {
 }
 
 export default function InventionForge() {
+  const [buildVideoInvention, setBuildVideoInvention] = useState(null);
   const [selectedDomains, setSelectedDomains] = useState(["vacuum_energy", "bioelectromagnetics"]);
   const [selectedMarkets, setSelectedMarkets] = useState(["Medical / Health", "Energy / Utilities"]);
   const [inventionCount, setInventionCount] = useState(3);
@@ -511,10 +520,13 @@ export default function InventionForge() {
           />
           <div className="space-y-5 mt-4">
             {inventions.map((inv, i) => (
-              <InventionCard key={i} inv={inv} index={i} selected={selectedForExport.has(i)} onToggle={() => toggleExportSelection(i)} />
+              <InventionCard key={i} inv={inv} index={i} selected={selectedForExport.has(i)} onToggle={() => toggleExportSelection(i)} onBuildVideo={() => setBuildVideoInvention(inv)} />
             ))}
           </div>
 
+          {buildVideoInvention && (
+            <InventionBuildVideo invention={buildVideoInvention} onClose={() => setBuildVideoInvention(null)} />
+          )}
           {inventions.length > 0 && (
             <div className="mt-6 text-center text-gray-600 text-xs border-t border-gray-800 pt-4">
               {inventions.length} inventions generated · All IP valuations are estimates for pitch purposes · Consult a registered patent attorney before filing
