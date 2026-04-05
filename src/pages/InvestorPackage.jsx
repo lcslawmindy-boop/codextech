@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { ArrowLeft, Copy, Mail, CheckCircle2, ChevronDown, ChevronUp, DollarSign, Shield, Zap, BookOpen, FileText } from "lucide-react";
+import NdaPdfGenerator from "../components/NdaPdfGenerator";
+import DueDiligencePackage from "../components/DueDiligencePackage";
 import { BUYERS } from "../lib/buyerData";
 
 const VALUATION = [
@@ -323,6 +325,8 @@ export default function InvestorPackage() {
           </div>
         </div>
         <div className="flex items-center gap-2">
+          <NdaPdfGenerator />
+          <DueDiligencePackage />
           <button onClick={() => setShowLetter(s => !s)}
             className="flex items-center gap-2 px-4 py-2 rounded-xl bg-blue-900/40 hover:bg-blue-800/60 border border-blue-700 text-blue-300 text-xs font-bold transition-all">
             <FileText size={13} /> {showLetter ? "Hide" : "View"} Master Letter
