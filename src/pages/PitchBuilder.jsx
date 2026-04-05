@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { ArrowLeft, Sparkles, Download, ChevronRight, Check, Loader2, X } from "lucide-react";
+import { ArrowLeft, Sparkles, Download, ChevronRight, Check, Loader2, X, FileText, Presentation } from "lucide-react";
+import { jsPDF } from "jspdf";
 import { businessItems } from "../lib/businessItems";
 import { base44 } from "@/api/base44Client";
 import { nodes, links } from "../lib/beardenData";
@@ -145,14 +146,124 @@ function PitchDeck({ item, aiExpansion, loadingAI, onRequestAI }) {
   );
 }
 
+function generatePDF(item, aiExpansion) {
+  const doc = new jsPDF({ orientation: "portrait", unit: "mm", format: "a4" });
+  const W = 210, margin = 20, cW = W - margin * 2;
+  let y = 20;
+
+  const check = (n = 12) => { if (y + n > 282) { doc.addPage(); y = 20; } };
+
+  const band = (text, r, g, b) => {
+    check(16);
+    doc.setFillColor(r, g, b);
+    doc.rect(margin - 2, y - 4, cW + 4, 12, "F");
+    doc.setFontSize(9); doc.setFont("helvetica", "bold"); doc.setTextColor(255, 255, 255);
+    doc.text(text, margin, y + 4); y += 14;
+  };
+
+  const para = (text, color = [40, 40, 40]) => {
+    doc.setFontSize(9); doc.setFont("helvetica", "normal"); doc.setTextColor(...color);
+    const lines = doc.splitTextToSize(text || "", cW);
+    lines.forEach(l => { check(6); doc.text(l, margin, y); y += 5.5; });
+    y += 3;
+  };
+
+  // Cover
+  doc.setFillColor(10, 15, 40);
+  doc.rect(0, 0, W, 297, "F");
+  doc.setFontSize(9); doc.setFont("helvetica", "normal"); doc.setTextColor(160, 160, 200);
+  doc.text("ZENITH APEX RESEARCH DATABASE — PITCH DECK", W / 2, 30, { align: "center" });
+  doc.setFontSize(18); doc.setFont("helvetica", "bold"); doc.setTextColor(255, 255, 255);
+  const titleLines = doc.splitTextToSize(item.title, cW);
+  titleLines.forEach((l, i) => doc.text(l, W / 2, 50 + i * 10, { align: "center" }));
+  doc.setFontSize(10); doc.setFont("helvetica", "italic"); doc.setTextColor(180, 180, 220);
+  doc.text(`"${item.tagline}"`, W / 2, 50 + titleLines.length * 10 + 8, { align: "center" });
+  doc.setFontSize(9); doc.setFont("helvetica", "normal"); doc.setTextColor(100, 200, 130);
+  doc.text(item.price, W / 2, 50 + titleLines.length * 10 + 18, { align: "center" });
+  doc.setFontSize(8); doc.setTextColor(120, 120, 160);
+  doc.text(`Generated: ${new Date().toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}`, W / 2, 50 + titleLines.length * 10 + 26, { align: "center" });
+
+  doc.addPage();
+  doc.setFillColor(255, 255, 255); doc.rect(0, 0, W, 297, "F");
+  y = 20;
+
+  band("SLIDE 1 — THE PROBLEM", 200, 50, 50);
+  para(item.problem);
+  para("Standard EM limitation: Present electromagnetic theory is only a special case of a more fundamental electromagnetics — blind to the scalar phi-field by design.", [120, 60, 60]);
+  y += 4;
+
+  band("SLIDE 2 — THE BEARDEN SOLUTION", 40, 90, 200);
+  para(item.beardenSolution);
+  y += 4;
+
+  band("SLIDE 3 — MARKET POTENTIAL", 30, 150, 80);
+  para(item.market);
+  para(`Entry Price: ${item.price}  |  Target: ${item.audience}  |  Category: ${item.category}`, [60, 120, 60]);
+  y += 4;
+
+  band("SLIDE 4 — TECHNICAL FEASIBILITY", 120, 60, 180);
+  para(item.feasibility);
+  para(`Source: ${item.source}`, [100, 80, 150]);
+  y += 4;
+
+  band("SLIDE 5 — REVENUE STREAMS", 180, 130, 30);
+  [
+    `Direct Sales: ${item.price} entry price`,
+    "Engineering Plans PDF: 80% margin digital product",
+    "Course / Training Bundle: Scalar EM upsell path",
+    "Research Licensing: University labs, defense contractors, biotech",
+    "Consulting / Custom Builds: $250+/hr premium service",
+    "DoD SBIR/STTR grants & alternative energy VC funding",
+  ].forEach(r => { check(6); para(`· ${r}`); });
+  y += 4;
+
+  if (aiExpansion) {
+    band("SLIDE 6 — AI EXECUTIVE SUMMARY", 180, 40, 100);
+    para(aiExpansion);
+  }
+
+  // Footer on all pages
+  const total = doc.getNumberOfPages();
+  for (let p = 1; p <= total; p++) {
+    doc.setPage(p);
+    doc.setFontSize(7); doc.setFont("helvetica", "normal"); doc.setTextColor(150, 150, 150);
+    doc.text("Zenith Apex Research Database — CONFIDENTIAL", margin, 291);
+    doc.text(`Page ${p} of ${total}`, W - margin, 291, { align: "right" });
+  }
+
+  doc.save(`ZenithApex_PitchDeck_${item.title.replace(/[^a-z0-9]/gi, "_").slice(0, 40)}.pdf`);
+}
+
 export default function PitchBuilder() {
   const [selectedItem, setSelectedItem] = useState(null);
   const [aiExpansion, setAiExpansion] = useState(null);
   const [loadingAI, setLoadingAI] = useState(false);
+  const [exportingSlides, setExportingSlides] = useState(false);
+  const [slidesUrl, setSlidesUrl] = useState(null);
 
   const handleSelect = (item) => {
     setSelectedItem(item);
     setAiExpansion(null);
+  };
+
+  const handleExportSlides = async () => {
+    setExportingSlides(true);
+    setSlidesUrl(null);
+    const res = await base44.functions.invoke("exportToGoogleSlides", {
+      title: selectedItem.title,
+      tagline: selectedItem.tagline,
+      price: selectedItem.price,
+      audience: selectedItem.audience,
+      category: selectedItem.category,
+      problem: selectedItem.problem,
+      beardenSolution: selectedItem.beardenSolution,
+      market: selectedItem.market,
+      feasibility: selectedItem.feasibility,
+      source: selectedItem.source,
+      aiExpansion: aiExpansion || "",
+    });
+    if (res.data?.url) setSlidesUrl(res.data.url);
+    setExportingSlides(false);
   };
 
   const handleAI = async () => {
@@ -234,14 +345,33 @@ Be specific, confident, and grounded in the documented physics. Avoid hype langu
             </div>
           ) : (
             <div className="max-w-2xl mx-auto">
-              <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center justify-between mb-4 flex-wrap gap-2">
                 <p className="text-gray-500 text-xs uppercase tracking-widest">Pitch Deck Outline</p>
-                <button
-                  onClick={() => setSelectedItem(null)}
-                  className="text-gray-600 hover:text-gray-400"
-                >
-                  <X size={16} />
-                </button>
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => generatePDF(selectedItem, aiExpansion)}
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-900/40 hover:bg-blue-800/60 border border-blue-700 text-blue-300 text-xs font-bold transition-all"
+                  >
+                    <FileText size={12} /> Download PDF
+                  </button>
+                  <button
+                    onClick={handleExportSlides}
+                    disabled={exportingSlides}
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-green-900/40 hover:bg-green-800/60 border border-green-700 text-green-300 text-xs font-bold transition-all disabled:opacity-60"
+                  >
+                    {exportingSlides ? <Loader2 size={12} className="animate-spin" /> : <Download size={12} />}
+                    {exportingSlides ? "Creating…" : "Google Slides"}
+                  </button>
+                  {slidesUrl && (
+                    <a href={slidesUrl} target="_blank" rel="noopener noreferrer"
+                      className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-yellow-900/40 hover:bg-yellow-800/60 border border-yellow-700 text-yellow-300 text-xs font-bold transition-all">
+                      Open Slides ↗
+                    </a>
+                  )}
+                  <button onClick={() => { setSelectedItem(null); setSlidesUrl(null); }} className="text-gray-600 hover:text-gray-400 ml-1">
+                    <X size={16} />
+                  </button>
+                </div>
               </div>
               <PitchDeck
                 item={selectedItem}
