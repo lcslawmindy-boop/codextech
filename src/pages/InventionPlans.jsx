@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { ArrowLeft, Download, ChevronDown, ChevronUp, AlertTriangle, CheckCircle2, Package, Loader2, FileText, Lock, ShoppingCart, Lightbulb, Eye } from "lucide-react";
+import { ArrowLeft, Download, ChevronDown, ChevronUp, AlertTriangle, CheckCircle2, Package, Loader2, FileText, Lock, ShoppingCart, Lightbulb, Eye, Film } from "lucide-react";
+import InventionBuildVideo from "../components/InventionBuildVideo";
 import { base44 } from "@/api/base44Client";
 import { inventionVisuals } from "../lib/inventionVisuals";
 import { businessItems } from "../lib/businessItems";
@@ -390,6 +391,7 @@ function PaywallGate({ invention }) {
 
 export default function InventionPlans() {
   const [selected, setSelected] = useState(inventions[0]);
+  const [showBuildVideo, setShowBuildVideo] = useState(false);
   const [showBom, setShowBom] = useState(true);
   const [showSteps, setShowSteps] = useState(true);
   const [generating, setGenerating] = useState(false);
@@ -442,6 +444,13 @@ export default function InventionPlans() {
             <Package size={12} /> {inventions.length} inventions
           </span>
           <button
+            onClick={() => setShowBuildVideo(true)}
+            disabled={!selected}
+            className="flex items-center gap-2 px-4 py-2 rounded-lg bg-purple-700 hover:bg-purple-600 disabled:opacity-50 text-white text-sm font-semibold transition-all"
+          >
+            <Film size={14} /> 🎬 Build Video
+          </button>
+          <button
             onClick={handleDownload}
             disabled={!data || generating}
             className="flex items-center gap-2 px-4 py-2 rounded-lg bg-red-700 hover:bg-red-600 disabled:opacity-50 text-white text-sm font-semibold transition-all"
@@ -452,181 +461,23 @@ export default function InventionPlans() {
         </div>
       </div>
 
-      <div className="flex-1 flex overflow-hidden">
-        {/* Sidebar */}
-        <div className="w-72 flex-shrink-0 border-r border-gray-800 overflow-y-auto bg-gray-950">
-          {inventions.map((inv, i) => {
-            const isSelected = selected?.title === inv.title;
-            const hasData = !!inventionSteps[inv.title];
-            return (
-              <button
-                key={i}
-                onClick={() => setSelected(inv)}
-                className={`w-full text-left px-4 py-3 border-b border-gray-800/50 transition-all flex items-start gap-3 ${
-                  isSelected ? "bg-gray-800 border-l-2" : "hover:bg-gray-900"
-                }`}
-                style={isSelected ? { borderLeftColor: inv.color } : {}}
-              >
-                <span className="text-xl flex-shrink-0 mt-0.5">{inv.icon}</span>
-                <div className="min-w-0">
-                  <p className={`text-sm font-semibold leading-snug ${isSelected ? "text-white" : "text-gray-300"}`}>
-                    {inv.title}
-                  </p>
-                  <p className="text-xs mt-0.5" style={{ color: inv.color }}>{inv.price}</p>
-                  {hasData && (
-                    <span className="text-xs text-green-600 flex items-center gap-1 mt-0.5">
-                      <CheckCircle2 size={10} /> Plans available
-                    </span>
-                  )}
-                </div>
-              </button>
-            );
-          })}
-        </div>
-
-        {/* Main content */}
-        <div className="flex-1 overflow-y-auto flex flex-col">
-          {checkingPurchase ? (
-            <div className="flex items-center justify-center flex-1">
-              <Loader2 size={24} className="animate-spin text-gray-600" />
-            </div>
-          ) : !hasPurchased ? (
-            <PaywallGate invention={selected} />
-          ) : selected && data ? (
-            <div className="p-6 max-w-5xl">
-              {/* Invention header */}
-              <div className="flex items-start gap-4 mb-6">
-                <div className="w-12 h-12 rounded-xl flex items-center justify-center text-2xl flex-shrink-0"
-                  style={{ backgroundColor: selected.color + "20" }}>
-                  {selected.icon}
-                </div>
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2 flex-wrap mb-1">
-                    <span className="text-xs px-2 py-0.5 rounded font-semibold uppercase tracking-wider"
-                      style={{ backgroundColor: selected.color + "20", color: selected.color }}>
-                      {selected.category}
-                    </span>
-                    <span className="text-green-400 font-bold text-sm">{selected.price}</span>
-                  </div>
-                  <h2 className="text-white font-bold text-2xl leading-tight">{selected.title}</h2>
-                  <p className="text-gray-400 text-sm mt-1 italic">"{selected.tagline}"</p>
-                </div>
-              </div>
-
-              {/* Visual Explainer */}
-              <VisualExplainer visual={visual} />
-
-              {/* Diagram + overview */}
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-                <div className="bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden aspect-[4/3]">
-                  <InventionDiagram type={data.diagramType} color={selected.color} />
-                </div>
-                <div className="space-y-4">
-                  <div>
-                    <h3 className="text-gray-400 text-xs uppercase tracking-widest font-semibold mb-2">Technical Overview</h3>
-                    <p className="text-gray-300 text-sm leading-relaxed">{data.overview}</p>
-                  </div>
-                  {selected.problem && (
-                    <div className="bg-red-950/30 border border-red-900/40 rounded-xl p-4">
-                      <h4 className="text-red-400 text-xs font-bold uppercase tracking-wider mb-1">The Problem</h4>
-                      <p className="text-gray-300 text-xs leading-relaxed">{selected.problem}</p>
-                    </div>
-                  )}
-                  {selected.feasibility && (
-                    <div className="bg-green-950/30 border border-green-900/40 rounded-xl p-4">
-                      <h4 className="text-green-400 text-xs font-bold uppercase tracking-wider mb-1">Feasibility</h4>
-                      <p className="text-gray-300 text-xs leading-relaxed">{selected.feasibility}</p>
-                    </div>
-                  )}
-                </div>
-              </div>
-
-              {/* BOM */}
-              <div className="bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden mb-6">
-                <button
-                  onClick={() => setShowBom(s => !s)}
-                  className="w-full flex items-center justify-between px-5 py-4 hover:bg-gray-800/50 transition-colors"
-                >
-                  <div className="flex items-center gap-3">
-                    <FileText size={15} className="text-cyan-400" />
-                    <h3 className="text-white font-bold text-sm">Bill of Materials</h3>
-                    <span className="text-xs text-gray-600 bg-gray-800 px-2 py-0.5 rounded-full">{data.bom.length} components</span>
-                  </div>
-                  {showBom ? <ChevronUp size={15} className="text-gray-500" /> : <ChevronDown size={15} className="text-gray-500" />}
-                </button>
-                {showBom && (
-                  <div className="px-5 pb-5">
-                    <BomTable bom={data.bom} />
-                  </div>
-                )}
-              </div>
-
-              {/* Steps */}
-              <div className="bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden mb-6">
-                <button
-                  onClick={() => setShowSteps(s => !s)}
-                  className="w-full flex items-center justify-between px-5 py-4 hover:bg-gray-800/50 transition-colors"
-                >
-                  <div className="flex items-center gap-3">
-                    <CheckCircle2 size={15} className="text-green-400" />
-                    <h3 className="text-white font-bold text-sm">Step-by-Step Instructions</h3>
-                    <span className="text-xs text-gray-600 bg-gray-800 px-2 py-0.5 rounded-full">{data.steps.length} steps</span>
-                  </div>
-                  {showSteps ? <ChevronUp size={15} className="text-gray-500" /> : <ChevronDown size={15} className="text-gray-500" />}
-                </button>
-                {showSteps && (
-                  <div className="px-5 pb-5 space-y-1">
-                    {data.steps.map((step, i) => (
-                      <StepCard key={i} step={step} index={i} />
-                    ))}
-                  </div>
-                )}
-              </div>
-
-              {/* Notes + software */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                <div className="bg-gray-900 border border-gray-800 rounded-xl p-4">
-                  <h4 className="text-gray-400 text-xs font-bold uppercase tracking-wider mb-2">Technical Notes</h4>
-                  <p className="text-gray-400 text-xs leading-relaxed">{data.notes}</p>
-                </div>
-                <div className="bg-gray-900 border border-gray-800 rounded-xl p-4">
-                  <h4 className="text-cyan-500 text-xs font-bold uppercase tracking-wider mb-2">Software & Firmware Included in PDF</h4>
-                  <p className="text-gray-400 text-xs leading-relaxed">{data.softwareNotes}</p>
-                </div>
-              </div>
-
-              {/* Source */}
-              <div className="text-xs text-gray-700 border-t border-gray-800 pt-4">
-                <span className="text-gray-500 font-semibold">Source: </span>{selected.source}
-              </div>
-
-              {/* Bottom CTA */}
-              <div className="mt-6 flex items-center gap-4">
-                <button
-                  onClick={handleDownload}
-                  disabled={generating}
-                  className="flex items-center gap-2 px-6 py-3 rounded-xl font-bold text-white text-sm transition-all hover:opacity-90 active:scale-95 disabled:opacity-60"
-                  style={{ backgroundColor: selected.color }}
-                >
-                  {generating ? <Loader2 size={15} className="animate-spin" /> : <Download size={15} />}
-                  {generating ? "Generating…" : `Download Complete Plans PDF`}
-                </button>
-                <p className="text-xs text-gray-600">Includes full BOM, schematics description, firmware notes, and step-by-step instructions.</p>
-              </div>
-            </div>
-          ) : selected ? (
-            <div className="flex flex-col items-center justify-center h-full text-center p-12">
-              <span className="text-5xl mb-4">{selected.icon}</span>
-              <h3 className="text-white font-bold text-xl mb-2">{selected.title}</h3>
-              <p className="text-gray-500 text-sm max-w-md">Detailed build plans for this invention are coming soon. Check back after the next update.</p>
-            </div>
-          ) : (
-            <div className="flex items-center justify-center h-full">
-              <p className="text-gray-600">Select an invention to view plans</p>
-            </div>
-          )}
-        </div>
-      </div>
+      {showBuildVideo && selected && (
+        <InventionBuildVideo
+          invention={{
+            name: selected.title,
+            tagline: selected.tagline,
+            category: selected.category,
+            steps: inventionSteps[selected.title]?.steps?.map(s => ({
+              title: s.title,
+              description: s.detail,
+              materials: [],
+              tools: [],
+              warning: s.warning || null,
+            })) || [],
+          }}
+          onClose={() => setShowBuildVideo(false)}
+        />
+      )}
     </div>
   );
 }
