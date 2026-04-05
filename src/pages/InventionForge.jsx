@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { ArrowLeft, Loader2, Sparkles, Download, DollarSign, Rocket, TrendingUp, Shield, CheckSquare, Square, FileDown, X, Film } from "lucide-react";
 import InventionBuildVideo from "../components/InventionBuildVideo";
+import PitchDeckExporter from "../components/PitchDeckExporter";
 import { base44 } from "@/api/base44Client";
 
 const SEED_DOMAINS = [
@@ -328,6 +329,7 @@ function InventionCard({ inv, index, selected, onToggle, onBuildVideo }) {
 
 export default function InventionForge() {
   const [buildVideoInvention, setBuildVideoInvention] = useState(null);
+  const [showPitchDeck, setShowPitchDeck] = useState(false);
   const [selectedDomains, setSelectedDomains] = useState(["vacuum_energy", "bioelectromagnetics"]);
   const [selectedMarkets, setSelectedMarkets] = useState(["Medical / Health", "Energy / Utilities"]);
   const [inventionCount, setInventionCount] = useState(3);
@@ -408,6 +410,12 @@ export default function InventionForge() {
           </div>
         </div>
         <div className="flex items-center gap-2">
+          {inventions.length > 0 && (
+            <button onClick={() => setShowPitchDeck(true)}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-gradient-to-r from-blue-700 to-purple-700 hover:from-blue-600 hover:to-purple-600 text-white text-xs font-black transition-all shadow-[0_0_15px_rgba(80,140,255,0.3)]">
+              📊 Export VC Deck
+            </button>
+          )}
           <Link to="/admin-videos" className="px-3 py-1.5 rounded-lg bg-purple-900/50 border border-purple-700 text-purple-300 text-xs font-bold">🎬 Video Library</Link>
           <Link to="/provisional-patent" className="px-3 py-1.5 rounded-lg bg-yellow-900/50 border border-yellow-700 text-yellow-300 text-xs font-bold">📋 Draft Patent</Link>
           <Link to="/dark-timeline" className="px-3 py-1.5 rounded-lg bg-red-900/50 border border-red-700 text-red-300 text-xs font-bold">🌍 Dark Timeline</Link>
@@ -527,6 +535,9 @@ export default function InventionForge() {
 
           {buildVideoInvention && (
             <InventionBuildVideo invention={buildVideoInvention} onClose={() => setBuildVideoInvention(null)} />
+          )}
+          {showPitchDeck && inventions.length > 0 && (
+            <PitchDeckExporter inventions={inventions} onClose={() => setShowPitchDeck(false)} />
           )}
           {inventions.length > 0 && (
             <div className="mt-6 text-center text-gray-600 text-xs border-t border-gray-800 pt-4">
