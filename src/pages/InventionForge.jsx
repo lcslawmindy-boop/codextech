@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { ArrowLeft, Loader2, Sparkles, Download, DollarSign, Rocket, TrendingUp, Shield, CheckSquare, Square, FileDown, X, Film } from "lucide-react";
 import InventionBuildVideo from "../components/InventionBuildVideo";
 import PitchDeckExporter from "../components/PitchDeckExporter";
+import InventionPatentDrafter from "../components/InventionPatentDrafter";
 import { base44 } from "@/api/base44Client";
 
 const SEED_DOMAINS = [
@@ -137,7 +138,7 @@ function ExportBar({ inventions, selected, onToggle, onSelectAll, onClear }) {
   );
 }
 
-function InventionCard({ inv, index, selected, onToggle, onBuildVideo }) {
+function InventionCard({ inv, index, selected, onToggle, onBuildVideo, onDraftPatent }) {
   const [tab, setTab] = useState("overview");
   const tabs = ["overview", "specs", "ip", "financials", "launch"];
 
@@ -188,6 +189,10 @@ function InventionCard({ inv, index, selected, onToggle, onBuildVideo }) {
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all hover:opacity-90 flex-shrink-0 text-white"
             style={{ backgroundColor: color }}>
             <Film size={11} /> 🎬 Build Video
+          </button>
+          <button onClick={onDraftPatent}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all hover:opacity-90 flex-shrink-0 bg-yellow-700 hover:bg-yellow-600 text-white">
+            📋 Draft Patent
           </button>
         </div>
       </div>
@@ -330,6 +335,7 @@ function InventionCard({ inv, index, selected, onToggle, onBuildVideo }) {
 export default function InventionForge() {
   const [buildVideoInvention, setBuildVideoInvention] = useState(null);
   const [showPitchDeck, setShowPitchDeck] = useState(false);
+  const [patentInvention, setPatentInvention] = useState(null);
   const [selectedDomains, setSelectedDomains] = useState(["vacuum_energy", "bioelectromagnetics"]);
   const [selectedMarkets, setSelectedMarkets] = useState(["Medical / Health", "Energy / Utilities"]);
   const [inventionCount, setInventionCount] = useState(3);
@@ -529,7 +535,7 @@ export default function InventionForge() {
           />
           <div className="space-y-5 mt-4">
             {inventions.map((inv, i) => (
-              <InventionCard key={i} inv={inv} index={i} selected={selectedForExport.has(i)} onToggle={() => toggleExportSelection(i)} onBuildVideo={() => setBuildVideoInvention(inv)} />
+              <InventionCard key={i} inv={inv} index={i} selected={selectedForExport.has(i)} onToggle={() => toggleExportSelection(i)} onBuildVideo={() => setBuildVideoInvention(inv)} onDraftPatent={() => setPatentInvention(inv)} />
             ))}
           </div>
 
@@ -538,6 +544,9 @@ export default function InventionForge() {
           )}
           {showPitchDeck && inventions.length > 0 && (
             <PitchDeckExporter inventions={inventions} onClose={() => setShowPitchDeck(false)} />
+          )}
+          {patentInvention && (
+            <InventionPatentDrafter invention={patentInvention} onClose={() => setPatentInvention(null)} />
           )}
           {inventions.length > 0 && (
             <div className="mt-6 text-center text-gray-600 text-xs border-t border-gray-800 pt-4">
