@@ -1,0 +1,51 @@
+{
+  "name": "OpportunitySubscription",
+  "type": "object",
+  "properties": {
+    "user_email": {
+      "type": "string"
+    },
+    "invention_names": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "technology_domains": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "alert_types": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "min_impact_level": {
+      "type": "string",
+      "enum": [
+        "low",
+        "medium",
+        "high",
+        "critical"
+      ],
+      "default": "medium"
+    },
+    "email_alerts": {
+      "type": "boolean",
+      "default": true
+    },
+    "is_active": {
+      "type": "boolean",
+      "default": true
+    },
+    "last_scan": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "user_email"
+  ]
+}

@@ -46,6 +46,7 @@ import InventionForge from './pages/InventionForge';
 import ProvisionalPatent from './pages/ProvisionalPatent';
 import ScalarPotentialMap from './pages/ScalarPotentialMap';
 import AdminVideos from './pages/AdminVideos';
+import OpportunityMonitor from './pages/OpportunityMonitor';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -122,6 +123,7 @@ const AuthenticatedApp = () => {
         <Route path="/provisional-patent" element={<ProvisionalPatent />} />
         <Route path="/scalar-potential" element={<ScalarPotentialMap />} />
         <Route path="/admin-videos" element={<AdminVideos />} />
+        <Route path="/opportunity-monitor" element={<OpportunityMonitor />} />
         <Route path="/investor-portal" element={<InvestorPortal />} />
         <Route path="*" element={<PageNotFound />} />
       </Routes>

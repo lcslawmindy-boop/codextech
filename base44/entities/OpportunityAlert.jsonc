@@ -1,0 +1,65 @@
+{
+  "name": "OpportunityAlert",
+  "type": "object",
+  "properties": {
+    "user_email": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "Market Trend",
+        "Prior Art Update",
+        "Patent Filing",
+        "Competitor Activity",
+        "Regulatory Change"
+      ]
+    },
+    "impact_level": {
+      "type": "string",
+      "enum": [
+        "critical",
+        "high",
+        "medium",
+        "low"
+      ],
+      "default": "medium"
+    },
+    "invention_name": {
+      "type": "string"
+    },
+    "summary": {
+      "type": "string"
+    },
+    "recommended_action": {
+      "type": "string"
+    },
+    "source_name": {
+      "type": "string"
+    },
+    "source_url": {
+      "type": "string"
+    },
+    "email_sent": {
+      "type": "boolean",
+      "default": false
+    },
+    "read": {
+      "type": "boolean",
+      "default": false
+    },
+    "dismissed": {
+      "type": "boolean",
+      "default": false
+    }
+  },
+  "required": [
+    "user_email",
+    "title",
+    "type",
+    "impact_level"
+  ]
+}
