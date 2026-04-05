@@ -102,6 +102,78 @@ const INVENTIONS = [
     market: 9300, tam_desc: "Defense electronics sensing",
     novelty: "very_high", prior_art_risk: "low",
   },
+  {
+    id: "open_generator",
+    title: "Open-System Magnetic Generator (Kromrey / Gray Architecture)",
+    symbol: "OSG-009",
+    category: "Vacuum Energy Extraction",
+    problem: "No modern commercial implementation of the Kromrey G-field generator or Edwin Gray pulsed capacitor discharge engine (US Patent #3,890,548) exists for systematic COP measurement and optimization.",
+    solution: "Rotating 8-pole N52 neodymium rotor with 12 bifilar-wound Kromrey-configuration stator coils and a pulsed capacitor nanosecond-discharge output circuit. Open-system coupling to subquantic G-field enables documented >100% COP above threshold RPM per Schaffranke's 1982 survey.",
+    components: ["8-pole N52 neodymium arc magnet rotor (balanced G1.0)", "12 Kromrey bifilar stator coils (400T each, ±2%)", "200 µF / 450V polypropylene capacitor discharge bank", "Tungsten spark gap firing circuit", "24V 200W BLDC drive motor + VESC 4.12 controller", "Bidirectional power meters (input + output)"],
+    claims_seed: ["rotating open-system electromagnetic generator", "Kromrey bifilar stator G-field coupling configuration", "pulsed capacitor nanosecond discharge cold electricity circuit", "subquantic field energy extraction mechanism"],
+    market: 12000, tam_desc: "Alternative energy generation market",
+    novelty: "very_high", prior_art_risk: "low",
+  },
+  {
+    id: "fireflies_detector",
+    title: "Quantum Potential EMI Detector (Fireflies Sensor)",
+    symbol: "QPD-010",
+    category: "Scalar EM Sensing",
+    problem: "No commercial instrument detects non-Gaussian scalar EM burst signatures ('fireflies effect') described in Gravitobiology Fig. 14 — invisible to standard spectrum analyzers.",
+    solution: "Matched quartz crystal array with coherent averaging and real-time kurtosis-based burst detection firmware on Red Pitaya STEMlab 125-14 (125 MSPS, 14-bit). Detects quantum potential EM interference via 4th statistical moment analysis where standard instruments show nothing.",
+    components: ["4× frequency-matched 10 MHz quartz crystals (within 5 ppm)", "Mini-Circuits ZX60 low-noise amplifier (NF 0.4 dB)", "Red Pitaya STEMlab 125-14 ADC (125 MSPS)", "FPGA kurtosis burst detector", "GPS timestamping module (u-blox NEO-6M)", "Faraday cage enclosure with BNC feedthrough"],
+    claims_seed: ["matched crystal array scalar EM burst detector", "kurtosis non-Gaussian burst detection algorithm", "quantum potential EM interference detection system", "coherent crystal array noise reduction method"],
+    market: 850, tam_desc: "Scientific instrumentation / defense sensing",
+    novelty: "very_high", prior_art_risk: "low",
+  },
+  {
+    id: "elf_lock_detector",
+    title: "ELF Carrier Lock Detection System (Psychotronic Detector)",
+    symbol: "ELD-011",
+    category: "Scalar EM Sensing",
+    problem: "No commercial instrument can detect phase-locked ELF modulation sidebands across multiple HF carriers — the signature of documented ELF brain-entrainment EM architectures.",
+    solution: "Dual GPS-disciplined RTL-SDR receiver array computing cross-carrier phase coherence index (CCPCI) using cross-spectral density analysis across 5–30 MHz. Detects simultaneous 10 Hz ELF sidebands on multiple carriers with 1 part in 10¹¹ frequency accuracy.",
+    components: ["2× RTL-SDR v3 TCXO-stabilized receivers", "Leo Bodnar GPS-disciplined oscillator (10¹¹ accuracy)", "Ham-It-Up Plus HF upconverter (0.1–60 MHz)", "Active HF antenna (MiniWhip / ALA1530S+)", "GNU Radio phase coherence detection flowgraph", "Raspberry Pi 4B real-time analysis platform"],
+    claims_seed: ["cross-carrier phase coherence ELF detection system", "GPS-disciplined dual SDR coherent phase measurement", "ELF modulation sideband cross-spectral detector", "Woodpecker pulse repetition interval analyzer"],
+    market: 4200, tam_desc: "SIGINT / electronic intelligence",
+    novelty: "very_high", prior_art_risk: "low",
+  },
+  {
+    id: "phi_gradient_sensor",
+    title: "Phi-River Gradient Sensor (∇φ Detector)",
+    symbol: "PGS-012",
+    category: "Scalar EM Sensing",
+    problem: "No instrument can measure the gradient-phi (∇φ) field distinct from the E-field — the phi-river virtual particle flux invisible to conventional voltmeters and standard field meters.",
+    solution: "Differential Hall-effect bridge using two matched shielded toroidal phi-source coils and a 120 dB CMRR instrumentation amplifier with 24-bit ADC. Measures gradient-phi where E=0, demonstrating the Aharonov-Bohm scalar potential in a precision calibrated instrument.",
+    components: ["2× matched shielded toroidal phi-source coils (0.1% inductance)", "Honeywell SS49E matched Hall sensor pair", "INA128 instrumentation amplifier (120 dB CMRR)", "ADS1256 24-bit ADC (30 kSPS)", "REF6025 precision 2.5V voltage reference (3 ppm/°C)", "NTC thermistor temperature compensation circuit"],
+    claims_seed: ["differential Hall bridge scalar potential gradient sensor", "toroidal coil phi-source reference pair instrument", "gradient-phi field measurement system distinct from E-field", "Aharonov-Bohm scalar potential calibrated detector"],
+    market: 620, tam_desc: "Advanced physics instrumentation",
+    novelty: "very_high", prior_art_risk: "low",
+  },
+  {
+    id: "sky_signature_ai",
+    title: "Atmospheric Scalar EM Signature Recognition System (AI Edition)",
+    symbol: "ASR-013",
+    category: "Scalar EM Sensing",
+    problem: "No automated system exists to detect and classify scalar EM atmospheric interference signatures (radial spokes, hole-punch clouds, rectangular grid cirrus) in continuous sky imagery.",
+    solution: "All-sky 180° fisheye camera station with GPS timestamping feeding a fine-tuned EfficientNet-B4 vision transformer AI classifier trained on Bearden-documented atmospheric formation photographs. Real-time 4-class classification with >85% validation accuracy on ONNX Runtime ARM inference.",
+    components: ["Raspberry Pi HQ Camera + 180° fisheye lens", "EfficientNet-B4 fine-tuned vision transformer (ONNX)", "GPS module u-blox NEO-M8N (±2m, UTC timestamped)", "IP67 weatherproof dome enclosure with defogging heater", "BME280 humidity/temperature sensor", "Flask web dashboard with Leaflet.js event mapping"],
+    claims_seed: ["AI scalar EM atmospheric signature classification system", "all-sky camera scalar cloud formation detector", "machine learning sky morphology anomaly classifier", "GPS-timestamped atmospheric EM event correlated detector"],
+    market: 1800, tam_desc: "Environmental monitoring / atmospheric SIGINT",
+    novelty: "very_high", prior_art_risk: "low",
+  },
+  {
+    id: "woodpecker_detector",
+    title: "Woodpecker Grid Standing Wave Detector (HF Scalar Signature Receiver)",
+    symbol: "WGD-014",
+    category: "Scalar EM Sensing",
+    problem: "No purpose-built instrument exists to detect and analyze Soviet Woodpecker-style 10 Hz pulse modulation signatures across the HF band with audio output and direction-finding capability.",
+    solution: "RTL-SDR receiver with HF upconverter running GNU Radio pulse-repetition-interval (PRI) detector, real-time 10 Hz sideband analysis across 5–30 MHz, auditory Woodpecker signal output, and optional dual magnetic loop direction-finding add-on.",
+    components: ["RTL-SDR v3 TCXO receiver + Ham-It-Up Plus HF upconverter", "20m random wire antenna + 9:1 unun transformer", "GNU Radio PRI detector flowgraph (woodpecker_detector.grc)", "Raspberry Pi 4B with 7-inch touchscreen dashboard", "PAM8403 audio amplifier + 3-inch speaker", "Dual magnetic loop direction-finding antenna (optional)"],
+    claims_seed: ["HF pulse repetition interval detection system", "Woodpecker 10 Hz ELF modulation sideband detector", "SDR-based ELF carrier lock monitoring system", "HF scalar EM signature audio output receiver"],
+    market: 3200, tam_desc: "SIGINT / amateur radio intelligence",
+    novelty: "very_high", prior_art_risk: "low",
+  },
 ];
 
 const NOVELTY_SCORES = { very_high: 95, high: 82, medium: 65, low: 40 };
@@ -385,7 +457,7 @@ Use formal patent legal language throughout. Be highly technical and specific. R
             <div className="flex flex-col items-center justify-center h-full text-center py-24">
               <FileText size={48} className="text-gray-700 mb-4" />
               <h2 className="text-white font-bold text-xl mb-2">Select an Invention Blueprint</h2>
-              <p className="text-gray-500 text-sm max-w-md">Choose one of the 8 Bearden invention blueprints from the left panel to begin drafting formal patent claims and calculating IP valuation.</p>
+              <p className="text-gray-500 text-sm max-w-md">Choose one of the 14 Bearden invention blueprints from the left panel to begin drafting formal patent claims and calculating IP valuation.</p>
             </div>
           )}
 
