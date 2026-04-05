@@ -1,16 +1,16 @@
 import { useState } from "react";
 import { jsPDF } from "jspdf";
 import { FileText, Loader2, Download } from "lucide-react";
-import { THEME, drawLogo, drawPageHeader, drawFooter } from "../lib/zenithPdfTheme";
 
 function generateNDA(recipientName, recipientOrg, recipientTitle) {
   const doc = new jsPDF({ orientation: "portrait", unit: "mm", format: "a4" });
-  const { margin, pageW, gold, goldLight, white, silver, muted, dimmed, pageBg, cardBg, accentBg } = THEME;
+  const margin = 20;
+  const pageW = 210;
   let y = 0;
   let pageNum = 1;
 
   const bg = () => {
-    doc.setFillColor(...pageBg);
+    doc.setFillColor(255, 255, 255);
     doc.rect(0, 0, pageW, 297, 'F');
   };
 
@@ -18,135 +18,141 @@ function generateNDA(recipientName, recipientOrg, recipientTitle) {
     doc.addPage();
     bg();
     pageNum++;
-    drawPageHeader(doc, 'NON-DISCLOSURE AGREEMENT', 'STRICTLY CONFIDENTIAL');
-    y = 46;
+    drawHeader();
+    y = 40;
   };
 
-  const check = (need = 12) => { if (y + need > 282) newPage(); };
+  const check = (need = 14) => { if (y + need > 280) newPage(); };
+
+  const drawHeader = () => {
+    doc.setFillColor(20, 20, 20);
+    doc.rect(0, 0, pageW, 12, 'F');
+    doc.setFontSize(8);
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(255, 255, 255);
+    doc.text('ZENITH APEX RESEARCH PORTFOLIO — NON-DISCLOSURE AGREEMENT', margin, 8);
+    doc.text('STRICTLY CONFIDENTIAL', pageW - margin, 8, { align: 'right' });
+  };
+
+  const drawFooter = () => {
+    const total = doc.getNumberOfPages();
+    for (let p = 1; p <= total; p++) {
+      doc.setPage(p);
+      doc.setFillColor(240, 240, 240);
+      doc.rect(0, 287, pageW, 10, 'F');
+      doc.setFontSize(8);
+      doc.setFont('helvetica', 'normal');
+      doc.setTextColor(80, 80, 80);
+      doc.text('Zenith Apex Research Portfolio — Confidential NDA', margin, 293);
+      doc.text(`Page ${p} of ${total}`, pageW - margin, 293, { align: 'right' });
+    }
+  };
 
   const rule = () => {
     check(6);
-    doc.setFillColor(...gold);
-    doc.rect(margin, y, pageW - margin * 2, 0.3, 'F');
-    y += 5;
+    doc.setDrawColor(0, 0, 0);
+    doc.setLineWidth(0.4);
+    doc.line(margin, y, pageW - margin, y);
+    y += 6;
   };
 
   const h1 = (txt) => {
-    check(14);
-    doc.setFillColor(...accentBg);
-    doc.rect(margin - 3, y - 3, pageW - margin * 2 + 6, 11, 'F');
-    doc.setFontSize(10);
+    check(16);
+    doc.setFillColor(20, 20, 20);
+    doc.rect(margin - 3, y - 3, pageW - margin * 2 + 6, 13, 'F');
+    doc.setFontSize(12);
     doc.setFont('helvetica', 'bold');
-    doc.setTextColor(...gold);
-    doc.text(txt, margin, y + 4);
-    y += 12;
+    doc.setTextColor(255, 255, 255);
+    doc.text(txt, margin, y + 5);
+    y += 15;
   };
 
   const h2 = (txt) => {
-    check(10);
-    doc.setFontSize(9);
+    check(12);
+    doc.setFontSize(11);
     doc.setFont('helvetica', 'bold');
-    doc.setTextColor(...goldLight);
+    doc.setTextColor(0, 0, 0);
     doc.text(txt, margin, y);
-    y += 7;
+    y += 8;
   };
 
   const body = (txt, indent = 0) => {
-    doc.setFontSize(9.5);
+    doc.setFontSize(11);
     doc.setFont('helvetica', 'normal');
-    doc.setTextColor(...silver);
+    doc.setTextColor(30, 30, 30);
     const lines = doc.splitTextToSize(txt, pageW - margin * 2 - indent);
-    lines.forEach(l => { check(6); doc.text(l, margin + indent, y); y += 5.5; });
+    lines.forEach(l => { check(7); doc.text(l, margin + indent, y); y += 6.5; });
     y += 3;
   };
 
   const infoRow = (label, value) => {
-    check(7);
-    doc.setFontSize(8.5);
+    check(8);
+    doc.setFontSize(10);
     doc.setFont('helvetica', 'bold');
-    doc.setTextColor(...muted);
+    doc.setTextColor(0, 0, 0);
     doc.text(label, margin, y);
     doc.setFont('helvetica', 'normal');
-    doc.setTextColor(...silver);
-    doc.text(value || '___________________________________', margin + 46, y);
-    y += 6;
+    doc.setTextColor(40, 40, 40);
+    doc.text(value || '___________________________________', margin + 50, y);
+    y += 7;
   };
 
   const date = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
 
   // ── COVER PAGE ─────────────────────────────────────────────────────────────
   bg();
-  // Hero band
-  doc.setFillColor(...[8, 18, 60]);
-  doc.rect(0, 0, pageW, 80, 'F');
-  doc.setFillColor(...gold);
-  doc.rect(0, 0, pageW, 2, 'F');
-  doc.rect(0, 78, pageW, 2, 'F');
+  // Top band
+  doc.setFillColor(20, 20, 20);
+  doc.rect(0, 0, pageW, 60, 'F');
 
-  // Large logo centered
-  drawLogo(doc, pageW / 2 - 18, 12, 36);
-
-  doc.setFontSize(11);
-  doc.setFont('helvetica', 'bold');
-  doc.setTextColor(...gold);
-  doc.text('ZENITH APEX RESEARCH PORTFOLIO', pageW / 2, 60, { align: 'center' });
-
-  doc.setFontSize(8);
+  doc.setFontSize(9);
   doc.setFont('helvetica', 'normal');
-  doc.setTextColor(...muted);
-  doc.text('Advanced Research · Intellectual Property · AI-Powered Innovation', pageW / 2, 67, { align: 'center' });
+  doc.setTextColor(200, 200, 200);
+  doc.text('ZENITH APEX RESEARCH PORTFOLIO', pageW / 2, 20, { align: 'center' });
+  doc.text('Advanced Research · Intellectual Property · AI-Powered Innovation', pageW / 2, 27, { align: 'center' });
 
-  y = 96;
-  doc.setFontSize(22);
+  doc.setFontSize(24);
   doc.setFont('helvetica', 'bold');
-  doc.setTextColor(...white);
-  doc.text('NON-DISCLOSURE AGREEMENT', pageW / 2, y, { align: 'center' });
-  y += 8;
+  doc.setTextColor(255, 255, 255);
+  doc.text('NON-DISCLOSURE AGREEMENT', pageW / 2, 45, { align: 'center' });
 
-  doc.setFontSize(10);
+  y = 75;
+  doc.setFontSize(12);
   doc.setFont('helvetica', 'normal');
-  doc.setTextColor(...muted);
+  doc.setTextColor(60, 60, 60);
   doc.text('MUTUAL CONFIDENTIALITY AND NON-DISCLOSURE AGREEMENT', pageW / 2, y, { align: 'center' });
-  y += 5;
+  y += 6;
   doc.text('Governing Disclosure of Proprietary Research, IP, and Trade Secrets', pageW / 2, y, { align: 'center' });
-  y += 14;
+  y += 16;
 
   // Parties box
-  doc.setFillColor(...cardBg);
-  doc.setDrawColor(...gold);
-  doc.setLineWidth(0.5);
-  doc.roundedRect(margin, y, pageW - margin * 2, 44, 3, 3, 'FD');
+  doc.setDrawColor(0, 0, 0);
+  doc.setLineWidth(0.6);
+  doc.rect(margin, y, pageW - margin * 2, 46, 'D');
   y += 8;
-
   infoRow('Agreement Date:', date);
   infoRow('Disclosing Party:', 'Zenith Apex Research Portfolio ("ZARP")');
   infoRow('Receiving Party:', `${recipientName || '[RECIPIENT NAME]'}, ${recipientTitle || '[TITLE]'}, ${recipientOrg || '[ORGANIZATION]'}`);
-  y += 4;
+  y += 6;
 
-  // Warning banner
-  y += 4;
-  doc.setFillColor(40, 10, 10);
-  doc.setDrawColor(180, 50, 30);
+  // Warning
+  doc.setDrawColor(0, 0, 0);
   doc.setLineWidth(0.4);
-  doc.roundedRect(margin, y, pageW - margin * 2, 22, 2, 2, 'FD');
-  doc.setFontSize(8);
+  doc.rect(margin, y, pageW - margin * 2, 22, 'D');
+  doc.setFontSize(10);
   doc.setFont('helvetica', 'bold');
-  doc.setTextColor(255, 120, 80);
-  doc.text('⚠  NOTICE: STRICTLY CONFIDENTIAL — ATTORNEY-CLIENT PRIVILEGED', margin + 4, y + 7);
+  doc.setTextColor(0, 0, 0);
+  doc.text('NOTICE: STRICTLY CONFIDENTIAL — ATTORNEY-CLIENT PRIVILEGED', margin + 5, y + 8);
   doc.setFont('helvetica', 'normal');
-  doc.setTextColor(220, 160, 140);
-  doc.setFontSize(7.5);
-  const noticeLines = doc.splitTextToSize(
-    'This Agreement governs all Confidential Information disclosed by ZARP. Unauthorized disclosure is subject to liquidated damages of $2,500,000 per incident. This document is intended solely for the named Receiving Party.',
-    pageW - margin * 2 - 8
-  );
-  noticeLines.forEach((l, i) => doc.text(l, margin + 4, y + 13 + i * 4.5));
+  doc.setFontSize(9);
+  doc.setTextColor(40, 40, 40);
+  const noticeLines = doc.splitTextToSize('Unauthorized disclosure is subject to liquidated damages of $2,500,000 per incident. This document is intended solely for the named Receiving Party.', pageW - margin * 2 - 10);
+  noticeLines.forEach((l, i) => doc.text(l, margin + 5, y + 14 + i * 4.5));
   y += 28;
 
-  // Draw footer on cover
-  drawFooter(doc, 1, 1, 'CONFIDENTIAL NDA');
+  drawFooter();
 
-  // ── PAGE 2+ CONTENT ──────────────────────────────────────────────────────
+  // ── CONTENT PAGES ──────────────────────────────────────────────────────────
   newPage();
 
   h1('ARTICLE 1 — RECITALS');
@@ -159,7 +165,7 @@ function generateNDA(recipientName, recipientOrg, recipientTitle) {
   h2('2.1  Confidential Information');
   body('"Confidential Information" means any and all information, data, documents, materials, or knowledge disclosed by ZARP, whether orally, in writing, electronically, or by any other means, that is designated as confidential or that reasonably should be understood to be confidential. This includes without limitation:');
   const ciItems = [
-    '(a) All research, analyses, and findings related to scalar electromagnetics, vacuum energy extraction, overunity energy devices, bioelectromagnetics, psychoenergetics, and related fields derived from the published and unpublished works of Lt. Col. Thomas E. Bearden (ret.);',
+    '(a) All research, analyses, and findings related to scalar electromagnetics, vacuum energy extraction, overunity energy devices, bioelectromagnetics, psychoenergetics, and related fields;',
     '(b) The Zenith Apex Research Platform — including all source code, AI prompt architectures, database schemas, entity structures, backend functions, automation workflows, and platform configurations;',
     '(c) All AI-generated invention disclosures, patent drafts, financial models, market research reports, pitch decks, and build guides;',
     '(d) All business plans, financial projections, revenue models, investor relationships, acquisition valuations, and negotiation strategies;',
@@ -215,56 +221,49 @@ function generateNDA(recipientName, recipientOrg, recipientTitle) {
   body('IN WITNESS WHEREOF, the parties have executed this Agreement as of the date first written above.');
   y += 5;
 
-  const sigBlock = (label, name, title, org, email) => {
-    check(50);
-    doc.setFontSize(9);
+  const sigBlock = (label, name, title, org) => {
+    check(55);
+    doc.setFontSize(11);
     doc.setFont('helvetica', 'bold');
-    doc.setTextColor(...gold);
+    doc.setTextColor(0, 0, 0);
     doc.text(label, margin, y);
-    y += 6;
+    y += 7;
 
-    doc.setFillColor(...cardBg);
-    doc.setDrawColor(...[30, 50, 100]);
-    doc.setLineWidth(0.3);
-    doc.roundedRect(margin, y, pageW - margin * 2, 40, 2, 2, 'FD');
-    y += 6;
+    doc.setDrawColor(0, 0, 0);
+    doc.setLineWidth(0.4);
+    doc.rect(margin, y, pageW - margin * 2, 44, 'D');
+    y += 8;
 
-    doc.setFillColor(...[40, 80, 160]);
-    doc.rect(margin + 4, y + 10, 75, 0.4, 'F');
-    doc.setFontSize(7);
+    doc.setDrawColor(100, 100, 100);
+    doc.line(margin + 5, y + 12, margin + 80, y + 12);
+    doc.setFontSize(9);
     doc.setFont('helvetica', 'normal');
-    doc.setTextColor(...dimmed);
-    doc.text('Authorized Signature', margin + 4, y + 14);
-    y += 18;
+    doc.setTextColor(80, 80, 80);
+    doc.text('Authorized Signature', margin + 5, y + 16);
+    y += 20;
 
     [['Printed Name:', name || '___________________________________'],
      ['Title / Role:', title || '___________________________________'],
      ['Organization:', org || '___________________________________'],
-     ['Email:', email || '___________________________________'],
      ['Date:', '___________________________________']
     ].forEach(([lbl, val]) => {
       doc.setFont('helvetica', 'bold');
-      doc.setTextColor(...muted);
-      doc.text(lbl, margin + 4, y);
+      doc.setTextColor(0, 0, 0);
+      doc.setFontSize(10);
+      doc.text(lbl, margin + 5, y);
       doc.setFont('helvetica', 'normal');
-      doc.setTextColor(...silver);
-      doc.text(val, margin + 40, y);
-      y += 5;
+      doc.setTextColor(40, 40, 40);
+      doc.text(val, margin + 42, y);
+      y += 6;
     });
-    y += 6;
+    y += 8;
   };
 
-  sigBlock('DISCLOSING PARTY — ZENITH APEX RESEARCH PORTFOLIO (ZARP)', '[YOUR NAME]', 'Founder / Portfolio Director', 'Zenith Apex Research Portfolio', '[YOUR EMAIL]');
+  sigBlock('DISCLOSING PARTY — ZENITH APEX RESEARCH PORTFOLIO (ZARP)', '[YOUR NAME]', 'Founder / Portfolio Director', 'Zenith Apex Research Portfolio');
   rule();
-  sigBlock('RECEIVING PARTY', recipientName || '[RECIPIENT NAME]', recipientTitle || '[TITLE]', recipientOrg || '[ORGANIZATION]', '');
+  sigBlock('RECEIVING PARTY', recipientName || '[RECIPIENT NAME]', recipientTitle || '[TITLE]', recipientOrg || '[ORGANIZATION]');
 
-  // Add footers to all pages
-  const total = doc.getNumberOfPages();
-  for (let p = 1; p <= total; p++) {
-    doc.setPage(p);
-    drawFooter(doc, p, total, 'NDA');
-  }
-
+  drawFooter();
   doc.save('zenith-apex-nda.pdf');
 }
 
