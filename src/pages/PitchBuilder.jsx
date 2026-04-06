@@ -68,28 +68,154 @@ function ValuationModule({ item }) {
 
   const v = calcValuation(tam * 1e6, trl, patent);
 
+  const handleDownloadDossier = () => {
+    const doc = new jsPDF({ unit: "pt", format: "letter" });
+    const pageW = doc.internal.pageSize.getWidth();
+    const pageH = doc.internal.pageSize.getHeight();
+    const margin = 56;
+    const maxW = pageW - margin * 2;
+    let y = margin;
+
+    const addPage = () => { doc.addPage(); y = margin; drawHeader(); drawFooter(); };
+    const check = (need = 16) => { if (y + need > pageH - 60) addPage(); };
+
+    const drawHeader = () => {
+      doc.setFillColor(10, 14, 35);
+      doc.rect(0, 0, pageW, 38, "F");
+      doc.setFontSize(8); doc.setFont("helvetica", "bold"); doc.setTextColor(180, 200, 255);
+      doc.text("ZENITH APEX RESEARCH DATABASE", margin, 16);
+      doc.setFont("helvetica", "normal"); doc.setTextColor(120, 140, 200);
+      doc.text("INVENTION PITCH DOSSIER — CONFIDENTIAL", margin, 27);
+      doc.setTextColor(80, 100, 160);
+      doc.text(new Date().toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" }), pageW - margin, 27, { align: "right" });
+    };
+
+    const drawFooter = () => {
+      const total = doc.getNumberOfPages();
+      for (let p = 1; p <= total; p++) {
+        doc.setPage(p);
+        doc.setFillColor(10, 14, 35);
+        doc.rect(0, pageH - 32, pageW, 32, "F");
+        doc.setFontSize(7); doc.setFont("helvetica", "normal"); doc.setTextColor(100, 120, 180);
+        doc.text("CONFIDENTIAL — FOR AUTHORIZED RECIPIENTS ONLY. Unauthorized disclosure is subject to liquidated damages.", margin, pageH - 14);
+        doc.text(`Page ${p} of ${total}`, pageW - margin, pageH - 14, { align: "right" });
+      }
+    };
+
+    const sectionBand = (title, r, g, b) => {
+      check(24);
+      doc.setFillColor(r, g, b);
+      doc.rect(margin - 8, y - 6, maxW + 16, 20, "F");
+      doc.setFontSize(9); doc.setFont("helvetica", "bold"); doc.setTextColor(255, 255, 255);
+      doc.text(title.toUpperCase(), margin, y + 8); y += 26;
+    };
+
+    const para = (text, color = [40, 40, 60]) => {
+      if (!text) return;
+      doc.setFontSize(9); doc.setFont("helvetica", "normal"); doc.setTextColor(...color);
+      const lines = doc.splitTextToSize(text, maxW);
+      lines.forEach(l => { check(13); doc.text(l, margin, y); y += 12; });
+      y += 6;
+    };
+
+    const kv = (label, value, labelColor = [80, 100, 160], valColor = [20, 20, 40]) => {
+      check(14);
+      doc.setFontSize(9); doc.setFont("helvetica", "bold"); doc.setTextColor(...labelColor);
+      doc.text(label, margin, y);
+      doc.setFont("helvetica", "normal"); doc.setTextColor(...valColor);
+      doc.text(String(value), margin + 160, y);
+      y += 14;
+    };
+
+    // ── COVER ──────────────────────────────────────────────────────────────
+    doc.setFillColor(10, 14, 35);
+    doc.rect(0, 0, pageW, pageH, "F");
+    doc.setFontSize(9); doc.setFont("helvetica", "normal"); doc.setTextColor(100, 130, 200);
+    doc.text("ZENITH APEX RESEARCH DATABASE", pageW / 2, 100, { align: "center" });
+    doc.text("Advanced Research · Intellectual Property · AI-Powered Innovation", pageW / 2, 114, { align: "center" });
+    doc.setFontSize(22); doc.setFont("helvetica", "bold"); doc.setTextColor(255, 255, 255);
+    const titleLines = doc.splitTextToSize(item.title, maxW);
+    titleLines.forEach((l, i) => doc.text(l, pageW / 2, 165 + i * 28, { align: "center" }));
+    doc.setFontSize(11); doc.setFont("helvetica", "italic"); doc.setTextColor(160, 180, 240);
+    doc.text(`"${item.tagline}"`, pageW / 2, 165 + titleLines.length * 28 + 16, { align: "center" });
+    doc.setFontSize(9); doc.setFont("helvetica", "normal"); doc.setTextColor(80, 100, 160);
+    doc.text("CONFIDENTIAL — ATTORNEY-CLIENT PRIVILEGED", pageW / 2, pageH - 60, { align: "center" });
+    doc.text(`Generated: ${new Date().toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}`, pageW / 2, pageH - 44, { align: "center" });
+
+    // ── PAGE 2 ─────────────────────────────────────────────────────────────
+    doc.addPage();
+    doc.setFillColor(248, 249, 255); doc.rect(0, 0, pageW, pageH, "F");
+    y = margin;
+    drawHeader();
+    y = 56;
+
+    // Project overview
+    sectionBand("1. Project Overview", 30, 50, 120);
+    kv("Invention:", item.title);
+    kv("Category:", item.category);
+    kv("Price Point:", item.price);
+    kv("Target Audience:", item.audience);
+    y += 4;
+    para(item.beardenSolution);
+
+    // Problem & Solution
+    sectionBand("2. Problem & Solution", 140, 30, 60);
+    doc.setFontSize(9); doc.setFont("helvetica", "bold"); doc.setTextColor(140, 30, 60);
+    doc.text("PROBLEM", margin, y); y += 12;
+    para(item.problem, [60, 30, 40]);
+    doc.setFontSize(9); doc.setFont("helvetica", "bold"); doc.setTextColor(30, 100, 60);
+    doc.text("SOLUTION", margin, y); y += 12;
+    para(item.beardenSolution, [20, 60, 40]);
+
+    // Market
+    sectionBand("3. Market Potential", 20, 100, 60);
+    para(item.market, [20, 60, 40]);
+
+    // Technical Feasibility
+    sectionBand("4. Technical Feasibility", 60, 40, 140);
+    para(item.feasibility, [40, 30, 80]);
+    doc.setFontSize(8); doc.setFont("helvetica", "italic"); doc.setTextColor(100, 80, 160);
+    const srcLines = doc.splitTextToSize(`Source: ${item.source}`, maxW);
+    srcLines.forEach(l => { check(12); doc.text(l, margin, y); y += 11; });
+    y += 6;
+
+    // IP Valuation
+    sectionBand("5. IP Valuation Analysis", 160, 100, 20);
+    kv("Total Addressable Market:", `$${tam}M`, [140, 80, 20]);
+    kv("Technology Readiness Level:", `TRL ${trl + 1} — ${TRL_LABELS[trl]}`, [140, 80, 20]);
+    kv("Patent Viability:", PATENT_LABELS[patent], [140, 80, 20]);
+    y += 4;
+    kv("Annual Licensing Royalties:", `${fmt(v.lowRoyalty)} – ${fmt(v.highRoyalty)}`, [20, 100, 40], [10, 80, 30]);
+    kv("IP Portfolio Value:", `${fmt(v.ipValue)} – ${fmt(v.ipValueHigh)}`, [20, 100, 40], [10, 80, 30]);
+    kv("Grant Funding Probability:", `${v.grantPct}%`, [20, 100, 40], [10, 80, 30]);
+    kv("SBIR/STTR Potential:", v.sbirLow > 0 ? `${fmt(v.sbirLow)} – ${fmt(v.sbirHigh)}` : "Insufficient TRL", [20, 100, 40], [10, 80, 30]);
+
+    // AI Valuation Report
+    if (aiReport) {
+      sectionBand("6. AI Valuation Report", 60, 20, 120);
+      para(aiReport, [30, 20, 60]);
+    }
+
+    // Legal notice
+    check(60);
+    y += 10;
+    doc.setFillColor(240, 240, 248);
+    doc.rect(margin - 8, y - 6, maxW + 16, 52, "F");
+    doc.setFontSize(8); doc.setFont("helvetica", "bold"); doc.setTextColor(80, 80, 140);
+    doc.text("CONFIDENTIALITY NOTICE", margin, y + 6);
+    doc.setFont("helvetica", "normal"); doc.setTextColor(80, 80, 120);
+    const notice = doc.splitTextToSize("This document contains proprietary research and confidential intellectual property belonging to Zenith Apex Research. Unauthorized disclosure, reproduction, or distribution is strictly prohibited and subject to liquidated damages of $250,000 per incident under the executed Non-Disclosure Agreement.", maxW - 8);
+    notice.forEach((l, i) => doc.text(l, margin, y + 18 + i * 10));
+
+    drawFooter();
+    doc.save(`ZenithApex_Dossier_${item.title.replace(/[^a-z0-9]/gi, "_").slice(0, 40)}.pdf`);
+  };
+
   const handleGenerate = async () => {
     setLoading(true);
     setGenerated(false);
     const result = await base44.integrations.Core.InvokeLLM({
-      prompt: `You are a senior IP valuation analyst. Generate a concise Valuation Report for the following invention:
-
-Invention: ${item.title}
-Description: ${item.beardenSolution}
-TAM: $${tam}M
-Technology Readiness Level: ${trl + 1} — ${TRL_LABELS[trl]}
-Patent Viability: ${PATENT_LABELS[patent]}
-Estimated Annual Licensing Royalties: ${fmt(v.lowRoyalty)}–${fmt(v.highRoyalty)}
-Estimated IP Portfolio Value: ${fmt(v.ipValue)}–${fmt(v.ipValueHigh)}
-Grant Funding Probability: ${v.grantPct}%
-SBIR/STTR Funding Potential: ${fmt(v.sbirLow)}–${fmt(v.sbirHigh)}
-
-Write a 3-paragraph professional valuation report (150–200 words) covering:
-1. IP asset strength and licensing opportunity
-2. Grant funding pathways (DoD SBIR, DARPA, NIH, DOE)
-3. Overall commercialization recommendation
-
-Be specific, confident, and data-driven. No hype.`,
+      prompt: `You are a senior IP valuation analyst. Generate a concise Valuation Report for the following invention:\n\nInvention: ${item.title}\nDescription: ${item.beardenSolution}\nTAM: $${tam}M\nTechnology Readiness Level: ${trl + 1} — ${TRL_LABELS[trl]}\nPatent Viability: ${PATENT_LABELS[patent]}\nEstimated Annual Licensing Royalties: ${fmt(v.lowRoyalty)}–${fmt(v.highRoyalty)}\nEstimated IP Portfolio Value: ${fmt(v.ipValue)}–${fmt(v.ipValueHigh)}\nGrant Funding Probability: ${v.grantPct}%\nSBIR/STTR Funding Potential: ${fmt(v.sbirLow)}–${fmt(v.sbirHigh)}\n\nWrite a 3-paragraph professional valuation report (150–200 words) covering:\n1. IP asset strength and licensing opportunity\n2. Grant funding pathways (DoD SBIR, DARPA, NIH, DOE)\n3. Overall commercialization recommendation\n\nBe specific, confident, and data-driven. No hype.`,
     });
     setAiReport(result);
     setGenerated(true);
@@ -181,6 +307,15 @@ Be specific, confident, and data-driven. No hype.`,
                 <p className="text-gray-300 text-sm leading-relaxed whitespace-pre-wrap">{aiReport}</p>
               </div>
             )}
+
+            {/* Download Dossier */}
+            <button
+              onClick={handleDownloadDossier}
+              className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl bg-blue-900/40 hover:bg-blue-800/50 border border-blue-700 text-blue-200 text-sm font-bold transition-all mt-2"
+            >
+              <Download size={14} />
+              Download Full Dossier PDF
+            </button>
           </div>
         </div>
       )}
