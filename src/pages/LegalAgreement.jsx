@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { ShieldAlert, Lock, Eye, FileText, AlertTriangle, CheckCircle2 } from "lucide-react";
+import { base44 } from "@/api/base44Client";
 
 const AGREEMENT_VERSION = "1.0";
 const EFFECTIVE_DATE = "April 1, 2026";
@@ -215,6 +216,12 @@ export default function LegalAgreement() {
           <p className="text-gray-600 text-xs text-center">
             Your acceptance is timestamped and recorded. By proceeding you confirm you are at least 18 years old and have authority to enter this agreement.
           </p>
+          <button
+            onClick={() => base44.auth.redirectToLogin(window.location.href)}
+            className="text-yellow-600 hover:text-yellow-400 text-xs underline transition-colors mt-1"
+          >
+            🔐 Admin? Sign in here to bypass this agreement
+          </button>
         </div>
 
       </div>
