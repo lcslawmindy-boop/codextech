@@ -1,4 +1,5 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { base44 } from "@/api/base44Client";
 
 /**
  * CopyProtection — mounts globally to block common data-theft vectors:
@@ -9,7 +10,14 @@ import { useEffect } from "react";
  * - Print attempts
  */
 export default function CopyProtection() {
+  const [isAdmin, setIsAdmin] = useState(null);
+
   useEffect(() => {
+    base44.auth.me().then(u => setIsAdmin(u?.role === 'admin')).catch(() => setIsAdmin(false));
+  }, []);
+
+  useEffect(() => {
+    if (isAdmin === null || isAdmin === true) return; // skip protection for admins
     const blockContext = (e) => e.preventDefault();
 
     const blockKeys = (e) => {
@@ -106,7 +114,7 @@ export default function CopyProtection() {
       document.getElementById("copy-protection-style")?.remove();
       document.getElementById("copy-protection-watermark")?.remove();
     };
-  }, []);
+  }, [isAdmin]);
 
   return null;
 }
