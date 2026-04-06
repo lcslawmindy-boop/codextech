@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { ArrowLeft, Sparkles, Download, ChevronRight, Check, Loader2, X, FileText, Presentation } from "lucide-react";
+import { ArrowLeft, Sparkles, Download, ChevronRight, Check, Loader2, X, FileText, TrendingUp, DollarSign, Award, Zap } from "lucide-react";
 import { jsPDF } from "jspdf";
 import { businessItems } from "../lib/businessItems";
 import { base44 } from "@/api/base44Client";
@@ -15,6 +15,177 @@ function getRelatedNodes(item) {
     text.includes(n.id.replace(/_/g, " ")) ||
     text.includes(n.label.toLowerCase())
   ).slice(0, 5);
+}
+
+// ── IP Valuation Module ──────────────────────────────────────────────────────
+
+const TRL_LABELS = [
+  "1 — Basic principles observed",
+  "2 — Technology concept formulated",
+  "3 — Experimental proof of concept",
+  "4 — Technology validated in lab",
+  "5 — Technology validated in relevant environment",
+  "6 — Technology demonstrated in relevant environment",
+  "7 — System prototype in operational environment",
+  "8 — System complete and qualified",
+  "9 — Actual system proven in operational environment",
+];
+
+const PATENT_LABELS = ["Very Low", "Low", "Moderate", "High", "Very High"];
+
+function calcValuation(tam, trl, patent) {
+  // Base royalty rate: 2%–8% of TAM slice, scaled by TRL
+  const trlFactor = 0.3 + (trl / 9) * 0.7;
+  const patentFactor = 0.2 + (patent / 4) * 0.8;
+  const reachableTam = tam * 0.001; // 0.1% of TAM as reachable slice
+  const lowRoyalty = reachableTam * 0.02 * trlFactor * patentFactor;
+  const highRoyalty = reachableTam * 0.08 * trlFactor * patentFactor;
+  const ipValue = lowRoyalty * 8; // ~8× annual royalty = IP value
+  const ipValueHigh = highRoyalty * 12;
+  // Grant probability: weighted TRL + patent viability
+  const grantPct = Math.min(95, Math.round((trl / 9) * 50 + (patent / 4) * 30 + 10));
+  // SBIR/STTR estimate
+  const sbirLow = trl >= 4 ? 150000 : trl >= 2 ? 50000 : 0;
+  const sbirHigh = trl >= 6 ? 2000000 : trl >= 4 ? 750000 : trl >= 2 ? 250000 : 0;
+  return { lowRoyalty, highRoyalty, ipValue, ipValueHigh, grantPct, sbirLow, sbirHigh };
+}
+
+function fmt(n) {
+  if (n >= 1e9) return `$${(n / 1e9).toFixed(1)}B`;
+  if (n >= 1e6) return `$${(n / 1e6).toFixed(1)}M`;
+  if (n >= 1e3) return `$${(n / 1e3).toFixed(0)}K`;
+  return `$${n.toFixed(0)}`;
+}
+
+function ValuationModule({ item }) {
+  const [open, setOpen] = useState(false);
+  const [tam, setTam] = useState(500); // in $M
+  const [trl, setTrl] = useState(3);
+  const [patent, setPatent] = useState(2);
+  const [generated, setGenerated] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [aiReport, setAiReport] = useState(null);
+
+  const v = calcValuation(tam * 1e6, trl, patent);
+
+  const handleGenerate = async () => {
+    setLoading(true);
+    setGenerated(false);
+    const result = await base44.integrations.Core.InvokeLLM({
+      prompt: `You are a senior IP valuation analyst. Generate a concise Valuation Report for the following invention:
+
+Invention: ${item.title}
+Description: ${item.beardenSolution}
+TAM: $${tam}M
+Technology Readiness Level: ${trl + 1} — ${TRL_LABELS[trl]}
+Patent Viability: ${PATENT_LABELS[patent]}
+Estimated Annual Licensing Royalties: ${fmt(v.lowRoyalty)}–${fmt(v.highRoyalty)}
+Estimated IP Portfolio Value: ${fmt(v.ipValue)}–${fmt(v.ipValueHigh)}
+Grant Funding Probability: ${v.grantPct}%
+SBIR/STTR Funding Potential: ${fmt(v.sbirLow)}–${fmt(v.sbirHigh)}
+
+Write a 3-paragraph professional valuation report (150–200 words) covering:
+1. IP asset strength and licensing opportunity
+2. Grant funding pathways (DoD SBIR, DARPA, NIH, DOE)
+3. Overall commercialization recommendation
+
+Be specific, confident, and data-driven. No hype.`,
+    });
+    setAiReport(result);
+    setGenerated(true);
+    setLoading(false);
+  };
+
+  return (
+    <div className="rounded-xl border border-yellow-900/40 bg-yellow-950/10 overflow-hidden mt-4">
+      <button
+        onClick={() => setOpen(o => !o)}
+        className="w-full flex items-center justify-between px-5 py-4 text-left hover:bg-yellow-900/10 transition-colors"
+      >
+        <div className="flex items-center gap-2">
+          <DollarSign size={16} className="text-yellow-400" />
+          <span className="text-yellow-300 font-bold text-sm uppercase tracking-widest">IP Valuation Calculator</span>
+        </div>
+        <ChevronRight size={15} className={`text-yellow-600 transition-transform ${open ? "rotate-90" : ""}`} />
+      </button>
+
+      {open && (
+        <div className="px-5 pb-5 space-y-5 border-t border-yellow-900/30">
+          <p className="text-gray-500 text-xs pt-4">Adjust parameters to estimate IP value, licensing royalties, and grant probability.</p>
+
+          {/* Sliders */}
+          <div className="space-y-4">
+            <div>
+              <div className="flex justify-between mb-1">
+                <label className="text-gray-400 text-xs font-semibold">Total Addressable Market (TAM)</label>
+                <span className="text-yellow-300 text-xs font-bold">${tam}M</span>
+              </div>
+              <input type="range" min={10} max={10000} step={10} value={tam} onChange={e => setTam(+e.target.value)}
+                className="w-full accent-yellow-500" />
+              <div className="flex justify-between text-gray-700 text-xs mt-0.5"><span>$10M</span><span>$10B</span></div>
+            </div>
+
+            <div>
+              <div className="flex justify-between mb-1">
+                <label className="text-gray-400 text-xs font-semibold">Technology Readiness Level (TRL)</label>
+                <span className="text-blue-300 text-xs font-bold">TRL {trl + 1}</span>
+              </div>
+              <input type="range" min={0} max={8} step={1} value={trl} onChange={e => setTrl(+e.target.value)}
+                className="w-full accent-blue-500" />
+              <p className="text-gray-600 text-xs mt-1">{TRL_LABELS[trl]}</p>
+            </div>
+
+            <div>
+              <div className="flex justify-between mb-1">
+                <label className="text-gray-400 text-xs font-semibold">Patent Viability</label>
+                <span className="text-purple-300 text-xs font-bold">{PATENT_LABELS[patent]}</span>
+              </div>
+              <input type="range" min={0} max={4} step={1} value={patent} onChange={e => setPatent(+e.target.value)}
+                className="w-full accent-purple-500" />
+              <div className="flex justify-between text-gray-700 text-xs mt-0.5"><span>Very Low</span><span>Very High</span></div>
+            </div>
+          </div>
+
+          {/* Metrics grid */}
+          <div className="grid grid-cols-2 gap-3">
+            {[
+              { label: "Annual Licensing Royalties", value: `${fmt(v.lowRoyalty)} – ${fmt(v.highRoyalty)}`, icon: <TrendingUp size={13} className="text-green-400" />, color: "green" },
+              { label: "IP Portfolio Value", value: `${fmt(v.ipValue)} – ${fmt(v.ipValueHigh)}`, icon: <DollarSign size={13} className="text-yellow-400" />, color: "yellow" },
+              { label: "Grant Funding Probability", value: `${v.grantPct}%`, icon: <Award size={13} className="text-blue-400" />, color: "blue" },
+              { label: "SBIR/STTR Potential", value: v.sbirLow > 0 ? `${fmt(v.sbirLow)} – ${fmt(v.sbirHigh)}` : "Insufficient TRL", icon: <Zap size={13} className="text-purple-400" />, color: "purple" },
+            ].map(m => (
+              <div key={m.label} className={`bg-gray-900/60 border border-${m.color}-900/40 rounded-xl p-3`}>
+                <div className="flex items-center gap-1.5 mb-1">{m.icon}<p className="text-gray-500 text-xs">{m.label}</p></div>
+                <p className={`text-${m.color}-300 font-bold text-sm`}>{m.value}</p>
+              </div>
+            ))}
+          </div>
+
+          {/* AI Report */}
+          <div>
+            <button
+              onClick={handleGenerate}
+              disabled={loading}
+              className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl bg-yellow-900/40 hover:bg-yellow-800/50 border border-yellow-700 text-yellow-300 text-sm font-bold transition-all disabled:opacity-60"
+            >
+              {loading ? <Loader2 size={14} className="animate-spin" /> : <Sparkles size={14} />}
+              {loading ? "Generating Valuation Report…" : generated ? "Regenerate AI Valuation Report" : "Generate AI Valuation Report"}
+            </button>
+
+            {aiReport && (
+              <div className="mt-3 bg-gray-900/60 border border-yellow-900/40 rounded-xl p-4">
+                <div className="flex items-center gap-1.5 mb-2">
+                  <Sparkles size={11} className="text-yellow-400" />
+                  <span className="text-yellow-400 text-xs font-semibold uppercase tracking-widest">AI Valuation Report</span>
+                </div>
+                <p className="text-gray-300 text-sm leading-relaxed whitespace-pre-wrap">{aiReport}</p>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+    </div>
+  );
 }
 
 function SectionBlock({ emoji, title, color, children }) {
@@ -379,6 +550,7 @@ Be specific, confident, and grounded in the documented physics. Avoid hype langu
                 loadingAI={loadingAI}
                 onRequestAI={handleAI}
               />
+              <ValuationModule item={selectedItem} />
             </div>
           )}
         </div>
