@@ -67,6 +67,12 @@ export default function CopyProtection() {
         user-select: none !important;
         -webkit-touch-callout: none !important;
       }
+      /* Allow selection in readable content */
+      p, li, td, blockquote, span.selectable {
+        -webkit-user-select: text !important;
+        -moz-user-select: text !important;
+        user-select: text !important;
+      }
       input, textarea {
         -webkit-user-select: text !important;
         -moz-user-select: text !important;

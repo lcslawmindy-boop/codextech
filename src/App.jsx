@@ -52,6 +52,8 @@ import InventionLibrary from './pages/InventionLibrary';
 import DownloadCenter from './pages/DownloadCenter';
 import InventionTimeline from './pages/InventionTimeline';
 import Pricing from './pages/Pricing';
+import AccountSettings from './pages/AccountSettings';
+import MobileLayout from './components/MobileLayout';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -91,51 +93,54 @@ const AuthenticatedApp = () => {
     <>
       <CopyProtection />
       <Routes>
-        <Route path="/" element={<ConceptGraph />} />
-        <Route path="/business" element={<BusinessModels />} />
-        <Route path="/pitch" element={<PitchBuilder />} />
-        <Route path="/market-deck" element={<MarketDeck />} />
-        <Route path="/subscribe" element={<Subscribe />} />
-        <Route path="/my-research" element={<MyResearch />} />
-        <Route path="/courses" element={<CourseCatalog />} />
-        <Route path="/marketing" element={<MarketingPlan />} />
-        <Route path="/simulator" element={<Simulator />} />
-        <Route path="/checkout" element={<Checkout />} />
-        <Route path="/my-learning" element={<MyLearning />} />
-        <Route path="/lab" element={<LabSimulation />} />
-        <Route path="/invention-plans" element={<InventionPlans />} />
-        <Route path="/emf-impact" element={<EMFImpact />} />
-        <Route path="/scalar-lab" element={<ScalarEMLab />} />
-        <Route path="/patent-tool" element={<PatentDraftingTool />} />
-        <Route path="/timeline-pitch" element={<TimelinePitchDeck />} />
-        <Route path="/prior-art" element={<PriorArtArchive />} />
-        <Route path="/investors" element={<InvestorPortal />} />
-        <Route path="/patent-landscape" element={<PatentLandscapeGraph />} />
-        <Route path="/monitoring" element={<MonitoringDashboard />} />
-        <Route path="/patent-wizard" element={<PatentFilingWizard />} />
-        <Route path="/investor-crm" element={<InvestorCRM />} />
-        <Route path="/zenith-apex" element={<ZenithApex />} />
-        <Route path="/scalar-sim" element={<ScalarFieldSim />} />
-        <Route path="/scalar-wave-sim" element={<ScalarWaveSimulatorPage />} />
-        <Route path="/brand" element={<BrandArchitecture />} />
-        <Route path="/emf-shop" element={<EMFProtectionShop />} />
-        <Route path="/emf-log" element={<EMFExposureLog />} />
-        <Route path="/heavy-metal-detox" element={<HeavyMetalDetox />} />
-        <Route path="/health-analytics" element={<HealthAnalytics />} />
-        <Route path="/investor-package" element={<InvestorPackage />} />
-        <Route path="/dark-timeline" element={<DarkTimeline />} />
-        <Route path="/inventor-forge" element={<InventionForge />} />
-        <Route path="/provisional-patent" element={<ProvisionalPatent />} />
-        <Route path="/scalar-potential" element={<ScalarPotentialMap />} />
-        <Route path="/admin-videos" element={<AdminVideos />} />
-        <Route path="/opportunity-monitor" element={<OpportunityMonitor />} />
-        <Route path="/admin-downloads" element={<AdminDownloadCenter />} />
-        <Route path="/invention-library" element={<InventionLibrary />} />
-        <Route path="/download-center" element={<DownloadCenter />} />
-        <Route path="/invention-timeline" element={<InventionTimeline />} />
-        <Route path="/pricing" element={<Pricing />} />
-        <Route path="/investor-portal" element={<InvestorPortal />} />
-        <Route path="*" element={<PageNotFound />} />
+        <Route element={<MobileLayout />}>
+          <Route path="/" element={<ConceptGraph />} />
+          <Route path="/business" element={<BusinessModels />} />
+          <Route path="/pitch" element={<PitchBuilder />} />
+          <Route path="/market-deck" element={<MarketDeck />} />
+          <Route path="/subscribe" element={<Subscribe />} />
+          <Route path="/my-research" element={<MyResearch />} />
+          <Route path="/courses" element={<CourseCatalog />} />
+          <Route path="/marketing" element={<MarketingPlan />} />
+          <Route path="/simulator" element={<Simulator />} />
+          <Route path="/checkout" element={<Checkout />} />
+          <Route path="/my-learning" element={<MyLearning />} />
+          <Route path="/lab" element={<LabSimulation />} />
+          <Route path="/invention-plans" element={<InventionPlans />} />
+          <Route path="/emf-impact" element={<EMFImpact />} />
+          <Route path="/scalar-lab" element={<ScalarEMLab />} />
+          <Route path="/patent-tool" element={<PatentDraftingTool />} />
+          <Route path="/timeline-pitch" element={<TimelinePitchDeck />} />
+          <Route path="/prior-art" element={<PriorArtArchive />} />
+          <Route path="/investors" element={<InvestorPortal />} />
+          <Route path="/patent-landscape" element={<PatentLandscapeGraph />} />
+          <Route path="/monitoring" element={<MonitoringDashboard />} />
+          <Route path="/patent-wizard" element={<PatentFilingWizard />} />
+          <Route path="/investor-crm" element={<InvestorCRM />} />
+          <Route path="/zenith-apex" element={<ZenithApex />} />
+          <Route path="/scalar-sim" element={<ScalarFieldSim />} />
+          <Route path="/scalar-wave-sim" element={<ScalarWaveSimulatorPage />} />
+          <Route path="/brand" element={<BrandArchitecture />} />
+          <Route path="/emf-shop" element={<EMFProtectionShop />} />
+          <Route path="/emf-log" element={<EMFExposureLog />} />
+          <Route path="/heavy-metal-detox" element={<HeavyMetalDetox />} />
+          <Route path="/health-analytics" element={<HealthAnalytics />} />
+          <Route path="/investor-package" element={<InvestorPackage />} />
+          <Route path="/dark-timeline" element={<DarkTimeline />} />
+          <Route path="/inventor-forge" element={<InventionForge />} />
+          <Route path="/provisional-patent" element={<ProvisionalPatent />} />
+          <Route path="/scalar-potential" element={<ScalarPotentialMap />} />
+          <Route path="/admin-videos" element={<AdminVideos />} />
+          <Route path="/opportunity-monitor" element={<OpportunityMonitor />} />
+          <Route path="/admin-downloads" element={<AdminDownloadCenter />} />
+          <Route path="/invention-library" element={<InventionLibrary />} />
+          <Route path="/download-center" element={<DownloadCenter />} />
+          <Route path="/invention-timeline" element={<InventionTimeline />} />
+          <Route path="/pricing" element={<Pricing />} />
+          <Route path="/investor-portal" element={<InvestorPortal />} />
+          <Route path="/account" element={<AccountSettings />} />
+          <Route path="*" element={<PageNotFound />} />
+        </Route>
       </Routes>
     </>
   );

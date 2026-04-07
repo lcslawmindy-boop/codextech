@@ -84,5 +84,23 @@
 
   body {
     @apply bg-background text-foreground;
+    font-size: 14px;
+    -webkit-text-size-adjust: 100%;
+    overscroll-behavior: none;
   }
+
+  /* Minimum tap target size for mobile */
+  button, a, [role="button"] {
+    min-height: 44px;
+  }
+
+  /* Allow text selection in readable content */
+  p, li, td, blockquote, .selectable {
+    user-select: text;
+    -webkit-user-select: text;
+  }
+
+  /* Safe area padding utility */
+  .safe-top { padding-top: env(safe-area-inset-top); }
+  .safe-bottom { padding-bottom: env(safe-area-inset-bottom); }
 }
