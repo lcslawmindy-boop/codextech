@@ -158,7 +158,7 @@ function generateInventionPlansPDF(plans) {
   doc.setFontSize(18); doc.setFont('helvetica', 'bold'); doc.setTextColor(...white);
   doc.text('Invention Build Plans & Engineering Specifications', pageW / 2, y + 8, { align: 'center' });
   doc.setFontSize(11); doc.setFont('helvetica', 'normal'); doc.setTextColor(...muted);
-  doc.text(`${plans.length} Devices  ·  Complete BOM  ·  Step-by-Step Assembly  ·  Theory Primers`,, pageW / 2, y + 16, { align: 'center' });
+  doc.text(`${plans.length} Devices  ·  Complete BOM  ·  Step-by-Step Assembly  ·  Theory Primers`, pageW / 2, y + 16, { align: 'center' });
   y += 28;
 
   plans.forEach((plan, idx) => {
@@ -239,7 +239,7 @@ function generateShopPDF() {
   doc.setFontSize(18); doc.setFont('helvetica', 'bold'); doc.setTextColor(...white);
   doc.text('EMF Protection Shop — Product Catalog', pageW / 2, y + 8, { align: 'center' });
   doc.setFontSize(11); doc.setFont('helvetica', 'normal'); doc.setTextColor(...muted);
-  doc.text(`${products.length} Products  ·  Jewelry  ·  Home Devices  ·  Clothing  ·  Supplements  ·  DIY Kits`,, pageW / 2, y + 16, { align: 'center' });
+  doc.text(`${products.length} Products  ·  Jewelry  ·  Home Devices  ·  Clothing  ·  Supplements  ·  DIY Kits`, pageW / 2, y + 16, { align: 'center' });
   y += 28;
 
   const categories = [...new Set(products.map(p => p.category))];
@@ -279,7 +279,7 @@ function generateBuildVideosPDF(videos) {
   doc.setFontSize(18); doc.setFont('helvetica', 'bold'); doc.setTextColor(...white);
   doc.text('Build Video Library', pageW / 2, y + 8, { align: 'center' });
   doc.setFontSize(11); doc.setFont('helvetica', 'normal'); doc.setTextColor(...muted);
-  doc.text(`${videos.length} Build Guides  ·  Complete Step-by-Step Instructions  ·  Materials & Tools Per Step`,, pageW / 2, y + 16, { align: 'center' });
+  doc.text(`${videos.length} Build Guides  ·  Complete Step-by-Step Instructions  ·  Materials & Tools Per Step`, pageW / 2, y + 16, { align: 'center' });
   y += 28;
 
   if (videos.length === 0) {
