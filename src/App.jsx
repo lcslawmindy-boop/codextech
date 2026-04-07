@@ -53,6 +53,8 @@ import DownloadCenter from './pages/DownloadCenter';
 import InventionTimeline from './pages/InventionTimeline';
 import Pricing from './pages/Pricing';
 import AccountSettings from './pages/AccountSettings';
+import BetaApply from './pages/BetaApply';
+import AdminBeta from './pages/AdminBeta';
 import MobileLayout from './components/MobileLayout';
 
 const AuthenticatedApp = () => {
@@ -139,6 +141,8 @@ const AuthenticatedApp = () => {
           <Route path="/pricing" element={<Pricing />} />
           <Route path="/investor-portal" element={<InvestorPortal />} />
           <Route path="/account" element={<AccountSettings />} />
+          <Route path="/beta-apply" element={<BetaApply />} />
+          <Route path="/admin-beta" element={<AdminBeta />} />
           <Route path="*" element={<PageNotFound />} />
         </Route>
       </Routes>
