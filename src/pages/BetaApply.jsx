@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { Shield, Lock, Check, Loader2, ChevronRight, Star } from "lucide-react";
+import { Shield, Check, Loader2, ChevronRight, Star } from "lucide-react";
+import { Link } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 
 const BACKGROUNDS = [
@@ -70,10 +71,16 @@ export default function BetaApply() {
           <div className="w-20 h-20 rounded-full bg-green-900/40 border-2 border-green-600 flex items-center justify-center mx-auto mb-6">
             <Check size={36} className="text-green-400" />
           </div>
-          <h1 className="text-white font-black text-2xl mb-3">Access Granted — Welcome!</h1>
+          <h1 className="text-white font-black text-2xl mb-3">NDA Signed — Complete Payment</h1>
           <p className="text-gray-400 text-sm leading-relaxed mb-6">
-            Your NDA is on file and your founding member access is <strong className="text-green-400">active immediately</strong>. Check your inbox for the welcome email with full platform details.
+            Your NDA is on file. To unlock the full platform, complete your membership payment below.
           </p>
+          <Link
+            to="/pricing"
+            className="block w-full py-4 rounded-2xl bg-gradient-to-r from-yellow-700 to-yellow-600 hover:from-yellow-600 hover:to-yellow-500 text-black font-black text-base text-center transition-all shadow-[0_4px_24px_rgba(200,160,0,0.3)] mb-4"
+          >
+            Choose a Plan & Get Access →
+          </Link>
           <div className="bg-yellow-950/30 border border-yellow-800 rounded-2xl p-5 text-left">
             <p className="text-yellow-400 font-bold text-sm mb-2">🔒 Confidentiality Reminder</p>
             <p className="text-yellow-200 text-xs leading-relaxed">Your NDA is now active. Do not share platform content, credentials, or research materials. Your access is tied to your email address and non-transferable.</p>
