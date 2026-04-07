@@ -154,7 +154,7 @@ function generateMasterLetterPDF() {
 function generateInventionPlansPDF() {
   const doc = makeDoc();
   let y = initPage(doc, "INVENTION BUILD PLANS", "Complete Technical Specifications");
-  const { margin, pageW, gold, silver, muted, cardBg, green, accentBg } = THEME;
+  const { margin, pageW, gold, silver, muted, white, cardBg, green, accentBg } = THEME;
 
   y = sectionH1(doc, "INVENTION BUILD PLANS — COMPLETE TECHNICAL PORTFOLIO", y);
 
