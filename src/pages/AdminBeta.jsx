@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { ArrowLeft, Lock, Loader2, Check, X, Mail, DollarSign, Users, TrendingUp, Clock, ChevronDown, ChevronUp, Search } from "lucide-react";
+import { ArrowLeft, Lock, Loader2, Check, X, Mail, DollarSign, Users, TrendingUp, Clock, ChevronDown, ChevronUp, Search, FileText } from "lucide-react";
+import { generateAndEmailInvoice, PLAN_DETAILS } from "../lib/generateInvoice";
 import { base44 } from "@/api/base44Client";
 
 const STATUS_CONFIG = {
@@ -11,12 +12,9 @@ const STATUS_CONFIG = {
   rejected:  { label: "Rejected",       color: "text-red-400",    bg: "bg-red-900/30 border-red-700" },
 };
 
-const MRR_BY_PLAN = {
-  "Research Membership ($29/mo)": 29,
-  "Invention Plans Bundle ($197)": 0,
-  "Complete Course Library ($497)": 0,
-  "Membership + Plans ($226)": 29,
-};
+const MRR_BY_PLAN = Object.fromEntries(
+  Object.entries(PLAN_DETAILS).map(([k, v]) => [k, v.interval ? v.price : 0])
+);
 
 function StatCard({ icon, label, value, sub, color }) {
   return (
@@ -35,6 +33,8 @@ function ApplicantRow({ app, onUpdate, onInvite, inviting }) {
   const [expanded, setExpanded] = useState(false);
   const [notes, setNotes] = useState(app.admin_notes || "");
   const [plan, setPlan] = useState(app.plan_purchased || "");
+  const [invoicing, setInvoicing] = useState(false);
+  const [invoiceUrl, setInvoiceUrl] = useState(app.invoice_url || null);
   const sc = STATUS_CONFIG[app.status] || STATUS_CONFIG.pending;
 
   const handleStatusChange = async (newStatus) => {
@@ -48,6 +48,7 @@ function ApplicantRow({ app, onUpdate, onInvite, inviting }) {
   };
 
   const handleMarkConverted = async () => {
+    setInvoicing(true);
     const mrr = MRR_BY_PLAN[plan] || 0;
     await base44.entities.BetaApplication.update(app.id, {
       status: "converted",
@@ -55,6 +56,14 @@ function ApplicantRow({ app, onUpdate, onInvite, inviting }) {
       mrr_value: mrr,
       converted_at: new Date().toISOString(),
     });
+    // Generate PDF invoice and email it
+    const { invoiceNumber, fileUrl } = await generateAndEmailInvoice(app, plan);
+    await base44.entities.BetaApplication.update(app.id, {
+      invoice_url: fileUrl,
+      invoice_number: invoiceNumber,
+    });
+    setInvoiceUrl(fileUrl);
+    setInvoicing(false);
     onUpdate();
   };
 
@@ -148,9 +157,17 @@ function ApplicantRow({ app, onUpdate, onInvite, inviting }) {
                 </select>
                 {plan && (
                   <button onClick={handleMarkConverted}
-                    className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-green-700 hover:bg-green-600 text-white text-xs font-bold">
-                    <DollarSign size={13} /> Mark Converted
+                    disabled={invoicing}
+                    className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-green-700 hover:bg-green-600 text-white text-xs font-bold disabled:opacity-60">
+                    {invoicing ? <Loader2 size={13} className="animate-spin" /> : <DollarSign size={13} />}
+                    {invoicing ? "Generating Invoice…" : "Mark Converted + Invoice"}
                   </button>
+                )}
+                {invoiceUrl && (
+                  <a href={invoiceUrl} target="_blank" rel="noopener noreferrer"
+                    className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-indigo-900/50 border border-indigo-700 text-indigo-300 text-xs font-bold hover:bg-indigo-800/50">
+                    <FileText size={13} /> View Invoice
+                  </a>
                 )}
               </div>
             )}

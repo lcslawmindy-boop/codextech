@@ -76,6 +76,12 @@
     },
     "mrr_value": {
       "type": "number"
+    },
+    "invoice_number": {
+      "type": "string"
+    },
+    "invoice_url": {
+      "type": "string"
     }
   },
   "required": [
