@@ -139,23 +139,23 @@ function generateDueDiligencePDF() {
   };
 
   const sectionBand = (text, subtitle) => {
-    check(20);
+    check(22);
     doc.setFillColor(20, 20, 20);
-    doc.rect(0, y - 4, pageW, 16, 'F');
-    doc.setFontSize(13);
+    doc.rect(0, y - 4, pageW, 18, 'F');
+    doc.setFontSize(14);
     doc.setFont('helvetica', 'bold');
     doc.setTextColor(255, 255, 255);
-    doc.text(text, margin, y + 5);
-    doc.setFontSize(9);
+    doc.text(text, margin, y + 7);
+    doc.setFontSize(10);
     doc.setFont('helvetica', 'normal');
     doc.setTextColor(200, 200, 200);
-    doc.text(subtitle, pageW - margin, y + 5, { align: 'right' });
-    y += 20;
+    doc.text(subtitle, pageW - margin, y + 7, { align: 'right' });
+    y += 22;
   };
 
   const subHeading = (text) => {
-    check(12);
-    doc.setFontSize(11);
+    check(14);
+    doc.setFontSize(13);
     doc.setFont('helvetica', 'bold');
     doc.setTextColor(0, 0, 0);
     doc.text(text, margin, y);
@@ -163,15 +163,15 @@ function generateDueDiligencePDF() {
     doc.setDrawColor(0, 0, 0);
     doc.setLineWidth(0.3);
     doc.line(margin, y, margin + doc.getTextWidth(text), y);
-    y += 8;
+    y += 9;
   };
 
   const para = (text) => {
-    doc.setFontSize(11);
+    doc.setFontSize(12);
     doc.setFont('helvetica', 'normal');
     doc.setTextColor(30, 30, 30);
     const lines = doc.splitTextToSize(text, pageW - margin * 2);
-    lines.forEach(l => { check(7); doc.text(l, margin, y); y += 6.5; });
+    lines.forEach(l => { check(8); doc.text(l, margin, y); y += 7; });
     y += 4;
   };
 

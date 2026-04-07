@@ -9,104 +9,102 @@ function downloadVideoAsPDF(video) {
   const W = 210, margin = 15;
   let y = margin;
 
-  const addText = (text, size, bold, color = [220, 220, 220]) => {
+  const addText = (text, size, bold, color = [20, 20, 20]) => {
     doc.setFontSize(size);
     doc.setFont("helvetica", bold ? "bold" : "normal");
     doc.setTextColor(...color);
     const lines = doc.splitTextToSize(String(text || ""), W - margin * 2);
     lines.forEach(line => {
-      if (y > 270) { doc.addPage(); y = margin; }
+      if (y > 270) { doc.addPage(); doc.setFillColor(255,255,255); doc.rect(0,0,210,297,"F"); y = margin; }
       doc.text(line, margin, y);
-      y += size * 0.45;
+      y += size * 0.5;
     });
     y += 2;
   };
 
   // Cover
-  doc.setFillColor(10, 10, 20);
+  doc.setFillColor(255, 255, 255);
   doc.rect(0, 0, 210, 297, "F");
+  // Header band
+  doc.setFillColor(20, 20, 20);
+  doc.rect(0, 0, 210, 30, "F");
+  y = 12;
+  addText("ZENITH APEX — BUILD GUIDE", 10, false, [200, 200, 200]);
+  addText(video.invention_name, 18, true, [255, 255, 255]);
   y = 40;
-  addText("BUILD VIDEO GUIDE", 10, false, [100, 150, 255]);
-  addText(video.invention_name, 22, true, [255, 255, 255]);
-  if (video.invention_tagline) addText(`"${video.invention_tagline}"`, 10, false, [150, 150, 180]);
-  if (video.invention_category) addText(video.invention_category.toUpperCase(), 9, false, [100, 100, 130]);
-  addText(`Generated: ${new Date(video.created_date).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}`, 9, false, [80, 80, 100]);
-  addText(`${video.step_count || video.steps?.length || 0} Steps`, 9, false, [80, 80, 100]);
+  if (video.invention_tagline) addText(`"${video.invention_tagline}"`, 11, false, [60, 60, 60]);
+  if (video.invention_category) addText(video.invention_category.toUpperCase(), 10, false, [80, 80, 80]);
+  addText(`Generated: ${new Date(video.created_date).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}`, 10, false, [80, 80, 80]);
+  addText(`${video.step_count || video.steps?.length || 0} Steps`, 10, false, [80, 80, 80]);
 
-  y += 10;
-  doc.setDrawColor(60, 80, 180);
+  y += 6;
+  doc.setDrawColor(20, 20, 20);
   doc.setLineWidth(0.5);
   doc.line(margin, y, W - margin, y);
-  y += 10;
+  y += 8;
 
   // Steps
   (video.steps || []).forEach((step, i) => {
-    if (y > 240) { doc.addPage(); doc.setFillColor(10, 10, 20); doc.rect(0, 0, 210, 297, "F"); y = margin; }
-
-    const typeColors = {
-      preparation: [167, 139, 250], assembly: [96, 184, 255], wiring: [251, 191, 36],
-      calibration: [52, 211, 153], testing: [34, 211, 238], safety: [248, 113, 113]
-    };
-    const col = typeColors[step.type] || [96, 184, 255];
+    if (y > 240) { doc.addPage(); doc.setFillColor(255,255,255); doc.rect(0,0,210,297,"F"); y = margin; }
 
     // Step header
-    doc.setFillColor(...col, 30);
-    doc.setDrawColor(...col);
+    doc.setFillColor(220, 220, 220);
+    doc.setDrawColor(20, 20, 20);
     doc.setLineWidth(0.3);
-    doc.roundedRect(margin, y, W - margin * 2, 8, 2, 2, "FD");
-    doc.setFontSize(10);
+    doc.roundedRect(margin, y, W - margin * 2, 9, 2, 2, "FD");
+    doc.setFontSize(12);
     doc.setFont("helvetica", "bold");
-    doc.setTextColor(...col);
-    doc.text(`STEP ${String(i + 1).padStart(2, "0")}  ${(step.title || "").toUpperCase()}`, margin + 3, y + 5.5);
+    doc.setTextColor(0, 0, 0);
+    doc.text(`STEP ${String(i + 1).padStart(2, "0")}  ${(step.title || "").toUpperCase()}`, margin + 3, y + 6);
 
     const durStr = step.duration || "";
     if (durStr) {
-      doc.setFontSize(8);
+      doc.setFontSize(9);
       doc.setFont("helvetica", "normal");
-      doc.setTextColor(150, 150, 170);
-      doc.text(durStr, W - margin - doc.getTextWidth(durStr) - 2, y + 5.5);
+      doc.setTextColor(80, 80, 80);
+      doc.text(durStr, W - margin - doc.getTextWidth(durStr) - 2, y + 6);
     }
-    y += 12;
+    y += 13;
 
-    addText(step.description || "", 9, false, [200, 200, 210]);
+    addText(step.description || "", 11, false, [20, 20, 20]);
 
     if (step.warning) {
-      doc.setFillColor(80, 20, 20);
+      doc.setFillColor(240, 240, 240);
       const warnLines = doc.splitTextToSize(`⚠ ${step.warning}`, W - margin * 2 - 6);
-      const warnH = warnLines.length * 4.5 + 4;
+      const warnH = warnLines.length * 5.5 + 4;
       doc.roundedRect(margin, y, W - margin * 2, warnH, 1, 1, "F");
-      doc.setFontSize(8); doc.setFont("helvetica", "normal"); doc.setTextColor(248, 113, 113);
-      warnLines.forEach(l => { doc.text(l, margin + 3, y + 4); y += 4.5; });
+      doc.setFontSize(10); doc.setFont("helvetica", "normal"); doc.setTextColor(40, 40, 40);
+      warnLines.forEach(l => { doc.text(l, margin + 3, y + 5); y += 5.5; });
       y += 4;
     }
 
-    // Materials + Tools side by side
+    // Materials + Tools
     const colW = (W - margin * 2 - 4) / 2;
     const matStart = y;
-    doc.setFontSize(8); doc.setFont("helvetica", "bold"); doc.setTextColor(130, 130, 160);
-    doc.text("MATERIALS", margin, y); y += 4;
-    doc.setFont("helvetica", "normal"); doc.setTextColor(180, 180, 200);
-    (step.materials || []).forEach(m => { doc.text(`· ${m}`, margin, y); y += 4; });
+    doc.setFontSize(10); doc.setFont("helvetica", "bold"); doc.setTextColor(60, 60, 60);
+    doc.text("MATERIALS", margin, y); y += 5;
+    doc.setFont("helvetica", "normal"); doc.setTextColor(30, 30, 30);
+    (step.materials || []).forEach(m => { doc.text(`· ${m}`, margin, y); y += 5; });
 
     const toolStart = matStart;
     let ty = toolStart;
-    doc.setFontSize(8); doc.setFont("helvetica", "bold"); doc.setTextColor(130, 130, 160);
-    doc.text("TOOLS", margin + colW + 4, ty); ty += 4;
-    doc.setFont("helvetica", "normal"); doc.setTextColor(180, 180, 200);
-    (step.tools || []).forEach(t => { doc.text(`· ${t}`, margin + colW + 4, ty); ty += 4; });
+    doc.setFontSize(10); doc.setFont("helvetica", "bold"); doc.setTextColor(60, 60, 60);
+    doc.text("TOOLS", margin + colW + 4, ty); ty += 5;
+    doc.setFont("helvetica", "normal"); doc.setTextColor(30, 30, 30);
+    (step.tools || []).forEach(t => { doc.text(`· ${t}`, margin + colW + 4, ty); ty += 5; });
     y = Math.max(y, ty) + 3;
 
     if (step.checkpoint) {
-      doc.setFillColor(10, 50, 30);
+      doc.setFillColor(235, 235, 235);
       const cpLines = doc.splitTextToSize(`✓ ${step.checkpoint}`, W - margin * 2 - 6);
-      const cpH = cpLines.length * 4.5 + 4;
+      const cpH = cpLines.length * 5.5 + 4;
       doc.roundedRect(margin, y, W - margin * 2, cpH, 1, 1, "F");
-      doc.setFontSize(8); doc.setFont("helvetica", "normal"); doc.setTextColor(52, 211, 153);
-      cpLines.forEach(l => { doc.text(l, margin + 3, y + 4); y += 4.5; });
+      doc.setFontSize(10); doc.setFont("helvetica", "normal"); doc.setTextColor(20, 20, 20);
+      cpLines.forEach(l => { doc.text(l, margin + 3, y + 5); y += 5.5; });
       y += 6;
     }
 
-    doc.setDrawColor(40, 40, 60);
+    doc.setDrawColor(180, 180, 180);
     doc.setLineWidth(0.2);
     doc.line(margin, y, W - margin, y);
     y += 6;

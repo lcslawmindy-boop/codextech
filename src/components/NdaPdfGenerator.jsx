@@ -57,44 +57,44 @@ function generateNDA(recipientName, recipientOrg, recipientTitle) {
   };
 
   const h1 = (txt) => {
-    check(16);
+    check(18);
     doc.setFillColor(20, 20, 20);
-    doc.rect(margin - 3, y - 3, pageW - margin * 2 + 6, 13, 'F');
-    doc.setFontSize(12);
+    doc.rect(margin - 3, y - 3, pageW - margin * 2 + 6, 15, 'F');
+    doc.setFontSize(13);
     doc.setFont('helvetica', 'bold');
     doc.setTextColor(255, 255, 255);
-    doc.text(txt, margin, y + 5);
-    y += 15;
+    doc.text(txt, margin, y + 6);
+    y += 17;
   };
 
   const h2 = (txt) => {
-    check(12);
-    doc.setFontSize(11);
+    check(14);
+    doc.setFontSize(12);
     doc.setFont('helvetica', 'bold');
     doc.setTextColor(0, 0, 0);
     doc.text(txt, margin, y);
-    y += 8;
+    y += 9;
   };
 
   const body = (txt, indent = 0) => {
-    doc.setFontSize(11);
+    doc.setFontSize(12);
     doc.setFont('helvetica', 'normal');
     doc.setTextColor(30, 30, 30);
     const lines = doc.splitTextToSize(txt, pageW - margin * 2 - indent);
-    lines.forEach(l => { check(7); doc.text(l, margin + indent, y); y += 6.5; });
+    lines.forEach(l => { check(8); doc.text(l, margin + indent, y); y += 7; });
     y += 3;
   };
 
   const infoRow = (label, value) => {
-    check(8);
-    doc.setFontSize(10);
+    check(10);
+    doc.setFontSize(11);
     doc.setFont('helvetica', 'bold');
     doc.setTextColor(0, 0, 0);
     doc.text(label, margin, y);
     doc.setFont('helvetica', 'normal');
     doc.setTextColor(40, 40, 40);
-    doc.text(value || '___________________________________', margin + 50, y);
-    y += 7;
+    doc.text(value || '___________________________________', margin + 55, y);
+    y += 8;
   };
 
   const date = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });

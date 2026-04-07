@@ -23,13 +23,13 @@ function initPage(doc, title, subtitle) {
 
 function addBodyText(doc, text, y, color) {
   const { margin, pageW, silver } = THEME;
-  doc.setFontSize(10);
+  doc.setFontSize(12);
   doc.setFont("helvetica", "normal");
   doc.setTextColor(...(color || silver));
   const lines = doc.splitTextToSize(text, pageW - margin * 2);
   lines.forEach(l => {
-    if (y > 278) { doc.addPage(); doc.setFillColor(...THEME.pageBg); doc.rect(0,0,210,297,"F"); drawPageHeader(doc, title, subtitle); y = 46; }
-    doc.text(l, margin, y); y += 5.8;
+    if (y > 278) { doc.addPage(); doc.setFillColor(...THEME.pageBg); doc.rect(0,0,210,297,"F"); drawPageHeader(doc, title, subtitle); y = 50; }
+    doc.text(l, margin, y); y += 7;
   });
   return y + 3;
 }
@@ -38,28 +38,28 @@ function sectionH1(doc, text, y) {
   const { margin, pageW, accentBg, gold } = THEME;
   if (y > 270) { doc.addPage(); doc.setFillColor(...THEME.pageBg); doc.rect(0,0,210,297,"F"); y = 20; }
   doc.setFillColor(...accentBg);
-  doc.rect(0, y - 4, pageW, 13, "F");
-  doc.setFillColor(...gold);
-  doc.rect(0, y - 4, 3, 13, "F");
-  doc.setFontSize(11);
+  doc.rect(0, y - 4, pageW, 14, "F");
+  doc.setFillColor(20, 20, 20);
+  doc.rect(0, y - 4, 3, 14, "F");
+  doc.setFontSize(13);
   doc.setFont("helvetica", "bold");
-  doc.setTextColor(...gold);
-  doc.text(text, margin + 5, y + 4);
-  return y + 16;
+  doc.setTextColor(0, 0, 0);
+  doc.text(text, margin + 5, y + 5);
+  return y + 18;
 }
 
 function bulletList(doc, items, y) {
   const { margin, pageW, silver } = THEME;
   items.forEach(item => {
     if (y > 278) { doc.addPage(); doc.setFillColor(...THEME.pageBg); doc.rect(0,0,210,297,"F"); y = 20; }
-    doc.setFontSize(9.5);
+    doc.setFontSize(12);
     doc.setFont("helvetica", "normal");
     doc.setTextColor(...silver);
-    doc.setFillColor(...THEME.gold);
+    doc.setFillColor(0, 0, 0);
     doc.circle(margin + 2, y - 1, 1, "F");
     const lines = doc.splitTextToSize(item, pageW - margin * 2 - 8);
-    lines.forEach((l, li) => { doc.text(l, margin + 6, y + li * 5.5); });
-    y += lines.length * 5.5 + 2;
+    lines.forEach((l, li) => { doc.text(l, margin + 6, y + li * 6.5); });
+    y += lines.length * 6.5 + 2;
   });
   return y + 2;
 }
@@ -269,11 +269,11 @@ function generateInventionPlansPDF() {
     doc.text(inv.patent, pageW-margin-4, y+16, {align:"right"});
     y += 28;
 
-    doc.setFontSize(9.5); doc.setFont("helvetica","bold"); doc.setTextColor(...gold);
-    doc.text("THEORETICAL BASIS", margin, y); y+=6;
+    doc.setFontSize(12); doc.setFont("helvetica","bold"); doc.setTextColor(...gold);
+    doc.text("THEORETICAL BASIS", margin, y); y+=7;
     doc.setFont("helvetica","normal"); doc.setTextColor(...silver);
     const thLines = doc.splitTextToSize(inv.theory, pageW-margin*2);
-    thLines.forEach(l => { doc.text(l, margin, y); y+=5.5; });
+    thLines.forEach(l => { doc.text(l, margin, y); y+=7; });
     y += 5;
 
     // Specs table
@@ -281,11 +281,12 @@ function generateInventionPlansPDF() {
     inv.specs.forEach(spec => {
       if (y > 278) { doc.addPage(); doc.setFillColor(...THEME.pageBg); doc.rect(0,0,210,297,"F"); y=20; }
       const [label, ...rest] = spec.split(":");
-      doc.setFontSize(9); doc.setFont("helvetica","bold"); doc.setTextColor(...THEME.goldLight);
+      doc.setFontSize(11);
+      doc.setFont("helvetica","bold"); doc.setTextColor(0, 0, 0);
       doc.text(label+":", margin+3, y);
       doc.setFont("helvetica","normal"); doc.setTextColor(...silver);
-      doc.text(rest.join(":").trim(), margin+60, y);
-      y += 5.8;
+      doc.text(rest.join(":").trim(), margin+65, y);
+      y += 7;
     });
     y += 4;
 
@@ -297,11 +298,11 @@ function generateInventionPlansPDF() {
     y = sectionH1(doc, "ASSEMBLY STEPS", y);
     inv.steps.forEach((step, si) => {
       if (y > 278) { doc.addPage(); doc.setFillColor(...THEME.pageBg); doc.rect(0,0,210,297,"F"); y=20; }
-      doc.setFontSize(9.5); doc.setFont("helvetica","bold"); doc.setTextColor(...gold);
+      doc.setFontSize(12); doc.setFont("helvetica","bold"); doc.setTextColor(0, 0, 0);
       doc.text(`Step ${si+1}:`, margin, y);
       doc.setFont("helvetica","normal"); doc.setTextColor(...silver);
-      doc.text(step, margin+18, y);
-      y+=6;
+      doc.text(step, margin+22, y);
+      y+=7;
     });
   });
 

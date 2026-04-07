@@ -118,13 +118,13 @@ function ValuationModule({ item }) {
       y += 6;
     };
 
-    const kv = (label, value, labelColor = [80, 100, 160], valColor = [20, 20, 40]) => {
+    const kv = (label, value, labelColor = [60, 60, 60], valColor = [0, 0, 0]) => {
       check(14);
-      doc.setFontSize(9); doc.setFont("helvetica", "bold"); doc.setTextColor(...labelColor);
+      doc.setFontSize(11); doc.setFont("helvetica", "bold"); doc.setTextColor(...labelColor);
       doc.text(label, margin, y);
       doc.setFont("helvetica", "normal"); doc.setTextColor(...valColor);
       doc.text(String(value), margin + 160, y);
-      y += 14;
+      y += 15;
     };
 
     // ── COVER ──────────────────────────────────────────────────────────────
@@ -459,27 +459,31 @@ function generatePDF(item, aiExpansion) {
 
   const check = (n = 12) => { if (y + n > 282) { doc.addPage(); y = 20; } };
 
-  const band = (text, r, g, b) => {
+  const band = (text) => {
     check(16);
-    doc.setFillColor(r, g, b);
-    doc.rect(margin - 2, y - 4, cW + 4, 12, "F");
-    doc.setFontSize(9); doc.setFont("helvetica", "bold"); doc.setTextColor(255, 255, 255);
-    doc.text(text, margin, y + 4); y += 14;
+    doc.setFillColor(20, 20, 20);
+    doc.rect(margin - 2, y - 4, cW + 4, 13, "F");
+    doc.setFontSize(11); doc.setFont("helvetica", "bold"); doc.setTextColor(255, 255, 255);
+    doc.text(text, margin, y + 5); y += 16;
   };
 
-  const para = (text, color = [40, 40, 40]) => {
-    doc.setFontSize(9); doc.setFont("helvetica", "normal"); doc.setTextColor(...color);
+  const para = (text, color = [20, 20, 20]) => {
+    doc.setFontSize(12); doc.setFont("helvetica", "normal"); doc.setTextColor(...color);
     const lines = doc.splitTextToSize(text || "", cW);
-    lines.forEach(l => { check(6); doc.text(l, margin, y); y += 5.5; });
+    lines.forEach(l => { check(7); doc.text(l, margin, y); y += 7; });
     y += 3;
   };
 
   // Cover
-  doc.setFillColor(10, 15, 40);
+  doc.setFillColor(20, 20, 20);
+  doc.rect(0, 0, W, 30, "F");
+  doc.setFillColor(255, 255, 255);
   doc.rect(0, 0, W, 297, "F");
-  doc.setFontSize(9); doc.setFont("helvetica", "normal"); doc.setTextColor(160, 160, 200);
-  doc.text("ZENITH APEX RESEARCH DATABASE — PITCH DECK", W / 2, 30, { align: "center" });
-  doc.setFontSize(18); doc.setFont("helvetica", "bold"); doc.setTextColor(255, 255, 255);
+  doc.setFillColor(20, 20, 20);
+  doc.rect(0, 0, W, 30, "F");
+  doc.setFontSize(10); doc.setFont("helvetica", "bold"); doc.setTextColor(255, 255, 255);
+  doc.text("ZENITH APEX RESEARCH DATABASE — PITCH DECK", W / 2, 18, { align: "center" });
+  doc.setFontSize(20); doc.setFont("helvetica", "bold"); doc.setTextColor(0, 0, 0);
   const titleLines = doc.splitTextToSize(item.title, cW);
   titleLines.forEach((l, i) => doc.text(l, W / 2, 50 + i * 10, { align: "center" }));
   doc.setFontSize(10); doc.setFont("helvetica", "italic"); doc.setTextColor(180, 180, 220);
@@ -490,29 +494,30 @@ function generatePDF(item, aiExpansion) {
   doc.text(`Generated: ${new Date().toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}`, W / 2, 50 + titleLines.length * 10 + 26, { align: "center" });
 
   doc.addPage();
-  doc.setFillColor(255, 255, 255); doc.rect(0, 0, W, 297, "F");
+  doc.setFillColor(255, 255, 255);
+  doc.rect(0, 0, W, 297, "F");
   y = 20;
 
-  band("SLIDE 1 — THE PROBLEM", 200, 50, 50);
+  band("SLIDE 1 — THE PROBLEM");
   para(item.problem);
   para("Standard EM limitation: Present electromagnetic theory is only a special case of a more fundamental electromagnetics — blind to the scalar phi-field by design.", [120, 60, 60]);
   y += 4;
 
-  band("SLIDE 2 — THE BEARDEN SOLUTION", 40, 90, 200);
+  band("SLIDE 2 — THE BEARDEN SOLUTION");
   para(item.beardenSolution);
   y += 4;
 
-  band("SLIDE 3 — MARKET POTENTIAL", 30, 150, 80);
+  band("SLIDE 3 — MARKET POTENTIAL");
   para(item.market);
   para(`Entry Price: ${item.price}  |  Target: ${item.audience}  |  Category: ${item.category}`, [60, 120, 60]);
   y += 4;
 
-  band("SLIDE 4 — TECHNICAL FEASIBILITY", 120, 60, 180);
+  band("SLIDE 4 — TECHNICAL FEASIBILITY");
   para(item.feasibility);
   para(`Source: ${item.source}`, [100, 80, 150]);
   y += 4;
 
-  band("SLIDE 5 — REVENUE STREAMS", 180, 130, 30);
+  band("SLIDE 5 — REVENUE STREAMS");
   [
     `Direct Sales: ${item.price} entry price`,
     "Engineering Plans PDF: 80% margin digital product",
@@ -524,7 +529,7 @@ function generatePDF(item, aiExpansion) {
   y += 4;
 
   if (aiExpansion) {
-    band("SLIDE 6 — AI EXECUTIVE SUMMARY", 180, 40, 100);
+    band("SLIDE 6 — AI EXECUTIVE SUMMARY");
     para(aiExpansion);
   }
 
