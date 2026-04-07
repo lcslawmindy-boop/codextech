@@ -44,7 +44,6 @@ export default function BetaApply() {
     setSubmitting(true);
     setError("");
 
-    // Check for duplicate
     const existing = await base44.entities.BetaApplication.filter({ email: form.email });
     if (existing.length > 0) {
       setError("This email has already applied. Check your inbox for updates.");
@@ -54,7 +53,6 @@ export default function BetaApply() {
 
     await base44.entities.BetaApplication.create({ ...form, status: "approved", converted_at: new Date().toISOString() });
 
-    // Send access granted email
     await base44.integrations.Core.SendEmail({
       to: form.email,
       subject: "✅ Zenith Apex — You Have Access",
@@ -75,6 +73,30 @@ export default function BetaApply() {
           <h1 className="text-white font-black text-2xl mb-3">Access Granted — Welcome!</h1>
           <p className="text-gray-400 text-sm leading-relaxed mb-6">
             Your NDA is on file and your founding member access is <strong className="text-green-400">active immediately</strong>. Check your inbox for the welcome email with full platform details.
+          </p>
+          <div className="bg-yellow-950/30 border border-yellow-800 rounded-2xl p-5 text-left">
+            <p className="text-yellow-400 font-bold text-sm mb-2">🔒 Confidentiality Reminder</p>
+            <p className="text-yellow-200 text-xs leading-relaxed">Your NDA is now active. Do not share platform content, credentials, or research materials. Your access is tied to your email address and non-transferable.</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-gray-950 text-white">
+      {/* Hero */}
+      <div className="border-b border-yellow-900/40 bg-gradient-to-b from-gray-900 to-gray-950">
+        <div className="max-w-4xl mx-auto px-5 py-14 text-center">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-green-950/60 border border-green-800 text-green-400 text-xs font-black mb-5 uppercase tracking-widest">
+            <Shield size={11} /> NDA-Gated Access — Open Enrollment
+          </div>
+          <h1 className="text-4xl md:text-5xl font-black leading-tight mb-4">
+            Apply for Early Access<br />
+            <span className="text-yellow-400">Zenith Apex Research Platform</span>
+          </h1>
+          <p className="text-gray-400 text-lg max-w-2xl mx-auto leading-relaxed mb-3">
+            Sign the NDA, complete your profile, and get <strong className="text-white">immediate access</strong> to the full Zenith Apex research platform. Founding member pricing locked forever.
           </p>
           <p className="text-gray-600 text-sm">NDA required · Instant access after sign-up · Founding 349 pricing</p>
         </div>
@@ -113,7 +135,7 @@ export default function BetaApply() {
           <div className="bg-gray-900 border border-yellow-900/40 rounded-2xl p-6">
             <div className="flex items-center gap-2 mb-5">
               <Shield size={16} className="text-yellow-400" />
-              <h2 className="text-white font-black text-lg">Beta Application</h2>
+              <h2 className="text-white font-black text-lg">Get Instant Access</h2>
               <span className="ml-auto text-xs px-2 py-0.5 rounded bg-yellow-900/40 border border-yellow-800 text-yellow-400 font-bold">NDA Required</span>
             </div>
 
