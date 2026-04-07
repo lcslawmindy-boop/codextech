@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { User, LogOut, Trash2, Shield, Bell, ChevronRight, AlertTriangle, Loader2 } from "lucide-react";
+import { User, LogOut, Trash2, Shield, Bell, ChevronRight, AlertTriangle, Loader2, Package } from "lucide-react";
+import { Link } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import PageHeader from "../components/PageHeader";
 
@@ -56,6 +57,16 @@ export default function AccountSettings() {
             </div>
           </div>
         </div>
+
+        {/* Member Portal Link */}
+        <Link to="/member-portal" className="flex items-center gap-3 px-5 py-4 bg-gray-900 border border-yellow-900/40 rounded-2xl hover:bg-gray-800/60 transition-colors" style={{ minHeight: 64 }}>
+          <Package size={20} className="text-yellow-400 flex-shrink-0" />
+          <div className="flex-1">
+            <p className="text-white text-sm font-bold">Member Portal</p>
+            <p className="text-gray-500 text-xs">View membership, purchases, invoices & access your content</p>
+          </div>
+          <ChevronRight size={15} className="text-gray-600" />
+        </Link>
 
         {/* Settings Rows */}
         <div className="bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden divide-y divide-gray-800">

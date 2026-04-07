@@ -55,6 +55,7 @@ import Pricing from './pages/Pricing';
 import AccountSettings from './pages/AccountSettings';
 import BetaApply from './pages/BetaApply';
 import AdminBeta from './pages/AdminBeta';
+import MemberPortal from './pages/MemberPortal';
 import MobileLayout from './components/MobileLayout';
 
 const AuthenticatedApp = () => {
@@ -143,6 +144,7 @@ const AuthenticatedApp = () => {
           <Route path="/account" element={<AccountSettings />} />
           <Route path="/beta-apply" element={<BetaApply />} />
           <Route path="/admin-beta" element={<AdminBeta />} />
+          <Route path="/member-portal" element={<MemberPortal />} />
           <Route path="*" element={<PageNotFound />} />
         </Route>
       </Routes>
