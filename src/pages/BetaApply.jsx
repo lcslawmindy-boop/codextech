@@ -52,13 +52,13 @@ export default function BetaApply() {
       return;
     }
 
-    await base44.entities.BetaApplication.create({ ...form, status: "pending" });
+    await base44.entities.BetaApplication.create({ ...form, status: "approved", converted_at: new Date().toISOString() });
 
-    // Send confirmation email
+    // Send access granted email
     await base44.integrations.Core.SendEmail({
       to: form.email,
-      subject: "Zenith Apex Beta — Application Received",
-      body: `Dear ${form.full_name},\n\nThank you for applying to the Zenith Apex closed beta.\n\nYour application is under review. We vet each applicant individually — expect a response within 48–72 hours.\n\nWhat happens next:\n1. We review your application and background\n2. If approved, you receive a private invitation link\n3. You complete the NDA and get immediate platform access\n4. Your beta pricing is grandfathered for life\n\nThis is a limited cohort of 50–100 researchers, investors, and engineers. We keep the group small to maintain research integrity.\n\n— Zenith Apex Research Portfolio\n\nDO NOT forward this email. Your application is confidential.`
+      subject: "✅ Zenith Apex — You Have Access",
+      body: `Dear ${form.full_name},\n\nWelcome to the Zenith Apex Research Platform. Your NDA has been recorded and your founding member access is now active.\n\nYou can log in immediately at the platform URL. Your founding member pricing is grandfathered for life.\n\nWhat you now have access to:\n• 5 Invention Build Plans (MEG, TRD-1, G-Com, Prioré, TRZ Reactor)\n• AI Patent Drafting Tool (unlimited provisionals)\n• Full 10-Course Library\n• Investor Package ($3.9M–$11.5M valuation deck)\n• AI Invention Forge\n• Prior Art Archive & IP Monitoring\n\nThis platform is confidential. Do not share your credentials or platform content. Violation subjects you to liquidated damages as agreed in the NDA.\n\n— Zenith Apex Research Portfolio`
     });
 
     setSubmitted(true);
@@ -72,35 +72,11 @@ export default function BetaApply() {
           <div className="w-20 h-20 rounded-full bg-green-900/40 border-2 border-green-600 flex items-center justify-center mx-auto mb-6">
             <Check size={36} className="text-green-400" />
           </div>
-          <h1 className="text-white font-black text-2xl mb-3">Application Received</h1>
+          <h1 className="text-white font-black text-2xl mb-3">Access Granted — Welcome!</h1>
           <p className="text-gray-400 text-sm leading-relaxed mb-6">
-            We review each applicant individually. Expect a response within <strong className="text-white">48–72 hours</strong>. Check your inbox — including spam.
+            Your NDA is on file and your founding member access is <strong className="text-green-400">active immediately</strong>. Check your inbox for the welcome email with full platform details.
           </p>
-          <div className="bg-yellow-950/30 border border-yellow-800 rounded-2xl p-5 text-left">
-            <p className="text-yellow-400 font-bold text-sm mb-2">⚠️ Important</p>
-            <p className="text-yellow-200 text-xs leading-relaxed">This is a closed, NDA-gated cohort. Do not share this page or your invitation. Your access is tied to your email address and non-transferable.</p>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  return (
-    <div className="min-h-screen bg-gray-950 text-white">
-      {/* Hero */}
-      <div className="border-b border-yellow-900/40 bg-gradient-to-b from-gray-900 to-gray-950">
-        <div className="max-w-4xl mx-auto px-5 py-14 text-center">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-red-950/60 border border-red-800 text-red-400 text-xs font-black mb-5 uppercase tracking-widest">
-            <Lock size={11} /> Closed Beta — Invite Required
-          </div>
-          <h1 className="text-4xl md:text-5xl font-black leading-tight mb-4">
-            Apply for Early Access<br />
-            <span className="text-yellow-400">Zenith Apex Research Platform</span>
-          </h1>
-          <p className="text-gray-400 text-lg max-w-2xl mx-auto leading-relaxed mb-3">
-            We're opening to a private cohort of <strong className="text-white">50–100 vetted researchers, investors, and engineers</strong> before public launch. Beta members receive lifetime grandfathered pricing.
-          </p>
-          <p className="text-gray-600 text-sm">NDA required · Application reviewed within 48–72 hrs · No public launch date set</p>
+          <p className="text-gray-600 text-sm">NDA required · Instant access after sign-up · Founding 349 pricing</p>
         </div>
       </div>
 
@@ -236,10 +212,10 @@ export default function BetaApply() {
                 className="w-full flex items-center justify-center gap-2 py-4 rounded-2xl bg-gradient-to-r from-yellow-700 to-yellow-600 hover:from-yellow-600 hover:to-yellow-500 text-black font-black text-base disabled:opacity-60 transition-all shadow-[0_4px_24px_rgba(200,160,0,0.3)]"
               >
                 {submitting ? <Loader2 size={18} className="animate-spin" /> : <ChevronRight size={18} />}
-                {submitting ? "Submitting Application…" : "Submit Beta Application"}
+                {submitting ? "Creating Your Access…" : "Sign NDA & Get Instant Access"}
               </button>
 
-              <p className="text-gray-600 text-xs text-center">No payment required to apply · Review within 48–72 hours</p>
+              <p className="text-gray-600 text-xs text-center">No payment required · Instant access after sign-up · NDA enforced</p>
             </form>
           </div>
         </div>
