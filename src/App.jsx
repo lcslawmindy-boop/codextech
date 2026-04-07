@@ -51,6 +51,7 @@ import AdminDownloadCenter from './pages/AdminDownloadCenter';
 import InventionLibrary from './pages/InventionLibrary';
 import DownloadCenter from './pages/DownloadCenter';
 import InventionTimeline from './pages/InventionTimeline';
+import Pricing from './pages/Pricing';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -132,6 +133,7 @@ const AuthenticatedApp = () => {
         <Route path="/invention-library" element={<InventionLibrary />} />
         <Route path="/download-center" element={<DownloadCenter />} />
         <Route path="/invention-timeline" element={<InventionTimeline />} />
+        <Route path="/pricing" element={<Pricing />} />
         <Route path="/investor-portal" element={<InvestorPortal />} />
         <Route path="*" element={<PageNotFound />} />
       </Routes>

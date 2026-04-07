@@ -12,28 +12,16 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { title, priceInCents, description, category, successUrl, cancelUrl } = await req.json();
+    const { title, priceInCents, description, category, mode, interval, successUrl, cancelUrl } = await req.json();
 
     if (!title || !priceInCents || !successUrl || !cancelUrl) {
       return Response.json({ error: 'Missing required fields' }, { status: 400 });
     }
 
-    const session = await stripe.checkout.sessions.create({
+    const isSubscription = mode === "subscription";
+
+    let sessionParams = {
       payment_method_types: ['card'],
-      line_items: [
-        {
-          price_data: {
-            currency: 'usd',
-            product_data: {
-              name: title,
-              description: description || '',
-            },
-            unit_amount: priceInCents,
-          },
-          quantity: 1,
-        },
-      ],
-      mode: 'payment',
       success_url: successUrl,
       cancel_url: cancelUrl,
       customer_email: user.email,
@@ -43,7 +31,34 @@ Deno.serve(async (req) => {
         product_title: title,
         product_category: category || '',
       },
-    });
+    };
+
+    if (isSubscription) {
+      // Subscription mode: create price inline
+      sessionParams.mode = 'subscription';
+      sessionParams.line_items = [{
+        price_data: {
+          currency: 'usd',
+          product_data: { name: title, description: description || '' },
+          unit_amount: priceInCents,
+          recurring: { interval: interval || 'month' },
+        },
+        quantity: 1,
+      }];
+    } else {
+      // One-time payment
+      sessionParams.mode = 'payment';
+      sessionParams.line_items = [{
+        price_data: {
+          currency: 'usd',
+          product_data: { name: title, description: description || '' },
+          unit_amount: priceInCents,
+        },
+        quantity: 1,
+      }];
+    }
+
+    const session = await stripe.checkout.sessions.create(sessionParams);
 
     return Response.json({ url: session.url, sessionId: session.id });
   } catch (error) {
