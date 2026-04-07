@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { ArrowLeft, Loader2, Sparkles, Download, DollarSign, Rocket, TrendingUp, Shield, CheckSquare, Square, FileDown, X, Film } from "lucide-react";
+import { ArrowLeft, Loader2, Sparkles, Download, DollarSign, Rocket, TrendingUp, Shield, CheckSquare, Square, FileDown, X, Film, BookOpen } from "lucide-react";
 import InventionBuildVideo from "../components/InventionBuildVideo";
 import PitchDeckExporter from "../components/PitchDeckExporter";
 import InventionPatentDrafter from "../components/InventionPatentDrafter";
 import MarketResearchScanner from "../components/MarketResearchScanner";
+import CitationGenerator from "../components/CitationGenerator";
 import { base44 } from "@/api/base44Client";
 
 const SEED_DOMAINS = [
@@ -139,7 +140,7 @@ function ExportBar({ inventions, selected, onToggle, onSelectAll, onClear }) {
   );
 }
 
-function InventionCard({ inv, index, selected, onToggle, onBuildVideo, onDraftPatent, onResearch }) {
+function InventionCard({ inv, index, selected, onToggle, onBuildVideo, onDraftPatent, onResearch, onCitations }) {
   const [tab, setTab] = useState("overview");
   const tabs = ["overview", "specs", "ip", "financials", "launch"];
 
@@ -198,6 +199,10 @@ function InventionCard({ inv, index, selected, onToggle, onBuildVideo, onDraftPa
           <button onClick={onResearch}
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all hover:opacity-90 flex-shrink-0 bg-cyan-700 hover:bg-cyan-600 text-white">
             🔬 Market Research
+          </button>
+          <button onClick={onCitations}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all hover:opacity-90 flex-shrink-0 bg-indigo-700 hover:bg-indigo-600 text-white">
+            <BookOpen size={11} /> 📚 Citations
           </button>
         </div>
       </div>
@@ -342,6 +347,7 @@ export default function InventionForge() {
   const [showPitchDeck, setShowPitchDeck] = useState(false);
   const [patentInvention, setPatentInvention] = useState(null);
   const [researchInvention, setResearchInvention] = useState(null);
+  const [citationInvention, setCitationInvention] = useState(null);
   const [selectedDomains, setSelectedDomains] = useState(["vacuum_energy", "bioelectromagnetics"]);
   const [selectedMarkets, setSelectedMarkets] = useState(["Medical / Health", "Energy / Utilities"]);
   const [inventionCount, setInventionCount] = useState(3);
@@ -541,7 +547,7 @@ export default function InventionForge() {
           />
           <div className="space-y-5 mt-4">
             {inventions.map((inv, i) => (
-              <InventionCard key={i} inv={inv} index={i} selected={selectedForExport.has(i)} onToggle={() => toggleExportSelection(i)} onBuildVideo={() => setBuildVideoInvention(inv)} onDraftPatent={() => setPatentInvention(inv)} onResearch={() => setResearchInvention(inv)} />
+              <InventionCard key={i} inv={inv} index={i} selected={selectedForExport.has(i)} onToggle={() => toggleExportSelection(i)} onBuildVideo={() => setBuildVideoInvention(inv)} onDraftPatent={() => setPatentInvention(inv)} onResearch={() => setResearchInvention(inv)} onCitations={() => setCitationInvention(inv)} />
             ))}
           </div>
 
@@ -561,6 +567,12 @@ export default function InventionForge() {
               onUpdateInvention={(updates) => {
                 setInventions(prev => prev.map(inv => inv.name === researchInvention.name ? { ...inv, ...updates } : inv));
               }}
+            />
+          )}
+          {citationInvention && (
+            <CitationGenerator
+              invention={citationInvention}
+              onClose={() => setCitationInvention(null)}
             />
           )}
           {inventions.length > 0 && (
