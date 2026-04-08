@@ -60,6 +60,7 @@ import MemberPortal from './pages/MemberPortal';
 import LicensingPortal from './pages/LicensingPortal';
 import MobileLayout from './components/MobileLayout';
 import DeviceKnowledgeGraph from './pages/DeviceKnowledgeGraph';
+import AcquisitionCRM from './pages/AcquisitionCRM';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -162,6 +163,7 @@ const AuthenticatedApp = () => {
           <Route path="/member-portal" element={<MemberPortal />} />
           <Route path="/licensing" element={<LicensingPortal />} />
           <Route path="/device-graph" element={<DeviceKnowledgeGraph />} />
+          <Route path="/acquisition-crm" element={<AcquisitionCRM />} />
           <Route path="*" element={<PageNotFound />} />
         </Route>
       </Routes>
