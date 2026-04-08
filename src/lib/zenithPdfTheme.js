@@ -1,115 +1,110 @@
-// Shared Zenith Apex PDF branding theme — Black & White print-friendly
+// Shared Zenith Apex PDF branding theme — Black & White print-friendly, large readable fonts
 
 export const THEME = {
-  // Backgrounds — all white/light gray for B&W printing
-  pageBg:    [255, 255, 255],   // white
-  headerBg:  [20, 20, 20],      // black header band
-  accentBg:  [220, 220, 220],   // light gray section bands
-  cardBg:    [245, 245, 245],   // very light gray cards
-  ruleBg:    [180, 180, 180],
-  // Typography — all grayscale
-  gold:      [0, 0, 0],         // black (was gold)
-  goldLight: [50, 50, 50],      // dark gray
+  // Backgrounds — pure B&W
+  pageBg:    [255, 255, 255],
+  headerBg:  [10, 10, 10],
+  accentBg:  [230, 230, 230],
+  cardBg:    [245, 245, 245],
+  ruleBg:    [160, 160, 160],
+  // Typography — strict grayscale
+  gold:      [0, 0, 0],
+  goldLight: [40, 40, 40],
   white:     [255, 255, 255],
-  silver:    [20, 20, 20],      // near-black body text
-  muted:     [70, 70, 70],      // medium gray
-  dimmed:    [130, 130, 130],   // lighter gray
-  // Accents — all grayscale
-  cyan:      [60, 60, 60],
-  green:     [40, 40, 40],
-  red:       [60, 60, 60],
-  // Dimensions
-  margin: 18,
+  silver:    [15, 15, 15],
+  muted:     [60, 60, 60],
+  dimmed:    [110, 110, 110],
+  cyan:      [50, 50, 50],
+  green:     [30, 30, 30],
+  red:       [50, 50, 50],
+  // Dimensions — wider margin for readability
+  margin: 20,
   pageW: 210,
   pageH: 297,
 };
 
-// Draw the Zenith Apex tech logo at (x, y) with given size
-export function drawLogo(doc, x, y, size = 14) {
+// Draw the Zenith Apex hexagonal logo at (x, y)
+export function drawLogo(doc, x, y, size = 16) {
   const s = size;
   const cx = x + s * 0.5;
   const cy = y + s * 0.5;
   const r = s * 0.48;
 
-  // Outer hexagon
-  doc.setDrawColor(255, 255, 255);
-  doc.setLineWidth(0.6);
   const hex = [];
   for (let i = 0; i < 6; i++) {
     const angle = (Math.PI / 3) * i - Math.PI / 6;
     hex.push([cx + r * Math.cos(angle), cy + r * Math.sin(angle)]);
   }
-  doc.setFillColor(20, 20, 20);
+  doc.setDrawColor(255, 255, 255);
+  doc.setLineWidth(0.8);
+  doc.setFillColor(10, 10, 10);
   doc.lines(hex.map((p, i) => [
     hex[(i + 1) % 6][0] - p[0],
     hex[(i + 1) % 6][1] - p[1]
   ]), hex[0][0], hex[0][1], [1, 1], 'FD', true);
 
-  // Inner Z shape
   const zScale = r * 0.55;
   doc.setDrawColor(255, 255, 255);
-  doc.setLineWidth(0.8);
+  doc.setLineWidth(1.0);
   doc.line(cx - zScale * 0.6, cy - zScale * 0.5, cx + zScale * 0.6, cy - zScale * 0.5);
   doc.line(cx + zScale * 0.6, cy - zScale * 0.5, cx - zScale * 0.6, cy + zScale * 0.5);
   doc.line(cx - zScale * 0.6, cy + zScale * 0.5, cx + zScale * 0.6, cy + zScale * 0.5);
 
-  // Corner dots
   doc.setFillColor(255, 255, 255);
-  hex.forEach(([px, py]) => {
-    doc.circle(px, py, 0.7, 'F');
-  });
+  hex.forEach(([px, py]) => doc.circle(px, py, 0.8, 'F'));
 }
 
-// Draw branded page header band
+// Draw branded page header band — taller, larger fonts
 export function drawPageHeader(doc, title, subtitle) {
   const { margin, pageW } = THEME;
-  doc.setFillColor(20, 20, 20);
-  doc.rect(0, 0, pageW, 42, 'F');
-  // Top rule
+  // Main band
+  doc.setFillColor(10, 10, 10);
+  doc.rect(0, 0, pageW, 50, 'F');
+  // Top accent rule
   doc.setFillColor(255, 255, 255);
-  doc.rect(0, 0, pageW, 1.5, 'F');
+  doc.rect(0, 0, pageW, 2, 'F');
 
-  drawLogo(doc, margin - 2, 13, 16);
+  drawLogo(doc, margin - 2, 16, 18);
 
-  doc.setFontSize(17);
+  doc.setFontSize(20);
   doc.setFont('helvetica', 'bold');
   doc.setTextColor(255, 255, 255);
-  doc.text('ZENITH APEX', margin + 20, 22);
+  doc.text('ZENITH APEX', margin + 24, 27);
 
-  doc.setFontSize(8);
+  doc.setFontSize(9);
   doc.setFont('helvetica', 'normal');
-  doc.setTextColor(200, 200, 200);
-  doc.text('ADVANCED RESEARCH PORTFOLIO', margin + 20, 29);
+  doc.setTextColor(190, 190, 190);
+  doc.text('ADVANCED RESEARCH PORTFOLIO', margin + 24, 35);
 
   if (title) {
-    doc.setFontSize(11);
+    doc.setFontSize(13);
     doc.setFont('helvetica', 'bold');
     doc.setTextColor(255, 255, 255);
-    doc.text(title, pageW - margin, 22, { align: 'right' });
+    doc.text(title, pageW - margin, 27, { align: 'right' });
   }
   if (subtitle) {
     doc.setFontSize(8);
     doc.setFont('helvetica', 'normal');
-    doc.setTextColor(200, 200, 200);
-    doc.text(subtitle, pageW - margin, 29, { align: 'right' });
+    doc.setTextColor(180, 180, 180);
+    doc.text(subtitle, pageW - margin, 35, { align: 'right' });
   }
 
   // Bottom rule
   doc.setFillColor(255, 255, 255);
-  doc.rect(0, 41, pageW, 0.5, 'F');
+  doc.rect(0, 49, pageW, 1, 'F');
 }
 
-// Draw footer on current page
+// Draw footer on all pages
 export function drawFooter(doc, pageNum, totalPages, label) {
   const { pageW, margin } = THEME;
-  doc.setFillColor(20, 20, 20);
-  doc.rect(0, 289, pageW, 8, 'F');
+  doc.setFillColor(10, 10, 10);
+  doc.rect(0, 287, pageW, 10, 'F');
   doc.setFillColor(255, 255, 255);
-  doc.rect(0, 289, pageW, 0.4, 'F');
-  doc.setFontSize(7);
+  doc.rect(0, 287, pageW, 0.5, 'F');
+  doc.setFontSize(7.5);
   doc.setFont('helvetica', 'normal');
   doc.setTextColor(200, 200, 200);
-  doc.text('CONFIDENTIAL — ZENITH APEX RESEARCH PORTFOLIO — UNAUTHORIZED DISCLOSURE PROHIBITED', pageW / 2, 294, { align: 'center' });
-  doc.text(`${label || ''}  ·  Page ${pageNum} of ${totalPages}`, pageW - margin, 294, { align: 'right' });
-  doc.text(new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }), margin, 294);
+  doc.text('CONFIDENTIAL — ZENITH APEX RESEARCH PORTFOLIO — UNAUTHORIZED DISCLOSURE PROHIBITED', pageW / 2, 293, { align: 'center' });
+  doc.text(`${label || ''}  ·  Page ${pageNum} of ${totalPages}`, pageW - margin, 293, { align: 'right' });
+  doc.text(new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }), margin, 293);
 }

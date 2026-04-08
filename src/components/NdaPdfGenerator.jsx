@@ -4,151 +4,158 @@ import { FileText, Loader2, Download } from "lucide-react";
 
 function generateNDA(recipientName, recipientOrg, recipientTitle) {
   const doc = new jsPDF({ orientation: "portrait", unit: "mm", format: "a4" });
-  const margin = 20;
+  const margin = 22;
   const pageW = 210;
+  const contentW = pageW - margin * 2;
   let y = 0;
-  let pageNum = 1;
 
   const bg = () => {
     doc.setFillColor(255, 255, 255);
     doc.rect(0, 0, pageW, 297, 'F');
   };
 
-  const newPage = () => {
-    doc.addPage();
-    bg();
-    pageNum++;
-    drawHeader();
-    y = 40;
-  };
-
-  const check = (need = 14) => { if (y + need > 280) newPage(); };
-
   const drawHeader = () => {
-    doc.setFillColor(20, 20, 20);
-    doc.rect(0, 0, pageW, 12, 'F');
-    doc.setFontSize(8);
+    doc.setFillColor(10, 10, 10);
+    doc.rect(0, 0, pageW, 14, 'F');
+    doc.setFontSize(8.5);
     doc.setFont('helvetica', 'bold');
     doc.setTextColor(255, 255, 255);
-    doc.text('ZENITH APEX RESEARCH PORTFOLIO — NON-DISCLOSURE AGREEMENT', margin, 8);
-    doc.text('STRICTLY CONFIDENTIAL', pageW - margin, 8, { align: 'right' });
+    doc.text('ZENITH APEX RESEARCH PORTFOLIO — NON-DISCLOSURE AGREEMENT', margin, 9.5);
+    doc.text('STRICTLY CONFIDENTIAL', pageW - margin, 9.5, { align: 'right' });
   };
 
   const drawFooter = () => {
     const total = doc.getNumberOfPages();
     for (let p = 1; p <= total; p++) {
       doc.setPage(p);
-      doc.setFillColor(240, 240, 240);
-      doc.rect(0, 287, pageW, 10, 'F');
-      doc.setFontSize(8);
+      doc.setFillColor(10, 10, 10);
+      doc.rect(0, 286, pageW, 11, 'F');
+      doc.setFillColor(255, 255, 255);
+      doc.rect(0, 286, pageW, 0.4, 'F');
+      doc.setFontSize(7.5);
       doc.setFont('helvetica', 'normal');
-      doc.setTextColor(80, 80, 80);
-      doc.text('Zenith Apex Research Portfolio — Confidential NDA', margin, 293);
-      doc.text(`Page ${p} of ${total}`, pageW - margin, 293, { align: 'right' });
+      doc.setTextColor(200, 200, 200);
+      doc.text('Zenith Apex Research Portfolio — Confidential NDA — Unauthorized Disclosure Subject to $2.5M Liquidated Damages', margin, 292);
+      doc.text(`Page ${p} of ${total}`, pageW - margin, 292, { align: 'right' });
     }
   };
 
+  const newPage = () => {
+    doc.addPage();
+    bg();
+    drawHeader();
+    y = 24;
+  };
+
+  const check = (need = 16) => { if (y + need > 282) newPage(); };
+
   const rule = () => {
-    check(6);
+    check(8);
     doc.setDrawColor(0, 0, 0);
-    doc.setLineWidth(0.4);
+    doc.setLineWidth(0.5);
     doc.line(margin, y, pageW - margin, y);
-    y += 6;
+    y += 8;
   };
 
   const h1 = (txt) => {
-    check(18);
-    doc.setFillColor(20, 20, 20);
-    doc.rect(margin - 3, y - 3, pageW - margin * 2 + 6, 15, 'F');
-    doc.setFontSize(13);
+    check(22);
+    doc.setFillColor(10, 10, 10);
+    doc.rect(margin - 4, y - 4, contentW + 8, 18, 'F');
+    doc.setFontSize(14);
     doc.setFont('helvetica', 'bold');
     doc.setTextColor(255, 255, 255);
-    doc.text(txt, margin, y + 6);
-    y += 17;
+    doc.text(txt, margin, y + 8);
+    y += 22;
   };
 
   const h2 = (txt) => {
-    check(14);
-    doc.setFontSize(12);
+    check(18);
+    doc.setFontSize(13);
     doc.setFont('helvetica', 'bold');
     doc.setTextColor(0, 0, 0);
     doc.text(txt, margin, y);
+    y += 4;
+    doc.setDrawColor(0, 0, 0);
+    doc.setLineWidth(0.4);
+    doc.line(margin, y, margin + doc.getTextWidth(txt), y);
     y += 9;
   };
 
   const body = (txt, indent = 0) => {
     doc.setFontSize(12);
     doc.setFont('helvetica', 'normal');
-    doc.setTextColor(30, 30, 30);
-    const lines = doc.splitTextToSize(txt, pageW - margin * 2 - indent);
-    lines.forEach(l => { check(8); doc.text(l, margin + indent, y); y += 7; });
-    y += 3;
+    doc.setTextColor(20, 20, 20);
+    const lines = doc.splitTextToSize(txt, contentW - indent);
+    lines.forEach(l => { check(10); doc.text(l, margin + indent, y); y += 8.5; });
+    y += 5;
   };
 
   const infoRow = (label, value) => {
-    check(10);
-    doc.setFontSize(11);
+    check(12);
+    doc.setFontSize(12);
     doc.setFont('helvetica', 'bold');
     doc.setTextColor(0, 0, 0);
-    doc.text(label, margin, y);
+    doc.text(label, margin + 4, y);
     doc.setFont('helvetica', 'normal');
-    doc.setTextColor(40, 40, 40);
-    doc.text(value || '___________________________________', margin + 55, y);
-    y += 8;
+    doc.setTextColor(30, 30, 30);
+    doc.text(value || '___________________________________', margin + 62, y);
+    y += 9;
   };
 
   const date = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
 
   // ── COVER PAGE ─────────────────────────────────────────────────────────────
   bg();
-  // Top band
-  doc.setFillColor(20, 20, 20);
-  doc.rect(0, 0, pageW, 60, 'F');
+  doc.setFillColor(10, 10, 10);
+  doc.rect(0, 0, pageW, 68, 'F');
 
-  doc.setFontSize(9);
+  doc.setFontSize(10);
   doc.setFont('helvetica', 'normal');
-  doc.setTextColor(200, 200, 200);
-  doc.text('ZENITH APEX RESEARCH PORTFOLIO', pageW / 2, 20, { align: 'center' });
-  doc.text('Advanced Research · Intellectual Property · AI-Powered Innovation', pageW / 2, 27, { align: 'center' });
+  doc.setTextColor(190, 190, 190);
+  doc.text('ZENITH APEX RESEARCH PORTFOLIO', pageW / 2, 22, { align: 'center' });
+  doc.text('Advanced Research  ·  Intellectual Property  ·  AI-Powered Innovation', pageW / 2, 31, { align: 'center' });
 
-  doc.setFontSize(24);
+  doc.setFontSize(26);
   doc.setFont('helvetica', 'bold');
   doc.setTextColor(255, 255, 255);
-  doc.text('NON-DISCLOSURE AGREEMENT', pageW / 2, 45, { align: 'center' });
+  doc.text('NON-DISCLOSURE AGREEMENT', pageW / 2, 52, { align: 'center' });
 
-  y = 75;
-  doc.setFontSize(12);
-  doc.setFont('helvetica', 'normal');
-  doc.setTextColor(60, 60, 60);
+  y = 82;
+  doc.setFontSize(13);
+  doc.setFont('helvetica', 'bold');
+  doc.setTextColor(0, 0, 0);
   doc.text('MUTUAL CONFIDENTIALITY AND NON-DISCLOSURE AGREEMENT', pageW / 2, y, { align: 'center' });
-  y += 6;
-  doc.text('Governing Disclosure of Proprietary Research, IP, and Trade Secrets', pageW / 2, y, { align: 'center' });
+  y += 7;
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(11);
+  doc.setTextColor(60, 60, 60);
+  doc.text('Governing Disclosure of Proprietary Research, Intellectual Property, and Trade Secrets', pageW / 2, y, { align: 'center' });
   y += 16;
 
   // Parties box
   doc.setDrawColor(0, 0, 0);
-  doc.setLineWidth(0.6);
-  doc.rect(margin, y, pageW - margin * 2, 46, 'D');
-  y += 8;
+  doc.setLineWidth(0.8);
+  doc.rect(margin, y, contentW, 52, 'D');
+  y += 10;
   infoRow('Agreement Date:', date);
   infoRow('Disclosing Party:', 'Zenith Apex Research Portfolio ("ZARP")');
   infoRow('Receiving Party:', `${recipientName || '[RECIPIENT NAME]'}, ${recipientTitle || '[TITLE]'}, ${recipientOrg || '[ORGANIZATION]'}`);
   y += 6;
 
-  // Warning
+  // Warning box
   doc.setDrawColor(0, 0, 0);
-  doc.setLineWidth(0.4);
-  doc.rect(margin, y, pageW - margin * 2, 22, 'D');
-  doc.setFontSize(10);
+  doc.setLineWidth(0.5);
+  doc.rect(margin, y, contentW, 28, 'D');
+  doc.setFontSize(11);
   doc.setFont('helvetica', 'bold');
   doc.setTextColor(0, 0, 0);
-  doc.text('NOTICE: STRICTLY CONFIDENTIAL — ATTORNEY-CLIENT PRIVILEGED', margin + 5, y + 8);
+  doc.text('NOTICE: STRICTLY CONFIDENTIAL — ATTORNEY-CLIENT PRIVILEGED', margin + 6, y + 10);
   doc.setFont('helvetica', 'normal');
-  doc.setFontSize(9);
-  doc.setTextColor(40, 40, 40);
-  const noticeLines = doc.splitTextToSize('Unauthorized disclosure is subject to liquidated damages of $2,500,000 per incident. This document is intended solely for the named Receiving Party.', pageW - margin * 2 - 10);
-  noticeLines.forEach((l, i) => doc.text(l, margin + 5, y + 14 + i * 4.5));
-  y += 28;
+  doc.setFontSize(10);
+  doc.setTextColor(30, 30, 30);
+  const noticeLines = doc.splitTextToSize('Unauthorized disclosure is subject to liquidated damages of $2,500,000 per incident. This document is intended solely for the named Receiving Party.', contentW - 12);
+  noticeLines.forEach((l, i) => doc.text(l, margin + 6, y + 19 + i * 5.5));
+  y += 34;
 
   drawFooter();
 
@@ -164,14 +171,13 @@ function generateNDA(recipientName, recipientOrg, recipientTitle) {
   h1('ARTICLE 2 — DEFINITIONS');
   h2('2.1  Confidential Information');
   body('"Confidential Information" means any and all information, data, documents, materials, or knowledge disclosed by ZARP, whether orally, in writing, electronically, or by any other means, that is designated as confidential or that reasonably should be understood to be confidential. This includes without limitation:');
-  const ciItems = [
+  [
     '(a) All research, analyses, and findings related to scalar electromagnetics, vacuum energy extraction, overunity energy devices, bioelectromagnetics, psychoenergetics, and related fields;',
     '(b) The Zenith Apex Research Platform — including all source code, AI prompt architectures, database schemas, entity structures, backend functions, automation workflows, and platform configurations;',
     '(c) All AI-generated invention disclosures, patent drafts, financial models, market research reports, pitch decks, and build guides;',
     '(d) All business plans, financial projections, revenue models, investor relationships, acquisition valuations, and negotiation strategies;',
     '(e) All primary source documents, declassified government reports, patent applications, engineering diagrams, and annotated research materials.',
-  ];
-  ciItems.forEach(item => body(item, 5));
+  ].forEach(item => body(item, 6));
 
   h2('2.2  Excluded Information');
   body('Confidential Information does not include information that: (a) is or becomes publicly available through no fault of the Receiving Party; (b) was rightfully known to the Receiving Party prior to disclosure; (c) is independently developed without use of Confidential Information; or (d) is required to be disclosed by applicable law, provided Receiving Party gives prompt written notice.');
@@ -214,49 +220,50 @@ function generateNDA(recipientName, recipientOrg, recipientTitle) {
   rule();
 
   h1('ARTICLE 7 — GENERAL PROVISIONS');
-  body('Governing Law: California. Disputes resolved by binding arbitration in Los Angeles, CA. This Agreement constitutes the entire agreement regarding the subject matter and supersedes all prior understandings. Amendments require written agreement by both parties. Electronic signatures are valid and binding. This Agreement may be executed in counterparts.');
+  body('Governing Law: State of California. Disputes resolved by binding arbitration in Los Angeles, California. This Agreement constitutes the entire agreement regarding the subject matter and supersedes all prior understandings. Amendments require written agreement by both parties. Electronic signatures are valid and binding. This Agreement may be executed in counterparts, each of which shall constitute an original.');
   rule();
 
   h1('ARTICLE 8 — SIGNATURES');
   body('IN WITNESS WHEREOF, the parties have executed this Agreement as of the date first written above.');
-  y += 5;
+  y += 6;
 
   const sigBlock = (label, name, title, org) => {
-    check(55);
-    doc.setFontSize(11);
+    check(60);
+    doc.setFontSize(12);
     doc.setFont('helvetica', 'bold');
     doc.setTextColor(0, 0, 0);
     doc.text(label, margin, y);
-    y += 7;
-
-    doc.setDrawColor(0, 0, 0);
-    doc.setLineWidth(0.4);
-    doc.rect(margin, y, pageW - margin * 2, 44, 'D');
     y += 8;
 
-    doc.setDrawColor(100, 100, 100);
-    doc.line(margin + 5, y + 12, margin + 80, y + 12);
-    doc.setFontSize(9);
+    doc.setDrawColor(0, 0, 0);
+    doc.setLineWidth(0.5);
+    doc.rect(margin, y, contentW, 50, 'D');
+    y += 10;
+
+    doc.setDrawColor(80, 80, 80);
+    doc.setLineWidth(0.4);
+    doc.line(margin + 6, y + 14, margin + 90, y + 14);
+    doc.setFontSize(10);
     doc.setFont('helvetica', 'normal');
-    doc.setTextColor(80, 80, 80);
-    doc.text('Authorized Signature', margin + 5, y + 16);
-    y += 20;
+    doc.setTextColor(70, 70, 70);
+    doc.text('Authorized Signature', margin + 6, y + 19);
+    y += 24;
 
     [['Printed Name:', name || '___________________________________'],
      ['Title / Role:', title || '___________________________________'],
      ['Organization:', org || '___________________________________'],
-     ['Date:', '___________________________________']
+     ['Date Signed:', '___________________________________']
     ].forEach(([lbl, val]) => {
       doc.setFont('helvetica', 'bold');
       doc.setTextColor(0, 0, 0);
-      doc.setFontSize(10);
-      doc.text(lbl, margin + 5, y);
+      doc.setFontSize(11);
+      doc.text(lbl, margin + 6, y);
       doc.setFont('helvetica', 'normal');
-      doc.setTextColor(40, 40, 40);
-      doc.text(val, margin + 42, y);
-      y += 6;
+      doc.setTextColor(30, 30, 30);
+      doc.text(val, margin + 48, y);
+      y += 7;
     });
-    y += 8;
+    y += 10;
   };
 
   sigBlock('DISCLOSING PARTY — ZENITH APEX RESEARCH PORTFOLIO (ZARP)', '[YOUR NAME]', 'Founder / Portfolio Director', 'Zenith Apex Research Portfolio');
@@ -290,7 +297,7 @@ export default function NdaPdfGenerator({ compact }) {
         <div className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4">
           <div className="bg-gray-900 border border-gray-700 rounded-2xl w-full max-w-md p-6 space-y-4">
             <h2 className="text-white font-black text-lg">Generate NDA PDF</h2>
-            <p className="text-gray-400 text-xs">Pre-fill recipient details (optional)</p>
+            <p className="text-gray-400 text-xs">Pre-fill recipient details (optional — leave blank for template placeholders)</p>
             {[
               { label: 'Recipient Full Name', val: name, set: setName, ph: 'e.g. John Smith' },
               { label: 'Title / Role', val: title, set: setTitle, ph: 'e.g. Managing Director' },

@@ -63,33 +63,42 @@ UNAUTHORIZED DISCLOSURE SUBJECT TO $2.5M LIQUIDATED DAMAGES PER INCIDENT`;
 
 function generateMasterLetterPDF() {
   const doc = new jsPDF({ orientation: "portrait", unit: "mm", format: "a4" });
-  const { margin, pageW, gold, goldLight, white, silver, muted, dimmed, pageBg, cardBg } = THEME;
+  const margin = 22;
+  const pageW = 210;
+  const contentW = pageW - margin * 2;
   let y = 0;
   let pageNum = 1;
 
-  const bg = () => { doc.setFillColor(...pageBg); doc.rect(0, 0, pageW, 297, 'F'); };
-  const newPage = () => { doc.addPage(); bg(); pageNum++; drawPageHeader(doc, 'ACQUISITION LETTER', 'CONFIDENTIAL'); y = 46; };
-  const check = (n = 12) => { if (y + n > 282) newPage(); };
+  const bg = () => { doc.setFillColor(255, 255, 255); doc.rect(0, 0, pageW, 297, 'F'); };
+
+  const newPage = () => {
+    doc.addPage(); bg(); pageNum++;
+    drawPageHeader(doc, 'ACQUISITION LETTER', 'CONFIDENTIAL');
+    y = 58;
+  };
+
+  const check = (n = 14) => { if (y + n > 281) newPage(); };
 
   bg();
   drawPageHeader(doc, 'MASTER ACQUISITION LETTER', 'STRICTLY CONFIDENTIAL — PERSONALIZE BEFORE SENDING');
-  y = 46;
+  y = 58;
 
-  doc.setFontSize(11);
+  doc.setFontSize(13);
   doc.setFont('helvetica', 'normal');
-  doc.setTextColor(...muted);
-  const lines = doc.splitTextToSize(MASTER_LETTER, pageW - margin * 2);
+  doc.setTextColor(20, 20, 20);
+  const lines = doc.splitTextToSize(MASTER_LETTER, contentW);
   lines.forEach(l => {
-    check(6.5);
-    if (l.trim().startsWith('PLATFORM') || l.trim().startsWith('ACQUISITION') || l.trim().startsWith('TO PROCEED') || l.trim() === 'STRICTLY CONFIDENTIAL — NDA REQUIRED BEFORE FURTHER DISCLOSURE') {
+    check(9);
+    const trimmed = l.trim();
+    if (trimmed.startsWith('PLATFORM') || trimmed.startsWith('ACQUISITION') || trimmed.startsWith('TO PROCEED') || trimmed === 'STRICTLY CONFIDENTIAL — NDA REQUIRED BEFORE FURTHER DISCLOSURE') {
       doc.setFont('helvetica', 'bold');
-      doc.setTextColor(...gold);
+      doc.setTextColor(0, 0, 0);
     } else {
       doc.setFont('helvetica', 'normal');
-      doc.setTextColor(...silver);
+      doc.setTextColor(20, 20, 20);
     }
     doc.text(l, margin, y);
-    y += 6.5;
+    y += 8;
   });
 
   const total = doc.getNumberOfPages();
@@ -102,43 +111,42 @@ function generateMasterLetterPDF() {
 
 function generateCoursesPDF(courses) {
   const doc = new jsPDF({ orientation: "portrait", unit: "mm", format: "a4" });
-  const { margin, pageW, gold, goldLight, white, silver, muted, dimmed, pageBg, cardBg, accentBg } = THEME;
-  let y = 46; let pn = 1;
-  const bg = () => { doc.setFillColor(...pageBg); doc.rect(0, 0, pageW, 297, 'F'); };
-  const newPage = () => { doc.addPage(); bg(); pn++; drawPageHeader(doc, 'COURSE CATALOG', 'ZENITH APEX EDUCATIONAL LIBRARY'); y = 46; };
-  const check = (n = 12) => { if (y + n > 282) newPage(); };
+  const margin = 22;
+  const pageW = 210;
+  const contentW = pageW - margin * 2;
+  let y = 58; let pn = 1;
+  const bg = () => { doc.setFillColor(255, 255, 255); doc.rect(0, 0, pageW, 297, 'F'); };
+  const newPage = () => { doc.addPage(); bg(); pn++; drawPageHeader(doc, 'COURSE CATALOG', 'ZENITH APEX EDUCATIONAL LIBRARY'); y = 58; };
+  const check = (n = 14) => { if (y + n > 281) newPage(); };
 
   bg(); drawPageHeader(doc, 'COURSE CATALOG', 'ZENITH APEX EDUCATIONAL LIBRARY');
 
-  // Cover intro
-  doc.setFontSize(18); doc.setFont('helvetica', 'bold'); doc.setTextColor(...white);
+  doc.setFontSize(20); doc.setFont('helvetica', 'bold'); doc.setTextColor(0, 0, 0);
   doc.text('Complete Course Catalog', pageW / 2, y + 8, { align: 'center' });
-  doc.setFontSize(9); doc.setFont('helvetica', 'normal'); doc.setTextColor(...muted);
-  doc.text(`${courses.length} Courses  ·  Scalar EM  ·  IP Strategy  ·  Bioelectromagnetics  ·  Advanced Physics`, pageW / 2, y + 17, { align: 'center' });
-  y += 28;
+  doc.setFontSize(11); doc.setFont('helvetica', 'normal'); doc.setTextColor(60, 60, 60);
+  doc.text(`${courses.length} Courses  ·  Scalar EM  ·  IP Strategy  ·  Bioelectromagnetics  ·  Advanced Physics`, pageW / 2, y + 18, { align: 'center' });
+  y += 32;
 
   courses.forEach((course, idx) => {
-    check(40);
-    doc.setFillColor(...accentBg);
-    doc.setDrawColor(...gold);
-    doc.setLineWidth(0.3);
-    doc.roundedRect(margin, y, pageW - margin * 2, 36, 2, 2, 'FD');
-    doc.setFontSize(12); doc.setFont('helvetica', 'bold'); doc.setTextColor(...gold);
-    doc.text(`${idx + 1}.  ${course.name}`, margin + 4, y + 8);
-    doc.setFontSize(11); doc.setFont('helvetica', 'normal'); doc.setTextColor(...silver);
-    const desc = doc.splitTextToSize(course.description || course.tagline || '', pageW - margin * 2 - 8);
-    desc.slice(0, 2).forEach((l, i) => doc.text(l, margin + 4, y + 14 + i * 5));
+    check(48);
+    doc.setFillColor(240, 240, 240);
+    doc.setDrawColor(0, 0, 0);
+    doc.setLineWidth(0.4);
+    doc.roundedRect(margin, y, contentW, 42, 2, 2, 'FD');
+    doc.setFontSize(13); doc.setFont('helvetica', 'bold'); doc.setTextColor(0, 0, 0);
+    doc.text(`${idx + 1}.  ${course.name}`, margin + 5, y + 10);
+    doc.setFontSize(11); doc.setFont('helvetica', 'normal'); doc.setTextColor(30, 30, 30);
+    const desc = doc.splitTextToSize(course.description || course.tagline || '', contentW - 10);
+    desc.slice(0, 2).forEach((l, i) => doc.text(l, margin + 5, y + 18 + i * 7));
     if (course.price) {
-      doc.setFont('helvetica', 'bold'); doc.setTextColor(...goldLight);
-      doc.text(course.price, pageW - margin - 4, y + 8, { align: 'right' });
+      doc.setFont('helvetica', 'bold'); doc.setTextColor(0, 0, 0);
+      doc.text(course.price, pageW - margin - 5, y + 10, { align: 'right' });
     }
     if (course.modules) {
-      doc.setFontSize(10);
-      doc.setFont('helvetica', 'normal');
-      doc.setTextColor(...muted);
-      doc.text(`Modules: ${course.modules.slice(0, 5).join('  ·  ')}`, margin + 4, y + 30);
+      doc.setFontSize(10); doc.setFont('helvetica', 'normal'); doc.setTextColor(70, 70, 70);
+      doc.text('Modules: ' + course.modules.slice(0, 5).join('  ·  '), margin + 5, y + 35);
     }
-    y += 42;
+    y += 48;
   });
 
   const total = doc.getNumberOfPages();
@@ -148,64 +156,61 @@ function generateCoursesPDF(courses) {
 
 function generateInventionPlansPDF(plans) {
   const doc = new jsPDF({ orientation: "portrait", unit: "mm", format: "a4" });
-  const { margin, pageW, gold, goldLight, white, silver, muted, dimmed, pageBg, cardBg, accentBg, cyan } = THEME;
-  let y = 46; let pn = 1;
-  const bg = () => { doc.setFillColor(...pageBg); doc.rect(0, 0, pageW, 297, 'F'); };
-  const newPage = () => { doc.addPage(); bg(); pn++; drawPageHeader(doc, 'INVENTION BUILD PLANS', 'ENGINEERING SPECIFICATIONS'); y = 46; };
-  const check = (n = 12) => { if (y + n > 282) newPage(); };
+  const margin = 22;
+  const pageW = 210;
+  const contentW = pageW - margin * 2;
+  let y = 58; let pn = 1;
+  const bg = () => { doc.setFillColor(255, 255, 255); doc.rect(0, 0, pageW, 297, 'F'); };
+  const newPage = () => { doc.addPage(); bg(); pn++; drawPageHeader(doc, 'INVENTION BUILD PLANS', 'ENGINEERING SPECIFICATIONS'); y = 58; };
+  const check = (n = 14) => { if (y + n > 281) newPage(); };
 
   bg(); drawPageHeader(doc, 'INVENTION BUILD PLANS', 'COMPLETE ENGINEERING SPECIFICATIONS LIBRARY');
-  doc.setFontSize(18); doc.setFont('helvetica', 'bold'); doc.setTextColor(...white);
+  doc.setFontSize(20); doc.setFont('helvetica', 'bold'); doc.setTextColor(0, 0, 0);
   doc.text('Invention Build Plans & Engineering Specifications', pageW / 2, y + 8, { align: 'center' });
-  doc.setFontSize(11); doc.setFont('helvetica', 'normal'); doc.setTextColor(...muted);
-  doc.text(`${plans.length} Devices  ·  Complete BOM  ·  Step-by-Step Assembly  ·  Theory Primers`, pageW / 2, y + 16, { align: 'center' });
-  y += 28;
+  doc.setFontSize(11); doc.setFont('helvetica', 'normal'); doc.setTextColor(60, 60, 60);
+  doc.text(`${plans.length} Devices  ·  Complete BOM  ·  Step-by-Step Assembly  ·  Theory Primers`, pageW / 2, y + 18, { align: 'center' });
+  y += 32;
 
   plans.forEach((plan, idx) => {
     check(60);
     // Section header
-    doc.setFillColor(...accentBg);
-    doc.setDrawColor(...gold); doc.setLineWidth(0.4);
-    doc.rect(margin - 2, y, pageW - margin * 2 + 4, 12, 'FD');
-    doc.setFontSize(13); doc.setFont('helvetica', 'bold'); doc.setTextColor(...gold);
-    doc.text(`Device ${idx + 1}: ${plan.name}`, margin, y + 8);
+    doc.setFillColor(10, 10, 10);
+    doc.rect(margin - 2, y, contentW + 4, 14, 'F');
+    doc.setFontSize(14); doc.setFont('helvetica', 'bold'); doc.setTextColor(255, 255, 255);
+    doc.text(`Device ${idx + 1}: ${plan.name}`, margin, y + 9);
     if (plan.price) {
-      doc.setTextColor(...goldLight); doc.setFontSize(11);
-      doc.text(plan.price, pageW - margin, y + 8, { align: 'right' });
+      doc.setTextColor(220, 220, 220); doc.setFontSize(12);
+      doc.text(plan.price, pageW - margin, y + 9, { align: 'right' });
     }
-    y += 16;
+    y += 18;
 
     if (plan.description) {
-      doc.setFontSize(11); doc.setFont('helvetica', 'normal'); doc.setTextColor(...silver);
-      const lines = doc.splitTextToSize(plan.description, pageW - margin * 2);
-      lines.slice(0, 3).forEach(l => { check(6); doc.text(l, margin, y); y += 5.5; });
-      y += 3;
+      doc.setFontSize(12); doc.setFont('helvetica', 'normal'); doc.setTextColor(20, 20, 20);
+      const lines = doc.splitTextToSize(plan.description, contentW);
+      lines.slice(0, 4).forEach(l => { check(9); doc.text(l, margin, y); y += 8; });
+      y += 4;
     }
 
     if (plan.components) {
-      check(10);
-      doc.setFontSize(11); doc.setFont('helvetica', 'bold'); doc.setTextColor(...cyan);
-      doc.text('KEY COMPONENTS:', margin, y); y += 7;
-      doc.setFont('helvetica', 'normal'); doc.setFontSize(11); doc.setTextColor(...silver);
-      plan.components.slice(0, 8).forEach(c => {
-        check(6); doc.text(`  ·  ${c}`, margin, y); y += 6;
-      });
-      y += 3;
+      check(12);
+      doc.setFontSize(12); doc.setFont('helvetica', 'bold'); doc.setTextColor(0, 0, 0);
+      doc.text('KEY COMPONENTS:', margin, y); y += 9;
+      doc.setFont('helvetica', 'normal'); doc.setFontSize(12); doc.setTextColor(20, 20, 20);
+      plan.components.slice(0, 10).forEach(c => { check(8); doc.text(`  •  ${c}`, margin, y); y += 8; });
+      y += 4;
     }
 
     if (plan.steps) {
-      check(10);
-      doc.setFontSize(11); doc.setFont('helvetica', 'bold'); doc.setTextColor(...goldLight);
-      doc.text('ASSEMBLY STEPS:', margin, y); y += 7;
-      doc.setFont('helvetica', 'normal'); doc.setFontSize(11); doc.setTextColor(...silver);
-      plan.steps.slice(0, 10).forEach((s, i) => {
-        check(6); doc.text(`  ${i + 1}.  ${typeof s === 'string' ? s : s.title || s.action || JSON.stringify(s)}`, margin, y); y += 6;
-      });
-      y += 3;
+      check(12);
+      doc.setFontSize(12); doc.setFont('helvetica', 'bold'); doc.setTextColor(0, 0, 0);
+      doc.text('ASSEMBLY STEPS:', margin, y); y += 9;
+      doc.setFont('helvetica', 'normal'); doc.setFontSize(12); doc.setTextColor(20, 20, 20);
+      plan.steps.slice(0, 12).forEach((s, i) => { check(8); doc.text(`  ${i + 1}.  ${typeof s === 'string' ? s : s.title || s.action || ''}`, margin, y); y += 8; });
+      y += 4;
     }
 
-    doc.setFillColor(...gold); doc.rect(margin, y, pageW - margin * 2, 0.25, 'F');
-    y += 8;
+    doc.setDrawColor(0, 0, 0); doc.setLineWidth(0.4); doc.line(margin, y, pageW - margin, y);
+    y += 10;
   });
 
   const total = doc.getNumberOfPages();
@@ -229,37 +234,42 @@ function generateShopPDF() {
     { name: 'Scalar Comm Module', category: 'Electronics', price: '$340', desc: 'Longitudinal wave transmission prototype board with adjustable phase conjugation.' },
   ];
   const doc = new jsPDF({ orientation: "portrait", unit: "mm", format: "a4" });
-  const { margin, pageW, gold, goldLight, white, silver, muted, dimmed, pageBg, accentBg, green } = THEME;
-  let y = 46;
-  const bg = () => { doc.setFillColor(...pageBg); doc.rect(0, 0, pageW, 297, 'F'); };
-  const newPage = () => { doc.addPage(); bg(); drawPageHeader(doc, 'EMF PROTECTION SHOP', 'PRODUCT CATALOG'); y = 46; };
-  const check = (n = 12) => { if (y + n > 282) newPage(); };
+  const margin = 22;
+  const pageW = 210;
+  const contentW = pageW - margin * 2;
+  let y = 58;
+  const bg = () => { doc.setFillColor(255, 255, 255); doc.rect(0, 0, pageW, 297, 'F'); };
+  const newPage = () => { doc.addPage(); bg(); drawPageHeader(doc, 'EMF PROTECTION SHOP', 'PRODUCT CATALOG'); y = 58; };
+  const check = (n = 14) => { if (y + n > 281) newPage(); };
 
   bg(); drawPageHeader(doc, 'EMF PROTECTION SHOP', 'COMPLETE PRODUCT CATALOG');
-  doc.setFontSize(18); doc.setFont('helvetica', 'bold'); doc.setTextColor(...white);
+  doc.setFontSize(20); doc.setFont('helvetica', 'bold'); doc.setTextColor(0, 0, 0);
   doc.text('EMF Protection Shop — Product Catalog', pageW / 2, y + 8, { align: 'center' });
-  doc.setFontSize(11); doc.setFont('helvetica', 'normal'); doc.setTextColor(...muted);
-  doc.text(`${products.length} Products  ·  Jewelry  ·  Home Devices  ·  Clothing  ·  Supplements  ·  DIY Kits`, pageW / 2, y + 16, { align: 'center' });
-  y += 28;
+  doc.setFontSize(11); doc.setFont('helvetica', 'normal'); doc.setTextColor(60, 60, 60);
+  doc.text(`${products.length} Products  ·  Jewelry  ·  Home Devices  ·  Clothing  ·  Supplements  ·  DIY Kits`, pageW / 2, y + 18, { align: 'center' });
+  y += 32;
 
   const categories = [...new Set(products.map(p => p.category))];
   categories.forEach(cat => {
-    check(14);
-    doc.setFillColor(...accentBg); doc.rect(margin - 2, y, pageW - margin * 2 + 4, 10, 'F');
-    doc.setFontSize(10); doc.setFont('helvetica', 'bold'); doc.setTextColor(...gold);
-    doc.text(cat.toUpperCase(), margin, y + 7); y += 14;
+    check(18);
+    doc.setFillColor(10, 10, 10); doc.rect(margin - 2, y - 2, contentW + 4, 13, 'F');
+    doc.setFontSize(12); doc.setFont('helvetica', 'bold'); doc.setTextColor(255, 255, 255);
+    doc.text(cat.toUpperCase(), margin, y + 7); y += 18;
     products.filter(p => p.category === cat).forEach(p => {
-      check(20);
-      doc.setFontSize(12); doc.setFont('helvetica', 'bold'); doc.setTextColor(...white);
+      check(26);
+      doc.setFontSize(13); doc.setFont('helvetica', 'bold'); doc.setTextColor(0, 0, 0);
       doc.text(p.name, margin, y);
-      doc.setFont('helvetica', 'bold'); doc.setTextColor(...[60, 210, 120]);
+      doc.setFont('helvetica', 'bold'); doc.setTextColor(0, 0, 0);
       doc.text(p.price, pageW - margin, y, { align: 'right' });
-      y += 7;
-      doc.setFontSize(11); doc.setFont('helvetica', 'normal'); doc.setTextColor(...silver);
-      const lines = doc.splitTextToSize(p.desc, pageW - margin * 2);
-      lines.forEach(l => { check(6); doc.text(l, margin, y); y += 6; });
-      y += 4;
+      y += 9;
+      doc.setFontSize(12); doc.setFont('helvetica', 'normal'); doc.setTextColor(25, 25, 25);
+      const lines = doc.splitTextToSize(p.desc, contentW);
+      lines.forEach(l => { check(8); doc.text(l, margin, y); y += 8; });
+      y += 6;
+      doc.setDrawColor(160, 160, 160); doc.setLineWidth(0.3); doc.line(margin, y, pageW - margin, y);
+      y += 5;
     });
+    y += 4;
   });
 
   const total = doc.getNumberOfPages();
@@ -269,70 +279,71 @@ function generateShopPDF() {
 
 function generateBuildVideosPDF(videos) {
   const doc = new jsPDF({ orientation: "portrait", unit: "mm", format: "a4" });
-  const { margin, pageW, gold, goldLight, white, silver, muted, dimmed, pageBg, accentBg, cyan } = THEME;
-  let y = 46;
-  const bg = () => { doc.setFillColor(...pageBg); doc.rect(0, 0, pageW, 297, 'F'); };
-  const newPage = () => { doc.addPage(); bg(); drawPageHeader(doc, 'BUILD VIDEO LIBRARY', 'ENGINEERING GUIDES'); y = 46; };
-  const check = (n = 12) => { if (y + n > 282) newPage(); };
+  const margin = 22;
+  const pageW = 210;
+  const contentW = pageW - margin * 2;
+  let y = 58;
+  const bg = () => { doc.setFillColor(255, 255, 255); doc.rect(0, 0, pageW, 297, 'F'); };
+  const newPage = () => { doc.addPage(); bg(); drawPageHeader(doc, 'BUILD VIDEO LIBRARY', 'ENGINEERING GUIDES'); y = 58; };
+  const check = (n = 14) => { if (y + n > 281) newPage(); };
 
   bg(); drawPageHeader(doc, 'BUILD VIDEO LIBRARY', 'COMPLETE STEP-BY-STEP ENGINEERING GUIDES');
-  doc.setFontSize(18); doc.setFont('helvetica', 'bold'); doc.setTextColor(...white);
+  doc.setFontSize(20); doc.setFont('helvetica', 'bold'); doc.setTextColor(0, 0, 0);
   doc.text('Build Video Library', pageW / 2, y + 8, { align: 'center' });
-  doc.setFontSize(11); doc.setFont('helvetica', 'normal'); doc.setTextColor(...muted);
-  doc.text(`${videos.length} Build Guides  ·  Complete Step-by-Step Instructions  ·  Materials & Tools Per Step`, pageW / 2, y + 16, { align: 'center' });
-  y += 28;
+  doc.setFontSize(11); doc.setFont('helvetica', 'normal'); doc.setTextColor(60, 60, 60);
+  doc.text(`${videos.length} Build Guides  ·  Complete Step-by-Step Instructions  ·  Materials & Tools Per Step`, pageW / 2, y + 18, { align: 'center' });
+  y += 32;
 
   if (videos.length === 0) {
-    doc.setFontSize(10); doc.setFont('helvetica', 'italic'); doc.setTextColor(...muted);
+    doc.setFontSize(12); doc.setFont('helvetica', 'italic'); doc.setTextColor(80, 80, 80);
     doc.text('No build videos found. Generate build videos in the Invention Forge to populate this catalog.', margin, y);
   }
 
   videos.forEach((v, idx) => {
-    check(20);
-    doc.setFillColor(...accentBg); doc.setDrawColor(...gold); doc.setLineWidth(0.3);
-    doc.rect(margin - 2, y, pageW - margin * 2 + 4, 12, 'FD');
-    doc.setFontSize(13); doc.setFont('helvetica', 'bold'); doc.setTextColor(...gold);
-    doc.text(`${idx + 1}.  ${v.invention_name}`, margin, y + 8);
-    doc.setFontSize(10); doc.setFont('helvetica', 'normal'); doc.setTextColor(...muted);
-    doc.text(`${v.step_count || (v.steps || []).length} steps  ·  ${v.invention_category || ''}  ·  ${new Date(v.created_date).toLocaleDateString()}`, pageW - margin, y + 8, { align: 'right' });
-    y += 16;
+    check(24);
+    doc.setFillColor(10, 10, 10); doc.rect(margin - 2, y - 2, contentW + 4, 16, 'F');
+    doc.setFontSize(14); doc.setFont('helvetica', 'bold'); doc.setTextColor(255, 255, 255);
+    doc.text(`${idx + 1}.  ${v.invention_name}`, margin, y + 9);
+    doc.setFontSize(10); doc.setFont('helvetica', 'normal'); doc.setTextColor(190, 190, 190);
+    doc.text(`${v.step_count || (v.steps || []).length} steps  ·  ${v.invention_category || ''}`, pageW - margin, y + 9, { align: 'right' });
+    y += 22;
 
     if (v.invention_tagline) {
-      doc.setFontSize(8.5); doc.setFont('helvetica', 'italic'); doc.setTextColor(...silver);
-      doc.text(`"${v.invention_tagline}"`, margin, y); y += 7;
+      doc.setFontSize(11); doc.setFont('helvetica', 'italic'); doc.setTextColor(40, 40, 40);
+      doc.text(`"${v.invention_tagline}"`, margin, y); y += 10;
     }
 
     (v.steps || []).forEach((step, si) => {
-      check(24);
-      doc.setFillColor(...[10, 25, 60]);
-      doc.rect(margin, y, pageW - margin * 2, 8, 'F');
-      doc.setFontSize(11); doc.setFont('helvetica', 'bold'); doc.setTextColor(...goldLight);
-      doc.text(`Step ${si + 1}: ${step.title || ''}`, margin + 3, y + 6);
-      doc.setFont('helvetica', 'normal'); doc.setTextColor(...muted);
-      doc.text(step.duration || '', pageW - margin - 3, y + 6, { align: 'right' });
-      y += 12;
+      check(30);
+      doc.setFillColor(230, 230, 230);
+      doc.rect(margin, y, contentW, 11, 'F');
+      doc.setFontSize(12); doc.setFont('helvetica', 'bold'); doc.setTextColor(0, 0, 0);
+      doc.text(`Step ${si + 1}: ${step.title || ''}`, margin + 4, y + 7.5);
+      doc.setFont('helvetica', 'normal'); doc.setTextColor(60, 60, 60);
+      doc.text(step.duration || '', pageW - margin - 4, y + 7.5, { align: 'right' });
+      y += 15;
       if (step.description) {
-        doc.setFontSize(11); doc.setFont('helvetica', 'normal'); doc.setTextColor(...silver);
-        const lines = doc.splitTextToSize(step.description, pageW - margin * 2);
-        lines.slice(0, 2).forEach(l => { check(6); doc.text(l, margin, y); y += 6; });
+        doc.setFontSize(12); doc.setFont('helvetica', 'normal'); doc.setTextColor(20, 20, 20);
+        const lines = doc.splitTextToSize(step.description, contentW);
+        lines.slice(0, 3).forEach(l => { check(8); doc.text(l, margin, y); y += 8; });
       }
       if (step.materials?.length) {
-        check(6); doc.setFontSize(10); doc.setTextColor(...muted);
-        doc.text('Materials: ' + step.materials.join('  ·  '), margin, y); y += 6;
+        check(8); doc.setFontSize(11); doc.setTextColor(50, 50, 50);
+        doc.text('Materials: ' + step.materials.join('  ·  '), margin, y); y += 8;
       }
       if (step.warning) {
-        check(5); doc.setTextColor(...[240, 100, 80]);
-        doc.text('⚠ ' + step.warning, margin, y); y += 5;
+        check(8); doc.setFontSize(11); doc.setFont('helvetica', 'bold'); doc.setTextColor(0, 0, 0);
+        doc.text('WARNING: ' + step.warning, margin, y); y += 8;
       }
       if (step.checkpoint) {
-        check(5); doc.setTextColor(...[60, 200, 100]);
-        doc.text('✓ ' + step.checkpoint, margin, y); y += 5;
+        check(8); doc.setFont('helvetica', 'bold'); doc.setTextColor(0, 0, 0);
+        doc.text('CHECKPOINT: ' + step.checkpoint, margin, y); y += 8;
       }
-      y += 2;
+      y += 3;
     });
 
-    doc.setFillColor(...gold); doc.rect(margin, y, pageW - margin * 2, 0.25, 'F');
-    y += 8;
+    doc.setDrawColor(0, 0, 0); doc.setLineWidth(0.4); doc.line(margin, y, pageW - margin, y);
+    y += 10;
   });
 
   const total = doc.getNumberOfPages();
