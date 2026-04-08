@@ -59,6 +59,7 @@ import AdminBeta from './pages/AdminBeta';
 import MemberPortal from './pages/MemberPortal';
 import LicensingPortal from './pages/LicensingPortal';
 import MobileLayout from './components/MobileLayout';
+import DeviceKnowledgeGraph from './pages/DeviceKnowledgeGraph';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -160,6 +161,7 @@ const AuthenticatedApp = () => {
           <Route path="/admin-beta" element={<AdminBeta />} />
           <Route path="/member-portal" element={<MemberPortal />} />
           <Route path="/licensing" element={<LicensingPortal />} />
+          <Route path="/device-graph" element={<DeviceKnowledgeGraph />} />
           <Route path="*" element={<PageNotFound />} />
         </Route>
       </Routes>
