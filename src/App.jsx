@@ -61,6 +61,7 @@ import LicensingPortal from './pages/LicensingPortal';
 import MobileLayout from './components/MobileLayout';
 import DeviceKnowledgeGraph from './pages/DeviceKnowledgeGraph';
 import AcquisitionCRM from './pages/AcquisitionCRM';
+import ValuationDashboard from './pages/ValuationDashboard';
 import VDRPortal from './pages/VDRPortal';
 import VDRAdmin from './pages/VDRAdmin';
 
@@ -168,6 +169,7 @@ const AuthenticatedApp = () => {
           <Route path="/acquisition-crm" element={<AcquisitionCRM />} />
           <Route path="/vdr/:token" element={<VDRPortal />} />
           <Route path="/vdr-admin" element={<VDRAdmin />} />
+          <Route path="/valuation" element={<ValuationDashboard />} />
           <Route path="*" element={<PageNotFound />} />
         </Route>
       </Routes>
