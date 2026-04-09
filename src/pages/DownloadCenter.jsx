@@ -1,12 +1,13 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { ArrowLeft, Download, FileText, BookOpen, Film, Package, ShoppingBag, Mail, Shield, Loader2, ChevronDown, ChevronUp, Star } from "lucide-react";
+import { ArrowLeft, Download, FileText, BookOpen, Film, Package, ShoppingBag, Mail, Shield, Loader2, ChevronDown, ChevronUp, Star, Wrench } from "lucide-react";
 import { jsPDF } from "jspdf";
 import { base44 } from "@/api/base44Client";
 import { THEME, drawLogo, drawPageHeader, drawFooter } from "../lib/zenithPdfTheme";
 import NdaPdfGenerator from "../components/NdaPdfGenerator";
 import DueDiligencePdfGenerator from "../components/DueDiligencePdfGenerator";
 import { businessItems } from "../lib/businessItems";
+import { inventionSteps } from "../lib/inventionSteps";
 
 // ── MASTER LETTER TEXT ─────────────────────────────────────────────────────
 const MASTER_LETTER = `STRICTLY CONFIDENTIAL — NDA REQUIRED BEFORE FURTHER DISCLOSURE
@@ -426,10 +427,38 @@ export default function DownloadCenter() {
   );
 
   const courses = (businessItems || []).filter(b => b.category === 'Video Course' || b.category === 'Course');
-  const plans = [];
+  const allInventions = (businessItems || []).filter(b => b.category === 'Invention');
+  const inventionsWithSteps = allInventions.filter(inv => inventionSteps[inv.title]);
+  const plans = allInventions.map(inv => {
+    const steps = inventionSteps[inv.title];
+    return {
+      name: inv.title,
+      description: inv.description,
+      price: inv.price,
+      components: steps?.bom?.map(b => `${b.qty}× ${b.item} (${b.spec})`) || [],
+      steps: steps?.steps?.map(s => ({ title: s.title, action: s.detail })) || [],
+    };
+  });
   const genVideoPDF = () => {
     setGeneratingVideos(true);
-    setTimeout(() => { generateBuildVideosPDF(buildVideos); setGeneratingVideos(false); }, 200);
+    // Merge DB build videos with inventionSteps-based guides
+    const stepGuides = inventionsWithSteps.map(inv => {
+      const data = inventionSteps[inv.title];
+      return {
+        invention_name: inv.title,
+        invention_category: inv.category,
+        invention_tagline: inv.tagline,
+        step_count: data.steps.length,
+        steps: data.steps.map(s => ({
+          title: s.title,
+          description: s.detail,
+          warning: s.warning || null,
+          materials: data.bom?.slice(0, 3).map(b => b.item) || [],
+        })),
+      };
+    });
+    const allGuides = [...stepGuides, ...buildVideos.filter(v => !stepGuides.some(g => g.invention_name === v.invention_name))];
+    setTimeout(() => { generateBuildVideosPDF(allGuides); setGeneratingVideos(false); }, 200);
   };
 
   const TABS = [
@@ -517,15 +546,38 @@ export default function DownloadCenter() {
           <>
             <div className="bg-gray-900 border border-gray-800 rounded-xl p-4 mb-2">
               <p className="text-white font-bold mb-1">Invention Build Plans Library</p>
-              <p className="text-gray-400 text-sm">{plans.length} invention build plans with full engineering specifications, BOM, and assembly steps.</p>
+              <p className="text-gray-400 text-sm">{allInventions.length} invention build plans · {inventionsWithSteps.length} with full BOM & step-by-step assembly instructions.</p>
             </div>
-            <DownloadCard icon={<Package size={22} />} title="All Invention Plans — Full PDF" badge={`${plans.length} Devices`} color="#22c55e"
-              desc="Complete engineering specifications for all invention devices: MEG, TRD-1, TRZ Reactor, Priore Device, Scalar Comm, EMF Shield Array. Each plan includes components, assembly steps, theory primer.">
-              <button onClick={() => { const p = plans.length ? plans : [{ name: 'MEG Replica', description: 'Motionless Electromagnetic Generator replication kit.', components: ['Nanocrystalline core', 'Primary bifilar coil', 'Permanent magnet array'], steps: ['Wind primary coil', 'Mount magnet array', 'Wire secondary coil', 'Install core', 'Calibrate'] }]; generateInventionPlansPDF(p); }}
+            <DownloadCard icon={<Package size={22} />} title="All 21 Invention Plans — Full PDF" badge={`${allInventions.length} Devices`} color="#22c55e"
+              desc="Complete engineering specifications for all 21 invention devices: MEG, TRD-1, TRZ Reactor, Prioré System, Scalar Comm, Biofield Chamber, VPO, Fireflies Sensor, PCM System, and more. Each plan includes description, components, assembly steps, and theory primer.">
+              <button onClick={() => generateInventionPlansPDF(plans)}
                 className="flex items-center gap-2 px-4 py-2 rounded-xl bg-green-800 hover:bg-green-700 text-white text-xs font-bold transition-all">
-                <Download size={13} /> Download All Plans PDF
+                <Download size={13} /> Download All {allInventions.length} Plans PDF
               </button>
             </DownloadCard>
+            {/* Individual invention cards */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-4">
+              {allInventions.map((inv, i) => {
+                const hasSteps = !!inventionSteps[inv.title];
+                const stepData = inventionSteps[inv.title];
+                return (
+                  <div key={i} className={`bg-gray-900 border rounded-xl p-4 ${hasSteps ? 'border-green-900/50' : 'border-gray-800'}`}>
+                    <div className="flex items-start justify-between gap-2 mb-1">
+                      <p className="text-white font-bold text-sm leading-tight">{inv.icon} {inv.title}</p>
+                      {hasSteps && <span className="flex-shrink-0 text-xs px-1.5 py-0.5 rounded bg-green-950/40 border border-green-800 text-green-400 font-bold">Full BOM</span>}
+                    </div>
+                    <p className="text-gray-500 text-xs mb-2">{inv.price}</p>
+                    {hasSteps && (
+                      <div className="flex items-center gap-3 text-xs text-gray-600">
+                        <span className="flex items-center gap-1"><Wrench size={9} /> {stepData.bom?.length || 0} parts</span>
+                        <span>{stepData.steps?.length || 0} steps</span>
+                      </div>
+                    )}
+                    {!hasSteps && <p className="text-gray-700 text-xs">Description & specs included</p>}
+                  </div>
+                );
+              })}
+            </div>
           </>
         )}
 
@@ -533,27 +585,45 @@ export default function DownloadCenter() {
         {tab === "videos" && (
           <>
             <div className="bg-gray-900 border border-gray-800 rounded-xl p-4 mb-2">
-              <p className="text-white font-bold mb-1">Build Video Library</p>
-              <p className="text-gray-400 text-sm">{buildVideos.length} build videos saved in database. Export all as a complete engineering guide PDF.</p>
+              <p className="text-white font-bold mb-1">Build Video / Step-by-Step Guide Library</p>
+              <p className="text-gray-400 text-sm">{inventionsWithSteps.length} inventions with full step-by-step build guides from inventionSteps + {buildVideos.length} AI-generated build videos from database.</p>
             </div>
-            <DownloadCard icon={<Film size={22} />} title="All Build Videos — Engineering Guide PDF" badge={`${buildVideos.length} Guides`} color="#f59e0b"
-              desc="Export every saved build video as a printable PDF engineering guide. Each video includes 10 steps with materials, tools, warnings, and checkpoints. Branded Zenith Apex cover.">
+            <DownloadCard icon={<Film size={22} />} title="All Build Guides — Complete Engineering PDF" badge={`${inventionsWithSteps.length + buildVideos.length} Guides`} color="#f59e0b"
+              desc={`Export all ${inventionsWithSteps.length} inventionSteps guides plus ${buildVideos.length} AI-generated build videos as a complete printable engineering PDF. Each guide includes detailed steps, BOM highlights, warnings, and checkpoints.`}>
               <button onClick={genVideoPDF} disabled={generatingVideos}
                 className="flex items-center gap-2 px-4 py-2 rounded-xl bg-amber-800 hover:bg-amber-700 text-white text-xs font-bold transition-all disabled:opacity-60">
                 {generatingVideos ? <Loader2 size={13} className="animate-spin" /> : <Download size={13} />}
-                {generatingVideos ? 'Building…' : 'Download All Build Guides PDF'}
+                {generatingVideos ? 'Building…' : `Download All ${inventionsWithSteps.length + buildVideos.length} Build Guides PDF`}
               </button>
             </DownloadCard>
-            {buildVideos.length > 0 && (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-4">
-                {buildVideos.map((v, i) => (
-                  <div key={v.id} className="bg-gray-900 border border-gray-800 rounded-xl p-4">
-                    <p className="text-white font-bold text-sm">{v.invention_name}</p>
-                    <p className="text-gray-500 text-xs">{v.step_count || (v.steps || []).length} steps · {v.invention_category}</p>
-                    <p className="text-gray-600 text-xs mt-1">{new Date(v.created_date).toLocaleDateString()}</p>
+            {/* Step-by-step guide cards from inventionSteps */}
+            <p className="text-gray-500 text-xs font-bold uppercase tracking-wider mt-4">Full Step-by-Step Guides ({inventionsWithSteps.length})</p>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+              {inventionsWithSteps.map((inv, i) => {
+                const data = inventionSteps[inv.title];
+                return (
+                  <div key={i} className="bg-gray-900 border border-amber-900/40 rounded-xl p-4">
+                    <p className="text-white font-bold text-sm">{inv.icon} {inv.title}</p>
+                    <p className="text-gray-500 text-xs mt-1">{data.steps?.length || 0} steps · {data.bom?.length || 0} BOM items</p>
+                    <p className="text-gray-600 text-xs mt-1 leading-relaxed line-clamp-2">{data.overview?.slice(0, 120)}…</p>
                   </div>
-                ))}
-              </div>
+                );
+              })}
+            </div>
+            {/* DB build videos */}
+            {buildVideos.length > 0 && (
+              <>
+                <p className="text-gray-500 text-xs font-bold uppercase tracking-wider mt-4">AI-Generated Build Videos ({buildVideos.length})</p>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                  {buildVideos.map((v, i) => (
+                    <div key={v.id} className="bg-gray-900 border border-gray-800 rounded-xl p-4">
+                      <p className="text-white font-bold text-sm">{v.invention_name}</p>
+                      <p className="text-gray-500 text-xs">{v.step_count || (v.steps || []).length} steps · {v.invention_category}</p>
+                      <p className="text-gray-600 text-xs mt-1">{new Date(v.created_date).toLocaleDateString()}</p>
+                    </div>
+                  ))}
+                </div>
+              </>
             )}
           </>
         )}
