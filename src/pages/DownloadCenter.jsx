@@ -157,66 +157,307 @@ function generateCoursesPDF(courses) {
 
 function generateInventionPlansPDF(plans) {
   const doc = new jsPDF({ orientation: "portrait", unit: "mm", format: "a4" });
-  const margin = 22;
-  const pageW = 210;
-  const contentW = pageW - margin * 2;
-  let y = 58; let pn = 1;
-  const bg = () => { doc.setFillColor(255, 255, 255); doc.rect(0, 0, pageW, 297, 'F'); };
-  const newPage = () => { doc.addPage(); bg(); pn++; drawPageHeader(doc, 'INVENTION BUILD PLANS', 'ENGINEERING SPECIFICATIONS'); y = 58; };
-  const check = (n = 14) => { if (y + n > 281) newPage(); };
+  const W = 210, M = 18, CW = W - M * 2;
+  let y = 0;
 
-  bg(); drawPageHeader(doc, 'INVENTION BUILD PLANS', 'COMPLETE ENGINEERING SPECIFICATIONS LIBRARY');
-  doc.setFontSize(20); doc.setFont('helvetica', 'bold'); doc.setTextColor(0, 0, 0);
-  doc.text('Invention Build Plans & Engineering Specifications', pageW / 2, y + 8, { align: 'center' });
-  doc.setFontSize(11); doc.setFont('helvetica', 'normal'); doc.setTextColor(60, 60, 60);
-  doc.text(`${plans.length} Devices  ·  Complete BOM  ·  Step-by-Step Assembly  ·  Theory Primers`, pageW / 2, y + 18, { align: 'center' });
-  y += 32;
+  const bg = () => { doc.setFillColor(255, 255, 255); doc.rect(0, 0, W, 297, 'F'); };
+  const addPage = () => { doc.addPage(); bg(); drawPageHeader(doc, 'INVENTION BUILD PLANS', 'BEGINNER-FRIENDLY ASSEMBLY GUIDE'); y = 58; };
+  const check = (n = 14) => { if (y + n > 281) addPage(); };
 
-  plans.forEach((plan, idx) => {
-    check(60);
-    // Section header
-    doc.setFillColor(10, 10, 10);
-    doc.rect(margin - 2, y, contentW + 4, 14, 'F');
+  const para = (text, color = [20, 20, 20], size = 11, bold = false, indent = 0) => {
+    doc.setFontSize(size); doc.setFont('helvetica', bold ? 'bold' : 'normal'); doc.setTextColor(...color);
+    const lines = doc.splitTextToSize(text, CW - indent);
+    lines.forEach(l => { check(8); doc.text(l, M + indent, y); y += 7; });
+    y += 2;
+  };
+
+  const sectionBand = (label, color = [10, 10, 10], textColor = [255, 255, 255]) => {
+    check(14);
+    doc.setFillColor(...color); doc.rect(M - 2, y - 3, CW + 4, 13, 'F');
+    doc.setFontSize(10); doc.setFont('helvetica', 'bold'); doc.setTextColor(...textColor);
+    doc.text(label, M + 2, y + 6); y += 16;
+  };
+
+  const pill = (label, x, py, bgColor = [230, 230, 230], textColor = [0, 0, 0]) => {
+    doc.setFillColor(...bgColor); doc.roundedRect(x, py - 4, doc.getStringUnitWidth(label) * 3 + 8, 7, 2, 2, 'F');
+    doc.setFontSize(8); doc.setFont('helvetica', 'bold'); doc.setTextColor(...textColor);
+    doc.text(label, x + 4, py + 0.5);
+  };
+
+  // ── COVER PAGE ──
+  bg();
+  doc.setFillColor(10, 10, 10); doc.rect(0, 0, W, 50, 'F');
+  doc.setFontSize(9); doc.setFont('helvetica', 'normal'); doc.setTextColor(160, 160, 160);
+  doc.text('ZENITH APEX RESEARCH PORTFOLIO', W / 2, 16, { align: 'center' });
+  doc.setFontSize(22); doc.setFont('helvetica', 'bold'); doc.setTextColor(255, 255, 255);
+  doc.text('INVENTION BUILD PLANS', W / 2, 34, { align: 'center' });
+  doc.setFontSize(11); doc.setFont('helvetica', 'normal'); doc.setTextColor(180, 180, 180);
+  doc.text('Beginner-Friendly Step-by-Step Assembly Guides', W / 2, 43, { align: 'center' });
+
+  y = 64;
+  doc.setFontSize(13); doc.setFont('helvetica', 'bold'); doc.setTextColor(0, 0, 0);
+  doc.text(`${plans.length} Invention Devices — Complete Engineering & Assembly Guides`, W / 2, y, { align: 'center' }); y += 10;
+  doc.setFontSize(10); doc.setFont('helvetica', 'normal'); doc.setTextColor(60, 60, 60);
+  doc.text('Written so a beginner — or a curious 10-year-old — can follow along and build.', W / 2, y, { align: 'center' }); y += 14;
+
+  // How to use this guide box
+  doc.setDrawColor(0); doc.setLineWidth(0.5); doc.rect(M, y, CW, 44, 'D');
+  doc.setFontSize(11); doc.setFont('helvetica', 'bold'); doc.setTextColor(0, 0, 0);
+  doc.text('HOW TO USE THIS GUIDE', M + 5, y + 10); y += 14;
+  const tips = [
+    '🔵  Read the WHAT IS IT section first — it explains the idea in plain language.',
+    '🟢  Gather ALL parts from the SHOPPING LIST before you start building.',
+    '🟡  Follow steps IN ORDER — do not skip ahead.',
+    '🔴  Read every WARNING box carefully before doing that step.',
+    '✅  Complete the CHECKPOINT before moving to the next step.',
+  ];
+  tips.forEach(t => { doc.setFontSize(10); doc.setFont('helvetica', 'normal'); doc.setTextColor(20, 20, 20); doc.text(t, M + 5, y); y += 7; });
+  y += 14;
+
+  // Table of contents
+  doc.setFontSize(12); doc.setFont('helvetica', 'bold'); doc.setTextColor(0, 0, 0);
+  doc.text('TABLE OF CONTENTS', M, y); y += 8;
+  plans.forEach((plan, i) => {
+    check(8);
+    doc.setFontSize(10); doc.setFont('helvetica', 'normal'); doc.setTextColor(20, 20, 20);
+    doc.text(`${i + 1}.  ${plan.name}`, M, y);
+    if (plan.steps?.length) { doc.setTextColor(100, 100, 100); doc.text(`${plan.steps.length} steps`, W - M, y, { align: 'right' }); }
+    y += 7;
+  });
+
+  const confidText = 'CONFIDENTIAL — NDA APPLIES — Unauthorized disclosure subject to $2,500,000 liquidated damages per incident.';
+  y += 6; doc.setDrawColor(0); doc.setLineWidth(0.3); doc.rect(M, y, CW, 12, 'D');
+  doc.setFontSize(8); doc.setFont('helvetica', 'bold'); doc.setTextColor(0, 0, 0);
+  doc.text(confidText, M + 4, y + 7);
+
+  // ── PLAN PAGES ──
+  plans.forEach((plan, planIdx) => {
+    addPage();
+
+    // Device header
+    doc.setFillColor(0, 0, 0); doc.rect(0, y - 8, W, 26, 'F');
+    doc.setFontSize(9); doc.setFont('helvetica', 'normal'); doc.setTextColor(160, 160, 160);
+    doc.text(`DEVICE ${planIdx + 1} OF ${plans.length}`, M, y);
     doc.setFontSize(14); doc.setFont('helvetica', 'bold'); doc.setTextColor(255, 255, 255);
-    doc.text(`Device ${idx + 1}: ${plan.name}`, margin, y + 9);
-    if (plan.price) {
-      doc.setTextColor(220, 220, 220); doc.setFontSize(12);
-      doc.text(plan.price, pageW - margin, y + 9, { align: 'right' });
-    }
-    y += 18;
+    const titleLines = doc.splitTextToSize(plan.name, CW - 40);
+    titleLines.slice(0, 2).forEach((l, i) => doc.text(l, M, y + 8 + i * 8));
+    if (plan.price) { doc.setFontSize(11); doc.setTextColor(220, 220, 100); doc.text(plan.price, W - M, y + 8, { align: 'right' }); }
+    y += 28;
 
-    if (plan.description) {
-      doc.setFontSize(12); doc.setFont('helvetica', 'normal'); doc.setTextColor(20, 20, 20);
-      const lines = doc.splitTextToSize(plan.description, contentW);
-      lines.slice(0, 4).forEach(l => { check(9); doc.text(l, margin, y); y += 8; });
+    // ── WHAT IS IT? (plain English) ──
+    sectionBand('🔵  WHAT IS IT? — Plain English Explanation', [30, 60, 130]);
+    if (plan.whatItIs) {
+      para(plan.whatItIs, [10, 10, 10], 11, false, 2);
+    } else if (plan.description) {
+      para(plan.description, [10, 10, 10], 11, false, 2);
+    }
+    if (plan.analogy) {
+      check(18);
+      doc.setFillColor(240, 248, 255); doc.rect(M, y - 2, CW, 16, 'F');
+      doc.setFontSize(10); doc.setFont('helvetica', 'bold'); doc.setTextColor(30, 80, 160);
+      doc.text('Think of it like this:', M + 4, y + 5);
+      doc.setFont('helvetica', 'normal'); doc.setTextColor(20, 20, 80);
+      const aLines = doc.splitTextToSize(plan.analogy, CW - 8);
+      aLines.slice(0, 2).forEach((l, i) => doc.text(l, M + 4, y + 11 + i * 6));
+      y += 20;
+    }
+
+    // ── HOW DOES IT WORK? ──
+    if (plan.howItWorks) {
+      sectionBand('⚙️  HOW DOES IT WORK?', [40, 40, 60]);
+      para(plan.howItWorks, [10, 10, 10], 11, false, 2);
+    }
+
+    // ── SHOPPING LIST (BOM) ──
+    if (plan.bom?.length) {
+      sectionBand('🟢  SHOPPING LIST — Everything You Need to Buy', [10, 80, 30]);
+
+      // Column headers
+      doc.setFillColor(220, 240, 220); doc.rect(M - 1, y - 3, CW + 2, 10, 'F');
+      doc.setFontSize(9); doc.setFont('helvetica', 'bold'); doc.setTextColor(0, 0, 0);
+      doc.text('Qty', M + 1, y + 4);
+      doc.text('Part Name', M + 14, y + 4);
+      doc.text('What it does (plain English)', M + 78, y + 4);
+      doc.text('Est. Cost', W - M - 36, y + 4);
+      doc.text('Where to Buy', W - M - 2, y + 4, { align: 'right' });
+      y += 12;
+
+      plan.bom.forEach((item, bi) => {
+        const rowH = 13;
+        check(rowH);
+        if (bi % 2 === 0) { doc.setFillColor(248, 252, 248); doc.rect(M - 1, y - 3, CW + 2, rowH, 'F'); }
+        doc.setFontSize(9); doc.setFont('helvetica', 'bold'); doc.setTextColor(0, 100, 0);
+        doc.text(String(item.qty || 1), M + 4, y + 4, { align: 'center' });
+        doc.setFont('helvetica', 'bold'); doc.setTextColor(0, 0, 0);
+        const itemName = doc.splitTextToSize(item.item || item.name || '', 60);
+        doc.text(itemName[0], M + 14, y + 4);
+        if (itemName[1]) { doc.setFontSize(8); doc.text(itemName[1], M + 14, y + 9); }
+        // Plain-English spec
+        doc.setFont('helvetica', 'normal'); doc.setTextColor(40, 40, 40); doc.setFontSize(8);
+        const specText = item.plainEnglish || item.spec || '';
+        const specLines = doc.splitTextToSize(specText, 54);
+        specLines.slice(0, 2).forEach((l, li) => doc.text(l, M + 78, y + 4 + li * 5));
+        // Cost
+        doc.setFont('helvetica', 'bold'); doc.setTextColor(0, 120, 0); doc.setFontSize(9);
+        doc.text(item.cost || item.estCost || '—', W - M - 36, y + 4);
+        // Where
+        doc.setFont('helvetica', 'normal'); doc.setTextColor(60, 60, 200); doc.setFontSize(8);
+        const whereText = item.source || item.where || '';
+        doc.text(doc.splitTextToSize(whereText, 34)[0], W - M - 2, y + 4, { align: 'right' });
+        y += rowH;
+      });
       y += 4;
+
+      if (plan.estimatedCost) {
+        check(10);
+        doc.setFillColor(200, 240, 200); doc.rect(M, y - 2, CW, 10, 'F');
+        doc.setFontSize(10); doc.setFont('helvetica', 'bold'); doc.setTextColor(0, 80, 0);
+        doc.text(`💰 Estimated Total Cost: ${plan.estimatedCost}`, M + 4, y + 5); y += 14;
+      }
+    } else if (plan.components?.length) {
+      sectionBand('🟢  PARTS LIST', [10, 80, 30]);
+      plan.components.forEach(c => { para(`•  ${c}`, [10, 10, 10], 10, false, 4); });
     }
 
-    if (plan.components) {
+    // ── SAFETY FIRST ──
+    if (plan.safetyNotes) {
+      check(24);
+      sectionBand('⚠️  SAFETY FIRST — Read Before You Build', [120, 20, 20]);
+      para(plan.safetyNotes, [80, 0, 0], 10, false, 2);
+    } else {
+      check(20);
+      sectionBand('⚠️  SAFETY REMINDERS', [120, 50, 0]);
+      const safetyDefaults = [
+        '• Always have an adult present when working with electricity.',
+        '• Never touch exposed wires when power is on. Always unplug before wiring.',
+        '• Strong magnets can pinch fingers hard. Keep away from faces and electronics.',
+        '• If something smells hot or burns, turn off power immediately.',
+        '• Keep your workspace tidy — tools on floor can cause trips and accidents.',
+      ];
+      safetyDefaults.forEach(s => { para(s, [80, 30, 0], 10, false, 2); });
+    }
+
+    // ── TOOLS NEEDED ──
+    if (plan.tools?.length) {
+      sectionBand('🔧  TOOLS YOU WILL NEED', [60, 40, 0]);
+      plan.tools.forEach(t => { para(`🔧  ${t}`, [30, 20, 0], 10, false, 2); });
+    }
+
+    // ── STEP-BY-STEP ASSEMBLY ──
+    if (plan.steps?.length) {
+      addPage();
+      sectionBand(`📋  STEP-BY-STEP ASSEMBLY — ${plan.steps.length} STEPS`, [0, 0, 0]);
+      doc.setFontSize(10); doc.setFont('helvetica', 'italic'); doc.setTextColor(60, 60, 60);
+      doc.text('Take your time with each step. Read the full step before starting. Do the checkpoint before moving on.', M, y); y += 10;
+
+      plan.steps.forEach((step, si) => {
+        const stepTitle = typeof step === 'string' ? step : (step.title || step.action || `Step ${si + 1}`);
+        const stepDetail = typeof step === 'string' ? '' : (step.detail || step.action || step.description || '');
+        const stepBeginner = typeof step === 'string' ? '' : (step.beginnerNote || '');
+        const stepWarning = typeof step === 'string' ? '' : (step.warning || '');
+        const stepCheckpoint = typeof step === 'string' ? '' : (step.checkpoint || '');
+        const stepMaterials = typeof step === 'string' ? [] : (step.materials || []);
+        const stepTools = typeof step === 'string' ? [] : (step.tools || []);
+
+        check(36);
+        // Step number band
+        doc.setFillColor(30, 30, 30); doc.rect(M - 2, y - 3, CW + 4, 14, 'F');
+        // Big step number circle
+        doc.setFillColor(255, 255, 255); doc.circle(M + 6, y + 4, 5, 'F');
+        doc.setFontSize(9); doc.setFont('helvetica', 'bold'); doc.setTextColor(0, 0, 0);
+        doc.text(String(si + 1), M + 6, y + 5.5, { align: 'center' });
+        // Step title
+        doc.setFontSize(11); doc.setFont('helvetica', 'bold'); doc.setTextColor(255, 255, 255);
+        doc.text(stepTitle, M + 14, y + 5);
+        y += 17;
+
+        // Full detailed instructions
+        if (stepDetail) {
+          para(stepDetail, [10, 10, 10], 10, false, 4);
+        }
+
+        // Beginner note (plain English analogy/tip)
+        if (stepBeginner) {
+          check(14);
+          doc.setFillColor(240, 245, 255); doc.rect(M + 2, y - 2, CW - 4, 14, 'F');
+          doc.setFontSize(9); doc.setFont('helvetica', 'bold'); doc.setTextColor(30, 80, 160);
+          doc.text('💡 Beginner Tip:', M + 5, y + 4);
+          doc.setFont('helvetica', 'normal'); doc.setTextColor(20, 40, 100);
+          const bLines = doc.splitTextToSize(stepBeginner, CW - 12);
+          bLines.slice(0, 2).forEach((l, li) => doc.text(l, M + 5, y + 9 + li * 5.5));
+          y += 14 + Math.max(0, bLines.length - 1) * 5.5;
+        }
+
+        // Step-specific materials
+        if (stepMaterials.length > 0) {
+          check(10);
+          doc.setFontSize(9); doc.setFont('helvetica', 'bold'); doc.setTextColor(0, 100, 0);
+          doc.text('For this step — grab:', M + 4, y);
+          doc.setFont('helvetica', 'normal'); doc.setTextColor(10, 60, 10);
+          doc.text(stepMaterials.join('  ·  '), M + 38, y); y += 7;
+        }
+
+        // Tools for this step
+        if (stepTools.length > 0) {
+          check(8);
+          doc.setFontSize(9); doc.setFont('helvetica', 'bold'); doc.setTextColor(100, 50, 0);
+          doc.text('Tools:', M + 4, y);
+          doc.setFont('helvetica', 'normal'); doc.setTextColor(80, 40, 0);
+          doc.text(stepTools.join('  ·  '), M + 18, y); y += 7;
+        }
+
+        // Warning
+        if (stepWarning) {
+          check(14);
+          doc.setFillColor(255, 235, 235); doc.rect(M + 2, y - 2, CW - 4, 13, 'F');
+          doc.setDrawColor(200, 0, 0); doc.setLineWidth(0.6); doc.rect(M + 2, y - 2, CW - 4, 13, 'D');
+          doc.setFontSize(9); doc.setFont('helvetica', 'bold'); doc.setTextColor(180, 0, 0);
+          doc.text('⚠ WARNING: ', M + 5, y + 6);
+          doc.setFont('helvetica', 'normal');
+          const wLines = doc.splitTextToSize(stepWarning, CW - 36);
+          doc.text(wLines[0], M + 32, y + 6); y += 17;
+        }
+
+        // Checkpoint
+        if (stepCheckpoint) {
+          check(14);
+          doc.setFillColor(235, 255, 235); doc.rect(M + 2, y - 2, CW - 4, 13, 'F');
+          doc.setFontSize(9); doc.setFont('helvetica', 'bold'); doc.setTextColor(0, 120, 0);
+          doc.text('✅ CHECK: Before moving on —', M + 5, y + 4);
+          doc.setFont('helvetica', 'normal'); doc.setTextColor(0, 60, 0);
+          const cpLines = doc.splitTextToSize(stepCheckpoint, CW - 8);
+          cpLines.slice(0, 2).forEach((l, li) => doc.text(l, M + 5, y + 9 + li * 5.5));
+          y += 14 + Math.max(0, cpLines.length - 1) * 5.5;
+        }
+
+        // Divider
+        y += 4;
+        doc.setDrawColor(180, 180, 180); doc.setLineWidth(0.2); doc.line(M, y, W - M, y); y += 7;
+      });
+    }
+
+    // ── TROUBLESHOOTING ──
+    if (plan.troubleshooting) {
+      check(16);
+      sectionBand('🛠  TROUBLESHOOTING — If Something Goes Wrong', [60, 0, 60]);
+      para(plan.troubleshooting, [40, 0, 40], 10, false, 2);
+    }
+
+    // ── TECHNICAL NOTES ──
+    if (plan.notes) {
       check(12);
-      doc.setFontSize(12); doc.setFont('helvetica', 'bold'); doc.setTextColor(0, 0, 0);
-      doc.text('KEY COMPONENTS:', margin, y); y += 9;
-      doc.setFont('helvetica', 'normal'); doc.setFontSize(12); doc.setTextColor(20, 20, 20);
-      plan.components.slice(0, 10).forEach(c => { check(8); doc.text(`  •  ${c}`, margin, y); y += 8; });
-      y += 4;
+      sectionBand('📖  TECHNICAL NOTES & REFERENCES', [40, 40, 40]);
+      para(plan.notes, [30, 30, 30], 9, false, 2);
     }
 
-    if (plan.steps) {
-      check(12);
-      doc.setFontSize(12); doc.setFont('helvetica', 'bold'); doc.setTextColor(0, 0, 0);
-      doc.text('ASSEMBLY STEPS:', margin, y); y += 9;
-      doc.setFont('helvetica', 'normal'); doc.setFontSize(12); doc.setTextColor(20, 20, 20);
-      plan.steps.slice(0, 12).forEach((s, i) => { check(8); doc.text(`  ${i + 1}.  ${typeof s === 'string' ? s : s.title || s.action || ''}`, margin, y); y += 8; });
-      y += 4;
-    }
-
-    doc.setDrawColor(0, 0, 0); doc.setLineWidth(0.4); doc.line(margin, y, pageW - margin, y);
-    y += 10;
+    // End of device divider
+    y += 6;
+    doc.setDrawColor(0, 0, 0); doc.setLineWidth(0.8); doc.line(M, y, W - M, y); y += 10;
   });
 
   const total = doc.getNumberOfPages();
-  for (let p = 1; p <= total; p++) { doc.setPage(p); drawFooter(doc, p, total, 'INVENTION BUILD PLANS'); }
-  doc.save('zenith-apex-invention-plans.pdf');
+  for (let p = 1; p <= total; p++) { doc.setPage(p); drawFooter(doc, p, total, 'INVENTION BUILD PLANS — BEGINNER GUIDE'); }
+  doc.save('zenith-apex-invention-plans-beginner-guide.pdf');
 }
 
 function generateShopPDF() {
@@ -430,13 +671,52 @@ export default function DownloadCenter() {
   const allInventions = (businessItems || []).filter(b => b.category === 'Invention');
   const inventionsWithSteps = allInventions.filter(inv => inventionSteps[inv.title]);
   const plans = allInventions.map(inv => {
-    const steps = inventionSteps[inv.title];
+    const data = inventionSteps[inv.title];
+    // Estimate total cost from BOM
+    const costMatches = (data?.bom || []).map(b => {
+      const m = (b.source || '').match(/\$(\d[\d,.]+)/);
+      return m ? parseFloat(m[1].replace(',', '')) : 0;
+    });
+    const totalCost = costMatches.reduce((a, b) => a + b, 0);
+    const estCost = totalCost > 0 ? `~$${totalCost.toFixed(0)}` : 'Varies';
+
     return {
       name: inv.title,
+      // Plain-English description (reuse tagline as analogy starter)
+      whatItIs: inv.description,
+      analogy: inv.tagline ? `"${inv.tagline}"` : null,
+      howItWorks: data?.overview || null,
       description: inv.description,
       price: inv.price,
-      components: steps?.bom?.map(b => `${b.qty}× ${b.item} (${b.spec})`) || [],
-      steps: steps?.steps?.map(s => ({ title: s.title, action: s.detail })) || [],
+      estimatedCost: estCost,
+      safetyNotes: null, // step-level warnings cover this
+      notes: data?.notes || null,
+      troubleshooting: data?.softwareNotes ? `Software & firmware: ${data.softwareNotes}` : null,
+      tools: data ? [...new Set((data.steps || []).flatMap(s => []))].slice(0, 6) : [],
+      // Full BOM with plain-English descriptions
+      bom: (data?.bom || []).map(b => ({
+        qty: b.qty,
+        item: b.item,
+        spec: b.spec,
+        plainEnglish: b.spec,
+        cost: (b.source || '').match(/\$[\d,.]+/)?.[0] || '—',
+        source: (b.source || '').replace(/\s*~?\$[\d,.]+.*/, '').trim() || b.source,
+        where: b.source || '—',
+      })),
+      // Steps with beginner notes
+      steps: (data?.steps || []).map((s, i) => ({
+        title: s.title,
+        detail: s.detail,
+        warning: s.warning || null,
+        checkpoint: `Verify step ${i + 1} is complete before continuing: look at your work and make sure it matches the description above.`,
+        beginnerNote: s.warning
+          ? `⚠️ This step has a warning. Read it carefully!`
+          : i === 0
+          ? `Start here! Take it slow — there's no rush. Read the full step once before picking up any tools.`
+          : `Good progress! You're on step ${i + 1}. Double-check the previous step looks right before continuing.`,
+      })),
+      // Fallback for inventions without detailed steps
+      components: data?.bom ? [] : [],
     };
   });
   const genVideoPDF = () => {
