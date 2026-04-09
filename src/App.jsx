@@ -61,6 +61,8 @@ import LicensingPortal from './pages/LicensingPortal';
 import MobileLayout from './components/MobileLayout';
 import DeviceKnowledgeGraph from './pages/DeviceKnowledgeGraph';
 import AcquisitionCRM from './pages/AcquisitionCRM';
+import VDRPortal from './pages/VDRPortal';
+import VDRAdmin from './pages/VDRAdmin';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -164,6 +166,8 @@ const AuthenticatedApp = () => {
           <Route path="/licensing" element={<LicensingPortal />} />
           <Route path="/device-graph" element={<DeviceKnowledgeGraph />} />
           <Route path="/acquisition-crm" element={<AcquisitionCRM />} />
+          <Route path="/vdr/:token" element={<VDRPortal />} />
+          <Route path="/vdr-admin" element={<VDRAdmin />} />
           <Route path="*" element={<PageNotFound />} />
         </Route>
       </Routes>

@@ -1,0 +1,85 @@
+{
+  "name": "VDRSession",
+  "type": "object",
+  "properties": {
+    "buyer_name": {
+      "type": "string"
+    },
+    "buyer_email": {
+      "type": "string"
+    },
+    "buyer_org": {
+      "type": "string"
+    },
+    "investor_relationship_id": {
+      "type": "string"
+    },
+    "token": {
+      "type": "string"
+    },
+    "token_hash": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "expired",
+        "revoked"
+      ],
+      "default": "active"
+    },
+    "expires_at": {
+      "type": "string"
+    },
+    "nda_signed_at": {
+      "type": "string"
+    },
+    "nda_ip_address": {
+      "type": "string"
+    },
+    "page_views": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "page": {
+            "type": "string"
+          },
+          "viewed_at": {
+            "type": "string"
+          },
+          "duration_seconds": {
+            "type": "number"
+          },
+          "ip": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "total_time_seconds": {
+      "type": "number",
+      "default": 0
+    },
+    "last_accessed": {
+      "type": "string"
+    },
+    "access_count": {
+      "type": "integer",
+      "default": 0
+    },
+    "revoked_reason": {
+      "type": "string"
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "buyer_name",
+    "buyer_email",
+    "token",
+    "expires_at"
+  ]
+}
