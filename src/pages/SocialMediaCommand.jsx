@@ -3,8 +3,7 @@ import { Link } from "react-router-dom";
 import {
   ArrowLeft, Target, TrendingUp, Calendar, Sparkles, Video,
   DollarSign, BarChart2, Send, Loader2, Copy, Check,
-  Instagram, Youtube, Linkedin, Twitter, MessageSquare,
-  Zap, Users, Star, ChevronRight, RefreshCw, BookOpen
+  MessageSquare, Zap, Users, Star, ChevronRight, BookOpen
 } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 
