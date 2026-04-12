@@ -69,6 +69,9 @@ import TRZPatent from './pages/TRZPatent';
 import CoursePlan from './pages/CoursePlan';
 import SocialMediaCommand from './pages/SocialMediaCommand';
 import SocialMediaAgent from './pages/SocialMediaAgent';
+import AdminPanel from './pages/AdminPanel';
+import AdminHub from './pages/AdminHub';
+import AdminGuard from './components/AdminGuard';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -128,7 +131,6 @@ const AuthenticatedApp = () => {
           <Route path="/subscribe" element={<Subscribe />} />
           <Route path="/my-research" element={<MyResearch />} />
           <Route path="/courses" element={<CourseCatalog />} />
-          <Route path="/marketing" element={<MarketingPlan />} />
           <Route path="/simulator" element={<Simulator />} />
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/my-learning" element={<MyLearning />} />
@@ -141,7 +143,6 @@ const AuthenticatedApp = () => {
           <Route path="/prior-art" element={<PriorArtArchive />} />
           <Route path="/investors" element={<InvestorPortal />} />
           <Route path="/patent-landscape" element={<PatentLandscapeGraph />} />
-          <Route path="/monitoring" element={<MonitoringDashboard />} />
           <Route path="/patent-wizard" element={<PatentFilingWizard />} />
           <Route path="/investor-crm" element={<InvestorCRM />} />
           <Route path="/zenith-apex" element={<ZenithApex />} />
@@ -157,9 +158,7 @@ const AuthenticatedApp = () => {
           <Route path="/inventor-forge" element={<InventionForge />} />
           <Route path="/provisional-patent" element={<ProvisionalPatent />} />
           <Route path="/scalar-potential" element={<ScalarPotentialMap />} />
-          <Route path="/admin-videos" element={<AdminVideos />} />
           <Route path="/opportunity-monitor" element={<OpportunityMonitor />} />
-          <Route path="/admin-downloads" element={<AdminDownloadCenter />} />
           <Route path="/invention-library" element={<InventionLibrary />} />
           <Route path="/download-center" element={<DownloadCenter />} />
           <Route path="/invention-timeline" element={<InventionTimeline />} />
@@ -167,19 +166,31 @@ const AuthenticatedApp = () => {
           <Route path="/investor-portal" element={<InvestorPortal />} />
           <Route path="/account" element={<AccountSettings />} />
           <Route path="/beta-apply" element={<BetaApply />} />
-          <Route path="/admin-beta" element={<AdminBeta />} />
           <Route path="/member-portal" element={<MemberPortal />} />
           <Route path="/licensing" element={<LicensingPortal />} />
           <Route path="/device-graph" element={<DeviceKnowledgeGraph />} />
-          <Route path="/acquisition-crm" element={<AcquisitionCRM />} />
           <Route path="/vdr/:token" element={<VDRPortal />} />
-          <Route path="/vdr-admin" element={<VDRAdmin />} />
-          <Route path="/valuation" element={<ValuationDashboard />} />
-          <Route path="/build-tracker" element={<InventionBuildTracker />} />
-          <Route path="/trz-patent" element={<TRZPatent />} />
           <Route path="/course-plan" element={<CoursePlan />} />
           <Route path="/social-command" element={<SocialMediaCommand />} />
           <Route path="/social-agent" element={<SocialMediaAgent />} />
+          <Route path="/admin" element={<AdminPanel />} />
+
+          {/* Admin-only routes */}
+          <Route element={<AdminGuard />}>
+            <Route path="/admin" element={<AdminHub />} />
+            <Route path="/admin-beta" element={<AdminBeta />} />
+            <Route path="/admin-videos" element={<AdminVideos />} />
+            <Route path="/admin-downloads" element={<AdminDownloadCenter />} />
+            <Route path="/vdr-admin" element={<VDRAdmin />} />
+            <Route path="/acquisition-crm" element={<AcquisitionCRM />} />
+            <Route path="/valuation" element={<ValuationDashboard />} />
+            <Route path="/opportunity-monitor" element={<OpportunityMonitor />} />
+            <Route path="/monitoring" element={<MonitoringDashboard />} />
+            <Route path="/marketing" element={<MarketingPlan />} />
+            <Route path="/build-tracker" element={<InventionBuildTracker />} />
+            <Route path="/trz-patent" element={<TRZPatent />} />
+          </Route>
+
           <Route path="*" element={<PageNotFound />} />
         </Route>
       </Routes>
