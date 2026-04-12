@@ -273,7 +273,7 @@ Platform details: scalar EM research (Bearden), 21 inventions, 20+ courses, AI p
 Question: ${finalQ}
 
 Provide a specific, actionable, data-backed answer with concrete steps, numbers, timelines, and comparable examples. Include any risks or caveats. Be direct and avoid generic marketing advice.`;
-    const result = await base44.integrations.Core.InvokeLLM({ prompt, model: "claude_sonnet_4_6", add_context_from_internet: true });
+    const result = await base44.integrations.Core.InvokeLLM({ prompt, model: "gemini_3_1_pro", add_context_from_internet: true });
     setAnswer(typeof result === "string" ? result : result?.content || JSON.stringify(result));
     setLoading(false);
   };
