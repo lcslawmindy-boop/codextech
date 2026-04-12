@@ -12,13 +12,21 @@ export function usePaymentGate() {
         if (!user) { setLoading(false); return; }
         // Admin users always have access
         if (user.role === "admin") { setPaid(true); setLoading(false); return; }
+
+        // Check 1: User entity has active subscription (set by Stripe webhook)
+        if (user.subscription_status === "active") { setPaid(true); setLoading(false); return; }
+
+        // Check 2: BetaApplication record shows converted or a paid plan
         const apps = await base44.entities.BetaApplication.filter({ email: user.email });
         const app = apps[0];
-        const plan = app?.plan_purchased?.toLowerCase() || "";
-        // Any paid plan unlocks the platform
-        const hasPaid = app?.status === "converted" ||
-          plan.includes("starter") || plan.includes("researcher") || plan.includes("pro");
-        setPaid(hasPaid);
+        if (app) {
+          const plan = app.plan_purchased?.toLowerCase() || "";
+          const hasPaid = app.status === "converted" ||
+            plan.includes("starter") || plan.includes("researcher") || plan.includes("pro");
+          if (hasPaid) { setPaid(true); setLoading(false); return; }
+        }
+
+        setPaid(false);
       } catch {
         setPaid(false);
       } finally {

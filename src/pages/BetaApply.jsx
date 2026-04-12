@@ -105,7 +105,7 @@ export default function BetaApply() {
           <p className="text-gray-400 text-lg max-w-2xl mx-auto leading-relaxed mb-3">
             Sign the NDA, complete your profile, and get <strong className="text-white">immediate access</strong> to the full Zenith Apex research platform. Founding member pricing locked forever.
           </p>
-          <p className="text-gray-600 text-sm">NDA required · Instant access after sign-up · Founding 349 pricing</p>
+          <p className="text-gray-600 text-sm">NDA required · Instant access after sign-up · Founding 1000 pricing</p>
         </div>
       </div>
 

@@ -23,6 +23,7 @@ Deno.serve(async (req) => {
     const email = session.customer_email || session.metadata?.user_email;
     if (email) {
       try {
+        // Update User entity subscription status
         const users = await base44.asServiceRole.entities.User.filter({ email });
         if (users.length > 0) {
           await base44.asServiceRole.entities.User.update(users[0].id, {
@@ -31,6 +32,32 @@ Deno.serve(async (req) => {
             subscription_id: session.subscription,
           });
           console.log("Subscription activated for:", email);
+        }
+
+        // Also mark BetaApplication as converted so payment gate check 2 also passes
+        const apps = await base44.asServiceRole.entities.BetaApplication.filter({ email });
+        if (apps.length > 0) {
+          const planName = session.metadata?.plan_name || "researcher";
+          await base44.asServiceRole.entities.BetaApplication.update(apps[0].id, {
+            status: "converted",
+            plan_purchased: planName,
+            converted_at: new Date().toISOString(),
+            mrr_value: session.amount_total ? session.amount_total / 100 : 0,
+          });
+          console.log("BetaApplication converted for:", email);
+        } else {
+          // No application exists yet — create one automatically so payment gate works
+          await base44.asServiceRole.entities.BetaApplication.create({
+            email,
+            full_name: email,
+            background: "Other",
+            why_interested: "Paid via Stripe checkout",
+            status: "converted",
+            plan_purchased: session.metadata?.plan_name || "researcher",
+            converted_at: new Date().toISOString(),
+            mrr_value: session.amount_total ? session.amount_total / 100 : 0,
+          });
+          console.log("BetaApplication auto-created for paid user:", email);
         }
       } catch (e) {
         console.error("Error updating user subscription:", e.message);
