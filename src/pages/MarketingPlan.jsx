@@ -26,11 +26,11 @@ const WEEK_THEMES = [
   { week: 4, theme: "Investment Opportunity",   color: "#f59e0b", desc: "IP portfolio, licensing, early-adopter offer, CTA" },
 ];
 
-const TARGET_MEMBERS = 349;
+const TARGET_MEMBERS = 1000;
 
 const PHASES = [
   {
-    name: "Phase 1 — Warm Network", range: "Week 1–2", target: 30, color: "#f59e0b",
+    name: "Phase 1 — Warm Network", range: "Week 1–2", target: 100, color: "#f59e0b",
     desc: "Direct outreach to existing contacts, alternative physics forums, Bearden fan communities.",
     channels: [
       { icon: "📧", label: "Email Outreach", action: "Personal emails to 200+ warm contacts. Offer 30-day free trial or founding member discount.", conversion: "15%", volume: "200 contacts → 30 members" },
@@ -39,7 +39,7 @@ const PHASES = [
     ]
   },
   {
-    name: "Phase 2 — Content Engine", range: "Week 3–6", target: 100, color: "#6366f1",
+    name: "Phase 2 — Content Engine", range: "Week 3–6", target: 300, color: "#6366f1",
     desc: "Launch the 30-day content calendar across LinkedIn, X, and YouTube. Build SEO and social proof.",
     channels: [
       { icon: "▶️", label: "YouTube (SEO)", action: "3 videos: 'What Bearden Actually Discovered', 'How MEG Works', 'Free Energy Patents That Were Suppressed'. Optimize for long-tail search.", conversion: "1%", volume: "10,000 views → 100 leads" },
@@ -48,7 +48,7 @@ const PHASES = [
     ]
   },
   {
-    name: "Phase 3 — Paid + Partners", range: "Week 7–10", target: 150, color: "#22c55e",
+    name: "Phase 3 — Paid + Partners", range: "Week 7–10", target: 400, color: "#22c55e",
     desc: "Layer in paid acquisition and affiliate partnerships with influencers in alt-energy and fringe science.",
     channels: [
       { icon: "🎯", label: "Reddit Ads", action: "$500/mo targeted at r/AlternativeEnergy, r/Physics, r/Patents. Drive to free 'MEG Build Plan Preview' lead magnet page.", conversion: "2%", volume: "$500 → ~150 clicks → 3 members" },
@@ -57,21 +57,21 @@ const PHASES = [
     ]
   },
   {
-    name: "Phase 4 — Urgency + Referral", range: "Week 11–16", target: 69, color: "#ec4899",
+    name: "Phase 4 — Urgency + Referral", range: "Week 11–16", target: 200, color: "#ec4899",
     desc: "Final push: founding member deadline, referral program, and live webinar to convert fence-sitters.",
     channels: [
-      { icon: "⏱️", label: "Founding Member Deadline", action: "Announce 'Founding 349 Members' cohort closes [DATE]. Price increases after. Email sequence: 7 days, 3 days, 24 hours, CLOSED.", conversion: "20% of leads", volume: "Urgency converts 20% of existing list" },
-      { icon: "🎁", label: "Referral Program", action: "Members get 1 month free for every referral who converts. Each member refers avg 1.2 friends → 40% member growth from referrals.", conversion: "40% lift", volume: "Existing 280 members × 1.2 referrals" },
+      { icon: "⏱️", label: "Founding Member Deadline", action: "Announce 'Founding 1000 Members' cohort closes [DATE]. Price increases after. Email sequence: 7 days, 3 days, 24 hours, CLOSED.", conversion: "20% of leads", volume: "Urgency converts 20% of existing list" },
+      { icon: "🎁", label: "Referral Program", action: "Members get 1 month free for every referral who converts. Each member refers avg 1.2 friends → 40% member growth from referrals.", conversion: "40% lift", volume: "Existing 800 members × 1.2 referrals" },
       { icon: "🎙️", label: "Live Webinar", action: "'The Physics That Could Change Energy Forever' — free 60-min webinar. Pitch beta at end. 500 attendees target, 10% conversion.", conversion: "10%", volume: "500 attendees → 50 members" },
     ]
   },
 ];
 
 const MRR_BREAKDOWN = [
-  { label: "Research Membership ($29/mo)", members: 200, value: 5800 },
-  { label: "Invention Plans Bundle ($197)", members: 80, value: 15760 },
-  { label: "Complete Course Library ($497)", members: 40, value: 19880 },
-  { label: "Membership + Plans ($226)", members: 29, value: 6554 },
+  { label: "Research Membership ($97/mo)", members: 600, value: 58200 },
+  { label: "Invention Plans Bundle ($197)", members: 200, value: 39400 },
+  { label: "Complete Course Library ($497)", members: 120, value: 59640 },
+  { label: "Pro Membership ($247/mo)", members: 80, value: 19760 },
 ];
 
 function CopyButton({ text }) {
@@ -153,7 +153,7 @@ function GrowthPlanTab() {
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-5">
           <div>
             <h2 className="text-white font-black text-2xl mb-1">🎯 Goal: <span className="text-yellow-400">{TARGET_MEMBERS} Founding Members</span></h2>
-            <p className="text-gray-400 text-sm">Beta cohort closes at 349 — price increases after. 16-week acquisition plan.</p>
+            <p className="text-gray-400 text-sm">Founding 1000 member cohort — founding pricing locked. 16-week acquisition plan.</p>
           </div>
           <div className="text-right">
             <p className="text-gray-500 text-xs mb-0.5">Revenue at {TARGET_MEMBERS} members</p>
@@ -170,14 +170,14 @@ function GrowthPlanTab() {
             <div className="h-full bg-gradient-to-r from-yellow-600 to-yellow-400 rounded-full transition-all" style={{ width: `${pct}%` }} />
           </div>
           <div className="flex justify-between text-xs text-gray-600">
-            <span>0</span><span>87</span><span>175</span><span>262</span><span>349</span>
+            <span>0</span><span>250</span><span>500</span><span>750</span><span>1000</span>
           </div>
         </div>
       </div>
 
       {/* Revenue breakdown */}
       <div>
-        <h3 className="text-white font-black text-base mb-3">Revenue Breakdown at {TARGET_MEMBERS} Members</h3>
+        <h3 className="text-white font-black text-base mb-3">Revenue at {TARGET_MEMBERS} Members Goal</h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-3">
           {MRR_BREAKDOWN.map((r, i) => (
             <div key={i} className="bg-gray-900 border border-gray-800 rounded-xl p-4">
@@ -193,7 +193,7 @@ function GrowthPlanTab() {
             <p className="text-gray-500 text-xs">Total first-payment revenue from {TARGET_MEMBERS} members</p>
           </div>
           <div className="text-right">
-            <p className="text-gray-400 text-sm font-bold">$5,800/mo recurring</p>
+            <p className="text-gray-400 text-sm font-bold">$77,960/mo recurring</p>
             <p className="text-gray-600 text-xs">from membership subs alone</p>
           </div>
         </div>
@@ -248,9 +248,9 @@ function GrowthPlanTab() {
           <DollarSign size={18} className="text-indigo-400" />
           <div><p className="text-white font-bold text-sm">Pricing Page</p><p className="text-gray-500 text-xs">Checkout-ready landing page</p></div>
         </Link>
-        <Link to="/admin-beta" className="flex items-center gap-3 bg-green-900/30 border border-green-800 rounded-xl p-4 hover:bg-green-900/50 transition-colors">
-          <TrendingUp size={18} className="text-green-400" />
-          <div><p className="text-white font-bold text-sm">Admin Dashboard</p><p className="text-gray-500 text-xs">Track conversions & MRR</p></div>
+        <Link to="/social-command" className="flex items-center gap-3 bg-rose-900/30 border border-rose-700 rounded-xl p-4 hover:bg-rose-900/50 transition-colors">
+          <TrendingUp size={18} className="text-rose-400" />
+          <div><p className="text-white font-bold text-sm">🚀 Social Command</p><p className="text-gray-500 text-xs">AI content + video + advisor</p></div>
         </Link>
       </div>
     </div>
@@ -365,12 +365,12 @@ Generate exactly ${days} posts for days ${dayStart}-${dayEnd}.`;
           <div className="w-px h-5 bg-gray-700" />
           <div>
             <h1 className="text-white font-bold text-lg tracking-tight">Marketing Plan</h1>
-            <p className="text-gray-500 text-xs">349-member growth roadmap + AI content calendar</p>
+            <p className="text-gray-500 text-xs">1000-member growth roadmap + AI content calendar</p>
           </div>
         </div>
         <div className="flex items-center gap-2 text-xs">
           <Users size={13} className="text-yellow-400" />
-          <span className="text-yellow-400 font-bold">Target: 349 members</span>
+          <span className="text-yellow-400 font-bold">Target: 1,000 members</span>
         </div>
       </div>
 
@@ -378,7 +378,7 @@ Generate exactly ${days} posts for days ${dayStart}-${dayEnd}.`;
       <div className="flex border-b border-gray-800 bg-gray-900/50 px-4">
         <button onClick={() => setTab("growth")}
           className={`px-5 py-3 text-sm font-bold border-b-2 transition-all ${tab === "growth" ? "border-yellow-500 text-yellow-300" : "border-transparent text-gray-500 hover:text-gray-300"}`}>
-          🎯 349 Members Plan
+          🎯 1000 Members Plan
         </button>
         <button onClick={() => setTab("calendar")}
           className={`px-5 py-3 text-sm font-bold border-b-2 transition-all ${tab === "calendar" ? "border-purple-500 text-purple-300" : "border-transparent text-gray-500 hover:text-gray-300"}`}>
