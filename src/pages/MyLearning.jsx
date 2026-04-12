@@ -1,11 +1,15 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { ArrowLeft, BookOpen, Play, Lock, CheckCircle2, Loader2, Award, Clock, ChevronRight } from "lucide-react";
+import { ArrowLeft, BookOpen, Play, Lock, CheckCircle2, Loader2, Award, Clock, ChevronRight, Package, Download, FileText, GraduationCap, Library } from "lucide-react";
+import { jsPDF } from "jspdf";
 import { base44 } from "@/api/base44Client";
 import { businessItems } from "../lib/businessItems";
 import LessonViewer from "../components/LessonViewer";
 
+import { inventionSteps } from "../lib/inventionSteps";
+
 const allCourses = businessItems.filter(i => i.category === "Course" || i.category === "Book/PDF");
+const allInventions = businessItems.filter(i => i.category === "Invention");
 
 function ProgressRing({ pct, size = 48, color = "#a855f7" }) {
   const r = (size - 6) / 2;
@@ -92,12 +96,143 @@ function CourseCard({ course, purchased, progress, onOpen }) {
   );
 }
 
+function LibrarySection({ purchasedInventions, purchasedPDFs }) {
+  const [generating, setGenerating] = useState(null);
+
+  const downloadPlan = async (inv) => {
+    setGenerating(inv.title);
+    await new Promise(r => setTimeout(r, 50));
+    const data = inventionSteps[inv.title];
+    const doc = new jsPDF({ orientation: "portrait", unit: "mm", format: "a4" });
+    const W = 210, M = 18, CW = W - M * 2;
+    let y = 20;
+
+    const check = (n = 14) => { if (y + n > 281) { doc.addPage(); y = 20; } };
+    const para = (text, size = 10, bold = false) => {
+      doc.setFontSize(size); doc.setFont("helvetica", bold ? "bold" : "normal"); doc.setTextColor(20, 20, 20);
+      doc.splitTextToSize(String(text), CW).forEach(l => { check(7); doc.text(l, M, y); y += 6; });
+      y += 2;
+    };
+
+    doc.setFillColor(10, 10, 10); doc.rect(0, 0, W, 36, "F");
+    doc.setFontSize(9); doc.setFont("helvetica", "normal"); doc.setTextColor(160, 160, 160);
+    doc.text("ZENITH APEX RESEARCH PORTFOLIO", W / 2, 14, { align: "center" });
+    doc.setFontSize(16); doc.setFont("helvetica", "bold"); doc.setTextColor(255, 255, 255);
+    doc.text(inv.title, W / 2, 27, { align: "center" });
+    y = 48;
+
+    para(inv.description, 11);
+
+    if (data) {
+      if (data.overview) { para("Overview", 11, true); para(data.overview); }
+      if (data.bom?.length) {
+        para("Bill of Materials", 11, true);
+        data.bom.forEach(b => { para(`• ${b.qty}× ${b.item} — ${b.spec} (${b.source})`); });
+      }
+      if (data.steps?.length) {
+        para("Assembly Steps", 11, true);
+        data.steps.forEach((s, i) => { para(`Step ${i+1}: ${s.title}`); if (s.detail) para(s.detail); });
+      }
+    }
+
+    doc.save(`${inv.title.replace(/[^a-zA-Z0-9]/g, "_")}.pdf`);
+    setGenerating(null);
+  };
+
+  return (
+    <div className="space-y-10">
+      {/* Invention Build Plans */}
+      <section>
+        <div className="flex items-center gap-3 mb-5">
+          <Package size={16} className="text-yellow-400" />
+          <h2 className="text-white font-bold text-lg">Invention Build Plans</h2>
+          <span className="text-xs text-gray-500 px-2 py-0.5 rounded-full bg-gray-800">{purchasedInventions.length} purchased</span>
+        </div>
+        {purchasedInventions.length === 0 ? (
+          <div className="bg-gray-900 border border-gray-800 rounded-2xl p-10 text-center">
+            <Package size={32} className="text-gray-700 mx-auto mb-3" />
+            <p className="text-gray-500 font-semibold mb-1">No invention plans purchased yet</p>
+            <p className="text-gray-600 text-sm mb-4">Purchase invention build plans to access full BOMs, assembly steps, and downloadable PDFs.</p>
+            <Link to="/invention-plans" className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-yellow-900/40 border border-yellow-700 text-yellow-300 text-sm font-semibold hover:bg-yellow-800/40 transition-colors">
+              Browse Invention Plans →
+            </Link>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+            {purchasedInventions.map((inv, i) => {
+              const hasSteps = !!inventionSteps[inv.title];
+              const stepData = inventionSteps[inv.title];
+              return (
+                <div key={i} className="bg-gray-900 border border-yellow-900/40 rounded-2xl p-5 flex flex-col gap-3">
+                  <div className="flex items-start gap-3">
+                    <span className="text-3xl">{inv.icon}</span>
+                    <div className="flex-1 min-w-0">
+                      <h3 className="text-white font-bold text-sm leading-snug">{inv.title}</h3>
+                      <p className="text-yellow-600 text-xs mt-0.5">{inv.price}</p>
+                    </div>
+                  </div>
+                  <p className="text-gray-500 text-xs leading-relaxed line-clamp-2">{inv.description}</p>
+                  {hasSteps && (
+                    <div className="flex gap-3 text-xs text-gray-600">
+                      <span>{stepData.bom?.length || 0} parts</span>
+                      <span>·</span>
+                      <span>{stepData.steps?.length || 0} steps</span>
+                    </div>
+                  )}
+                  <div className="flex gap-2 mt-auto">
+                    <Link to="/invention-plans"
+                      className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-xl text-xs font-semibold bg-gray-800 hover:bg-gray-700 text-gray-300 transition-colors">
+                      <Play size={11} /> View Plans
+                    </Link>
+                    <button onClick={() => downloadPlan(inv)} disabled={generating === inv.title}
+                      className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-xl text-xs font-semibold bg-yellow-900/50 hover:bg-yellow-800/60 border border-yellow-800 text-yellow-300 transition-colors disabled:opacity-60">
+                      {generating === inv.title ? <Loader2 size={11} className="animate-spin" /> : <Download size={11} />}
+                      {generating === inv.title ? "Building…" : "Download PDF"}
+                    </button>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        )}
+      </section>
+
+      {/* Purchased Books/PDFs */}
+      {purchasedPDFs.length > 0 && (
+        <section>
+          <div className="flex items-center gap-3 mb-5">
+            <FileText size={16} className="text-blue-400" />
+            <h2 className="text-white font-bold text-lg">Books & Documents</h2>
+            <span className="text-xs text-gray-500 px-2 py-0.5 rounded-full bg-gray-800">{purchasedPDFs.length} purchased</span>
+          </div>
+          <div className="flex flex-col gap-3">
+            {purchasedPDFs.map((item, i) => (
+              <div key={i} className="bg-gray-900 border border-gray-800 rounded-xl p-4 flex items-center gap-4">
+                <span className="text-3xl">{item.icon}</span>
+                <div className="flex-1 min-w-0">
+                  <h3 className="text-white font-semibold text-sm">{item.title}</h3>
+                  <p className="text-gray-500 text-xs mt-0.5 line-clamp-1">{item.description}</p>
+                </div>
+                <span className="text-green-400 font-bold text-sm flex-shrink-0">{item.price}</span>
+                <Link to="/courses" className="flex-shrink-0 flex items-center gap-1.5 px-3 py-2 rounded-lg bg-blue-900/40 border border-blue-800 text-blue-300 text-xs font-semibold hover:bg-blue-800/40 transition-colors">
+                  <BookOpen size={11} /> Access
+                </Link>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
+    </div>
+  );
+}
+
 export default function MyLearning() {
   const [purchases, setPurchases] = useState([]);
   const [progressMap, setProgressMap] = useState({});
   const [loading, setLoading] = useState(true);
   const [activeCourse, setActiveCourse] = useState(null);
   const [filter, setFilter] = useState("all");
+  const [tab, setTab] = useState("learning");
 
   const loadData = async () => {
     setLoading(true);
@@ -128,6 +263,9 @@ export default function MyLearning() {
   const completedCount = Object.values(progressMap).filter(p => p.completed).length;
   const inProgressCount = Object.values(progressMap).filter(p => !p.completed && p.completed_lessons?.length > 0).length;
 
+  const purchasedInventions = allInventions.filter(inv => purchases.has(inv.title));
+  const purchasedPDFs = allCourses.filter(c => c.category === "Book/PDF" && purchases.has(c.title));
+
   const filteredCourses = allCourses.filter(c => {
     if (filter === "purchased") return purchases.has(c.title);
     if (filter === "in-progress") return progressMap[c.title] && !progressMap[c.title].completed;
@@ -156,18 +294,38 @@ export default function MyLearning() {
           </Link>
           <div className="w-px h-5 bg-gray-700" />
           <div>
-            <h1 className="text-white font-bold text-lg tracking-tight">My Learning</h1>
-            <p className="text-gray-500 text-xs">Your purchased courses & documents</p>
+            <h1 className="text-white font-bold text-lg tracking-tight">My Dashboard</h1>
+            <p className="text-gray-500 text-xs">Learning progress & purchased content</p>
           </div>
         </div>
-        <Link to="/courses" className="text-xs px-3 py-1.5 rounded-lg bg-purple-900/40 border border-purple-700 text-purple-300 hover:bg-purple-800/40 transition-colors">
-          Browse More Courses
-        </Link>
+        <div className="flex items-center gap-2">
+          <Link to="/invention-plans" className="text-xs px-3 py-1.5 rounded-lg bg-yellow-900/40 border border-yellow-700 text-yellow-300 hover:bg-yellow-800/40 transition-colors">Invention Plans</Link>
+          <Link to="/courses" className="text-xs px-3 py-1.5 rounded-lg bg-purple-900/40 border border-purple-700 text-purple-300 hover:bg-purple-800/40 transition-colors">Course Catalog</Link>
+        </div>
+      </div>
+
+      {/* Tabs */}
+      <div className="flex items-center gap-1 px-6 pt-4 border-b border-gray-800 bg-gray-950">
+        {[
+          { id: "learning", label: "My Learning", icon: <GraduationCap size={14} /> },
+          { id: "library", label: "My Library", icon: <Library size={14} /> },
+        ].map(t => (
+          <button key={t.id} onClick={() => setTab(t.id)}
+            className={`flex items-center gap-2 px-5 py-3 text-sm font-semibold border-b-2 transition-all ${
+              tab === t.id ? "border-purple-500 text-purple-300" : "border-transparent text-gray-500 hover:text-gray-300"
+            }`}>
+            {t.icon} {t.label}
+          </button>
+        ))}
       </div>
 
       {loading ? (
         <div className="flex-1 flex items-center justify-center">
           <Loader2 size={24} className="animate-spin text-purple-400" />
+        </div>
+      ) : tab === "library" ? (
+        <div className="flex-1 overflow-y-auto px-6 py-8 max-w-7xl mx-auto w-full">
+          <LibrarySection purchasedInventions={purchasedInventions} purchasedPDFs={purchasedPDFs} />
         </div>
       ) : (
         <div className="flex-1 overflow-y-auto px-6 py-8 max-w-7xl mx-auto w-full">
