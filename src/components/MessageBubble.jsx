@@ -1,9 +1,7 @@
 import { useState } from 'react';
 import ReactMarkdown from 'react-markdown';
-import { Button } from "@/components/ui/button";
 import { Copy, Check } from 'lucide-react';
 import { cn } from "@/lib/utils";
-import { toast } from "sonner";
 
 export default function MessageBubble({ message }) {
   const isUser = message.role === 'user';
@@ -13,7 +11,6 @@ export default function MessageBubble({ message }) {
     navigator.clipboard.writeText(message.content || '');
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
-    toast.success('Copied');
   };
 
   return (
@@ -30,14 +27,12 @@ export default function MessageBubble({ message }) {
             isUser ? "bg-slate-700 text-white" : "bg-white border border-slate-200 text-slate-800"
           )}>
             {!isUser && (
-              <Button
-                size="icon"
-                variant="ghost"
-                className="absolute top-2 right-2 h-6 w-6 opacity-0 group-hover:opacity-100 transition-opacity"
+              <button
+                className="absolute top-2 right-2 h-6 w-6 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center rounded bg-slate-100 hover:bg-slate-200"
                 onClick={handleCopy}
               >
-                {copied ? <Check size={11} className="text-green-500" /> : <Copy size={11} />}
-              </Button>
+                {copied ? <Check size={11} className="text-green-500" /> : <Copy size={11} className="text-slate-500" />}
+              </button>
             )}
             {isUser ? (
               <p className="text-sm leading-relaxed">{message.content}</p>
@@ -45,15 +40,14 @@ export default function MessageBubble({ message }) {
               <ReactMarkdown
                 className="text-sm prose prose-sm prose-slate max-w-none [&>*:first-child]:mt-0 [&>*:last-child]:mb-0 pr-6"
                 components={{
-                  code: ({ inline, className, children, ...props }) => {
-                    return !inline ? (
+                  code: ({ inline, className, children, ...props }) =>
+                    !inline ? (
                       <pre className="bg-slate-900 text-slate-100 rounded-lg p-3 overflow-x-auto my-2 text-xs">
                         <code className={className} {...props}>{children}</code>
                       </pre>
                     ) : (
                       <code className="px-1 py-0.5 rounded bg-slate-100 text-slate-700 text-xs">{children}</code>
-                    );
-                  },
+                    ),
                   p: ({ children }) => <p className="my-1 leading-relaxed">{children}</p>,
                   ul: ({ children }) => <ul className="my-1 ml-4 list-disc">{children}</ul>,
                   ol: ({ children }) => <ol className="my-1 ml-4 list-decimal">{children}</ol>,
@@ -62,7 +56,9 @@ export default function MessageBubble({ message }) {
                   h2: ({ children }) => <h2 className="text-base font-bold my-2">{children}</h2>,
                   h3: ({ children }) => <h3 className="text-sm font-bold my-1">{children}</h3>,
                   strong: ({ children }) => <strong className="font-bold">{children}</strong>,
-                  a: ({ children, ...props }) => <a {...props} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">{children}</a>,
+                  a: ({ children, ...props }) => (
+                    <a {...props} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">{children}</a>
+                  ),
                 }}
               >
                 {message.content}
