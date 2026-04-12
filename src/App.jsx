@@ -69,7 +69,6 @@ import TRZPatent from './pages/TRZPatent';
 import CoursePlan from './pages/CoursePlan';
 import SocialMediaCommand from './pages/SocialMediaCommand';
 import SocialMediaAgent from './pages/SocialMediaAgent';
-import AdminPanel from './pages/AdminPanel';
 import AdminHub from './pages/AdminHub';
 import AdminGuard from './components/AdminGuard';
 
@@ -158,7 +157,6 @@ const AuthenticatedApp = () => {
           <Route path="/inventor-forge" element={<InventionForge />} />
           <Route path="/provisional-patent" element={<ProvisionalPatent />} />
           <Route path="/scalar-potential" element={<ScalarPotentialMap />} />
-          <Route path="/opportunity-monitor" element={<OpportunityMonitor />} />
           <Route path="/invention-library" element={<InventionLibrary />} />
           <Route path="/download-center" element={<DownloadCenter />} />
           <Route path="/invention-timeline" element={<InventionTimeline />} />
@@ -173,7 +171,6 @@ const AuthenticatedApp = () => {
           <Route path="/course-plan" element={<CoursePlan />} />
           <Route path="/social-command" element={<SocialMediaCommand />} />
           <Route path="/social-agent" element={<SocialMediaAgent />} />
-          <Route path="/admin" element={<AdminPanel />} />
 
           {/* Admin-only routes */}
           <Route element={<AdminGuard />}>

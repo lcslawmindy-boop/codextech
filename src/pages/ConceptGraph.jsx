@@ -10,11 +10,13 @@ import BusinessConceptGraph from "../components/BusinessConceptGraph";
 import { groupColors, nodes } from "../lib/beardenData";
 import NewsletterSignup from "../components/NewsletterSignup";
 import { base44 } from "@/api/base44Client";
-import { useAuth } from "@/lib/AuthContext";
+import { useState as useAdminState, useEffect as useAdminEffect } from 'react';
 
 export default function ConceptGraph() {
-  const { user } = useAuth();
-  const isAdmin = user?.role === "admin";
+  const [isAdmin, setIsAdmin] = useAdminState(false);
+  useAdminEffect(() => {
+    base44.auth.me().then(u => setIsAdmin(u?.role === 'admin')).catch(() => {});
+  }, []);
   const [selectedNode, setSelectedNode] = useState(null);
   const [showSearch, setShowSearch] = useState(false);
   const [showDiagnostics, setShowDiagnostics] = useState(false);
@@ -134,56 +136,40 @@ export default function ConceptGraph() {
             🔬 Diagnostics
           </button>
           <Link to="/investor-package" className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-yellow-900/40 hover:bg-yellow-800/50 border border-yellow-800 text-yellow-300 text-xs font-medium transition-colors">💼 Investor Package</Link>
-          {/* ── CUSTOMER-FACING LINKS ── */}
           <Link to="/pricing" className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-green-800/60 hover:bg-green-700/60 border border-green-600 text-green-200 text-xs font-bold transition-colors">💳 Pricing & Plans</Link>
           <Link to="/licensing" className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-purple-900/60 hover:bg-purple-800/60 border border-purple-600 text-purple-200 text-xs font-bold transition-colors">📜 IP Licensing</Link>
           <Link to="/download-center" className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-yellow-950/60 hover:bg-yellow-900/60 border border-yellow-700 text-yellow-400 text-xs font-bold transition-colors">⬇ Downloads</Link>
-          <Link to="/invention-library" className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-orange-900/40 hover:bg-orange-800/50 border border-orange-800 text-orange-300 text-xs font-bold transition-colors">⚗️ Invention Library</Link>
+          <Link to="/investor-portal" className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-green-900/40 hover:bg-green-800/50 border border-green-800 text-green-300 text-xs font-medium transition-colors">💰 Investors</Link>
+          {isAdmin && <Link to="/monitoring" className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-900/40 hover:bg-blue-800/50 border border-blue-800 text-blue-300 text-xs font-medium transition-colors">🛡 Monitor</Link>}
           <Link to="/prior-art" className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-amber-900/40 hover:bg-amber-800/50 border border-amber-800 text-amber-300 text-xs font-medium transition-colors">🗄️ Prior Art</Link>
           <Link to="/patent-tool" className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-900/40 hover:bg-blue-800/50 border border-blue-800 text-blue-300 text-xs font-medium transition-colors">📄 Patent Tool</Link>
+          <Link to="/timeline-pitch" className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-orange-900/40 hover:bg-orange-800/50 border border-orange-800 text-orange-300 text-xs font-medium transition-colors">📊 Timeline Deck</Link>
+          <Link to="/invention-library" className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-orange-900/40 hover:bg-orange-800/50 border border-orange-800 text-orange-300 text-xs font-bold transition-colors">⚗️ Invention Library</Link>
+          <Link to="/invention-timeline" className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-indigo-900/40 hover:bg-indigo-800/50 border border-indigo-800 text-indigo-300 text-xs font-bold transition-colors">📈 Dev Timeline</Link>
+          <Link to="/dark-timeline" className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-red-900/40 hover:bg-red-800/50 border border-red-800 text-red-300 text-xs font-medium transition-colors">🌍 Dark vs Light</Link>
+          {isAdmin && <Link to="/acquisition-crm" className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-green-900/60 hover:bg-green-800/60 border border-green-600 text-green-200 text-xs font-bold transition-colors">🎯 Acquisition CRM</Link>}
+          {isAdmin && <Link to="/build-tracker" className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-indigo-900/60 hover:bg-indigo-800/60 border border-indigo-600 text-indigo-200 text-xs font-bold transition-colors">🔧 Build Tracker</Link>}
+          {isAdmin && <Link to="/trz-patent" className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-red-900/60 hover:bg-red-800/60 border border-red-700 text-red-200 text-xs font-bold transition-colors">📋 TRZ Patent PPA</Link>}
+          {isAdmin && <Link to="/valuation" className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-yellow-900/60 hover:bg-yellow-800/60 border border-yellow-600 text-yellow-200 text-xs font-bold transition-colors">📈 Valuation Dashboard</Link>}
+          <Link to="/device-graph" className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-yellow-900/60 hover:bg-yellow-800/60 border border-yellow-600 text-yellow-200 text-xs font-bold transition-colors">🕸️ Device Knowledge Graph</Link>
           <Link to="/inventor-forge" className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-900/40 hover:bg-blue-800/50 border border-blue-800 text-blue-300 text-xs font-medium transition-colors">🧬 Invention Forge</Link>
-          <Link to="/investor-portal" className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-green-900/40 hover:bg-green-800/50 border border-green-800 text-green-300 text-xs font-medium transition-colors">💰 Investors</Link>
-          <Link to="/courses" className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-900/60 hover:bg-blue-800/60 border border-blue-700 text-blue-200 text-xs font-bold transition-colors">🎓 Courses</Link>
-          <Link to="/my-learning" className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-purple-900/40 hover:bg-purple-800/50 border border-purple-800 text-purple-300 text-xs font-medium transition-colors">📚 My Learning</Link>
-          <Link to="/member-portal" className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-indigo-900/40 hover:bg-indigo-800/50 border border-indigo-800 text-indigo-300 text-xs font-medium transition-colors">🏠 Member Portal</Link>
+          <Link to="/opportunity-monitor" className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-indigo-900/40 hover:bg-indigo-800/50 border border-indigo-800 text-indigo-300 text-xs font-medium transition-colors">🔔 Opportunity Monitor</Link>
+          {isAdmin && <Link to="/admin-downloads" className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-yellow-900/40 hover:bg-yellow-800/50 border border-yellow-700 text-yellow-300 text-xs font-medium transition-colors">⭐ Download Center</Link>}
+          <Link to="/account" className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-gray-800/80 hover:bg-gray-700/80 border border-gray-700 text-gray-300 text-xs font-medium transition-colors">👤 Account</Link>
+          {isAdmin && <Link to="/admin" className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-yellow-900/60 hover:bg-yellow-800/60 border border-yellow-600 text-yellow-200 text-xs font-bold transition-colors">🔒 Admin Panel</Link>}
+          {isAdmin && <Link to="/social-command" className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-rose-900/60 hover:bg-rose-800/60 border border-rose-600 text-rose-200 text-xs font-bold transition-colors">🚀 Marketing</Link>}
+          <Link to="/health-analytics" className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-cyan-900/40 hover:bg-cyan-800/50 border border-cyan-800 text-cyan-300 text-xs font-medium transition-colors">📈 Health Analytics</Link>
+          <Link to="/heavy-metal-detox" className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-green-900/40 hover:bg-green-800/50 border border-green-800 text-green-300 text-xs font-medium transition-colors">🌿 Metal Detox</Link>
+          <Link to="/emf-log" className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-rose-900/40 hover:bg-rose-800/50 border border-rose-800 text-rose-300 text-xs font-medium transition-colors">📊 EMF Log</Link>
+          <Link to="/emf-shop" className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-900/40 hover:bg-emerald-800/50 border border-emerald-700 text-emerald-300 text-xs font-medium transition-colors">🛒 Shop</Link>
+          <Link to="/emf-impact" className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-red-900/40 hover:bg-red-800/50 border border-red-800 text-red-300 text-xs font-medium transition-colors">☠️ EMF Impact</Link>
+          <Link to="/scalar-potential" className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-violet-900/40 hover:bg-violet-800/50 border border-violet-800 text-violet-300 text-xs font-medium transition-colors">🌊 ∇φ Heatmap</Link>
+          <Link to="/scalar-wave-sim" className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-green-900/40 hover:bg-green-800/50 border border-green-800 text-green-300 text-xs font-medium transition-colors">〰️ Scalar Wave Sim</Link>
           <Link to="/scalar-lab" className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-purple-900/40 hover:bg-purple-800/50 border border-purple-800 text-purple-300 text-xs font-medium transition-colors">⚗️ Scalar EM Lab</Link>
           <Link to="/lab" className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-teal-900/40 hover:bg-teal-800/50 border border-teal-800 text-teal-300 text-xs font-medium transition-colors">🧪 Wave Lab</Link>
           <Link to="/simulator" className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-cyan-900/40 hover:bg-cyan-800/50 border border-cyan-800 text-cyan-300 text-xs font-medium transition-colors">⚗️ Simulator</Link>
-          <Link to="/scalar-wave-sim" className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-green-900/40 hover:bg-green-800/50 border border-green-800 text-green-300 text-xs font-medium transition-colors">〰️ Scalar Wave Sim</Link>
-          <Link to="/scalar-potential" className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-violet-900/40 hover:bg-violet-800/50 border border-violet-800 text-violet-300 text-xs font-medium transition-colors">🌊 ∇φ Heatmap</Link>
-          <Link to="/emf-impact" className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-red-900/40 hover:bg-red-800/50 border border-red-800 text-red-300 text-xs font-medium transition-colors">☠️ EMF Impact</Link>
-          <Link to="/emf-shop" className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-900/40 hover:bg-emerald-800/50 border border-emerald-700 text-emerald-300 text-xs font-medium transition-colors">🛒 Shop</Link>
-          <Link to="/emf-log" className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-rose-900/40 hover:bg-rose-800/50 border border-rose-800 text-rose-300 text-xs font-medium transition-colors">📊 EMF Log</Link>
-          <Link to="/health-analytics" className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-cyan-900/40 hover:bg-cyan-800/50 border border-cyan-800 text-cyan-300 text-xs font-medium transition-colors">📈 Health Analytics</Link>
-          <Link to="/heavy-metal-detox" className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-green-900/40 hover:bg-green-800/50 border border-green-800 text-green-300 text-xs font-medium transition-colors">🌿 Metal Detox</Link>
-          <Link to="/account" className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-gray-800/80 hover:bg-gray-700/80 border border-gray-700 text-gray-300 text-xs font-medium transition-colors">👤 Account</Link>
-
-          {/* ── ADMIN-ONLY LINKS ── */}
-          {isAdmin && (
-            <>
-              <div className="flex-shrink-0 w-px h-5 bg-red-900/60 mx-1" />
-              <Link to="/admin" className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-red-900/60 hover:bg-red-800/60 border border-red-700 text-red-200 text-xs font-black transition-colors">🔴 Admin Panel</Link>
-              <Link to="/social-command" className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-rose-900/60 hover:bg-rose-800/60 border border-rose-600 text-rose-200 text-xs font-bold transition-colors">🚀 Marketing</Link>
-              <Link to="/social-agent" className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-purple-900/60 hover:bg-purple-800/60 border border-purple-600 text-purple-200 text-xs font-bold transition-colors">🤖 Growth Agent</Link>
-              <Link to="/admin-beta" className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-yellow-900/40 hover:bg-yellow-800/50 border border-yellow-700 text-yellow-300 text-xs font-medium transition-colors">👥 Beta Apps</Link>
-              <Link to="/vdr-admin" className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-indigo-900/60 hover:bg-indigo-800/60 border border-indigo-600 text-indigo-200 text-xs font-bold transition-colors">🔐 VDR Admin</Link>
-              <Link to="/monitoring" className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-900/40 hover:bg-blue-800/50 border border-blue-800 text-blue-300 text-xs font-medium transition-colors">🛡 Monitor</Link>
-              <Link to="/investor-crm" className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-green-900/60 hover:bg-green-800/60 border border-green-600 text-green-200 text-xs font-bold transition-colors">💼 Investor CRM</Link>
-              <Link to="/acquisition-crm" className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-green-900/60 hover:bg-green-800/60 border border-green-600 text-green-200 text-xs font-bold transition-colors">🎯 Acquisition CRM</Link>
-              <Link to="/build-tracker" className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-indigo-900/60 hover:bg-indigo-800/60 border border-indigo-600 text-indigo-200 text-xs font-bold transition-colors">🔧 Build Tracker</Link>
-              <Link to="/admin-videos" className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-yellow-900/40 hover:bg-yellow-800/50 border border-yellow-700 text-yellow-300 text-xs font-medium transition-colors">🎬 Admin Videos</Link>
-              <Link to="/admin-downloads" className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-yellow-900/40 hover:bg-yellow-800/50 border border-yellow-700 text-yellow-300 text-xs font-medium transition-colors">⭐ Download Center</Link>
-              <Link to="/valuation" className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-yellow-900/60 hover:bg-yellow-800/60 border border-yellow-600 text-yellow-200 text-xs font-bold transition-colors">📈 Valuation</Link>
-              <Link to="/dark-timeline" className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-red-900/40 hover:bg-red-800/50 border border-red-800 text-red-300 text-xs font-medium transition-colors">🌍 Dark vs Light</Link>
-              <Link to="/invention-timeline" className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-indigo-900/40 hover:bg-indigo-800/50 border border-indigo-800 text-indigo-300 text-xs font-bold transition-colors">📈 Dev Timeline</Link>
-              <Link to="/opportunity-monitor" className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-indigo-900/40 hover:bg-indigo-800/50 border border-indigo-800 text-indigo-300 text-xs font-medium transition-colors">🔔 Alerts</Link>
-              <Link to="/trz-patent" className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-red-900/60 hover:bg-red-800/60 border border-red-700 text-red-200 text-xs font-bold transition-colors">📋 TRZ Patent</Link>
-              <Link to="/device-graph" className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-yellow-900/60 hover:bg-yellow-800/60 border border-yellow-600 text-yellow-200 text-xs font-bold transition-colors">🕸️ Device Graph</Link>
-              <Link to="/timeline-pitch" className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-orange-900/40 hover:bg-orange-800/50 border border-orange-800 text-orange-300 text-xs font-medium transition-colors">📊 Timeline Deck</Link>
-              <Link to="/investor-package" className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-yellow-900/40 hover:bg-yellow-800/50 border border-yellow-800 text-yellow-300 text-xs font-medium transition-colors">💼 Investor Pkg</Link>
-              <Link to="/business" className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-green-900/40 hover:bg-green-800/50 border border-green-800 text-green-300 text-xs font-medium transition-colors">💡 Business</Link>
-            </>
-          )}
+          <Link to="/business" className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-green-900/40 hover:bg-green-800/50 border border-green-800 text-green-300 text-xs font-medium transition-colors">💼 Business Models</Link>
+          <Link to="/investors" className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-green-900/40 hover:bg-green-800/50 border border-green-800 text-green-300 text-xs font-medium transition-colors">💰 Investors</Link>
           {view === "graph" && (
             <div className="flex flex-wrap gap-2 flex-shrink-0">
               {groups.map(g => (
