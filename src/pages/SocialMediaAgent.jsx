@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { ArrowLeft, Send, Loader2, Users, TrendingUp, Calendar, Zap, BarChart2, Plus, X } from "lucide-react";
+import GrowthCalendar from "../components/GrowthCalendar";
 import { base44 } from "@/api/base44Client";
 import MessageBubble from "../components/MessageBubble";
 
@@ -48,6 +49,7 @@ export default function SocialMediaAgent() {
   const [input, setInput] = useState("");
   const [sending, setSending] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [activeTab, setActiveTab] = useState("chat");
   const [logs, setLogs] = useState([]);
   const [showLogForm, setShowLogForm] = useState(false);
   const [logForm, setLogForm] = useState({ platform: "Twitter/X", action_type: "Post Published", content_summary: "", new_members: 0 });
@@ -125,6 +127,10 @@ export default function SocialMediaAgent() {
           </div>
         </div>
         <div className="flex items-center gap-2">
+          <div className="flex bg-gray-800 border border-gray-700 rounded-lg p-0.5">
+            <button onClick={() => setActiveTab("chat")} className={`px-3 py-1 rounded text-xs font-semibold transition-colors ${activeTab === "chat" ? "bg-gray-600 text-white" : "text-gray-400 hover:text-gray-200"}`}>💬 Chat</button>
+            <button onClick={() => setActiveTab("calendar")} className={`px-3 py-1 rounded text-xs font-semibold transition-colors ${activeTab === "calendar" ? "bg-gray-600 text-white" : "text-gray-400 hover:text-gray-200"}`}>📅 Calendar</button>
+          </div>
           <span className="text-xs px-3 py-1.5 rounded-full bg-rose-900/40 border border-rose-700 text-rose-300 font-bold animate-pulse">
             ● LIVE: {totalMembers} / 1,000 members
           </span>
@@ -135,6 +141,11 @@ export default function SocialMediaAgent() {
         </div>
       </div>
 
+      {activeTab === "calendar" ? (
+        <div className="flex-1 overflow-hidden">
+          <GrowthCalendar logs={logs} />
+        </div>
+      ) : (
       <div className="flex flex-1 overflow-hidden">
         {/* Sidebar */}
         <div className="w-72 flex-shrink-0 border-r border-gray-800 flex flex-col overflow-y-auto bg-gray-900/40">
@@ -257,6 +268,7 @@ export default function SocialMediaAgent() {
           )}
         </div>
       </div>
+      )}
 
       {/* Log Activity Modal */}
       {showLogForm && (
