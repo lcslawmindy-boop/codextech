@@ -66,6 +66,7 @@ import VDRPortal from './pages/VDRPortal';
 import VDRAdmin from './pages/VDRAdmin';
 import InventionBuildTracker from './pages/InventionBuildTracker';
 import TRZPatent from './pages/TRZPatent';
+import CoursePlan from './pages/CoursePlan';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -174,6 +175,7 @@ const AuthenticatedApp = () => {
           <Route path="/valuation" element={<ValuationDashboard />} />
           <Route path="/build-tracker" element={<InventionBuildTracker />} />
           <Route path="/trz-patent" element={<TRZPatent />} />
+          <Route path="/course-plan" element={<CoursePlan />} />
           <Route path="*" element={<PageNotFound />} />
         </Route>
       </Routes>

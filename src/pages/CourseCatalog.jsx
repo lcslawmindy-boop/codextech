@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { courseSlugMap } from "../lib/coursePlans";
 import { Link, useLocation } from "react-router-dom";
 import { ArrowLeft, BookOpen, Play, Download, ChevronDown, ChevronUp, Star, Users, CheckCircle2, Loader2, AlertCircle } from "lucide-react";
 import { useTier } from "../hooks/useTier";
@@ -129,6 +130,14 @@ function CourseCard({ item }) {
           <p className="text-gray-600 text-xs">
             <span className="text-gray-500 font-semibold">Source: </span>{item.source}
           </p>
+          {item.stripeProductId && courseSlugMap[item.stripeProductId] && (
+            <Link
+              to={`/course-plan?course=${courseSlugMap[item.stripeProductId]}`}
+              className="block w-full py-2 rounded-xl font-semibold text-xs text-center text-gray-300 border border-gray-700 hover:border-gray-500 hover:text-white transition-colors"
+            >
+              📋 View Full Curriculum
+            </Link>
+          )}
           <CheckoutButton item={item} label={`Enroll Now — ${item.price}`} />
         </div>
       </div>

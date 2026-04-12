@@ -15,7 +15,7 @@ export const businessItems = [
       "Module 5 – E-Fields Don't Exist in Vacuum: What Does",
     ],
     source: "Bearden 'Toward a New Electromagnetics Part 3' (1983)",
-    color: "#3b82f6", icon: "📐",
+    color: "#3b82f6", icon: "📐", stripeProductId: "prod_UK6duAtEI5PhM5",
   },
   {
     category: "Course",
@@ -33,7 +33,7 @@ export const businessItems = [
       "Module 6 – Standing Scalar Waves in Magnetic Materials",
     ],
     source: "Bearden 'Toward a New Electromagnetics Part 4' (1983)",
-    color: "#3b82f6", icon: "📡",
+    color: "#3b82f6", icon: "📡", stripeProductId: "prod_UK6dMpBcrEfAEZ",
   },
   {
     category: "Course",
@@ -51,7 +51,7 @@ export const businessItems = [
       "Module 6 – The Massless Charge Cycle: Full Conservation Picture",
     ],
     source: "Bearden 'Toward a New Electromagnetics Part 4' (1983); Moray, Kervran, Reich references",
-    color: "#22c55e", icon: "⚡",
+    color: "#22c55e", icon: "⚡", stripeProductId: "prod_UK6d3qvfMq12d7",
   },
   {
     category: "Course",
@@ -90,7 +90,7 @@ export const businessItems = [
       "Module 7 – Therapeutic Frequency Applications & Research Directions",
     ],
     source: "Bearden 'Kindling, Life, Mind and Negentropy'; Kaznacheyev cytopathogenic effect",
-    color: "#22c55e", icon: "🧬",
+    color: "#22c55e", icon: "🧬", stripeProductId: "prod_UK6dOVTKfVuo3j",
   },
   {
     category: "Course",
@@ -130,7 +130,7 @@ export const businessItems = [
       "Module 10 – Revenue: How to Build Products from This Framework",
     ],
     source: "Bearden Gravitobiology (1991/2019 Energetic Productions)",
-    color: "#a855f7", icon: "🧫",
+    color: "#a855f7", icon: "🧫", stripeProductId: "prod_UK6dViE3GxDCpu",
   },
   // ── BOOKS / PDFs
   {
@@ -732,7 +732,7 @@ export const businessItems = [
       "Module 7 – Bearden's Mechanism: MCCS, Porthole Technology, Vacuum Engines",
     ],
     source: "ONR R-5-78 (Bateman, 1978); Esquire July 1975 (Rorvik); French Patent 1,342,772; Priore lab notes",
-    color: "#22c55e", icon: "🦠",
+    color: "#22c55e", icon: "🦠", stripeProductId: "prod_UK6dOmbdthIa0u",
   },
   {
     category: "Course",
@@ -1085,7 +1085,7 @@ export const businessItems = [
       "Module 7 – Implications for Cloning, Rife Therapy, Priore Devices & Porthole Concept",
     ],
     source: "Bearden, 'Bedini's Discovery: Extending the Porthole Concept and the Waddington Valley Cell Lineage Concept' (Nov 28, 2002)",
-    color: "#22c55e", icon: "🧬",
+    color: "#22c55e", icon: "🧬", stripeProductId: "prod_UK6d8QLNRiVVT6",
   },
   {
     category: "Course",
@@ -1104,7 +1104,7 @@ export const businessItems = [
       "Module 7 – Totipotency: The Final Goal of Full Epigenetic Reprogramming",
     ],
     source: "Bearden Nov 2002; Waddington 1940; Becker 1970; Gordon & Uehlinger 1966",
-    color: "#22c55e", icon: "🌿",
+    color: "#22c55e", icon: "🌿", stripeProductId: "prod_UK6dtsfzCXNs0t",
   },
   {
     category: "Course",
