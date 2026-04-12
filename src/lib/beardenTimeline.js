@@ -362,6 +362,15 @@ export const timelineEvents = [
   {
     year: 2002,
     era: "mature",
+    title: "Bedini's Discovery: Environmental EM Conditioning & the Waddington Extension",
+    type: "publication",
+    description: "Tom Bearden publishes 'Bedini's Discovery: Extending the Porthole Concept and the Waddington Valley Cell Lineage Concept' (28 November 2002). John Bedini discovers that applied EM signals must have their INFOLDED longitudinal EM dynamics force-fitted to the local vacuum and signal environment of targeted cells. Pristine signals carry infolded EM noise that causes scalar interferometry jamming of epigenetic reprogramming. Identified as the missing ingredient in Rife, Priore, and cloning. Extends Waddington's cell lineage model: cells must retrace both the valley and its infolded EM environment.",
+    concepts: ["bedini_environmental_conditioning", "waddington_cell_lineage", "epigenetic_reprogramming_em", "dielectric_body_portholes", "mccs_cellular_control", "scalar_em"],
+    color: "#22c55e",
+  },
+  {
+    year: 2002,
+    era: "mature",
     title: "Energy from the Vacuum",
     type: "publication",
     description: "Major synthesis work connecting scalar EM theory to free energy extraction from the vacuum. Bearden argues the vacuum is a vast reservoir of ordered scalar EM energy that can be tapped via resonant scalar transmitters — unifying his physics, biology, and consciousness models.",

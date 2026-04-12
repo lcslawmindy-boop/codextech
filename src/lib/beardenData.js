@@ -730,9 +730,45 @@ export const nodes = [
       "Biological significance: The amplitude distribution satisfies ΔI(-n)/I(-n) = F(-n), ΔI(n)/I(n) = F(n) — increment-to-amplitude ratios follow the same function at positive and negative n. This logarithmic spacing of biological EM resonances (echoing the Global Scaling node spacing of 3 ln units) is the Soviet experimental discovery of the biological electromagnetic spectrum — the trigger windows.",
       "Bearden integration: Gravitobiology Table 12 documents these 'EM trigger windows' as the mechanism for remote disease induction. Window 1 (12.5 Hz) matches Soviet Woodpecker's 10 Hz modulation. Rife's mortal oscillatory rates correspond to windows 7-8. Prioré device therapeutic frequencies match windows 1-3. Global Scaling node frequencies (5 Hz, 101 Hz, 2032 Hz) are strikingly close to Lisitsyn windows 1, 2, 3."
     ]
+  },
+  // ── BEDINI / WADDINGTON NODES ──
+  {
+    id: "bedini_environmental_conditioning",
+    label: "Bedini's Environmental EM Conditioning Discovery (2002)",
+    group: "biology",
+    description: "John Bedini's 2002 discovery: applied EM signals used in Porthole/Priore-type therapy must have their internal infolded longitudinal EM dynamics precisely matched to the local vacuum and EM environment of the targeted cells. Without this force-fitting, pristine signals carry massive infolded EM noise that jams epigenetic reprogramming via scalar interferometry.",
+    fragments: [
+      "Bedini discovered that one can condition the infolded dynamics environment inside the signals, waves, pulses, and fields by using electron tubes in a fairly straightforward manner, but in addition to their normal textbook operation the tubes must also be deliberately operated in a very unusual manner derived by Bedini. The second manner of how the tube is used is completely backwards from anything in present textbooks.",
+      "The adaptation of the inside environment of the applied EM signals must exactly correspond to the inside environment of the local spacetime (local vacuum and local EM environment) to include both its altered inner structuring inside local EM fields, waves, and signals and its envelope ordinary dense signal environment.",
+      "Once the causative textbook signals are force-fitted rather strongly to the local vacuum environment's internal structuring and to the local complex dense weak signals EM environment, then the Porthole Concept will work as intended, as will a plasma tube concept such as Priore's and a tube concept such as Rife's.",
+      "A pristine signal (with unstructured inner environment) actually transports a very noisy infolded EM difference and jamming into the targeted cells. Scalar interferometry between two differing infolded environments produces spurious outfolded EM signals in the zone of interference, electromagnetically jamming the cellular reprogramming process."
+    ]
+  },
+  {
+    id: "waddington_cell_lineage",
+    label: "Waddington Cell Lineage / Epigenetic Valley Model",
+    group: "biology",
+    description: "C.H. Waddington's model of cellular differentiation as a ball rolling down branching valleys on a sloping landscape. Bearden/Bedini extend this: not only must cells be time-reversed back up the exact valley taken, the infolded EM environment of each valley must also be precisely retraced.",
+    fragments: [
+      "Waddington compared the forward differentiation of cells to a ball rolling down a sloping set of branching valleys. One must seek to dedifferentiate the cells by moving them precisely back up the path previously taken downward. Becker showed that red blood cells can be dedifferentiated and redifferentiated by applying scalar potentials to otherwise intractable bone fractures.",
+      "Bedini's EM extension to Waddington's fundamental work: Not only are there Waddington valleys to be considered, but one must also consider and adapt the experiments to the exact cellular EM environment -- both infolded and outfolded -- existing in all these valleys when the differentiation cell route (valleys) were previously taken.",
+      "Cancer is a deviation from the proper cell lineage (Waddington differentiation valley) to a side-valley that is off-course from the healthy, normal Waddington lineage. Transdifferentiation means jumping across the intervening gap between two adjacent Waddington valleys.",
+      "The Porthole Concept is designed to continuously eliminate the delta between the Waddington valley a diseased or disordered cell is actually in, and the adjacent Waddington valley it would be in if it were a normal cell -- controlling transdifferentiation as well as dedifferentiation."
+    ]
+  },
+  {
+    id: "epigenetic_reprogramming_em",
+    label: "Epigenetic Reprogramming via Infolded EM (Bedini-Bearden 2002)",
+    group: "biology",
+    description: "The EM mechanism for epigenetic reprogramming: resetting gene-expression programs of specialized cells back toward totipotency by applying EM signals whose infolded longitudinal wave content precisely matches the local cellular EM environment. Bedini's discovery identifies the missing ingredient in Rife, Priore, cloning, and the pristine Porthole method.",
+    fragments: [
+      "Epigenetic reprogramming is changing the gene expression factors so that the genetics is reprogrammed back along the path formerly taken by the cells during their differentiation and development. The differences in gene expression occur without DNA sequence change -- Gordon showed this conclusively. Successful cloning itself is a demonstration.",
+      "What is necessary is to temporarily move the cells back toward totipotency -- the nascent state the newly fertilized egg in the early embryo achieves. In physics terms, that is a time reversal of the cell back over its previous cellular differentiation pathway, back down the Waddington cell lineage path.",
+      "Bedini may well have found why present cloning is so inefficient. Researchers have been unwittingly applying a great deal of infolded inner noise to the infolded internal EM environment of the egg cells. Scalar interferometry between the input signals' environmental inner electrodynamics and the receiving cell's environmental inner electrodynamics generates overt EM jamming signals.",
+      "Normal egg fertilization by sperm occurs where both bodies -- including both the egg and the sperm -- are already thoroughly conditioned to both the envelope dense EM signal environment and the infolded longitudinal EM wave dynamics environment. Cloning experiments skip this natural conditioning, introducing a catastrophic environmental mismatch."
+    ]
   }
 ];
-
 
 export const links = [
   { source: "vector_concept", target: "scalar_em", label: "clarifies basis of" },
@@ -882,13 +918,19 @@ export const links = [
   { source: "lisitsyn_trigger_windows", target: "soviet_woodpecker", label: "targeting windows for" },
   { source: "lisitsyn_trigger_windows", target: "priors_device", label: "therapeutic windows match" },
   { source: "lisitsyn_trigger_windows", target: "global_scaling_gcom", label: "node frequency alignment" },
+  // ── Bedini / Waddington batch
+  { source: "bedini_environmental_conditioning", target: "dielectric_body_portholes", label: "improves Porthole via" },
+  { source: "bedini_environmental_conditioning", target: "waddington_cell_lineage", label: "must match environment of" },
+  { source: "bedini_environmental_conditioning", target: "mccs_cellular_control", label: "extends" },
+  { source: "bedini_environmental_conditioning", target: "epigenetic_reprogramming_em", label: "key ingredient in" },
+  { source: "bedini_environmental_conditioning", target: "scalar_em", label: "advances" },
+  { source: "waddington_cell_lineage", target: "epigenetic_reprogramming_em", label: "trajectory for" },
+  { source: "waddington_cell_lineage", target: "telomere_rejuvenation", label: "retracing path toward" },
+  { source: "waddington_cell_lineage", target: "time_reversal_zone", label: "physics analog of" },
+  { source: "epigenetic_reprogramming_em", target: "kindling", label: "reversal of" },
+  { source: "epigenetic_reprogramming_em", target: "dielectric_body_portholes", label: "applied via" },
+  { source: "epigenetic_reprogramming_em", target: "gravitobiology", label: "domain of" },
+  { source: "epigenetic_reprogramming_em", target: "quantum_potential", label: "scalar interferometry jams" },
 ];
 
 export const groupColors = {
-  physics: "#3b82f6",
-  biology: "#22c55e",
-  weapons: "#ef4444",
-  consciousness: "#a855f7",
-  history: "#f59e0b",
-  philosophy: "#06b6d4",
-};
