@@ -13,7 +13,11 @@ export function usePaymentGate() {
         // Admin users always have access
         if (user.role === "admin") { setPaid(true); setLoading(false); return; }
         const apps = await base44.entities.BetaApplication.filter({ email: user.email });
-        const hasPaid = apps.some(a => a.status === "converted");
+        const app = apps[0];
+        const plan = app?.plan_purchased?.toLowerCase() || "";
+        // Any paid plan unlocks the platform
+        const hasPaid = app?.status === "converted" ||
+          plan.includes("starter") || plan.includes("researcher") || plan.includes("pro");
         setPaid(hasPaid);
       } catch {
         setPaid(false);

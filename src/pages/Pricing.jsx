@@ -1,76 +1,90 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { ArrowLeft, Check, Zap, Shield, BookOpen, Download, Users, Star, Lock, ChevronRight } from "lucide-react";
+import { ArrowLeft, Check, Zap, Shield, BookOpen, Download, Users, Star, Lock, ChevronRight, Sparkles, FlaskConical, Briefcase } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 
-const PRODUCTS = [
+const PLANS = [
   {
-    id: "pdf_bundle",
-    name: "Invention Build Plans Bundle",
-    price: 197,
-    type: "one_time",
+    id: "free",
+    name: "Free Preview",
+    price: 0,
+    priceSuffix: "",
     badge: null,
-    tagline: "Everything you need to replicate the devices",
-    description: "Complete PDF library: 5 full invention build plans with bill of materials, assembly steps, specs, and theoretical basis.",
+    tagline: "Explore before you commit",
+    color: "#6b7280",
+    cta: "Current Plan",
+    ctaLink: true,
     features: [
-      "MEG — Motionless Electromagnetic Generator (US Patent 6,362,718)",
-      "TRD-1 — Telomere Regeneration Device (MCCS Protocol)",
-      "G-Com Mk I — Scalar Wave Communicator",
-      "Portable Prioré-Class EM Therapy System",
-      "TRZ-1 — Cold Fusion Reactor (73-sigma validated)",
-      "Full Bill of Materials for each device",
-      "Step-by-step assembly guides",
-      "Theoretical basis & primary source citations",
-      "Lifetime access — yours to download",
+      "Access to 1 Invention Build Plan",
+      "Access to 1 Course module",
+      "Concept Knowledge Graph",
+      "Prior Art Archive (read-only)",
+      "Newsletter & Research Updates",
     ],
-    cta: "Buy Now — $197",
-    color: "#f59e0b",
+    locked: ["AI Invention Forge", "Patent Drafting Tool", "Investor CRM", "Full Invention Library"],
   },
   {
-    id: "membership",
-    name: "Research Membership",
-    price: 29,
-    type: "subscription",
-    badge: "MOST POPULAR",
-    tagline: "Full platform access + new research monthly",
-    description: "Unlimited access to the complete Zenith Apex platform — all tools, simulations, patent generators, and new content each month.",
+    id: "starter",
+    name: "Starter",
+    price: 47,
+    type: "one_time",
+    priceSuffix: " one-time",
+    badge: null,
+    tagline: "Inventions + foundational courses",
+    color: "#f59e0b",
+    cta: "Buy Starter — $47",
     features: [
-      "Full access to Invention Library (14 devices)",
-      "AI Patent Drafting Tool — unlimited use",
-      "AI Invention Forge — generate new devices",
-      "Prior Art Archive (200+ entries)",
+      "5 Invention Build Plans (full PDF)",
+      "4 Courses with full curriculum",
+      "Bill of Materials for each device",
+      "Step-by-step assembly guides",
+      "Prior Art Archive access",
+      "Lifetime access to purchased content",
+    ],
+    locked: ["AI Invention Forge", "Patent Drafting Tool", "Investor CRM"],
+  },
+  {
+    id: "researcher",
+    name: "Researcher",
+    price: 97,
+    type: "subscription",
+    priceSuffix: "/mo",
+    badge: "MOST POPULAR",
+    tagline: "Full invention & course library",
+    color: "#6366f1",
+    cta: "Start Researcher — $97/mo",
+    features: [
+      "All 21 Invention Build Plans",
+      "All courses + new content monthly",
+      "AI Invention Forge — unlimited",
       "Scalar EM simulators & lab tools",
-      "Investor CRM & pitch deck builder",
-      "IP Valuation calculator",
-      "New research modules added monthly",
+      "Prior Art Archive (200+ entries)",
+      "Build Video generator",
       "Cancel anytime",
     ],
-    cta: "Start Membership — $29/mo",
-    color: "#6366f1",
+    locked: ["Patent Drafting Tool", "Investor CRM", "Acquisition CRM"],
   },
   {
-    id: "course_bundle",
-    name: "Complete Course Library",
-    price: 497,
-    type: "one_time",
-    badge: "BEST VALUE",
-    tagline: "10 courses. No physics PhD required.",
-    description: "Every course in the catalog — scalar EM fundamentals, patent strategy, bioelectromagnetics, investor presentation skills, and more.",
-    features: [
-      "10 professionally structured courses",
-      "Scalar Electromagnetics Fundamentals",
-      "MEG Replication Workshop",
-      "Prioré Device: History & Replication",
-      "USPTO Patent Strategy for Frontier Tech",
-      "Bioelectromagnetics & Healing Devices",
-      "Psychoenergetics & Consciousness",
-      "EMF Protection: Science & Practice",
-      "Advanced Investor Presentation Skills",
-      "Time-Reversal Zone Physics",
-      "Lifetime access",
-    ],
-    cta: "Buy All Courses — $497",
+    id: "pro",
+    name: "Pro",
+    price: 247,
+    type: "subscription",
+    priceSuffix: "/mo",
+    badge: "FULL ACCESS",
+    tagline: "Everything — IP tools + investor suite",
     color: "#22c55e",
+    cta: "Go Pro — $247/mo",
+    features: [
+      "Everything in Researcher",
+      "AI Patent Drafting Tool — unlimited",
+      "Investor CRM & Pitch Deck Builder",
+      "IP Valuation Calculator",
+      "Acquisition CRM",
+      "VDR Portal (Virtual Data Room)",
+      "Priority admin support",
+      "Cancel anytime",
+    ],
+    locked: [],
   },
 ];
 
@@ -80,30 +94,71 @@ const TESTIMONIALS = [
   { name: "J.T.", role: "Bioelectromagnetics Practitioner", text: "The Prioré device documentation and the TRD-1 build plans are worth 10× the membership fee alone." },
 ];
 
-function CheckoutButton({ product, loading, onCheckout }) {
+function PlanCard({ plan, loading, onCheckout }) {
+  const isPopular = plan.badge === "MOST POPULAR";
+  const isFull = plan.badge === "FULL ACCESS";
   return (
-    <button
-      onClick={() => onCheckout(product)}
-      disabled={loading === product.id}
-      className="w-full py-3.5 rounded-xl font-black text-sm transition-all disabled:opacity-60"
-      style={{
-        backgroundColor: product.color,
-        color: "#0a0a0a",
-        boxShadow: `0 4px 24px ${product.color}40`,
-      }}
-    >
-      {loading === product.id ? "Redirecting to checkout…" : product.cta}
-    </button>
+    <div className={`relative bg-gray-900 rounded-2xl border overflow-hidden flex flex-col ${
+      isPopular ? "border-indigo-600 shadow-xl shadow-indigo-900/20" :
+      isFull ? "border-green-700 shadow-xl shadow-green-900/20" : "border-gray-800"
+    }`}>
+      {plan.badge && (
+        <div className="text-center py-2 text-xs font-black tracking-widest"
+          style={{ backgroundColor: plan.color + "25", color: plan.color }}>
+          {plan.badge}
+        </div>
+      )}
+      <div className="p-6 flex flex-col flex-1">
+        <h3 className="text-white font-black text-xl mb-1">{plan.name}</h3>
+        <p className="text-gray-500 text-sm mb-4">{plan.tagline}</p>
+        <div className="flex items-end gap-1 mb-1">
+          <span className="text-4xl font-black" style={{ color: plan.color }}>
+            {plan.price === 0 ? "Free" : `$${plan.price}`}
+          </span>
+          {plan.price > 0 && <span className="text-gray-500 text-sm mb-1.5">{plan.priceSuffix}</span>}
+        </div>
+        <p className="text-gray-600 text-xs mb-5">
+          {plan.price === 0 ? "No credit card required" :
+            plan.type === "subscription" ? "Cancel anytime." : "Lifetime access. One payment."}
+        </p>
+
+        <div className="space-y-2 mb-4 flex-1">
+          {plan.features.map((f, i) => (
+            <div key={i} className="flex items-start gap-2">
+              <Check size={12} className="flex-shrink-0 mt-0.5" style={{ color: plan.color }} />
+              <span className="text-gray-300 text-xs leading-relaxed">{f}</span>
+            </div>
+          ))}
+          {plan.locked.map((f, i) => (
+            <div key={i} className="flex items-start gap-2 opacity-40">
+              <Lock size={12} className="flex-shrink-0 mt-0.5 text-gray-600" />
+              <span className="text-gray-600 text-xs line-through">{f}</span>
+            </div>
+          ))}
+        </div>
+
+        {plan.ctaLink ? (
+          <Link to="/" className="w-full py-3 rounded-xl font-black text-sm text-center block border border-gray-700 text-gray-400">
+            Explore Free →
+          </Link>
+        ) : (
+          <button onClick={() => onCheckout(plan)} disabled={loading === plan.id}
+            className="w-full py-3 rounded-xl font-black text-sm transition-all disabled:opacity-60"
+            style={{ backgroundColor: plan.color, color: plan.color === "#6b7280" ? "#fff" : "#0a0a0a",
+              boxShadow: `0 4px 20px ${plan.color}40` }}>
+            {loading === plan.id ? "Redirecting…" : plan.cta}
+          </button>
+        )}
+      </div>
+    </div>
   );
 }
 
 export default function Pricing() {
   const [loading, setLoading] = useState(null);
   const [error, setError] = useState(null);
-  const navigate = useNavigate();
 
   const handleCheckout = async (product) => {
-    // Block if in iframe
     if (window !== window.top) {
       alert("Checkout only works from the published app. Please open the app directly.");
       return;
@@ -164,56 +219,20 @@ export default function Pricing() {
         {error && (
           <div className="bg-red-950/60 border border-red-800 rounded-xl p-4 mb-6 text-red-300 text-sm text-center">{error}</div>
         )}
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {PRODUCTS.map(product => (
-            <div
-              key={product.id}
-              className={`relative bg-gray-900 rounded-2xl border overflow-hidden flex flex-col ${
-                product.badge === "MOST POPULAR" ? "border-indigo-600 shadow-lg shadow-indigo-900/30" : "border-gray-800"
-              }`}
-            >
-              {product.badge && (
-                <div
-                  className="text-center py-2 text-xs font-black tracking-widest"
-                  style={{ backgroundColor: product.color + "25", color: product.color }}
-                >
-                  {product.badge}
-                </div>
-              )}
-
-              <div className="p-6 flex flex-col flex-1">
-                <div className="mb-5">
-                  <h3 className="text-white font-black text-xl mb-1">{product.name}</h3>
-                  <p className="text-gray-500 text-sm mb-4">{product.tagline}</p>
-
-                  <div className="flex items-end gap-1 mb-1">
-                    <span className="text-4xl font-black" style={{ color: product.color }}>${product.price}</span>
-                    <span className="text-gray-500 text-sm mb-1.5">
-                      {product.type === "subscription" ? "/month" : " one-time"}
-                    </span>
-                  </div>
-                  <p className="text-gray-600 text-xs">
-                    {product.type === "subscription" ? "Cancel anytime. No contracts." : "Lifetime access. Download immediately."}
-                  </p>
-                </div>
-
-                <div className="space-y-2.5 mb-6 flex-1">
-                  {product.features.map((f, i) => (
-                    <div key={i} className="flex items-start gap-2.5">
-                      <Check size={13} className="flex-shrink-0 mt-0.5" style={{ color: product.color }} />
-                      <span className="text-gray-300 text-xs leading-relaxed">{f}</span>
-                    </div>
-                  ))}
-                </div>
-
-                <CheckoutButton product={product} loading={loading} onCheckout={handleCheckout} />
-
-                {product.type === "subscription" && (
-                  <p className="text-center text-gray-600 text-xs mt-3">First month — cancel before renewal for $0 charge</p>
-                )}
-              </div>
-            </div>
+        {/* Comparison hint */}
+        <div className="flex items-center justify-center gap-6 mb-8 text-xs text-gray-500 flex-wrap">
+          {[
+            { icon: <BookOpen size={12} />, label: "Courses" },
+            { icon: <Sparkles size={12} />, label: "AI Tools" },
+            { icon: <FlaskConical size={12} />, label: "Build Plans" },
+            { icon: <Briefcase size={12} />, label: "Investor Suite" },
+          ].map((item, i) => (
+            <span key={i} className="flex items-center gap-1.5">{item.icon} {item.label}</span>
+          ))}
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5">
+          {PLANS.map(plan => (
+            <PlanCard key={plan.id} plan={plan} loading={loading} onCheckout={handleCheckout} />
           ))}
         </div>
       </div>
@@ -280,15 +299,15 @@ export default function Pricing() {
       </div>
 
       {/* CTA Footer */}
-      <div className="border-t border-yellow-900/40 bg-yellow-950/20 px-5 py-12 text-center">
+      <div className="border-t border-indigo-900/40 bg-indigo-950/10 px-5 py-12 text-center">
         <h3 className="text-white font-black text-2xl mb-3">Ready to access 40 years of suppressed research?</h3>
-        <p className="text-gray-400 text-sm mb-6">Start with the $29/month membership — cancel anytime.</p>
+        <p className="text-gray-400 text-sm mb-6">Start with Researcher at $97/mo — cancel anytime.</p>
         <button
-          onClick={() => handleCheckout(PRODUCTS[1])}
-          disabled={loading === "membership"}
+          onClick={() => handleCheckout(PLANS[2])}
+          disabled={loading === "researcher"}
           className="inline-flex items-center gap-2 px-8 py-4 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-black text-base transition-all disabled:opacity-60"
         >
-          {loading === "membership" ? "Redirecting…" : "Start Research Membership — $29/mo"}
+          {loading === "researcher" ? "Redirecting…" : "Start Researcher Plan — $97/mo"}
           <ChevronRight size={16} />
         </button>
         <p className="text-gray-600 text-xs mt-3">🔒 Secured by Stripe · Cancel anytime</p>

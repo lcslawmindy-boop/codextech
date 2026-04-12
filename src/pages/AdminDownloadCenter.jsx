@@ -28,7 +28,7 @@ function addBodyText(doc, text, y, color) {
   doc.setTextColor(...(color || silver));
   const lines = doc.splitTextToSize(text, pageW - margin * 2);
   lines.forEach(l => {
-    if (y > 278) { doc.addPage(); doc.setFillColor(...THEME.pageBg); doc.rect(0,0,210,297,"F"); drawPageHeader(doc, title, subtitle); y = 50; }
+    if (y > 278) { doc.addPage(); doc.setFillColor(...THEME.pageBg); doc.rect(0,0,210,297,"F"); y = 20; }
     doc.text(l, margin, y); y += 7;
   });
   return y + 3;

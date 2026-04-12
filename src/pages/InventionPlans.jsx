@@ -1,6 +1,9 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { ArrowLeft, Download, ChevronDown, ChevronUp, AlertTriangle, CheckCircle2, Package, Loader2, FileText, Lock, ShoppingCart, Lightbulb, Eye, Film } from "lucide-react";
+import { useTier } from "../hooks/useTier";
+import { tierCanAccessInvention } from "../lib/tiers";
+import TierGate from "../components/TierGate";
 import InventionBuildVideo from "../components/InventionBuildVideo";
 import { base44 } from "@/api/base44Client";
 import { inventionVisuals } from "../lib/inventionVisuals";
@@ -390,6 +393,7 @@ function PaywallGate({ invention }) {
 }
 
 export default function InventionPlans() {
+  const { tier } = useTier();
   const [selected, setSelected] = useState(inventions[0]);
   const [showBuildVideo, setShowBuildVideo] = useState(false);
   const [showBom, setShowBom] = useState(true);
@@ -425,6 +429,9 @@ export default function InventionPlans() {
     setGenerating(false);
   };
 
+  const selectedIndex = inventions.findIndex(i => i.title === selected?.title);
+  const canViewSelected = tierCanAccessInvention(tier, selectedIndex);
+
   return (
     <div className="w-screen h-screen bg-gray-950 flex flex-col overflow-hidden">
       {/* Header */}
@@ -445,14 +452,14 @@ export default function InventionPlans() {
           </span>
           <button
             onClick={() => setShowBuildVideo(true)}
-            disabled={!selected}
+            disabled={!selected || !canViewSelected}
             className="flex items-center gap-2 px-4 py-2 rounded-lg bg-purple-700 hover:bg-purple-600 disabled:opacity-50 text-white text-sm font-semibold transition-all"
           >
             <Film size={14} /> 🎬 Build Video
           </button>
           <button
             onClick={handleDownload}
-            disabled={!data || generating}
+            disabled={!data || generating || !canViewSelected}
             className="flex items-center gap-2 px-4 py-2 rounded-lg bg-red-700 hover:bg-red-600 disabled:opacity-50 text-white text-sm font-semibold transition-all"
           >
             {generating ? <Loader2 size={14} className="animate-spin" /> : <Download size={14} />}
@@ -461,7 +468,7 @@ export default function InventionPlans() {
         </div>
       </div>
 
-      {showBuildVideo && selected && (
+      {showBuildVideo && selected && canViewSelected && (
         <InventionBuildVideo
           invention={{
             name: selected.title,
@@ -478,6 +485,114 @@ export default function InventionPlans() {
           onClose={() => setShowBuildVideo(false)}
         />
       )}
+
+      {/* Main layout: sidebar + detail */}
+      <div className="flex flex-1 overflow-hidden">
+        {/* Sidebar — invention list */}
+        <div className="w-64 flex-shrink-0 border-r border-gray-800 overflow-y-auto bg-gray-900/40">
+          {inventions.map((inv, i) => {
+            const accessible = tierCanAccessInvention(tier, i);
+            const isSelected = selected?.title === inv.title;
+            return (
+              <button key={i} onClick={() => setSelected(inv)}
+                className={`w-full text-left px-4 py-3 border-b border-gray-800/60 transition-all flex items-start gap-3 ${
+                  isSelected ? "bg-gray-800/80 border-l-2 border-l-yellow-500" : "hover:bg-gray-800/30"
+                }`}>
+                <span className="text-xl flex-shrink-0 mt-0.5">{inv.icon}</span>
+                <div className="flex-1 min-w-0">
+                  <p className={`text-xs font-semibold leading-snug truncate ${
+                    accessible ? "text-white" : "text-gray-600"
+                  }`}>{inv.title}</p>
+                  <p className="text-gray-600 text-xs">{inv.price}</p>
+                </div>
+                {!accessible && <Lock size={10} className="text-gray-700 flex-shrink-0 mt-1" />}
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Detail panel */}
+        <div className="flex-1 overflow-y-auto p-6">
+          {!selected ? (
+            <div className="flex items-center justify-center h-full text-gray-700 text-sm">Select an invention</div>
+          ) : !canViewSelected ? (
+            <div className="max-w-xl mx-auto mt-8">
+              <TierGate locked={true} requiredTier={selectedIndex < 5 ? "starter" : "researcher"}>
+                <div className="p-10 text-center">
+                  <p className="text-white font-black text-xl mb-2">{selected.title}</p>
+                  <p className="text-gray-400 text-sm">{selected.tagline}</p>
+                </div>
+              </TierGate>
+            </div>
+          ) : (
+            <div className="max-w-3xl mx-auto">
+              <div className="mb-6">
+                <div className="flex items-center gap-3 mb-2">
+                  <span className="text-4xl">{selected.icon}</span>
+                  <div>
+                    <h2 className="text-white font-black text-2xl">{selected.title}</h2>
+                    <p className="text-gray-400 text-sm italic">{selected.tagline}</p>
+                  </div>
+                </div>
+                <p className="text-gray-300 text-sm leading-relaxed mt-3">{selected.description}</p>
+              </div>
+
+              <VisualExplainer visual={visual} />
+
+              {data ? (
+                <>
+                  {/* Overview */}
+                  <div className="bg-gray-900 border border-gray-800 rounded-2xl p-5 mb-4">
+                    <p className="text-cyan-400 font-bold text-xs uppercase tracking-wider mb-2">Technical Overview</p>
+                    <p className="text-gray-300 text-sm leading-relaxed">{data.overview}</p>
+                  </div>
+
+                  {/* BOM */}
+                  {data.bom?.length > 0 && (
+                    <div className="bg-gray-900 border border-gray-800 rounded-2xl p-5 mb-4">
+                      <button onClick={() => setShowBom(b => !b)}
+                        className="flex items-center justify-between w-full mb-3">
+                        <p className="text-yellow-400 font-bold text-xs uppercase tracking-wider">Bill of Materials ({data.bom.length} items)</p>
+                        {showBom ? <ChevronUp size={14} className="text-gray-500" /> : <ChevronDown size={14} className="text-gray-500" />}
+                      </button>
+                      {showBom && <BomTable bom={data.bom} />}
+                    </div>
+                  )}
+
+                  {/* Steps */}
+                  {data.steps?.length > 0 && (
+                    <div className="bg-gray-900 border border-gray-800 rounded-2xl p-5 mb-4">
+                      <button onClick={() => setShowSteps(s => !s)}
+                        className="flex items-center justify-between w-full mb-4">
+                        <p className="text-green-400 font-bold text-xs uppercase tracking-wider">Assembly Steps ({data.steps.length})</p>
+                        {showSteps ? <ChevronUp size={14} className="text-gray-500" /> : <ChevronDown size={14} className="text-gray-500" />}
+                      </button>
+                      {showSteps && (
+                        <div className="space-y-2">
+                          {data.steps.map((step, i) => <StepCard key={i} step={step} index={i} />)}
+                        </div>
+                      )}
+                    </div>
+                  )}
+
+                  {/* Notes */}
+                  {data.notes && (
+                    <div className="bg-gray-900 border border-gray-800 rounded-2xl p-5 mb-4">
+                      <p className="text-purple-400 font-bold text-xs uppercase tracking-wider mb-2">Technical Notes</p>
+                      <p className="text-gray-400 text-sm leading-relaxed">{data.notes}</p>
+                    </div>
+                  )}
+                </>
+              ) : (
+                <div className="bg-gray-900 border border-gray-800 rounded-2xl p-8 text-center">
+                  <FileText size={32} className="text-gray-700 mx-auto mb-3" />
+                  <p className="text-gray-500 text-sm">Detailed build plans coming soon for this device.</p>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+      </div>
     </div>
   );
 }

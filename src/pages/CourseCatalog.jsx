@@ -1,6 +1,9 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { ArrowLeft, BookOpen, Play, Download, ChevronDown, ChevronUp, Star, Users, CheckCircle2, Loader2, AlertCircle } from "lucide-react";
+import { useTier } from "../hooks/useTier";
+import { tierCanAccessCourse } from "../lib/tiers";
+import TierGate from "../components/TierGate";
 import { businessItems } from "../lib/businessItems";
 import { base44 } from "@/api/base44Client";
 
@@ -172,6 +175,7 @@ function SuccessBanner({ productName }) {
 }
 
 export default function CourseCatalog() {
+  const { tier } = useTier();
   const location = useLocation();
   const params = new URLSearchParams(location.search);
   const isSuccess = params.get("success") === "1";
@@ -225,7 +229,11 @@ export default function CourseCatalog() {
             <span className="text-xs text-gray-500 px-2 py-0.5 rounded-full bg-gray-800">{courses.length} available</span>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-            {courses.map((item, i) => <CourseCard key={i} item={item} />)}
+            {courses.map((item, i) => (
+              <TierGate key={i} locked={!tierCanAccessCourse(tier, i)} requiredTier={i < 4 ? "starter" : "researcher"}>
+                <CourseCard item={item} />
+              </TierGate>
+            ))}
           </div>
         </section>
 
