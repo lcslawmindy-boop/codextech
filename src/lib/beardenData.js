@@ -934,3 +934,10 @@ export const links = [
 ];
 
 export const groupColors = {
+  physics: "#3b82f6",
+  biology: "#22c55e",
+  weapons: "#ef4444",
+  consciousness: "#a855f7",
+  history: "#f59e0b",
+  philosophy: "#06b6d4",
+};
