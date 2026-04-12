@@ -56,8 +56,8 @@ export default function BetaApply() {
 
     await base44.integrations.Core.SendEmail({
       to: form.email,
-      subject: "✅ Zenith Apex — You Have Access",
-      body: `Dear ${form.full_name},\n\nWelcome to the Zenith Apex Research Platform. Your NDA has been recorded and your founding member access is now active.\n\nYou can log in immediately at the platform URL. Your founding member pricing is grandfathered for life.\n\nWhat you now have access to:\n• 5 Invention Build Plans (MEG, TRD-1, G-Com, Prioré, TRZ Reactor)\n• AI Patent Drafting Tool (unlimited provisionals)\n• Full 10-Course Library\n• Investor Package ($3.9M–$11.5M valuation deck)\n• AI Invention Forge\n• Prior Art Archive & IP Monitoring\n\nThis platform is confidential. Do not share your credentials or platform content. Violation subjects you to liquidated damages as agreed in the NDA.\n\n— Zenith Apex Research Portfolio`
+      subject: "✅ Zenith Apex — Your Access is Active",
+      body: `Dear ${form.full_name},\n\nWelcome to the Zenith Apex Research Platform. Your founding member access is now active.\n\nYou can log in immediately at the platform URL.\n\nWhat you now have access to:\n• 5 Invention Build Plans (MEG, TRD-1, G-Com, Prioré, TRZ Reactor)\n• AI Patent Drafting Tool (unlimited provisionals)\n• Full 10-Course Library\n• AI Invention Forge\n• Prior Art Archive & IP Monitoring\n\nIMPORTANT — Legal Notice:\nZenith Apex is an independent research curation and tools platform. All third-party works referenced on this platform (including works by Thomas E. Bearden, ONR reports, and other published materials) remain the copyright of their respective authors and institutions. These are referenced for educational and research purposes. The platform's original software, tools, curation, and compiled indexes are proprietary to Zenith Apex. Please do not share your login credentials.\n\n— Zenith Apex Research Portfolio`
     });
 
     setSubmitted(true);
@@ -71,9 +71,9 @@ export default function BetaApply() {
           <div className="w-20 h-20 rounded-full bg-green-900/40 border-2 border-green-600 flex items-center justify-center mx-auto mb-6">
             <Check size={36} className="text-green-400" />
           </div>
-          <h1 className="text-white font-black text-2xl mb-3">NDA Signed — Complete Payment</h1>
+          <h1 className="text-white font-black text-2xl mb-3">Access Confirmed — Complete Payment</h1>
           <p className="text-gray-400 text-sm leading-relaxed mb-6">
-            Your NDA is on file. To unlock the full platform, complete your membership payment below.
+            Your account has been created. To unlock the full platform, complete your membership payment below.
           </p>
           <Link
             to="/pricing"
@@ -81,9 +81,9 @@ export default function BetaApply() {
           >
             Choose a Plan & Get Access →
           </Link>
-          <div className="bg-yellow-950/30 border border-yellow-800 rounded-2xl p-5 text-left">
-            <p className="text-yellow-400 font-bold text-sm mb-2">🔒 Confidentiality Reminder</p>
-            <p className="text-yellow-200 text-xs leading-relaxed">Your NDA is now active. Do not share platform content, credentials, or research materials. Your access is tied to your email address and non-transferable.</p>
+          <div className="bg-gray-800/60 border border-gray-700 rounded-2xl p-5 text-left">
+            <p className="text-gray-300 font-bold text-sm mb-2">ℹ️ Legal Notice</p>
+            <p className="text-gray-400 text-xs leading-relaxed">Zenith Apex is an independent research curation platform. Third-party works referenced here remain the copyright of their respective owners. Do not share your login credentials. The platform's original tools and software are proprietary to Zenith Apex.</p>
           </div>
         </div>
       </div>
@@ -96,16 +96,16 @@ export default function BetaApply() {
       <div className="border-b border-yellow-900/40 bg-gradient-to-b from-gray-900 to-gray-950">
         <div className="max-w-4xl mx-auto px-5 py-14 text-center">
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-green-950/60 border border-green-800 text-green-400 text-xs font-black mb-5 uppercase tracking-widest">
-            <Shield size={11} /> NDA-Gated Access — Open Enrollment
+            <Shield size={11} /> Founding Member Access — Open Enrollment
           </div>
           <h1 className="text-4xl md:text-5xl font-black leading-tight mb-4">
             Apply for Early Access<br />
             <span className="text-yellow-400">Zenith Apex Research Platform</span>
           </h1>
           <p className="text-gray-400 text-lg max-w-2xl mx-auto leading-relaxed mb-3">
-            Sign the NDA, complete your profile, and get <strong className="text-white">immediate access</strong> to the full Zenith Apex research platform. Founding member pricing locked forever.
+            Complete your profile and get <strong className="text-white">immediate access</strong> to the full Zenith Apex research platform. Founding member pricing locked forever.
           </p>
-          <p className="text-gray-600 text-sm">NDA required · Instant access after sign-up · Founding 1000 pricing</p>
+          <p className="text-gray-600 text-sm">Instant access after sign-up · Founding 1000 pricing · Third-party works referenced under fair use</p>
         </div>
       </div>
 
@@ -141,9 +141,9 @@ export default function BetaApply() {
         <div>
           <div className="bg-gray-900 border border-yellow-900/40 rounded-2xl p-6">
             <div className="flex items-center gap-2 mb-5">
-              <Shield size={16} className="text-yellow-400" />
-              <h2 className="text-white font-black text-lg">Get Instant Access</h2>
-              <span className="ml-auto text-xs px-2 py-0.5 rounded bg-yellow-900/40 border border-yellow-800 text-yellow-400 font-bold">NDA Required</span>
+            <Shield size={16} className="text-yellow-400" />
+            <h2 className="text-white font-black text-lg">Get Instant Access</h2>
+            <span className="ml-auto text-xs px-2 py-0.5 rounded bg-yellow-900/40 border border-yellow-800 text-yellow-400 font-bold">Founding Member</span>
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-4">
@@ -216,7 +216,7 @@ export default function BetaApply() {
               </div>
 
               {/* NDA checkbox */}
-              <div className="bg-red-950/20 border border-red-900/40 rounded-xl p-4">
+              <div className="bg-gray-800/60 border border-gray-700 rounded-xl p-4">
                 <label className="flex items-start gap-3 cursor-pointer">
                   <div
                     onClick={() => set("nda_signed", !form.nda_signed)}
@@ -225,8 +225,10 @@ export default function BetaApply() {
                     {form.nda_signed && <Check size={12} className="text-black" />}
                   </div>
                   <div>
-                    <p className="text-white text-xs font-bold leading-snug">I agree to the Zenith Apex Mutual NDA *</p>
-                    <p className="text-gray-500 text-xs mt-1 leading-relaxed">I understand this platform contains confidential research. I will not share, reproduce, or distribute any content. Violation subjects me to liquidated damages of $2.5M per incident.</p>
+                    <p className="text-white text-xs font-bold leading-snug">I agree to the Zenith Apex Platform Terms *</p>
+                    <p className="text-gray-500 text-xs mt-1 leading-relaxed">
+                      I understand that Zenith Apex is an independent research curation platform. Third-party works (including Bearden's published books and papers) remain the copyright of their respective owners and are referenced here for educational and research purposes under fair use. I agree not to redistribute the platform's original tools, software, or compiled research indexes. I am accessing this platform for legitimate research purposes.
+                    </p>
                   </div>
                 </label>
               </div>
@@ -241,10 +243,10 @@ export default function BetaApply() {
                 className="w-full flex items-center justify-center gap-2 py-4 rounded-2xl bg-gradient-to-r from-yellow-700 to-yellow-600 hover:from-yellow-600 hover:to-yellow-500 text-black font-black text-base disabled:opacity-60 transition-all shadow-[0_4px_24px_rgba(200,160,0,0.3)]"
               >
                 {submitting ? <Loader2 size={18} className="animate-spin" /> : <ChevronRight size={18} />}
-                {submitting ? "Creating Your Access…" : "Sign NDA & Get Instant Access"}
+                {submitting ? "Creating Your Access…" : "Create Account & Get Instant Access"}
               </button>
 
-              <p className="text-gray-600 text-xs text-center">No payment required · Instant access after sign-up · NDA enforced</p>
+              <p className="text-gray-600 text-xs text-center">No payment required · Instant access after sign-up · Third-party works used under fair use</p>
             </form>
           </div>
         </div>
