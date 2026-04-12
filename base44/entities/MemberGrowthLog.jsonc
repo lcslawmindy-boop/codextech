@@ -1,0 +1,82 @@
+{
+  "name": "MemberGrowthLog",
+  "type": "object",
+  "properties": {
+    "week": {
+      "type": "integer"
+    },
+    "phase": {
+      "type": "string",
+      "enum": [
+        "Phase 1 \u2014 Warm Network",
+        "Phase 2 \u2014 Content Engine",
+        "Phase 3 \u2014 Paid + Partners",
+        "Phase 4 \u2014 Urgency + Referral"
+      ]
+    },
+    "date": {
+      "type": "string"
+    },
+    "platform": {
+      "type": "string",
+      "enum": [
+        "Twitter/X",
+        "LinkedIn",
+        "TikTok",
+        "YouTube",
+        "Reddit",
+        "Instagram",
+        "Substack",
+        "Email",
+        "Discord",
+        "Other"
+      ]
+    },
+    "action_type": {
+      "type": "string",
+      "enum": [
+        "Post Published",
+        "Thread Posted",
+        "Video Published",
+        "Email Sent",
+        "DM Outreach",
+        "Ad Launched",
+        "Partner Outreach",
+        "Webinar",
+        "Reddit Post",
+        "Newsletter Swap"
+      ]
+    },
+    "content_summary": {
+      "type": "string"
+    },
+    "impressions": {
+      "type": "integer"
+    },
+    "clicks": {
+      "type": "integer"
+    },
+    "new_members": {
+      "type": "integer",
+      "default": 0
+    },
+    "notes": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "planned",
+        "in_progress",
+        "completed",
+        "skipped"
+      ],
+      "default": "planned"
+    }
+  },
+  "required": [
+    "week",
+    "platform",
+    "action_type"
+  ]
+}

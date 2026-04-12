@@ -585,6 +585,9 @@ export default function SocialMediaCommand() {
           </div>
         </div>
         <div className="flex items-center gap-2">
+          <Link to="/social-agent" className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-purple-900/40 border border-purple-700 text-purple-300 font-bold text-xs hover:bg-purple-800/40 transition-colors">
+            🤖 AI Growth Agent
+          </Link>
           <span className="text-xs px-3 py-1.5 rounded-full bg-red-900/40 border border-red-800 text-red-300 font-bold animate-pulse">
             ● LIVE GOAL: 1000 MEMBERS
           </span>
