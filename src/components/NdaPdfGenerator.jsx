@@ -35,7 +35,7 @@ function generateNDA(recipientName, recipientOrg, recipientTitle) {
       doc.setFontSize(7.5);
       doc.setFont('helvetica', 'normal');
       doc.setTextColor(200, 200, 200);
-      doc.text('Zenith Apex Research Portfolio — Confidential NDA — Unauthorized Disclosure Subject to $2.5M Liquidated Damages', margin, 292);
+      doc.text('Zenith Apex Research Portfolio — Confidential Platform Agreement — For Authorized Recipients Only', margin, 292);
       doc.text(`Page ${p} of ${total}`, pageW - margin, 292, { align: 'right' });
     }
   };
@@ -142,18 +142,18 @@ function generateNDA(recipientName, recipientOrg, recipientTitle) {
   infoRow('Receiving Party:', `${recipientName || '[RECIPIENT NAME]'}, ${recipientTitle || '[TITLE]'}, ${recipientOrg || '[ORGANIZATION]'}`);
   y += 6;
 
-  // Warning box
+  // Notice box
   doc.setDrawColor(0, 0, 0);
   doc.setLineWidth(0.5);
   doc.rect(margin, y, contentW, 28, 'D');
   doc.setFontSize(11);
   doc.setFont('helvetica', 'bold');
   doc.setTextColor(0, 0, 0);
-  doc.text('NOTICE: STRICTLY CONFIDENTIAL — ATTORNEY-CLIENT PRIVILEGED', margin + 6, y + 10);
+  doc.text('NOTICE: CONFIDENTIAL — FOR AUTHORIZED RECIPIENTS ONLY', margin + 6, y + 10);
   doc.setFont('helvetica', 'normal');
   doc.setFontSize(10);
   doc.setTextColor(30, 30, 30);
-  const noticeLines = doc.splitTextToSize('Unauthorized disclosure is subject to liquidated damages of $2,500,000 per incident. This document is intended solely for the named Receiving Party.', contentW - 12);
+  const noticeLines = doc.splitTextToSize('This document contains proprietary platform information. Third-party research referenced herein remains the copyright of respective authors. Recipients are bound by the terms of this agreement.', contentW - 12);
   noticeLines.forEach((l, i) => doc.text(l, margin + 6, y + 19 + i * 5.5));
   y += 34;
 
@@ -163,7 +163,7 @@ function generateNDA(recipientName, recipientOrg, recipientTitle) {
   newPage();
 
   h1('ARTICLE 1 — RECITALS');
-  body('WHEREAS, ZARP possesses certain confidential, proprietary, and trade secret information relating to advanced electromagnetic physics research, AI-powered intellectual property generation platforms, invention disclosures, patent strategies, business models, financial projections, and related technical documentation (collectively, the "Confidential Information");');
+  body('WHEREAS, ZARP operates a research curation and AI-powered tools platform (the "Platform") that includes proprietary software, compiled research indexes, AI-generated analysis tools, patent drafting utilities, and original platform content (collectively, the "Confidential Information"). Note: Third-party published works referenced on the Platform (including works by Thomas E. Bearden and other researchers) remain the copyright of their respective authors and are not included in the definition of Confidential Information.;');
   body('WHEREAS, the Receiving Party desires to evaluate the Confidential Information for the purpose of assessing a potential business transaction, licensing arrangement, strategic partnership, or acquisition (the "Purpose");');
   body('NOW, THEREFORE, in consideration of the mutual covenants herein, and for other good and valuable consideration, the receipt and sufficiency of which are acknowledged, the parties agree as follows:');
   rule();
@@ -172,11 +172,11 @@ function generateNDA(recipientName, recipientOrg, recipientTitle) {
   h2('2.1  Confidential Information');
   body('"Confidential Information" means any and all information, data, documents, materials, or knowledge disclosed by ZARP, whether orally, in writing, electronically, or by any other means, that is designated as confidential or that reasonably should be understood to be confidential. This includes without limitation:');
   [
-    '(a) All research, analyses, and findings related to scalar electromagnetics, vacuum energy extraction, overunity energy devices, bioelectromagnetics, psychoenergetics, and related fields;',
+    '(a) All original Platform tools, software, source code, AI prompt architectures, database schemas, and platform configurations developed by ZARP;',
     '(b) The Zenith Apex Research Platform — including all source code, AI prompt architectures, database schemas, entity structures, backend functions, automation workflows, and platform configurations;',
     '(c) All AI-generated invention disclosures, patent drafts, financial models, market research reports, pitch decks, and build guides;',
     '(d) All business plans, financial projections, revenue models, investor relationships, acquisition valuations, and negotiation strategies;',
-    '(e) All primary source documents, declassified government reports, patent applications, engineering diagrams, and annotated research materials.',
+    '(e) All original annotations, curation decisions, and novel analysis compiled by ZARP (excluding the underlying third-party source documents themselves, which remain the property of their respective authors).',
   ].forEach(item => body(item, 6));
 
   h2('2.2  Excluded Information');
@@ -201,7 +201,7 @@ function generateNDA(recipientName, recipientOrg, recipientTitle) {
   rule();
 
   h1('ARTICLE 4 — INTELLECTUAL PROPERTY');
-  body('All Confidential Information and all intellectual property rights therein remain the exclusive property of ZARP. This Agreement grants no license, right, or interest of any kind. Any improvements or derivative works created using the Confidential Information shall be deemed owned by ZARP, and the Receiving Party hereby assigns all such rights to ZARP.');
+  body('All original Platform Confidential Information and all intellectual property rights therein remain the exclusive property of ZARP. This Agreement grants no license, right, or interest of any kind in ZARP\'s proprietary Platform. Nothing herein shall be construed to grant any rights in third-party published works that are referenced on the Platform, which remain the intellectual property of their respective owners. Any improvements or derivative works created using ZARP\'s original Platform Confidential Information shall be deemed owned by ZARP.');
   rule();
 
   h1('ARTICLE 5 — TERM AND TERMINATION');
@@ -212,8 +212,8 @@ function generateNDA(recipientName, recipientOrg, recipientTitle) {
   h2('6.1  Irreparable Harm');
   body('The Receiving Party acknowledges that any breach would cause irreparable harm for which monetary damages would be an inadequate remedy. Accordingly, ZARP shall be entitled to seek equitable relief, including injunction and specific performance, without posting a bond.');
 
-  h2('6.2  Liquidated Damages');
-  body('The Receiving Party agrees to pay liquidated damages of TWO MILLION FIVE HUNDRED THOUSAND DOLLARS ($2,500,000.00 USD) per incident of unauthorized disclosure, the parties acknowledging this represents a reasonable estimate of the harm from such breach.');
+  h2('6.2  Damages');
+  body('In the event of breach, the non-breaching party shall be entitled to seek actual damages, including but not limited to lost profits and business opportunities. The parties agree that damages may be difficult to quantify and that equitable relief shall be available as described in Section 6.1.');
 
   h2('6.3  Attorneys\' Fees');
   body('In any action to enforce this Agreement, the prevailing party shall be entitled to recover reasonable attorneys\' fees and costs.');

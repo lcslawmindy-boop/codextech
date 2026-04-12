@@ -104,7 +104,7 @@ export function drawFooter(doc, pageNum, totalPages, label) {
   doc.setFontSize(7.5);
   doc.setFont('helvetica', 'normal');
   doc.setTextColor(200, 200, 200);
-  doc.text('CONFIDENTIAL — ZENITH APEX RESEARCH PORTFOLIO — UNAUTHORIZED DISCLOSURE PROHIBITED', pageW / 2, 293, { align: 'center' });
+  doc.text('ZENITH APEX RESEARCH PORTFOLIO — CONFIDENTIAL PLATFORM CONTENT — FOR AUTHORIZED MEMBERS ONLY', pageW / 2, 293, { align: 'center' });
   doc.text(`${label || ''}  ·  Page ${pageNum} of ${totalPages}`, pageW - margin, 293, { align: 'right' });
   doc.text(new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }), margin, 293);
 }
