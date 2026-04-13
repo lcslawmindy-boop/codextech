@@ -17,12 +17,12 @@ const INTERESTS = [
 const BUDGETS = ["Under $200", "$200–$500", "$500–$2,000", "$2,000–$10,000", "$10,000+"];
 
 const BENEFITS = [
-  { icon: "🔬", title: "5 Invention Build Plans", desc: "MEG, TRD-1, G-Com, Prioré System, TRZ Reactor — full BOMs & assembly guides" },
-  { icon: "📋", title: "AI Patent Drafting Tool", desc: "Unlimited provisional patent generation with prior art cross-referencing" },
-  { icon: "📚", title: "Full Course Library Access", desc: "10 courses covering scalar EM, bioelectromagnetics, USPTO strategy & more" },
-  { icon: "💼", title: "Investor Package", desc: "Due diligence pack, NDA templates, acquisition letter — $3.9M–$11.5M valuation" },
-  { icon: "⚡", title: "AI Invention Forge", desc: "Generate novel scalar EM inventions with IP valuation + 5-year financials" },
-  { icon: "🛡️", title: "Beta Pricing — Locked Forever", desc: "Your rate is grandfathered even after public launch price increases" },
+  { icon: "🔬", title: "21 Invention Build Plans", desc: "Full device architectures with Bills of Materials, engineering specs, and step-by-step assembly guides" },
+  { icon: "📋", title: "AI Patent Drafting Tool", desc: "Generate USPTO-compliant provisional patent applications with prior art cross-referencing — unlimited" },
+  { icon: "📚", title: "Full Course Library", desc: "10+ courses covering advanced EM research, bioelectromagnetics, IP strategy, and USPTO filing procedures" },
+  { icon: "💼", title: "Investor Package & CRM", desc: "Due diligence PDF, NDA templates, acquisition letter, and full investor pipeline management" },
+  { icon: "⚡", title: "AI Invention Forge", desc: "Generate novel invention concepts grounded in documented EM research — with IP valuation and 5-year financials" },
+  { icon: "🛡️", title: "Founding Member Rate — Locked", desc: "Your pricing is grandfathered permanently, even as the platform grows and rates increase" },
 ];
 
 export default function BetaApply() {
@@ -71,9 +71,9 @@ export default function BetaApply() {
           <div className="w-20 h-20 rounded-full bg-green-900/40 border-2 border-green-600 flex items-center justify-center mx-auto mb-6">
             <Check size={36} className="text-green-400" />
           </div>
-          <h1 className="text-white font-black text-2xl mb-3">Access Confirmed — Complete Payment</h1>
+          <h1 className="text-white font-black text-2xl mb-3">Account Created — Choose Your Plan</h1>
           <p className="text-gray-400 text-sm leading-relaxed mb-6">
-            Your account has been created. To unlock the full platform, complete your membership payment below.
+            Your account is ready. Select a membership plan below to unlock the full platform — AI tools, patent drafting, build plans, and investor suite.
           </p>
           <Link
             to="/pricing"
@@ -99,20 +99,20 @@ export default function BetaApply() {
             <Shield size={11} /> Founding Member Access — Open Enrollment
           </div>
           <h1 className="text-4xl md:text-5xl font-black leading-tight mb-4">
-            Apply for Early Access<br />
-            <span className="text-yellow-400">Zenith Apex Research Platform</span>
+            Join Zenith Apex<br />
+            <span className="text-yellow-400">Advanced Research & IP Platform</span>
           </h1>
           <p className="text-gray-400 text-lg max-w-2xl mx-auto leading-relaxed mb-3">
-            Complete your profile and get <strong className="text-white">immediate access</strong> to the full Zenith Apex research platform. Founding member pricing locked forever.
+            Get <strong className="text-white">immediate access</strong> to the full platform — AI-powered IP generation, patent drafting, device build plans, and investor tools backed by 40+ years of documented EM research.
           </p>
-          <p className="text-gray-600 text-sm">Instant access after sign-up · Founding 1000 pricing · Third-party works referenced under fair use</p>
+          <p className="text-gray-600 text-sm">Instant access after sign-up · Founding member rate locked permanently · Third-party works referenced under fair use</p>
         </div>
       </div>
 
       <div className="max-w-5xl mx-auto px-5 py-12 grid grid-cols-1 lg:grid-cols-2 gap-12">
         {/* Benefits */}
         <div>
-          <h2 className="text-white font-black text-xl mb-6">What Beta Members Get</h2>
+          <h2 className="text-white font-black text-xl mb-6">What You Get Immediately</h2>
           <div className="space-y-4 mb-8">
             {BENEFITS.map((b, i) => (
               <div key={i} className="flex items-start gap-4 bg-gray-900 border border-gray-800 rounded-xl p-4">
@@ -131,9 +131,9 @@ export default function BetaApply() {
               {[...Array(5)].map((_, i) => <Star key={i} size={13} className="text-yellow-500 fill-yellow-500" />)}
             </div>
             <p className="text-gray-300 text-sm leading-relaxed italic mb-3">
-              "The patent drafting tool alone saved me $3,000 in attorney fees. The prior art archive is unlike anything publicly available. If you get a beta invite — take it."
+              "The patent drafting tool alone saved me $3,000 in attorney fees. The prior art archive is the most organized cross-referenced collection of advanced EM research I've found anywhere."
             </p>
-            <p className="text-gray-600 text-xs">— D.R., Independent Researcher (early access tester)</p>
+            <p className="text-gray-600 text-xs">— D.R., Independent Researcher</p>
           </div>
         </div>
 

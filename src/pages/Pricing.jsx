@@ -10,18 +10,18 @@ const PLANS = [
     price: 0,
     priceSuffix: "",
     badge: null,
-    tagline: "Explore before you commit",
+    tagline: "Explore the platform before committing",
     color: "#6b7280",
     cta: "Current Plan",
     ctaLink: true,
     features: [
-      "Access to 1 Invention Build Plan",
-      "Access to 1 Course module",
+      "1 Invention Build Plan (full PDF)",
+      "1 Course module",
       "Concept Knowledge Graph",
       "Prior Art Archive (read-only)",
-      "Newsletter & Research Updates",
+      "Research Newsletter",
     ],
-    locked: ["AI Invention Forge", "Patent Drafting Tool", "Investor CRM", "Full Invention Library"],
+    locked: ["AI Invention Forge", "Patent Drafting Tool", "Investor CRM", "Full IP Library"],
   },
   {
     id: "starter",
@@ -30,16 +30,15 @@ const PLANS = [
     type: "one_time",
     priceSuffix: " one-time",
     badge: null,
-    tagline: "Inventions + foundational courses",
+    tagline: "Core build plans & foundational courses",
     color: "#f59e0b",
-    cta: "Buy Starter — $47",
+    cta: "Get Starter — $47",
     features: [
-      "5 Invention Build Plans (full PDF)",
-      "4 Courses with full curriculum",
-      "Bill of Materials for each device",
+      "5 Invention Build Plans (full PDF + BOM)",
+      "4 Courses with complete curriculum",
       "Step-by-step assembly guides",
       "Prior Art Archive access",
-      "Lifetime access to purchased content",
+      "Lifetime access — one payment",
     ],
     locked: ["AI Invention Forge", "Patent Drafting Tool", "Investor CRM"],
   },
@@ -50,16 +49,16 @@ const PLANS = [
     type: "subscription",
     priceSuffix: "/mo",
     badge: "MOST POPULAR",
-    tagline: "Full invention & course library",
+    tagline: "Full IP library + AI research tools",
     color: "#6366f1",
     cta: "Start Researcher — $97/mo",
     features: [
       "All 21 Invention Build Plans",
-      "All courses + new content monthly",
-      "AI Invention Forge — unlimited",
-      "Scalar EM simulators & lab tools",
-      "Prior Art Archive (200+ entries)",
-      "Build Video generator",
+      "Full course library + monthly new content",
+      "AI Invention Forge — unlimited sessions",
+      "EM simulators & lab visualization tools",
+      "Prior Art Archive (200+ documented entries)",
+      "Animated Build Video generator",
       "Cancel anytime",
     ],
     locked: ["Patent Drafting Tool", "Investor CRM", "Acquisition CRM"],
@@ -71,17 +70,17 @@ const PLANS = [
     type: "subscription",
     priceSuffix: "/mo",
     badge: "FULL ACCESS",
-    tagline: "Everything — IP tools + investor suite",
+    tagline: "Complete IP + investor & commercialization suite",
     color: "#22c55e",
     cta: "Go Pro — $247/mo",
     features: [
       "Everything in Researcher",
-      "AI Patent Drafting Tool — unlimited",
+      "AI Patent Drafting Tool — unlimited (USPTO 35 USC 111(b))",
       "Investor CRM & Pitch Deck Builder",
       "IP Valuation Calculator",
-      "Acquisition CRM",
+      "Acquisition CRM & deal pipeline",
       "VDR Portal (Virtual Data Room)",
-      "Priority admin support",
+      "Priority support",
       "Cancel anytime",
     ],
     locked: [],
@@ -89,9 +88,9 @@ const PLANS = [
 ];
 
 const TESTIMONIALS = [
-  { name: "D.R.", role: "Independent Researcher", text: "The patent drafting tool alone saved me $3,000 in attorney fees. The prior art archive is unlike anything publicly available." },
-  { name: "M.K.", role: "Alternative Energy Investor", text: "I've been researching Bearden's work for 15 years. This platform is the most organized and useful resource I've found." },
-  { name: "J.T.", role: "Bioelectromagnetics Practitioner", text: "The Prioré device documentation and the TRD-1 build plans are worth 10× the membership fee alone." },
+  { name: "D.R.", role: "Independent Researcher", text: "The patent drafting tool alone saved me $3,000 in attorney fees. The prior art archive is the most organized cross-referenced collection I've found anywhere." },
+  { name: "M.K.", role: "Deep Tech Investor", text: "I've been tracking advanced EM research for 15 years. This platform finally puts primary sources, IP tools, and financial modeling in one place." },
+  { name: "J.T.", role: "Bioelectromagnetics Researcher", text: "The documented device architectures and build plans — backed by primary sources including ONR reports and peer-reviewed papers — are worth 10× the membership." },
 ];
 
 function PlanCard({ plan, loading, onCheckout }) {
@@ -202,14 +201,14 @@ export default function Pricing() {
       {/* Hero */}
       <div className="text-center px-5 py-16 max-w-3xl mx-auto">
         <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-yellow-900/40 border border-yellow-800 text-yellow-400 text-xs font-bold mb-6">
-          <Star size={12} /> The world's only structured Bearden research platform
+          <Star size={12} /> Advanced EM Research · IP Generation · Commercialization Tools
         </div>
         <h2 className="text-4xl md:text-5xl font-black leading-tight mb-4">
-          Access Suppressed Physics<br />
-          <span className="text-yellow-400">Research That Actually Works</span>
+          Advanced Electromagnetic Research,<br />
+          <span className="text-yellow-400">Structured for Inventors & Investors</span>
         </h2>
         <p className="text-gray-400 text-lg leading-relaxed mb-4">
-          No physics PhD required. Get the organized research, build plans, and patent tools that researchers, inventors, and investors have been searching for.
+          A professional-grade platform for IP generation, prior art research, patent drafting, and technology commercialization — built on 40+ years of documented EM research and peer-reviewed literature.
         </p>
         <p className="text-gray-600 text-sm">🔒 Secure checkout via Stripe · Instant access · Cancel anytime</p>
       </div>
@@ -240,13 +239,13 @@ export default function Pricing() {
       {/* What you get section */}
       <div className="border-t border-gray-800 bg-gray-900/40 px-5 py-14">
         <div className="max-w-5xl mx-auto">
-          <h3 className="text-white font-black text-2xl text-center mb-10">What Makes This Different</h3>
+          <h3 className="text-white font-black text-2xl text-center mb-10">What Makes This Platform Different</h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
-              { icon: <Shield size={22} className="text-yellow-400" />, title: "Primary Sources Only", desc: "Every claim traced to government documents, patents, or peer-reviewed papers. No speculation." },
-              { icon: <Download size={22} className="text-green-400" />, title: "Actionable Build Plans", desc: "Real BOMs, specs, and assembly steps — not just theory. Replicate these devices yourself." },
-              { icon: <BookOpen size={22} className="text-indigo-400" />, title: "No PhD Required", desc: "Complex concepts explained plainly. You're the researcher — we organized 40 years of work." },
-              { icon: <Zap size={22} className="text-purple-400" />, title: "AI-Powered Tools", desc: "Generate patents, pitch decks, valuations, and invention blueprints in minutes with AI." },
+              { icon: <Shield size={22} className="text-yellow-400" />, title: "Primary Source Verified", desc: "Every device and concept is traced to government documents, issued patents, or peer-reviewed publications. No unsubstantiated claims." },
+              { icon: <Download size={22} className="text-green-400" />, title: "Actionable Build Plans", desc: "Complete Bills of Materials, engineering specs, and assembly procedures — designed for actual replication and prototyping." },
+              { icon: <BookOpen size={22} className="text-indigo-400" />, title: "Accessible to Non-Specialists", desc: "Technical content structured for researchers, entrepreneurs, and investors — not just engineers. 40 years of work, organized." },
+              { icon: <Zap size={22} className="text-purple-400" />, title: "AI-Powered IP Pipeline", desc: "Generate USPTO-compliant patent drafts, investor pitch decks, IP valuations, and invention blueprints in minutes." },
             ].map((item, i) => (
               <div key={i} className="text-center">
                 <div className="flex justify-center mb-3">{item.icon}</div>
@@ -283,11 +282,11 @@ export default function Pricing() {
           <h3 className="text-white font-black text-2xl text-center mb-8">Common Questions</h3>
           <div className="space-y-4">
             {[
-              { q: "Do I need a physics background?", a: "No. The platform is designed for curious researchers, entrepreneurs, and investors — not physicists. Everything is explained with clear language and primary source references." },
-              { q: "What format are the build plans?", a: "Downloadable PDFs with full Bill of Materials, assembly steps, operating parameters, safety notes, and theoretical basis with citations. Immediately accessible after purchase." },
-              { q: "Can I cancel the membership?", a: "Yes, anytime. Log in, go to your account settings, and cancel before your next billing date. No questions asked." },
-              { q: "Is this legal content?", a: "Yes. All content is derived from publicly available patents (USPTO), declassified government documents, peer-reviewed papers, and published books. We organize and analyze public information." },
-              { q: "How is payment handled?", a: "Securely through Stripe — the same payment processor used by Amazon, Google, and millions of businesses. We never see or store your card details." },
+              { q: "Do I need a technical background?", a: "No. The platform is designed for researchers, entrepreneurs, patent attorneys, and investors. Technical content is accompanied by plain-language explanations and full primary source citations." },
+              { q: "What format are the build plans?", a: "Downloadable PDFs with full Bill of Materials (with sourcing), step-by-step assembly procedures, operating parameters, safety notes, and citations to source documents. Accessible immediately after purchase." },
+              { q: "Can I cancel my subscription?", a: "Yes, anytime. Log in, go to account settings, and cancel before your next billing date. No questions asked, no penalty." },
+              { q: "What are the original sources for this research?", a: "All content is derived from publicly available records: USPTO patents, declassified government documents (including ONR reports), peer-reviewed journal publications, and books by their respective authors. The platform organizes, cross-references, and builds tools on top of this public record." },
+              { q: "How is payment handled?", a: "Securely through Stripe — the same payment infrastructure used by Fortune 500 companies and millions of businesses globally. We never see or store your payment details." },
             ].map((faq, i) => (
               <div key={i} className="bg-gray-900 border border-gray-800 rounded-xl p-4">
                 <p className="text-white font-bold text-sm mb-1.5">{faq.q}</p>
@@ -300,8 +299,8 @@ export default function Pricing() {
 
       {/* CTA Footer */}
       <div className="border-t border-indigo-900/40 bg-indigo-950/10 px-5 py-12 text-center">
-        <h3 className="text-white font-black text-2xl mb-3">Ready to access 40 years of suppressed research?</h3>
-        <p className="text-gray-400 text-sm mb-6">Start with Researcher at $97/mo — cancel anytime.</p>
+        <h3 className="text-white font-black text-2xl mb-3">Ready to turn advanced EM research into real IP?</h3>
+        <p className="text-gray-400 text-sm mb-6">Start with Researcher at $97/mo — full library, AI tools, and simulators. Cancel anytime.</p>
         <button
           onClick={() => handleCheckout(PLANS[2])}
           disabled={loading === "researcher"}
