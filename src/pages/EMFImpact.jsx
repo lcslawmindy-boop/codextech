@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { ArrowLeft, Zap, Heart, Globe, AlertTriangle, ChevronDown, ChevronUp } from "lucide-react";
 import HumanBodyScene from "../components/HumanBodyScene";
+import ResearchDisclaimer from "../components/ResearchDisclaimer";
 import EarthFutureScene from "../components/EarthFutureScene";
 
 const DAMAGE_EFFECTS = [
@@ -180,6 +181,10 @@ export default function EMFImpact() {
             </button>
           ))}
         </div>
+      </div>
+
+      <div className="px-6 pt-3">
+        <ResearchDisclaimer type="medical" />
       </div>
 
       {/* ── BODY SECTION */}

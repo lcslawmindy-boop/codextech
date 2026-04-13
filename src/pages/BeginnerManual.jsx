@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import ResearchDisclaimer from "../components/ResearchDisclaimer";
 import { ArrowLeft, BookOpen, ChevronRight, ChevronDown, CheckCircle, AlertTriangle, Lightbulb, Zap } from "lucide-react";
 
 const SECTIONS = [
@@ -201,6 +202,7 @@ export default function BeginnerManual() {
 
         {/* Content */}
         <div className="flex-1 overflow-y-auto p-5">
+          <ResearchDisclaimer type="energy" />
           {section && (
             <div className="max-w-2xl mx-auto space-y-5">
               <div className="flex items-start justify-between gap-3">

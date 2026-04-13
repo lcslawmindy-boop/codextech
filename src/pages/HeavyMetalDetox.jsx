@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import ResearchDisclaimer from "../components/ResearchDisclaimer";
 import { ArrowLeft, ChevronDown, ChevronUp, AlertTriangle, CheckCircle2, Leaf, Zap, Droplets, Shield } from "lucide-react";
 
 const PHASES = [
@@ -178,12 +179,8 @@ export default function HeavyMetalDetox() {
         </Link>
       </div>
 
-      {/* Disclaimer */}
-      <div className="bg-yellow-950/30 border-b border-yellow-900/30 px-6 py-2 flex items-center gap-3">
-        <AlertTriangle size={12} className="text-yellow-400 flex-shrink-0" />
-        <p className="text-yellow-300 text-xs">
-          <strong>Disclaimer:</strong> This is educational information only. Always consult a qualified healthcare practitioner before starting any detox protocol, especially if you have chronic illness, are pregnant, or take medications.
-        </p>
+      <div className="px-6 pt-3">
+        <ResearchDisclaimer type="medical" />
       </div>
 
       <div className="flex-1 overflow-y-auto px-6 py-8 max-w-4xl mx-auto w-full">

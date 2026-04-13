@@ -2,6 +2,7 @@ import { useState, useEffect, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { ArrowLeft, TrendingUp, TrendingDown, Minus, Loader2, Activity } from "lucide-react";
 import { base44 } from "@/api/base44Client";
+import ResearchDisclaimer from "../components/ResearchDisclaimer";
 import {
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend,
   ResponsiveContainer, ScatterChart, Scatter, BarChart, Bar, Cell
@@ -160,6 +161,7 @@ export default function HealthAnalytics() {
       </div>
 
       <div className="flex-1 overflow-y-auto px-6 py-8 max-w-6xl mx-auto w-full">
+        <ResearchDisclaimer type="medical" />
         {loading ? (
           <div className="flex items-center justify-center py-24">
             <Loader2 size={24} className="animate-spin text-gray-600" />

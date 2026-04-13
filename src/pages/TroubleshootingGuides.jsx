@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import ResearchDisclaimer from "../components/ResearchDisclaimer";
 import { ArrowLeft, AlertTriangle, CheckCircle, ChevronDown, ChevronRight, Wrench, Zap, Search, Shield } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 
@@ -408,6 +409,7 @@ export default function TroubleshootingGuides() {
         {/* Main content */}
         <div className="flex-1 overflow-y-auto p-5">
           <div className="max-w-3xl mx-auto">
+            <ResearchDisclaimer type="energy" />
             {device && <DevicePanel device={device} />}
           </div>
         </div>
