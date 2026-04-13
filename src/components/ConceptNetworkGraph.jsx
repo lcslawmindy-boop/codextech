@@ -34,8 +34,11 @@ export default function ConceptNetworkGraph({ onNodeClick, selectedNodeId }) {
 
     svg.selectAll("*").remove();
 
+    // All defs upfront
+    const defs = svg.append("defs");
+
     // Arrow marker
-    svg.append("defs").append("marker")
+    defs.append("marker")
       .attr("id", "arrow")
       .attr("viewBox", "0 -5 10 10")
       .attr("refX", 38)
@@ -46,6 +49,27 @@ export default function ConceptNetworkGraph({ onNodeClick, selectedNodeId }) {
       .append("path")
       .attr("d", "M0,-5L10,0L0,5")
       .attr("fill", "#9ca3af");
+
+    // Electric glow filter for links
+    const linkGlow = defs.append("filter").attr("id", "linkGlow").attr("x", "-50%").attr("y", "-50%").attr("width", "200%").attr("height", "200%");
+    linkGlow.append("feGaussianBlur").attr("stdDeviation", "2.5").attr("result", "coloredBlur");
+    const lfm = linkGlow.append("feMerge");
+    lfm.append("feMergeNode").attr("in", "coloredBlur");
+    lfm.append("feMergeNode").attr("in", "SourceGraphic");
+
+    // Node glow filter
+    const filter = defs.append("filter").attr("id", "glow");
+    filter.append("feGaussianBlur").attr("stdDeviation", "5").attr("result", "coloredBlur");
+    const feMerge = filter.append("feMerge");
+    feMerge.append("feMergeNode").attr("in", "coloredBlur");
+    feMerge.append("feMergeNode").attr("in", "SourceGraphic");
+
+    // Neon glow filter for text
+    const textGlow = defs.append("filter").attr("id", "textGlow");
+    textGlow.append("feGaussianBlur").attr("stdDeviation", "3").attr("result", "coloredBlur");
+    const feMerge2 = textGlow.append("feMerge");
+    feMerge2.append("feMergeNode").attr("in", "coloredBlur");
+    feMerge2.append("feMergeNode").attr("in", "SourceGraphic");
 
     const g = svg.append("g");
 
@@ -62,13 +86,6 @@ export default function ConceptNetworkGraph({ onNodeClick, selectedNodeId }) {
       .force("charge", d3.forceManyBody().strength(-1200))
       .force("center", d3.forceCenter(width / 2, height / 2))
       .force("collision", d3.forceCollide(80));
-
-    // Electric glow filter for links
-    const linkGlow = defs.append("filter").attr("id", "linkGlow").attr("x", "-50%").attr("y", "-50%").attr("width", "200%").attr("height", "200%");
-    linkGlow.append("feGaussianBlur").attr("stdDeviation", "2.5").attr("result", "coloredBlur");
-    const lfm = linkGlow.append("feMerge");
-    lfm.append("feMergeNode").attr("in", "coloredBlur");
-    lfm.append("feMergeNode").attr("in", "SourceGraphic");
 
     // Base dim link lines
     g.append("g").selectAll("line.base")
@@ -133,14 +150,6 @@ export default function ConceptNetworkGraph({ onNodeClick, selectedNodeId }) {
       )
       .on("click", (e, d) => { e.stopPropagation(); onNodeClick(d); });
 
-    // Glow filter
-    const defs = svg.select("defs");
-    const filter = defs.append("filter").attr("id", "glow");
-    filter.append("feGaussianBlur").attr("stdDeviation", "5").attr("result", "coloredBlur");
-    const feMerge = filter.append("feMerge");
-    feMerge.append("feMergeNode").attr("in", "coloredBlur");
-    feMerge.append("feMergeNode").attr("in", "SourceGraphic");
-
     const NODE_R = 38;
 
     // Node circles — larger, filled with group color at higher opacity
@@ -169,13 +178,6 @@ export default function ConceptNetworkGraph({ onNodeClick, selectedNodeId }) {
       .attr("cy", -NODE_R + 6)
       .attr("fill", d => groupColors[d.group])
       .attr("pointer-events", "none");
-
-    // Neon glow filter for text
-    const textGlow = defs.append("filter").attr("id", "textGlow");
-    textGlow.append("feGaussianBlur").attr("stdDeviation", "3").attr("result", "coloredBlur");
-    const feMerge2 = textGlow.append("feMerge");
-    feMerge2.append("feMergeNode").attr("in", "coloredBlur");
-    feMerge2.append("feMergeNode").attr("in", "SourceGraphic");
 
     // Multi-line node labels — white text with neon color outline/glow
     node.each(function(d) {
