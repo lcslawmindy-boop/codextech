@@ -71,7 +71,7 @@ COURSE CATALOG (20+ courses, LMS integrated)
   Comparable: Coursera for Business at $400/user
   Estimated value: $150,000 – $320,000
 
-INVENTION BUILD PLAN LIBRARY (24 devices)
+INVENTION BUILD PLAN LIBRARY (26 devices)
   Revenue basis: $490–$1,800/plan; kits at $1,200–$3,500
   Estimated value: $450,000 – $1,200,000
 
@@ -80,7 +80,7 @@ ANNOTATED PRIMARY DOCUMENT ARCHIVE
   Comparable: JSTOR institutional; ProQuest Research Library
   Estimated value: $120,000 – $280,000
 
-IP PORTFOLIO — CORE DEVICES (MEG, TRZ, TRD-1, Prioré, 20 additional)
+IP PORTFOLIO — CORE DEVICES (MEG, TRZ, TRD-1, Prioré, 22 additional)
   Revenue basis: Licensing royalties 2–8% downstream; acquisition premium
   Comparable: WARF ($180M+/year licensing); Caltech licensing ($260M/year)
   Estimated value: $1,800,000 – $6,500,000
@@ -89,25 +89,40 @@ PRIOR ART ARCHIVE + PATENT AI CROSS-REFERENCING
   Revenue basis: $150–$500/search; subscription $800–$3,000/month
   Estimated value: $95,000 – $240,000
 
+KRCIC — KAZNACHEYEV REVERSAL CELL IMPRINTING CHAMBER (NEW — Q2 2026)
+  Full 10-step build plan, dual-chamber UV-grade quartz architecture, biophoton imprinting
+  Revenue basis: Research instrument licensing $2,500–$8,000; build kit $1,200
+  Estimated value: $180,000 – $480,000
+
+UBDRS — UV BIOPHOTON DISEASE REVERSAL SYSTEM (NEW — Q2 2026)
+  Full build plan, UV emission spectroscopy, statistical monitoring protocols
+  Revenue basis: Research instrument licensing $2,000–$6,000; build kit $950
+  Estimated value: $145,000 – $385,000
+
+LEGAL COMPLIANCE INFRASTRUCTURE (NEW — Q2 2026)
+  Terms of Service, Research Disclaimers (medical/energy/bioelectromagnetics), Refund Policy,
+  NDA gate architecture, copy protection — reduces regulatory liability across all content verticals
+  Estimated value: $45,000 – $120,000
+
 HEALTH + CRM + MONITORING SUITE
   Revenue basis: SaaS $50–$200/user/month; enterprise $10,000–$50,000/year
   Estimated value: $110,000 – $220,000
 
 ─────────────────────────────────────────────────────────────
-PLATFORM TOTAL (conservative DCF):    $3,895,000 – $11,545,000
-Strategic pre-public premium (3×):    $5,453,000 – $25,399,000
+PLATFORM TOTAL (conservative DCF):    $5,770,000 – $13,540,000
+Strategic pre-public premium (40–120%):  $8,078,000 – $29,788,000
 ─────────────────────────────────────────────────────────────`
       },
       {
         heading: "1.4  Acquisition Terms — Four Deal Structures Available",
         body: `STRUCTURE A — EXCLUSIVE FULL ACQUISITION (PREFERRED)
-  Price range: $6,500,000 – $18,000,000
+  Price range: $7,500,000 – $22,000,000
   Includes: Full codebase transfer, all IP assignments, primary source archive, database, brand, domain, subscriber list, all AI prompt architectures, and 90-day transition support.
   Timeline: LOI → due diligence → close within 60–90 days.
   Exclusivity: 30-day exclusive window for first buyer with executed NDA + proof of funds.
 
 STRUCTURE B — STRATEGIC LICENSING (ANNUAL)
-  Price range: $650,000 – $1,500,000/year
+  Price range: $750,000 – $1,800,000/year
   Includes: Platform white-label rights, AI module API access, course co-branding, ongoing development.
   Minimum term: 3 years. Renewal option at original price + CPI adjustment.
   Target licensees: IP law firms, defense contractors, university research offices.
@@ -681,8 +696,8 @@ Derwent Innovation — Thomson Reuters / Clarivate: Estimated standalone value $
 WARF (Wisconsin Alumni Research Foundation): $180M+/year licensing income from university IP portfolio.
 
 VALUATION CONCLUSION:
-  At $6.5M–$18M asking price, this platform is priced at:
-  — 0.046× of PatSnap acquisition value for a more capable platform
+  At $7.5M–$22M asking price, this platform is priced at:
+  — 0.050× of PatSnap acquisition value for a more capable platform
   — 4.4–12.3× Year 1 EBITDA ($478,353)
   — Deliberately conservative for rapid execution before public launch.`
       }
@@ -1094,8 +1109,8 @@ FINAL NOTE — WHY NOW:
   The window for pre-revenue acquisition pricing closes at Q3 2026 public launch. Every month of delay means higher acquisition price, more competition for the asset, and less negotiating leverage for the buyer. Buyers who execute quickly lock in the most favorable terms. Time is the only non-recoverable resource in this transaction.
 
 ─────────────────────────────────────────────────────────────────────
-END OF ZENITH APEX TECHNICAL DUE DILIGENCE PACKAGE — Q2 2026
-TOTAL SECTIONS: 12  ·  TOTAL SUBSECTIONS: 60+  ·  PLATFORM VALUE: $3.9M–$11.5M
+END OF ZENITH APEX TECHNICAL DUE DILIGENCE PACKAGE — Q2 2026 (UPDATED)
+TOTAL SECTIONS: 12  ·  TOTAL SUBSECTIONS: 60+  ·  PLATFORM VALUE: $5.8M–$13.5M  ·  ASKING: $7.5M–$22M
 ─────────────────────────────────────────────────────────────────────`
       }
     ]

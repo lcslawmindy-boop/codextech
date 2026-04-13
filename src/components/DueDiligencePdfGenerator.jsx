@@ -151,7 +151,7 @@ function generateDueDiligencePDF() {
   doc.setFont('helvetica', 'normal');
   doc.setFontSize(10.5);
   doc.setTextColor(60, 60, 60);
-  doc.text('Revised Q2 2026  ·  12 Sections  ·  24 Device Architectures  ·  8 Revenue Streams  ·  ~100 Pages', pageW / 2, y, { align: 'center' });
+  doc.text('Updated Q2 2026  ·  12 Sections  ·  26 Device Architectures  ·  8 Revenue Streams  ·  ~100 Pages', pageW / 2, y, { align: 'center' });
   y += 18;
 
   // Valuation box
@@ -164,15 +164,15 @@ function generateDueDiligencePDF() {
   doc.text('PLATFORM FAIR MARKET VALUATION (Q2 2026)  —  ASSET-BY-ASSET DCF', margin + 8, y + 10);
   doc.setFontSize(26);
   doc.setTextColor(0, 0, 0);
-  doc.text('$3.9M – $11.5M', margin + 8, y + 27);
+  doc.text('$5.8M \u2013 $13.5M', margin + 8, y + 27);
   doc.setFontSize(10);
   doc.setFont('helvetica', 'normal');
   doc.setTextColor(70, 70, 70);
-  doc.text('Conservative component-by-component DCF valuation', margin + 8, y + 36);
+  doc.text('Conservative DCF: 15 assets incl. KRCIC, UBDRS & legal compliance', margin + 8, y + 36);
   doc.setFontSize(18);
   doc.setFont('helvetica', 'bold');
   doc.setTextColor(0, 0, 0);
-  doc.text('$6.5M – $18M', pageW - margin - 8, y + 27, { align: 'right' });
+  doc.text('$7.5M \u2013 $22M', pageW - margin - 8, y + 27, { align: 'right' });
   doc.setFontSize(10);
   doc.setFont('helvetica', 'normal');
   doc.setTextColor(70, 70, 70);
@@ -181,7 +181,7 @@ function generateDueDiligencePDF() {
 
   // Stats row
   const stats = [
-    ['24', 'Device\nArchitectures'],
+    ['26', 'Device\nArchitectures'],
     ['12', 'Sections'],
     ['200+', 'KG Nodes'],
     ['8', 'Revenue\nStreams'],
@@ -266,7 +266,7 @@ function generateDueDiligencePDF() {
   });
 
   drawFooter();
-  doc.save('zenith-apex-due-diligence-100pg-q2-2026.pdf');
+  doc.save('zenith-apex-due-diligence-q2-2026-updated.pdf');
 }
 
 export default function DueDiligencePdfGenerator({ compact }) {

@@ -17,6 +17,9 @@ const VALUATION = [
   { label: "Annotated Primary Document Archive + Bearden Node Network", low: 120000, high: 280000 },
   { label: "Research Domain Moat + Platform Content Exclusivity (curated Bearden framework, tools, indexes)", low: 1800000, high: 6500000 },
   { label: "Prior Art Archive + Patent Landscape Graph + AI Patentability Cross-Reference", low: 95000, high: 240000 },
+  { label: "KRCIC — Kaznacheyev Reversal Cell Imprinting Chamber (biophysics IP, build plan)", low: 180000, high: 480000, tag: "NEW" },
+  { label: "UBDRS — UV Biophoton Disease Reversal System (biophysics IP, full build plan)", low: 145000, high: 385000, tag: "NEW" },
+  { label: "Legal Compliance Infrastructure (ToS, disclaimers, refund policy, NDA gate)", low: 45000, high: 120000, tag: "NEW" },
   { label: "EMF Health Platform + Investor CRM + Monitoring Dashboard + Alert System", low: 110000, high: 220000 },
 ];
 
@@ -53,8 +56,12 @@ Independent asset-by-asset valuation (conservative discounted cash flow + compar
   Prior Art Archive + Patent AI ......... $95K – $240K
   Health + CRM + Monitoring Suite ....... $110K – $220K
 
-  PLATFORM TOTAL (conservative):    $3.9M – $11.5M
-  + Strategic pre-public premium:    $5.5M – $25.3M
+  KRCIC — Kaznacheyev EM Imprinting Chamber ... $180K – $480K
+  UBDRS — UV Biophoton Disease Reversal System .. $145K – $385K
+  Legal Compliance Infrastructure .............. $45K – $120K
+
+  PLATFORM TOTAL (conservative):    $5.8M – $13.5M
+  + Strategic pre-public premium:    $8.1M – $29.7M
 
 ────────────────────────────────────────────
 WHAT YOU ARE ACQUIRING — FULL ASSET SUMMARY
@@ -111,14 +118,14 @@ V. PRODUCTION-READY REVENUE PLATFORM
 
   Conservative Year 1 revenue (self-operated):          $380,000 – $850,000
   Year 2 with AI module licensing to law firms / VCs:   $1.2M – $3.8M
-  Strategic value to acquirer with existing distribution: $6.5M – $25M
+  Strategic value to acquirer with existing distribution: $7.5M – $29.7M
 
 ────────────────────────────────────────────
 ACQUISITION TERMS (REVISED Q2 2026)
 ────────────────────────────────────────────
 
-EXCLUSIVE ACQUISITION (full IP, platform, AI engines, archive, plans):  $6.5M – $18M
-LICENSING ONLY (non-exclusive, annual):                                  $650,000 – $1,500,000/year
+EXCLUSIVE ACQUISITION (full IP, platform, AI engines, archive, plans):  $7.5M – $22M
+LICENSING ONLY (non-exclusive, annual):                                  $750,000 – $1,800,000/year
 AI MODULE WHITE-LABEL (SaaS to law firms / patent shops):                $280,000 – $750,000/year per licensee
 STRATEGIC PARTNERSHIP / JV:                                              Equity terms, negotiable
 
@@ -236,7 +243,7 @@ function ValuationTable() {
               <td className="px-5 py-2.5 text-right text-blue-300 font-bold">$1.5M/yr</td>
             </tr>
             <tr className="bg-yellow-950/20">
-              <td className="px-5 py-2.5 text-yellow-300 text-xs">+ Strategic pre-public premium (40–120%) — Revised Q2 2026</td>
+              <td className="px-5 py-2.5 text-yellow-300 text-xs">+ Strategic pre-public premium (40–120%) — Updated Q2 2026</td>
               <td className="px-4 py-2.5 text-right text-yellow-400 font-bold">{fmt(totalLow * 1.4)}</td>
               <td className="px-5 py-2.5 text-right text-yellow-300 font-bold">{fmt(totalHigh * 2.2)}</td>
             </tr>
