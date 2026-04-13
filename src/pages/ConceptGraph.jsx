@@ -205,7 +205,7 @@ export default function ConceptGraph() {
                 onClose={() => { setClusterMode(false); setClusterNodes([]); }}
               />
             )}
-            {showDiagnostics && (
+            {(showSearch || showDiagnostics) && (
               <SearchPanel
                 onResultClick={(nodeId) => {
                   const node = nodes.find(n => n.id === nodeId);
