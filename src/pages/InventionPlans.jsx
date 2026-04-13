@@ -1,6 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
-import { ArrowLeft, Download, ChevronDown, ChevronUp, AlertTriangle, CheckCircle2, Package, Loader2, FileText, Lock, ShoppingCart, Lightbulb, Eye, Film, Shield } from "lucide-react";
+import { ArrowLeft, Download, ChevronDown, ChevronUp, AlertTriangle, CheckCircle2, Package, Loader2, FileText, Lock, ShoppingCart, Lightbulb, Eye, Film, Shield, RotateCcw } from "lucide-react";
 import { useTier } from "../hooks/useTier";
 import { isClassifiedInvention, tierHasGovAccess } from "../lib/tiers";
 import GovClassifiedGate from "../components/GovClassifiedGate";
@@ -77,29 +77,86 @@ function VisualExplainer({ visual }) {
   );
 }
 
-function BomTable({ bom }) {
+function BomChecklist({ bom, checked, onToggle, onReset }) {
+  const checkedCount = checked.filter(Boolean).length;
+  const pct = bom.length > 0 ? Math.round((checkedCount / bom.length) * 100) : 0;
+  const allDone = checkedCount === bom.length;
+
   return (
-    <div className="overflow-x-auto">
-      <table className="w-full text-xs border-collapse">
-        <thead>
-          <tr className="border-b border-gray-700">
-            <th className="text-left text-gray-500 font-semibold py-2 pr-4 w-12">Qty</th>
-            <th className="text-left text-gray-500 font-semibold py-2 pr-4">Item</th>
-            <th className="text-left text-gray-500 font-semibold py-2 pr-4">Specification</th>
-            <th className="text-left text-gray-500 font-semibold py-2">Source / Est. Cost</th>
-          </tr>
-        </thead>
-        <tbody>
-          {bom.map((row, i) => (
-            <tr key={i} className={`border-b border-gray-800 ${i % 2 === 0 ? "bg-gray-900/30" : ""}`}>
-              <td className="py-2 pr-4 text-cyan-400 font-bold">{row.qty}</td>
-              <td className="py-2 pr-4 text-gray-200">{row.item}</td>
-              <td className="py-2 pr-4 text-gray-400">{row.spec}</td>
-              <td className="py-2 text-gray-500">{row.source}</td>
+    <div>
+      {/* Progress bar */}
+      <div className="mb-4">
+        <div className="flex items-center justify-between mb-1.5">
+          <span className="text-xs text-gray-400 font-semibold">
+            {checkedCount} / {bom.length} components procured
+          </span>
+          <div className="flex items-center gap-2">
+            <span className={`text-xs font-black ${allDone ? "text-green-400" : "text-yellow-400"}`}>
+              {pct}%
+            </span>
+            {checkedCount > 0 && (
+              <button onClick={onReset} title="Reset checklist"
+                className="text-gray-600 hover:text-gray-400 transition-colors">
+                <RotateCcw size={11} />
+              </button>
+            )}
+          </div>
+        </div>
+        <div className="w-full h-2 bg-gray-800 rounded-full overflow-hidden">
+          <div
+            className={`h-full rounded-full transition-all duration-500 ${allDone ? "bg-green-500" : "bg-yellow-500"}`}
+            style={{ width: `${pct}%` }}
+          />
+        </div>
+        {allDone && (
+          <p className="text-green-400 text-xs font-bold mt-1.5 flex items-center gap-1">
+            <CheckCircle2 size={11} /> All components accounted for — ready to build!
+          </p>
+        )}
+      </div>
+
+      {/* Table with checkboxes */}
+      <div className="overflow-x-auto">
+        <table className="w-full text-xs border-collapse">
+          <thead>
+            <tr className="border-b border-gray-700">
+              <th className="text-left text-gray-500 font-semibold py-2 pr-3 w-8"></th>
+              <th className="text-left text-gray-500 font-semibold py-2 pr-4 w-12">Qty</th>
+              <th className="text-left text-gray-500 font-semibold py-2 pr-4">Item</th>
+              <th className="text-left text-gray-500 font-semibold py-2 pr-4">Specification</th>
+              <th className="text-left text-gray-500 font-semibold py-2">Source / Est. Cost</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {bom.map((row, i) => (
+              <tr
+                key={i}
+                onClick={() => onToggle(i)}
+                className={`border-b border-gray-800 cursor-pointer transition-all select-none ${
+                  checked[i]
+                    ? "bg-green-950/20 opacity-60"
+                    : i % 2 === 0
+                    ? "bg-gray-900/30 hover:bg-gray-800/40"
+                    : "hover:bg-gray-800/40"
+                }`}
+              >
+                <td className="py-2 pr-3">
+                  <div className={`w-4 h-4 rounded border flex items-center justify-center flex-shrink-0 transition-all ${
+                    checked[i] ? "bg-green-600 border-green-600" : "border-gray-600"
+                  }`}>
+                    {checked[i] && <CheckCircle2 size={10} className="text-white" />}
+                  </div>
+                </td>
+                <td className={`py-2 pr-4 font-bold ${checked[i] ? "text-gray-600 line-through" : "text-cyan-400"}`}>{row.qty}</td>
+                <td className={`py-2 pr-4 ${checked[i] ? "text-gray-600 line-through" : "text-gray-200"}`}>{row.item}</td>
+                <td className={`py-2 pr-4 ${checked[i] ? "text-gray-700" : "text-gray-400"}`}>{row.spec}</td>
+                <td className={`py-2 ${checked[i] ? "text-gray-700" : "text-gray-500"}`}>{row.source}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <p className="text-gray-700 text-xs mt-2">Click any row to mark as procured / manufactured.</p>
     </div>
   );
 }
@@ -430,6 +487,7 @@ export default function InventionPlans() {
   const [showBom, setShowBom] = useState(true);
   const [showSteps, setShowSteps] = useState(true);
   const [generating, setGenerating] = useState(false);
+  const [bomChecked, setBomChecked] = useState({});
   const [hasPurchased, setHasPurchased] = useState(false);
   const [checkingPurchase, setCheckingPurchase] = useState(true);
 
@@ -455,6 +513,20 @@ export default function InventionPlans() {
 
   const data = inventionSteps[selected?.title];
   const visual = inventionVisuals[selected?.title];
+
+  // Per-invention BOM checklist state (keyed by invention title)
+  const bomKey = selected?.title || "";
+  const currentChecked = bomChecked[bomKey] || [];
+  const handleBomToggle = useCallback((idx) => {
+    setBomChecked(prev => {
+      const arr = [...(prev[bomKey] || [])];
+      arr[idx] = !arr[idx];
+      return { ...prev, [bomKey]: arr };
+    });
+  }, [bomKey]);
+  const handleBomReset = useCallback(() => {
+    setBomChecked(prev => ({ ...prev, [bomKey]: [] }));
+  }, [bomKey]);
 
   const handleDownload = async () => {
     if (!data || !selected) return;
@@ -616,10 +688,19 @@ export default function InventionPlans() {
                     <div className="bg-gray-900 border border-gray-800 rounded-2xl p-5 mb-4">
                       <button onClick={() => setShowBom(b => !b)}
                         className="flex items-center justify-between w-full mb-3">
-                        <p className="text-yellow-400 font-bold text-xs uppercase tracking-wider">Bill of Materials ({data.bom.length} items)</p>
+                        <p className="text-yellow-400 font-bold text-xs uppercase tracking-wider">
+                          Bill of Materials ({data.bom.length} items)
+                        </p>
                         {showBom ? <ChevronUp size={14} className="text-gray-500" /> : <ChevronDown size={14} className="text-gray-500" />}
                       </button>
-                      {showBom && <BomTable bom={data.bom} />}
+                      {showBom && (
+                        <BomChecklist
+                          bom={data.bom}
+                          checked={currentChecked}
+                          onToggle={handleBomToggle}
+                          onReset={handleBomReset}
+                        />
+                      )}
                     </div>
                   )}
 
