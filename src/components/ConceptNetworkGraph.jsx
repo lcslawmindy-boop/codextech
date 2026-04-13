@@ -45,7 +45,7 @@ export default function ConceptNetworkGraph({ onNodeClick, selectedNodeId }) {
       .attr("orient", "auto")
       .append("path")
       .attr("d", "M0,-5L10,0L0,5")
-      .attr("fill", "#4b5563");
+      .attr("fill", "#9ca3af");
 
     const g = svg.append("g");
 
@@ -66,9 +66,9 @@ export default function ConceptNetworkGraph({ onNodeClick, selectedNodeId }) {
     // Links
     const link = g.append("g").selectAll("line")
       .data(links).enter().append("line")
-      .attr("stroke", "#374151")
-      .attr("stroke-width", 1.2)
-      .attr("stroke-opacity", 0.5)
+      .attr("stroke", "#6b7280")
+      .attr("stroke-width", 1.8)
+      .attr("stroke-opacity", 0.85)
       .attr("marker-end", "url(#arrow)");
 
     // Link labels — only show on hover via opacity, hidden by default
