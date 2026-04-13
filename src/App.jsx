@@ -73,6 +73,11 @@ import AdminHub from './pages/AdminHub';
 import AdminGuard from './components/AdminGuard';
 import BuildSuppliesShop from './pages/BuildSuppliesShop';
 import AdminShopOrders from './pages/AdminShopOrders';
+import TroubleshootingGuides from './pages/TroubleshootingGuides';
+import BeginnerManual from './pages/BeginnerManual';
+import Glossary from './pages/Glossary';
+import TermsOfService from './pages/TermsOfService';
+import RefundPolicy from './pages/RefundPolicy';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -174,6 +179,11 @@ const AuthenticatedApp = () => {
           <Route path="/social-command" element={<SocialMediaCommand />} />
           <Route path="/social-agent" element={<SocialMediaAgent />} />
           <Route path="/build-supplies-shop" element={<BuildSuppliesShop />} />
+          <Route path="/troubleshooting" element={<TroubleshootingGuides />} />
+          <Route path="/beginner-manual" element={<BeginnerManual />} />
+          <Route path="/glossary" element={<Glossary />} />
+          <Route path="/terms" element={<TermsOfService />} />
+          <Route path="/refund-policy" element={<RefundPolicy />} />
 
           {/* Admin-only routes */}
           <Route element={<AdminGuard />}>
