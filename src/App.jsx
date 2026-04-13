@@ -71,6 +71,7 @@ import SocialMediaCommand from './pages/SocialMediaCommand';
 import SocialMediaAgent from './pages/SocialMediaAgent';
 import AdminHub from './pages/AdminHub';
 import AdminGuard from './components/AdminGuard';
+import BuildSuppliesShop from './pages/BuildSuppliesShop';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -171,6 +172,7 @@ const AuthenticatedApp = () => {
           <Route path="/course-plan" element={<CoursePlan />} />
           <Route path="/social-command" element={<SocialMediaCommand />} />
           <Route path="/social-agent" element={<SocialMediaAgent />} />
+          <Route path="/build-supplies-shop" element={<BuildSuppliesShop />} />
 
           {/* Admin-only routes */}
           <Route element={<AdminGuard />}>
