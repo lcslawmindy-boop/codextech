@@ -17,6 +17,7 @@ import { inventionSteps } from "../lib/inventionSteps";
 import InventionDiagram from "../components/InventionDiagram";
 import { jsPDF } from "jspdf";
 import ResearchDisclaimer from "../components/ResearchDisclaimer";
+import AttributionFooter from "../components/AttributionFooter";
 
 const inventions = businessItems.filter(i => i.category === "Invention");
 
@@ -563,6 +564,7 @@ export default function InventionPlans() {
           ) : (
             <div className="max-w-3xl mx-auto">
               <ResearchDisclaimer type="energy" />
+              <AttributionFooter compact />
               <div className="mb-6">
                 <div className="flex items-center gap-3 mb-2">
                   <span className="text-4xl">{selected.icon}</span>

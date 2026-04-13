@@ -46,13 +46,14 @@ export default function ConceptGraph() {
       {/* Header */}
       {/* Bearden Attribution Banner */}
       <div className="bg-gray-900/80 border-b border-yellow-900/40 px-6 py-1.5 flex items-center gap-3 flex-shrink-0">
-        <span className="text-yellow-500 text-xs font-bold uppercase tracking-widest">Attribution</span>
-        <span className="text-gray-400 text-xs">
-          All concepts, theories, and source fragments are derived from the published works of{" "}
-          <span className="text-yellow-300 font-semibold">Lt. Col. Thomas E. Bearden (US Army, Ret.)</span>{" "}
-          — including <em>Gravitobiology</em> (1991), <em>Excalibur Briefing</em> (1980/1988),{" "}
-          <em>Toward a New Electromagnetics</em> Parts 1–4 (1983), and papers published in{" "}
-          <em>Explore!</em>, <em>Foundations of Physics Letters</em>, and Tesla Book Company. No copyright infringement intended.
+        <span className="text-yellow-500 text-xs font-bold uppercase tracking-widest flex-shrink-0">Attribution</span>
+        <span className="text-gray-400 text-xs leading-relaxed">
+          All concepts, theories, and source fragments are derived from and attributed to the published works of their original authors, including:{" "}
+          <span className="text-yellow-300 font-semibold">Lt. Col. T.E. Bearden</span> (Gravitobiology, Excalibur Briefing, Foundations of Physics Letters),{" "}
+          <span className="text-yellow-300 font-semibold">Nikola Tesla</span> (Colorado Springs Diary, Wardenclyffe patents — public domain),{" "}
+          <span className="text-yellow-300 font-semibold">Antoine Priore</span> (French Patent 1,342,772; ONR Report R-5-78),{" "}
+          <span className="text-yellow-300 font-semibold">R.R. Rife, W. Reich, V. Schauberger, W. Russell, R. Mills, P. LaViolette, E. Podkletnov, J. Hutchison, C. Bohren, T.H. Moray, C.H. Waddington, M.W. Evans et al., J.C. Maxwell</span>, and others.{" "}
+          All third-party works remain copyright of their respective authors/estates. Referenced under Fair Use (17 U.S.C. § 107) for educational &amp; research purposes. Zenith Apex LLC claims no ownership of any third-party source material.
         </span>
       </div>
       <div className="flex flex-col border-b border-gray-800 flex-shrink-0">
