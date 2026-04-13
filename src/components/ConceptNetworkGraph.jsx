@@ -63,13 +63,49 @@ export default function ConceptNetworkGraph({ onNodeClick, selectedNodeId }) {
       .force("center", d3.forceCenter(width / 2, height / 2))
       .force("collision", d3.forceCollide(80));
 
-    // Links
-    const link = g.append("g").selectAll("line")
+    // Electric glow filter for links
+    const linkGlow = defs.append("filter").attr("id", "linkGlow").attr("x", "-50%").attr("y", "-50%").attr("width", "200%").attr("height", "200%");
+    linkGlow.append("feGaussianBlur").attr("stdDeviation", "2.5").attr("result", "coloredBlur");
+    const lfm = linkGlow.append("feMerge");
+    lfm.append("feMergeNode").attr("in", "coloredBlur");
+    lfm.append("feMergeNode").attr("in", "SourceGraphic");
+
+    // Base dim link lines
+    g.append("g").selectAll("line.base")
       .data(links).enter().append("line")
-      .attr("stroke", "#6b7280")
-      .attr("stroke-width", 1.8)
-      .attr("stroke-opacity", 0.85)
+      .attr("class", "base")
+      .attr("stroke", "#374151")
+      .attr("stroke-width", 1)
+      .attr("stroke-opacity", 0.4)
       .attr("marker-end", "url(#arrow)");
+
+    // Animated electric links
+    const link = g.append("g").selectAll("line.electric")
+      .data(links).enter().append("line")
+      .attr("class", "electric")
+      .attr("stroke", "#7dd3fc")
+      .attr("stroke-width", 1.8)
+      .attr("stroke-opacity", 0.9)
+      .attr("stroke-dasharray", "6 14")
+      .attr("filter", "url(#linkGlow)")
+      .attr("marker-end", "url(#arrow)")
+      .each(function(d, i) {
+        // Stagger the animation per link
+        const el = d3.select(this);
+        const duration = 800 + (i % 7) * 120;
+        const offset = (i % 20) * -3;
+        el.style("stroke-dashoffset", offset)
+          .transition()
+          .duration(0)
+          .on("start", function repeat() {
+            d3.active(this)
+              .styleTween("stroke-dashoffset", () => d3.interpolateNumber(offset, offset - 60))
+              .transition()
+              .duration(duration)
+              .ease(d3.easeLinear)
+              .on("start", repeat);
+          });
+      });
 
     // Link labels — only show on hover via opacity, hidden by default
     const linkLabel = g.append("g").selectAll("text")
@@ -193,6 +229,13 @@ export default function ConceptNetworkGraph({ onNodeClick, selectedNodeId }) {
       .text(d => d.group.toUpperCase());
 
     simRef.current.on("tick", () => {
+      // Update both base and electric lines
+      g.selectAll("line").filter(function() { return true; })
+        .attr("x1", d => d.source?.x ?? 0)
+        .attr("y1", d => d.source?.y ?? 0)
+        .attr("x2", d => d.target?.x ?? 0)
+        .attr("y2", d => d.target?.y ?? 0);
+
       link
         .attr("x1", d => d.source.x)
         .attr("y1", d => d.source.y)
