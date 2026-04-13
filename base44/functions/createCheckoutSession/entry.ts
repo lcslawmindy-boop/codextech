@@ -12,7 +12,7 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { title, priceInCents, description, category, mode, interval, successUrl, cancelUrl } = await req.json();
+    const { title, priceInCents, description, category, mode, interval, successUrl, cancelUrl, priceId, productName } = await req.json();
 
     if (!title || !priceInCents || !successUrl || !cancelUrl) {
       return Response.json({ error: 'Missing required fields' }, { status: 400 });
@@ -26,9 +26,10 @@ Deno.serve(async (req) => {
       cancel_url: cancelUrl,
       customer_email: user.email,
       metadata: {
-        base44_app_id: Deno.env.get("BASE44_APP_ID"),
+        base44_app_id: Deno.env.get('BASE44_APP_ID'),
         user_email: user.email,
-        product_title: title,
+        product_title: title || productName || '',
+        product_name: productName || title || '',
         product_category: category || '',
       },
     };
@@ -45,8 +46,13 @@ Deno.serve(async (req) => {
         },
         quantity: 1,
       }];
+    } else if (priceId) {
+      // Use existing Stripe price ID (shop products)
+      sessionParams.mode = 'payment';
+      sessionParams.shipping_address_collection = { allowed_countries: ['US', 'CA', 'GB', 'AU', 'DE', 'FR', 'NL', 'SE', 'NO', 'DK', 'FI', 'JP', 'SG', 'NZ'] };
+      sessionParams.line_items = [{ price: priceId, quantity: 1 }];
     } else {
-      // One-time payment
+      // One-time payment with inline price
       sessionParams.mode = 'payment';
       sessionParams.line_items = [{
         price_data: {

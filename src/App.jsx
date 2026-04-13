@@ -72,6 +72,7 @@ import SocialMediaAgent from './pages/SocialMediaAgent';
 import AdminHub from './pages/AdminHub';
 import AdminGuard from './components/AdminGuard';
 import BuildSuppliesShop from './pages/BuildSuppliesShop';
+import AdminShopOrders from './pages/AdminShopOrders';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -188,6 +189,7 @@ const AuthenticatedApp = () => {
             <Route path="/marketing" element={<MarketingPlan />} />
             <Route path="/build-tracker" element={<InventionBuildTracker />} />
             <Route path="/trz-patent" element={<TRZPatent />} />
+            <Route path="/admin-shop-orders" element={<AdminShopOrders />} />
           </Route>
 
           <Route path="*" element={<PageNotFound />} />

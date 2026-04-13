@@ -21,6 +21,35 @@ Deno.serve(async (req) => {
   if (event.type === "checkout.session.completed") {
     const session = event.data.object;
     const email = session.customer_email || session.metadata?.user_email;
+
+    // Save shop order if it's a physical product (has shipping address or product metadata)
+    const productName = session.metadata?.product_name || session.metadata?.product_title;
+    const isShopOrder = productName && !session.subscription;
+    if (isShopOrder) {
+      try {
+        const shipping = session.shipping_details;
+        await base44.asServiceRole.entities.ShopOrder.create({
+          customer_email: email || '',
+          customer_name: session.customer_details?.name || '',
+          product_name: productName,
+          amount: session.amount_total ? session.amount_total / 100 : 0,
+          stripe_session_id: session.id,
+          stripe_payment_intent: session.payment_intent || '',
+          status: 'pending',
+          shipping_name: shipping?.name || '',
+          shipping_address_line1: shipping?.address?.line1 || '',
+          shipping_address_line2: shipping?.address?.line2 || '',
+          shipping_city: shipping?.address?.city || '',
+          shipping_state: shipping?.address?.state || '',
+          shipping_postal_code: shipping?.address?.postal_code || '',
+          shipping_country: shipping?.address?.country || '',
+        });
+        console.log('ShopOrder created for:', productName, email);
+      } catch (e) {
+        console.error('Error saving ShopOrder:', e.message);
+      }
+    }
+
     if (email) {
       try {
         // Update User entity subscription status
