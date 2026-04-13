@@ -2,11 +2,13 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { ArrowLeft, Download, ChevronDown, ChevronUp, AlertTriangle, CheckCircle2, Package, Loader2, FileText, Lock, ShoppingCart, Lightbulb, Eye, Film, Shield } from "lucide-react";
 import { useTier } from "../hooks/useTier";
+import { isClassifiedInvention, tierHasGovAccess } from "../lib/tiers";
+import GovClassifiedGate from "../components/GovClassifiedGate";
 import { base44 as b44 } from "@/api/base44Client";
 
-// Devices classified as admin-only due to free energy / medical claims
-const CLASSIFIED_KEYWORDS = ["motionless", "prioré", "priore", "trz", "time-reversal"];
-const isClassified = (title) => CLASSIFIED_KEYWORDS.some(k => title?.toLowerCase().includes(k));
+// Legacy admin-only gate (free energy / medical claims — still admin-only)
+const ADMIN_ONLY_KEYWORDS = ["motionless electromagnetic generator", "prioré-type multichannel"];
+const isAdminOnly = (title) => ADMIN_ONLY_KEYWORDS.some(k => title?.toLowerCase().includes(k.toLowerCase()));
 import { tierCanAccessInvention } from "../lib/tiers";
 import TierGate from "../components/TierGate";
 import InventionBuildVideo from "../components/InventionBuildVideo";
@@ -525,9 +527,11 @@ export default function InventionPlans() {
         <div className="w-64 flex-shrink-0 border-r border-gray-800 overflow-y-auto bg-gray-900/40">
           {inventions.map((inv, i) => {
             const accessible = tierCanAccessInvention(tier, i);
-            const classified = isClassified(inv.title);
+            const adminOnly = isAdminOnly(inv.title);
+            const govClassified = isClassifiedInvention(inv.title);
             const isSelected = selected?.title === inv.title;
-            const isLocked = classified && !isAdmin;
+            const isAdminLocked = adminOnly && !isAdmin;
+            const isGovLocked = govClassified && !isAdmin && !tierHasGovAccess(tier);
             return (
               <button key={i} onClick={() => setSelected(inv)}
                 className={`w-full text-left px-4 py-3 border-b border-gray-800/60 transition-all flex items-start gap-3 ${
@@ -536,11 +540,19 @@ export default function InventionPlans() {
                 <span className="text-xl flex-shrink-0 mt-0.5">{inv.icon}</span>
                 <div className="flex-1 min-w-0">
                   <p className={`text-xs font-semibold leading-snug truncate ${
-                    isLocked ? "text-red-900" : accessible ? "text-white" : "text-gray-600"
+                    isAdminLocked ? "text-red-900" :
+                    isGovLocked ? "text-red-400" :
+                    accessible ? "text-white" : "text-gray-600"
                   }`}>{inv.title}</p>
-                  <p className="text-gray-600 text-xs">{isLocked ? "🔐 Admin Only" : inv.price}</p>
+                  <p className="text-gray-600 text-xs">
+                    {isAdminLocked ? "🔐 Admin Only" :
+                     isGovLocked ? "🏛 Gov/Defense Only" :
+                     inv.price}
+                  </p>
                 </div>
-                {isLocked ? <Shield size={10} className="text-red-700 flex-shrink-0 mt-1" /> : !accessible && <Lock size={10} className="text-gray-700 flex-shrink-0 mt-1" />}
+                {isAdminLocked ? <Shield size={10} className="text-red-700 flex-shrink-0 mt-1" /> :
+                 isGovLocked ? <Shield size={10} className="text-red-400 flex-shrink-0 mt-1" /> :
+                 !accessible && <Lock size={10} className="text-gray-700 flex-shrink-0 mt-1" />}
               </button>
             );
           })}
@@ -550,8 +562,21 @@ export default function InventionPlans() {
         <div className="flex-1 overflow-y-auto p-6">
           {!selected ? (
             <div className="flex items-center justify-center h-full text-gray-700 text-sm">Select an invention</div>
-          ) : (isClassified(selected.title) && !isAdmin) ? (
-            <ClassifiedGate />
+          ) : (isAdminOnly(selected.title) && !isAdmin) ? (
+            <div className="flex-1 flex items-center justify-center p-12">
+              <div className="max-w-md text-center">
+                <div className="w-20 h-20 rounded-2xl bg-red-950/40 border-2 border-red-800 flex items-center justify-center text-4xl mx-auto mb-6">🔐</div>
+                <div className="flex items-center justify-center gap-2 mb-3">
+                  <Shield size={16} className="text-red-400" />
+                  <span className="text-red-400 font-black text-sm uppercase tracking-widest">Restricted — Admin Only</span>
+                </div>
+                <h2 className="text-white font-black text-xl mb-3">Restricted Research Content</h2>
+                <p className="text-gray-400 text-sm leading-relaxed">This device involves free energy or bioelectromagnetic treatment claims. Full build plans are restricted to platform administrators only.</p>
+                <p className="text-gray-600 text-xs mt-4">Contact support@zenithapex.com for access inquiries.</p>
+              </div>
+            </div>
+          ) : (isClassifiedInvention(selected.title) && !isAdmin && !tierHasGovAccess(tier)) ? (
+            <GovClassifiedGate inventionTitle={selected.title} />
           ) : !canViewSelected ? (
             <div className="max-w-xl mx-auto mt-8">
               <TierGate locked={true} requiredTier={selectedIndex < 5 ? "starter" : "researcher"}>
