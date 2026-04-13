@@ -127,10 +127,12 @@ export default function ConceptNetworkGraph({ onNodeClick, selectedNodeId }) {
     // Link labels — only show on hover via opacity, hidden by default
     const linkLabel = g.append("g").selectAll("text")
       .data(links).enter().append("text")
-      .attr("font-size", 8)
-      .attr("fill", "#6b7280")
+      .attr("font-size", 12)
+      .attr("font-weight", "700")
+      .attr("fill", "#e2e8f0")
       .attr("fill-opacity", 0)
       .attr("text-anchor", "middle")
+      .attr("filter", "url(#textGlow)")
       .text(d => d.label);
 
     // Node groups
