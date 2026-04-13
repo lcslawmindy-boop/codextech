@@ -11,14 +11,17 @@ import { jsPDF } from "jspdf";
 const WACC = 0.18;         // 18% discount rate for early-stage
 const GROWTH_YEARS = 5;
 const TERMINAL_GROWTH = 0.04;
-const IP_BASE_VALUE = 3_900_000; // platform tools + content moat floor
+// IP floor updated Apr 2026: +KRCIC ($6.8K clinical prototype IP), +UBDRS ($9.5K research IP),
+// +5 complete build plans with PDF/video/manual/troubleshooting, +legal compliance layer (ToS/disclaimers)
+const IP_BASE_VALUE = 5_800_000;
+const IP_FLOOR_LABEL = "platform tools + 10 build plans + 2 new biophysics devices + legal compliance";
 const REVENUE_MULTIPLES = [
   { label: "Conservative (3×)", mult: 3 },
   { label: "Base Case (6×)", mult: 6 },
   { label: "Optimistic (12×)", mult: 12 },
-  { label: "Strategic Premium (18×)", mult: 18 },
+  { label: "Strategic Premium (20×)", mult: 20 },
 ];
-const EBITDA_MARGIN = 0.72; // SaaS-comparable gross margin assumption
+const EBITDA_MARGIN = 0.74; // improved margin assumption with expanded catalog
 
 function fmt(n, prefix = "$") {
   if (n >= 1_000_000) return `${prefix}${(n / 1_000_000).toFixed(2)}M`;
@@ -121,7 +124,7 @@ function exportPDF(data, dcf, multiples, growthRates) {
   doc.setFontSize(28); doc.setTextColor(212, 175, 55);
   doc.text(fmt(dcf.totalDCF), margin + 8, y + 28);
   doc.setFontSize(12); doc.setTextColor(100, 116, 139);
-  doc.text("+ Platform Tools Floor: $3.9M", margin + 8, y + 38);
+  doc.text(`+ IP Asset Floor: ${fmt(IP_BASE_VALUE)} (10 build plans, KRCIC, UBDRS, legal)`, margin + 8, y + 38);
   doc.setFont("helvetica", "bold"); doc.setFontSize(14); doc.setTextColor(255, 255, 255);
   const askRange = fmt(multiples.find(m => m.label.includes("12"))?.value || 0) + " – " + fmt(multiples.find(m => m.label.includes("18"))?.value || 0);
   doc.text(`Asking: ${askRange}`, W - margin - 8, y + 28, { align: "right" });
@@ -170,7 +173,7 @@ function exportPDF(data, dcf, multiples, growthRates) {
   divider();
   row("PV of Free Cash Flows", fmt(dcf.pvCashFlows));
   row("PV of Terminal Value", fmt(dcf.pvTerminal));
-  row("Platform Tools Base Value", fmt(IP_BASE_VALUE));
+  row("IP Asset Floor (tools + 10 plans + new devices)", fmt(IP_BASE_VALUE));
   divider();
   row("TOTAL DCF ENTERPRISE VALUE", fmt(dcf.totalDCF), true);
 
@@ -283,7 +286,7 @@ export default function ValuationDashboard() {
             <div>
               <p className="text-gray-500 text-xs mb-1">Total DCF Value</p>
               <p className="text-yellow-400 font-black text-2xl">{fmt(dcf.totalDCF)}</p>
-              <p className="text-gray-600 text-xs">incl. IP base floor</p>
+              <p className="text-gray-600 text-xs">incl. ${fmt(IP_BASE_VALUE)} IP floor</p>
             </div>
             <div>
               <p className="text-gray-500 text-xs mb-1">PV Cash Flows</p>
@@ -298,7 +301,7 @@ export default function ValuationDashboard() {
             <div>
               <p className="text-gray-500 text-xs mb-1">Platform Tools Floor</p>
               <p className="text-white font-black text-xl">{fmt(IP_BASE_VALUE)}</p>
-              <p className="text-gray-600 text-xs">platform tools + content moat</p>
+              <p className="text-gray-600 text-xs" title={IP_FLOOR_LABEL}>10 plans · 2 new devices · legal layer</p>
             </div>
           </div>
         </div>
