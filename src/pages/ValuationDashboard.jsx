@@ -11,7 +11,7 @@ import { jsPDF } from "jspdf";
 const WACC = 0.18;         // 18% discount rate for early-stage
 const GROWTH_YEARS = 5;
 const TERMINAL_GROWTH = 0.04;
-const IP_BASE_VALUE = 3_900_000; // floor from due diligence
+const IP_BASE_VALUE = 3_900_000; // platform tools + content moat floor
 const REVENUE_MULTIPLES = [
   { label: "Conservative (3×)", mult: 3 },
   { label: "Base Case (6×)", mult: 6 },
@@ -121,7 +121,7 @@ function exportPDF(data, dcf, multiples, growthRates) {
   doc.setFontSize(28); doc.setTextColor(212, 175, 55);
   doc.text(fmt(dcf.totalDCF), margin + 8, y + 28);
   doc.setFontSize(12); doc.setTextColor(100, 116, 139);
-  doc.text("+ IP Base Floor: $3.9M", margin + 8, y + 38);
+  doc.text("+ Platform Tools Floor: $3.9M", margin + 8, y + 38);
   doc.setFont("helvetica", "bold"); doc.setFontSize(14); doc.setTextColor(255, 255, 255);
   const askRange = fmt(multiples.find(m => m.label.includes("12"))?.value || 0) + " – " + fmt(multiples.find(m => m.label.includes("18"))?.value || 0);
   doc.text(`Asking: ${askRange}`, W - margin - 8, y + 28, { align: "right" });
@@ -170,7 +170,7 @@ function exportPDF(data, dcf, multiples, growthRates) {
   divider();
   row("PV of Free Cash Flows", fmt(dcf.pvCashFlows));
   row("PV of Terminal Value", fmt(dcf.pvTerminal));
-  row("IP Portfolio Base Value", fmt(IP_BASE_VALUE));
+  row("Platform Tools Base Value", fmt(IP_BASE_VALUE));
   divider();
   row("TOTAL DCF ENTERPRISE VALUE", fmt(dcf.totalDCF), true);
 
@@ -296,9 +296,9 @@ export default function ValuationDashboard() {
               <p className="text-gray-600 text-xs">{pct(TERMINAL_GROWTH * 100)} perpetual growth</p>
             </div>
             <div>
-              <p className="text-gray-500 text-xs mb-1">IP Portfolio Floor</p>
+              <p className="text-gray-500 text-xs mb-1">Platform Tools Floor</p>
               <p className="text-white font-black text-xl">{fmt(IP_BASE_VALUE)}</p>
-              <p className="text-gray-600 text-xs">asset-by-asset DCF</p>
+              <p className="text-gray-600 text-xs">platform tools + content moat</p>
             </div>
           </div>
         </div>

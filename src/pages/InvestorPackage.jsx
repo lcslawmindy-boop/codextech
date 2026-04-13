@@ -15,12 +15,12 @@ const VALUATION = [
   { label: "Course Catalog (20+ courses, syllabi, Stripe checkout, learning dashboard)", low: 150000, high: 320000 },
   { label: "Invention Build Plans (10+ devices, BOM, PDF export, animated guides)", low: 450000, high: 1200000 },
   { label: "Annotated Primary Document Archive + Bearden Node Network", low: 120000, high: 280000 },
-  { label: "IP Portfolio Framing (MEG, TRZ, TRD-1, Regauging — peer-reviewed backing)", low: 1800000, high: 6500000 },
+  { label: "Research Domain Moat + Platform Content Exclusivity (curated Bearden framework, tools, indexes)", low: 1800000, high: 6500000 },
   { label: "Prior Art Archive + Patent Landscape Graph + AI Patentability Cross-Reference", low: 95000, high: 240000 },
   { label: "EMF Health Platform + Investor CRM + Monitoring Dashboard + Alert System", low: 110000, high: 220000 },
 ];
 
-const LETTER = `STRICTLY CONFIDENTIAL — NDA REQUIRED BEFORE FURTHER DISCLOSURE
+const LETTER = `STRICTLY CONFIDENTIAL — FOR AUTHORIZED RECIPIENTS ONLY
 
 [DATE]
 
@@ -28,7 +28,9 @@ Dear [RECIPIENT NAME],
 
 I am writing to offer you a time-limited, exclusive first-look at an acquisition that does not come to market twice.
 
-The Zenith Apex Advanced Research Platform is the world's only commercially structured, production-ready AI-powered knowledge and IP generation platform built around the suppressed physics and biology research of Lt. Col. Thomas E. Bearden (ret.) — cross-referenced against primary US government documents, peer-reviewed publications, and declassified archives that validate the core claims.
+The Zenith Apex Advanced Research Platform is the world's only commercially structured, production-ready AI-powered knowledge and tools platform built around the published physics and biology research of Lt. Col. Thomas E. Bearden (ret.) — cross-referenced against primary US government documents, peer-reviewed publications, and declassified archives that document the core claims.
+
+Note: Third-party published works referenced on this platform (including Bearden's books and papers, ONR reports, and peer-reviewed publications) remain the copyright of their respective authors. What you are acquiring is the original platform software, AI tool suite, curated indexes, and compiled research infrastructure built on top of this publicly available research.
 
 As of Q2 2026, the platform has been substantially expanded with a suite of AI-native modules that transform it from a research archive into a fully autonomous invention-to-commercialization engine. This is not a static dataset — it is a living, generative IP factory.
 
@@ -47,7 +49,7 @@ Independent asset-by-asset valuation (conservative discounted cash flow + compar
   Course Catalog (20+ courses, LMS) ..... $150K – $320K
   Invention Build Plan Library ........... $450K – $1.2M
   Annotated Primary Document Archive .... $120K – $280K
-  IP Portfolio (MEG, TRZ, TRD-1) ........ $1.8M – $6.5M
+  Research Domain Moat + Exclusivity ... $1.8M – $6.5M
   Prior Art Archive + Patent AI ......... $95K – $240K
   Health + CRM + Monitoring Suite ....... $110K – $220K
 
@@ -147,7 +149,7 @@ TO PROCEED
 3. Receive full technical due diligence package (100+ page document portfolio)
 4. Schedule technical demonstration and Q&A (live platform walkthrough available)
 
-This letter and all attachments constitute trade secrets and proprietary research. Unauthorized disclosure is subject to liquidated damages of $2.5M per incident.
+This letter and its attachments contain confidential platform and business information. Please treat this document as confidential and do not share without authorization.
 
 I look forward to discussing this opportunity at your earliest convenience.
 
@@ -346,7 +348,7 @@ export default function InvestorPackage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="bg-gray-800 border border-green-700 rounded-xl p-4">
               <p className="text-green-300 font-bold text-sm mb-1">📄 Mutual NDA PDF</p>
-              <p className="text-gray-400 text-xs mb-3">Legally binding NDA with $2.5M liquidated damages clause, signature blocks, and notary section. Enter recipient details and download instantly.</p>
+              <p className="text-gray-400 text-xs mb-3">Mutual confidentiality agreement covering ZARP's original platform tools and proprietary software. Enter recipient details and download instantly.</p>
               <NdaPdfGenerator />
             </div>
             <div className="bg-gray-800 border border-purple-700 rounded-xl p-4">
