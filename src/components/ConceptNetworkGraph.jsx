@@ -134,21 +134,51 @@ export default function ConceptNetworkGraph({ onNodeClick, selectedNodeId }) {
       .attr("fill", d => groupColors[d.group])
       .attr("pointer-events", "none");
 
-    // Multi-line node labels — wrapped, centered inside circle
+    // Neon glow filter for text
+    const textGlow = defs.append("filter").attr("id", "textGlow");
+    textGlow.append("feGaussianBlur").attr("stdDeviation", "3").attr("result", "coloredBlur");
+    const feMerge2 = textGlow.append("feMerge");
+    feMerge2.append("feMergeNode").attr("in", "coloredBlur");
+    feMerge2.append("feMergeNode").attr("in", "SourceGraphic");
+
+    // Multi-line node labels — white text with neon color outline/glow
     node.each(function(d) {
-      const lines = wrapLabel(d.label, 13);
-      const lineH = 13;
+      const lines = wrapLabel(d.label, 12);
+      const lineH = 15;
       const startY = -(lines.length - 1) * lineH / 2;
-      d3.select(this).selectAll(".node-line").data(lines).enter()
-        .append("text")
-        .attr("class", "node-line")
-        .attr("text-anchor", "middle")
-        .attr("y", (_, i) => startY + i * lineH)
-        .attr("font-size", lines.length > 2 ? 9 : 10)
-        .attr("font-weight", "700")
-        .attr("fill", d => groupColors[d.group])
-        .attr("pointer-events", "none")
-        .text(t => t);
+      const sel = d3.select(this);
+      const color = groupColors[d.group];
+      const fontSize = lines.length > 2 ? 11 : 12;
+
+      // Shadow/stroke layer for neon outline effect
+      lines.forEach((t, i) => {
+        sel.append("text")
+          .attr("class", "node-line-shadow")
+          .attr("text-anchor", "middle")
+          .attr("y", startY + i * lineH)
+          .attr("font-size", fontSize)
+          .attr("font-weight", "800")
+          .attr("fill", "none")
+          .attr("stroke", color)
+          .attr("stroke-width", 3)
+          .attr("stroke-linejoin", "round")
+          .attr("filter", "url(#textGlow)")
+          .attr("pointer-events", "none")
+          .text(t);
+      });
+
+      // White fill layer on top
+      lines.forEach((t, i) => {
+        sel.append("text")
+          .attr("class", "node-line")
+          .attr("text-anchor", "middle")
+          .attr("y", startY + i * lineH)
+          .attr("font-size", fontSize)
+          .attr("font-weight", "800")
+          .attr("fill", "#ffffff")
+          .attr("pointer-events", "none")
+          .text(t);
+      });
     });
 
     // Group label below node
