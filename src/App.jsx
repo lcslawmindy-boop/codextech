@@ -78,6 +78,7 @@ import BeginnerManual from './pages/BeginnerManual';
 import Glossary from './pages/Glossary';
 import TermsOfService from './pages/TermsOfService';
 import RefundPolicy from './pages/RefundPolicy';
+import SocialMediaProfileGen from './pages/SocialMediaProfileGen';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -184,6 +185,7 @@ const AuthenticatedApp = () => {
           <Route path="/glossary" element={<Glossary />} />
           <Route path="/terms" element={<TermsOfService />} />
           <Route path="/refund-policy" element={<RefundPolicy />} />
+          <Route path="/social-profile-gen" element={<SocialMediaProfileGen />} />
 
           {/* Admin-only routes */}
           <Route element={<AdminGuard />}>

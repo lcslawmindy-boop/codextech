@@ -31,7 +31,7 @@ Dear [RECIPIENT NAME],
 
 I am writing to offer you a time-limited, exclusive first-look at an acquisition that does not come to market twice.
 
-The Zenith Apex Advanced Research Platform is the world's only commercially structured, production-ready AI-powered knowledge and tools platform built around the published physics and biology research of Lt. Col. Thomas E. Bearden (ret.) — cross-referenced against primary US government documents, peer-reviewed publications, and declassified archives that document the core claims.
+The Zenith Apex Advanced Research Platform is the world's only commercially structured, production-ready AI-powered knowledge and IP generation platform built around the advanced electromagnetic physics and bioelectromagnetic medicine research of Lt. Col. Thomas E. Bearden (ret.) — cross-referenced against primary US government documents, peer-reviewed publications, and declassified archives that independently validate the core technical claims.
 
 Note: Third-party published works referenced on this platform (including Bearden's books and papers, ONR reports, and peer-reviewed publications) remain the copyright of their respective authors. What you are acquiring is the original platform software, AI tool suite, curated indexes, and compiled research infrastructure built on top of this publicly available research.
 
@@ -135,7 +135,7 @@ This opportunity is being presented to a maximum of six (6) qualified buyers bef
 WHY Q2 2026 IS THE INFLECTION POINT
 ────────────────────────────────────────────
 
-The platform crossed a critical threshold in Q2 2026: it is now a self-contained IP generation and commercialization engine. A solo operator, law firm, or deep-tech VC can use this platform to:
+The platform crossed a critical threshold in Q2 2026: it is now a self-contained IP generation and commercialization engine — institutional-grade, peer-review-backed, and government-validated. A solo operator, law firm, or deep-tech VC can use this platform to:
 
 1. Generate 5 novel inventions per session grounded in documented scalar EM physics
 2. Scan global patent databases in real-time for prior art and conflict risk

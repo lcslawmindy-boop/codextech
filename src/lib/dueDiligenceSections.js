@@ -10,13 +10,13 @@ export const DD_SECTIONS = [
     items: [
       {
         heading: "1.1  Platform Identity & Mission",
-        body: `The Zenith Apex Advanced Research Platform is the world's only commercially structured, production-ready AI-powered knowledge and IP generation platform built around the suppressed physics and biology research of Lt. Col. Thomas E. Bearden (ret.), cross-referenced against primary US government documents, peer-reviewed publications, and declassified archives that independently validate the core theoretical claims.
+        body: `The Zenith Apex Advanced Research Platform is the world's only commercially structured, production-ready AI-powered knowledge and IP generation platform built around the advanced electromagnetic physics and bioelectromagnetic research of Lt. Col. Thomas E. Bearden (ret.), cross-referenced against primary US government documents, peer-reviewed publications, and declassified archives that independently validate the core theoretical claims.
 
 As of Q2 2026, the platform integrates a complete invention-to-commercialization pipeline spanning: AI-driven concept generation across eight technology domains; live USPTO/EPO/WIPO patent database scanning with prior art conflict scoring; full USPTO-compliant provisional patent drafting (35 U.S.C. § 111(b)); animated 10-step engineering build guide generation; VC-grade pitch deck creation; scalar field simulation (WebGL); bioelectromagnetic exposure modeling; and a 200+ node interactive knowledge graph.
 
 The platform is not a static archive or document repository. It is a living, generative intellectual property factory operating at near-zero marginal cost per invention cycle. Every primary source document is annotated, cross-referenced, and integrated into the AI generation pipeline — creating a data moat that cannot be replicated from the public internet.
 
-Mission: To commercialize the most significant suppressed research portfolio of the 20th century through AI-accelerated IP generation, licensing, and strategic acquisition — enabling defense, biotech, energy, and longevity investors to access assets that have been unavailable at institutional scale until now.`
+Mission: To commercialize the most comprehensive advanced electromagnetic IP portfolio of the 20th century through AI-accelerated IP generation, licensing, and strategic acquisition — enabling defense, biotech, energy, and longevity investors to access assets that have been unavailable at institutional scale until now.`
       },
       {
         heading: "1.2  Core Investment Thesis — Five Converging Macro Trends",
@@ -147,7 +147,7 @@ REASON 1 — PUBLIC LAUNCH IMMINENT: The platform's beta application pipeline co
 
 REASON 2 — REGULATORY TAILWINDS FORMING: The USPTO AI Task Force (2025) is actively developing frameworks for AI-assisted patent applications. Early-mover platforms with documented AI patent workflows will receive favorable classification. This platform's 12-month head start in operational AI patent drafting creates a significant compliance moat before the regulatory framework solidifies.
 
-REASON 3 — PEER REVIEW MOMENTUM: The post-COVID research environment has dramatically increased institutional tolerance for unconventional physics. Replication of Bearden-adjacent phenomena (LENR, anomalous EM effects) is being funded at unprecedented levels by DARPA, ARPA-E, and DoE. The timing for scalar EM IP commercialization has never been better.
+REASON 3 — PEER REVIEW MOMENTUM: The post-COVID research environment has dramatically accelerated institutional investment in non-conventional physics. Replication of electromagnetic anomalous-energy phenomena (LENR, anomalous EM effects) is being funded at unprecedented levels by DARPA, ARPA-E, and DoE. The timing for advanced EM IP commercialization has never been better.
 
 REASON 4 — AI MODEL COST TRAJECTORY: As LLM costs decline (OpenAI prices dropped 99% from GPT-4 launch to GPT-5-mini), the platform's marginal cost per invention cycle approaches zero. The unit economics improve automatically as AI commoditizes. Acquiring now captures this trajectory — the platform becomes more profitable without additional investment.`
       }
