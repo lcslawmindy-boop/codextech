@@ -1,9 +1,18 @@
 /** @type {import('tailwindcss').Config} */
+const twColors = require('tailwindcss/colors');
 module.exports = {
     darkMode: ["class"],
     content: ["./index.html", "./src/**/*.{ts,tsx,js,jsx}"],
   theme: {
   	extend: {
+  		colors: {
+  			gray: {
+  				...twColors.gray,
+  				800: 'hsl(var(--surface-2) / <alpha-value>)',
+  				900: 'hsl(var(--surface-1) / <alpha-value>)',
+  				950: 'hsl(var(--surface-0) / <alpha-value>)',
+  			},
+  		},
   		borderRadius: {
   			lg: 'var(--radius)',
   			md: 'calc(var(--radius) - 2px)',

@@ -1,5 +1,7 @@
 import { Outlet, useLocation } from "react-router-dom";
 import BottomTabBar from "./BottomTabBar";
+import ThemeSwitcher, { loadTheme } from "./ThemeSwitcher";
+import { useEffect } from "react";
 
 // Pages that should NOT show the bottom tab bar
 const HIDDEN_TAB_ROUTES = ["/legal", "/checkout"];
@@ -12,6 +14,7 @@ const IMMERSIVE_ROUTES = [
 
 export default function MobileLayout() {
   const { pathname } = useLocation();
+  useEffect(() => { loadTheme(); }, []);
   const hideTab = HIDDEN_TAB_ROUTES.some(r => pathname.startsWith(r)) ||
                   IMMERSIVE_ROUTES.some(r => pathname.startsWith(r));
 
@@ -29,6 +32,10 @@ export default function MobileLayout() {
         <Outlet />
       </div>
       {!hideTab && <BottomTabBar />}
+      {/* Floating theme switcher */}
+      <div className="fixed bottom-20 right-4 z-[100]" style={{ bottom: hideTab ? '1rem' : '5rem' }}>
+        <ThemeSwitcher />
+      </div>
     </div>
   );
 }
