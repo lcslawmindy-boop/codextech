@@ -35,7 +35,7 @@ export const TIERS = {
     inventionsAllowed: 999,
     coursesAllowed: 999,
     aiTools: true,
-    patentTools: false,
+    patentTools: true,
     investorTools: false,
     govAccess: false,
   },

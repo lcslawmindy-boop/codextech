@@ -1,7 +1,9 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { ArrowLeft, FileText, Zap, DollarSign, Download, Loader2, ChevronDown, ChevronUp, CheckCircle2, AlertCircle } from "lucide-react";
+import { ArrowLeft, FileText, Zap, DollarSign, Download, Loader2, ChevronDown, ChevronUp, CheckCircle2, AlertCircle, Lock } from "lucide-react";
 import { base44 } from "@/api/base44Client";
+import { useTier } from "../hooks/useTier";
+import { TIERS } from "../lib/tiers";
 import { jsPDF } from "jspdf";
 
 // Bearden inventions from the portfolio
@@ -203,6 +205,31 @@ function SectionHeader({ n, title, desc }) {
   );
 }
 
+function ToolGate({ requiredFlag, requiredTierName, requiredPrice, children }) {
+  const { tier } = useTier();
+  if (TIERS[tier]?.[requiredFlag]) return children;
+  return (
+    <div className="w-screen min-h-screen bg-gray-950 flex items-center justify-center p-8">
+      <div className="max-w-md text-center">
+        <div className="w-20 h-20 rounded-2xl bg-gray-800 border border-gray-700 flex items-center justify-center text-4xl mx-auto mb-6">🔒</div>
+        <div className="flex items-center justify-center gap-2 mb-3">
+          <Lock size={16} className="text-yellow-400" />
+          <span className="text-yellow-400 font-black text-sm uppercase tracking-widest">{requiredTierName} Required</span>
+        </div>
+        <h2 className="text-white font-black text-2xl mb-3">AI Patent Drafting Tool</h2>
+        <p className="text-gray-400 text-sm leading-relaxed mb-6">
+          The AI patent drafting &amp; IP valuation tools are exclusive to <span className="text-white font-bold">{requiredTierName}</span> members. Upgrade to unlock full patent generation, claim drafting, and multi-jurisdiction IP valuation.
+        </p>
+        <Link to="/pricing"
+          className="flex items-center justify-center gap-2 w-full py-3 rounded-xl font-black text-white text-sm bg-indigo-700 hover:bg-indigo-600 transition-all">
+          Upgrade to {requiredTierName} — from ${requiredPrice}/mo
+        </Link>
+        <Link to="/" className="block mt-3 text-xs text-gray-600 hover:text-gray-400 transition-colors">← Back to Research Database</Link>
+      </div>
+    </div>
+  );
+}
+
 export default function PatentDraftingTool() {
   const [step, setStep] = useState(1); // 1=select, 2=configure, 3=draft, 4=valuation
   const [selectedInv, setSelectedInv] = useState(null);
@@ -395,6 +422,7 @@ Use formal patent legal language throughout. Be highly technical and specific. R
   };
 
   return (
+    <ToolGate requiredFlag="patentTools" requiredTierName="Researcher ($97/mo)" requiredPrice={97}>
     <div className="w-screen min-h-screen bg-gray-950 flex flex-col text-white">
       {/* Header */}
       <div className="flex items-center justify-between px-5 py-3 border-b border-gray-800 flex-shrink-0">
@@ -664,6 +692,7 @@ Use formal patent legal language throughout. Be highly technical and specific. R
         </div>
       </div>
     </div>
+    </ToolGate>
   );
 }
 

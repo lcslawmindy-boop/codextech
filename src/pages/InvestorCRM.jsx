@@ -1,11 +1,13 @@
 import { useState, useCallback } from "react";
 import { Link } from "react-router-dom";
 import {
-  ArrowLeft, Bell, StickyNote, ChevronDown, ChevronRight,
-  Mail, ExternalLink, Plus, Trash2, Clock, AlertCircle,
-  LayoutGrid, List, MessageSquare, Send
+  ArrowLeft, Bell, ChevronDown, ChevronRight,
+  Mail, ExternalLink, Trash2, Clock, AlertCircle,
+  LayoutGrid, List, MessageSquare, Send, Lock
 } from "lucide-react";
 import { BUYERS, STAGES } from "../lib/buyerData";
+import { useTier } from "../hooks/useTier";
+import { TIERS } from "../lib/tiers";
 
 const STORAGE_KEY = "zenith_investor_crm_v2";
 
@@ -338,6 +340,32 @@ function UpcomingReminders({ crm }) {
   );
 }
 
+// ── TIER GATE ─────────────────────────────────────────────────────────────────
+function InvestorCRMGate({ children }) {
+  const { tier } = useTier();
+  if (TIERS[tier]?.investorTools) return children;
+  return (
+    <div className="w-screen min-h-screen bg-gray-950 flex items-center justify-center p-8">
+      <div className="max-w-md text-center">
+        <div className="w-20 h-20 rounded-2xl bg-gray-800 border border-gray-700 flex items-center justify-center text-4xl mx-auto mb-6">💼</div>
+        <div className="flex items-center justify-center gap-2 mb-3">
+          <Lock size={16} className="text-green-400" />
+          <span className="text-green-400 font-black text-sm uppercase tracking-widest">Pro Plan Required</span>
+        </div>
+        <h2 className="text-white font-black text-2xl mb-3">Investor CRM</h2>
+        <p className="text-gray-400 text-sm leading-relaxed mb-6">
+          The Investor CRM — including pipeline tracking, Kanban board, automated email logging, and follow-up reminders — is exclusive to <span className="text-white font-bold">Pro ($247/mo)</span> members.
+        </p>
+        <Link to="/pricing"
+          className="flex items-center justify-center gap-2 w-full py-3 rounded-xl font-black text-white text-sm bg-green-700 hover:bg-green-600 transition-all">
+          Upgrade to Pro — $247/mo
+        </Link>
+        <Link to="/" className="block mt-3 text-xs text-gray-600 hover:text-gray-400 transition-colors">← Back to Research Database</Link>
+      </div>
+    </div>
+  );
+}
+
 // ── MAIN PAGE ─────────────────────────────────────────────────────────────────
 export default function InvestorCRM() {
   const [crm, setCRM] = useState(loadCRM);
@@ -366,6 +394,7 @@ export default function InvestorCRM() {
     .filter(b => b.contacts.length > 0);
 
   return (
+    <InvestorCRMGate>
     <div className="w-screen min-h-screen bg-gray-950 text-white flex flex-col">
       {/* Header */}
       <div className="flex items-center justify-between px-5 py-3 border-b border-gray-800 flex-shrink-0">
@@ -459,5 +488,6 @@ export default function InvestorCRM() {
         </div>
       </div>
     </div>
+    </InvestorCRMGate>
   );
 }
