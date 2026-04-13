@@ -1,7 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { ArrowLeft, ShoppingCart, Zap, Shield, Wrench, Star, ExternalLink, Loader2, AlertCircle } from "lucide-react";
+import { ArrowLeft, ShoppingCart, Zap, Shield, Wrench, Star, ExternalLink, Loader2, AlertCircle, Lock } from "lucide-react";
 import { base44 } from "@/api/base44Client";
+
+// Classified products — admin-only due to free energy / medical treatment claims
+const CLASSIFIED_IDS = ["meg-kit", "priore-bundle", "trz-components"];
 
 const PRODUCTS = [
   {
@@ -268,9 +271,14 @@ function ProductCard({ product, onBuy, buying }) {
 }
 
 export default function BuildSuppliesShop() {
+  const [isAdmin, setIsAdmin] = useState(false);
   const [category, setCategory] = useState("All");
   const [buying, setBuying] = useState(null);
   const [error, setError] = useState("");
+
+  useEffect(() => {
+    base44.auth.me().then(u => setIsAdmin(u?.role === 'admin')).catch(() => {});
+  }, []);
 
   const isInIframe = window.self !== window.top;
 
@@ -298,7 +306,8 @@ export default function BuildSuppliesShop() {
   const urlParams = new URLSearchParams(window.location.search);
   const success = urlParams.get("success") === "1";
 
-  const filtered = category === "All" ? PRODUCTS : PRODUCTS.filter(p => p.category === category);
+  const visibleProducts = PRODUCTS.filter(p => !CLASSIFIED_IDS.includes(p.id) || isAdmin);
+  const filtered = category === "All" ? visibleProducts : visibleProducts.filter(p => p.category === category);
 
   return (
     <div className="w-screen min-h-screen bg-gray-950 text-white">
@@ -371,6 +380,12 @@ export default function BuildSuppliesShop() {
 
       {/* Product grid */}
       <div className="max-w-7xl mx-auto px-5 py-8">
+        {!isAdmin && CLASSIFIED_IDS.length > 0 && (
+          <div className="mb-5 flex items-center gap-2 px-4 py-2 rounded-xl border border-red-900/40 bg-red-950/10">
+            <Lock size={12} className="text-red-600" />
+            <p className="text-red-600 text-xs">{CLASSIFIED_IDS.length} products restricted to admin access due to regulatory considerations</p>
+          </div>
+        )}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
           {filtered.map(p => (
             <ProductCard key={p.id} product={p} onBuy={handleBuy} buying={buying} />

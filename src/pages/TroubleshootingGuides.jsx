@@ -1,6 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { ArrowLeft, AlertTriangle, CheckCircle, ChevronDown, ChevronRight, Wrench, Zap, Search } from "lucide-react";
+import { ArrowLeft, AlertTriangle, CheckCircle, ChevronDown, ChevronRight, Wrench, Zap, Search, Shield } from "lucide-react";
+import { base44 } from "@/api/base44Client";
+
+// Classified device IDs — free energy / cancer treatment
+const CLASSIFIED_IDS = ["meg", "priore", "trz"];
 
 const DEVICES = [
   {
@@ -356,8 +360,15 @@ function DevicePanel({ device }) {
 }
 
 export default function TroubleshootingGuides() {
-  const [activeDevice, setActiveDevice] = useState("meg");
-  const device = DEVICES.find(d => d.id === activeDevice);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [activeDevice, setActiveDevice] = useState("trd1");
+
+  useEffect(() => {
+    base44.auth.me().then(u => setIsAdmin(u?.role === 'admin')).catch(() => {});
+  }, []);
+
+  const visibleDevices = DEVICES.filter(d => !CLASSIFIED_IDS.includes(d.id) || isAdmin);
+  const device = visibleDevices.find(d => d.id === activeDevice) || visibleDevices[0];
 
   return (
     <div className="w-screen min-h-screen bg-gray-950 text-white flex flex-col">
@@ -377,15 +388,21 @@ export default function TroubleshootingGuides() {
       <div className="flex flex-col md:flex-row flex-1 overflow-hidden">
         {/* Device selector sidebar */}
         <div className="md:w-56 border-b md:border-b-0 md:border-r border-gray-800 flex md:flex-col gap-1 p-3 overflow-x-auto md:overflow-y-auto flex-shrink-0">
-          {DEVICES.map(d => (
+          {visibleDevices.map(d => (
             <button key={d.id} onClick={() => setActiveDevice(d.id)}
               className={`flex-shrink-0 flex items-center gap-2 px-3 py-2.5 rounded-xl text-sm font-semibold text-left transition-all whitespace-nowrap md:whitespace-normal ${
                 activeDevice === d.id ? "bg-gray-700 text-white" : "text-gray-400 hover:bg-gray-800 hover:text-gray-200"
               }`}>
               <span>{d.icon}</span>
               <span className="truncate">{d.id.toUpperCase()}</span>
+              {CLASSIFIED_IDS.includes(d.id) && <Shield size={10} className="text-red-500 flex-shrink-0" />}
             </button>
           ))}
+          {!isAdmin && CLASSIFIED_IDS.length > 0 && (
+            <div className="mt-2 px-3 py-2 rounded-xl border border-red-900/40 bg-red-950/20">
+              <p className="text-red-600 text-xs flex items-center gap-1"><Shield size={9} /> {CLASSIFIED_IDS.length} classified guides hidden</p>
+            </div>
+          )}
         </div>
 
         {/* Main content */}
