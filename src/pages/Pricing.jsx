@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { ArrowLeft, Check, Zap, Shield, BookOpen, Download, Users, Star, Lock, ChevronRight, Sparkles, FlaskConical, Briefcase } from "lucide-react";
+import { ArrowLeft, Check, Zap, Shield, BookOpen, Download, Users, Star, Lock, ChevronRight, Sparkles, FlaskConical, Briefcase, Mail } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 
 const PLANS = [
@@ -229,10 +229,60 @@ export default function Pricing() {
             <span key={i} className="flex items-center gap-1.5">{item.icon} {item.label}</span>
           ))}
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5 mb-5">
           {PLANS.map(plan => (
             <PlanCard key={plan.id} plan={plan} loading={loading} onCheckout={handleCheckout} />
           ))}
+        </div>
+
+        {/* Government / Defense tier — full-width banner card */}
+        <div className="relative bg-gray-900 border-2 border-red-800 rounded-2xl overflow-hidden">
+          <div className="text-center py-2 text-xs font-black tracking-widest bg-red-900/30 text-red-400 uppercase">
+            🏛 Government &amp; Defense — Restricted Access
+          </div>
+          <div className="p-6 md:p-8 grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
+            {/* Left: name + price */}
+            <div>
+              <div className="flex items-center gap-2 mb-2">
+                <Shield size={18} className="text-red-400" />
+                <h3 className="text-white font-black text-2xl">Government / Defense</h3>
+              </div>
+              <p className="text-gray-400 text-sm mb-4">For verified government agencies, defense contractors, national laboratories, and cleared research institutions.</p>
+              <div className="text-red-300 font-black text-xl mb-1">Contract Pricing</div>
+              <p className="text-gray-600 text-xs">Negotiated per institution · NDA + verification required · ITAR-compatible terms available</p>
+            </div>
+
+            {/* Middle: features */}
+            <div className="space-y-2">
+              {[
+                "Everything in Pro, plus classified device architectures",
+                "Directed-energy & psychotronic device build plans",
+                "Scalar weapons & advanced biodefense documentation",
+                "Primary source classified/declassified reference archive",
+                "Defense procurement pathway documentation",
+                "Dedicated account manager & priority technical support",
+                "Custom NDA, IP licensing, and white-label terms",
+              ].map((f, i) => (
+                <div key={i} className="flex items-start gap-2">
+                  <Check size={12} className="flex-shrink-0 mt-0.5 text-red-400" />
+                  <span className="text-gray-300 text-xs leading-relaxed">{f}</span>
+                </div>
+              ))}
+            </div>
+
+            {/* Right: CTA */}
+            <div className="flex flex-col items-center md:items-end gap-4">
+              <a
+                href="mailto:admin@zenithapex.com?subject=Government%2FDefense%20Access%20Inquiry&body=Organization%3A%0AVerification%20type%20(agency%2Fcontractor%2Flab)%3A%0AContact%20name%3A%0AInterest%20area%3A%0A"
+                className="flex items-center gap-2 px-6 py-3 rounded-xl font-black text-white text-sm bg-red-800 hover:bg-red-700 transition-all shadow-lg shadow-red-900/40 whitespace-nowrap"
+              >
+                <Mail size={15} /> Request Access
+              </a>
+              <p className="text-gray-600 text-xs text-center md:text-right max-w-[200px]">
+                Approved entities only. Institutional verification, proof of clearance or mandate letter required.
+              </p>
+            </div>
+          </div>
         </div>
       </div>
 
