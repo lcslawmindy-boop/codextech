@@ -116,7 +116,7 @@ function CharBar({ current, max }) {
   );
 }
 
-function FieldCard({ fieldKey, label, value, limit, onChange }) {
+function FieldCard({ fieldKey, label, value, limit, onChange, platformColor }) {
   const [editing, setEditing] = useState(false);
   const [draft, setDraft] = useState(value);
   const isLong = limit > 400;
@@ -124,38 +124,48 @@ function FieldCard({ fieldKey, label, value, limit, onChange }) {
   const save = () => { onChange(draft); setEditing(false); };
 
   return (
-    <div className="bg-gray-900 border border-gray-800 rounded-xl overflow-hidden group">
-      <div className="flex items-center justify-between px-4 py-2.5 border-b border-gray-800 bg-gray-800/30">
-        <p className="text-gray-400 text-xs font-black uppercase tracking-widest">{label}</p>
+    <div className="rounded-2xl overflow-hidden border border-gray-700/60 shadow-lg" style={{ boxShadow: `0 2px 24px ${platformColor}18` }}>
+      {/* Platform-colored label bar */}
+      <div className="flex items-center justify-between px-4 py-2.5"
+        style={{ background: `linear-gradient(90deg, ${platformColor}22, ${platformColor}08)`, borderBottom: `1px solid ${platformColor}30` }}>
+        <div className="flex items-center gap-2">
+          <div className="w-2 h-2 rounded-full" style={{ backgroundColor: platformColor }} />
+          <p className="text-xs font-black uppercase tracking-widest" style={{ color: platformColor }}>{label}</p>
+        </div>
         <div className="flex items-center gap-2">
           <CopyButton text={value} />
           <button
             onClick={() => { setDraft(value); setEditing(e => !e); }}
-            className="flex items-center gap-1 px-2 py-1 rounded-lg bg-gray-700 hover:bg-gray-600 text-gray-300 text-xs transition-all"
+            className="flex items-center gap-1 px-2 py-1 rounded-lg text-xs transition-all"
+            style={{ background: `${platformColor}20`, color: platformColor, border: `1px solid ${platformColor}40` }}
           >
             <Edit3 size={10} /> {editing ? "Cancel" : "Edit"}
           </button>
         </div>
       </div>
-      <div className="p-4">
+
+      {/* Content area */}
+      <div className="p-5 bg-gray-900">
         {editing ? (
           <>
             {isLong
               ? <textarea value={draft} onChange={e => setDraft(e.target.value)} rows={8}
-                  className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-white text-sm resize-none focus:outline-none focus:border-yellow-600 mb-2" />
+                  className="w-full bg-gray-800 border border-gray-700 rounded-xl px-4 py-3 text-white text-sm resize-none focus:outline-none mb-3"
+                  style={{ focusBorderColor: platformColor }} />
               : <input value={draft} onChange={e => setDraft(e.target.value)}
-                  className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-yellow-600 mb-2" />
+                  className="w-full bg-gray-800 border border-gray-700 rounded-xl px-4 py-2.5 text-white text-sm focus:outline-none mb-3" />
             }
             <div className="flex items-center justify-between">
               <CharBar current={draft.length} max={limit} />
-              <button onClick={save} className="ml-3 px-3 py-1 rounded-lg bg-yellow-700 hover:bg-yellow-600 text-white text-xs font-black transition-all">
+              <button onClick={save} className="ml-3 px-4 py-1.5 rounded-lg text-white text-xs font-black transition-all"
+                style={{ backgroundColor: platformColor }}>
                 Save
               </button>
             </div>
           </>
         ) : (
           <>
-            <p className="text-gray-200 text-sm leading-relaxed whitespace-pre-wrap mb-3">{value}</p>
+            <p className="text-gray-100 text-sm leading-relaxed whitespace-pre-wrap mb-4 font-light">{value}</p>
             <CharBar current={value.length} max={limit} />
           </>
         )}
@@ -398,26 +408,56 @@ Each value must be a string within the character limit. Be compelling, specific,
 
           {/* Results */}
           {displayResult && (
-            <div className="space-y-4" ref={resultRef}>
-              {/* Result header */}
-              <div className="flex items-center justify-between flex-wrap gap-3">
-                <div className="flex items-center gap-2">
-                  <span className="text-2xl">{platform.icon}</span>
-                  <div>
-                    <h2 className="text-white font-black text-base">{platform.name} Profile</h2>
-                    <p className="text-gray-500 text-xs">Tone: {tone.label} · Click any field to edit</p>
+            <div className="space-y-5" ref={resultRef}>
+
+              {/* Platform mockup header card */}
+              <div className="rounded-2xl overflow-hidden border border-gray-700/50 shadow-2xl"
+                style={{ boxShadow: `0 8px 40px ${platform.color}28` }}>
+                {/* Banner */}
+                <div className="relative px-6 py-5 flex items-center justify-between"
+                  style={{ background: `linear-gradient(135deg, ${platform.color}33, ${platform.color}10)` }}>
+                  <div className="flex items-center gap-4">
+                    {/* Fake avatar */}
+                    <div className="w-14 h-14 rounded-full flex items-center justify-center text-2xl font-black shadow-lg border-2"
+                      style={{ backgroundColor: platform.color + "30", borderColor: platform.color + "60" }}>
+                      {platform.icon}
+                    </div>
+                    <div>
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className="text-white font-black text-lg">Zenith Apex Research</span>
+                        <span className="px-2 py-0.5 rounded-full text-xs font-black"
+                          style={{ backgroundColor: platform.color + "40", color: platform.color }}>
+                          {platform.name}
+                        </span>
+                      </div>
+                      <p className="text-gray-400 text-xs">zenithapex.base44.app · {tone.emoji} {tone.label} tone · {platform.fields.length} fields generated</p>
+                    </div>
+                  </div>
+                  {/* Floating action buttons */}
+                  <div className="flex items-center gap-2">
+                    <button onClick={generate}
+                      className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold transition-all border"
+                      style={{ backgroundColor: platform.color + "20", borderColor: platform.color + "50", color: platform.color }}>
+                      <RefreshCw size={11} /> Regenerate
+                    </button>
+                    <CopyButton text={allFieldsText} label="Copy All" />
+                    <button onClick={handleDownload}
+                      className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-gray-800 hover:bg-gray-700 border border-gray-700 text-gray-300 text-xs font-bold transition-all">
+                      <Download size={11} /> .txt
+                    </button>
                   </div>
                 </div>
-                <div className="flex items-center gap-2">
-                  <button onClick={generate}
-                    className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-gray-800 hover:bg-gray-700 border border-gray-700 text-gray-300 text-xs font-bold transition-all">
-                    <RefreshCw size={12} /> Regenerate
-                  </button>
-                  <CopyButton text={allFieldsText} label="Copy All" />
-                  <button onClick={handleDownload}
-                    className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-gray-800 hover:bg-gray-700 border border-gray-700 text-gray-300 text-xs font-bold transition-all">
-                    <Download size={12} /> .txt
-                  </button>
+                {/* Sub-bar */}
+                <div className="px-6 py-2.5 flex items-center gap-4 bg-gray-900/80 border-t border-gray-700/40">
+                  <span className="text-gray-500 text-xs">✏️ Click any field to edit inline</span>
+                  <span className="text-gray-700">·</span>
+                  <span className="text-gray-500 text-xs">📋 Copy individual fields or all at once</span>
+                  {editedResult && (
+                    <>
+                      <span className="text-gray-700">·</span>
+                      <span className="text-yellow-400 text-xs font-bold">⚡ Edits saved</span>
+                    </>
+                  )}
                 </div>
               </div>
 
@@ -432,18 +472,19 @@ Each value must be a string within the character limit. Be compelling, specific,
                       value={displayResult[field]}
                       limit={platform.limits[field]}
                       onChange={(v) => handleFieldEdit(field, v)}
+                      platformColor={platform.color}
                     />
                   ) : null
                 )}
               </div>
 
               {/* Validation badge */}
-              <div className="flex items-start gap-3 bg-green-950/20 border border-green-900/30 rounded-xl p-4">
+              <div className="flex items-start gap-3 bg-green-950/20 border border-green-900/30 rounded-2xl p-4">
                 <CheckCircle2 size={14} className="text-green-400 flex-shrink-0 mt-0.5" />
                 <div>
-                  <p className="text-green-400 text-xs font-black uppercase tracking-wider mb-0.5">Investment-Grade Language Verified</p>
+                  <p className="text-green-400 text-xs font-black uppercase tracking-wider mb-0.5">✅ Investment-Grade Language Verified</p>
                   <p className="text-gray-500 text-xs leading-relaxed">
-                    No fringe, pseudoscience, or conspiracy framing. Emphasizes peer-reviewed validation, government documentation, AI IP tools, and commercial value. Ready to post.
+                    No fringe, pseudoscience, or conspiracy framing. Peer-reviewed validation, DoD documentation, AI IP tools, and commercial credibility emphasized throughout. Ready to post directly.
                   </p>
                 </div>
               </div>
