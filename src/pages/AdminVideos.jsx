@@ -78,21 +78,27 @@ function downloadVideoAsPDF(video) {
       y += 4;
     }
 
-    // Materials + Tools
+    // Materials + Tools — two-column layout matching uploaded PDF format
     const colW = (W - margin * 2 - 4) / 2;
-    const matStart = y;
-    doc.setFontSize(10); doc.setFont("helvetica", "bold"); doc.setTextColor(60, 60, 60);
-    doc.text("MATERIALS", margin, y); y += 5;
-    doc.setFont("helvetica", "normal"); doc.setTextColor(30, 30, 30);
-    (step.materials || []).forEach(m => { doc.text(`· ${m}`, margin, y); y += 5; });
-
-    const toolStart = matStart;
-    let ty = toolStart;
-    doc.setFontSize(10); doc.setFont("helvetica", "bold"); doc.setTextColor(60, 60, 60);
-    doc.text("TOOLS", margin + colW + 4, ty); ty += 5;
-    doc.setFont("helvetica", "normal"); doc.setTextColor(30, 30, 30);
-    (step.tools || []).forEach(t => { doc.text(`· ${t}`, margin + colW + 4, ty); ty += 5; });
-    y = Math.max(y, ty) + 3;
+    const hasMat = step.materials?.length > 0;
+    const hasTool = step.tools?.length > 0;
+    if (hasMat || hasTool) {
+      const matStart = y;
+      if (hasMat) {
+        doc.setFontSize(10); doc.setFont("helvetica", "bold"); doc.setTextColor(60, 60, 60);
+        doc.text("MATERIALS", margin, y); y += 5;
+        doc.setFont("helvetica", "normal"); doc.setTextColor(30, 30, 30);
+        (step.materials || []).forEach(m => { doc.text(`· ${m}`, margin, y); y += 5; });
+      }
+      let ty = matStart;
+      if (hasTool) {
+        doc.setFontSize(10); doc.setFont("helvetica", "bold"); doc.setTextColor(60, 60, 60);
+        doc.text("TOOLS", margin + colW + 4, ty); ty += 5;
+        doc.setFont("helvetica", "normal"); doc.setTextColor(30, 30, 30);
+        (step.tools || []).forEach(t => { doc.text(`· ${t}`, margin + colW + 4, ty); ty += 5; });
+      }
+      y = Math.max(y, ty) + 3;
+    }
 
     if (step.checkpoint) {
       doc.setFillColor(235, 235, 235);
