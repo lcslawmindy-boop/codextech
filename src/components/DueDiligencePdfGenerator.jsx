@@ -129,208 +129,269 @@ function drawPieChart(doc, cx, cy, r, segments, title) {
 // ── PDF GENERATION ────────────────────────────────────────────────────────────
 function generateDueDiligencePDF(selectedSections, includeCharts) {
   const doc = new jsPDF({ orientation: "portrait", unit: "mm", format: "a4" });
-  const margin = 22;
+  const margin = 20;
   const pageW = 210;
   const contentW = pageW - margin * 2;
   let y = 0;
   let currentSectionLabel = '';
 
-  const bg = () => { doc.setFillColor(255, 255, 255); doc.rect(0, 0, pageW, 297, 'F'); };
+  // ── THEME ─────────────────────────────────────────────────────────────────
+  const NAVY   = [15, 35, 70];    // deep navy header
+  const GOLD   = [180, 140, 50];  // gold accent
+  const SLATE  = [55, 70, 95];    // slate subheading
+  const TEXT   = [28, 32, 40];    // body text
+  const LIGHT  = [240, 242, 246]; // light bg for rows
+  const ACCENT = [230, 236, 248]; // subheading bg
+  const WHITE  = [255, 255, 255];
+
+  // ── SANITIZE ──────────────────────────────────────────────────────────────
+  const clean = (txt) => String(txt || '')
+    .replace(/!'/g, '→')
+    .replace(/"d/g, '≤').replace(/"e/g, '≥')
+    .replace(/Æ/g, 'φ').replace(/Â/g, '')
+    .replace(/ÿ/g, '').replace(/[\u0080-\u009F]/g, '')
+    .replace(/%%%+/g, '─────────────────────────────────')
+    .replace(/─{10,}/g, '')  // remove long dash lines (will be replaced by rule())
+    .trim();
+
+  const bg = () => { doc.setFillColor(...WHITE); doc.rect(0, 0, pageW, 297, 'F'); };
 
   const drawRunningHeader = () => {
-    doc.setFillColor(10, 10, 10);
-    doc.rect(0, 0, pageW, 16, 'F');
-    doc.setFontSize(8); doc.setFont('helvetica', 'bold'); doc.setTextColor(255, 255, 255);
-    doc.text('ZENITH APEX RESEARCH PORTFOLIO — TECHNICAL DUE DILIGENCE PACKAGE', margin, 10.5);
-    doc.text(`v${CURRENT_VERSION}  ·  ${currentSectionLabel || 'CONFIDENTIAL'}`, pageW - margin, 10.5, { align: 'right' });
+    doc.setFillColor(...NAVY);
+    doc.rect(0, 0, pageW, 14, 'F');
+    doc.setFillColor(...GOLD);
+    doc.rect(0, 14, pageW, 1.2, 'F');
+    doc.setFontSize(7.5); doc.setFont('helvetica', 'bold'); doc.setTextColor(...WHITE);
+    doc.text('ZENITH APEX RESEARCH PORTFOLIO  ·  TECHNICAL DUE DILIGENCE PACKAGE', margin, 9);
+    doc.setFont('helvetica', 'normal');
+    doc.text(`v${CURRENT_VERSION}  ·  ${currentSectionLabel || 'CONFIDENTIAL'}`, pageW - margin, 9, { align: 'right' });
   };
 
   const drawFooter = () => {
     const total = doc.getNumberOfPages();
     for (let p = 1; p <= total; p++) {
       doc.setPage(p);
-      doc.setFillColor(10, 10, 10);
+      doc.setFillColor(...NAVY);
       doc.rect(0, 285, pageW, 12, 'F');
-      doc.setFontSize(7); doc.setFont('helvetica', 'normal'); doc.setTextColor(200, 200, 200);
-      doc.text('ZENITH APEX — TECHNICAL DUE DILIGENCE — CONFIDENTIAL — UNAUTHORIZED DISCLOSURE SUBJECT TO $2.5M LIQUIDATED DAMAGES', pageW / 2, 291, { align: 'center' });
+      doc.setFillColor(...GOLD);
+      doc.rect(0, 285, pageW, 1, 'F');
+      doc.setFontSize(6.5); doc.setFont('helvetica', 'normal'); doc.setTextColor(180, 190, 210);
+      doc.text('ZENITH APEX  ·  CONFIDENTIAL  ·  UNAUTHORIZED DISCLOSURE SUBJECT TO $2.5M LIQUIDATED DAMAGES', pageW / 2, 291, { align: 'center' });
       doc.text(`Page ${p} of ${total}`, pageW - margin, 291, { align: 'right' });
       doc.text(new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }), margin, 291);
     }
   };
 
-  const addPage = () => { doc.addPage(); bg(); drawRunningHeader(); y = 26; };
-  const check = (need = 16) => { if (y + need > 281) addPage(); };
+  const addPage = () => { doc.addPage(); bg(); drawRunningHeader(); y = 24; };
+  const check = (need = 14) => { if (y + need > 281) addPage(); };
 
   const rule = () => {
     check(8);
-    doc.setDrawColor(180, 180, 180); doc.setLineWidth(0.3);
-    doc.line(margin, y, pageW - margin, y); y += 8;
+    doc.setDrawColor(210, 215, 225); doc.setLineWidth(0.25);
+    doc.line(margin, y, pageW - margin, y); y += 7;
   };
 
   const sectionDivider = (text, subtitle) => {
-    if (y > 70) addPage();
-    doc.setFillColor(10, 10, 10);
-    doc.rect(0, y - 6, pageW, 28, 'F');
-    doc.setFontSize(15); doc.setFont('helvetica', 'bold'); doc.setTextColor(255, 255, 255);
+    if (y > 60) addPage();
+    else { check(32); }
+    doc.setFillColor(...NAVY);
+    doc.rect(0, y - 4, pageW, 26, 'F');
+    doc.setFillColor(...GOLD); doc.rect(0, y + 22, pageW, 1.5, 'F');
+    doc.setFontSize(14); doc.setFont('helvetica', 'bold'); doc.setTextColor(...WHITE);
     doc.text(text, margin, y + 9);
-    doc.setFontSize(9); doc.setFont('helvetica', 'normal'); doc.setTextColor(190, 190, 190);
-    doc.text(subtitle, pageW - margin, y + 16, { align: 'right' });
-    y += 30;
+    doc.setFontSize(8); doc.setFont('helvetica', 'normal'); doc.setTextColor(180, 200, 230);
+    doc.text(subtitle, margin, y + 18);
+    y += 32;
   };
 
   const subHeading = (text) => {
-    check(20);
-    doc.setFillColor(225, 225, 225);
-    doc.rect(margin - 2, y - 3, contentW + 4, 14, 'F');
-    doc.setDrawColor(0, 0, 0); doc.setLineWidth(0.3);
-    doc.line(margin - 2, y - 3, margin - 2, y + 11);
-    doc.setFontSize(12.5); doc.setFont('helvetica', 'bold'); doc.setTextColor(0, 0, 0);
-    doc.text(text, margin + 4, y + 7);
-    y += 18;
+    check(18);
+    doc.setFillColor(...ACCENT);
+    doc.rect(margin - 2, y - 2, contentW + 4, 13, 'F');
+    doc.setFillColor(...GOLD); doc.rect(margin - 2, y - 2, 3, 13, 'F');
+    doc.setFontSize(10.5); doc.setFont('helvetica', 'bold'); doc.setTextColor(...SLATE);
+    doc.text(clean(text), margin + 5, y + 7);
+    y += 17;
   };
 
-  const para = (text) => {
-    const lines = doc.splitTextToSize(text, contentW);
-    lines.forEach(l => {
-      check(10);
-      const trimmed = l.trim();
-      const isBold = (trimmed.endsWith(':') && trimmed.length < 60 && !trimmed.startsWith('—') && !trimmed.startsWith('(')) ||
-        trimmed.startsWith('[  ]') || trimmed.startsWith('[ ]') ||
-        (trimmed.startsWith('STEP ') && trimmed.includes('—')) ||
-        (trimmed.startsWith('STRUCTURE ') && trimmed.includes('—')) ||
-        (trimmed.startsWith('RISK ') && trimmed.includes(':')) ||
-        (trimmed.startsWith('VERTICAL ') && trimmed.includes('—')) ||
-        (trimmed.startsWith('STREAM ') && trimmed.includes('—')) ||
-        trimmed.startsWith('PLATFORM TOTAL') || trimmed.startsWith('──────');
-      doc.setFont('helvetica', isBold ? 'bold' : 'normal');
-      doc.setTextColor(isBold ? 0 : 15, isBold ? 0 : 15, isBold ? 0 : 15);
-      doc.setFontSize(12);
-      doc.text(l, margin, y);
-      y += 8.5;
+  const para = (rawText) => {
+    const text = clean(rawText);
+    // Split into logical lines first (newline-delimited blocks)
+    const segments = text.split('\n').filter(s => s.trim());
+    segments.forEach(seg => {
+      const trimmed = seg.trim();
+      // Skip pure divider lines
+      if (/^[─—\-=]{5,}$/.test(trimmed)) { rule(); return; }
+      const lines = doc.splitTextToSize(trimmed, contentW - 4);
+      // Detect heading-like lines
+      const isHeadline = (
+        (trimmed.length < 70 && /^[A-Z][A-Z\s\d&\.\/\-:,()]+[:\s]/.test(trimmed) &&
+          (trimmed === trimmed.toUpperCase() || trimmed.endsWith(':')))
+        || /^\[\s*\]/.test(trimmed)
+        || /^(STREAM|STRUCTURE|RISK|VERTICAL|PHASE|STEP|LAYER|REASON|PUBLICATION|YEAR|CATEGORY)\s+[\dA-Z]/.test(trimmed)
+        || /^(PLATFORM TOTAL|KEY UNIT|VALUATION CONCLUSION|PAYMENT STRUCTURES|FINANCIAL PACKAGE|LEGAL PACKAGE|ENGINEERING:|DATA:|TECHNOLOGY:|INTELLECTUAL PROPERTY:|TRANSITION:)/.test(trimmed)
+      );
+      lines.forEach((l, li) => {
+        check(8);
+        if (isHeadline && li === 0) {
+          doc.setFont('helvetica', 'bold'); doc.setFontSize(10); doc.setTextColor(...SLATE);
+          doc.text(l, margin + 2, y); y += 7;
+        } else {
+          doc.setFont('helvetica', 'normal'); doc.setFontSize(9.5); doc.setTextColor(...TEXT);
+          const indent = trimmed.startsWith('—') || trimmed.startsWith('•') || trimmed.startsWith('→') ? margin + 6 : margin + 2;
+          doc.text(l, indent, y); y += 6.5;
+        }
+      });
+      y += 1.5;
     });
-    y += 5;
+    y += 3;
   };
 
   // ── CLICKABLE LINK HELPER ──────────────────────────────────────────────────
   const addLink = (labelText, url) => {
-    check(12);
-    doc.setFont('helvetica', 'normal'); doc.setFontSize(10); doc.setTextColor(0, 80, 200);
-    doc.textWithLink(`→ ${labelText}`, margin + 4, y, { url });
-    const lw = doc.getTextWidth(`→ ${labelText}`);
-    doc.setDrawColor(0, 80, 200); doc.setLineWidth(0.2);
+    check(10);
+    doc.setFont('helvetica', 'bold'); doc.setFontSize(9); doc.setTextColor(40, 90, 180);
+    const linkText = `→  ${labelText}`;
+    doc.textWithLink(linkText, margin + 4, y, { url });
+    const lw = doc.getTextWidth(linkText);
+    doc.setDrawColor(40, 90, 180); doc.setLineWidth(0.15);
     doc.line(margin + 4, y + 1, margin + 4 + lw, y + 1);
     y += 9;
   };
 
   // ── COVER PAGE ─────────────────────────────────────────────────────────────
   bg();
-  doc.setFillColor(10, 10, 10); doc.rect(0, 0, pageW, 90, 'F');
+  // Top navy band
+  doc.setFillColor(...NAVY); doc.rect(0, 0, pageW, 80, 'F');
+  doc.setFillColor(...GOLD); doc.rect(0, 80, pageW, 2, 'F');
+  // Left accent stripe
+  doc.setFillColor(...GOLD); doc.rect(0, 0, 5, 297, 'F');
 
-  doc.setFontSize(10); doc.setFont('helvetica', 'normal'); doc.setTextColor(175, 175, 175);
-  doc.text('ZENITH APEX RESEARCH PORTFOLIO', pageW / 2, 25, { align: 'center' });
-  doc.text('Advanced Research  ·  Intellectual Property  ·  AI-Powered Innovation', pageW / 2, 35, { align: 'center' });
-  doc.text(`Q2 2026  ·  Document Version ${CURRENT_VERSION}`, pageW / 2, 44, { align: 'center' });
+  doc.setFontSize(8.5); doc.setFont('helvetica', 'normal'); doc.setTextColor(160, 180, 220);
+  doc.text('ZENITH APEX RESEARCH PORTFOLIO', pageW / 2, 18, { align: 'center' });
+  doc.text('Advanced Research  ·  Intellectual Property  ·  AI-Powered Innovation', pageW / 2, 27, { align: 'center' });
+  doc.text(`Q2 2026  ·  Document Version ${CURRENT_VERSION}`, pageW / 2, 36, { align: 'center' });
 
-  doc.setFontSize(27); doc.setFont('helvetica', 'bold'); doc.setTextColor(255, 255, 255);
-  doc.text('TECHNICAL DUE DILIGENCE', pageW / 2, 65, { align: 'center' });
-  doc.setFontSize(18);
-  doc.text('INVESTMENT PACKAGE', pageW / 2, 79, { align: 'center' });
+  doc.setFontSize(28); doc.setFont('helvetica', 'bold'); doc.setTextColor(...WHITE);
+  doc.text('TECHNICAL DUE DILIGENCE', pageW / 2, 56, { align: 'center' });
+  doc.setFontSize(15); doc.setFont('helvetica', 'normal'); doc.setTextColor(...GOLD);
+  doc.text('INVESTMENT PACKAGE', pageW / 2, 70, { align: 'center' });
 
-  y = 106;
-  doc.setFontSize(13); doc.setFont('helvetica', 'bold'); doc.setTextColor(0, 0, 0);
+  y = 95;
+  doc.setFontSize(12); doc.setFont('helvetica', 'bold'); doc.setTextColor(...NAVY);
   doc.text('Comprehensive Technical, IP, Financial & Market Analysis', pageW / 2, y, { align: 'center' });
   y += 8;
-  doc.setFont('helvetica', 'normal'); doc.setFontSize(10.5); doc.setTextColor(60, 60, 60);
-  doc.text(`${selectedSections.length} of 12 Sections Selected  ·  26 Device Architectures  ·  8 Revenue Streams  ·  ~100 Pages`, pageW / 2, y, { align: 'center' });
-  y += 18;
+  doc.setFont('helvetica', 'normal'); doc.setFontSize(9); doc.setTextColor(100, 110, 130);
+  doc.text(`${selectedSections.length} of 12 Sections  ·  26 Device Architectures  ·  8 Revenue Streams`, pageW / 2, y, { align: 'center' });
+  y += 14;
 
   // Valuation box
-  doc.setDrawColor(0, 0, 0); doc.setLineWidth(1.0);
-  doc.rect(margin, y, contentW, 44, 'D');
-  doc.setFontSize(9.5); doc.setFont('helvetica', 'bold'); doc.setTextColor(0, 0, 0);
-  doc.text('PLATFORM FAIR MARKET VALUATION (Q2 2026)  —  ASSET-BY-ASSET DCF', margin + 8, y + 10);
-  doc.setFontSize(26); doc.setTextColor(0, 0, 0);
-  doc.text('$5.8M – $13.5M', margin + 8, y + 27);
-  doc.setFontSize(10); doc.setFont('helvetica', 'normal'); doc.setTextColor(70, 70, 70);
-  doc.text('Conservative DCF: 15 assets incl. KRCIC, UBDRS & legal compliance', margin + 8, y + 36);
-  doc.setFontSize(18); doc.setFont('helvetica', 'bold'); doc.setTextColor(0, 0, 0);
-  doc.text('$7.5M – $22M', pageW - margin - 8, y + 27, { align: 'right' });
-  doc.setFontSize(10); doc.setFont('helvetica', 'normal'); doc.setTextColor(70, 70, 70);
-  doc.text('ACQUISITION ASKING PRICE', pageW - margin - 8, y + 36, { align: 'right' });
-  y += 52;
+  doc.setFillColor(245, 247, 252);
+  doc.roundedRect(margin, y, contentW, 52, 3, 3, 'F');
+  doc.setDrawColor(...NAVY); doc.setLineWidth(0.8);
+  doc.roundedRect(margin, y, contentW, 52, 3, 3, 'D');
+  doc.setFillColor(...NAVY); doc.roundedRect(margin, y, contentW, 12, 3, 3, 'F');
+  doc.rect(margin, y + 9, contentW, 3, 'F'); // square off bottom corners of header
+  doc.setFontSize(8); doc.setFont('helvetica', 'bold'); doc.setTextColor(...WHITE);
+  doc.text('PLATFORM FAIR MARKET VALUATION (Q2 2026)  ─  ASSET-BY-ASSET DCF', margin + 6, y + 8);
 
+  doc.setFontSize(24); doc.setFont('helvetica', 'bold'); doc.setTextColor(...NAVY);
+  doc.text('$5.8M – $13.5M', margin + 6, y + 27);
+  doc.setFontSize(9); doc.setFont('helvetica', 'normal'); doc.setTextColor(90, 100, 120);
+  doc.text('Conservative DCF · 15 assets incl. KRCIC, UBDRS & legal compliance', margin + 6, y + 36);
+
+  doc.setFontSize(18); doc.setFont('helvetica', 'bold'); doc.setTextColor(...GOLD);
+  doc.text('$7.5M – $22M', pageW - margin - 6, y + 27, { align: 'right' });
+  doc.setFontSize(8); doc.setFont('helvetica', 'normal'); doc.setTextColor(90, 100, 120);
+  doc.text('ACQUISITION ASKING PRICE', pageW - margin - 6, y + 36, { align: 'right' });
+  y += 60;
+
+  // Stats row
   const stats = [['26','Device\nArchitectures'],['12','Sections'],['200+','KG Nodes'],['8','Revenue\nStreams'],['$630K','SBIR\nFunding'],['40+','Yrs Research']];
   const colW = contentW / stats.length;
   stats.forEach(([val, lbl], i) => {
     const cx = margin + i * colW + colW / 2;
-    doc.setFontSize(17); doc.setFont('helvetica', 'bold'); doc.setTextColor(0, 0, 0);
-    doc.text(val, cx, y + 10, { align: 'center' });
-    doc.setFontSize(8); doc.setFont('helvetica', 'normal'); doc.setTextColor(70, 70, 70);
-    lbl.split('\n').forEach((ll, li) => doc.text(ll, cx, y + 17 + li * 5, { align: 'center' }));
+    if (i > 0) { doc.setDrawColor(210,215,225); doc.setLineWidth(0.3); doc.line(margin + i*colW, y, margin + i*colW, y+18); }
+    doc.setFontSize(16); doc.setFont('helvetica', 'bold'); doc.setTextColor(...NAVY);
+    doc.text(val, cx, y + 8, { align: 'center' });
+    doc.setFontSize(7.5); doc.setFont('helvetica', 'normal'); doc.setTextColor(100, 110, 130);
+    lbl.split('\n').forEach((ll, li) => doc.text(ll, cx, y + 14 + li * 5, { align: 'center' }));
   });
-  y += 32;
+  y += 28;
 
-  doc.setDrawColor(0); doc.setLineWidth(0.5);
-  doc.line(margin, y, pageW - margin, y); y += 8;
+  doc.setDrawColor(200, 205, 215); doc.setLineWidth(0.5);
+  doc.line(margin, y, pageW - margin, y); y += 10;
 
-  // TOC — only selected sections
-  doc.setFontSize(13); doc.setFont('helvetica', 'bold'); doc.setTextColor(0, 0, 0);
-  doc.text('TABLE OF CONTENTS', margin, y); y += 8;
+  // TOC
+  doc.setFontSize(11); doc.setFont('helvetica', 'bold'); doc.setTextColor(...NAVY);
+  doc.text('TABLE OF CONTENTS', margin, y); y += 9;
 
   const sectionsToRender = DD_SECTIONS.filter((_, i) => selectedSections.includes(i));
   sectionsToRender.forEach((s, si) => {
-    check(10);
-    doc.setFontSize(10.5); doc.setFont('helvetica', 'bold'); doc.setTextColor(0, 0, 0);
+    check(9);
+    doc.setFontSize(9); doc.setFont('helvetica', 'bold'); doc.setTextColor(...NAVY);
     doc.text(`${si + 1}.  ${s.title}`, margin, y);
-    doc.setFont('helvetica', 'normal'); doc.setFontSize(9); doc.setTextColor(80, 80, 80);
+    doc.setFont('helvetica', 'normal'); doc.setTextColor(120, 130, 150);
     doc.text(s.subtitle, pageW - margin, y, { align: 'right' });
-    y += 9;
+    // Dot leader
+    const leftW = doc.getTextWidth(`${si + 1}.  ${s.title}`);
+    const rightW = doc.getTextWidth(s.subtitle);
+    const dotsStart = margin + leftW + 3;
+    const dotsEnd = pageW - margin - rightW - 3;
+    if (dotsEnd > dotsStart + 4) {
+      doc.setTextColor(200, 205, 215);
+      let dx = dotsStart;
+      while (dx < dotsEnd) { doc.text('.', dx, y); dx += 3; }
+    }
+    y += 8.5;
   });
-  y += 8;
+  y += 6;
 
-  // Confidentiality notice
-  doc.setDrawColor(0); doc.setLineWidth(0.5);
-  doc.rect(margin, y, contentW, 26, 'D');
-  doc.setFontSize(11); doc.setFont('helvetica', 'bold'); doc.setTextColor(0, 0, 0);
-  doc.text('CONFIDENTIALITY NOTICE', margin + 6, y + 10);
-  doc.setFont('helvetica', 'normal'); doc.setFontSize(10); doc.setTextColor(25, 25, 25);
-  const noticeLines = doc.splitTextToSize('This document contains proprietary trade secrets, invention disclosures, and strategic financial information. Unauthorized disclosure is subject to liquidated damages of $2,500,000 per incident under the executed NDA.', contentW - 12);
-  noticeLines.forEach((l, i) => doc.text(l, margin + 6, y + 17 + i * 5));
+  // Confidentiality box
+  doc.setFillColor(250, 245, 235);
+  doc.roundedRect(margin, y, contentW, 24, 2, 2, 'F');
+  doc.setDrawColor(200, 160, 60); doc.setLineWidth(0.5);
+  doc.roundedRect(margin, y, contentW, 24, 2, 2, 'D');
+  doc.setFontSize(9); doc.setFont('helvetica', 'bold'); doc.setTextColor(140, 100, 20);
+  doc.text('CONFIDENTIALITY NOTICE', margin + 6, y + 8);
+  doc.setFont('helvetica', 'normal'); doc.setFontSize(8.5); doc.setTextColor(80, 60, 20);
+  const noticeLines = doc.splitTextToSize(
+    'This document contains proprietary trade secrets and strategic financial information. Unauthorized disclosure is subject to liquidated damages of $2,500,000 per incident under the executed NDA.',
+    contentW - 12
+  );
+  noticeLines.forEach((l, i) => doc.text(l, margin + 6, y + 14 + i * 5));
 
   drawFooter();
 
-  // ── FINANCIAL CHARTS PAGE (if Section 6 selected and includeCharts) ────────
+  // ── FINANCIAL CHARTS PAGE ─────────────────────────────────────────────────
   if (includeCharts && selectedSections.includes(5)) {
     addPage();
     currentSectionLabel = 'FINANCIAL CHARTS';
     drawRunningHeader();
-    y = 26;
+    y = 24;
 
-    doc.setFontSize(16); doc.setFont('helvetica', 'bold'); doc.setTextColor(0, 0, 0);
-    doc.text('FINANCIAL PROJECTIONS — VISUAL SUMMARY', pageW / 2, y, { align: 'center' });
-    y += 12;
+    doc.setFontSize(14); doc.setFont('helvetica', 'bold'); doc.setTextColor(...NAVY);
+    doc.text('FINANCIAL PROJECTIONS  —  VISUAL SUMMARY', pageW / 2, y, { align: 'center' });
+    doc.setFillColor(...GOLD); doc.rect(margin, y + 3, contentW, 1, 'F');
+    y += 14;
 
-    // 5-year Revenue bar chart
     const fmtM = v => v >= 1000000 ? `$${(v/1000000).toFixed(1)}M` : `$${(v/1000).toFixed(0)}K`;
-    drawBarChart(doc, margin, y, 80, 50, FINANCIAL_DATA.revenue, ['Y1','Y2','Y3','Y4','Y5'], '5-Year Revenue Projection', [59, 130, 246], fmtM);
-    drawBarChart(doc, margin + 90, y, 80, 50, FINANCIAL_DATA.ebitda, ['Y1','Y2','Y3','Y4','Y5'], '5-Year EBITDA Projection', [34, 197, 94], fmtM);
-    y += 65;
+    drawBarChart(doc, margin, y, 82, 48, FINANCIAL_DATA.revenue, ['Y1','Y2','Y3','Y4','Y5'], '5-Year Revenue Projection', [30, 60, 140], fmtM);
+    drawBarChart(doc, margin + 88, y, 82, 48, FINANCIAL_DATA.ebitda, ['Y1','Y2','Y3','Y4','Y5'], '5-Year EBITDA Projection', [30, 130, 80], fmtM);
+    y += 62;
 
-    // Revenue streams pie chart
-    doc.setFontSize(11); doc.setFont('helvetica', 'bold'); doc.setTextColor(0, 0, 0);
-    doc.text('Year 5 Revenue Mix by Stream', margin + 35, y);
-    y += 6;
-    drawPieChart(doc, margin + 32, y + 30, 28, FINANCIAL_DATA.streams, '');
-    y += 68;
+    drawPieChart(doc, margin + 30, y + 32, 26, FINANCIAL_DATA.streams, 'Year 5 Revenue Mix by Stream');
+    y += 72;
 
-    // TAM bar chart
-    drawBarChart(doc, margin, y, 165, 50, FINANCIAL_DATA.tam.map(t => t.value), FINANCIAL_DATA.tam.map(t => t.label), 'Total Addressable Market by Vertical ($B)', [168, 85, 247], v => `$${v}B`);
-    y += 65;
+    drawBarChart(doc, margin, y, 165, 46, FINANCIAL_DATA.tam.map(t => t.value), FINANCIAL_DATA.tam.map(t => t.label), 'Total Addressable Market by Vertical ($B)', [100, 60, 180], v => `$${v}B`);
+    y += 60;
 
-    // Comparable M&A table
+    // M&A table
     check(50);
-    doc.setFontSize(12); doc.setFont('helvetica', 'bold'); doc.setTextColor(0, 0, 0);
-    doc.text('Comparable M&A Transaction Benchmarks', margin, y); y += 8;
+    doc.setFontSize(11); doc.setFont('helvetica', 'bold'); doc.setTextColor(...NAVY);
+    doc.text('Comparable M&A Transaction Benchmarks', margin, y); y += 6;
+    doc.setFillColor(...GOLD); doc.rect(margin, y, contentW, 1, 'F'); y += 5;
+
     const comps = [
       ['Company', 'Acquirer', 'Price', 'Multiple'],
       ['PatSnap', 'SoftBank', '$1.5B', '28× ARR'],
@@ -339,14 +400,17 @@ function generateDueDiligencePDF(selectedSections, includeCharts) {
       ['Derwent Innovation', 'Clarivate', '$800M–$1.2B', 'Domain Premium'],
       ['Zenith Apex (ASKING)', '—', '$7.5M–$22M', '4–12× Y1 EBITDA'],
     ];
-    const colXs = [margin, margin + 55, margin + 105, margin + 140];
+    const colXs = [margin, margin + 52, margin + 104, margin + 143];
     comps.forEach((row, ri) => {
       check(10);
-      if (ri === 0) { doc.setFillColor(220, 220, 220); doc.rect(margin - 2, y - 4, contentW + 4, 9, 'F'); }
-      if (ri === comps.length - 1) { doc.setFillColor(210, 240, 210); doc.rect(margin - 2, y - 4, contentW + 4, 9, 'F'); }
+      if (ri === 0) { doc.setFillColor(...NAVY); doc.rect(margin - 2, y - 4, contentW + 4, 9, 'F'); }
+      else if (ri % 2 === 0) { doc.setFillColor(...LIGHT); doc.rect(margin - 2, y - 4, contentW + 4, 9, 'F'); }
+      if (ri === comps.length - 1) { doc.setFillColor(220, 240, 220); doc.rect(margin - 2, y - 4, contentW + 4, 9, 'F'); }
       row.forEach((cell, ci) => {
-        doc.setFont('helvetica', ri === 0 || ri === comps.length - 1 ? 'bold' : 'normal');
-        doc.setFontSize(9); doc.setTextColor(0, 0, 0);
+        const isBold = ri === 0 || ri === comps.length - 1;
+        doc.setFont('helvetica', isBold ? 'bold' : 'normal');
+        doc.setFontSize(9);
+        doc.setTextColor(ri === 0 ? 255 : (ri === comps.length - 1 ? 30 : 30), ri === 0 ? 255 : 35, ri === 0 ? 255 : 45);
         doc.text(cell, colXs[ci], y);
       });
       y += 10;
@@ -354,26 +418,26 @@ function generateDueDiligencePDF(selectedSections, includeCharts) {
   }
 
   // ── CONTENT SECTIONS ──────────────────────────────────────────────────────
-  sectionsToRender.forEach((section, si) => {
+  sectionsToRender.forEach((section) => {
     currentSectionLabel = section.title.replace('SECTION ', 'SEC ').split(' — ')[0];
-    doc.addPage(); bg(); drawRunningHeader(); y = 26;
+    doc.addPage(); bg(); drawRunningHeader(); y = 24;
     sectionDivider(section.title, section.subtitle);
 
     section.items.forEach(item => {
       subHeading(item.heading);
       para(item.body);
 
-      // ── INJECT SOURCE LINKS for Section 4 ──────────────────────────────
+      // Inject links for Section 4
       if (section.title.includes('SECTION 4') && item.heading.includes('4.2')) {
-        check(12);
-        doc.setFontSize(11); doc.setFont('helvetica', 'bold'); doc.setTextColor(0, 0, 0);
-        doc.text('CLICKABLE SOURCE DOCUMENT LINKS:', margin, y); y += 8;
+        check(10);
+        doc.setFontSize(9.5); doc.setFont('helvetica', 'bold'); doc.setTextColor(...SLATE);
+        doc.text('SOURCE DOCUMENT LINKS:', margin + 2, y); y += 8;
         SOURCE_LINKS.slice(0, 4).forEach(link => addLink(link.label, link.url));
       }
       if (section.title.includes('SECTION 4') && item.heading.includes('4.3')) {
-        check(12);
-        doc.setFontSize(11); doc.setFont('helvetica', 'bold'); doc.setTextColor(0, 0, 0);
-        doc.text('PATENT DATABASE LINKS:', margin, y); y += 8;
+        check(10);
+        doc.setFontSize(9.5); doc.setFont('helvetica', 'bold'); doc.setTextColor(...SLATE);
+        doc.text('PATENT DATABASE LINKS:', margin + 2, y); y += 8;
         SOURCE_LINKS.slice(4).forEach(link => addLink(link.label, link.url));
       }
 
@@ -381,29 +445,38 @@ function generateDueDiligencePDF(selectedSections, includeCharts) {
     });
   });
 
-  // ── VERSION CONTROL PAGE ───────────────────────────────────────────────────
+  // ── VERSION HISTORY PAGE ──────────────────────────────────────────────────
   addPage();
   currentSectionLabel = 'VERSION HISTORY';
   drawRunningHeader();
-  y = 26;
+  y = 24;
 
-  doc.setFontSize(16); doc.setFont('helvetica', 'bold'); doc.setTextColor(0, 0, 0);
-  doc.text('DOCUMENT VERSION HISTORY & CHANGE LOG', pageW / 2, y, { align: 'center' }); y += 12;
+  doc.setFontSize(14); doc.setFont('helvetica', 'bold'); doc.setTextColor(...NAVY);
+  doc.text('DOCUMENT VERSION HISTORY & CHANGE LOG', pageW / 2, y, { align: 'center' });
+  doc.setFillColor(...GOLD); doc.rect(margin, y + 4, contentW, 1.2, 'F');
+  y += 16;
 
-  CHANGELOG.forEach(entry => {
-    check(30);
-    doc.setFillColor(240, 240, 240); doc.rect(margin - 2, y - 3, contentW + 4, 10, 'F');
-    doc.setFont('helvetica', 'bold'); doc.setFontSize(12); doc.setTextColor(0, 0, 0);
-    doc.text(`Version ${entry.version}`, margin + 2, y + 4);
-    doc.setFont('helvetica', 'normal'); doc.setFontSize(10); doc.setTextColor(80, 80, 80);
+  CHANGELOG.forEach((entry, i) => {
+    check(28);
+    const isLatest = i === 0;
+    doc.setFillColor(isLatest ? 235 : 244, isLatest ? 242 : 246, isLatest ? 252 : 250);
+    doc.roundedRect(margin, y - 2, contentW, 8, 1, 1, 'F');
+    if (isLatest) { doc.setFillColor(...GOLD); doc.rect(margin, y - 2, 3, 8, 'F'); }
+    doc.setFont('helvetica', 'bold'); doc.setFontSize(10); doc.setTextColor(...NAVY);
+    doc.text(`Version ${entry.version}`, margin + 7, y + 4);
+    if (isLatest) {
+      doc.setFillColor(...NAVY); doc.roundedRect(margin + 50, y, 22, 6, 2, 2, 'F');
+      doc.setFontSize(7); doc.setTextColor(...WHITE); doc.text('CURRENT', margin + 54, y + 4);
+    }
+    doc.setFont('helvetica', 'normal'); doc.setFontSize(9); doc.setTextColor(110, 120, 140);
     doc.text(entry.date, pageW - margin, y + 4, { align: 'right' });
-    y += 14;
+    y += 12;
     entry.changes.forEach(c => {
-      check(8);
-      doc.setFont('helvetica', 'normal'); doc.setFontSize(10); doc.setTextColor(30, 30, 30);
-      doc.text(`  •  ${c}`, margin + 4, y); y += 7;
+      check(7);
+      doc.setFont('helvetica', 'normal'); doc.setFontSize(9); doc.setTextColor(...TEXT);
+      doc.text(`  •  ${c}`, margin + 4, y); y += 6.5;
     });
-    y += 5;
+    y += 6;
   });
 
   drawFooter();
