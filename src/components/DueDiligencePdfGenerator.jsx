@@ -46,6 +46,55 @@ const FINANCIAL_DATA = {
   ],
 };
 
+// ── PDF THEMES ───────────────────────────────────────────────────────────────
+const PDF_THEMES = [
+  {
+    id: 'navy-gold',
+    label: 'Navy & Gold',
+    preview: ['#0F2346', '#B48C32'],
+    NAVY: [15, 35, 70], GOLD: [180, 140, 50], SLATE: [55, 70, 95],
+    TEXT: [28, 32, 40], LIGHT: [240, 242, 246], ACCENT: [230, 236, 248], WHITE: [255, 255, 255],
+    bar1: [30, 60, 140], bar2: [30, 130, 80], bar3: [100, 60, 180],
+    mono: false,
+  },
+  {
+    id: 'black-white',
+    label: 'Black & White',
+    preview: ['#111111', '#888888'],
+    NAVY: [20, 20, 20], GOLD: [90, 90, 90], SLATE: [50, 50, 50],
+    TEXT: [30, 30, 30], LIGHT: [242, 242, 242], ACCENT: [232, 232, 232], WHITE: [255, 255, 255],
+    bar1: [60, 60, 60], bar2: [120, 120, 120], bar3: [160, 160, 160],
+    mono: true,
+  },
+  {
+    id: 'executive-red',
+    label: 'Executive Red',
+    preview: ['#7B1414', '#C85028'],
+    NAVY: [100, 18, 18], GOLD: [200, 80, 40], SLATE: [90, 25, 25],
+    TEXT: [28, 20, 20], LIGHT: [255, 242, 240], ACCENT: [255, 236, 232], WHITE: [255, 255, 255],
+    bar1: [180, 40, 40], bar2: [210, 100, 60], bar3: [240, 150, 80],
+    mono: false,
+  },
+  {
+    id: 'forest-green',
+    label: 'Forest Green',
+    preview: ['#14462A', '#4A9660'],
+    NAVY: [20, 60, 38], GOLD: [74, 150, 96], SLATE: [28, 72, 46],
+    TEXT: [20, 35, 25], LIGHT: [232, 248, 237], ACCENT: [220, 245, 228], WHITE: [255, 255, 255],
+    bar1: [30, 120, 70], bar2: [60, 160, 100], bar3: [90, 190, 130],
+    mono: false,
+  },
+  {
+    id: 'slate-corporate',
+    label: 'Slate Corporate',
+    preview: ['#2D3748', '#6480A0'],
+    NAVY: [45, 55, 75], GOLD: [100, 128, 165], SLATE: [60, 72, 95],
+    TEXT: [35, 40, 55], LIGHT: [238, 241, 248], ACCENT: [228, 234, 246], WHITE: [255, 255, 255],
+    bar1: [70, 100, 160], bar2: [80, 140, 130], bar3: [120, 90, 170],
+    mono: false,
+  },
+];
+
 // ── CHART DRAWING HELPERS ─────────────────────────────────────────────────────
 function drawBarChart(doc, x, y, w, h, data, labels, title, colorRGB, formatFn) {
   // Title
@@ -127,7 +176,7 @@ function drawPieChart(doc, cx, cy, r, segments, title) {
 }
 
 // ── PDF GENERATION ────────────────────────────────────────────────────────────
-function generateDueDiligencePDF(selectedSections, includeCharts) {
+function generateDueDiligencePDF(selectedSections, includeCharts, theme = PDF_THEMES[0]) {
   const doc = new jsPDF({ orientation: "portrait", unit: "mm", format: "a4" });
   const margin = 20;
   const pageW = 210;
@@ -136,13 +185,7 @@ function generateDueDiligencePDF(selectedSections, includeCharts) {
   let currentSectionLabel = '';
 
   // ── THEME ─────────────────────────────────────────────────────────────────
-  const NAVY   = [15, 35, 70];    // deep navy header
-  const GOLD   = [180, 140, 50];  // gold accent
-  const SLATE  = [55, 70, 95];    // slate subheading
-  const TEXT   = [28, 32, 40];    // body text
-  const LIGHT  = [240, 242, 246]; // light bg for rows
-  const ACCENT = [230, 236, 248]; // subheading bg
-  const WHITE  = [255, 255, 255];
+  const { NAVY, GOLD, SLATE, TEXT, LIGHT, ACCENT, WHITE } = theme;
 
   // ── SANITIZE ──────────────────────────────────────────────────────────────
   const clean = (txt) => String(txt || '')
@@ -376,14 +419,21 @@ function generateDueDiligencePDF(selectedSections, includeCharts) {
     y += 14;
 
     const fmtM = v => v >= 1000000 ? `$${(v/1000000).toFixed(1)}M` : `$${(v/1000).toFixed(0)}K`;
-    drawBarChart(doc, margin, y, 82, 48, FINANCIAL_DATA.revenue, ['Y1','Y2','Y3','Y4','Y5'], '5-Year Revenue Projection', [30, 60, 140], fmtM);
-    drawBarChart(doc, margin + 88, y, 82, 48, FINANCIAL_DATA.ebitda, ['Y1','Y2','Y3','Y4','Y5'], '5-Year EBITDA Projection', [30, 130, 80], fmtM);
+    // Apply theme colors to charts
+    const themedStreams = theme.mono
+      ? FINANCIAL_DATA.streams.map((s, i) => ({ ...s, color: [[60,60,60],[100,100,100],[130,130,130],[160,160,160],[190,190,190],[210,210,210]][i] }))
+      : FINANCIAL_DATA.streams;
+    const themedTam = theme.mono
+      ? FINANCIAL_DATA.tam.map((t, i) => ({ ...t, color: [[50,50,50],[90,90,90],[130,130,130],[160,160,160],[190,190,190]][i] }))
+      : FINANCIAL_DATA.tam;
+    drawBarChart(doc, margin, y, 82, 48, FINANCIAL_DATA.revenue, ['Y1','Y2','Y3','Y4','Y5'], '5-Year Revenue Projection', theme.bar1, fmtM);
+    drawBarChart(doc, margin + 88, y, 82, 48, FINANCIAL_DATA.ebitda, ['Y1','Y2','Y3','Y4','Y5'], '5-Year EBITDA Projection', theme.bar2, fmtM);
     y += 62;
 
-    drawPieChart(doc, margin + 30, y + 32, 26, FINANCIAL_DATA.streams, 'Year 5 Revenue Mix by Stream');
+    drawPieChart(doc, margin + 30, y + 32, 26, themedStreams, 'Year 5 Revenue Mix by Stream');
     y += 72;
 
-    drawBarChart(doc, margin, y, 165, 46, FINANCIAL_DATA.tam.map(t => t.value), FINANCIAL_DATA.tam.map(t => t.label), 'Total Addressable Market by Vertical ($B)', [100, 60, 180], v => `$${v}B`);
+    drawBarChart(doc, margin, y, 165, 46, themedTam.map(t => t.value), themedTam.map(t => t.label), 'Total Addressable Market by Vertical ($B)', theme.bar3, v => `$${v}B`);
     y += 60;
 
     // M&A table
@@ -490,6 +540,7 @@ export default function DueDiligencePdfGenerator({ compact }) {
   const [showChangelog, setShowChangelog] = useState(false);
   const [selectedSections, setSelectedSections] = useState(DD_SECTIONS.map((_, i) => i));
   const [includeCharts, setIncludeCharts] = useState(true);
+  const [selectedTheme, setSelectedTheme] = useState(PDF_THEMES[0]);
 
   // Persist selections in localStorage
   useEffect(() => {
@@ -510,10 +561,10 @@ export default function DueDiligencePdfGenerator({ compact }) {
   const selectAll = () => { const all = DD_SECTIONS.map((_, i) => i); setSelectedSections(all); localStorage.setItem("dd_selected_sections", JSON.stringify(all)); };
   const selectNone = () => { setSelectedSections([]); localStorage.setItem("dd_selected_sections", JSON.stringify([])); };
 
-  const handle = () => {
+  const handle = (themeOverride) => {
     if (selectedSections.length === 0) { alert("Select at least one section."); return; }
     setGenerating(true);
-    setTimeout(() => { generateDueDiligencePDF(selectedSections, includeCharts); setGenerating(false); }, 400);
+    setTimeout(() => { generateDueDiligencePDF(selectedSections, includeCharts, themeOverride || selectedTheme); setGenerating(false); }, 400);
   };
 
   return (
@@ -545,6 +596,27 @@ export default function DueDiligencePdfGenerator({ compact }) {
           <div className="flex items-center justify-between mb-3">
             <p className="text-white font-black text-sm">Customize Package</p>
             <button onClick={() => setShowConfig(false)} className="text-gray-500 hover:text-white"><X size={14} /></button>
+          </div>
+
+          {/* Theme Picker */}
+          <div className="mb-3 pb-3 border-b border-gray-800">
+            <p className="text-gray-400 text-xs font-bold uppercase tracking-wider mb-2">PDF Style Theme</p>
+            <div className="grid grid-cols-5 gap-1.5">
+              {PDF_THEMES.map(t => (
+                <button key={t.id} onClick={() => setSelectedTheme(t)}
+                  title={t.label}
+                  className={`flex flex-col items-center gap-1 p-1.5 rounded-lg border transition-all ${
+                    selectedTheme.id === t.id ? 'border-blue-500 bg-blue-950/30' : 'border-gray-700 hover:border-gray-500'
+                  }`}>
+                  <div className="flex w-full h-5 rounded overflow-hidden">
+                    <div className="flex-1" style={{ backgroundColor: t.preview[0] }} />
+                    <div className="flex-1" style={{ backgroundColor: t.preview[1] }} />
+                  </div>
+                  <span className={`text-center leading-tight ${selectedTheme.id === t.id ? 'text-blue-300' : 'text-gray-600'}`}
+                    style={{ fontSize: '8px' }}>{t.label}</span>
+                </button>
+              ))}
+            </div>
           </div>
 
           {/* Charts toggle */}
@@ -585,10 +657,10 @@ export default function DueDiligencePdfGenerator({ compact }) {
             ))}
           </div>
 
-          <button onClick={handle} disabled={generating || selectedSections.length === 0}
+          <button onClick={() => handle()} disabled={generating || selectedSections.length === 0}
             className="mt-4 w-full py-2.5 rounded-xl bg-blue-800 hover:bg-blue-700 disabled:opacity-50 text-white font-black text-xs transition-all flex items-center justify-center gap-2">
             {generating ? <Loader2 size={12} className="animate-spin" /> : <BookOpen size={12} />}
-            Generate {selectedSections.length}-Section PDF
+            Generate {selectedSections.length}-Section PDF ({selectedTheme.label})
           </button>
         </div>
       )}
