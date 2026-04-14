@@ -1,9 +1,10 @@
-import { useState, useCallback } from "react";
+import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import {
   ArrowLeft, ArrowRight, Brain, Loader2, Download, AlertCircle,
-  CheckCircle2, Sparkles, User, Plus, Trash2, Info
+  CheckCircle2, Sparkles, User, Plus, Trash2, Info, Share2
 } from "lucide-react";
+import ShareDraftModal from "@/components/wizard/ShareDraftModal";
 import { base44 } from "@/api/base44Client";
 import WizardProgress, { WIZARD_STEPS } from "@/components/wizard/WizardProgress";
 import ClaimEditor from "@/components/wizard/ClaimEditor";
@@ -523,6 +524,7 @@ export default function PatentDraftingWizard() {
   const location = useLocation();
   const [step, setStep] = useState("import");
   const [completed, setCompleted] = useState([]);
+  const [showShare, setShowShare] = useState(false);
   const [doc, setDoc] = useState(() => {
     // Accept pre-seeded context from navigation state
     const state = location.state;
@@ -550,6 +552,7 @@ export default function PatentDraftingWizard() {
 
   return (
     <div className="w-screen min-h-screen bg-gray-950 text-white flex flex-col">
+      {showShare && <ShareDraftModal doc={doc} onClose={() => setShowShare(false)} />}
       {/* Header */}
       <div className="flex items-center justify-between px-5 py-3.5 border-b border-gray-800 bg-gray-900/80 sticky top-0 z-20">
         <div className="flex items-center gap-4">
@@ -568,6 +571,12 @@ export default function PatentDraftingWizard() {
           <span className={`text-xs font-black px-2.5 py-1 rounded-full ${score >= 80 ? "bg-green-900/40 text-green-400" : "bg-gray-800 text-gray-400"}`}>
             {score}% complete
           </span>
+          <button
+            onClick={() => setShowShare(true)}
+            disabled={!doc.title?.trim()}
+            className="flex items-center gap-2 px-4 py-2 rounded-xl bg-gray-800 hover:bg-gray-700 border border-gray-700 text-gray-300 text-xs font-black transition-all disabled:opacity-40">
+            <Share2 size={13} /> Share
+          </button>
           <button
             onClick={() => exportPatentApplicationPDF(doc)}
             disabled={score < 30}

@@ -1,0 +1,70 @@
+{
+  "name": "SharedPatentDraft",
+  "type": "object",
+  "properties": {
+    "token": {
+      "type": "string"
+    },
+    "owner_email": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    },
+    "document": {
+      "type": "object",
+      "description": "Full patent draft document JSON"
+    },
+    "expires_at": {
+      "type": "string",
+      "description": "ISO timestamp"
+    },
+    "allow_comments": {
+      "type": "boolean",
+      "default": true
+    },
+    "comments": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "author": {
+            "type": "string"
+          },
+          "section": {
+            "type": "string"
+          },
+          "text": {
+            "type": "string"
+          },
+          "created_at": {
+            "type": "string"
+          }
+        }
+      },
+      "default": []
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "revoked"
+      ],
+      "default": "active"
+    },
+    "view_count": {
+      "type": "integer",
+      "default": 0
+    }
+  },
+  "required": [
+    "token",
+    "owner_email",
+    "title",
+    "document",
+    "expires_at"
+  ]
+}

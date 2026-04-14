@@ -84,6 +84,7 @@ import SellerTermSheet from './pages/SellerTermSheet';
 import MaterialSourcing from './pages/MaterialSourcing.jsx';
 import PatentIntelligence from './pages/PatentIntelligence.jsx';
 import PatentDraftingWizard from './pages/PatentDraftingWizard.jsx';
+import PatentReview from './pages/PatentReview.jsx';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -194,6 +195,7 @@ const AuthenticatedApp = () => {
           <Route path="/ai-research" element={<AIResearchAssistant />} />
           <Route path="/patent-intelligence" element={<PatentIntelligence />} />
           <Route path="/patent-drafting-wizard" element={<PatentDraftingWizard />} />
+          <Route path="/patent-review/:token" element={<PatentReview />} />
           <Route path="/term-sheet" element={<SellerTermSheet />} />
 
           {/* Admin-only routes */}
