@@ -80,6 +80,7 @@ import TermsOfService from './pages/TermsOfService';
 import RefundPolicy from './pages/RefundPolicy';
 import SocialMediaProfileGen from './pages/SocialMediaProfileGen';
 import AIResearchAssistant from './pages/AIResearchAssistant';
+import SellerTermSheet from './pages/SellerTermSheet';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -188,6 +189,7 @@ const AuthenticatedApp = () => {
           <Route path="/refund-policy" element={<RefundPolicy />} />
           <Route path="/social-profile-gen" element={<SocialMediaProfileGen />} />
           <Route path="/ai-research" element={<AIResearchAssistant />} />
+          <Route path="/term-sheet" element={<SellerTermSheet />} />
 
           {/* Admin-only routes */}
           <Route element={<AdminGuard />}>

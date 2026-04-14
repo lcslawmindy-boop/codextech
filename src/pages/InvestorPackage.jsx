@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { ArrowLeft, Copy, Mail, CheckCircle2, ChevronDown, ChevronUp, DollarSign, Shield, Zap, BookOpen, FileText, Download } from "lucide-react";
+import { ArrowLeft, Copy, Mail, CheckCircle2, ChevronDown, ChevronUp, DollarSign, Shield, BookOpen, FileText, Download } from "lucide-react";
 import { BUYERS } from "../lib/buyerData";
 import NdaPdfGenerator from "../components/NdaPdfGenerator";
 import DueDiligencePdfGenerator from "../components/DueDiligencePdfGenerator";
@@ -336,6 +336,10 @@ export default function InvestorPackage() {
         <div className="flex items-center gap-2">
           <NdaPdfGenerator />
           <DueDiligencePdfGenerator />
+          <Link to="/term-sheet"
+            className="flex items-center gap-2 px-4 py-2 rounded-xl bg-indigo-900/40 hover:bg-indigo-800/60 border border-indigo-700 text-indigo-300 text-xs font-bold transition-all">
+            <FileText size={13} /> Term Sheets
+          </Link>
           <button onClick={() => setShowLetter(s => !s)}
             className="flex items-center gap-2 px-4 py-2 rounded-xl bg-blue-900/40 hover:bg-blue-800/60 border border-blue-700 text-blue-300 text-xs font-bold transition-all">
             <FileText size={13} /> {showLetter ? "Hide" : "View"} Master Letter
