@@ -82,6 +82,7 @@ import SocialMediaProfileGen from './pages/SocialMediaProfileGen';
 import AIResearchAssistant from './pages/AIResearchAssistant';
 import SellerTermSheet from './pages/SellerTermSheet';
 import MaterialSourcing from './pages/MaterialSourcing';
+import PatentIntelligence from './pages/PatentIntelligence';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -190,6 +191,7 @@ const AuthenticatedApp = () => {
           <Route path="/refund-policy" element={<RefundPolicy />} />
           <Route path="/social-profile-gen" element={<SocialMediaProfileGen />} />
           <Route path="/ai-research" element={<AIResearchAssistant />} />
+          <Route path="/patent-intelligence" element={<PatentIntelligence />} />
           <Route path="/term-sheet" element={<SellerTermSheet />} />
 
           {/* Admin-only routes */}

@@ -12,6 +12,7 @@ const ALL_PAGES = [
 
   // Research
   { label: "Prior Art Archive", path: "/prior-art", tags: ["prior art", "patents", "archive", "research"], icon: "🗂️", category: "Research" },
+  { label: "AI Patent Intelligence", path: "/patent-intelligence", tags: ["patent", "ai", "analysis", "claims", "summarize", "conflicts", "landscape", "competitive", "strategy", "drafting", "prior art"], icon: "🧠", category: "AI Tools" },
   { label: "Patent Drafting Tool", path: "/patent-tool", tags: ["patent", "draft", "ai", "provisional", "ip"], icon: "📝", category: "IP Tools" },
   { label: "Patent Filing Wizard", path: "/patent-wizard", tags: ["patent", "filing", "wizard", "uspto"], icon: "🧙", category: "IP Tools" },
   { label: "Patent Landscape Graph", path: "/patent-landscape", tags: ["patent", "landscape", "graph", "map"], icon: "🗺️", category: "IP Tools" },
@@ -183,7 +184,7 @@ export default function GlobalSearch({ open, onClose }) {
           <div className="px-4 py-3">
             <p className="text-gray-600 text-xs font-semibold uppercase tracking-wider mb-2">Quick Access</p>
             <div className="flex flex-wrap gap-2">
-              {["Material Sourcing", "Patent Tool", "Investor Package", "Build Plans", "AI Research", "Admin Hub"].map(q => (
+              {["Patent Intelligence", "Material Sourcing", "Patent Tool", "Investor Package", "Build Plans", "AI Research"].map(q => (
                 <button key={q} onClick={() => setQuery(q)}
                   className="px-3 py-1.5 rounded-full bg-gray-800 hover:bg-gray-700 border border-gray-700 text-gray-300 text-xs font-medium transition-colors">
                   {q}
