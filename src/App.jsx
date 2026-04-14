@@ -81,6 +81,7 @@ import RefundPolicy from './pages/RefundPolicy';
 import SocialMediaProfileGen from './pages/SocialMediaProfileGen';
 import AIResearchAssistant from './pages/AIResearchAssistant';
 import SellerTermSheet from './pages/SellerTermSheet';
+import MaterialSourcing from './pages/MaterialSourcing';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -206,6 +207,7 @@ const AuthenticatedApp = () => {
             <Route path="/build-tracker" element={<InventionBuildTracker />} />
             <Route path="/trz-patent" element={<TRZPatent />} />
             <Route path="/admin-shop-orders" element={<AdminShopOrders />} />
+            <Route path="/material-sourcing" element={<MaterialSourcing />} />
           </Route>
 
           <Route path="*" element={<PageNotFound />} />

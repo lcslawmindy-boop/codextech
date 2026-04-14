@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import {
   Shield, Download, Video, FileText, Users, BarChart2,
-  TrendingUp, Database, Settings, ArrowRight, Star, Zap, Target
+  TrendingUp, Database, Settings, ArrowRight, Star, Zap, Target, ShoppingCart
 } from "lucide-react";
 
 const ADMIN_SECTIONS = [
@@ -47,6 +47,7 @@ const ADMIN_SECTIONS = [
     color: "#ec4899",
     items: [
       { path: "/build-tracker", icon: <Settings size={20} />, label: "Build Tracker", desc: "Track invention build projects, parts & milestones", badge: "Ops" },
+      { path: "/material-sourcing", icon: <ShoppingCart size={20} />, label: "Material Sourcing", desc: "Order parts from all BOMs with vendor links & 10% commission tracking", badge: "NEW" },
       { path: "/trz-patent", icon: <FileText size={20} />, label: "TRZ Patent PPA", desc: "Provisional patent application management & figures", badge: "Patent" },
       { path: "/provisional-patent", icon: <FileText size={20} />, label: "Provisional Patent Tool", desc: "Draft provisional patent applications with AI", badge: "Patent" },
     ]
