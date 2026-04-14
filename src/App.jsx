@@ -83,6 +83,7 @@ import AIResearchAssistant from './pages/AIResearchAssistant';
 import SellerTermSheet from './pages/SellerTermSheet';
 import MaterialSourcing from './pages/MaterialSourcing.jsx';
 import PatentIntelligence from './pages/PatentIntelligence.jsx';
+import PatentDraftingWizard from './pages/PatentDraftingWizard.jsx';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -192,6 +193,7 @@ const AuthenticatedApp = () => {
           <Route path="/social-profile-gen" element={<SocialMediaProfileGen />} />
           <Route path="/ai-research" element={<AIResearchAssistant />} />
           <Route path="/patent-intelligence" element={<PatentIntelligence />} />
+          <Route path="/patent-drafting-wizard" element={<PatentDraftingWizard />} />
           <Route path="/term-sheet" element={<SellerTermSheet />} />
 
           {/* Admin-only routes */}

@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   ArrowLeft, Brain, Loader2, Download, Copy, CheckCircle2,
-  FileText, Search, Map, Lightbulb, ChevronRight
+  FileText, Search, Map, Lightbulb, ChevronRight, Wand2
 } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import { jsPDF } from "jspdf";
@@ -285,6 +285,7 @@ Use real data from USPTO, EPO, and WIPO where possible. Format with clear header
 
 // ── TAB: PROVISIONAL DRAFTING STRATEGY ───────────────────────────────────────
 function ProvDraftingStrategy() {
+  const navigate = useNavigate();
   const [invention, setInvention] = useState("");
   const [reference, setReference] = useState("");
   const [loading, setLoading] = useState(false);
@@ -342,6 +343,11 @@ Format claims in proper USPTO claim format. Be specific and technically accurate
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-indigo-400 font-black text-sm uppercase tracking-wider">Provisional Drafting Strategy</h3>
             <div className="flex gap-2">
+              <button
+                onClick={() => navigate("/patent-drafting-wizard", { state: { aiContext: `INVENTION:\n${invention}\n\nAI DRAFTING STRATEGY OUTPUT:\n${result}` } })}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-indigo-700 hover:bg-indigo-600 text-white text-xs font-bold transition-all">
+                <Wand2 size={11} /> Open in Wizard
+              </button>
               <CopyBtn text={result} />
               <button onClick={() => exportToPDF("Provisional Drafting Strategy", result)}
                 className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-gray-800 hover:bg-gray-700 border border-gray-700 text-gray-300 text-xs font-semibold">
@@ -376,10 +382,16 @@ export default function PatentIntelligence() {
             <p className="text-gray-500 text-xs">Claim analysis · Novelty gaps · Competitive landscape · Drafting strategy</p>
           </div>
         </div>
-        <Link to="/patent-tool"
-          className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gray-800 border border-gray-700 text-gray-300 text-xs font-bold hover:bg-gray-700 transition-all">
-          Patent Drafter <ChevronRight size={12} />
-        </Link>
+        <div className="hidden sm:flex items-center gap-2">
+          <Link to="/patent-drafting-wizard"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-indigo-700 hover:bg-indigo-600 text-white text-xs font-bold transition-all">
+            Drafting Wizard <ChevronRight size={12} />
+          </Link>
+          <Link to="/patent-tool"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gray-800 border border-gray-700 text-gray-300 text-xs font-bold hover:bg-gray-700 transition-all">
+            Patent Drafter <ChevronRight size={12} />
+          </Link>
+        </div>
       </div>
 
       {/* Tabs */}
