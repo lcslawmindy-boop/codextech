@@ -81,8 +81,8 @@ import RefundPolicy from './pages/RefundPolicy';
 import SocialMediaProfileGen from './pages/SocialMediaProfileGen';
 import AIResearchAssistant from './pages/AIResearchAssistant';
 import SellerTermSheet from './pages/SellerTermSheet';
-import MaterialSourcing from './pages/MaterialSourcing';
-import PatentIntelligence from './pages/PatentIntelligence';
+import MaterialSourcing from './pages/MaterialSourcing.jsx';
+import PatentIntelligence from './pages/PatentIntelligence.jsx';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
