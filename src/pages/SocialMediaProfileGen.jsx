@@ -2,9 +2,10 @@ import { useState, useRef } from "react";
 import { Link } from "react-router-dom";
 import {
   ArrowLeft, Sparkles, Copy, CheckCircle2, Loader2, RefreshCw,
-  Download, ChevronRight, Edit3, BarChart2, Users, Zap, Target
+  Download, ChevronRight, Edit3, BarChart2, Users, Zap, Target, Eye, EyeOff
 } from "lucide-react";
 import { base44 } from "@/api/base44Client";
+import SocialPlatformMockup from "@/components/SocialPlatformMockup";
 
 const PLATFORMS = [
   {
@@ -182,6 +183,7 @@ export default function SocialMediaProfileGen() {
   const [customFocus, setCustomFocus] = useState("");
   const [editedResult, setEditedResult] = useState(null);
   const [generatedFor, setGeneratedFor] = useState(null);
+  const [showMockup, setShowMockup] = useState(true);
   const resultRef = useRef(null);
 
   const displayResult = editedResult || result;
@@ -434,10 +436,15 @@ Each value must be a string within the character limit. Be compelling, specific,
                     </div>
                   </div>
                   {/* Floating action buttons */}
-                  <div className="flex items-center gap-2">
-                    <button onClick={generate}
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <button onClick={() => setShowMockup(m => !m)}
                       className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold transition-all border"
                       style={{ backgroundColor: platform.color + "20", borderColor: platform.color + "50", color: platform.color }}>
+                      {showMockup ? <EyeOff size={11} /> : <Eye size={11} />}
+                      {showMockup ? "Hide Preview" : "Platform Preview"}
+                    </button>
+                    <button onClick={generate}
+                      className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-gray-800 hover:bg-gray-700 border border-gray-700 text-gray-300 text-xs font-bold transition-all">
                       <RefreshCw size={11} /> Regenerate
                     </button>
                     <CopyButton text={allFieldsText} label="Copy All" />
@@ -460,6 +467,21 @@ Each value must be a string within the character limit. Be compelling, specific,
                   )}
                 </div>
               </div>
+
+              {/* Platform Preview Mockup */}
+              {showMockup && (
+                <div className="rounded-2xl overflow-hidden border border-gray-700/40 p-5"
+                  style={{ background: `linear-gradient(135deg, ${platform.color}10, ${platform.color}04)` }}>
+                  <div className="flex items-center gap-2 mb-4">
+                    <Eye size={13} style={{ color: platform.color }} />
+                    <p className="text-xs font-black uppercase tracking-widest" style={{ color: platform.color }}>
+                      {platform.name} Profile Preview
+                    </p>
+                    <span className="text-gray-600 text-xs ml-1">— how it will look on the platform</span>
+                  </div>
+                  <SocialPlatformMockup platformId={platform.id} data={displayResult} />
+                </div>
+              )}
 
               {/* Fields */}
               <div className="space-y-3">
