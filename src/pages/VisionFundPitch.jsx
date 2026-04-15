@@ -3,6 +3,10 @@ import { Link } from "react-router-dom";
 import { ArrowLeft, ArrowRight, Download, Loader2 } from "lucide-react";
 import { jsPDF } from "jspdf";
 
+const BRAND = "Zenith Apex Research Portfolio (ZARP)";
+const BRAND_SHORT = "ZARP";
+const TAGLINE = "AI Operating System for Global R&D and Intellectual Property Creation";
+
 const SLIDES = [
   {
     id: 1,
@@ -13,10 +17,11 @@ const SLIDES = [
         <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-yellow-900/40 border border-yellow-700 text-yellow-400 text-xs font-black mb-8 uppercase tracking-widest">
           Vision Fund Pitch · Confidential
         </div>
-        <h1 className="text-6xl md:text-8xl font-black text-white mb-4 tracking-tight">Zenith Apex</h1>
-        <p className="text-2xl md:text-3xl font-bold text-yellow-400 mb-4">AI Operating System for Global R&D</p>
-        <p className="text-gray-400 text-xl">Transforming a $2T Industry</p>
-        <div className="mt-12 w-24 h-1 bg-yellow-400 rounded-full" />
+        <p className="text-gray-500 text-sm font-bold uppercase tracking-widest mb-3">{BRAND}</p>
+        <h1 className="text-5xl md:text-7xl font-black text-white mb-4 tracking-tight">ZARP</h1>
+        <p className="text-xl md:text-2xl font-bold text-yellow-400 mb-3 max-w-2xl">AI Operating System for Global R&D and Intellectual Property Creation</p>
+        <p className="text-gray-500 text-base">Transforming a $2T Industry</p>
+        <div className="mt-10 w-24 h-1 bg-yellow-400 rounded-full" />
       </div>
     ),
   },
@@ -80,8 +85,8 @@ const SLIDES = [
     content: () => (
       <div className="flex flex-col justify-center h-full px-10 md:px-16">
         <p className="text-green-400 text-sm font-black uppercase tracking-widest mb-3">Slide 4 — The Solution</p>
-        <h2 className="text-4xl md:text-5xl font-black text-white mb-2">Zenith Apex =</h2>
-        <h2 className="text-4xl md:text-5xl font-black text-green-400 mb-8">AI Operating System for Invention</h2>
+        <h2 className="text-4xl md:text-5xl font-black text-white mb-2">ZARP =</h2>
+        <h2 className="text-3xl md:text-4xl font-black text-green-400 mb-8">AI Operating System for Global R&D and IP Creation</h2>
         <div className="grid grid-cols-2 gap-4 mb-8">
           {[
             { icon: "⚡", action: "Generates", what: "inventions" },
@@ -118,7 +123,7 @@ const SLIDES = [
               <tr className="bg-gray-800">
                 <th className="text-left px-6 py-3 text-gray-400 font-black uppercase tracking-wider">Metric</th>
                 <th className="text-left px-6 py-3 text-gray-400 font-black uppercase tracking-wider">Before</th>
-                <th className="text-left px-6 py-3 text-purple-400 font-black uppercase tracking-wider">Zenith Apex</th>
+                <th className="text-left px-6 py-3 text-purple-400 font-black uppercase tracking-wider">ZARP</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-800">
@@ -187,9 +192,7 @@ const SLIDES = [
               <div className="bg-yellow-900/40 border border-yellow-700 rounded-xl px-5 py-3 text-yellow-300 font-black text-base">
                 {step}
               </div>
-              {i < arr.length - 1 && (
-                <span className="text-yellow-600 font-black text-xl">→</span>
-              )}
+              {i < arr.length - 1 && <span className="text-yellow-600 font-black text-xl">→</span>}
             </div>
           ))}
         </div>
@@ -211,7 +214,7 @@ const SLIDES = [
         <h2 className="text-4xl md:text-5xl font-black text-white mb-8">Perfect inflection point.</h2>
         <div className="space-y-4 mb-8">
           {[
-            { icon: "📉", headline: "AI compute costs collapsed 99%", sub: "What cost $50K now costs pennies — enabling the Zenith Apex model" },
+            { icon: "📉", headline: "AI compute costs collapsed 99%", sub: "What cost $50K now costs pennies — enabling the ZARP model" },
             { icon: "🏢", headline: "Enterprise AI adoption accelerating", sub: "Fortune 500s are actively building AI-native R&D workflows" },
             { icon: "🏛", headline: "Governments funding innovation pipelines", sub: "National IP infrastructure is a strategic priority globally" },
             { icon: "📈", headline: "IP demand increasing globally", sub: "Patent filings up 4% YoY — yet the tools haven't scaled" },
@@ -270,7 +273,7 @@ const SLIDES = [
           {[
             { icon: "💳", model: "SaaS Subscriptions", desc: "Individual and team plans — recurring, global, instant access" },
             { icon: "🏢", model: "Enterprise Licensing", desc: "White-label AI Patent Suite + VDR Portal for IP firms and law practices" },
-            { icon: "🔌", model: "API / Platform Access", desc: "Embedding Zenith Apex into enterprise R&D workflows via API" },
+            { icon: "🔌", model: "API / Platform Access", desc: "Embedding ZARP into enterprise R&D workflows via API" },
             { icon: "🏛", model: "IP Marketplace (Future)", desc: "Connecting invention supply to institutional capital demand" },
           ].map((item, i) => (
             <div key={i} className="bg-purple-950/20 border border-purple-900/40 rounded-2xl p-5">
@@ -312,14 +315,199 @@ const SLIDES = [
                 <span className="font-black text-sm" style={{ color: item.color }}>{item.range}</span>
               </div>
               <div className="h-2 bg-gray-800 rounded-full overflow-hidden">
-                <div className="h-full rounded-full transition-all" style={{ width: item.bar, backgroundColor: item.color }} />
+                <div className="h-full rounded-full" style={{ width: item.bar, backgroundColor: item.color }} />
               </div>
             </div>
           ))}
         </div>
         <div className="bg-yellow-950/30 border border-yellow-800 rounded-2xl px-6 py-5 text-center">
-          <p className="text-yellow-400 font-black text-xl mb-1">Zenith Apex becomes the infrastructure layer</p>
+          <p className="text-yellow-400 font-black text-xl mb-1">ZARP becomes the infrastructure layer</p>
           <p className="text-gray-400 text-sm">for how the world creates intellectual property.</p>
+        </div>
+      </div>
+    ),
+  },
+  {
+    id: 12,
+    label: "Competition",
+    color: "#f97316",
+    content: () => (
+      <div className="flex flex-col justify-center h-full px-10 md:px-16">
+        <p className="text-orange-400 text-sm font-black uppercase tracking-widest mb-3">Slide 12 — Competitive Positioning</p>
+        <h2 className="text-4xl md:text-5xl font-black text-white mb-8">Everyone else is partial.<br /><span className="text-orange-400">ZARP is full-stack.</span></h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+          {[
+            { label: "Legal AI Tools", scope: "Partial solution", detail: "Document review only. No invention generation. No market validation.", icon: "⚖️", bad: true },
+            { label: "Patent Tools", scope: "Limited scope", detail: "Filing assistance only. No AI invention engine. No commercialization layer.", icon: "📄", bad: true },
+            { label: "Research Tools", scope: "Non-generative", detail: "Passive search and retrieval. Cannot create, draft, or commercialize IP.", icon: "🔍", bad: true },
+          ].map((item, i) => (
+            <div key={i} className="bg-gray-900 border border-gray-800 rounded-2xl p-5">
+              <span className="text-3xl block mb-2">{item.icon}</span>
+              <p className="text-white font-black text-sm mb-1">{item.label}</p>
+              <p className="text-red-400 text-xs font-bold mb-2">{item.scope}</p>
+              <p className="text-gray-600 text-xs leading-relaxed">{item.detail}</p>
+            </div>
+          ))}
+        </div>
+        <div className="bg-orange-950/30 border border-orange-800/50 rounded-2xl px-6 py-4 flex items-center gap-4">
+          <span className="text-3xl">🟣</span>
+          <div>
+            <p className="text-orange-400 font-black text-sm uppercase tracking-wider mb-0.5">Zenith Apex Research Portfolio (ZARP)</p>
+            <p className="text-white font-black text-lg">Full-stack innovation engine — generation to commercialization.</p>
+          </div>
+        </div>
+      </div>
+    ),
+  },
+  {
+    id: 13,
+    label: "Moat",
+    color: "#8b5cf6",
+    content: () => (
+      <div className="flex flex-col justify-center h-full px-10 md:px-16">
+        <p className="text-violet-400 text-sm font-black uppercase tracking-widest mb-3">Slide 13 — Moat</p>
+        <h2 className="text-4xl md:text-5xl font-black text-white mb-8">Compounding defensibility.</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-8">
+          {[
+            { icon: "🗄️", label: "Proprietary Dataset", desc: "Curated, cross-referenced IP and research data that competitors cannot easily replicate", color: "#8b5cf6" },
+            { icon: "🔁", label: "AI Feedback Loop", desc: "Every invention and patent drafted makes the model smarter — self-reinforcing improvement", color: "#a855f7" },
+            { icon: "⛓️", label: "Integrated Pipeline", desc: "End-to-end workflow lock-in: users cannot replace one piece without losing the whole system", color: "#c084fc" },
+            { icon: "🥇", label: "First-Mover Advantage", desc: "Building the data moat now — when AI R&D infrastructure is in its formative window", color: "#d4af37" },
+          ].map((item, i) => (
+            <div key={i} className="bg-violet-950/20 border border-violet-900/40 rounded-2xl p-5">
+              <div className="flex items-center gap-3 mb-2">
+                <span className="text-2xl">{item.icon}</span>
+                <p className="font-black text-sm" style={{ color: item.color }}>{item.label}</p>
+              </div>
+              <p className="text-gray-400 text-xs leading-relaxed">{item.desc}</p>
+            </div>
+          ))}
+        </div>
+        <div className="bg-violet-950/30 border border-violet-800/50 rounded-2xl px-6 py-4">
+          <p className="text-white font-black text-lg">👉 Compounding defensibility — the moat widens every day.</p>
+        </div>
+      </div>
+    ),
+  },
+  {
+    id: 14,
+    label: "Traction",
+    color: "#10b981",
+    content: () => (
+      <div className="flex flex-col justify-center h-full px-10 md:px-16">
+        <p className="text-emerald-400 text-sm font-black uppercase tracking-widest mb-3">Slide 14 — Traction (Early Signal)</p>
+        <h2 className="text-4xl md:text-5xl font-black text-white mb-3">Early signal.</h2>
+        <h2 className="text-4xl md:text-5xl font-black text-emerald-400 mb-8">Not endpoint.</h2>
+        <div className="space-y-4 mb-8">
+          {[
+            { stat: "200+", label: "Early users on platform", sub: "Researchers, inventors, IP attorneys, engineers — active across all 7 modules" },
+            { stat: "✅", label: "Government funding validation", sub: "Aligned with DoD SBIR and federal innovation mandates — positioned for institutional adoption" },
+            { stat: "23+", label: "Multi-domain IP portfolio", sub: "Bioelectromagnetics, energy, defense, communications — cross-domain invention pipeline active" },
+          ].map((item, i) => (
+            <div key={i} className="flex items-center gap-6 bg-gray-900 border border-gray-800 rounded-2xl px-6 py-4">
+              <p className="text-emerald-400 font-black text-3xl w-16 flex-shrink-0 text-center">{item.stat}</p>
+              <div>
+                <p className="text-white font-black text-sm">{item.label}</p>
+                <p className="text-gray-500 text-xs mt-0.5">{item.sub}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+        <div className="bg-emerald-950/30 border border-emerald-800/50 rounded-2xl px-6 py-4">
+          <p className="text-white font-black text-lg">👉 This is traction at the infrastructure layer — not a consumer product.</p>
+        </div>
+      </div>
+    ),
+  },
+  {
+    id: 15,
+    label: "Strategic Position",
+    color: "#f43f5e",
+    content: () => (
+      <div className="flex flex-col justify-center h-full px-10 md:px-16">
+        <p className="text-rose-400 text-sm font-black uppercase tracking-widest mb-3">Slide 15 — Strategic Positioning</p>
+        <h2 className="text-4xl md:text-5xl font-black text-white mb-4">Infrastructure-level asset.</h2>
+        <p className="text-gray-400 text-base mb-8">ZARP is not a feature — it is a platform layer. The same category as what these acquirers buy.</p>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+          {[
+            { name: "SoftBank Group", role: "Vision Fund — global technology platform investor", icon: "🇯🇵" },
+            { name: "Google", role: "AI + IP infrastructure acquisition target", icon: "🔍" },
+            { name: "Microsoft", role: "Enterprise AI + IP workflow integration", icon: "🪟" },
+            { name: "Defense Primes", role: "Classified device documentation + SBIR alignment", icon: "🛡️" },
+          ].map((item, i) => (
+            <div key={i} className="bg-rose-950/20 border border-rose-900/40 rounded-2xl p-5 text-center">
+              <span className="text-3xl block mb-2">{item.icon}</span>
+              <p className="text-white font-black text-sm mb-1">{item.name}</p>
+              <p className="text-gray-500 text-xs leading-relaxed">{item.role}</p>
+            </div>
+          ))}
+        </div>
+        <div className="bg-rose-950/30 border border-rose-800/50 rounded-2xl px-6 py-4">
+          <p className="text-white font-black text-lg">👉 We are building to be acquired or to dominate. Both paths win.</p>
+        </div>
+      </div>
+    ),
+  },
+  {
+    id: 16,
+    label: "Vision",
+    color: "#d4af37",
+    content: () => (
+      <div className="flex flex-col items-center justify-center h-full text-center px-8 md:px-20">
+        <p className="text-yellow-400 text-sm font-black uppercase tracking-widest mb-10">Slide 16 — Vision</p>
+        <div className="mb-8">
+          <div className="w-16 h-1 bg-yellow-400 rounded-full mx-auto mb-8" />
+          <blockquote className="text-3xl md:text-4xl font-black text-white leading-tight mb-6">
+            "We believe Zenith Apex Research Portfolio becomes the infrastructure layer for how the world creates intellectual property."
+          </blockquote>
+          <div className="w-16 h-1 bg-yellow-400 rounded-full mx-auto" />
+        </div>
+        <p className="text-gray-500 text-base max-w-xl leading-relaxed">
+          Not a tool. Not a database. Not a search engine.<br />
+          <span className="text-white font-bold">The operating system for global innovation.</span>
+        </p>
+        <div className="mt-10 grid grid-cols-3 gap-6 text-center">
+          {[
+            { label: "Scale", icon: "📡" },
+            { label: "Inevitability", icon: "⚡" },
+            { label: "Dominance", icon: "🏆" },
+          ].map((item, i) => (
+            <div key={i}>
+              <span className="text-4xl block mb-2">{item.icon}</span>
+              <p className="text-yellow-400 font-black text-lg">{item.label}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    ),
+  },
+  {
+    id: 17,
+    label: "The Ask",
+    color: "#22c55e",
+    content: () => (
+      <div className="flex flex-col justify-center h-full px-10 md:px-16">
+        <p className="text-green-400 text-sm font-black uppercase tracking-widest mb-3">Slide 17 — The Ask</p>
+        <h2 className="text-4xl md:text-5xl font-black text-white mb-8">Partner with us to<br /><span className="text-green-400">redefine innovation.</span></h2>
+        <div className="space-y-4 mb-8">
+          {[
+            { icon: "💰", label: "Strategic Capital", desc: "To accelerate platform scaling, patent filings, and enterprise sales" },
+            { icon: "🌐", label: "Platform Scaling", desc: "Engineering, AI infrastructure, and enterprise-grade deployments" },
+            { icon: "🗺️", label: "Global Deployment", desc: "Expanding ZARP into international markets — EU, Asia-Pacific, Middle East R&D corridors" },
+          ].map((item, i) => (
+            <div key={i} className="flex items-center gap-5 bg-green-950/20 border border-green-900/40 rounded-2xl px-6 py-5">
+              <span className="text-3xl flex-shrink-0">{item.icon}</span>
+              <div>
+                <p className="text-white font-black text-base">{item.label}</p>
+                <p className="text-gray-500 text-sm mt-0.5">{item.desc}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+        <div className="bg-green-950/40 border border-green-700 rounded-2xl px-8 py-6 text-center">
+          <p className="text-green-400 font-black text-2xl mb-2">Zenith Apex Research Portfolio (ZARP)</p>
+          <p className="text-white font-black text-lg mb-1">AI Operating System for Global R&D and IP Creation</p>
+          <p className="text-gray-500 text-sm">Confidential · Vision Fund · {new Date().getFullYear()}</p>
         </div>
       </div>
     ),
@@ -332,26 +520,22 @@ function exportPDF() {
 
   SLIDES.forEach((slide, i) => {
     if (i > 0) doc.addPage();
-    // Background
     doc.setFillColor(10, 10, 20);
     doc.rect(0, 0, W, H, "F");
-    // Color accent bar
     const [r, g, b] = hexToRgb(slide.color);
     doc.setFillColor(r, g, b);
     doc.rect(0, 0, W, 5, "F");
-    // Slide number
     doc.setFont("helvetica", "normal");
     doc.setFontSize(8);
     doc.setTextColor(80, 80, 100);
     doc.text(`${slide.id} / ${SLIDES.length}`, W - margin, H - 8, { align: "right" });
-    doc.text("ZENITH APEX — VISION FUND PITCH · CONFIDENTIAL", margin, H - 8);
-    // Slide label
+    doc.text(`ZARP — ${BRAND} · VISION FUND · CONFIDENTIAL`, margin, H - 8);
     doc.setFontSize(8);
     doc.setTextColor(r, g, b);
     doc.text(`SLIDE ${slide.id} — ${slide.label.toUpperCase()}`, margin, 14);
   });
 
-  doc.save("ZenithApex_VisionFund_PitchDeck.pdf");
+  doc.save("ZARP_VisionFund_PitchDeck.pdf");
 }
 
 function hexToRgb(hex) {
@@ -384,27 +568,25 @@ export default function VisionFundPitch() {
           </Link>
           <div className="w-px h-5 bg-gray-700" />
           <div>
-            <p className="text-white font-black text-sm">Vision Fund Pitch Deck</p>
-            <p className="text-gray-500 text-xs">Zenith Apex · Confidential · {SLIDES.length} Slides</p>
+            <p className="text-white font-black text-sm">ZARP — Vision Fund Pitch Deck</p>
+            <p className="text-gray-500 text-xs">Zenith Apex Research Portfolio · Confidential · {SLIDES.length} Slides</p>
           </div>
         </div>
-        <div className="flex items-center gap-2">
-          <button onClick={handleExport} disabled={exporting}
-            className="flex items-center gap-2 px-4 py-2 rounded-xl bg-yellow-800 hover:bg-yellow-700 text-black font-black text-xs transition-all disabled:opacity-60">
-            {exporting ? <Loader2 size={12} className="animate-spin" /> : <Download size={12} />}
-            {exporting ? "Exporting…" : "Export PDF"}
-          </button>
-        </div>
+        <button onClick={handleExport} disabled={exporting}
+          className="flex items-center gap-2 px-4 py-2 rounded-xl bg-yellow-800 hover:bg-yellow-700 text-black font-black text-xs transition-all disabled:opacity-60">
+          {exporting ? <Loader2 size={12} className="animate-spin" /> : <Download size={12} />}
+          {exporting ? "Exporting…" : "Export PDF"}
+        </button>
       </div>
 
-      {/* Slide thumbnail nav */}
-      <div className="flex gap-1.5 px-5 py-2 border-b border-gray-800 bg-gray-900/60 overflow-x-auto flex-shrink-0">
+      {/* Slide tab nav */}
+      <div className="flex gap-1 px-4 py-2 border-b border-gray-800 bg-gray-900/60 overflow-x-auto flex-shrink-0">
         {SLIDES.map((s, i) => (
           <button key={s.id} onClick={() => setCurrent(i)}
-            className={`flex-shrink-0 px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
-              i === current ? "text-white" : "text-gray-600 hover:text-gray-400"
-            }`}
-            style={i === current ? { backgroundColor: s.color + "25", color: s.color } : {}}>
+            className="flex-shrink-0 px-3 py-1.5 rounded-lg text-xs font-bold transition-all"
+            style={i === current
+              ? { backgroundColor: s.color + "25", color: s.color }
+              : { color: "#4b5563" }}>
             {s.id}. {s.label}
           </button>
         ))}
@@ -413,18 +595,16 @@ export default function VisionFundPitch() {
       {/* Slide content */}
       <div className="flex-1 relative overflow-hidden" style={{ borderTop: `3px solid ${slide.color}` }}>
         <div className="absolute inset-0 overflow-y-auto">
-          <div className="min-h-full flex flex-col" style={{ minHeight: "100%" }}>
+          <div className="min-h-full flex flex-col py-6">
             {slide.content()}
           </div>
         </div>
-
-        {/* Prev / Next */}
         <button onClick={prev} disabled={current === 0}
-          className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-gray-800/80 hover:bg-gray-700 border border-gray-700 flex items-center justify-center text-gray-400 disabled:opacity-20 transition-all z-10">
+          className="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-gray-800/80 hover:bg-gray-700 border border-gray-700 flex items-center justify-center text-gray-400 disabled:opacity-20 transition-all z-10">
           <ArrowLeft size={16} />
         </button>
         <button onClick={next} disabled={current === SLIDES.length - 1}
-          className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-gray-800/80 hover:bg-gray-700 border border-gray-700 flex items-center justify-center text-gray-400 disabled:opacity-20 transition-all z-10">
+          className="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-gray-800/80 hover:bg-gray-700 border border-gray-700 flex items-center justify-center text-gray-400 disabled:opacity-20 transition-all z-10">
           <ArrowRight size={16} />
         </button>
       </div>
