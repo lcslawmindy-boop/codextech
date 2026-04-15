@@ -507,16 +507,18 @@ Invention: ${invention.name}
 Description: ${invention.description || ""}
 Category: ${invention.category || ""}
 
-Return a JSON object with a "steps" array. Each step must have:
+Return a JSON object with a "steps" array containing exactly 10 steps. Each step must have ALL of these fields:
 - title: string (short action title like "Wind Primary Bifilar Coil")
 - type: one of "preparation", "assembly", "wiring", "calibration", "testing", "safety"
 - duration: string (e.g. "45 minutes")
 - description: string (3-4 sentences of precise engineering instructions)
-- audio_script: string (1-2 natural spoken sentences describing what the builder is doing — conversational tone, no jargon)
-- materials: array of objects, each: { name, cost, where } — e.g. { name: "T200-2 Ferrite Core", cost: "$3.50", where: "Mouser Electronics (mouser.com)" }
-- tools: array of strings (specific tool names)
-- warning: string or null (safety or precision critical warning)
-- checkpoint: string (specific measurable verification before proceeding)`,
+- audio_script: string (1-2 natural spoken sentences describing what the builder is doing)
+- materials: array of objects, each: { name: string, cost: string, where: string }
+- tools: array of strings
+- warning: string (or empty string if none)
+- checkpoint: string (specific measurable verification)
+
+You MUST return all 10 steps fully populated. Do not return empty arrays or null values.`,
       response_json_schema: {
         type: "object",
         properties: {
@@ -551,17 +553,24 @@ Return a JSON object with a "steps" array. Each step must have:
       },
       model: "claude_sonnet_4_6"
     });
-    const generated = result.steps || [];
+    // InvokeLLM with response_json_schema returns the parsed object directly
+    const generated = (result?.steps && result.steps.length > 0)
+      ? result.steps
+      : (result?.data?.steps && result.data.steps.length > 0)
+      ? result.data.steps
+      : [];
     setSteps(generated);
-    base44.entities.BuildVideo.create({
-      invention_name: invention.name,
-      invention_category: invention.category || "",
-      invention_tagline: invention.tagline || "",
-      steps: generated,
-      step_count: generated.length,
-    });
+    if (generated.length > 0) {
+      base44.entities.BuildVideo.create({
+        invention_name: invention.name,
+        invention_category: invention.category || "",
+        invention_tagline: invention.tagline || "",
+        steps: generated,
+        step_count: generated.length,
+      });
+    }
     setLoading(false);
-    setPlaying(true);
+    if (generated.length > 0) setPlaying(true);
   };
 
   // Narrate on step change
@@ -648,6 +657,14 @@ Return a JSON object with a "steps" array. Each step must have:
             <p className="text-gray-500 text-sm max-w-sm text-center">
               AI is generating step-by-step assembly guide with materials, costs, and audio narration for {invention.name}
             </p>
+          </div>
+        ) : steps.length === 0 ? (
+          <div className="flex-1 flex flex-col items-center justify-center gap-4 py-16">
+            <p className="text-red-400 font-bold text-base">Failed to generate steps</p>
+            <p className="text-gray-500 text-sm text-center max-w-sm">The AI did not return valid build steps. Please close and try again.</p>
+            <button onClick={generateSteps} className="px-5 py-2.5 rounded-xl bg-indigo-700 hover:bg-indigo-600 text-white text-sm font-black transition-all">
+              Retry Generation
+            </button>
           </div>
         ) : (
           <div className="flex flex-1 overflow-hidden min-h-0">
