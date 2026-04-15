@@ -4,6 +4,7 @@ import { ArrowLeft, Zap, Loader2, Copy, CheckCircle2, Download, FlaskConical, Do
 import { base44 } from "@/api/base44Client";
 import { nodes } from "@/lib/beardenData";
 import { jsPDF } from "jspdf";
+import NodeSelector from "@/components/NodeSelector";
 
 // ── BUILD SUPPLIES SUGGESTIONS (keyed by keyword matching) ──────────────────
 const SUPPLY_KEYWORDS = [
@@ -75,55 +76,6 @@ function SynergyVisualizer({ selected, result }) {
           </text>
         )}
       </svg>
-    </div>
-  );
-}
-
-// ── NODE SELECTOR ──────────────────────────────────────────────────────────
-function NodeSelector({ selected, onToggle }) {
-  const [search, setSearch] = useState("");
-  const filtered = nodes.filter(n =>
-    n.label.toLowerCase().includes(search.toLowerCase()) ||
-    (n.group || "").toLowerCase().includes(search.toLowerCase())
-  );
-  const groups = [...new Set(nodes.map(n => n.group))];
-  const groupColors = { physics: "#3b82f6", biology: "#22c55e", weapons: "#ef4444", consciousness: "#a855f7", history: "#f59e0b", philosophy: "#06b6d4" };
-
-  return (
-    <div className="bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden">
-      <div className="px-4 py-3 border-b border-gray-800">
-        <input
-          value={search}
-          onChange={e => setSearch(e.target.value)}
-          placeholder="Search invention nodes…"
-          className="w-full bg-gray-800 border border-gray-700 rounded-xl px-3 py-2 text-white text-sm focus:outline-none focus:border-yellow-600 placeholder-gray-600"
-        />
-        <div className="flex gap-2 mt-2 flex-wrap">
-          {groups.map(g => (
-            <span key={g} className="text-xs px-2 py-0.5 rounded-full border font-semibold"
-              style={{ backgroundColor: (groupColors[g] || "#888") + "20", borderColor: (groupColors[g] || "#888") + "60", color: groupColors[g] || "#888" }}>
-              {g}
-            </span>
-          ))}
-        </div>
-      </div>
-      <div className="overflow-y-auto max-h-64 divide-y divide-gray-800/50">
-        {filtered.map(node => {
-          const isSelected = selected.find(s => s.id === node.id);
-          return (
-            <button key={node.id} onClick={() => onToggle(node)}
-              className={`w-full text-left px-4 py-2.5 flex items-center gap-3 transition-all hover:bg-gray-800/60 ${isSelected ? "bg-gray-800" : ""}`}>
-              <div className={`w-2.5 h-2.5 rounded-full flex-shrink-0 border-2 ${isSelected ? "border-yellow-400 bg-yellow-400" : "border-gray-600"}`}
-                style={!isSelected ? { borderColor: groupColors[node.group] || "#888" } : {}} />
-              <div className="flex-1 min-w-0">
-                <p className={`text-xs font-bold truncate ${isSelected ? "text-yellow-300" : "text-gray-300"}`}>{node.label}</p>
-                <p className="text-gray-600 text-xs capitalize">{node.group}</p>
-              </div>
-              {isSelected && <CheckCircle2 size={12} className="text-yellow-400 flex-shrink-0" />}
-            </button>
-          );
-        })}
-      </div>
     </div>
   );
 }
