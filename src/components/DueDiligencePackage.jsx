@@ -122,7 +122,7 @@ function generateDDP() {
   doc.text("& INVESTMENT PORTFOLIO PACKAGE", W / 2, 40, { align: "center" });
   doc.setFontSize(9); doc.setFont("helvetica", "normal"); doc.setTextColor(140, 160, 220);
   doc.text("Zenith Apex Research Portfolio — AI-Powered Scalar EM IP Generation Platform", W / 2, 52, { align: "center" });
-  doc.text("Pre-Public Acquisition Prospectus · Revision Q2 2026", W / 2, 59, { align: "center" });
+  doc.text("Pre-Public Acquisition Prospectus · Revision Q3 2026 — v2.1", W / 2, 59, { align: "center" });
   doc.setFontSize(8); doc.setTextColor(80, 100, 160);
   doc.text(`Prepared: ${date}`, W / 2, 70, { align: "center" });
 
@@ -168,7 +168,7 @@ function generateDDP() {
 
   y += 6;
   doc.setFontSize(7.5); doc.setFont("helvetica", "normal"); doc.setTextColor(80, 80, 120);
-  doc.text(`Total pages: 110+ | Revision: Q2 2026 | Classification: CONFIDENTIAL`, M, y);
+  doc.text(`Total pages: 120+ | Revision: Q3 2026 v2.1 | 23 Inventions | AI Patent Suite | VDR | Classification: CONFIDENTIAL`, M, y);
 
   // ════════════════════════════════════════════════════════════════════════════
   // PART I — EXECUTIVE OVERVIEW
@@ -197,10 +197,12 @@ function generateDDP() {
     ["AI Integration", "OpenAI GPT-4o, Claude Sonnet 4.6, Gemini 1.5 Pro (live internet) — multi-model orchestration"],
     ["Knowledge Graph", "200+ nodes, 400+ edges · Primary Bearden source fragments · Real-time subscriptions"],
     ["Courses", "20+ fully developed courses with syllabi, Stripe checkout, and LMS progress tracking"],
-    ["Inventions", "10+ engineering build plans with BOM, PDF export, animated guides, and admin library"],
-    ["AI Modules", "5 new AI-native engines (Q2 2026): Forge, Scanner, Patent Drafter, Video, Pitch Deck"],
-    ["Revenue Infrastructure", "Stripe integrated · EMF shop (20 products) · Newsletter · NDA gate · CRM"],
-    ["Patent Pipeline", "AI-to-USPTO PPA in <60 seconds per invention · Claude Sonnet · 9 formal sections"],
+    ["Inventions", "23 engineering build plans with BOM, PDF export, animated guides, gov-classified tier"],
+    ["AI Patent Suite", "Patent Intelligence (4 tools) + 7-step Drafting Wizard + Secure Sharing System — full USPTO pipeline"],
+    ["VDR Portal", "Virtual Data Room with tokenized NDA-gated investor access, page-view analytics, and revocation controls"],
+    ["AI Modules", "7 AI-native engines: Forge, Market Scanner, Patent Intelligence, Drafting Wizard, PPA Drafter, Video, Pitch Deck"],
+    ["Revenue Infrastructure", "Stripe integrated · EMF shop (20 products) · Newsletter · NDA gate · CRM · Material Sourcing Center"],
+    ["Patent Pipeline", "AI-to-USPTO PPA in <60 seconds per invention · Claude Sonnet · 9 formal sections · Shared review system"],
   ]);
 
   section("1.4 Investment Thesis Summary");
@@ -208,12 +210,13 @@ function generateDDP() {
   table(
     ["Metric", "Value", "Basis"],
     [
-      ["Platform FMV (conservative)", "$3.9M – $11.5M", "Asset-by-asset DCF"],
-      ["Strategic Acquisition Value", "$6.5M – $25M", "Pre-public premium"],
+      ["Platform FMV (conservative)", "$6.3M – $17.8M", "Asset-by-asset DCF (23 plans + AI patent suite + VDR)"],
+      ["Strategic Acquisition Value", "$8.8M – $39.2M", "Pre-public premium (40–120%)"],
       ["Yr 1 Revenue (self-operated)", "$380K – $850K", "Course + shop + plans"],
       ["Yr 2 Revenue (w/ AI licensing)", "$1.2M – $3.8M", "Law firm / VC SaaS"],
       ["Cost Per Invention Cycle", "~$0.80", "LLM API costs only"],
       ["USPTO PPA Value Displaced", "$10K – $50K", "Attorney fee equivalent"],
+      ["Patent Wizard Sessions/Month", "Unlimited", "AI-assisted, PDF export per session"],
     ],
     [70, 55, 45]
   );
@@ -240,7 +243,7 @@ function generateDDP() {
   ]);
 
   section("2.2 Entity Data Model");
-  body("The platform maintains 15+ entity types in a production database with real-time subscriptions. Key entities:");
+  body("The platform maintains 20+ entity types in a production database with real-time subscriptions. Key entities:");
   table(
     ["Entity", "Fields", "Purpose"],
     [
@@ -254,6 +257,10 @@ function generateDDP() {
       ["CourseProgress", "7", "LMS completion tracking"],
       ["NewsletterSubscriber", "5", "Email list with source tracking"],
       ["NodeClick", "5", "Analytics for knowledge graph engagement"],
+      ["SharedPatentDraft", "10", "Tokenized patent draft sharing with expiry + comments"],
+      ["VDRSession", "16", "Tokenized investor data room access + page-view audit trail"],
+      ["InventionBuildProject", "18", "Build project tracker with milestones, parts, and issues"],
+      ["ShopOrder", "18", "E-commerce order lifecycle with shipping and tracking"],
     ],
     [55, 18, 97]
   );
@@ -287,7 +294,7 @@ function generateDDP() {
   // ════════════════════════════════════════════════════════════════════════════
   // PART III — AI ENGINE DOCUMENTATION
   // ════════════════════════════════════════════════════════════════════════════
-  partHeader("III", "AI ENGINE DOCUMENTATION", "Invention Forge Suite — 5 New Modules (Q2 2026)");
+  partHeader("III", "AI ENGINE DOCUMENTATION", "AI Patent Suite + Invention Forge — 7 Integrated AI Modules (Q2 2026)");
 
   section("3.1 AI Invention Forge — Architecture & Capabilities");
   body("The Invention Forge is the platform's crown jewel — a multi-domain AI invention synthesis engine that generates complete, investor-ready invention dossiers grounded in Bearden's documented scalar EM framework.");
@@ -398,6 +405,37 @@ function generateDDP() {
     "Export: jsPDF landscape A4, branded dark theme, ZARP watermark",
   ]);
 
+  section("3.6 AI Patent Intelligence Suite");
+  body("A 4-tool patent intelligence platform that provides comprehensive analysis at every stage of the IP lifecycle — from raw claim review through competitive landscape to full drafting strategy.");
+  table(
+    ["Tool", "Model", "Output"],
+    [
+      ["Claim Summarizer", "Claude Sonnet 4.6", "Claim strength ratings, vulnerabilities, broadening opps"],
+      ["Novelty & FTO Analysis", "Claude Sonnet 4.6", "Prior art conflict scoring, differentiation strategy"],
+      ["Competitive Landscape", "Gemini Pro (live internet)", "IP holder map, white-space, 5-year forecast"],
+      ["Provisional Drafting Strategy", "Claude Sonnet 4.6", "3 ind. claims, 7 dep. claims, prosecution roadmap"],
+    ],
+    [48, 38, 84]
+  );
+
+  section("3.7 Patent Drafting Wizard");
+  body("A 7-step guided USPTO patent application drafting workflow with real-time validation, AI auto-fill at every step, and one-click PDF export. Seamlessly imports output from the Patent Intelligence Suite.");
+  bullet([
+    "Step 1: Import AI Patent Intelligence context (pre-seeds all AI suggestions)",
+    "Step 2: Title + Inventors + Technical Field (USPTO character limits enforced)",
+    "Step 3: Abstract (150–250 word validation, first-person blocked, real-time word count)",
+    "Step 4: Background + Summary + Detailed Description (AI generate per section)",
+    "Step 5: Claims Editor (independent + dependent, real-time USPTO rule validation)",
+    "Step 6: Brief Description of Drawings (figure list with AI suggestions)",
+    "Step 7: Review + Completeness Score + Full Document Preview + PDF Export",
+    "Secure Sharing: Tokenized share links with expiry, per-section comment threading for collaborators",
+  ]);
+  kv([
+    ["Completeness Scoring", "Weighted scoring across 10 required/optional sections (0–100%)"],
+    ["Share Token Lifecycle", "Configurable expiry (24h–30d) · One-click revocation · View count tracking"],
+    ["Export Format", "Fully formatted USPTO patent application PDF with section headers and legal citations"],
+  ]);
+
   // ════════════════════════════════════════════════════════════════════════════
   // PART IV — IP PORTFOLIO
   // ════════════════════════════════════════════════════════════════════════════
@@ -407,18 +445,23 @@ function generateDDP() {
   table(
     ["Asset", "Status", "Est. Value (Low)", "Est. Value (High)"],
     [
-      ["MEG Engineering Plans + Replication Kit", "Documented", "$450K", "$1.2M"],
+      ["MEG Engineering Plans + Replication Kit (23-plan library)", "Documented", "$620K", "$1.65M"],
       ["TRZ Cold Fusion Reactor Plans", "Documented", "$380K", "$950K"],
       ["TRD-1 Telomere Restoration Device", "Documented", "$520K", "$1.4M"],
+      ["MorphoYield TRZ-Agri Array (scalar agriculture IP)", "Documented", "$190K", "$490K"],
+      ["Aegis-SV Adaptive Scalar Counterphase Shield", "Documented", "$210K", "$540K"],
       ["Portable Porthole Disease System", "Documented", "$290K", "$780K"],
       ["Asymmetric Regauging Circuit (Patent)", "Pending", "$180K", "$440K"],
+      ["AI Patent Intelligence Suite (4 tools, full USPTO pipeline)", "Proprietary", "$210K", "$520K"],
+      ["AI Patent Drafting Wizard (7-step, real-time validation)", "Proprietary", "$175K", "$440K"],
+      ["Secure Patent Sharing System (tokenized, threaded comments)", "Proprietary", "$85K", "$210K"],
       ["AI Invention Forge (Platform IP)", "Proprietary", "$380K", "$950K"],
-      ["AI Patent Drafter (Platform IP)", "Proprietary", "$150K", "$380K"],
+      ["VDR Portal (tokenized NDA-gated investor data room)", "Proprietary", "$140K", "$360K"],
       ["Knowledge Graph Architecture", "Proprietary", "$220K", "$420K"],
       ["Bearden Primary Doc Archive + Annotations", "Proprietary", "$120K", "$280K"],
       ["Prior Art Database + AI Cross-Ref Engine", "Proprietary", "$95K", "$240K"],
     ],
-    [70, 30, 32, 38]
+    [70, 26, 30, 34]
   );
 
   section("4.2 Valuation Methodology");
@@ -622,13 +665,15 @@ function generateDDP() {
 
   section("9.3 Acquirer Return Analysis");
   kv([
-    ["Acquisition Price Range", "$6.5M – $18M (exclusive full acquisition)"],
+    ["Acquisition Price Range", "$8.8M – $22M (exclusive full acquisition, Q2 2026)"],
     ["Year 3 Revenue at Midpoint", "$2.9M (low scenario)"],
     ["Year 3 EBITDA at Midpoint", "$812K (28% margin)"],
     ["Implied EV/EBITDA at Acquisition", "8–22× Year 3 EBITDA (reasonable for AI platform)"],
     ["Year 5 Exit Value (10× EBITDA)", "$42M – $96M (high scenario)"],
     ["Implied IRR (5-year hold)", "44% – 89% depending on scenario"],
-    ["Strategic Value (distribution synergy)", "$6.5M – $25M premium above standalone"],
+    ["Strategic Value (distribution synergy)", "$8.8M – $39.2M premium above standalone"],
+    ["Additional Value Driver (NEW)", "AI Patent Suite white-label: $210K–$750K/yr per law firm licensee"],
+    ["Additional Value Driver (NEW)", "VDR Portal SaaS to IP firms / VC: $50K–$180K/yr per client"],
   ]);
   body("Note: AI module SaaS licensing ($280K–$750K/year per licensee, targeting 4–8 patent law firms and VC firms in Year 2–3) is the primary upside driver and is NOT included in the conservative Year 1 projections.");
 

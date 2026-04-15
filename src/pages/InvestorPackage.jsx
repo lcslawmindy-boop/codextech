@@ -6,20 +6,26 @@ import NdaPdfGenerator from "../components/NdaPdfGenerator";
 import DueDiligencePdfGenerator from "../components/DueDiligencePdfGenerator";
 
 const VALUATION = [
-  { label: "AI Invention Forge Engine (LLM-powered, full IP + financial generation)", low: 380000, high: 950000, tag: "NEW" },
-  { label: "AI Market Research Scanner (live USPTO/EPO/IEEE/journal scan + TAM/SAM/SOM)", low: 220000, high: 580000, tag: "NEW" },
-  { label: "Provisional Patent Drafter (USPTO 35 USC 111(b), Claude Sonnet, 9 sections)", low: 150000, high: 380000, tag: "NEW" },
-  { label: "VC Pitch Deck Generator + Build Video Engine (animated step-by-step guides)", low: 120000, high: 280000, tag: "NEW" },
-  { label: "Scalar Wave / Field Simulators + Dark Timeline Visualizer", low: 80000, high: 175000, tag: "NEW" },
+  { label: "AI Invention Forge Engine (LLM-powered, full IP + financial generation)", low: 380000, high: 950000 },
+  { label: "AI Market Research Scanner (live USPTO/EPO/IEEE/journal scan + TAM/SAM/SOM)", low: 220000, high: 580000 },
+  { label: "AI Patent Intelligence Suite (Claim Summarizer, Novelty/FTO, Competitive Landscape, Drafting Strategy)", low: 210000, high: 520000, tag: "NEW" },
+  { label: "Patent Drafting Wizard (7-step USPTO workflow, real-time validation, AI auto-fill, PDF export)", low: 175000, high: 440000, tag: "NEW" },
+  { label: "Secure Patent Sharing System (tokenized share links, comment threading, expiry control)", low: 85000, high: 210000, tag: "NEW" },
+  { label: "Provisional Patent Drafter (USPTO 35 USC 111(b), Claude Sonnet, 9 sections)", low: 150000, high: 380000 },
+  { label: "VC Pitch Deck Generator + Build Video Engine (animated step-by-step guides)", low: 120000, high: 280000 },
+  { label: "Virtual Data Room (VDR) Portal (tokenized NDA-gated investor access + analytics)", low: 140000, high: 360000, tag: "NEW" },
+  { label: "Scalar Wave / Field Simulators + Dark Timeline Visualizer", low: 80000, high: 175000 },
   { label: "Knowledge Graph (200+ nodes, primary source fragments, real-time subscriptions)", low: 220000, high: 420000 },
   { label: "Course Catalog (20+ courses, syllabi, Stripe checkout, learning dashboard)", low: 150000, high: 320000 },
-  { label: "Invention Build Plans (10+ devices, BOM, PDF export, animated guides)", low: 450000, high: 1200000 },
+  { label: "Invention Build Plans (23 devices, BOM, PDF export, animated guides, gov-classified tier)", low: 620000, high: 1650000, tag: "EXPANDED" },
+  { label: "MorphoYield TRZ-Agri Array (scalar field agriculture, crop yield IP)", low: 190000, high: 490000, tag: "NEW" },
+  { label: "Aegis-SV Adaptive Scalar Counterphase Shield (personal EMF defense system IP)", low: 210000, high: 540000, tag: "NEW" },
   { label: "Annotated Primary Document Archive + Bearden Node Network", low: 120000, high: 280000 },
-  { label: "Research Domain Moat + Platform Content Exclusivity (curated Bearden framework, tools, indexes)", low: 1800000, high: 6500000 },
+  { label: "Research Domain Moat + Platform Content Exclusivity (curated Bearden framework, tools, indexes)", low: 2100000, high: 7500000 },
   { label: "Prior Art Archive + Patent Landscape Graph + AI Patentability Cross-Reference", low: 95000, high: 240000 },
-  { label: "KRCIC — Kaznacheyev Reversal Cell Imprinting Chamber (biophysics IP, build plan)", low: 180000, high: 480000, tag: "NEW" },
-  { label: "UBDRS — UV Biophoton Disease Reversal System (biophysics IP, full build plan)", low: 145000, high: 385000, tag: "NEW" },
-  { label: "Legal Compliance Infrastructure (ToS, disclaimers, refund policy, NDA gate)", low: 45000, high: 120000, tag: "NEW" },
+  { label: "KRCIC — Kaznacheyev Reversal Cell Imprinting Chamber (biophysics IP, build plan)", low: 180000, high: 480000 },
+  { label: "UBDRS — UV Biophoton Disease Reversal System (biophysics IP, full build plan)", low: 145000, high: 385000 },
+  { label: "Legal Compliance Infrastructure (ToS, disclaimers, refund policy, NDA gate)", low: 45000, high: 120000 },
   { label: "EMF Health Platform + Investor CRM + Monitoring Dashboard + Alert System", low: 110000, high: 220000 },
 ];
 
@@ -45,23 +51,28 @@ Independent asset-by-asset valuation (conservative discounted cash flow + compar
 
   AI Invention Forge Engine ............. $380K – $950K
   AI Market Research Scanner ............ $220K – $580K
+  AI Patent Intelligence Suite (NEW) .... $210K – $520K
+  Patent Drafting Wizard (NEW) ........... $175K – $440K
+  Secure Patent Sharing System (NEW) .... $85K – $210K
   USPTO Provisional Patent Drafter ....... $150K – $380K
   VC Pitch Deck + Build Video Engine .... $120K – $280K
+  VDR Portal — Investor Data Room (NEW)  $140K – $360K
   Scalar Field / Wave Simulators ......... $80K – $175K
   Bearden Knowledge Graph (200+ nodes) .. $220K – $420K
   Course Catalog (20+ courses, LMS) ..... $150K – $320K
-  Invention Build Plan Library ........... $450K – $1.2M
+  Invention Build Plans (23 devices, EXPANDED) $620K – $1.65M
+  MorphoYield TRZ-Agri Array (NEW) ....... $190K – $490K
+  Aegis-SV Scalar Counterphase Shield (NEW) $210K – $540K
   Annotated Primary Document Archive .... $120K – $280K
-  Research Domain Moat + Exclusivity ... $1.8M – $6.5M
+  Research Domain Moat + Exclusivity ... $2.1M – $7.5M
   Prior Art Archive + Patent AI ......... $95K – $240K
-  Health + CRM + Monitoring Suite ....... $110K – $220K
+  KRCIC — Kaznacheyev EM Imprinting Chamber $180K – $480K
+  UBDRS — UV Biophoton Disease Reversal  $145K – $385K
+  Legal Compliance Infrastructure ........ $45K – $120K
+  Health + CRM + Monitoring Suite ........ $110K – $220K
 
-  KRCIC — Kaznacheyev EM Imprinting Chamber ... $180K – $480K
-  UBDRS — UV Biophoton Disease Reversal System .. $145K – $385K
-  Legal Compliance Infrastructure .............. $45K – $120K
-
-  PLATFORM TOTAL (conservative):    $5.8M – $13.5M
-  + Strategic pre-public premium:    $8.1M – $29.7M
+  PLATFORM TOTAL (conservative):    $6.3M – $17.8M
+  + Strategic pre-public premium:    $8.8M – $39.2M
 
 ────────────────────────────────────────────
 WHAT YOU ARE ACQUIRING — FULL ASSET SUMMARY
@@ -73,11 +84,17 @@ I. AI-NATIVE INVENTION GENERATION ENGINE (NEW — Q2 2026)
 
 • AI Market Research Scanner — Integrated live-internet scanning module that queries USPTO, EPO, WIPO, Google Patents, IEEE Xplore, arXiv, Grand View Research, and MarketsandMarkets in real-time. Auto-populates TAM/SAM/SOM figures with citations, identifies 8 prior art citations per invention with conflict risk scoring (High/Medium/Low), and generates per-citation differentiation strategies. Powered by Gemini Pro with live internet access.
 
-• Provisional Patent Drafter — Generates complete USPTO-compliant Provisional Patent Applications (35 USC 111(b), 37 CFR Part 1) in 9 formal sections: Title, Cross-Reference, Technical Field, Background, Summary, Brief Drawings, Detailed Description (800–1,200 words with element reference numerals), 20 Claims (3 independent + 17 dependent), and Abstract (≤150 words per Rule 1.72(b)). Powered by Claude Sonnet. Export as PDF or text file. Each PPA establishes a real USPTO priority date.
+• AI Patent Intelligence Suite (NEW) — 4-tool patent intelligence platform: (1) Claim Summarizer (strength ratings, vulnerabilities, broadening opportunities); (2) Novelty & FTO Analysis (prior art conflict scoring, differentiation strategy); (3) Competitive Landscape (live-internet IP holder map, white-space analysis, 5-year forecast); (4) Provisional Drafting Strategy (3 independent claims, 7 dependent claims, prosecution roadmap). All tools include PDF export and "Open in Wizard" one-click handoff.
+
+• Patent Drafting Wizard (NEW) — 7-step guided USPTO patent application drafting workflow with real-time validation, AI auto-fill at every step, completeness scoring (0–100%), and one-click PDF export. Imports Patent Intelligence context for seamless workflow. Includes Secure Sharing System: tokenized share links with configurable expiry (24h–30d), per-section comment threading for collaborators, one-click revocation, and view count tracking.
+
+• Provisional Patent Drafter — Generates complete USPTO-compliant Provisional Patent Applications (35 USC 111(b), 37 CFR Part 1) in 9 formal sections: Title, Cross-Reference, Technical Field, Background, Summary, Brief Drawings, Detailed Description (800–1,200 words), 20 Claims (3 independent + 17 dependent), and Abstract. Powered by Claude Sonnet. Each PPA establishes a real USPTO priority date.
 
 • Build Video Generator — Generates 10-step animated engineering build guides for any invention: materials, tools, safety warnings, checkpoints, and schematic canvas visualizations per step. Playback engine with progress tracking. Export as branded PDF build manual. All guides auto-saved to database with full CRUD management in Admin Video Library.
 
 • VC Pitch Deck Exporter — One-click generation of investor-ready pitch decks covering market opportunity, technology differentiation, IP strategy, financial projections, and team structure. Personalized per invention portfolio.
+
+• Virtual Data Room (VDR) Portal (NEW) — Tokenized, NDA-gated investor data room with page-view analytics, session duration tracking, access revocation controls, and audit trail. Each investor receives a unique secure URL. Admin dashboard shows live engagement per investor.
 
 II. OVERUNITY ENERGY TECHNOLOGY (Peer-Reviewed, Independently Replicated)
 
@@ -110,23 +127,24 @@ IV. DEFENSE INTELLIGENCE (Primary Source Documented)
 V. PRODUCTION-READY REVENUE PLATFORM
 
 • 20+ fully developed educational courses ($197–$397 each) with Stripe payment + LMS
-• 10+ invention build plan kits with downloadable PDFs ($490–$1,800 each)
+• 23 invention build plan kits with downloadable PDFs ($490–$1,800 each) — including MorphoYield TRZ-Agri Array and Aegis-SV Scalar Counterphase Shield
 • 20-product EMF protection shop with full e-commerce
 • Investor matching portal, CRM with pipeline tracking, and monitoring alert system
 • Newsletter infrastructure, NDA access gate, copy protection, analytics
 • AI Invention Forge → Patent → Market Research → Pitch Deck pipeline (complete)
 
   Conservative Year 1 revenue (self-operated):          $380,000 – $850,000
-  Year 2 with AI module licensing to law firms / VCs:   $1.2M – $3.8M
-  Strategic value to acquirer with existing distribution: $7.5M – $29.7M
+  Year 2 with AI patent suite + VDR licensing:          $1.2M – $3.8M
+  Strategic value to acquirer with existing distribution: $8.8M – $39.2M
 
 ────────────────────────────────────────────
 ACQUISITION TERMS (REVISED Q2 2026)
 ────────────────────────────────────────────
 
-EXCLUSIVE ACQUISITION (full IP, platform, AI engines, archive, plans):  $7.5M – $22M
-LICENSING ONLY (non-exclusive, annual):                                  $750,000 – $1,800,000/year
-AI MODULE WHITE-LABEL (SaaS to law firms / patent shops):                $280,000 – $750,000/year per licensee
+EXCLUSIVE ACQUISITION (full IP, platform, AI engines, archive, plans):  $8.8M – $25M
+LICENSING ONLY (non-exclusive, annual):                                  $850,000 – $2,200,000/year
+AI PATENT SUITE WHITE-LABEL (law firms, IP shops, VC patent teams):     $210,000 – $750,000/year per licensee
+VDR PORTAL SaaS (IP firms / VC data room solution):                     $50,000 – $180,000/year per client
 STRATEGIC PARTNERSHIP / JV:                                              Equity terms, negotiable
 
 This opportunity is being presented to a maximum of six (6) qualified buyers before public launch. First executed NDA with proof of funds receives priority due diligence access.
@@ -364,7 +382,7 @@ export default function InvestorPackage() {
             </div>
             <div className="bg-gray-800 border border-purple-700 rounded-xl p-4">
               <p className="text-purple-300 font-bold text-sm mb-1">📚 Due Diligence Package PDF</p>
-              <p className="text-gray-400 text-xs mb-3">100+ page technical &amp; financial portfolio covering all 8 platform sections: AI modules, IP assets, source documents, revenue model, risk analysis &amp; checklist.</p>
+              <p className="text-gray-400 text-xs mb-3">120+ page technical &amp; financial portfolio: 23 invention plans, AI patent suite (intelligence + wizard + sharing), VDR portal, IP assets, revenue model &amp; checklist. Q3 2026 v2.1.</p>
               <DueDiligencePdfGenerator />
             </div>
           </div>
