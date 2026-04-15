@@ -52,6 +52,7 @@ const ADMIN_SECTIONS = [
       { path: "/trz-patent", icon: <FileText size={20} />, label: "TRZ Patent PPA", desc: "Provisional patent application management & figures", badge: "Patent" },
       { path: "/provisional-patent", icon: <FileText size={20} />, label: "Provisional Patent Tool", desc: "Draft provisional patent applications with AI", badge: "Patent" },
       { path: "/pitch-script", icon: <FileText size={20} />, label: "Pitch Script", desc: "8-minute investor pitch, Q&A matrix & exit playbook", badge: "Pitch" },
+      { path: "/vision-fund-pitch", icon: <Zap size={20} />, label: "Vision Fund Pitch Deck", desc: "11-slide SoftBank-style pitch deck — AI OS for global R&D", badge: "NEW" },
       { path: "/term-sheet", icon: <FileText size={20} />, label: "Seller Term Sheet", desc: "Draft acquisition, licensing & investor term sheets", badge: "Legal" },
     ]
   },

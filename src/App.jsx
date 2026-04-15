@@ -87,6 +87,7 @@ import PatentIntelligence from './pages/PatentIntelligence.jsx';
 import PatentDraftingWizard from './pages/PatentDraftingWizard.jsx';
 import PatentReview from './pages/PatentReview.jsx';
 import PitchScript from './pages/PitchScript.jsx';
+import VisionFundPitch from './pages/VisionFundPitch';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -200,6 +201,7 @@ const AuthenticatedApp = () => {
           <Route path="/patent-review/:token" element={<PatentReview />} />
           <Route path="/term-sheet" element={<SellerTermSheet />} />
           <Route path="/pitch-script" element={<PitchScript />} />
+          <Route path="/vision-fund-pitch" element={<VisionFundPitch />} />
 
           {/* Admin-only routes */}
           <Route element={<AdminGuard />}>
