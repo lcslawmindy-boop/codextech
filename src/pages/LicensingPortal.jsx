@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { ArrowLeft, Check, ChevronRight, Shield, FileText, Loader2, Lock, Star, Zap, Package, Building2, AlertTriangle } from "lucide-react";
+import { ArrowLeft, Check, ChevronRight, Shield, FileText, Loader2, Lock, Star, Zap, Package, Building2, AlertTriangle, Mail } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 
 const TIERS = [
@@ -76,6 +76,27 @@ const TIERS = [
       "Strategic partnership / revenue share also available",
     ],
     restrictions: "NDA + proof of funds required before detailed disclosure.",
+  },
+  {
+    id: "gov_classified",
+    name: "Government / Classified",
+    price: "Contract Pricing",
+    priceNote: "Per agency mandate — ITAR-compatible terms",
+    color: "#ef4444",
+    badge: "🏛 Restricted",
+    govOnly: true,
+    features: [
+      "All 24 unclassified device architectures",
+      "Access to directed-energy & psychotronic device build plans",
+      "Scalar weapons & advanced biodefense documentation",
+      "Primary source classified/declassified reference archive",
+      "Defense procurement pathway documentation",
+      "Dedicated account manager & priority technical support",
+      "Custom NDA, IP licensing, and white-label terms",
+      "ITAR / EAR compliance review included",
+      "Secure data delivery (air-gap compatible)",
+    ],
+    restrictions: "Approved government entities only. Institutional verification, proof of clearance or mandate letter required. DoD SBIR-aligned.",
   },
 ];
 
@@ -232,7 +253,7 @@ export default function LicensingPortal() {
                 <p className="text-gray-500 text-sm">Choose the tier that matches your commercialization scope. All tiers require NDA execution before agreement delivery.</p>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                {TIERS.map(t => (
+                {TIERS.filter(t => !t.govOnly).map(t => (
                   <button
                     key={t.id}
                     onClick={() => setSelectedTier(t.id)}
@@ -258,6 +279,48 @@ export default function LicensingPortal() {
                   </button>
                 ))}
               </div>
+
+              {/* Government / Classified Tier — full-width banner */}
+              {(() => {
+                const gov = TIERS.find(t => t.govOnly);
+                return (
+                  <div className="relative bg-gray-900 border-2 border-red-800 rounded-2xl overflow-hidden">
+                    <div className="text-center py-2 text-xs font-black tracking-widest bg-red-900/30 text-red-400 uppercase">
+                      🏛 Government &amp; Defense — Restricted Access
+                    </div>
+                    <div className="p-6 md:p-8 grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
+                      <div>
+                        <div className="flex items-center gap-2 mb-2">
+                          <Shield size={18} className="text-red-400" />
+                          <h3 className="text-white font-black text-xl">{gov.name}</h3>
+                        </div>
+                        <p className="text-red-300 font-black text-xl mb-1">{gov.price}</p>
+                        <p className="text-gray-500 text-xs mb-3">{gov.priceNote}</p>
+                        <p className="text-gray-600 text-xs leading-relaxed">{gov.restrictions}</p>
+                      </div>
+                      <div className="space-y-2">
+                        {gov.features.map((f, i) => (
+                          <div key={i} className="flex items-start gap-2">
+                            <Check size={11} className="flex-shrink-0 mt-0.5 text-red-400" />
+                            <span className="text-gray-300 text-xs leading-relaxed">{f}</span>
+                          </div>
+                        ))}
+                      </div>
+                      <div className="flex flex-col items-center md:items-end gap-3">
+                        <a
+                          href="mailto:admin@zenithapex.com?subject=Government%2FDefense%20Licensing%20Inquiry&body=Organization%3A%0AVerification%20type%20(agency%2Fcontractor%2Flab)%3A%0AContact%20name%3A%0AInterest%20area%3A%0A"
+                          className="flex items-center gap-2 px-6 py-3 rounded-xl font-black text-white text-sm bg-red-800 hover:bg-red-700 transition-all shadow-lg shadow-red-900/40 whitespace-nowrap"
+                        >
+                          <Mail size={14} /> Request Access
+                        </a>
+                        <p className="text-gray-600 text-xs text-center md:text-right max-w-[200px]">
+                          Approved entities only. NDA + institutional verification required.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })()}
               <div className="flex justify-end">
                 <button
                   onClick={() => setStep(1)}
