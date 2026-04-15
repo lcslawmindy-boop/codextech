@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { ArrowLeft, Zap, Loader2, Copy, CheckCircle2, Download, FlaskConical, DollarSign, ShoppingCart } from "lucide-react";
+import { ArrowLeft, Zap, Loader2, Copy, CheckCircle2, Download, FlaskConical, DollarSign, ShoppingCart, Layers } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import { nodes } from "@/lib/beardenData";
 import { jsPDF } from "jspdf";
@@ -253,6 +253,15 @@ Be specific, technical, and IP-focused. Treat this as a real invention disclosur
 
     setResult(res);
     setLoading(false);
+
+    // Save to HybridInvention entity
+    await base44.entities.HybridInvention.create({
+      ...res,
+      input_nodes: selected.map(n => ({ id: n.id, label: n.label, group: n.group })),
+      mode,
+      market_sectors: [...new Set(selected.map(n => n.group))],
+      status: "draft",
+    });
   };
 
   const supplies = result ? getSuggestedSupplies(
@@ -275,6 +284,10 @@ Be specific, technical, and IP-focused. Treat this as a real invention disclosur
             <p className="text-gray-500 text-xs">Select 2–5 invention nodes · AI cross-pollination · IP valuation</p>
           </div>
         </div>
+        <Link to="/hybrid-portfolio"
+          className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-gray-800 hover:bg-gray-700 border border-gray-700 text-gray-300 text-xs font-bold transition-all">
+          <Layers size={12} /> Portfolio
+        </Link>
         {result && (
           <button onClick={() => exportPDF(selected, result)}
             className="flex items-center gap-2 px-4 py-2 rounded-xl bg-yellow-800 hover:bg-yellow-700 text-black font-black text-xs transition-all">

@@ -1,0 +1,82 @@
+{
+  "name": "HybridInvention",
+  "type": "object",
+  "properties": {
+    "hybrid_concept": {
+      "type": "string"
+    },
+    "mechanism": {
+      "type": "string"
+    },
+    "synergy_score": {
+      "type": "integer"
+    },
+    "patent_claims": {
+      "type": "string"
+    },
+    "market_applications": {
+      "type": "string"
+    },
+    "required_components": {
+      "type": "string"
+    },
+    "ip_valuation": {
+      "type": "string"
+    },
+    "ip_value_low": {
+      "type": "number",
+      "description": "Parsed lower bound of IP valuation in millions USD"
+    },
+    "ip_value_high": {
+      "type": "number",
+      "description": "Parsed upper bound of IP valuation in millions USD"
+    },
+    "suggested_next_steps": {
+      "type": "string"
+    },
+    "input_nodes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string"
+          },
+          "group": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "mode": {
+      "type": "string",
+      "enum": [
+        "merge",
+        "cross-pollinate"
+      ]
+    },
+    "market_sectors": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "filed",
+        "patented",
+        "commercializing"
+      ],
+      "default": "draft"
+    }
+  },
+  "required": [
+    "hybrid_concept",
+    "synergy_score"
+  ]
+}

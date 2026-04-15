@@ -89,6 +89,7 @@ import PatentReview from './pages/PatentReview.jsx';
 import PitchScript from './pages/PitchScript.jsx';
 import VisionFundPitch from './pages/VisionFundPitch';
 import RDSandbox from './pages/RDSandbox';
+import HybridPortfolio from './pages/HybridPortfolio';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -204,6 +205,7 @@ const AuthenticatedApp = () => {
           <Route path="/pitch-script" element={<PitchScript />} />
           <Route path="/vision-fund-pitch" element={<VisionFundPitch />} />
           <Route path="/rd-sandbox" element={<RDSandbox />} />
+          <Route path="/hybrid-portfolio" element={<HybridPortfolio />} />
 
           {/* Admin-only routes */}
           <Route element={<AdminGuard />}>
