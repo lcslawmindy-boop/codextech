@@ -85,6 +85,7 @@ import MaterialSourcing from './pages/MaterialSourcing.jsx';
 import PatentIntelligence from './pages/PatentIntelligence.jsx';
 import PatentDraftingWizard from './pages/PatentDraftingWizard.jsx';
 import PatentReview from './pages/PatentReview.jsx';
+import PitchScript from './pages/PitchScript.jsx';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -197,6 +198,7 @@ const AuthenticatedApp = () => {
           <Route path="/patent-drafting-wizard" element={<PatentDraftingWizard />} />
           <Route path="/patent-review/:token" element={<PatentReview />} />
           <Route path="/term-sheet" element={<SellerTermSheet />} />
+          <Route path="/pitch-script" element={<PitchScript />} />
 
           {/* Admin-only routes */}
           <Route element={<AdminGuard />}>
