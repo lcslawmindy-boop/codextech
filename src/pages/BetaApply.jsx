@@ -100,7 +100,7 @@ export default function BetaApply() {
           </div>
           <h1 className="text-4xl md:text-5xl font-black leading-tight mb-4">
             Join Zenith Apex<br />
-            <span className="text-yellow-400">Advanced Research & IP Platform</span>
+            <span className="text-yellow-400">The Operating System for Global Innovation and IP Creation</span>
           </h1>
           <p className="text-gray-400 text-lg max-w-2xl mx-auto leading-relaxed mb-3">
             Get <strong className="text-white">immediate access</strong> to the full platform — AI-powered IP generation, patent drafting, device build plans, and investor tools backed by 40+ years of documented EM research.
