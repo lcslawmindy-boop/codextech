@@ -8,20 +8,32 @@ import { base44 } from "@/api/base44Client";
 import { jsPDF } from "jspdf";
 
 // ── DCF CONFIG ────────────────────────────────────────────────────────────────
-const WACC = 0.18;         // 18% discount rate for early-stage
+const WACC = 0.17;         // 17% discount rate — de-risked by expanded defensible IP
 const GROWTH_YEARS = 5;
-const TERMINAL_GROWTH = 0.04;
-// IP floor updated Apr 2026: +KRCIC ($6.8K clinical prototype IP), +UBDRS ($9.5K research IP),
-// +5 complete build plans with PDF/video/manual/troubleshooting, +legal compliance layer (ToS/disclaimers)
-const IP_BASE_VALUE = 5_800_000;
-const IP_FLOOR_LABEL = "platform tools + 10 build plans + 2 new biophysics devices + legal compliance";
+const TERMINAL_GROWTH = 0.05;  // raised: platform network effects + recurring research tools
+// IP floor updated Apr 2026 — full platform revaluation:
+//   • 23 invention build plans (incl. MorphoYield TRZ-Agri Array, Aegis-SV Adaptive Shield)
+//   • AI Patent Intelligence module (claim summarizer, FTO, landscape, drafting strategy)
+//   • Patent Drafting Wizard — 7-step USPTO-compliant, real-time validation, PDF export
+//   • Secure Patent Sharing system (tokenized links, attorney review, comment threads)
+//   • KRCIC ($6.8K clinical), UBDRS ($9.5K research), TRD-1, PPDTS, TRZ-CFR
+//   • VDR Portal + admin, Investor CRM + Kanban, Acquisition CRM, Valuation Dashboard
+//   • AI Research Assistant (literature review, IP scanner, SBIR grant drafter)
+//   • Social Media Command Center + AI Profile Generator (8 platforms)
+//   • Build Video Generator (AI-narrated animated per-invention walkthroughs)
+//   • Bedini EM Signal Conditioner, Waddington Valley EM Tracer, Cloning Efficiency System
+//   • Full course library (26 modules), prior art archive, monitoring dashboard
+//   • Legal compliance layer: ToS, NDA gate, refund policy, attribution footers
+//   • Gov/Defense tier gating, TRZ Patent doc, TRZ Reactor, MEG Replication Kit
+const IP_BASE_VALUE = 9_200_000;
+const IP_FLOOR_LABEL = "23 build plans · AI patent suite · VDR · Investor CRM · Build Video AI · Legal compliance · Defense tier · 26 courses";
 const REVENUE_MULTIPLES = [
-  { label: "Conservative (3×)", mult: 3 },
-  { label: "Base Case (6×)", mult: 6 },
-  { label: "Optimistic (12×)", mult: 12 },
-  { label: "Strategic Premium (20×)", mult: 20 },
+  { label: "Conservative (4×)", mult: 4 },
+  { label: "Base Case (8×)", mult: 8 },
+  { label: "Optimistic (15×)", mult: 15 },
+  { label: "Strategic Premium (25×)", mult: 25 },
 ];
-const EBITDA_MARGIN = 0.74; // improved margin assumption with expanded catalog
+const EBITDA_MARGIN = 0.78; // raised: high-margin SaaS tools + AI features drive premium pricing
 
 function fmt(n, prefix = "$") {
   if (n >= 1_000_000) return `${prefix}${(n / 1_000_000).toFixed(2)}M`;
@@ -124,12 +136,12 @@ function exportPDF(data, dcf, multiples, growthRates) {
   doc.setFontSize(28); doc.setTextColor(212, 175, 55);
   doc.text(fmt(dcf.totalDCF), margin + 8, y + 28);
   doc.setFontSize(12); doc.setTextColor(100, 116, 139);
-  doc.text(`+ IP Asset Floor: ${fmt(IP_BASE_VALUE)} (10 build plans, KRCIC, UBDRS, legal)`, margin + 8, y + 38);
+  doc.text(`+ IP Asset Floor: ${fmt(IP_BASE_VALUE)} (23 plans, AI patent suite, VDR, Build Video AI, legal)`, margin + 8, y + 38);
   doc.setFont("helvetica", "bold"); doc.setFontSize(14); doc.setTextColor(255, 255, 255);
-  const askRange = fmt(multiples.find(m => m.label.includes("12"))?.value || 0) + " – " + fmt(multiples.find(m => m.label.includes("18"))?.value || 0);
+  const askRange = fmt(multiples.find(m => m.label.includes("15"))?.value || 0) + " – " + fmt(multiples.find(m => m.label.includes("25"))?.value || 0);
   doc.text(`Asking: ${askRange}`, W - margin - 8, y + 28, { align: "right" });
   doc.setFontSize(10); doc.setTextColor(100, 116, 139);
-  doc.text("12× – 18× ARR Strategic Premium", W - margin - 8, y + 38, { align: "right" });
+  doc.text("15× – 25× ARR Strategic Premium", W - margin - 8, y + 38, { align: "right" });
 
   doc.setFillColor(212, 175, 55);
   doc.rect(0, 293, W, 4, "F");
@@ -173,7 +185,7 @@ function exportPDF(data, dcf, multiples, growthRates) {
   divider();
   row("PV of Free Cash Flows", fmt(dcf.pvCashFlows));
   row("PV of Terminal Value", fmt(dcf.pvTerminal));
-  row("IP Asset Floor (tools + 10 plans + new devices)", fmt(IP_BASE_VALUE));
+  row("IP Asset Floor (23 plans + AI patent suite + VDR + legal)", fmt(IP_BASE_VALUE));
   divider();
   row("TOTAL DCF ENTERPRISE VALUE", fmt(dcf.totalDCF), true);
 
@@ -183,7 +195,7 @@ function exportPDF(data, dcf, multiples, growthRates) {
 
   y += 8;
   heading("EXIT MULTIPLE ANALYSIS (ARR-BASED)");
-  multiples.forEach(m => row(m.label, fmt(m.value), m.label.includes("18")));
+  multiples.forEach(m => row(m.label, fmt(m.value), m.label.includes("25")));
 
   // Footer on all pages
   const total = doc.getNumberOfPages();
@@ -301,7 +313,7 @@ export default function ValuationDashboard() {
             <div>
               <p className="text-gray-500 text-xs mb-1">Platform Tools Floor</p>
               <p className="text-white font-black text-xl">{fmt(IP_BASE_VALUE)}</p>
-              <p className="text-gray-600 text-xs" title={IP_FLOOR_LABEL}>10 plans · 2 new devices · legal layer</p>
+              <p className="text-gray-600 text-xs" title={IP_FLOOR_LABEL}>23 plans · AI patent suite · VDR · legal</p>
             </div>
           </div>
         </div>
