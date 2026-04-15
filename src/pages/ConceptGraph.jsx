@@ -59,7 +59,7 @@ export default function ConceptGraph() {
       <div className="flex flex-col border-b border-gray-800 flex-shrink-0">
         <div className="flex items-center justify-between px-6 py-3">
         <div>
-          <h1 className="text-white font-bold text-lg tracking-tight">Zenith Apex Research Database — Invention & Patent Generator</h1>
+          <h1 className="text-white font-bold text-lg tracking-tight">Zenith Apex Research Portfolio (ZARP) — AI Operating System for Global R&D and Intellectual Property Creation</h1>
           <p className="text-gray-500 text-xs">Click any node to explore source fragments · Drag to rearrange · Scroll to zoom</p>
         </div>
         <div className="flex items-center gap-2">
