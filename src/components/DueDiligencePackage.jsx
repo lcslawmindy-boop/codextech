@@ -122,7 +122,7 @@ function generateDDP() {
   doc.text("& INVESTMENT PORTFOLIO PACKAGE", W / 2, 40, { align: "center" });
   doc.setFontSize(9); doc.setFont("helvetica", "normal"); doc.setTextColor(140, 160, 220);
   doc.text("Zenith Apex Research Portfolio — AI-Powered Scalar EM IP Generation Platform", W / 2, 52, { align: "center" });
-  doc.text("Pre-Public Acquisition Prospectus · Revision Q3 2026 — v2.1", W / 2, 59, { align: "center" });
+  doc.text("Pre-Public Acquisition Prospectus · Revision Q2 2026 — v3.0 · 12+ AI Modules · IP Marketplace · Valuation API · White-Label SaaS", W / 2, 59, { align: "center" });
   doc.setFontSize(8); doc.setTextColor(80, 100, 160);
   doc.text(`Prepared: ${date}`, W / 2, 70, { align: "center" });
 
@@ -168,7 +168,7 @@ function generateDDP() {
 
   y += 6;
   doc.setFontSize(7.5); doc.setFont("helvetica", "normal"); doc.setTextColor(80, 80, 120);
-  doc.text(`Total pages: 120+ | Revision: Q3 2026 v2.1 | 23 Inventions | AI Patent Suite | VDR | Classification: CONFIDENTIAL`, M, y);
+  doc.text(`Total pages: 130+ | Revision: Q2 2026 v3.0 | 23 Inventions | 12+ AI Modules | IP Marketplace | Valuation API | White-Label SaaS | Classification: CONFIDENTIAL`, M, y);
 
   // ════════════════════════════════════════════════════════════════════════════
   // PART I — EXECUTIVE OVERVIEW
@@ -196,13 +196,16 @@ function generateDDP() {
     ["Platform Type", "Production SaaS · React + Tailwind frontend · Deno edge functions · Base44 entity database"],
     ["AI Integration", "OpenAI GPT-4o, Claude Sonnet 4.6, Gemini 1.5 Pro (live internet) — multi-model orchestration"],
     ["Knowledge Graph", "200+ nodes, 400+ edges · Primary Bearden source fragments · Real-time subscriptions"],
-    ["Courses", "20+ fully developed courses with syllabi, Stripe checkout, and LMS progress tracking"],
+    ["Courses", "26 fully developed courses with syllabi, Stripe checkout, and LMS progress tracking"],
     ["Inventions", "23 engineering build plans with BOM, PDF export, animated guides, gov-classified tier"],
-    ["AI Patent Suite", "Patent Intelligence (4 tools) + 7-step Drafting Wizard + Secure Sharing System — full USPTO pipeline"],
-    ["VDR Portal", "Virtual Data Room with tokenized NDA-gated investor access, page-view analytics, and revocation controls"],
-    ["AI Modules", "7 AI-native engines: Forge, Market Scanner, Patent Intelligence, Drafting Wizard, PPA Drafter, Video, Pitch Deck"],
-    ["Revenue Infrastructure", "Stripe integrated · EMF shop (20 products) · Newsletter · NDA gate · CRM · Material Sourcing Center"],
-    ["Patent Pipeline", "AI-to-USPTO PPA in <60 seconds per invention · Claude Sonnet · 9 formal sections · Shared review system"],
+    ["AI Patent Suite", "AI FTO Tool + AI Patent Attorney Chat + Patent Intelligence (4 tools) + Drafting Wizard + Collaborative Draft + Secure Sharing"],
+    ["IP Marketplace", "Private brokered IP exchange — 5% commission on executed deals — anonymous listing + LOI workflow"],
+    ["New Revenue APIs", "IP Valuation API ($0.50–$2.00/call) + White-Label SaaS ($10K–$50K/yr per seat) + SBIR Pipeline"],
+    ["Co-Inventor Engine", "AI-matched inventor introductions — AngelList for inventors — profile creation, matching, anonymous connect"],
+    ["VDR Portal", "Virtual Data Room with tokenized NDA-gated investor access, page-view analytics, audit heatmap, revocation controls"],
+    ["AI Modules", "12+ AI-native engines: Forge, Market Scanner, FTO, Patent Attorney Chat, Patent Intelligence, Drafting Wizard, Collab Draft, PPA Drafter, SBIR Pipeline, Portfolio Health, Valuation API, R&D Sandbox"],
+    ["Revenue Infrastructure", "Stripe integrated · EMF shop (20 products) · Newsletter · NDA gate · CRM · Material Sourcing Center · IP Marketplace"],
+    ["Patent Pipeline", "AI FTO → Attorney Chat → PPA in <60 seconds · Claude Sonnet · 9 formal sections · Collab review system"],
   ]);
 
   section("1.4 Investment Thesis Summary");
@@ -210,13 +213,14 @@ function generateDDP() {
   table(
     ["Metric", "Value", "Basis"],
     [
-      ["Platform FMV (conservative)", "$6.3M – $17.8M", "Asset-by-asset DCF (23 plans + AI patent suite + VDR)"],
-      ["Strategic Acquisition Value", "$8.8M – $39.2M", "Pre-public premium (40–120%)"],
-      ["Yr 1 Revenue (self-operated)", "$380K – $850K", "Course + shop + plans"],
-      ["Yr 2 Revenue (w/ AI licensing)", "$1.2M – $3.8M", "Law firm / VC SaaS"],
+      ["Platform FMV (conservative)", "$10.4M – $28.1M", "Asset-by-asset DCF (32+ modules incl. IP Marketplace, Valuation API, White-Label SaaS)"],
+      ["Strategic Acquisition Value", "$14.8M – $56.2M", "Pre-public premium (40–100%)"],
+      ["Yr 1 Revenue (self-operated)", "$380K – $850K", "Course + shop + plans + API"],
+      ["Yr 2 Revenue (AI + API + Marketplace)", "$2.4M – $6.8M", "White-Label SaaS + Valuation API + IP Marketplace commission"],
+      ["Yr 3 Revenue (SaaS scale)", "$4.8M – $12.5M", "Platform compounding — more modules = more data = better AI"],
       ["Cost Per Invention Cycle", "~$0.80", "LLM API costs only"],
-      ["USPTO PPA Value Displaced", "$10K – $50K", "Attorney fee equivalent"],
-      ["Patent Wizard Sessions/Month", "Unlimited", "AI-assisted, PDF export per session"],
+      ["USPTO PPA + FTO Value Displaced", "$15K – $65K", "Attorney fee equivalent per session"],
+      ["Valuation API Revenue Potential", "$50K – $2M+/yr", "$0.50–$2.00/call — enterprise usage scales quickly"],
     ],
     [70, 55, 45]
   );
@@ -639,13 +643,16 @@ function generateDDP() {
   table(
     ["Revenue Stream", "Unit Price", "Year 1 Target", "Year 3 Target"],
     [
-      ["Online Courses (20+ catalog)", "$197–$397", "$120K–$280K", "$380K–$680K"],
-      ["Invention Build Plan Kits (10+)", "$490–$1,800", "$95K–$220K", "$280K–$520K"],
+      ["Online Courses (26 catalog)", "$197–$397", "$120K–$280K", "$380K–$680K"],
+      ["Invention Build Plan Kits (23)", "$490–$1,800", "$95K–$220K", "$280K–$520K"],
       ["EMF Protection Shop (20 products)", "$29–$299", "$45K–$110K", "$140K–$310K"],
-      ["AI Module SaaS Licensing (law firms)", "$280K–$750K/yr", "$0 (pending sale)", "$560K–$1.5M"],
+      ["AI Patent Suite White-Label (law firms)", "$210K–$750K/yr", "$0 (pending sale)", "$420K–$1.5M"],
+      ["IP Valuation API (VCs, law firms, R&D)", "$0.50–$2.00/call", "$5K–$40K", "$120K–$600K"],
+      ["White-Label SaaS (IP firms / VC funds)", "$10K–$50K/yr/seat", "$0 (pending sale)", "$200K–$800K"],
+      ["IP Marketplace Commission (brokered deals)", "5% of deal value", "$10K–$80K", "$150K–$500K"],
       ["Newsletter + Community (premium tier)", "$29/mo", "$18K–$44K", "$72K–$180K"],
       ["Investor Portal + CRM (enterprise)", "$5K–$25K/client", "$15K–$60K", "$95K–$280K"],
-      ["Patent Drafting Service (white-label)", "$500–$2K/PPA", "$25K–$80K", "$180K–$480K"],
+      ["Patent Drafting + FTO (white-label)", "$500–$5K/session", "$25K–$80K", "$180K–$480K"],
     ],
     [68, 36, 36, 30]
   );
@@ -654,26 +661,29 @@ function generateDDP() {
   table(
     ["Year", "Revenue (Low)", "Revenue (High)", "EBITDA Margin", "Cumul. Investment"],
     [
-      ["Year 1", "$318K", "$794K", "-15%", "$120K"],
-      ["Year 2", "$890K", "$2.1M", "12%", "$220K"],
-      ["Year 3", "$1.8M", "$4.2M", "28%", "$320K"],
-      ["Year 4", "$3.2M", "$7.1M", "38%", "$420K"],
-      ["Year 5", "$5.4M", "$11.8M", "45%", "$520K"],
+      ["Year 1", "$380K", "$850K", "-10%", "$120K"],
+      ["Year 2", "$2.4M", "$6.8M", "18%", "$240K"],
+      ["Year 3", "$4.8M", "$12.5M", "34%", "$360K"],
+      ["Year 4", "$7.2M", "$19.4M", "44%", "$480K"],
+      ["Year 5", "$11.0M", "$28.8M", "52%", "$600K"],
     ],
     [20, 32, 32, 32, 54]
   );
 
   section("9.3 Acquirer Return Analysis");
   kv([
-    ["Acquisition Price Range", "$8.8M – $22M (exclusive full acquisition, Q2 2026)"],
+    ["Acquisition Price Range", "$14.8M – $38M (exclusive full acquisition, Q2 2026 v2 — 12 AI modules, IP Marketplace, Valuation API, White-Label SaaS)"],
     ["Year 3 Revenue at Midpoint", "$2.9M (low scenario)"],
     ["Year 3 EBITDA at Midpoint", "$812K (28% margin)"],
     ["Implied EV/EBITDA at Acquisition", "8–22× Year 3 EBITDA (reasonable for AI platform)"],
     ["Year 5 Exit Value (10× EBITDA)", "$42M – $96M (high scenario)"],
     ["Implied IRR (5-year hold)", "44% – 89% depending on scenario"],
     ["Strategic Value (distribution synergy)", "$8.8M – $39.2M premium above standalone"],
-    ["Additional Value Driver (NEW)", "AI Patent Suite white-label: $210K–$750K/yr per law firm licensee"],
-    ["Additional Value Driver (NEW)", "VDR Portal SaaS to IP firms / VC: $50K–$180K/yr per client"],
+    ["New Revenue Driver", "IP Valuation API: $0.50–$2.00/call — VCs, law firms, corporate R&D (scales to $50K–$2M+/yr)"],
+    ["New Revenue Driver", "White-Label SaaS Platform: $10K–$50K/yr per seat — IP firms, patent boutiques, VC funds"],
+    ["New Revenue Driver", "IP Marketplace: 5% commission on brokered IP deals — zero marginal cost per transaction"],
+    ["New Revenue Driver", "AI FTO Tool + Patent Attorney Chat: $210K–$750K/yr per law firm white-label license"],
+    ["New Revenue Driver", "VDR Portal SaaS to IP firms / VC: $50K–$180K/yr per client"],
   ]);
   body("Note: AI module SaaS licensing ($280K–$750K/year per licensee, targeting 4–8 patent law firms and VC firms in Year 2–3) is the primary upside driver and is NOT included in the conservative Year 1 projections.");
 
@@ -826,7 +836,7 @@ function generateDDP() {
   y += 4;
   [
     ["Document Title", "Technical Due Diligence & Investment Portfolio Package"],
-    ["Revision", "Q2 2026"],
+    ["Revision", "Q2 2026 v3.0"],
     ["Prepared By", "Zenith Apex Research Portfolio"],
     ["Classification", "CONFIDENTIAL — NDA REQUIRED"],
     ["Effective Date", date],

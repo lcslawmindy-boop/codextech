@@ -16,16 +16,16 @@ const ACQUISITION_TERMS = [
       { label: "Transaction Type", value: "Asset Purchase or Stock Acquisition (to be determined at close)" },
       { label: "Effective Date", value: TODAY },
       { label: "Exclusivity Period", value: "60 days from execution of this Term Sheet" },
-      { label: "Platform Revision", value: "Q3 2026 v2.1 — 23 invention plans · AI Patent Suite · VDR Portal" },
+      { label: "Platform Revision", value: "Q2 2026 v3.0 — 23 invention plans · AI FTO + Patent Attorney Chat · IP Marketplace · Co-Inventor Matching · SBIR Pipeline · Collab Patent Draft · IP Portfolio Health · Valuation API · White-Label SaaS · Build Milestone AI · R&D Sandbox · 26 courses" },
     ],
   },
   {
     section: "Purchase Price & Valuation",
     items: [
-      { label: "Base Purchase Price", value: "$8,800,000 – $25,000,000 USD (subject to due diligence and final audit)" },
-      { label: "Valuation Basis", value: "Asset-by-asset DCF ($6.3M–$17.8M conservative floor) + strategic pre-public premium (40–120%)" },
-      { label: "IP Asset Floor", value: "$9,200,000 (23 documented device architectures + AI Patent Suite + VDR Portal + legal infrastructure)" },
-      { label: "Platform ARR Multiple", value: "15×–25× trailing 12-month ARR (strategic AI platform premium)" },
+      { label: "Base Purchase Price", value: "$14,800,000 – $38,000,000 USD (subject to due diligence and final audit)" },
+      { label: "Valuation Basis", value: "Asset-by-asset DCF ($10.4M–$28.1M conservative floor) + strategic pre-public premium (40–100%)" },
+      { label: "IP Asset Floor", value: "$14,800,000 (23 device architectures + AI FTO + Patent Attorney Chat + IP Marketplace + Valuation API + White-Label SaaS + SBIR + Co-Inventor Matching + Collab Draft + Portfolio Health + Build Milestone AI + VDR + legal)" },
+      { label: "Platform ARR Multiple", value: "18×–30× trailing 12-month ARR (multi-revenue-stream AI platform premium)" },
       { label: "Cash at Close", value: "70% of Base Purchase Price" },
       { label: "Deferred / Earnout", value: "30% over 24 months, tied to revenue milestones (Stripe verified)" },
     ],
@@ -36,7 +36,7 @@ const ACQUISITION_TERMS = [
       { label: "Earnout Period", value: "24 months post-close" },
       { label: "Milestone 1 (Month 12)", value: "15% of deferred consideration if platform ARR >= $750K" },
       { label: "Milestone 2 (Month 24)", value: "15% of deferred consideration if platform ARR >= $1.5M" },
-      { label: "Bonus Milestone", value: "Additional 5% if AI Patent Suite white-label secures >= 2 law firm licensees" },
+      { label: "Bonus Milestone", value: "Additional 5% if IP Valuation API reaches >= 5,000 monthly calls OR White-Label SaaS secures >= 2 firm clients OR IP Marketplace executes >= 3 brokered deals" },
       { label: "Measurement Metric", value: "Gross recurring subscription revenue (Stripe verified) + AI module licensing fees" },
       { label: "Clawback Provision", value: "None — milestones are additive only" },
     ],
@@ -46,9 +46,17 @@ const ACQUISITION_TERMS = [
     items: [
       { label: "Platform Codebase", value: "Full source code (React/Vite frontend, Deno backend functions, 70+ components, all pages)" },
       { label: "IP Portfolio", value: "23 invention dossiers with BOM, PDF export, animated build guides, gov-classified tier" },
-      { label: "AI Patent Suite", value: "Patent Intelligence (4 tools) + 7-step Drafting Wizard + Secure Sharing System (tokenized review links)" },
-      { label: "VDR Portal", value: "Tokenized NDA-gated investor data room with page-view analytics, revocation controls, and audit trail" },
-      { label: "New Inventions (Q3 2026)", value: "MorphoYield TRZ-Agri Array (scalar agriculture IP) + Aegis-SV Adaptive Scalar Counterphase Shield" },
+      { label: "AI Patent Suite", value: "AI FTO Analysis Tool + AI Patent Attorney Chat (Claude Sonnet) + Patent Intelligence (4 tools) + 7-step Drafting Wizard + Collaborative Patent Drafting (multi-user, role-based) + Secure Sharing System" },
+      { label: "IP Marketplace", value: "Private brokered IP exchange with anonymous listings, LOI workflow, and 5% commission on executed deals" },
+      { label: "Co-Inventor Matching Engine", value: "AI-matched inventor introductions with profile creation, domain matching, and anonymous connect workflow" },
+      { label: "SBIR/STTR Grant Pipeline", value: "AI maps inventions to open federal solicitations and auto-fills grant proposals" },
+      { label: "IP Portfolio Health Score", value: "Live portfolio scoring, renewal alerts, AI strategic insights, weekly email digest" },
+      { label: "IP Valuation API", value: "Programmatic IP valuation at $0.50–$2.00/call for VCs, law firms, and corporate R&D teams" },
+      { label: "White-Label SaaS", value: "Full platform licensed to IP firms and patent boutiques at $10K–$50K/yr per seat" },
+      { label: "Build Milestone AI Tracker", value: "AI flags failure points, suggests components, estimates completion per build project" },
+      { label: "R&D Simulation Sandbox", value: "AI hybrid invention synthesis with cross-domain node selection, synergy scoring, and IP valuation" },
+      { label: "VDR Portal + Audit Log", value: "Tokenized NDA-gated investor data room with page-view analytics, due diligence heatmap, revocation, and audit trail" },
+      { label: "New Inventions (Q2 2026)", value: "MorphoYield TRZ-Agri Array (scalar agriculture IP) + Aegis-SV Adaptive Scalar Counterphase Shield" },
       { label: "Customer Database", value: "All subscriber records, beta applicant pipeline, CRM data, and communication logs" },
       { label: "Content Library", value: "20+ courses, 23 build plan kits, research documents, animated video guides, prior art archive" },
       { label: "Government Documentation", value: "Declassified ONR R-5-78, DoD SBIR grants ($630K+), TACOM IOP FSO-3, Bearden archive (200+ items)" },
@@ -60,9 +68,12 @@ const ACQUISITION_TERMS = [
   {
     section: "AI Module White-Label Revenue Rights",
     items: [
-      { label: "AI Patent Suite Licensing", value: "Buyer inherits right to sub-license AI Patent Suite to law firms/IP shops at $210K–$750K/yr per licensee" },
+      { label: "AI Patent Suite + FTO White-Label", value: "Buyer inherits right to sub-license AI FTO Tool + Patent Attorney Chat + Patent Suite to law firms/IP shops at $210K–$750K/yr per licensee" },
+      { label: "IP Valuation API Revenue Rights", value: "Buyer owns all API revenue — $0.50–$2.00/call, scalable to $50K–$2M+/yr with enterprise contracts" },
+      { label: "White-Label SaaS Revenue Rights", value: "Buyer may license full platform to IP firms, patent boutiques, VC funds at $10K–$50K/yr per seat" },
+      { label: "IP Marketplace Commission Rights", value: "Buyer earns 5% commission on all brokered IP deals executed through the marketplace" },
       { label: "VDR Portal SaaS Rights", value: "Buyer may license VDR Portal as standalone SaaS to VC/IP firms at $50K–$180K/yr per client" },
-      { label: "Projected Year 2 Licensing Revenue", value: "$420K–$1.5M (2 patent suite licensees + 3 VDR clients at midpoint)" },
+      { label: "Projected Year 2 Revenue (new streams)", value: "$2.4M–$6.8M (API + White-Label SaaS + Marketplace + Patent Suite licenses at midpoint)" },
       { label: "Revenue Share (if applicable)", value: "None — all licensing revenue transfers fully to Buyer post-close" },
     ],
   },
@@ -85,7 +96,7 @@ const LICENSING_TERMS = [
     items: [
       { label: "Licensor", value: "Zenith Apex Research Portfolio, LLC ('Licensor')" },
       { label: "Licensee", value: "[LICENSEE LEGAL NAME] ('Licensee')" },
-      { label: "Subject Matter", value: "Advanced Electromagnetic Device Architectures, AI Patent Suite, VDR Portal & IP Generation Platform (Q3 2026 v2.1)" },
+      { label: "Subject Matter", value: "Advanced Electromagnetic Device Architectures, AI FTO Tool, AI Patent Attorney Chat, AI Patent Suite, IP Marketplace, Co-Inventor Matching, SBIR Pipeline, IP Portfolio Health, IP Valuation API, White-Label SaaS, VDR Portal & full IP Generation Platform (Q2 2026 v3.0)" },
       { label: "Effective Date", value: TODAY },
       { label: "License Term", value: "5 years, renewable with mutual consent at prevailing market rates" },
     ],
@@ -108,7 +119,9 @@ const LICENSING_TERMS = [
       { label: "Tier A Upfront Fee", value: "$175,000 – $350,000 (based on device count selected)" },
       { label: "Tier B Upfront Fee (AI Patent Suite)", value: "$210,000 – $420,000 + $210,000 – $750,000/year annual license" },
       { label: "Tier C Upfront Fee (VDR Portal)", value: "$75,000 – $140,000 + $50,000 – $180,000/year annual license" },
-      { label: "Tier D Full Platform Annual License", value: "$850,000 – $2,200,000/year (non-exclusive); $2,200,000 – $4,500,000/year (exclusive)" },
+      { label: "Tier E — IP Valuation API", value: "$99/mo (Starter, 200 calls) — $499/mo (Growth, 1,000 calls) — $2,000/mo (Enterprise, 10,000 calls) — $2.00/call (PAYG)" },
+      { label: "Tier F — White-Label SaaS", value: "$10,000 – $50,000/year per seat (full platform rebranded for IP firm, patent boutique, or VC fund)" },
+      { label: "Tier D Full Platform Annual License", value: "$1,200,000 – $3,500,000/year (non-exclusive); $3,500,000 – $7,000,000/year (exclusive)" },
       { label: "Annual Royalty", value: "6% of gross revenue derived from licensed IP (applies to all tiers)" },
       { label: "Minimum Annual Royalty", value: "$25,000/year (Years 1–3, Tier A); $75,000/year (Years 1–3, Tier B+)" },
       { label: "Sublicensing", value: "Permitted with 50% sublicense fee pass-through to Licensor" },
@@ -154,19 +167,19 @@ const INVESTOR_TERMS = [
       { label: "Investor", value: "[INVESTOR NAME / FUND] ('Investor')" },
       { label: "Round Type", value: "Seed / Series A — Convertible Note or Preferred Equity (Investor's election)" },
       { label: "Effective Date", value: TODAY },
-      { label: "Platform Status", value: "Q3 2026 v2.1 — 23 inventions, AI Patent Suite, VDR Portal, 7 AI modules, live Stripe revenue" },
-      { label: "Use of Proceeds", value: "Patent filings (provisional → nonprovisional conversions), AI Patent Suite white-label sales, team expansion, global marketing" },
+      { label: "Platform Status", value: "Q2 2026 v3.0 — 23 inventions, AI FTO, Patent Attorney Chat, IP Marketplace, Co-Inventor Matching, SBIR Pipeline, Collab Patent Draft, IP Portfolio Health, Valuation API, White-Label SaaS, Build Milestone AI, R&D Sandbox, 26 courses, live Stripe revenue" },
+      { label: "Use of Proceeds", value: "Patent filings (provisional to nonprovisional conversions), IP Valuation API enterprise sales, White-Label SaaS client acquisition, team expansion, global IP firm outreach" },
     ],
   },
   {
     section: "Investment Terms",
     items: [
       { label: "Investment Amount", value: "$750,000 – $3,000,000 USD" },
-      { label: "Pre-Money Valuation", value: "$9,200,000 USD (conservative IP asset floor basis)" },
-      { label: "Post-Money Valuation", value: "$9,950,000 – $12,200,000 USD (depending on round size)" },
+      { label: "Pre-Money Valuation", value: "$14,800,000 USD (conservative IP asset floor — 12 AI modules, IP Marketplace, Valuation API, White-Label SaaS)" },
+      { label: "Post-Money Valuation", value: "$15,550,000 – $17,800,000 USD (depending on round size)" },
       { label: "Security Type", value: "Series A Preferred Units (or Convertible Note at Investor's election)" },
       { label: "Conversion Discount (if Note)", value: "20% discount on qualified next-round price" },
-      { label: "Valuation Cap (if Note)", value: "$10,500,000 USD" },
+      { label: "Valuation Cap (if Note)", value: "$16,500,000 USD" },
     ],
   },
   {
@@ -182,12 +195,16 @@ const INVESTOR_TERMS = [
   {
     section: "Investment Thesis & Revenue Drivers",
     items: [
-      { label: "Conservative Year 1 Revenue", value: "$380K – $850K (self-operated: courses + shop + build plans)" },
-      { label: "Year 2 Upside — AI Patent Suite", value: "$420K – $1.5M (2 law firm licensees at $210K–$750K/yr each)" },
+      { label: "Conservative Year 1 Revenue", value: "$380K – $850K (self-operated: courses + shop + build plans + API)" },
+      { label: "Year 2 Upside — AI FTO + Patent Chat", value: "$420K – $1.5M (2 law firm white-label licensees at $210K–$750K/yr each)" },
+      { label: "Year 2 Upside — IP Valuation API", value: "$50K – $600K (usage-based, scales with enterprise contracts)" },
+      { label: "Year 2 Upside — White-Label SaaS", value: "$200K – $800K (IP firms + VC funds at $10K–$50K/yr per seat)" },
+      { label: "Year 2 Upside — IP Marketplace", value: "$50K – $500K (5% commission on brokered deals — zero marginal cost)" },
       { label: "Year 2 Upside — VDR Portal SaaS", value: "$150K – $540K (3 VC/IP firm clients at $50K–$180K/yr each)" },
-      { label: "Year 5 Exit Value (10× EBITDA)", value: "$42M – $96M (high scenario per DCF model)" },
-      { label: "Cost Per Invention Cycle", value: "~$0.80 LLM API costs → $10K–$50K attorney fees displaced per USPTO PPA" },
-      { label: "Competitive Moat", value: "Only platform combining Bearden framework + AI invention generation + real-time patent scanning + USPTO PPA drafting + VDR" },
+      { label: "Year 3 Total Revenue (midpoint)", value: "$4.8M – $12.5M (platform compounding — all streams scaling)" },
+      { label: "Year 5 Exit Value (10× EBITDA)", value: "$82M – $196M (high scenario per updated DCF model)" },
+      { label: "Cost Per Invention + FTO Cycle", value: "~$1.60 LLM API costs → $15K–$65K in attorney fees displaced per session" },
+      { label: "Competitive Moat", value: "Only platform combining Bearden framework + AI FTO + Patent Attorney Chat + IP Marketplace + Co-Inventor Matching + Valuation API + White-Label SaaS + SBIR Pipeline + VDR" },
     ],
   },
   {
@@ -310,10 +327,10 @@ function exportPDF(sheet) {
   doc.text("PLATFORM VALUATION", margin + 6, 133);
   doc.setFontSize(18);
   doc.setTextColor(255, 255, 255);
-  doc.text("$8.8M -- $25M Acquisition", margin + 6, 146);
+  doc.text("$14.8M -- $38M Acquisition", margin + 6, 146);
   doc.setFontSize(9);
   doc.setTextColor(148, 163, 184);
-  doc.text("IP Floor: $9.2M  |  23 Inventions + AI Patent Suite + VDR Portal", margin + 6, 156);
+  doc.text("IP Floor: $14.8M  |  23 Inventions + AI FTO + Patent Chat + IP Marketplace + Valuation API + White-Label SaaS", margin + 6, 156);
 
   // ── CONTENT PAGES ──────────────────────────────────────────────────────────
   sheet.data.forEach(section => {
