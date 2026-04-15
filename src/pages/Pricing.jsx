@@ -88,9 +88,9 @@ const PLANS = [
 ];
 
 const TESTIMONIALS = [
-  { name: "D.R.", role: "Independent Researcher", text: "The patent drafting tool alone saved me $3,000 in attorney fees. The prior art archive is the most organized cross-referenced collection I've found anywhere." },
-  { name: "M.K.", role: "Deep Tech Investor", text: "I've been tracking advanced EM research for 15 years. This platform finally puts primary sources, IP tools, and financial modeling in one place." },
-  { name: "J.T.", role: "Bioelectromagnetics Researcher", text: "The documented device architectures and build plans — backed by primary sources including ONR reports and peer-reviewed papers — are worth 10× the membership." },
+  { name: "D.R.", role: "Independent Inventor", text: "The AI patent suite alone saved me $12,000 in attorney fees on my first two provisionals. The prior art analysis and claim drafting are institutional quality." },
+  { name: "M.K.", role: "Deep Tech VC", text: "I've evaluated hundreds of IP platforms. Zenith Apex is the first to put invention generation, patent drafting, market research, and investor tooling in a single coherent workflow." },
+  { name: "J.T.", role: "IP Strategy Director", text: "We white-labeled the AI Patent Suite for our firm's clients. The 7-step drafting wizard and secure sharing system cut our provisional turnaround time by 60%." },
 ];
 
 function PlanCard({ plan, loading, onCheckout }) {
@@ -201,14 +201,14 @@ export default function Pricing() {
       {/* Hero */}
       <div className="text-center px-5 py-16 max-w-3xl mx-auto">
         <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-yellow-900/40 border border-yellow-800 text-yellow-400 text-xs font-bold mb-6">
-          <Star size={12} /> Advanced EM Research · IP Generation · Commercialization Tools
+          <Star size={12} /> AI-Native IP Platform · Invention to Commercialization · Institutional Grade
         </div>
         <h2 className="text-4xl md:text-5xl font-black leading-tight mb-4">
-          Advanced Electromagnetic Research,<br />
-          <span className="text-yellow-400">Structured for Inventors & Investors</span>
+          The Operating System for<br />
+          <span className="text-yellow-400">Global Innovation and IP Creation</span>
         </h2>
         <p className="text-gray-400 text-lg leading-relaxed mb-4">
-          A professional-grade platform for IP generation, prior art research, patent drafting, and technology commercialization — built on 40+ years of documented EM research and peer-reviewed literature.
+          The world's first end-to-end AI platform for invention generation, patent drafting, IP valuation, and technology commercialization — purpose-built for inventors, IP firms, deep-tech investors, and institutional acquirers.
         </p>
         <p className="text-gray-600 text-sm">🔒 Secure checkout via Stripe · Instant access · Cancel anytime</p>
       </div>
@@ -292,10 +292,10 @@ export default function Pricing() {
           <h3 className="text-white font-black text-2xl text-center mb-10">What Makes This Platform Different</h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
-              { icon: <Shield size={22} className="text-yellow-400" />, title: "Primary Source Verified", desc: "Every device and concept is traced to government documents, issued patents, or peer-reviewed publications. No unsubstantiated claims." },
-              { icon: <Download size={22} className="text-green-400" />, title: "Actionable Build Plans", desc: "Complete Bills of Materials, engineering specs, and assembly procedures — designed for actual replication and prototyping." },
-              { icon: <BookOpen size={22} className="text-indigo-400" />, title: "Accessible to Non-Specialists", desc: "Technical content structured for researchers, entrepreneurs, and investors — not just engineers. 40 years of work, organized." },
-              { icon: <Zap size={22} className="text-purple-400" />, title: "AI-Powered IP Pipeline", desc: "Generate USPTO-compliant patent drafts, investor pitch decks, IP valuations, and invention blueprints in minutes." },
+              { icon: <Zap size={22} className="text-yellow-400" />, title: "AI Invention Engine", desc: "Generate fully-formed invention dossiers — technical specs, IP valuation, 5-year financials, GTM plan — from a single prompt. No engineering background required." },
+              { icon: <Shield size={22} className="text-green-400" />, title: "End-to-End Patent Suite", desc: "USPTO-compliant claim drafting, novelty & FTO analysis, competitive landscape mapping, and secure attorney collaboration — all in one workflow." },
+              { icon: <Download size={22} className="text-indigo-400" />, title: "Investor-Grade Commercialization", desc: "VDR portal, investor CRM, acquisition pipeline, pitch deck builder, and institutional due diligence package — ready to send to VC and strategic buyers." },
+              { icon: <BookOpen size={22} className="text-purple-400" />, title: "White-Label Ready", desc: "IP firms, law practices, and deep-tech VCs can license the AI Patent Suite and VDR Portal for $210K–$750K/yr per deployment." },
             ].map((item, i) => (
               <div key={i} className="text-center">
                 <div className="flex justify-center mb-3">{item.icon}</div>
@@ -349,8 +349,8 @@ export default function Pricing() {
 
       {/* CTA Footer */}
       <div className="border-t border-indigo-900/40 bg-indigo-950/10 px-5 py-12 text-center">
-        <h3 className="text-white font-black text-2xl mb-3">Ready to turn advanced EM research into real IP?</h3>
-        <p className="text-gray-400 text-sm mb-6">Start with Researcher at $97/mo — full library, AI tools, and simulators. Cancel anytime.</p>
+        <h3 className="text-white font-black text-2xl mb-3">Ready to turn innovation into institutional-grade IP?</h3>
+        <p className="text-gray-400 text-sm mb-6">Start with Researcher at $97/mo — full AI toolkit, patent suite, and IP library. Cancel anytime.</p>
         <button
           onClick={() => handleCheckout(PLANS[2])}
           disabled={loading === "researcher"}

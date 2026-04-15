@@ -17,12 +17,12 @@ const INTERESTS = [
 const BUDGETS = ["Under $200", "$200–$500", "$500–$2,000", "$2,000–$10,000", "$10,000+"];
 
 const BENEFITS = [
-  { icon: "🔬", title: "21 Invention Build Plans", desc: "Full device architectures with Bills of Materials, engineering specs, and step-by-step assembly guides" },
-  { icon: "📋", title: "AI Patent Drafting Tool", desc: "Generate USPTO-compliant provisional patent applications with prior art cross-referencing — unlimited" },
-  { icon: "📚", title: "Full Course Library", desc: "10+ courses covering advanced EM research, bioelectromagnetics, IP strategy, and USPTO filing procedures" },
-  { icon: "💼", title: "Investor Package & CRM", desc: "Due diligence PDF, NDA templates, acquisition letter, and full investor pipeline management" },
-  { icon: "⚡", title: "AI Invention Forge", desc: "Generate novel invention concepts grounded in documented EM research — with IP valuation and 5-year financials" },
-  { icon: "🛡️", title: "Founding Member Rate — Locked", desc: "Your pricing is grandfathered permanently, even as the platform grows and rates increase" },
+  { icon: "⚡", title: "AI Invention Engine", desc: "Generate patent-ready invention concepts with full IP valuation, 5-year financial projections, and GTM strategy — in minutes" },
+  { icon: "📋", title: "AI Patent Suite", desc: "USPTO-compliant patent drafting, prior art analysis, novelty scoring, and competitive landscape — end-to-end, unlimited" },
+  { icon: "🔬", title: "23 Device Dossiers", desc: "Fully documented hardware architectures with engineering specs, Bills of Materials, and peer-reviewed source citations" },
+  { icon: "💼", title: "Investor & Commercialization Suite", desc: "Due diligence package, VDR portal, investor CRM, pitch deck builder, and acquisition pipeline management" },
+  { icon: "📚", title: "Full IP Education Library", desc: "26 courses covering IP strategy, patent law, technology commercialization, and research-to-revenue workflows" },
+  { icon: "🛡️", title: "Founding Member Rate — Locked", desc: "Your pricing is grandfathered permanently as the platform scales globally" },
 ];
 
 export default function BetaApply() {
@@ -103,9 +103,9 @@ export default function BetaApply() {
             <span className="text-yellow-400">The Operating System for Global Innovation and IP Creation</span>
           </h1>
           <p className="text-gray-400 text-lg max-w-2xl mx-auto leading-relaxed mb-3">
-            Get <strong className="text-white">immediate access</strong> to the full platform — AI-powered IP generation, patent drafting, device build plans, and investor tools backed by 40+ years of documented EM research.
+            Get <strong className="text-white">immediate access</strong> to the world's first AI-native platform for invention generation, patent drafting, and IP commercialization — from concept to institutional investor-ready in one workflow.
           </p>
-          <p className="text-gray-600 text-sm">Instant access after sign-up · Founding member rate locked permanently · Third-party works referenced under fair use</p>
+          <p className="text-gray-600 text-sm">Instant access after sign-up · Founding member rate locked permanently · Institutional-grade IP tools</p>
         </div>
       </div>
 
