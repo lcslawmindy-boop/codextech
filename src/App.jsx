@@ -64,6 +64,7 @@ import AcquisitionCRM from './pages/AcquisitionCRM';
 import ValuationDashboard from './pages/ValuationDashboard';
 import VDRPortal from './pages/VDRPortal';
 import VDRAdmin from './pages/VDRAdmin';
+import VDRAuditLog from './pages/VDRAuditLog';
 import InventionBuildTracker from './pages/InventionBuildTracker';
 import TRZPatent from './pages/TRZPatent';
 import CoursePlan from './pages/CoursePlan';
@@ -207,6 +208,7 @@ const AuthenticatedApp = () => {
             <Route path="/admin-videos" element={<AdminVideos />} />
             <Route path="/admin-downloads" element={<AdminDownloadCenter />} />
             <Route path="/vdr-admin" element={<VDRAdmin />} />
+            <Route path="/vdr-audit-log" element={<VDRAuditLog />} />
             <Route path="/acquisition-crm" element={<AcquisitionCRM />} />
             <Route path="/valuation" element={<ValuationDashboard />} />
             <Route path="/opportunity-monitor" element={<OpportunityMonitor />} />

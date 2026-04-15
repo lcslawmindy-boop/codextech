@@ -306,10 +306,16 @@ export default function VDRAdmin() {
             <p className="text-gray-500 text-xs">Manage NDA sessions · Track buyer engagement</p>
           </div>
         </div>
-        <button onClick={() => setShowModal(true)}
-          className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-yellow-900/60 hover:bg-yellow-800/60 border border-yellow-700 text-yellow-300 text-xs font-black transition-all">
-          <Plus size={13} /> Generate VDR Link
-        </button>
+        <div className="flex items-center gap-2">
+          <Link to="/vdr-audit-log"
+            className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-gray-800 hover:bg-gray-700 border border-gray-700 text-gray-300 text-xs font-bold transition-all">
+            <BarChart3 size={12} /> Audit Log
+          </Link>
+          <button onClick={() => setShowModal(true)}
+            className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-yellow-900/60 hover:bg-yellow-800/60 border border-yellow-700 text-yellow-300 text-xs font-black transition-all">
+            <Plus size={13} /> Generate VDR Link
+          </button>
+        </div>
       </div>
 
       {/* Stats */}
