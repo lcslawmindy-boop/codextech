@@ -204,8 +204,8 @@ export default function Pricing() {
           <Star size={12} /> $2T Global R&D Industry · AI-Native · Compounding Data Moat
         </div>
         <h2 className="text-4xl md:text-5xl font-black leading-tight mb-4">
-          Zenith Apex is building the AI Operating System<br />
-          <span className="text-yellow-400">for Global R&D and Intellectual Property Creation</span>
+          Zenith Apex Research Portfolio (ZARP)<br />
+          <span className="text-yellow-400">AI Operating System for Global R&D and Intellectual Property Creation</span>
         </h2>
         <p className="text-gray-400 text-lg leading-relaxed mb-4">
           We reduce the cost of invention by <strong className="text-white">over 99%</strong> and compress months of R&D into minutes. By integrating AI, patent generation, and market validation into a single platform, we're transforming the <strong className="text-white">$2 trillion global R&D industry</strong> into a scalable, software-driven system — becoming the infrastructure layer for how the world creates intellectual property.
