@@ -201,15 +201,16 @@ export default function Pricing() {
       {/* Hero */}
       <div className="text-center px-5 py-16 max-w-3xl mx-auto">
         <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-yellow-900/40 border border-yellow-800 text-yellow-400 text-xs font-bold mb-6">
-          <Star size={12} /> AI-Native IP Platform · Invention to Commercialization · Institutional Grade
+          <Star size={12} /> $2T Global R&D Industry · AI-Native · Compounding Data Moat
         </div>
         <h2 className="text-4xl md:text-5xl font-black leading-tight mb-4">
-          The Operating System for<br />
-          <span className="text-yellow-400">Global Innovation and IP Creation</span>
+          The AI Operating System<br />
+          <span className="text-yellow-400">for Global Innovation</span>
         </h2>
         <p className="text-gray-400 text-lg leading-relaxed mb-4">
-          The world's first end-to-end AI platform for invention generation, patent drafting, IP valuation, and technology commercialization — purpose-built for inventors, IP firms, deep-tech investors, and institutional acquirers.
+          We reduce the cost of invention by <strong className="text-white">over 99%</strong> and compress months of R&D into minutes. By integrating AI, patent generation, and market validation into a single platform, we're transforming the <strong className="text-white">$2 trillion global R&D industry</strong> into a scalable, software-driven system — becoming the infrastructure layer for how the world creates intellectual property.
         </p>
+        <p className="text-gray-500 text-sm italic mb-2">More inventions → more data → exponentially more powerful system.</p>
         <p className="text-gray-600 text-sm">🔒 Secure checkout via Stripe · Instant access · Cancel anytime</p>
       </div>
 
@@ -349,7 +350,7 @@ export default function Pricing() {
 
       {/* CTA Footer */}
       <div className="border-t border-indigo-900/40 bg-indigo-950/10 px-5 py-12 text-center">
-        <h3 className="text-white font-black text-2xl mb-3">Ready to turn innovation into institutional-grade IP?</h3>
+        <h3 className="text-white font-black text-2xl mb-3">Join the infrastructure layer for how the world creates IP.</h3>
         <p className="text-gray-400 text-sm mb-6">Start with Researcher at $97/mo — full AI toolkit, patent suite, and IP library. Cancel anytime.</p>
         <button
           onClick={() => handleCheckout(PLANS[2])}

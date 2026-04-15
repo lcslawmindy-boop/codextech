@@ -99,12 +99,13 @@ export default function BetaApply() {
             <Shield size={11} /> Founding Member Access — Open Enrollment
           </div>
           <h1 className="text-4xl md:text-5xl font-black leading-tight mb-4">
-            Join Zenith Apex<br />
-            <span className="text-yellow-400">The Operating System for Global Innovation and IP Creation</span>
+            The AI Operating System<br />
+            <span className="text-yellow-400">for Global Innovation</span>
           </h1>
           <p className="text-gray-400 text-lg max-w-2xl mx-auto leading-relaxed mb-3">
-            Get <strong className="text-white">immediate access</strong> to the world's first AI-native platform for invention generation, patent drafting, and IP commercialization — from concept to institutional investor-ready in one workflow.
+            We reduce the cost of invention by <strong className="text-white">over 99%</strong> and compress months of R&D into minutes — integrating AI, patent generation, and market validation into a single platform that transforms the <strong className="text-white">$2 trillion global R&D industry</strong> into a scalable, software-driven system.
           </p>
+          <p className="text-gray-500 text-sm italic mb-2 max-w-xl mx-auto">As the platform grows, it compounds — more inventions create more data, making the system exponentially more powerful.</p>
           <p className="text-gray-600 text-sm">Instant access after sign-up · Founding member rate locked permanently · Institutional-grade IP tools</p>
         </div>
       </div>
