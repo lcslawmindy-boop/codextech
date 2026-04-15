@@ -905,4 +905,120 @@ export const inventionSteps = {
     notes: "Based on Kaznacheyev cytopathogenic experiments, Popp biophoton research, and Bearden MCCS framework. Full build plans coming soon.",
     softwareNotes: "Python spectral analysis pipeline and ML template matching library included in PDF plans.",
   },
+
+  "MorphoYield TRZ-Agri Array": {
+    diagramType: "agri",
+    overview: "A field-deployable phase-conjugate scalar biofield array that creates a Time-Reversal Zone (TRZ) condition within an agricultural plot. Resonant VLF-ELF antenna stakes generate counter-propagating phase-conjugate wave pairs that restructure the local quantum potential (morphogenetic) lattice — reinforcing species-coherent cellular organization in seed germination, root development, and seasonal growth cycles.",
+    bom: [
+      { qty: 4, item: "Ground stake VLF antenna assemblies", spec: "1.2m stainless rod, wound with 50-turn 20 AWG coil at 300mm mark", source: "Wind per plans ~$18/unit" },
+      { qty: 1, item: "Central control hub (weatherproof)", spec: "IP67 ABS enclosure, 250×180×100mm, wall-mount", source: "Amazon ~$28" },
+      { qty: 1, item: "DDS signal generator module", spec: "AD9833 breakout, 0–12.5 MHz, 28-bit tuning", source: "Amazon ~$8" },
+      { qty: 1, item: "Quad-channel RF power amplifier", spec: "4× TDA2003, 10W each, 4–30 MHz class A", source: "Mouser ~$4/unit" },
+      { qty: 1, item: "Raspberry Pi Zero 2W", spec: "With RTC module, for protocol scheduling", source: "Amazon ~$15 + $8 RTC" },
+      { qty: 4, item: "Soil moisture sensors (capacitive)", spec: "Adafruit STEMMA, ±1% RH, I2C", source: "Adafruit ~$7.50 ea" },
+      { qty: 1, item: "GPS module", spec: "u-blox NEO-6M, for geo-referenced logging", source: "Amazon ~$12" },
+      { qty: 1, item: "12V 20Ah LiFePO4 battery pack", spec: "With BMS, solar-input-ready", source: "Amazon ~$65" },
+      { qty: 1, item: "20W solar panel (optional)", spec: "Monocrystalline, 12V charging, with MPPT controller", source: "Amazon ~$35 + $18 MPPT" },
+      { qty: 1, item: "Phase conjugate controller IC", spec: "Custom FPGA — Lattice iCE40UP5K (detailed in plans)", source: "Mouser ~$6" },
+      { qty: 4, item: "50Ω coaxial antenna cables", spec: "RG-58, 5m lengths, N-connector each end", source: "Amazon ~$10 ea" },
+      { qty: 1, item: "Current/power monitor IC", spec: "INA219, I2C, for efficiency logging", source: "Mouser ~$1.50" },
+    ],
+    steps: [
+      {
+        title: "Plan Antenna Array Geometry",
+        detail: "Survey the target plot and mark four antenna stake positions at the corners of a square with side length equal to 0.7× the plot diagonal. For a 10×10m plot, stake positions are 7m apart. The square geometry creates overlapping phase-conjugate interference zones at the plot center and throughout the interior volume. Record GPS coordinates of each stake position using the provided stake_survey.py GPS logging script. The phase-conjugate wave pairs propagate along the diagonals of the square — the TRZ condition forms where both diagonal pairs overlap (the central ~60% of the plot area).",
+        warning: null,
+      },
+      {
+        title: "Wind and Assemble Ground Stake Antennas",
+        detail: "For each of the four stake assemblies: starting 100mm from the top of the 1.2m stainless rod, wind 50 turns of 20 AWG enameled copper wire in a tight single layer (forms a coil ~60mm long, ~20mm diameter). Secure with heat-shrink tubing top and bottom. Solder N-connector to the coil terminals — coil becomes the feed element. Measure inductance (target 15–20 µH on LCR meter). Seal all connections with self-amalgamating tape for weatherproofing. The stainless rod drives into soil to 300mm depth — the upper coil sits 900mm above grade.",
+        warning: "Ensure the N-connector junction is fully weatherproofed with self-amalgamating tape before field deployment — moisture ingress will detune the antenna and cause corrosion.",
+      },
+      {
+        title: "Wire the Quad-Channel DDS/Amplifier Hub",
+        detail: "Inside the IP67 control enclosure: mount the AD9833 DDS module on the Raspberry Pi via SPI (SCLK→GPIO11, MOSI→GPIO10, FSYNC→GPIO8). Wire four TDA2003 amplifier modules in parallel from the DDS output, each through a 180° phase-shift network (RC phase inverter per plans) — creating two 0° and two 180° channels. Channels 0/2 feed Stake-A and Stake-C (one diagonal pair); Channels 1/3 (phase-inverted) feed Stake-B and Stake-D (the other diagonal pair). This creates counter-propagating phase-conjugate wave pairs on both plot diagonals simultaneously.",
+        warning: null,
+      },
+      {
+        title: "Install Soil Moisture Sensor Network",
+        detail: "Place one Adafruit STEMMA soil moisture sensor at 150mm depth at each of the four stake positions. Wire all four sensors to the Raspberry Pi I2C bus (SDA→GPIO2, SCL→GPIO3) via the provided I2C multiplexer (TCA9548A). The soil moisture readings feed the field strength optimizer algorithm: drier soil has lower conductivity and requires higher drive current to maintain the target TRZ field intensity at plot center. The optimizer automatically adjusts DDS output amplitude to compensate — maintaining consistent biofield conditions across varying weather.",
+        warning: null,
+      },
+      {
+        title: "Set Up Solar Power and Deploy the Unit",
+        detail: "Connect the 20W solar panel to the LiFePO4 battery pack via the MPPT charge controller. Connect the battery to the control hub (12V input rail). The hub draws <5W average — the battery provides 4+ days of autonomous operation without solar input. Drive each antenna stake into the soil at the surveyed GPS positions to 300mm depth. Route N-connector coax cables to the hub using the cable clips provided. Connect all four antenna cables to the hub output connectors (labeled A–D). The system auto-starts the seasonal protocol at sunrise each day via the RTC module.",
+        warning: "Stake insertion must be vertical (±5°) to maintain the correct antenna radiation geometry. Use a spirit level on the stake during installation.",
+      },
+      {
+        title: "Load and Configure the Seasonal Protocol Library",
+        detail: "SSH into the Raspberry Pi and run the provided setup script (morphoyield_setup.sh). This installs the protocol library (protocols.json: 18 crop-specific protocols covering wheat, corn, soy, tomato, cannabis, and 13 others), the soil-adaptive field optimizer, and the GPS logging daemon. Select your crop protocol via the web dashboard (served on port 5000, accessible on your local WiFi). Each protocol specifies: VLF drive frequency (typically 7.83 Hz Schumann base, modulated to 3–30 Hz range), session duration per day (typically 4–6 hours around sunrise/solar noon), field intensity target, and phase-conjugate modulation depth.",
+        warning: null,
+      },
+      {
+        title: "Measure Baseline and Document Field Conditions",
+        detail: "Before activating the unit, record baseline measurements for the experimental plot: soil NPK (basic test kit), seed germination rate (50-seed tray test), and a GPS-documented reference photo of the plot boundaries. Set up a matched control plot (same soil type, seed variety, irrigation) without the array. Run both plots in parallel for the growing season. Log system data daily (provided dashboard exports CSV: timestamp, drive frequency, output power, soil moisture×4, GPS coordinates). At harvest: document yield weight, germination rate, disease incidence, and time-to-maturity for both plots.",
+        warning: null,
+      },
+    ],
+    notes: "The MorphoYield array targets the morphogenetic field layer described in Bearden's Gravitobiology (p.45-48) — the Whittaker-structured quantum potential lattice that guides species-specific cellular development. The TRZ condition (created by phase-conjugate counter-propagating wave pairs) is the same mechanism documented in Bearden's cold fusion analysis: at TRZ conditions, like charges attract and ion transport across cellular membranes is enhanced. Applied to agriculture, this manifests as improved nutrient uptake coherence, faster germination, and enhanced disease resistance. The morphogenetic coherence mechanism is consistent with published biophoton field coherence research (Popp, Chang) providing an academic validation pathway.",
+    softwareNotes: "Raspberry Pi: morphoyield_setup.sh (full install), protocols.json (18 crop protocols), soil_optimizer.py, gps_logger.py, Flask dashboard (port 5000). FPGA: phase_conjugate_controller.v (Lattice iCE40, provided bitstream + source). Analysis: morphoyield_analysis.py (yield comparison, field efficiency plots, season summary PDF generator). All included in PDF plans.",
+  },
+
+  "Aegis-SV Adaptive Scalar Counterphase Shield": {
+    diagramType: "aegis",
+    overview: "An adaptive EM counterphase shielding system using continuous SDR ambient sampling and real-time DDS phase-conjugate output to create a local EM 'quiet zone'. The system identifies ELF entrainment signatures (especially 10 Hz Woodpecker-style modulation) and generates precisely matched counterphase signals that destructively interfere with the incoming anomalous EM — protecting occupants from documented psychotronic and EM warfare modalities.",
+    bom: [
+      { qty: 1, item: "Software-defined radio receiver (SDR)", spec: "RTL-SDR v3 with TCXO 0.5 ppm, 500 kHz–1766 MHz", source: "RTL-SDR.com ~$30" },
+      { qty: 1, item: "HF upconverter", spec: "Ham-It-Up Plus, covers 0.1–60 MHz HF band", source: "Nooelec ~$55" },
+      { qty: 1, item: "DDS signal generator (counterphase output)", spec: "AD9910 evaluation board, 0.4–400 MHz, 32-bit tuning", source: "Analog Devices ~$200" },
+      { qty: 1, item: "RF power amplifier (counterphase)", spec: "10W class A linear, 1–30 MHz, low harmonic", source: "Mouser PA module ~$35" },
+      { qty: 1, item: "Raspberry Pi 4B", spec: "4GB RAM, for SDR processing and DDS control", source: "Amazon ~$55" },
+      { qty: 2, item: "Loop antennas (receive + transmit)", spec: "300mm diameter, 20-turn, shielded — one Rx, one Tx", source: "Wind per plans ~$15 ea" },
+      { qty: 1, item: "Phase conjugate nonlinear medium", spec: "Varactor diode array (BB833 × 8 in bridge)", source: "Mouser ~$1.50/diode" },
+      { qty: 1, item: "GPS module (timing reference)", spec: "u-blox NEO-6M USB, ±100 ns timing", source: "Amazon ~$12" },
+      { qty: 1, item: "LiPo battery (wearable version)", spec: "3.7V 3000 mAh flat pack", source: "Amazon ~$14" },
+      { qty: 1, item: "Wearable enclosure (3D print)", spec: "ABS filament, pendant form, 70×45×18mm, STL files included", source: "3D print service ~$12" },
+      { qty: 1, item: "Cabinet enclosure (grid version)", spec: "Aluminum, 300×200×100mm, rack-mountable", source: "Hammond 1455T2201 ~$45" },
+      { qty: 1, item: "LDO voltage regulator (ultra-low noise)", spec: "LT3042, 3.3V, 1 nV/√Hz noise floor", source: "Mouser ~$5" },
+    ],
+    steps: [
+      {
+        title: "Establish the SDR Ambient Sampling Chain",
+        detail: "Connect the RTL-SDR v3 dongle to the Raspberry Pi via USB. Connect the HF upconverter between the receive loop antenna and the SDR input. The receive loop antenna is shielded (using copper tape over the coil form with a 10mm gap at the start/end to avoid shorted turns) — this makes it responsive to magnetic field (H-field) and largely insensitive to E-field static, reducing pickup of local electronics noise. Configure GNU Radio Companion on the Raspberry Pi with the provided flowgraph (aegis_sampler.grc): dual-band simultaneous monitoring at ELF (1–50 Hz envelope detection from HF carriers) and HF (5–30 MHz carrier scan for Woodpecker signatures).",
+        warning: null,
+      },
+      {
+        title: "Load the ELF Entrainment Detection Firmware",
+        detail: "Install the provided Python package (aegis_detector.py) on the Raspberry Pi. The detector runs continuously, sampling at 2.4 MSPS and computing: (1) Woodpecker PRI: detects 10 Hz ± 0.5 Hz modulation sidebands on HF carriers using the same algorithm as the Woodpecker Grid Detector; (2) ELF coherence index: measures cross-carrier phase coherence at ELF frequencies (the brain-entrainment coupling signature); (3) Anomaly score: weighted combination of PRI match + coherence index, thresholded at 3σ above baseline. Set the alarm LED (GPIO17 → LED) to illuminate when anomaly score > threshold.",
+        warning: null,
+      },
+      {
+        title: "Build the Varactor Phase Conjugate Nonlinear Stage",
+        detail: "Assemble the varactor diode bridge (8× BB833 in a double-balanced bridge configuration per the included schematic). Bias all diodes at 4V reverse (from the LT3042 low-noise 3.3V rail via a voltage doubler) to operate in the high-nonlinearity region. Connect the DDS output to the varactor bridge input through a 6 dB attenuator pad. The bridge's nonlinear response generates the phase-conjugate replica of the input signal — the counterphase signal required for destructive interference with the ambient anomalous EM. Connect the bridge output to the PA stage input.",
+        warning: "Varactor bias voltage must be stable to ±50 mV — use the LT3042 ultra-low-noise LDO throughout. Noisy bias voltage generates spurious intermodulation products that contaminate the counterphase output and degrade shielding effectiveness.",
+      },
+      {
+        title: "Wire the Counterphase DDS and PA Output",
+        detail: "Connect the AD9910 DDS to the Raspberry Pi via SPI. The counterphase control loop (aegis_control.py) reads the detected anomalous frequency from the SDR, programs the DDS to match that frequency ± 180° phase, and routes the DDS output through the varactor bridge → PA → transmit loop antenna. The transmit loop antenna is placed within 200mm of the receive loop to maximize overlap of the counterphase field with the detected anomalous field. The resulting local EM field is the destructive sum: incoming anomalous signal + counterphase output = near-zero anomalous EM within the quiet zone.",
+        warning: null,
+      },
+      {
+        title: "Calibrate the Feedback Loop Timing",
+        detail: "The counterphase control loop latency (SDR sample → FFT → DDS update → PA output) must be <50 ms for effective ELF cancellation at 10 Hz (where a 50 ms delay introduces only 0.5° phase error — well within the cancellation bandwidth). Measure actual loop latency using a test signal: inject a known 10 Hz modulated carrier from a signal generator, start the control loop, and measure the time delay between test signal onset and DDS response on a dual-channel oscilloscope. Adjust the GNU Radio SDR buffer size (aegis_sampler.grc: 'samp_rate / 4096' samples per FFT window) until latency < 50 ms is achieved.",
+        warning: null,
+      },
+      {
+        title: "Assemble and Deploy the Form Factor",
+        detail: "WEARABLE: Mount the Raspberry Pi Zero 2W, RTL-SDR mini, AD9833 (mini DDS), PA output stage (1W max), and LiPo battery in the 3D-printed pendant enclosure (STL files included). Wear the pendant with the loop antennas embedded in a neck cord (receive) and vest pocket (transmit — 200mm separation). CABINET: Mount all components in the Hammond rack enclosure. External receive loop antenna mounts on top of cabinet. Transmit loop antenna mounts inside the cabinet door. The cabinet quiet zone extends ~600mm radius from the transmit antenna. GRID-SCALE: Deploy four cabinet units at building perimeter corners. Network all four via Ethernet — the central Raspberry Pi 4B runs a coordinated four-node counterphase strategy that creates a facility-wide quiet zone via coherent multi-node cancellation.",
+        warning: null,
+      },
+      {
+        title: "Validate Counterphase Effectiveness",
+        detail: "Validation procedure: (1) Inject a known 10 Hz modulated carrier at 15 MHz using a signal generator and directional antenna outside the quiet zone. (2) Measure the carrier + sideband amplitude at the center of the quiet zone using the SDR (Aegis system OFF). Record baseline amplitude. (3) Activate the Aegis counterphase system. (4) Re-measure the 10 Hz sideband amplitude inside the quiet zone. Target: >20 dB reduction in the 10 Hz sideband amplitude (the entrainment modulation signature) while the carrier amplitude is reduced by <3 dB (the system targets the modulation, not the carrier). Log all measurements in the provided validation report template.",
+        warning: null,
+      },
+    ],
+    notes: "The Aegis-SV targets the documented ELF brain-entrainment modulation architecture (Bearden Gravitobiology, Excalibur Briefing) which operates via phase-locked ELF sidebands on HF carriers — not through the carrier energy itself. This is why conventional shielding (Faraday cage) is ineffective: the ELF coupling is at 10 Hz, which penetrates any practical enclosure. The counterphase approach targets the modulation, not the carrier, enabling a compact and wearable solution. The Woodpecker PRI detector module (from the Woodpecker Grid Detector plans) is reused here — both instruments share 80% of their firmware.",
+    softwareNotes: "GNU Radio: aegis_sampler.grc (SDR sampling flowgraph). Python: aegis_detector.py (Woodpecker PRI + ELF coherence detection), aegis_control.py (counterphase DDS control loop, <50 ms latency target), aegis_dashboard.py (Flask monitoring dashboard, port 5000). FPGA option: aegis_fpga.v (Lattice iCE40 implementation for wearable — reduces latency to <5 ms). Validation report template (DOCX). All included in PDF plans.",
+  },
 };
