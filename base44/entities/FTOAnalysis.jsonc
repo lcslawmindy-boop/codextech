@@ -1,0 +1,94 @@
+{
+  "name": "FTOAnalysis",
+  "type": "object",
+  "properties": {
+    "invention_title": {
+      "type": "string"
+    },
+    "invention_description": {
+      "type": "string"
+    },
+    "technology_domain": {
+      "type": "string"
+    },
+    "target_markets": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "overall_risk": {
+      "type": "string",
+      "enum": [
+        "low",
+        "medium",
+        "high",
+        "critical"
+      ]
+    },
+    "risk_score": {
+      "type": "integer"
+    },
+    "executive_summary": {
+      "type": "string"
+    },
+    "blocking_patents": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "patent_number": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "assignee": {
+            "type": "string"
+          },
+          "risk_level": {
+            "type": "string"
+          },
+          "overlap_explanation": {
+            "type": "string"
+          },
+          "expiry_estimate": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "design_around_strategies": {
+      "type": "string"
+    },
+    "white_space_opportunities": {
+      "type": "string"
+    },
+    "recommended_claims_focus": {
+      "type": "string"
+    },
+    "jurisdiction_risks": {
+      "type": "string"
+    },
+    "next_steps": {
+      "type": "string"
+    },
+    "disclaimer": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "reviewed",
+        "actioned"
+      ],
+      "default": "draft"
+    }
+  },
+  "required": [
+    "invention_title",
+    "invention_description",
+    "overall_risk"
+  ]
+}

@@ -90,6 +90,7 @@ import PitchScript from './pages/PitchScript.jsx';
 import VisionFundPitch from './pages/VisionFundPitch';
 import RDSandbox from './pages/RDSandbox';
 import HybridPortfolio from './pages/HybridPortfolio';
+import FTOAnalysisTool from './pages/FTOAnalysisTool';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -206,6 +207,7 @@ const AuthenticatedApp = () => {
           <Route path="/vision-fund-pitch" element={<VisionFundPitch />} />
           <Route path="/rd-sandbox" element={<RDSandbox />} />
           <Route path="/hybrid-portfolio" element={<HybridPortfolio />} />
+          <Route path="/fto-analysis" element={<FTOAnalysisTool />} />
 
           {/* Admin-only routes */}
           <Route element={<AdminGuard />}>
