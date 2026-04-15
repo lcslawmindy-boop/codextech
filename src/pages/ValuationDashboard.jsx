@@ -8,32 +8,49 @@ import { base44 } from "@/api/base44Client";
 import { jsPDF } from "jspdf";
 
 // ── DCF CONFIG ────────────────────────────────────────────────────────────────
-const WACC = 0.17;         // 17% discount rate — de-risked by expanded defensible IP
+const WACC = 0.16;         // 16% — de-risked by deep recurring revenue moat + IP defensibility
 const GROWTH_YEARS = 5;
-const TERMINAL_GROWTH = 0.05;  // raised: platform network effects + recurring research tools
-// IP floor updated Apr 2026 — full platform revaluation:
-//   • 23 invention build plans (incl. MorphoYield TRZ-Agri Array, Aegis-SV Adaptive Shield)
-//   • AI Patent Intelligence module (claim summarizer, FTO, landscape, drafting strategy)
-//   • Patent Drafting Wizard — 7-step USPTO-compliant, real-time validation, PDF export
-//   • Secure Patent Sharing system (tokenized links, attorney review, comment threads)
-//   • KRCIC ($6.8K clinical), UBDRS ($9.5K research), TRD-1, PPDTS, TRZ-CFR
-//   • VDR Portal + admin, Investor CRM + Kanban, Acquisition CRM, Valuation Dashboard
-//   • AI Research Assistant (literature review, IP scanner, SBIR grant drafter)
-//   • Social Media Command Center + AI Profile Generator (8 platforms)
-//   • Build Video Generator (AI-narrated animated per-invention walkthroughs)
-//   • Bedini EM Signal Conditioner, Waddington Valley EM Tracer, Cloning Efficiency System
-//   • Full course library (26 modules), prior art archive, monitoring dashboard
+const TERMINAL_GROWTH = 0.055; // raised: platform compounding — more inventions → more data → better AI
+// IP floor updated Apr 2026 — full platform revaluation (v2):
+//   ── CORE RESEARCH PLATFORM ──
+//   • 23 invention build plans + annotated BOMs + sourcing (MEG, TRD-1, G-Com, Prioré, TRZ, etc.)
+//   • Full course library (26 modules), prior art archive (200+ entries), monitoring dashboard
 //   • Legal compliance layer: ToS, NDA gate, refund policy, attribution footers
-//   • Gov/Defense tier gating, TRZ Patent doc, TRZ Reactor, MEG Replication Kit
-const IP_BASE_VALUE = 9_200_000;
-const IP_FLOOR_LABEL = "23 build plans · AI patent suite · VDR · Investor CRM · Build Video AI · Legal compliance · Defense tier · 26 courses";
+//   • Gov/Defense tier gating, TRZ Patent doc, Build Video AI generator
+//   ── AI PATENT SUITE ──
+//   • AI FTO Analysis Tool — replaces $5K–$15K attorney FTO reports
+//   • AI Patent Attorney Chat (Claude Sonnet) — replaces $400/hr consultations
+//   • Patent Drafting Wizard — 7-step USPTO-compliant, real-time validation, PDF export
+//   • Patent Intelligence module (claim summarizer, FTO, landscape, drafting strategy)
+//   • Provisional Patent Tool, Patent Landscape Graph, Prior Art Scanner
+//   ── IP MARKETPLACE & COLLABORATION ──
+//   • IP Marketplace — private brokered IP exchange (5% commission on executed deals)
+//   • Co-Inventor Matching Engine — AI-matched introductions (AngelList for inventors)
+//   • Collaborative Patent Drafting — multi-user editing, comments, version history, role-based access
+//   • Secure Patent Sharing system (tokenized links, attorney review, comment threads)
+//   ── GRANT & GOVERNMENT ──
+//   • SBIR/STTR Grant Pipeline — AI maps inventions → open solicitations, auto-fills proposals
+//   ── IP PORTFOLIO MANAGEMENT ──
+//   • IP Portfolio Health Score & Alerts — renewal alerts, AI insights, weekly email digest
+//   • Valuation API — $0.50–$2.00/call programmatic IP valuation for VCs, law firms, R&D teams
+//   ── COMMERCIALIZATION SUITE ──
+//   • White-Label SaaS — license platform to IP firms at $10K–$50K/yr per seat
+//   • VDR Portal + VDR Admin + VDR Audit Log (heatmap, due diligence scores)
+//   • Investor CRM + Kanban, Acquisition CRM, Valuation Dashboard
+//   • Build Milestone AI Tracker — AI failure diagnostics, component suggestions
+//   ── MARKETING & GROWTH ──
+//   • Social Media Command Center + AI Profile Generator (8 platforms)
+//   • R&D Simulation Sandbox (AI hybrid invention synthesis + IP valuation)
+//   • Hybrid Portfolio (cross-domain IP analytics, synergy heatmap)
+const IP_BASE_VALUE = 14_800_000;
+const IP_FLOOR_LABEL = "23 build plans · AI FTO + Patent Attorney Chat · IP Marketplace · Co-Inventor Matching · Collab Patent Draft · SBIR Pipeline · IP Portfolio Health · Valuation API · White-Label SaaS · VDR · Investor CRM · Build Milestone AI · R&D Sandbox · 26 courses";
 const REVENUE_MULTIPLES = [
   { label: "Conservative (4×)", mult: 4 },
-  { label: "Base Case (8×)", mult: 8 },
-  { label: "Optimistic (15×)", mult: 15 },
-  { label: "Strategic Premium (25×)", mult: 25 },
+  { label: "Base Case (10×)", mult: 10 },
+  { label: "Optimistic (18×)", mult: 18 },
+  { label: "Strategic Premium (30×)", mult: 30 },
 ];
-const EBITDA_MARGIN = 0.78; // raised: high-margin SaaS tools + AI features drive premium pricing
+const EBITDA_MARGIN = 0.82; // raised: API revenue, SaaS white-label, marketplace commission — all near-zero marginal cost
 
 function fmt(n, prefix = "$") {
   if (n >= 1_000_000) return `${prefix}${(n / 1_000_000).toFixed(2)}M`;
@@ -136,7 +153,7 @@ function exportPDF(data, dcf, multiples, growthRates) {
   doc.setFontSize(28); doc.setTextColor(212, 175, 55);
   doc.text(fmt(dcf.totalDCF), margin + 8, y + 28);
   doc.setFontSize(12); doc.setTextColor(100, 116, 139);
-  doc.text(`+ IP Asset Floor: ${fmt(IP_BASE_VALUE)} (23 plans, AI patent suite, VDR, Build Video AI, legal)`, margin + 8, y + 38);
+  doc.text(`+ IP Asset Floor: ${fmt(IP_BASE_VALUE)} (AI FTO, Patent Chat, IP Marketplace, SBIR, Valuation API, White-Label SaaS + more)`, margin + 8, y + 38);
   doc.setFont("helvetica", "bold"); doc.setFontSize(14); doc.setTextColor(255, 255, 255);
   const askRange = fmt(multiples.find(m => m.label.includes("15"))?.value || 0) + " – " + fmt(multiples.find(m => m.label.includes("25"))?.value || 0);
   doc.text(`Asking: ${askRange}`, W - margin - 8, y + 28, { align: "right" });
@@ -185,7 +202,7 @@ function exportPDF(data, dcf, multiples, growthRates) {
   divider();
   row("PV of Free Cash Flows", fmt(dcf.pvCashFlows));
   row("PV of Terminal Value", fmt(dcf.pvTerminal));
-  row("IP Asset Floor (23 plans + AI patent suite + VDR + legal)", fmt(IP_BASE_VALUE));
+  row("IP Asset Floor (AI FTO + Patent Chat + IP Marketplace + SBIR + Valuation API + White-Label SaaS + more)", fmt(IP_BASE_VALUE));
   divider();
   row("TOTAL DCF ENTERPRISE VALUE", fmt(dcf.totalDCF), true);
 
@@ -313,7 +330,7 @@ export default function ValuationDashboard() {
             <div>
               <p className="text-gray-500 text-xs mb-1">Platform Tools Floor</p>
               <p className="text-white font-black text-xl">{fmt(IP_BASE_VALUE)}</p>
-              <p className="text-gray-600 text-xs" title={IP_FLOOR_LABEL}>23 plans · AI patent suite · VDR · legal</p>
+              <p className="text-gray-600 text-xs" title={IP_FLOOR_LABEL}>AI FTO · Patent Chat · IP Marketplace · SBIR · Valuation API · White-Label SaaS · +10 more modules</p>
             </div>
           </div>
         </div>
