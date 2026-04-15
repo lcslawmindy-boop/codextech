@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import {
   Shield, Download, Video, FileText, Users, BarChart2,
   TrendingUp, Database, Settings, ArrowRight, Star, Zap, Target, ShoppingCart, Flame, ShieldCheck,
-  Scale, Briefcase, Building2
+  Scale, Briefcase, Building2, Code, Wrench
 } from "lucide-react";
 
 const ADMIN_SECTIONS = [
@@ -42,6 +42,11 @@ const ADMIN_SECTIONS = [
       { path: "/ip-marketplace", icon: <Briefcase size={20} />, label: "IP Marketplace", desc: "Private brokered IP exchange — 5% commission on executed deals", badge: "NEW" },
       { path: "/co-inventor-matching", icon: <Users size={20} />, label: "Co-Inventor Matching", desc: "AI-matched inventor introductions — AngelList for inventors", badge: "NEW" },
       { path: "/white-label-saas", icon: <Building2 size={20} />, label: "White-Label SaaS", desc: "License the full IP platform to law firms — $10K–$50K/yr per seat", badge: "NEW" },
+      { path: "/sbir-pipeline", icon: <Target size={20} />, label: "SBIR/STTR Grant Pipeline", desc: "AI maps inventions to open solicitations & auto-fills proposals", badge: "NEW" },
+      { path: "/collab-patent-draft", icon: <Users size={20} />, label: "Collaborative Patent Draft", desc: "Multi-user editing, comment threads, version history, role-based access", badge: "NEW" },
+      { path: "/ip-portfolio-health", icon: <ShieldCheck size={20} />, label: "IP Portfolio Health Score", desc: "Live scoring, renewal alerts, weekly digest emails — re-engagement driver", badge: "NEW" },
+      { path: "/build-milestone-ai", icon: <Wrench size={20} />, label: "Build Milestone AI", desc: "AI flags failure points, suggests components, estimates completion", badge: "NEW" },
+      { path: "/valuation-api", icon: <Code size={20} />, label: "Valuation API", desc: "$0.50–$2.00/call programmatic IP valuation for VCs, law firms, R&D teams", badge: "NEW" },
       { path: "/valuation", icon: <BarChart2 size={20} />, label: "Valuation Dashboard", desc: "IP portfolio valuation & financial projections", badge: null },
       { path: "/acquisition-crm", icon: <Target size={20} />, label: "Acquisition CRM", desc: "Institutional buyer pipeline & deal tracking", badge: "CRM" },
       { path: "/investor-crm", icon: <Database size={20} />, label: "Investor CRM", desc: "Investor relationship management & communications", badge: "CRM" },

@@ -95,6 +95,11 @@ import PatentAttorneyChat from './pages/PatentAttorneyChat';
 import IPMarketplace from './pages/IPMarketplace';
 import CoInventorMatching from './pages/CoInventorMatching';
 import WhiteLabelSaaS from './pages/WhiteLabelSaaS';
+import SBIRPipeline from './pages/SBIRPipeline';
+import CollabPatentDraft from './pages/CollabPatentDraft';
+import IPPortfolioHealth from './pages/IPPortfolioHealth';
+import BuildMilestoneAI from './pages/BuildMilestoneAI';
+import ValuationAPI from './pages/ValuationAPI';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -216,6 +221,11 @@ const AuthenticatedApp = () => {
           <Route path="/ip-marketplace" element={<IPMarketplace />} />
           <Route path="/co-inventor-matching" element={<CoInventorMatching />} />
           <Route path="/white-label-saas" element={<WhiteLabelSaaS />} />
+          <Route path="/sbir-pipeline" element={<SBIRPipeline />} />
+          <Route path="/collab-patent-draft" element={<CollabPatentDraft />} />
+          <Route path="/ip-portfolio-health" element={<IPPortfolioHealth />} />
+          <Route path="/build-milestone-ai" element={<BuildMilestoneAI />} />
+          <Route path="/valuation-api" element={<ValuationAPI />} />
 
           {/* Admin-only routes */}
           <Route element={<AdminGuard />}>
