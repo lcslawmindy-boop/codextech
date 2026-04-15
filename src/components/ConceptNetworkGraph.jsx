@@ -2,8 +2,7 @@ import { useEffect, useRef } from "react";
 import * as d3 from "d3";
 import { nodes as rawNodes, links as rawLinks, groupColors } from "../lib/beardenData";
 
-// Wrap text into max N chars per line
-function wrapLabel(label, maxChars = 14) {
+function wrapLabel(label, maxChars = 13) {
   const words = label.split(' ');
   const lines = [];
   let cur = '';
@@ -16,7 +15,20 @@ function wrapLabel(label, maxChars = 14) {
     }
   });
   if (cur) lines.push(cur.trim());
-  return lines.slice(0, 3); // max 3 lines
+  return lines.slice(0, 3);
+}
+
+// Count connections per node for sizing
+function getNodeDegrees(nodes, links) {
+  const deg = {};
+  nodes.forEach(n => { deg[n.id] = 0; });
+  links.forEach(l => {
+    const src = typeof l.source === 'object' ? l.source.id : l.source;
+    const tgt = typeof l.target === 'object' ? l.target.id : l.target;
+    if (deg[src] !== undefined) deg[src]++;
+    if (deg[tgt] !== undefined) deg[tgt]++;
+  });
+  return deg;
 }
 
 export default function ConceptNetworkGraph({ onNodeClick, selectedNodeId }) {
@@ -34,221 +46,307 @@ export default function ConceptNetworkGraph({ onNodeClick, selectedNodeId }) {
 
     svg.selectAll("*").remove();
 
-    // All defs upfront
     const defs = svg.append("defs");
 
-    // Arrow marker
+    // ── Radial gradients per group ──
+    Object.entries(groupColors).forEach(([group, color]) => {
+      const grad = defs.append("radialGradient")
+        .attr("id", `grad-${group}`)
+        .attr("cx", "35%").attr("cy", "35%")
+        .attr("r", "65%");
+      grad.append("stop").attr("offset", "0%").attr("stop-color", color).attr("stop-opacity", 0.65);
+      grad.append("stop").attr("offset", "100%").attr("stop-color", color).attr("stop-opacity", 0.12);
+
+      const gradSelected = defs.append("radialGradient")
+        .attr("id", `grad-sel-${group}`)
+        .attr("cx", "35%").attr("cy", "35%")
+        .attr("r", "65%");
+      gradSelected.append("stop").attr("offset", "0%").attr("stop-color", "#fff").attr("stop-opacity", 0.25);
+      gradSelected.append("stop").attr("offset", "100%").attr("stop-color", color).attr("stop-opacity", 0.9);
+    });
+
+    // ── Arrow marker ──
     defs.append("marker")
       .attr("id", "arrow")
-      .attr("viewBox", "0 -5 10 10")
-      .attr("refX", 38)
-      .attr("refY", 0)
-      .attr("markerWidth", 5)
-      .attr("markerHeight", 5)
+      .attr("viewBox", "0 -4 8 8")
+      .attr("refX", 42).attr("refY", 0)
+      .attr("markerWidth", 4).attr("markerHeight", 4)
       .attr("orient", "auto")
-      .append("path")
-      .attr("d", "M0,-5L10,0L0,5")
-      .attr("fill", "#9ca3af");
+      .append("path").attr("d", "M0,-4L8,0L0,4").attr("fill", "#475569");
 
-    // Electric glow filter for links
-    const linkGlow = defs.append("filter").attr("id", "linkGlow").attr("x", "-50%").attr("y", "-50%").attr("width", "200%").attr("height", "200%");
-    linkGlow.append("feGaussianBlur").attr("stdDeviation", "2.5").attr("result", "coloredBlur");
-    const lfm = linkGlow.append("feMerge");
-    lfm.append("feMergeNode").attr("in", "coloredBlur");
+    defs.append("marker")
+      .attr("id", "arrow-hover")
+      .attr("viewBox", "0 -4 8 8")
+      .attr("refX", 42).attr("refY", 0)
+      .attr("markerWidth", 4).attr("markerHeight", 4)
+      .attr("orient", "auto")
+      .append("path").attr("d", "M0,-4L8,0L0,4").attr("fill", "#93c5fd");
+
+    // ── Glow filters ──
+    const makeGlow = (id, blur, color) => {
+      const f = defs.append("filter").attr("id", id).attr("x", "-60%").attr("y", "-60%").attr("width", "220%").attr("height", "220%");
+      f.append("feColorMatrix").attr("type", "matrix")
+        .attr("values", `0 0 0 0 ${parseInt(color.slice(1,3),16)/255} 0 0 0 0 ${parseInt(color.slice(3,5),16)/255} 0 0 0 0 ${parseInt(color.slice(5,7),16)/255} 0 0 0 1 0`)
+        .attr("result", "colorOut");
+      f.append("feGaussianBlur").attr("in", "colorOut").attr("stdDeviation", blur).attr("result", "blurred");
+      const fm = f.append("feMerge");
+      fm.append("feMergeNode").attr("in", "blurred");
+      fm.append("feMergeNode").attr("in", "SourceGraphic");
+    };
+
+    makeGlow("glow-blue", 8, "#3b82f6");
+    makeGlow("glow-green", 8, "#22c55e");
+    makeGlow("glow-red", 8, "#ef4444");
+    makeGlow("glow-purple", 8, "#a855f7");
+    makeGlow("glow-amber", 8, "#f59e0b");
+    makeGlow("glow-cyan", 8, "#06b6d4");
+    makeGlow("glow-white", 6, "#ffffff");
+
+    const glowMap = {
+      physics: "url(#glow-blue)", biology: "url(#glow-green)", weapons: "url(#glow-red)",
+      consciousness: "url(#glow-purple)", history: "url(#glow-amber)", philosophy: "url(#glow-cyan)"
+    };
+
+    // ── Link glow ──
+    const lf = defs.append("filter").attr("id", "linkGlow").attr("x", "-50%").attr("y", "-50%").attr("width", "200%").attr("height", "200%");
+    lf.append("feGaussianBlur").attr("stdDeviation", "1.5").attr("result", "blurred");
+    const lfm = lf.append("feMerge");
+    lfm.append("feMergeNode").attr("in", "blurred");
     lfm.append("feMergeNode").attr("in", "SourceGraphic");
-
-    // Node glow filter
-    const filter = defs.append("filter").attr("id", "glow");
-    filter.append("feGaussianBlur").attr("stdDeviation", "5").attr("result", "coloredBlur");
-    const feMerge = filter.append("feMerge");
-    feMerge.append("feMergeNode").attr("in", "coloredBlur");
-    feMerge.append("feMergeNode").attr("in", "SourceGraphic");
-
-    // Neon glow filter for text
-    const textGlow = defs.append("filter").attr("id", "textGlow");
-    textGlow.append("feGaussianBlur").attr("stdDeviation", "3").attr("result", "coloredBlur");
-    const feMerge2 = textGlow.append("feMerge");
-    feMerge2.append("feMergeNode").attr("in", "coloredBlur");
-    feMerge2.append("feMergeNode").attr("in", "SourceGraphic");
 
     const g = svg.append("g");
 
-    // Zoom
-    svg.call(d3.zoom().scaleExtent([0.2, 4]).on("zoom", (e) => {
-      g.attr("transform", e.transform);
-    }));
+    svg.call(d3.zoom().scaleExtent([0.15, 5]).on("zoom", e => g.attr("transform", e.transform)));
 
     const nodes = rawNodes.map(d => ({ ...d }));
     const links = rawLinks.map(d => ({ ...d }));
+    const degrees = getNodeDegrees(nodes, links);
+
+    // Node radius based on degree (hub nodes are larger)
+    const minR = 30, maxR = 52;
+    const maxDeg = Math.max(...Object.values(degrees));
+    const nodeRadius = d => minR + ((degrees[d.id] || 0) / maxDeg) * (maxR - minR);
 
     simRef.current = d3.forceSimulation(nodes)
-      .force("link", d3.forceLink(links).id(d => d.id).distance(220))
-      .force("charge", d3.forceManyBody().strength(-1200))
+      .force("link", d3.forceLink(links).id(d => d.id).distance(d => {
+        const srcDeg = degrees[typeof d.source === 'object' ? d.source.id : d.source] || 0;
+        const tgtDeg = degrees[typeof d.target === 'object' ? d.target.id : d.target] || 0;
+        return 180 + (srcDeg + tgtDeg) * 3;
+      }))
+      .force("charge", d3.forceManyBody().strength(d => -900 - (degrees[d.id] || 0) * 25))
       .force("center", d3.forceCenter(width / 2, height / 2))
-      .force("collision", d3.forceCollide(80));
+      .force("collision", d3.forceCollide(d => nodeRadius(d) + 20));
 
-    // Base dim link lines
+    // ── Base dim links ──
     g.append("g").selectAll("line.base")
       .data(links).enter().append("line")
       .attr("class", "base")
-      .attr("stroke", "#374151")
+      .attr("stroke", "#1e293b")
       .attr("stroke-width", 1)
-      .attr("stroke-opacity", 0.4)
+      .attr("stroke-opacity", 0.6)
       .attr("marker-end", "url(#arrow)");
 
-    // Animated electric links
+    // ── Animated electric links ──
     const link = g.append("g").selectAll("line.electric")
       .data(links).enter().append("line")
       .attr("class", "electric")
-      .attr("stroke", "#7dd3fc")
-      .attr("stroke-width", 1.8)
-      .attr("stroke-opacity", 0.9)
-      .attr("stroke-dasharray", "6 14")
+      .attr("stroke", "#38bdf8")
+      .attr("stroke-width", 1.4)
+      .attr("stroke-opacity", 0.7)
+      .attr("stroke-dasharray", "5 12")
       .attr("filter", "url(#linkGlow)")
       .attr("marker-end", "url(#arrow)")
       .each(function(d, i) {
-        // Stagger the animation per link
         const el = d3.select(this);
-        const duration = 800 + (i % 7) * 120;
-        const offset = (i % 20) * -3;
+        const duration = 900 + (i % 8) * 100;
+        const offset = (i % 22) * -4;
         el.style("stroke-dashoffset", offset)
-          .transition()
-          .duration(0)
+          .transition().duration(0)
           .on("start", function repeat() {
             d3.active(this)
               .styleTween("stroke-dashoffset", () => d3.interpolateNumber(offset, offset - 60))
-              .transition()
-              .duration(duration)
-              .ease(d3.easeLinear)
-              .on("start", repeat);
+              .transition().duration(duration).ease(d3.easeLinear).on("start", repeat);
           });
       });
 
-    // Link labels — only show on hover via opacity, hidden by default
-    const linkLabel = g.append("g").selectAll("text")
+    // ── Link labels ──
+    const linkLabel = g.append("g").selectAll("text.linklabel")
       .data(links).enter().append("text")
-      .attr("font-size", 12)
-      .attr("font-weight", "700")
-      .attr("fill", "#e2e8f0")
-      .attr("fill-opacity", 0)
+      .attr("class", "linklabel")
+      .attr("font-size", 10).attr("font-weight", "600")
+      .attr("fill", "#94a3b8").attr("fill-opacity", 0)
       .attr("text-anchor", "middle")
-      .attr("filter", "url(#textGlow)")
+      .attr("pointer-events", "none")
       .text(d => d.label);
 
-    // Node groups
-    const node = g.append("g").selectAll("g")
+    // ── Node groups ──
+    const node = g.append("g").selectAll("g.node")
       .data(nodes).enter().append("g")
+      .attr("class", "node")
       .style("cursor", "pointer")
       .call(d3.drag()
-        .on("start", (e, d) => {
-          if (!e.active) simRef.current.alphaTarget(0.3).restart();
-          d.fx = d.x; d.fy = d.y;
-        })
+        .on("start", (e, d) => { if (!e.active) simRef.current.alphaTarget(0.3).restart(); d.fx = d.x; d.fy = d.y; })
         .on("drag", (e, d) => { d.fx = e.x; d.fy = e.y; })
-        .on("end", (e, d) => {
-          if (!e.active) simRef.current.alphaTarget(0);
-          d.fx = null; d.fy = null;
-        })
+        .on("end", (e, d) => { if (!e.active) simRef.current.alphaTarget(0); d.fx = null; d.fy = null; })
       )
       .on("click", (e, d) => { e.stopPropagation(); onNodeClick(d); });
 
-    const NODE_R = 38;
-
-    // Node circles — larger, filled with group color at higher opacity
+    // ── Outer ring (thin, colored) ──
     node.append("circle")
-      .attr("r", NODE_R)
-      .attr("fill", d => groupColors[d.group] + "33")
+      .attr("class", "ring")
+      .attr("r", d => nodeRadius(d) + 5)
+      .attr("fill", "none")
       .attr("stroke", d => groupColors[d.group])
-      .attr("stroke-width", d => d.id === selectedNodeId ? 4 : 2)
-      .attr("filter", d => d.id === selectedNodeId ? "url(#glow)" : null)
-      .on("mouseenter", function(e, d) {
-        d3.select(this).attr("fill", groupColors[d.group] + "66").attr("stroke-width", 3);
-        // Show adjacent link labels
-        linkLabel.attr("fill-opacity", l => (l.source.id === d.id || l.target.id === d.id) ? 1 : 0);
-      })
-      .on("mouseleave", function(e, d) {
-        d3.select(this)
-          .attr("fill", groupColors[d.group] + "33")
-          .attr("stroke-width", d.id === selectedNodeId ? 4 : 2);
-        linkLabel.attr("fill-opacity", 0);
-      });
-
-    // Group badge (colored dot + group name)
-    node.append("circle")
-      .attr("r", 5)
-      .attr("cx", NODE_R - 6)
-      .attr("cy", -NODE_R + 6)
-      .attr("fill", d => groupColors[d.group])
+      .attr("stroke-width", 1)
+      .attr("stroke-opacity", 0.3)
       .attr("pointer-events", "none");
 
-    // Multi-line node labels — white text with neon color outline/glow
+    // ── Main node circle ──
+    node.append("circle")
+      .attr("class", "main-circle")
+      .attr("r", d => nodeRadius(d))
+      .attr("fill", d => `url(#grad-${d.group})`)
+      .attr("stroke", d => groupColors[d.group])
+      .attr("stroke-width", 1.5)
+      .on("mouseenter", function(e, d) {
+        const r = nodeRadius(d);
+        d3.select(this.parentNode).select(".ring")
+          .transition().duration(200)
+          .attr("stroke-opacity", 0.7)
+          .attr("r", r + 9);
+        d3.select(this)
+          .transition().duration(200)
+          .attr("stroke-width", 2.5);
+        linkLabel.transition().duration(150)
+          .attr("fill-opacity", l => {
+            const src = typeof l.source === 'object' ? l.source.id : l.source;
+            const tgt = typeof l.target === 'object' ? l.target.id : l.target;
+            return (src === d.id || tgt === d.id) ? 1 : 0;
+          });
+        // Highlight connected links
+        link.transition().duration(150)
+          .attr("stroke-opacity", l => {
+            const src = typeof l.source === 'object' ? l.source.id : l.source;
+            const tgt = typeof l.target === 'object' ? l.target.id : l.target;
+            return (src === d.id || tgt === d.id) ? 1 : 0.15;
+          })
+          .attr("stroke", l => {
+            const src = typeof l.source === 'object' ? l.source.id : l.source;
+            const tgt = typeof l.target === 'object' ? l.target.id : l.target;
+            return (src === d.id || tgt === d.id) ? groupColors[d.group] : "#38bdf8";
+          })
+          .attr("stroke-width", l => {
+            const src = typeof l.source === 'object' ? l.source.id : l.source;
+            const tgt = typeof l.target === 'object' ? l.target.id : l.target;
+            return (src === d.id || tgt === d.id) ? 2.5 : 1.4;
+          });
+      })
+      .on("mouseleave", function(e, d) {
+        const r = nodeRadius(d);
+        d3.select(this.parentNode).select(".ring")
+          .transition().duration(300)
+          .attr("stroke-opacity", d.id === selectedNodeId ? 0.8 : 0.3)
+          .attr("r", r + 5);
+        d3.select(this)
+          .transition().duration(300)
+          .attr("stroke-width", d.id === selectedNodeId ? 3 : 1.5);
+        linkLabel.transition().duration(200).attr("fill-opacity", 0);
+        link.transition().duration(200)
+          .attr("stroke-opacity", 0.7)
+          .attr("stroke", "#38bdf8")
+          .attr("stroke-width", 1.4);
+      });
+
+    // ── Group color dot (top-right badge) ──
+    node.append("circle")
+      .attr("class", "badge-dot")
+      .attr("r", 4.5)
+      .attr("cx", d => nodeRadius(d) - 4)
+      .attr("cy", d => -(nodeRadius(d) - 4))
+      .attr("fill", d => groupColors[d.group])
+      .attr("stroke", "#0f172a")
+      .attr("stroke-width", 1.5)
+      .attr("pointer-events", "none");
+
+    // ── Node degree indicator (small arc) ──
     node.each(function(d) {
-      const lines = wrapLabel(d.label, 12);
-      const lineH = 15;
+      const r = nodeRadius(d);
+      const deg = degrees[d.id] || 0;
+      const maxAngle = Math.PI * 2 * Math.min(deg / 15, 1);
+      const arc = d3.arc()
+        .innerRadius(r + 2).outerRadius(r + 6)
+        .startAngle(0).endAngle(maxAngle);
+      d3.select(this).append("path")
+        .attr("d", arc())
+        .attr("fill", groupColors[d.group])
+        .attr("fill-opacity", 0.5)
+        .attr("pointer-events", "none");
+    });
+
+    // ── Multi-line labels ──
+    node.each(function(d) {
+      const lines = wrapLabel(d.label, 11);
+      const lineH = 14;
+      const r = nodeRadius(d);
       const startY = -(lines.length - 1) * lineH / 2;
       const sel = d3.select(this);
       const color = groupColors[d.group];
-      const fontSize = lines.length > 2 ? 11 : 12;
+      const fontSize = lines.length > 2 ? 9.5 : lines.length === 2 ? 10.5 : 11;
 
-      // Shadow/stroke layer for neon outline effect
+      // Shadow/glow layer
       lines.forEach((t, i) => {
         sel.append("text")
-          .attr("class", "node-line-shadow")
+          .attr("class", "lbl-shadow")
           .attr("text-anchor", "middle")
           .attr("y", startY + i * lineH)
           .attr("font-size", fontSize)
-          .attr("font-weight", "800")
+          .attr("font-weight", "900")
           .attr("fill", "none")
           .attr("stroke", color)
-          .attr("stroke-width", 3)
+          .attr("stroke-width", 2.5)
           .attr("stroke-linejoin", "round")
-          .attr("filter", "url(#textGlow)")
+          .attr("paint-order", "stroke")
           .attr("pointer-events", "none")
           .text(t);
       });
 
-      // White fill layer on top
+      // White fill
       lines.forEach((t, i) => {
         sel.append("text")
-          .attr("class", "node-line")
+          .attr("class", "lbl-fill")
           .attr("text-anchor", "middle")
           .attr("y", startY + i * lineH)
           .attr("font-size", fontSize)
-          .attr("font-weight", "800")
-          .attr("fill", "#ffffff")
+          .attr("font-weight", "900")
+          .attr("fill", "#f8fafc")
           .attr("pointer-events", "none")
           .text(t);
       });
     });
 
-    // Group label below node
+    // ── Group label below node ──
     node.append("text")
       .attr("text-anchor", "middle")
-      .attr("y", NODE_R + 14)
-      .attr("font-size", 9)
-      .attr("font-weight", "600")
+      .attr("y", d => nodeRadius(d) + 15)
+      .attr("font-size", 8)
+      .attr("font-weight", "700")
+      .attr("letter-spacing", "0.08em")
       .attr("fill", d => groupColors[d.group])
-      .attr("fill-opacity", 0.7)
+      .attr("fill-opacity", 0.6)
       .attr("pointer-events", "none")
       .text(d => d.group.toUpperCase());
 
+    // ── Tick ──
     simRef.current.on("tick", () => {
-      // Update both base and electric lines
-      g.selectAll("line").filter(function() { return true; })
+      g.selectAll("line")
         .attr("x1", d => d.source?.x ?? 0)
         .attr("y1", d => d.source?.y ?? 0)
         .attr("x2", d => d.target?.x ?? 0)
         .attr("y2", d => d.target?.y ?? 0);
 
-      link
-        .attr("x1", d => d.source.x)
-        .attr("y1", d => d.source.y)
-        .attr("x2", d => d.target.x)
-        .attr("y2", d => d.target.y);
-
       linkLabel
         .attr("x", d => (d.source.x + d.target.x) / 2)
-        .attr("y", d => (d.source.y + d.target.y) / 2);
+        .attr("y", d => (d.source.y + d.target.y) / 2 - 4);
 
       node.attr("transform", d => `translate(${d.x},${d.y})`);
     });
@@ -256,13 +354,25 @@ export default function ConceptNetworkGraph({ onNodeClick, selectedNodeId }) {
     return () => { simRef.current?.stop(); };
   }, []);
 
-  // Update selected node highlight
+  // ── Update selected highlight ──
   useEffect(() => {
     if (!svgRef.current) return;
-    d3.select(svgRef.current).selectAll("circle")
-      .filter(d => d && d.r === undefined) // only main node circles (not badge dots)
-      .attr("stroke-width", d => d.id === selectedNodeId ? 4 : 2)
-      .attr("r", d => d.id === selectedNodeId ? 44 : 38);
+    const glowFilters = {
+      physics: "url(#glow-blue)", biology: "url(#glow-green)", weapons: "url(#glow-red)",
+      consciousness: "url(#glow-purple)", history: "url(#glow-amber)", philosophy: "url(#glow-cyan)"
+    };
+    const svg = d3.select(svgRef.current);
+    svg.selectAll("g.node").each(function(d) {
+      if (!d) return;
+      const isSelected = d.id === selectedNodeId;
+      const grp = d3.select(this);
+      grp.select(".main-circle")
+        .attr("stroke-width", isSelected ? 3 : 1.5)
+        .attr("filter", isSelected ? (glowFilters[d.group] || null) : null);
+      grp.select(".ring")
+        .attr("stroke-opacity", isSelected ? 0.85 : 0.3)
+        .attr("stroke-width", isSelected ? 2 : 1);
+    });
   }, [selectedNodeId]);
 
   return <svg ref={svgRef} className="w-full h-full" />;
