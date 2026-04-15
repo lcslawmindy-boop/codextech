@@ -34,9 +34,9 @@ const ACQUISITION_TERMS = [
     section: "Earnout Structure",
     items: [
       { label: "Earnout Period", value: "24 months post-close" },
-      { label: "Milestone 1 (Month 12)", value: "15% of deferred consideration if platform ARR ≥ $750K" },
-      { label: "Milestone 2 (Month 24)", value: "15% of deferred consideration if platform ARR ≥ $1.5M" },
-      { label: "Bonus Milestone", value: "Additional 5% if AI Patent Suite white-label secures ≥ 2 law firm licensees" },
+      { label: "Milestone 1 (Month 12)", value: "15% of deferred consideration if platform ARR >= $750K" },
+      { label: "Milestone 2 (Month 24)", value: "15% of deferred consideration if platform ARR >= $1.5M" },
+      { label: "Bonus Milestone", value: "Additional 5% if AI Patent Suite white-label secures >= 2 law firm licensees" },
       { label: "Measurement Metric", value: "Gross recurring subscription revenue (Stripe verified) + AI module licensing fees" },
       { label: "Clawback Provision", value: "None — milestones are additive only" },
     ],
@@ -193,11 +193,11 @@ const INVESTOR_TERMS = [
   {
     section: "Governance & Rights",
     items: [
-      { label: "Board Seat", value: "1 Board observer seat for Investor if investment ≥ $1M; full Board seat if ≥ $2M" },
+      { label: "Board Seat", value: "1 Board observer seat for Investor if investment >= $1M; full Board seat if >= $2M" },
       { label: "Pro-Rata Rights", value: "Investor has right to participate pro-rata in future rounds" },
       { label: "Information Rights", value: "Monthly Stripe MRR/ARR dashboard access, quarterly financials, annual audited statements" },
       { label: "Major Decision Approval", value: "Investor consent required for: asset sale > $1M, new equity issuance, IP encumbrance, M&A" },
-      { label: "Drag-Along", value: "Majority equity holders may drag minority into approved sale at ≥ 3× investment return" },
+      { label: "Drag-Along", value: "Majority equity holders may drag minority into approved sale at >= 3x investment return" },
       { label: "Tag-Along", value: "Investor has tag-along rights on any Founder share sale > 5%" },
     ],
   },
@@ -207,7 +207,7 @@ const INVESTOR_TERMS = [
       { label: "Target Exit", value: "Strategic acquisition by defense contractor, IP firm, or deep-tech VC portfolio within 4–6 years" },
       { label: "Preferred Exit Multiples", value: "4–8× return target on investment (supported by DCF and comparable SaaS transactions)" },
       { label: "Strategic Acquirer Targets", value: "Defense/IC primes, IP management SaaS rollups, deep-tech VC portfolio companies, law firm IP practice groups" },
-      { label: "IPO Conversion", value: "Preferred automatically converts to common on qualified IPO ≥ $50M raise" },
+      { label: "IPO Conversion", value: "Preferred automatically converts to common on qualified IPO >= $50M raise" },
       { label: "Right of First Refusal", value: "Investor has ROFR on any secondary share transfer by Founders" },
     ],
   },
@@ -231,93 +231,173 @@ const SHEETS = [
 
 // ── PDF EXPORT ───────────────────────────────────────────────────────────────
 
+// Sanitize special characters that jsPDF helvetica cannot render
+function sanitize(str) {
+  return String(str)
+    .replace(/≥/g, ">=")
+    .replace(/≤/g, "<=")
+    .replace(/×/g, "x")
+    .replace(/–/g, "-")
+    .replace(/—/g, "--")
+    .replace(/"/g, '"')
+    .replace(/"/g, '"')
+    .replace(/'/g, "'")
+    .replace(/'/g, "'")
+    .replace(/…/g, "...")
+    .replace(/•/g, "-")
+    .replace(/·/g, ".")
+    .replace(/[^\x00-\x7F]/g, ""); // strip any remaining non-ASCII
+}
+
 function exportPDF(sheet) {
   const doc = new jsPDF({ orientation: "portrait", unit: "mm", format: "a4" });
   const W = 210;
   const margin = 18;
   const contentW = W - margin * 2;
-  let y = 0;
+  let y = 20;
 
-  const addPage = () => { doc.addPage(); y = 20; };
-  const checkPage = (need = 12) => { if (y + need > 275) addPage(); };
+  const newPage = () => {
+    doc.addPage();
+    // dark bg on every page
+    doc.setFillColor(10, 14, 26);
+    doc.rect(0, 0, W, 297, "F");
+    // footer bar
+    doc.setFillColor(...hexToRgb(sheet.color));
+    doc.rect(0, 293, W, 4, "F");
+    y = 20;
+  };
 
-  // Cover
+  const checkPage = (need = 14) => { if (y + need > 282) newPage(); };
+
+  // ── COVER PAGE ──────────────────────────────────────────────────────────────
   doc.setFillColor(10, 14, 26);
   doc.rect(0, 0, W, 297, "F");
   doc.setFillColor(...hexToRgb(sheet.color));
   doc.rect(0, 0, W, 4, "F");
+  doc.rect(0, 293, W, 4, "F");
 
   doc.setFont("helvetica", "bold");
   doc.setFontSize(9);
   doc.setTextColor(148, 163, 184);
   doc.text("ZENITH APEX RESEARCH PORTFOLIO", margin, 30);
-  doc.text("CONFIDENTIAL — DRAFT TERM SHEET", margin, 37);
+  doc.text("CONFIDENTIAL -- DRAFT TERM SHEET", margin, 38);
 
-  doc.setFontSize(22);
+  doc.setFontSize(24);
   doc.setTextColor(255, 255, 255);
-  doc.text(`${sheet.label} Term Sheet`, margin, 58);
+  doc.text(sanitize(`${sheet.label} Term Sheet`), margin, 65);
 
-  doc.setFontSize(10);
+  doc.setFontSize(11);
   doc.setFont("helvetica", "italic");
   doc.setTextColor(148, 163, 184);
-  doc.text(sheet.subtitle, margin, 67);
+  doc.text(sanitize(sheet.subtitle), margin, 75);
 
-  doc.setFontSize(8);
+  doc.setFontSize(9);
   doc.setFont("helvetica", "normal");
-  doc.setTextColor(71, 85, 105);
-  doc.text(`Date: ${TODAY}`, margin, 78);
-  doc.text("THIS TERM SHEET IS NON-BINDING EXCEPT WHERE EXPLICITLY STATED.", margin, 84);
-  doc.text("This document is confidential and intended solely for the named parties.", margin, 90);
+  doc.setTextColor(100, 116, 139);
+  doc.text(`Date: ${TODAY}`, margin, 90);
+  doc.text("THIS TERM SHEET IS NON-BINDING EXCEPT WHERE EXPLICITLY STATED.", margin, 98);
+  doc.text("This document is confidential and intended solely for the named parties.", margin, 105);
 
-  doc.setFillColor(...hexToRgb(sheet.color));
-  doc.rect(0, 293, W, 4, "F");
+  // valuation highlight box on cover
+  const [cr, cg, cb] = hexToRgb(sheet.color);
+  doc.setFillColor(cr, cg, cb, 0.15);
+  doc.setDrawColor(...hexToRgb(sheet.color));
+  doc.setLineWidth(0.5);
+  doc.roundedRect(margin, 120, contentW, 40, 3, 3, "FD");
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(9);
+  doc.setTextColor(148, 163, 184);
+  doc.text("PLATFORM VALUATION", margin + 6, 133);
+  doc.setFontSize(18);
+  doc.setTextColor(255, 255, 255);
+  doc.text("$8.8M -- $25M Acquisition", margin + 6, 146);
+  doc.setFontSize(9);
+  doc.setTextColor(148, 163, 184);
+  doc.text("IP Floor: $9.2M  |  23 Inventions + AI Patent Suite + VDR Portal", margin + 6, 156);
 
-  // Content pages
+  // ── CONTENT PAGES ──────────────────────────────────────────────────────────
   sheet.data.forEach(section => {
-    addPage();
-    doc.setFillColor(20, 28, 48);
-    doc.rect(margin - 3, y - 5, contentW + 6, 11, "F");
+    newPage();
+
+    // Section header bar
+    doc.setFillColor(20, 28, 55);
+    doc.rect(0, 0, W, 14, "F");
     doc.setFont("helvetica", "bold");
     doc.setFontSize(11);
     doc.setTextColor(...hexToRgb(sheet.color));
-    doc.text(section.section.toUpperCase(), margin, y + 2);
-    y += 12;
+    doc.text(sanitize(section.section.toUpperCase()), margin, 10);
+    y = 24;
 
     section.items.forEach(item => {
-      checkPage(16);
+      // Estimate height needed
+      const valueLines = doc.setFontSize(10) || doc.splitTextToSize(sanitize(item.value), contentW - 6);
+      const need = 8 + (valueLines.length * 6) + 4;
+      checkPage(need);
+
+      // Label
       doc.setFont("helvetica", "bold");
       doc.setFontSize(8);
-      doc.setTextColor(148, 163, 184);
-      doc.text(item.label, margin, y);
+      doc.setTextColor(120, 140, 180);
+      doc.text(sanitize(item.label).toUpperCase(), margin, y);
       y += 5;
 
+      // Value
       doc.setFont("helvetica", "normal");
-      doc.setFontSize(9);
-      doc.setTextColor(220, 230, 245);
-      const lines = doc.splitTextToSize(item.value, contentW - 4);
+      doc.setFontSize(10);
+      doc.setTextColor(230, 235, 250);
+      const lines = doc.splitTextToSize(sanitize(item.value), contentW - 6);
       lines.forEach(line => {
         checkPage(7);
-        doc.text(line, margin + 2, y);
-        y += 5.5;
+        doc.text(line, margin + 3, y);
+        y += 6;
       });
-      y += 2;
+
+      // Divider
+      doc.setDrawColor(30, 40, 65);
+      doc.setLineWidth(0.3);
+      doc.line(margin, y + 1, W - margin, y + 1);
+      y += 6;
     });
   });
 
-  // Footer on last page
-  checkPage(20);
-  y += 8;
-  doc.setFillColor(20, 28, 48);
-  doc.rect(margin - 3, y, contentW + 6, 28, "F");
+  // ── SIGNATURE PAGE ──────────────────────────────────────────────────────────
+  newPage();
+  doc.setFillColor(20, 28, 55);
+  doc.rect(0, 0, W, 14, "F");
   doc.setFont("helvetica", "bold");
-  doc.setFontSize(9);
+  doc.setFontSize(11);
   doc.setTextColor(...hexToRgb(sheet.color));
-  doc.text("SIGNATURE BLOCK", margin, y + 8);
-  doc.setFont("helvetica", "normal");
-  doc.setFontSize(8);
-  doc.setTextColor(148, 163, 184);
-  doc.text("Seller / Licensor: ________________________________  Date: ______________", margin, y + 16);
-  doc.text("Buyer / Investor:  ________________________________  Date: ______________", margin, y + 23);
+  doc.text("SIGNATURE BLOCK", margin, 10);
+  y = 30;
+
+  [["Seller / Licensor", "Zenith Apex Research Portfolio, LLC"], ["Buyer / Acquirer / Licensee", "[COUNTERPARTY NAME]"]].forEach(([role, name]) => {
+    checkPage(55);
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(9);
+    doc.setTextColor(...hexToRgb(sheet.color));
+    doc.text(role.toUpperCase(), margin, y);
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(9);
+    doc.setTextColor(148, 163, 184);
+    doc.text(name, margin, y + 6);
+    y += 14;
+
+    [["Signature", 18], ["Printed Name", 10], ["Title / Organization", 10], ["Date", 10]].forEach(([fieldLabel, h]) => {
+      doc.setFont("helvetica", "normal");
+      doc.setFontSize(8);
+      doc.setTextColor(100, 116, 139);
+      doc.text(fieldLabel + ":", margin, y);
+      doc.setDrawColor(50, 65, 100);
+      doc.setLineWidth(0.4);
+      doc.line(margin + 25, y, W - margin, y);
+      y += h;
+    });
+    y += 10;
+  });
+
+  doc.setFontSize(7);
+  doc.setTextColor(50, 65, 100);
+  doc.text(`ZENITH APEX RESEARCH PORTFOLIO -- CONFIDENTIAL -- ${TODAY} -- FOR DISCUSSION PURPOSES ONLY`, margin, 288);
 
   doc.save(`ZenithApex_${sheet.id}_TermSheet_${new Date().toISOString().slice(0, 10)}.pdf`);
 }
