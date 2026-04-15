@@ -50,6 +50,8 @@ const ADMIN_SECTIONS = [
       { path: "/material-sourcing", icon: <ShoppingCart size={20} />, label: "Material Sourcing", desc: "Order parts from all BOMs with vendor links & 10% commission tracking", badge: "NEW" },
       { path: "/trz-patent", icon: <FileText size={20} />, label: "TRZ Patent PPA", desc: "Provisional patent application management & figures", badge: "Patent" },
       { path: "/provisional-patent", icon: <FileText size={20} />, label: "Provisional Patent Tool", desc: "Draft provisional patent applications with AI", badge: "Patent" },
+      { path: "/pitch-script", icon: <FileText size={20} />, label: "Pitch Script", desc: "8-minute investor pitch, Q&A matrix & exit playbook", badge: "Pitch" },
+      { path: "/term-sheet", icon: <FileText size={20} />, label: "Seller Term Sheet", desc: "Draft acquisition, licensing & investor term sheets", badge: "Legal" },
     ]
   },
 ];
