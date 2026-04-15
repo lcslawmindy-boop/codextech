@@ -1,7 +1,8 @@
 import { Link } from "react-router-dom";
 import {
   Shield, Download, Video, FileText, Users, BarChart2,
-  TrendingUp, Database, Settings, ArrowRight, Star, Zap, Target, ShoppingCart, Flame, ShieldCheck
+  TrendingUp, Database, Settings, ArrowRight, Star, Zap, Target, ShoppingCart, Flame, ShieldCheck,
+  Scale, Briefcase, Building2
 } from "lucide-react";
 
 const ADMIN_SECTIONS = [
@@ -37,6 +38,10 @@ const ADMIN_SECTIONS = [
     color: "#a855f7",
     items: [
       { path: "/fto-analysis", icon: <ShieldCheck size={20} />, label: "FTO Analysis Tool", desc: "AI Freedom-to-Operate reports — replaces $5K–$15K attorney analysis", badge: "NEW" },
+      { path: "/patent-attorney-chat", icon: <Scale size={20} />, label: "AI Patent Attorney Chat", desc: "USPTO-trained AI attorney — replaces $400/hr consultations", badge: "NEW" },
+      { path: "/ip-marketplace", icon: <Briefcase size={20} />, label: "IP Marketplace", desc: "Private brokered IP exchange — 5% commission on executed deals", badge: "NEW" },
+      { path: "/co-inventor-matching", icon: <Users size={20} />, label: "Co-Inventor Matching", desc: "AI-matched inventor introductions — AngelList for inventors", badge: "NEW" },
+      { path: "/white-label-saas", icon: <Building2 size={20} />, label: "White-Label SaaS", desc: "License the full IP platform to law firms — $10K–$50K/yr per seat", badge: "NEW" },
       { path: "/valuation", icon: <BarChart2 size={20} />, label: "Valuation Dashboard", desc: "IP portfolio valuation & financial projections", badge: null },
       { path: "/acquisition-crm", icon: <Target size={20} />, label: "Acquisition CRM", desc: "Institutional buyer pipeline & deal tracking", badge: "CRM" },
       { path: "/investor-crm", icon: <Database size={20} />, label: "Investor CRM", desc: "Investor relationship management & communications", badge: "CRM" },

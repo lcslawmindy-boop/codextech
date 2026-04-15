@@ -91,6 +91,10 @@ import VisionFundPitch from './pages/VisionFundPitch';
 import RDSandbox from './pages/RDSandbox';
 import HybridPortfolio from './pages/HybridPortfolio';
 import FTOAnalysisTool from './pages/FTOAnalysisTool';
+import PatentAttorneyChat from './pages/PatentAttorneyChat';
+import IPMarketplace from './pages/IPMarketplace';
+import CoInventorMatching from './pages/CoInventorMatching';
+import WhiteLabelSaaS from './pages/WhiteLabelSaaS';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -208,6 +212,10 @@ const AuthenticatedApp = () => {
           <Route path="/rd-sandbox" element={<RDSandbox />} />
           <Route path="/hybrid-portfolio" element={<HybridPortfolio />} />
           <Route path="/fto-analysis" element={<FTOAnalysisTool />} />
+          <Route path="/patent-attorney-chat" element={<PatentAttorneyChat />} />
+          <Route path="/ip-marketplace" element={<IPMarketplace />} />
+          <Route path="/co-inventor-matching" element={<CoInventorMatching />} />
+          <Route path="/white-label-saas" element={<WhiteLabelSaaS />} />
 
           {/* Admin-only routes */}
           <Route element={<AdminGuard />}>
