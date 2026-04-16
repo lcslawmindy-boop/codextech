@@ -151,11 +151,8 @@ export default function ConceptGraph() {
       {/* Content area */}
       <div className="flex-1 relative overflow-hidden">
         {/* ZARP logo background */}
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-5 z-0">
-          <div className="text-center">
-            <div className="text-9xl font-black text-white tracking-tighter">ZARP</div>
-            <div className="text-2xl text-gray-400 tracking-widest mt-2">Zenith Apex Research Portfolio</div>
-          </div>
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-15 z-0">
+          <img src="https://media.base44.com/images/public/69ccefebfea78b23498c66a8/a90918e3c_ZARPlogo.png" alt="ZARP" className="w-2/3 h-2/3 object-contain" />
         </div>
 
         {view === "business" ? (
