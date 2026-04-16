@@ -1,9 +1,9 @@
 import { Link, useLocation } from "react-router-dom";
-import { Network, FlaskConical, ShoppingBag, HeartPulse, TrendingUp } from "lucide-react";
+import { Network, FlaskConical, BookOpen, HeartPulse, Scale } from "lucide-react";
 
 const TABS = [
   {
-    label: "Network",
+    label: "Graph",
     path: "/",
     icon: Network,
     match: (p) => p === "/",
@@ -12,25 +12,25 @@ const TABS = [
     label: "Inventions",
     path: "/invention-library",
     icon: FlaskConical,
-    match: (p) => ["/invention-library", "/invention-timeline", "/invention-plans", "/inventor-forge", "/patent-tool", "/patent-wizard", "/prior-art"].includes(p),
+    match: (p) => ["/invention-library", "/inventor-forge", "/rd-sandbox", "/hybrid-portfolio", "/patent-intelligence", "/fto-analysis", "/patent-attorney-chat", "/patent-drafting-wizard", "/prior-art"].includes(p),
   },
   {
-    label: "Shop",
-    path: "/pricing",
-    icon: ShoppingBag,
-    match: (p) => ["/pricing", "/checkout", "/emf-shop", "/download-center"].includes(p),
+    label: "Courses",
+    path: "/courses",
+    icon: BookOpen,
+    match: (p) => ["/courses", "/my-learning", "/ai-research", "/course-plan"].includes(p),
+  },
+  {
+    label: "IP Tools",
+    path: "/patent-intelligence",
+    icon: Scale,
+    match: (p) => ["/patent-intelligence", "/fto-analysis", "/patent-attorney-chat", "/ip-marketplace", "/co-inventor-matching", "/sbir-pipeline", "/ip-portfolio-health"].includes(p),
   },
   {
     label: "Health",
     path: "/emf-impact",
     icon: HeartPulse,
     match: (p) => ["/emf-impact", "/emf-log", "/heavy-metal-detox", "/health-analytics"].includes(p),
-  },
-  {
-    label: "Investors",
-    path: "/investor-portal",
-    icon: TrendingUp,
-    match: (p) => ["/investor-portal", "/investor-crm", "/investor-package", "/pitch", "/business"].includes(p),
   },
 ];
 

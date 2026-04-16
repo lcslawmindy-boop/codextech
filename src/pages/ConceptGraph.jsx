@@ -9,6 +9,7 @@ import TopConceptsPanel from "../components/TopConceptsPanel";
 import BusinessConceptGraph from "../components/BusinessConceptGraph";
 import { groupColors, nodes } from "../lib/beardenData";
 import NewsletterSignup from "../components/NewsletterSignup";
+import NavDropdown from "../components/NavDropdown";
 import { base44 } from "@/api/base44Client";
 import { useState as useAdminState, useEffect as useAdminEffect } from 'react';
 
@@ -101,89 +102,145 @@ export default function ConceptGraph() {
           )}
         </div>
       </div>
-      {/* Scrollable nav links row */}
-      <div className="flex items-center gap-2 px-4 py-2 overflow-x-auto border-t border-gray-800/60" style={{scrollbarWidth: 'thin'}}>
+      {/* Organized nav bar */}
+      <div className="flex items-center gap-2 px-4 py-2 overflow-x-auto border-t border-gray-800/60 flex-shrink-0" style={{scrollbarWidth: 'none'}}>
+          {/* Graph tools */}
           <button
             onClick={() => setShowTopConcepts(s => !s)}
-            className={`flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-xs font-medium transition-colors ${
-              showTopConcepts
-                ? "bg-yellow-700 border-yellow-500 text-white"
-                : "bg-yellow-900/40 hover:bg-yellow-800/50 border-yellow-800 text-yellow-300"
+            className={`flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-xs font-semibold transition-all ${
+              showTopConcepts ? "bg-yellow-700/50 border-yellow-500 text-yellow-200" : "bg-yellow-900/20 border-yellow-800/50 text-yellow-400 hover:bg-yellow-900/40"
             }`}
           >
             📊 Top Concepts
           </button>
           <button
-            onClick={() => {
-              setClusterMode(m => {
-                if (m) setClusterNodes([]);
-                return !m;
-              });
-              setShowSearch(false);
-              setShowDiagnostics(false);
-            }}
-            className={`flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-xs font-medium transition-colors ${
-              clusterMode
-                ? "bg-indigo-700 border-indigo-500 text-white"
-                : "bg-indigo-900/40 hover:bg-indigo-800/50 border-indigo-800 text-indigo-300"
+            onClick={() => { setClusterMode(m => { if (m) setClusterNodes([]); return !m; }); setShowSearch(false); setShowDiagnostics(false); }}
+            className={`flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-xs font-semibold transition-all ${
+              clusterMode ? "bg-indigo-700/50 border-indigo-500 text-indigo-200" : "bg-indigo-900/20 border-indigo-800/50 text-indigo-400 hover:bg-indigo-900/40"
             }`}
           >
             🔗 {clusterMode ? `Cluster (${clusterNodes.length})` : "Cluster"}
           </button>
-          <button
-            onClick={() => { setShowDiagnostics(s => !s); setShowSearch(false); }}
-            className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-purple-900/40 hover:bg-purple-800/50 border border-purple-800 text-purple-300 text-xs font-medium transition-colors"
-          >
-            🔬 Diagnostics
-          </button>
-          <Link to="/investor-package" className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-yellow-900/40 hover:bg-yellow-800/50 border border-yellow-800 text-yellow-300 text-xs font-medium transition-colors">💼 Investor Package</Link>
-          <Link to="/pricing" className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-green-800/60 hover:bg-green-700/60 border border-green-600 text-green-200 text-xs font-bold transition-colors">💳 Pricing & Plans</Link>
-          <Link to="/licensing" className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-purple-900/60 hover:bg-purple-800/60 border border-purple-600 text-purple-200 text-xs font-bold transition-colors">📜 IP Licensing</Link>
-          <Link to="/download-center" className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-yellow-950/60 hover:bg-yellow-900/60 border border-yellow-700 text-yellow-400 text-xs font-bold transition-colors">⬇ Downloads</Link>
-          <Link to="/investor-portal" className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-green-900/40 hover:bg-green-800/50 border border-green-800 text-green-300 text-xs font-medium transition-colors">💰 Investors</Link>
-          {isAdmin && <Link to="/monitoring" className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-900/40 hover:bg-blue-800/50 border border-blue-800 text-blue-300 text-xs font-medium transition-colors">🛡 Monitor</Link>}
-          <Link to="/prior-art" className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-amber-900/40 hover:bg-amber-800/50 border border-amber-800 text-amber-300 text-xs font-medium transition-colors">🗄️ Prior Art</Link>
-          <Link to="/patent-tool" className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-900/40 hover:bg-blue-800/50 border border-blue-800 text-blue-300 text-xs font-medium transition-colors">📄 Patent Tool</Link>
-          <Link to="/timeline-pitch" className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-orange-900/40 hover:bg-orange-800/50 border border-orange-800 text-orange-300 text-xs font-medium transition-colors">📊 Timeline Deck</Link>
-          <Link to="/invention-library" className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-orange-900/40 hover:bg-orange-800/50 border border-orange-800 text-orange-300 text-xs font-bold transition-colors">⚗️ Invention Library</Link>
-          <Link to="/invention-timeline" className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-indigo-900/40 hover:bg-indigo-800/50 border border-indigo-800 text-indigo-300 text-xs font-bold transition-colors">📈 Dev Timeline</Link>
-          <Link to="/dark-timeline" className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-red-900/40 hover:bg-red-800/50 border border-red-800 text-red-300 text-xs font-medium transition-colors">🌍 Dark vs Light</Link>
-          {isAdmin && <Link to="/acquisition-crm" className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-green-900/60 hover:bg-green-800/60 border border-green-600 text-green-200 text-xs font-bold transition-colors">🎯 Acquisition CRM</Link>}
-          {isAdmin && <Link to="/build-tracker" className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-indigo-900/60 hover:bg-indigo-800/60 border border-indigo-600 text-indigo-200 text-xs font-bold transition-colors">🔧 Build Tracker</Link>}
-          {isAdmin && <Link to="/trz-patent" className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-red-900/60 hover:bg-red-800/60 border border-red-700 text-red-200 text-xs font-bold transition-colors">📋 TRZ Patent PPA</Link>}
-          {isAdmin && <Link to="/valuation" className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-yellow-900/60 hover:bg-yellow-800/60 border border-yellow-600 text-yellow-200 text-xs font-bold transition-colors">📈 Valuation Dashboard</Link>}
-          <Link to="/device-graph" className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-yellow-900/60 hover:bg-yellow-800/60 border border-yellow-600 text-yellow-200 text-xs font-bold transition-colors">🕸️ Device Knowledge Graph</Link>
-          <Link to="/inventor-forge" className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-900/40 hover:bg-blue-800/50 border border-blue-800 text-blue-300 text-xs font-medium transition-colors">🧬 Invention Forge</Link>
-          <Link to="/rd-sandbox" className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-yellow-900/40 hover:bg-yellow-800/50 border border-yellow-700 text-yellow-300 text-xs font-bold transition-colors">⚗️ R&D Sandbox</Link>
-          <Link to="/opportunity-monitor" className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-indigo-900/40 hover:bg-indigo-800/50 border border-indigo-800 text-indigo-300 text-xs font-medium transition-colors">🔔 Opportunity Monitor</Link>
-          {isAdmin && <Link to="/admin-downloads" className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-yellow-900/40 hover:bg-yellow-800/50 border border-yellow-700 text-yellow-300 text-xs font-medium transition-colors">⭐ Download Center</Link>}
-          <Link to="/account" className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-gray-800/80 hover:bg-gray-700/80 border border-gray-700 text-gray-300 text-xs font-medium transition-colors">👤 Account</Link>
-          {isAdmin && <Link to="/admin" className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-yellow-900/60 hover:bg-yellow-800/60 border border-yellow-600 text-yellow-200 text-xs font-bold transition-colors">🔒 Admin Panel</Link>}
-          {isAdmin && <Link to="/social-command" className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-rose-900/60 hover:bg-rose-800/60 border border-rose-600 text-rose-200 text-xs font-bold transition-colors">🚀 Marketing</Link>}
-          <Link to="/social-profile-gen" className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-yellow-900/50 hover:bg-yellow-800/50 border border-yellow-700 text-yellow-300 text-xs font-bold transition-colors">✨ Profile Gen</Link>
-          <Link to="/ai-research" className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-purple-900/60 hover:bg-purple-800/60 border border-purple-600 text-purple-200 text-xs font-bold transition-colors">🧠 AI Research</Link>
-          <Link to="/health-analytics" className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-cyan-900/40 hover:bg-cyan-800/50 border border-cyan-800 text-cyan-300 text-xs font-medium transition-colors">📈 Health Analytics</Link>
-          <Link to="/heavy-metal-detox" className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-green-900/40 hover:bg-green-800/50 border border-green-800 text-green-300 text-xs font-medium transition-colors">🌿 Metal Detox</Link>
-          <Link to="/emf-log" className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-rose-900/40 hover:bg-rose-800/50 border border-rose-800 text-rose-300 text-xs font-medium transition-colors">📊 EMF Log</Link>
-          <Link to="/emf-shop" className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-900/40 hover:bg-emerald-800/50 border border-emerald-700 text-emerald-300 text-xs font-medium transition-colors">🛒 Shop</Link>
-          <Link to="/build-supplies-shop" className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-yellow-900/60 hover:bg-yellow-800/60 border border-yellow-600 text-yellow-200 text-xs font-bold transition-colors">🔧 Build Supplies</Link>
-          <Link to="/emf-impact" className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-red-900/40 hover:bg-red-800/50 border border-red-800 text-red-300 text-xs font-medium transition-colors">☠️ EMF Impact</Link>
-          <Link to="/scalar-potential" className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-violet-900/40 hover:bg-violet-800/50 border border-violet-800 text-violet-300 text-xs font-medium transition-colors">🌊 ∇φ Heatmap</Link>
-          <Link to="/scalar-wave-sim" className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-green-900/40 hover:bg-green-800/50 border border-green-800 text-green-300 text-xs font-medium transition-colors">〰️ Scalar Wave Sim</Link>
-          <Link to="/scalar-lab" className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-purple-900/40 hover:bg-purple-800/50 border border-purple-800 text-purple-300 text-xs font-medium transition-colors">⚗️ Scalar EM Lab</Link>
-          <Link to="/lab" className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-teal-900/40 hover:bg-teal-800/50 border border-teal-800 text-teal-300 text-xs font-medium transition-colors">🧪 Wave Lab</Link>
-          <Link to="/simulator" className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-cyan-900/40 hover:bg-cyan-800/50 border border-cyan-800 text-cyan-300 text-xs font-medium transition-colors">⚗️ Simulator</Link>
-          <Link to="/business" className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-green-900/40 hover:bg-green-800/50 border border-green-800 text-green-300 text-xs font-medium transition-colors">💼 Business Models</Link>
-          <Link to="/investors" className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-green-900/40 hover:bg-green-800/50 border border-green-800 text-green-300 text-xs font-medium transition-colors">💰 Investors</Link>
+
+          <div className="w-px h-5 bg-gray-700 flex-shrink-0" />
+
+          {/* Inventions */}
+          <NavDropdown label="Inventions" icon="⚗️" color="#f59e0b" isAdmin={isAdmin} items={[
+            { emoji: "📚", label: "Invention Library", path: "/invention-library", desc: "Browse all device architectures" },
+            { emoji: "🧬", label: "Invention Forge", path: "/inventor-forge", desc: "AI invention generation" },
+            { emoji: "🔬", label: "R&D Sandbox", path: "/rd-sandbox", desc: "Cross-domain AI synthesis" },
+            { emoji: "🧪", label: "Hybrid Portfolio", path: "/hybrid-portfolio", desc: "AI hybrid inventions" },
+            { emoji: "📐", label: "Build Plans", path: "/invention-plans", desc: "Full engineering build plans" },
+            { emoji: "🕸️", label: "Device Knowledge Graph", path: "/device-graph", desc: "Component relationships" },
+            { emoji: "🔧", label: "Build Milestone AI", path: "/build-milestone-ai", desc: "AI build tracking" },
+            { emoji: "🛒", label: "Build Supplies Shop", path: "/build-supplies-shop", desc: "Parts & components" },
+          ]} />
+
+          {/* IP Tools */}
+          <NavDropdown label="IP Tools" icon="⚖️" color="#6366f1" isAdmin={isAdmin} items={[
+            { emoji: "🛡️", label: "FTO Analysis", path: "/fto-analysis", desc: "AI freedom-to-operate" },
+            { emoji: "⚖️", label: "Patent Attorney Chat", path: "/patent-attorney-chat", desc: "USPTO-trained AI attorney" },
+            { emoji: "🔍", label: "Patent Intelligence", path: "/patent-intelligence", desc: "4-tool IP analysis suite" },
+            { emoji: "✍️", label: "Patent Drafting Wizard", path: "/patent-drafting-wizard", desc: "7-step USPTO workflow" },
+            { emoji: "📄", label: "Patent Tool", path: "/patent-tool", desc: "Classic patent drafter" },
+            { emoji: "📋", label: "Provisional Patent", path: "/provisional-patent", desc: "35 USC 111(b) PPA" },
+            { emoji: "🗄️", label: "Prior Art Archive", path: "/prior-art", desc: "200+ documented entries" },
+            { emoji: "🗺️", label: "Patent Landscape", path: "/patent-landscape", desc: "IP landscape graph" },
+            { emoji: "💼", label: "IP Marketplace", path: "/ip-marketplace", desc: "Private IP exchange" },
+            { emoji: "🤝", label: "Co-Inventor Matching", path: "/co-inventor-matching", desc: "AI inventor introductions" },
+            { emoji: "📝", label: "Collab Patent Draft", path: "/collab-patent-draft", desc: "Multi-user editing" },
+            { emoji: "🏥", label: "IP Portfolio Health", path: "/ip-portfolio-health", desc: "Live portfolio scoring" },
+            { emoji: "🎯", label: "SBIR/STTR Pipeline", path: "/sbir-pipeline", desc: "Grant auto-matching" },
+          ]} />
+
+          {/* Research */}
+          <NavDropdown label="Research" icon="🧠" color="#a855f7" isAdmin={isAdmin} items={[
+            { emoji: "🧠", label: "AI Research Assistant", path: "/ai-research", desc: "Intelligent research tool" },
+            { emoji: "📈", label: "Dark vs Light Timeline", path: "/dark-timeline", desc: "Suppression history" },
+            { emoji: "📊", label: "Timeline Pitch Deck", path: "/timeline-pitch", desc: "Research timeline deck" },
+            { emoji: "📅", label: "Dev Timeline", path: "/invention-timeline", desc: "Invention history" },
+            { emoji: "🔬", label: "Diagnostics", path: "#diagnostics", desc: "Graph diagnostics" },
+          ]} />
+
+          {/* Labs */}
+          <NavDropdown label="Labs" icon="🌊" color="#06b6d4" isAdmin={isAdmin} items={[
+            { emoji: "〰️", label: "Scalar Wave Sim", path: "/scalar-wave-sim" },
+            { emoji: "🌊", label: "Scalar Field Sim", path: "/scalar-sim" },
+            { emoji: "⚗️", label: "Scalar EM Lab", path: "/scalar-lab" },
+            { emoji: "🗺️", label: "∇φ Potential Map", path: "/scalar-potential" },
+            { emoji: "🧪", label: "Wave Lab", path: "/lab" },
+            { emoji: "⚗️", label: "Simulator", path: "/simulator" },
+          ]} />
+
+          {/* Investors */}
+          <NavDropdown label="Investors" icon="💼" color="#22c55e" isAdmin={isAdmin} items={[
+            { emoji: "💰", label: "Investor Portal", path: "/investor-portal" },
+            { emoji: "📦", label: "Investor Package", path: "/investor-package" },
+            { emoji: "📜", label: "Term Sheets", path: "/term-sheet" },
+            { emoji: "🔒", label: "VDR Portal", path: "/vdr/:token", desc: "Investor data room" },
+            { emoji: "📊", label: "Valuation Dashboard", path: "/valuation", adminOnly: true },
+            { emoji: "🎯", label: "Acquisition CRM", path: "/acquisition-crm", adminOnly: true },
+            { emoji: "💹", label: "Investor CRM", path: "/investor-crm", adminOnly: true },
+            { emoji: "🚀", label: "Vision Fund Pitch", path: "/vision-fund-pitch" },
+            { emoji: "📋", label: "Pitch Script", path: "/pitch-script" },
+          ]} />
+
+          {/* Courses & Learning */}
+          <NavDropdown label="Learn" icon="📚" color="#f97316" isAdmin={isAdmin} items={[
+            { emoji: "📚", label: "Course Catalog", path: "/courses" },
+            { emoji: "🎓", label: "My Learning", path: "/my-learning" },
+            { emoji: "📖", label: "Course Plan", path: "/course-plan" },
+            { emoji: "📥", label: "Download Center", path: "/download-center" },
+            { emoji: "🔰", label: "Beginner Manual", path: "/beginner-manual" },
+            { emoji: "📖", label: "Glossary", path: "/glossary" },
+            { emoji: "🛠️", label: "Troubleshooting", path: "/troubleshooting" },
+          ]} />
+
+          {/* Health */}
+          <NavDropdown label="Health" icon="💚" color="#10b981" isAdmin={isAdmin} items={[
+            { emoji: "☠️", label: "EMF Impact", path: "/emf-impact" },
+            { emoji: "📊", label: "EMF Log", path: "/emf-log" },
+            { emoji: "📈", label: "Health Analytics", path: "/health-analytics" },
+            { emoji: "🌿", label: "Heavy Metal Detox", path: "/heavy-metal-detox" },
+            { emoji: "🛒", label: "EMF Protection Shop", path: "/emf-shop" },
+          ]} />
+
+          {/* Account */}
+          <NavDropdown label="Account" icon="👤" color="#94a3b8" isAdmin={isAdmin} items={[
+            { emoji: "👤", label: "My Account", path: "/account" },
+            { emoji: "📊", label: "Member Portal", path: "/member-portal" },
+            { emoji: "💳", label: "Pricing & Plans", path: "/pricing" },
+            { emoji: "✨", label: "Social Profile Gen", path: "/social-profile-gen" },
+          ]} />
+
+          {isAdmin && (
+            <>
+              <div className="w-px h-5 bg-gray-700 flex-shrink-0" />
+              <NavDropdown label="Admin" icon="🔒" color="#eab308" isAdmin={isAdmin} items={[
+                { emoji: "🏠", label: "Admin Hub", path: "/admin" },
+                { emoji: "📊", label: "Marketing", path: "/marketing" },
+                { emoji: "🚀", label: "Social Command", path: "/social-command" },
+                { emoji: "👥", label: "Beta Applications", path: "/admin-beta" },
+                { emoji: "🔒", label: "VDR Admin", path: "/vdr-admin" },
+                { emoji: "📋", label: "TRZ Patent PPA", path: "/trz-patent" },
+                { emoji: "🔧", label: "Build Tracker", path: "/build-tracker" },
+                { emoji: "🛍️", label: "Shop Orders", path: "/admin-shop-orders" },
+              ]} />
+            </>
+          )}
+
           {view === "graph" && (
-            <div className="flex flex-wrap gap-2 flex-shrink-0">
-              {groups.map(g => (
-                <div key={g} className="flex items-center gap-1.5">
-                  <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: groupColors[g] }} />
-                  <span className="text-gray-400 text-xs capitalize">{g}</span>
-                </div>
-              ))}
-            </div>
+            <>
+              <div className="w-px h-5 bg-gray-700 flex-shrink-0" />
+              <div className="flex gap-2 flex-shrink-0">
+                {groups.map(g => (
+                  <div key={g} className="flex items-center gap-1">
+                    <span className="w-2 h-2 rounded-full" style={{ backgroundColor: groupColors[g] }} />
+                    <span className="text-gray-500 text-[10px] capitalize">{g}</span>
+                  </div>
+                ))}
+              </div>
+            </>
           )}
         </div>
       </div>
