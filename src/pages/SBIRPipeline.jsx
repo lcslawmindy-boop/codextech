@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { ArrowLeft, Target, Loader2, ChevronRight, Calendar, DollarSign, FileText, Zap, Copy, CheckCircle2, Download } from "lucide-react";
 import { base44 } from "@/api/base44Client";
@@ -87,6 +87,13 @@ export default function SBIRPipeline() {
   const [proposal, setProposal] = useState(null);
   const [generating, setGenerating] = useState(false);
   const [showExplainer, setShowExplainer] = useState(false);
+  const [user, setUser] = useState(null);
+  const [feedback, setFeedback] = useState({});
+
+  // Load current user on mount
+  useEffect(() => {
+    base44.auth.me().then(u => setUser(u)).catch(() => {});
+  }, []);
 
   const runMatch = async () => {
     if (!invention.title || !invention.description) return;
@@ -339,10 +346,52 @@ Be specific, technical, and quantifiable. Every section should be submission-rea
                       <span className="text-yellow-400 text-xs font-bold">{s.award}</span>
                       <span className="text-gray-600 text-xs">{s.phase}</span>
                     </div>
-                    <button onClick={() => generateProposal(s)}
-                      className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-green-700 hover:bg-green-600 text-white text-xs font-black transition-all">
-                      <FileText size={11} /> Generate Proposal
-                    </button>
+                    <div className="flex items-center gap-1.5">
+                      <button onClick={() => generateProposal(s)}
+                        className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-green-700 hover:bg-green-600 text-white text-xs font-black transition-all">
+                        <FileText size={11} /> Generate Proposal
+                      </button>
+                      {/* Feedback buttons */}
+                      <div className="flex gap-0.5">
+                        {[-1, 0, 1].map(val => (
+                          <button key={val}
+                            onClick={() => {
+                              setFeedback(p => ({ ...p, [s.id]: val }));
+                              if (user) {
+                                base44.entities.FeedbackLog.create({
+                                  user_email: user.email,
+                                  solicitation_id: s.id,
+                                  solicitation_agency: s.agency,
+                                  solicitation_title: s.title,
+                                  invention_title: invention.title,
+                                  ai_fit_score: matched?.fit_scores?.[s.id] || 0,
+                                  user_rating: val,
+                                  feedback_date: new Date().toISOString()
+                                });
+                              }
+                            }}
+                            className={`px-2 py-1 rounded-lg text-xs font-bold transition-all ${
+                              feedback[s.id] === val
+                                ? val === 1 ? "bg-green-600 text-white" : val === -1 ? "bg-red-600 text-white" : "bg-gray-600 text-white"
+                                : "bg-gray-800 text-gray-500 hover:bg-gray-700"
+                            }`}
+                            title={val === 1 ? "Great match" : val === -1 ? "Poor match" : "Neutral"}>
+                            {val === 1 ? "👍" : val === -1 ? "👎" : "—"}
+                          </button>
+                        ))}
+                      </div>
+                      {/* Add to Calendar */}
+                      {user && (
+                        <button onClick={async () => {
+                          const url = await base44.connectors.connectAppUser("googlecalendar_sbir");
+                          if (url) window.open(url, "_blank");
+                        }}
+                          className="flex items-center gap-1 px-2 py-1 rounded-lg text-xs font-bold bg-blue-900/30 text-blue-400 hover:bg-blue-800/30 transition-all"
+                          title="Add deadline to Google Calendar">
+                          📅
+                        </button>
+                      )}
+                    </div>
                   </div>
                 </div>
               );

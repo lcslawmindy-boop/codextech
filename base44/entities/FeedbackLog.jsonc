@@ -1,0 +1,54 @@
+{
+  "name": "FeedbackLog",
+  "type": "object",
+  "properties": {
+    "user_email": {
+      "type": "string"
+    },
+    "solicitation_id": {
+      "type": "string"
+    },
+    "solicitation_agency": {
+      "type": "string"
+    },
+    "solicitation_title": {
+      "type": "string"
+    },
+    "invention_title": {
+      "type": "string"
+    },
+    "ai_fit_score": {
+      "type": "integer"
+    },
+    "user_rating": {
+      "type": "integer",
+      "enum": [
+        -1,
+        0,
+        1
+      ],
+      "description": "-1 = poor match, 0 = neutral, 1 = excellent match"
+    },
+    "user_notes": {
+      "type": "string"
+    },
+    "outcome": {
+      "type": "string",
+      "enum": [
+        "submitted",
+        "rejected",
+        "in_progress",
+        "not_pursued"
+      ],
+      "description": "Did user pursue this match?"
+    },
+    "feedback_date": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "user_email",
+    "solicitation_id",
+    "user_rating"
+  ]
+}
