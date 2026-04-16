@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { ArrowLeft, Loader2, Sparkles, Download, DollarSign, Rocket, TrendingUp, Shield, CheckSquare, Square, FileDown, X, Film, BookOpen } from "lucide-react";
+import { ArrowLeft, Loader2, Sparkles, Download, DollarSign, Rocket, TrendingUp, Shield, CheckSquare, Square, FileDown, X, Film, BookOpen, Lock, Zap } from "lucide-react";
+import { hasTrialToken, consumeTrialToken, TRIAL_FEATURES } from "../lib/trialTokens";
 import InventionBuildVideo from "../components/InventionBuildVideo";
 import PitchDeckExporter from "../components/PitchDeckExporter";
 import InventionPatentDrafter from "../components/InventionPatentDrafter";
@@ -355,6 +356,12 @@ export default function InventionForge() {
   const [inventions, setInventions] = useState([]);
   const [error, setError] = useState("");
   const [selectedForExport, setSelectedForExport] = useState(new Set());
+  const [tokenAvailable, setTokenAvailable] = useState(true);
+  const [tokenUsed, setTokenUsed] = useState(false);
+
+  useEffect(() => {
+    setTokenAvailable(hasTrialToken(TRIAL_FEATURES.invention_forge));
+  }, []);
 
   const toggleExportSelection = (i) => setSelectedForExport(prev => {
     const next = new Set(prev);
@@ -369,6 +376,11 @@ export default function InventionForge() {
 
   const generate = async () => {
     if (!selectedDomains.length) return;
+    if (!tokenAvailable) return;
+    // Consume the trial token on first use
+    consumeTrialToken(TRIAL_FEATURES.invention_forge);
+    setTokenAvailable(false);
+    setTokenUsed(true);
     setGenerating(true);
     setError("");
     setInventions([]);
@@ -482,14 +494,35 @@ export default function InventionForge() {
             </div>
           </div>
 
-          <button
-            onClick={generate}
-            disabled={generating || !selectedDomains.length}
-            className="w-full flex items-center justify-center gap-2 py-4 rounded-2xl bg-gradient-to-r from-blue-700 to-purple-700 hover:from-blue-600 hover:to-purple-600 text-white font-black text-base disabled:opacity-60 disabled:cursor-not-allowed transition-all shadow-[0_0_30px_rgba(100,100,255,0.3)]"
-          >
-            {generating ? <Loader2 size={18} className="animate-spin" /> : <Sparkles size={18} />}
-            {generating ? "Forging Inventions…" : "Generate Inventions"}
-          </button>
+          {!tokenAvailable && !tokenUsed ? (
+            <div className="w-full space-y-3">
+              <div className="bg-indigo-950/40 border border-indigo-700/60 rounded-2xl p-4 text-center">
+                <Lock size={20} className="text-indigo-400 mx-auto mb-2" />
+                <p className="text-indigo-300 font-bold text-sm mb-1">1× Free Trial Used</p>
+                <p className="text-gray-400 text-xs leading-relaxed mb-3">Your beta trial token for the Invention Forge has been used. Upgrade to the $97/mo Researcher plan to generate unlimited inventions.</p>
+                <Link to="/pricing" className="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl bg-indigo-700 hover:bg-indigo-600 text-white font-black text-sm transition-all">
+                  Upgrade to Researcher — $97/mo
+                </Link>
+              </div>
+            </div>
+          ) : (
+            <div className="space-y-2">
+              {tokenAvailable && !tokenUsed && (
+                <div className="flex items-center gap-2 bg-green-950/30 border border-green-800/50 rounded-xl px-3 py-2">
+                  <Zap size={12} className="text-green-400 flex-shrink-0" />
+                  <p className="text-green-300 text-xs font-semibold">1× Free Beta Trial available — generate once, then upgrade to unlock unlimited.</p>
+                </div>
+              )}
+              <button
+                onClick={generate}
+                disabled={generating || !selectedDomains.length}
+                className="w-full flex items-center justify-center gap-2 py-4 rounded-2xl bg-gradient-to-r from-blue-700 to-purple-700 hover:from-blue-600 hover:to-purple-600 text-white font-black text-base disabled:opacity-60 disabled:cursor-not-allowed transition-all shadow-[0_0_30px_rgba(100,100,255,0.3)]"
+              >
+                {generating ? <Loader2 size={18} className="animate-spin" /> : <Sparkles size={18} />}
+                {generating ? "Forging Inventions…" : "Generate Inventions"}
+              </button>
+            </div>
+          )}
 
           {generating && (
             <div className="bg-blue-950/30 border border-blue-900/40 rounded-xl p-3 text-xs text-blue-300">
