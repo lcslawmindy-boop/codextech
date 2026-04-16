@@ -38,6 +38,8 @@ export default function InvestorOutreachWorkflow() {
   const [followUpReminders, setFollowUpReminders] = useState(null);
   const [loadingReminders, setLoadingReminders] = useState(false);
   const [user, setUser] = useState(null);
+  const [personalizedEmail, setPersonalizedEmail] = useState(null);
+  const [generatingEmail, setGeneratingEmail] = useState(false);
 
   useEffect(() => {
     base44.auth.me().then(u => setUser(u)).catch(() => {});
@@ -126,6 +128,25 @@ export default function InvestorOutreachWorkflow() {
       console.error('Template generation failed:', err);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleGeneratePersonalizedEmail = async (inv) => {
+    setGeneratingEmail(true);
+    setPersonalizedEmail(null);
+    
+    try {
+      const response = await base44.functions.invoke("generatePersonalizedEmail", {
+        investor_id: inv.investor_id
+      });
+
+      setPersonalizedEmail(response);
+      setSelectedInvestor(inv);
+    } catch (err) {
+      console.error('Email generation failed:', err);
+      alert('Failed to generate personalized email. Please try again.');
+    } finally {
+      setGeneratingEmail(false);
     }
   };
 
@@ -234,6 +255,10 @@ export default function InvestorOutreachWorkflow() {
                         </td>
                         <td className="px-4 py-3 text-center" onClick={e => e.stopPropagation()}>
                           <div className="flex items-center justify-center gap-1">
+                            <button onClick={() => handleGeneratePersonalizedEmail(inv)} disabled={generatingEmail}
+                              className="flex items-center gap-1 px-2 py-1 rounded-lg bg-green-900/30 hover:bg-green-800/40 disabled:opacity-40 text-green-400 text-xs font-bold transition-all">
+                              {generatingEmail ? <Loader2 size={10} className="animate-spin" /> : <Mail size={10} />} AI Email
+                            </button>
                             <button onClick={() => handleGenerateTemplate(inv, inv.current_stage)}
                               className="flex items-center gap-1 px-2 py-1 rounded-lg bg-blue-900/30 hover:bg-blue-800/40 text-blue-400 text-xs font-bold transition-all">
                               <Mail size={10} /> Template
@@ -311,9 +336,56 @@ export default function InvestorOutreachWorkflow() {
           </div>
         </div>
 
+        {/* Personalized AI Email Display */}
+        {personalizedEmail && !template && (
+          <div className="bg-gray-900 border border-green-800/50 rounded-2xl overflow-hidden mb-6">
+            <div className="px-5 py-3 border-b border-gray-800 bg-green-950/20">
+              <p className="text-green-400 text-xs font-black uppercase tracking-widest">
+                AI-Generated Personalized Email: {personalizedEmail.investor_name}
+              </p>
+            </div>
+            <div className="p-5 space-y-4">
+              {/* Subject */}
+              <div className="border border-gray-800 rounded-xl p-4 bg-gray-800/30">
+                <div className="flex items-center justify-between mb-2">
+                  <p className="text-gray-400 text-xs font-black uppercase tracking-wider">Subject Line</p>
+                  <CopyBtn text={personalizedEmail.subject} />
+                </div>
+                <p className="text-white font-bold text-sm">{personalizedEmail.subject}</p>
+              </div>
+
+              {/* Body */}
+              <div className="border border-gray-800 rounded-xl p-4 bg-gray-800/30">
+                <div className="flex items-center justify-between mb-2">
+                  <p className="text-gray-400 text-xs font-black uppercase tracking-wider">Email Body</p>
+                  <CopyBtn text={personalizedEmail.body} />
+                </div>
+                <p className="text-gray-300 text-sm leading-relaxed whitespace-pre-line">{personalizedEmail.body}</p>
+              </div>
+
+              {/* Copy Full Email */}
+              <button
+                onClick={() => {
+                  const fullEmail = `Subject: ${personalizedEmail.subject}\n\n${personalizedEmail.body}`;
+                  navigator.clipboard.writeText(fullEmail);
+                  alert('Email copied to clipboard!');
+                }}
+                className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-green-800 hover:bg-green-700 text-white font-black text-sm transition-all">
+                <Copy size={14} /> Copy Full Email
+              </button>
+
+              <button
+                onClick={() => setPersonalizedEmail(null)}
+                className="w-full flex items-center justify-center py-2 rounded-xl bg-gray-800 hover:bg-gray-700 text-gray-300 text-xs font-bold transition-all">
+                Close
+              </button>
+            </div>
+          </div>
+        )}
+
         {/* Template Display */}
         {template && (
-          <div className="bg-gray-900 border border-blue-800/50 rounded-2xl overflow-hidden">
+          <div className="bg-gray-900 border border-blue-800/50 rounded-2xl overflow-hidden mb-6">
             <div className="px-5 py-3 border-b border-gray-800 bg-blue-950/20">
               <p className="text-blue-400 text-xs font-black uppercase tracking-widest">
                 Communication Template: {selectedInvestor?.investor_name}
