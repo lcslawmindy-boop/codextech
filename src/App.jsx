@@ -96,6 +96,7 @@ import IPMarketplace from './pages/IPMarketplace';
 import CoInventorMatching from './pages/CoInventorMatching';
 import WhiteLabelSaaS from './pages/WhiteLabelSaaS';
 import SBIRPipeline from './pages/SBIRPipeline';
+import ZARPAcquisitionPackage from './pages/ZARPAcquisitionPackage';
 import CollabPatentDraft from './pages/CollabPatentDraft';
 import IPPortfolioHealth from './pages/IPPortfolioHealth';
 import BuildMilestoneAI from './pages/BuildMilestoneAI';
@@ -222,6 +223,7 @@ const AuthenticatedApp = () => {
           <Route path="/co-inventor-matching" element={<CoInventorMatching />} />
           <Route path="/white-label-saas" element={<WhiteLabelSaaS />} />
           <Route path="/sbir-pipeline" element={<SBIRPipeline />} />
+          <Route path="/zarp-acquisition" element={<ZARPAcquisitionPackage />} />
           <Route path="/collab-patent-draft" element={<CollabPatentDraft />} />
           <Route path="/ip-portfolio-health" element={<IPPortfolioHealth />} />
           <Route path="/build-milestone-ai" element={<BuildMilestoneAI />} />
