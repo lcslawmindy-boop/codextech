@@ -149,7 +149,12 @@ export default function ConceptNetworkGraph({ onNodeClick, selectedNodeId, graph
       .force("link", d3.forceLink(links).id(d => d.id).distance(d => {
         const srcDeg = degrees[typeof d.source === 'object' ? d.source.id : d.source] || 0;
         const tgtDeg = degrees[typeof d.target === 'object' ? d.target.id : d.target] || 0;
-        return 190 + (srcDeg + tgtDeg) * 3.5;
+        const baseDistance = 190 + (srcDeg + tgtDeg) * 3.5;
+        const srcNode = nodes.find(n => n.id === (typeof d.source === 'object' ? d.source.id : d.source));
+        const tgtNode = nodes.find(n => n.id === (typeof d.target === 'object' ? d.target.id : d.target));
+        const srcRadius = srcNode ? nodeRadius(srcNode) : 0;
+        const tgtRadius = tgtNode ? nodeRadius(tgtNode) : 0;
+        return baseDistance + srcRadius + tgtRadius;
       }))
       .force("charge", d3.forceManyBody().strength(d => -900 - (degrees[d.id] || 0) * 20))
       .force("center", d3.forceCenter(width / 2, height / 2))
