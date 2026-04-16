@@ -125,104 +125,66 @@ Return a JSON with:
     setGenerating(true);
     setProposal(null);
 
-    const res = await base44.integrations.Core.InvokeLLM({
-      prompt: `You are a senior federal grant consultant with 15+ years of SBIR/STTR success. You've secured $200M+ for clients across DoD, NIH, DOE, NSF, and DARPA.
+    try {
+      const res = await base44.integrations.Core.InvokeLLM({
+        prompt: `You are an expert SBIR grant writer. Generate a complete, government-level SBIR proposal.
 
-TASK: Generate a government-funded ELITE LEVEL SBIR proposal that will:
-1. Score 90+ on federal reviewer rubrics (innovation, feasibility, commercial potential, team strength)
-2. Use agency-specific language and priorities from the solicitation
-3. Demonstrate clear Phase I → Phase II → Phase III commercialization pathway
-4. Include specific, quantifiable technical milestones and success metrics
-5. Address technical risk mitigation strategies
-6. Show deep understanding of the federal review process and scoring criteria
-
-INVENTION DETAILS:
+INVENTION:
 Title: ${invention.title}
-Technical Description: ${invention.description}
+Description: ${invention.description}
 Domain: ${invention.domain}
-Team: ${invention.team_background || "Experienced R&D team with advanced physics/engineering background"}
+Team: ${invention.team_background || "Experienced R&D team"}
 
-TARGET SOLICITATION:
+SOLICITATION:
 Agency: ${sol.agency}
 Topic: ${sol.topic}
-Solicitation Title: ${sol.title}
-Solicitation Description: ${sol.desc}
-Phase/Award Amount: ${sol.phase} (${sol.award})
-Deadline: ${sol.deadline}
+Title: ${sol.title}
+Description: ${sol.desc}
+Award: ${sol.award}
 
-CRITICAL INSTRUCTIONS FOR GOVERNMENT-ELITE QUALITY:
+Generate EXACTLY these 7 fields with complete, detailed text (200+ words each, no placeholders):
 
-1. TECHNICAL ABSTRACT (250 words):
-   - Lead with the innovation: What makes this novel and why ${sol.agency} prioritizes it
-   - State specific technical advantages (e.g., COP, efficiency gain, enabling capability)
-   - Include preliminary data or theoretical justification if applicable
-   - End with Phase I deliverables that will de-risk Phase II
+1. technical_abstract: 250-word overview of innovation, technical approach, why it matters to ${sol.agency}
+2. anticipated_results: 4-5 concrete, measurable Phase I outcomes with metrics
+3. technical_objectives: 4 numbered technical objectives with specific milestones (e.g., "Objective 1: Develop prototype core component by Month 3 to validate efficiency gains")
+4. work_plan: Month-by-month Phase I plan (6 months) with deliverables for each phase
+5. commercial_applications: 3 specific market opportunities with TAM estimates and timelines
+6. qualifications: Team expertise, relevant publications/patents, prior award experience
+7. budget_justification: Detailed budget breakdown including personnel ($X/hr), equipment, materials, overhead (typically 25-35% for small firms)
 
-2. ANTICIPATED RESULTS (specific, measurable):
-   - State 4-5 concrete, quantifiable Phase I outcomes
-   - Include technical specifications, performance metrics, and success criteria
-   - Each result should directly feed into Phase II commercialization
-   - Example: "Prototype achieving 85%+ energy conversion efficiency with <2ms response time"
-
-3. TECHNICAL OBJECTIVES (3-5 numbered, detailed):
-   - Structure as "Objective 1: [Task] will result in [specific outcome] by [month]"
-   - Ensure technical depth and feasibility
-   - Align with ${sol.agency} strategic priorities
-   - Include risk mitigation for each objective
-
-4. WORK PLAN (6-month Phase I plan with specific milestones):
-   - Month 1-2: Literature review, design optimization, preliminary testing
-   - Month 2-3: Prototype development, component sourcing, integration
-   - Month 3-5: Testing, validation, performance characterization, iteration
-   - Month 5-6: Documentation, technology readiness assessment (TRA), Phase II planning
-   - Each milestone must have deliverables (reports, prototypes, data packages)
-
-5. COMMERCIAL APPLICATIONS (3 specific markets with TAM/SAM estimates):
-   - Market 1: [Sector] · TAM: \\$[X] billion · Use case: [specific application] · Timeline: [2-5 years]
-   - Market 2: [Sector] · TAM: \\$[X] billion · Use case: [specific application] · Timeline: [3-7 years]
-   - Market 3: [Sector] · TAM: \\$[X] billion · Use case: [specific application] · Timeline: [5+ years]
-   - Include realistic competitive advantages and IP protection strategy
-
-6. TEAM QUALIFICATIONS:
-   - Frame team credentials specifically for this ${sol.agency} solicitation
-   - Emphasize relevant publications, prior SBIR awards (if applicable), patent portfolio
-   - Detail management approach: Who leads technical work? Who handles commercialization?
-   - Include letters of commitment from collaborators/subcontractors if applicable
-
-7. BUDGET JUSTIFICATION (detailed cost breakdown):
-   - Personnel: [Role] - [Hours] hrs @ \\$[Rate] = \\$[Total] (explain critical contributions)
-   - Equipment: [Specific items] = \\$[Total] (justify necessity, no redundancy)
-   - Materials & Supplies: [Specific consumables] = \\$[Total]
-   - Subcontracts: [Partner contributions] = \\$[Total]
-   - Other Direct Costs (travel, publications): \\$[Total]
-   - Indirect Costs (overhead): [XX]% of modified total direct costs = \\$[Total]
-   - TOTAL PHASE I REQUEST: \\$[Amount]
-   - Each line item must justify why it's essential to Phase I success
-
-TONE & STYLE:
-- Professional, technical, evidence-based
-- Avoid hype; use measured, credible claims
-- Federal review boards respond to clarity, specificity, and risk awareness
-- Include contingency plans (e.g., "If [risk occurs], we will [mitigation strategy]")
-
-Generate all 7 sections as complete, submission-ready text suitable for direct submission to [${sol.agency}].`,
-      model: "claude_sonnet_4_6",
-      response_json_schema: {
-        type: "object",
-        properties: {
-          technical_abstract: { type: "string" },
-          anticipated_results: { type: "string" },
-          technical_objectives: { type: "string" },
-          work_plan: { type: "string" },
-          commercial_applications: { type: "string" },
-          qualifications: { type: "string" },
-          budget_justification: { type: "string" },
+Be specific, technical, and quantifiable. Every section should be submission-ready.`,
+        model: "claude_sonnet_4_6",
+        response_json_schema: {
+          type: "object",
+          properties: {
+            technical_abstract: { type: "string" },
+            anticipated_results: { type: "string" },
+            technical_objectives: { type: "string" },
+            work_plan: { type: "string" },
+            commercial_applications: { type: "string" },
+            qualifications: { type: "string" },
+            budget_justification: { type: "string" },
+          }
         }
-      }
-    });
+      });
 
-    setProposal(res);
-    setGenerating(false);
+      // Validate that we got actual content
+      if (!res || Object.keys(res).length === 0) {
+        throw new Error("Empty response from LLM - all fields missing");
+      }
+
+      const emptyFields = Object.entries(res).filter(([k, v]) => !v || v.trim().length === 0);
+      if (emptyFields.length > 0) {
+        console.warn("Warning: Empty fields detected:", emptyFields.map(e => e[0]));
+      }
+
+      setProposal(res);
+    } catch (error) {
+      console.error("Proposal generation failed:", error);
+      alert(`Error generating proposal: ${error.message}\n\nPlease check your invention details and try again.`);
+    } finally {
+      setGenerating(false);
+    }
   };
 
   const rankedSolicitations = matched
