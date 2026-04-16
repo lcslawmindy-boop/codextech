@@ -241,6 +241,9 @@ export default function ConceptNetworkGraph({ onNodeClick, selectedNodeId, graph
       .attr("pointer-events", "none")
       .text(d => d.label);
 
+    // Raise link group to front so it renders over nodes without breaking
+    linkGroup.raise();
+
     // ── Node groups ──
     const node = g.append("g").selectAll("g.node")
       .data(nodes).enter().append("g")
