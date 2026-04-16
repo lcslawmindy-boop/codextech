@@ -108,9 +108,10 @@ export default function ConceptNetworkGraph({ onNodeClick, selectedNodeId }) {
     };
 
     // ── Link glow (bright multi-layer) ──
-    const lf = defs.append("filter").attr("id", "linkGlow").attr("x", "-80%").attr("y", "-80%").attr("width", "260%").attr("height", "260%");
-    lf.append("feGaussianBlur").attr("in", "SourceGraphic").attr("stdDeviation", "3").attr("result", "blurred");
+    const lf = defs.append("filter").attr("id", "linkGlow").attr("x", "-100%").attr("y", "-100%").attr("width", "300%").attr("height", "300%");
+    lf.append("feGaussianBlur").attr("in", "SourceGraphic").attr("stdDeviation", "4").attr("result", "blurred");
     const lfm = lf.append("feMerge");
+    lfm.append("feMergeNode").attr("in", "blurred");
     lfm.append("feMergeNode").attr("in", "blurred");
     lfm.append("feMergeNode").attr("in", "blurred");
     lfm.append("feMergeNode").attr("in", "SourceGraphic");
@@ -124,6 +125,8 @@ export default function ConceptNetworkGraph({ onNodeClick, selectedNodeId }) {
 
     // Colorful electric palette
     const electricColors = ["#38bdf8","#a78bfa","#34d399","#fb923c","#f472b6","#facc15","#60a5fa","#4ade80"];
+    // Lightning bolt colors: white core, neon blue & yellow
+    const boltColors = ["#ffffff","#38bdf8","#facc15","#ffffff","#7dd3fc","#fde68a","#ffffff","#0ea5e9"];
 
 
     const g = svg.append("g");
@@ -372,15 +375,15 @@ export default function ConceptNetworkGraph({ onNodeClick, selectedNodeId }) {
 
     // ── Lightning bolt particles ──
     // Each particle travels along a random link from source to target
-    const NUM_BOLTS = 40;
+    const NUM_BOLTS = 90;
     const boltData = Array.from({ length: NUM_BOLTS }, (_, i) => ({
       id: i,
       linkIdx: Math.floor(Math.random() * links.length),
-      t: Math.random(), // 0..1 progress along link
-      speed: 0.004 + Math.random() * 0.008,
-      color: electricColors[i % electricColors.length],
-      size: 3 + Math.random() * 4,
-      trail: 0.3 + Math.random() * 0.5,
+      t: Math.random(),
+      speed: 0.012 + Math.random() * 0.022,
+      color: boltColors[i % boltColors.length],
+      size: 2.5 + Math.random() * 4.5,
+      trail: 0.5 + Math.random() * 0.5,
     }));
 
     const boltGroup = g.append("g").attr("class", "bolts");
@@ -412,9 +415,9 @@ export default function ConceptNetworkGraph({ onNodeClick, selectedNodeId }) {
           // Pick a new random link and reset
           b.t = 0;
           b.linkIdx = Math.floor(Math.random() * links.length);
-          b.speed = 0.004 + Math.random() * 0.009;
-          b.color = electricColors[Math.floor(Math.random() * electricColors.length)];
-          b.size = 3 + Math.random() * 4;
+          b.speed = 0.012 + Math.random() * 0.022;
+          b.color = boltColors[Math.floor(Math.random() * boltColors.length)];
+          b.size = 2.5 + Math.random() * 4.5;
         }
       });
 
