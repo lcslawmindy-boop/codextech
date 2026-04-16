@@ -35,13 +35,13 @@ const MODES = {
   analyst: {
     bg: "#080d14",
     linkColor: "#ffffff",
-    linkOpacity: 0.95,
-    linkWidth: 2,
-    nodeStrokeWidth: 1.5,
+    linkOpacity: 1,
+    linkWidth: 1.5,
+    nodeStrokeWidth: 1,
     showJolts: false,
     showWaves: false,
     showFlashes: false,
-    glowBlur: 5,
+    glowBlur: 0,
     label: "ANALYST",
   },
   electric: {
@@ -164,7 +164,7 @@ export default function ConceptNetworkGraph({ onNodeClick, selectedNodeId, graph
       .attr("stroke-width", mode.linkWidth)
       .attr("stroke-opacity", mode.linkOpacity)
       .attr("stroke-dasharray", null)
-      .attr("filter", "url(#glow-link)");
+      .attr("filter", graphMode === "analyst" ? null : "url(#glow-link)");
 
     // ── Electric jolt layer ──
     const joltColorsElectric = ["#7dd3fc","#c4b5fd","#86efac","#fde68a","#f9a8d4","#ffffff"];
