@@ -121,7 +121,7 @@ export default function MainNav({ isAdmin }) {
                     className="flex flex-col items-center justify-center gap-1 px-3 py-2 hover:bg-gray-800 transition-colors min-w-[64px] border-r border-gray-800/30 last:border-r-0 group"
                   >
                     <span className="text-xl leading-none">{link.emoji}</span>
-                    <span className="text-[10px] leading-tight text-gray-500 group-hover:text-gray-300 text-center whitespace-nowrap transition-colors">{link.label}</span>
+                    <span className="text-[11px] leading-tight font-bold text-gray-300 group-hover:text-white text-center whitespace-nowrap transition-colors drop-shadow">{link.label}</span>
                   </Link>
                 ))}
               </div>
@@ -147,7 +147,7 @@ export default function MainNav({ isAdmin }) {
                 className="flex flex-col items-center justify-center gap-1 px-3 py-2 hover:bg-gray-800 transition-colors min-w-[64px] border-r border-gray-800/30 last:border-r-0 group"
               >
                 <span className="text-xl leading-none">{link.emoji}</span>
-                <span className="text-[10px] leading-tight text-gray-500 group-hover:text-gray-300 text-center whitespace-nowrap transition-colors">{link.label}</span>
+                <span className="text-[11px] leading-tight font-bold text-gray-300 group-hover:text-white text-center whitespace-nowrap transition-colors drop-shadow">{link.label}</span>
               </Link>
             ))}
           </div>
