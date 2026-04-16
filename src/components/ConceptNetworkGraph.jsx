@@ -449,70 +449,94 @@ export default function ConceptNetworkGraph({ onNodeClick, selectedNodeId }) {
 
     setTimeout(() => { rafId = requestAnimationFrame(animateBolts); }, 800);
 
-    // ── Scalar wave rings pulsing from nodes ──
+    // ── Scalar wave rings pulsing from nodes — large, very visible ──
     const scalarGroup = g.append("g").attr("class", "scalar-waves");
-    const NUM_WAVES = 60;
+    const NUM_WAVES = 80;
     const waveData = Array.from({ length: NUM_WAVES }, (_, i) => ({
       nodeIdx: Math.floor(Math.random() * nodes.length),
-      r: Math.random() * 80,
-      maxR: 80 + Math.random() * 60,
-      speed: 0.6 + Math.random() * 1.0,
-      color: ["#38bdf8","#facc15","#a78bfa","#34d399","#ffffff"][i % 5],
-      opacity: 0,
+      r: (i / NUM_WAVES) * 200,
+      maxR: 180 + Math.random() * 120,
+      speed: 1.2 + Math.random() * 1.8,
+      color: ["#38bdf8","#facc15","#a78bfa","#34d399","#f472b6","#ffffff"][i % 6],
+      strokeW: 1.5 + Math.random() * 1.5,
     }));
 
-    const waveEls = waveData.map(() => {
+    const waveEls = waveData.map(w => {
       const el = document.createElementNS("http://www.w3.org/2000/svg", "circle");
       el.setAttribute("fill", "none");
-      el.setAttribute("stroke-width", "1");
+      el.setAttribute("stroke-width", w.strokeW);
+      el.setAttribute("filter", "url(#linkGlow)");
       el.setAttribute("pointer-events", "none");
       scalarGroup.node().appendChild(el);
       return el;
     });
 
-    // ── Atomic orbital particles ──
+    // ── Atomic orbital particles — large orbits, clearly visible ──
     const atomGroup = g.append("g").attr("class", "atoms");
-    const NUM_ATOMS = 50;
+    const NUM_ATOMS = 80;
     const atomData = Array.from({ length: NUM_ATOMS }, (_, i) => ({
       nodeIdx: i % nodes.length,
-      angle: Math.random() * Math.PI * 2,
-      orbitR: 45 + Math.random() * 30,
-      speed: (0.02 + Math.random() * 0.04) * (Math.random() < 0.5 ? 1 : -1),
-      color: ["#ffffff","#38bdf8","#facc15","#f472b6","#4ade80"][i % 5],
-      size: 2 + Math.random() * 2.5,
-      tilt: Math.random() * Math.PI,
+      angle: (i / NUM_ATOMS) * Math.PI * 2,
+      orbitR: 60 + Math.random() * 55,
+      speed: (0.025 + Math.random() * 0.04) * (i % 2 === 0 ? 1 : -1),
+      color: ["#ffffff","#38bdf8","#facc15","#f472b6","#4ade80","#a78bfa"][i % 6],
+      size: 4 + Math.random() * 4,
+      tilt: (i / NUM_ATOMS) * Math.PI,
     }));
 
-    const atomEls = atomData.map(a => {
-      const el = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-      el.setAttribute("r", a.size);
-      el.setAttribute("fill", a.color);
-      el.setAttribute("filter", "url(#linkGlow)");
-      el.setAttribute("pointer-events", "none");
-      atomGroup.node().appendChild(el);
-      return el;
+    // Each atom: glowing dot + orbit path ellipse
+    const atomEls = atomData.map((a, i) => {
+      // Orbit ellipse (static, drawn once, updated on tick via node position)
+      const orbitEl = document.createElementNS("http://www.w3.org/2000/svg", "ellipse");
+      orbitEl.setAttribute("rx", a.orbitR);
+      orbitEl.setAttribute("ry", a.orbitR * 0.4);
+      orbitEl.setAttribute("fill", "none");
+      orbitEl.setAttribute("stroke", a.color);
+      orbitEl.setAttribute("stroke-width", "0.5");
+      orbitEl.setAttribute("stroke-opacity", "0.25");
+      orbitEl.setAttribute("pointer-events", "none");
+      orbitEl.setAttribute("transform", `rotate(${a.tilt * 180 / Math.PI})`);
+      atomGroup.node().appendChild(orbitEl);
+
+      const dot = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+      dot.setAttribute("r", a.size);
+      dot.setAttribute("fill", a.color);
+      dot.setAttribute("filter", "url(#linkGlowOuter)");
+      dot.setAttribute("pointer-events", "none");
+      atomGroup.node().appendChild(dot);
+
+      return { dot, orbitEl };
     });
 
-    // ── Light bulb flash bursts ──
+    // ── Light bulb flash bursts — explosive bright rings ──
     const flashGroup = g.append("g").attr("class", "flashes");
-    const NUM_FLASHES = 20;
+    const NUM_FLASHES = 25;
     const flashData = Array.from({ length: NUM_FLASHES }, (_, i) => ({
       nodeIdx: Math.floor(Math.random() * nodes.length),
-      timer: Math.random() * 120,
-      interval: 60 + Math.floor(Math.random() * 120),
+      timer: Math.floor((i / NUM_FLASHES) * 80),
+      interval: 40 + Math.floor(Math.random() * 80),
       r: 0,
-      maxR: 30 + Math.random() * 40,
+      maxR: 70 + Math.random() * 80,
       active: false,
-      color: ["#ffffff","#facc15","#38bdf8"][i % 3],
+      color: ["#ffffff","#facc15","#38bdf8","#f472b6"][i % 4],
     }));
 
+    // Each flash: a solid bright core + expanding ring
     const flashEls = flashData.map(f => {
-      const el = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-      el.setAttribute("fill", "none");
-      el.setAttribute("stroke-width", "2");
-      el.setAttribute("pointer-events", "none");
-      flashGroup.node().appendChild(el);
-      return el;
+      const ring = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+      ring.setAttribute("fill", "none");
+      ring.setAttribute("stroke-width", "3");
+      ring.setAttribute("filter", "url(#linkGlowOuter)");
+      ring.setAttribute("pointer-events", "none");
+      flashGroup.node().appendChild(ring);
+
+      const core = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+      core.setAttribute("r", "8");
+      core.setAttribute("filter", "url(#linkGlowOuter)");
+      core.setAttribute("pointer-events", "none");
+      flashGroup.node().appendChild(core);
+
+      return { ring, core };
     });
 
     // ── Combined RAF ──
@@ -529,13 +553,13 @@ export default function ConceptNetworkGraph({ onNodeClick, selectedNodeId }) {
           w.nodeIdx = Math.floor(Math.random() * nodes.length);
         }
         const prog = w.r / w.maxR;
-        const op = (1 - prog) * 0.55;
+        const op = Math.sin(prog * Math.PI) * 0.75; // bell curve — bright in middle
         waveEls[i].setAttribute("cx", nd.x);
         waveEls[i].setAttribute("cy", nd.y);
         waveEls[i].setAttribute("r", w.r);
         waveEls[i].setAttribute("stroke", w.color);
         waveEls[i].setAttribute("stroke-opacity", op);
-        waveEls[i].setAttribute("stroke-dasharray", `${4 + w.r * 0.15} ${6 + w.r * 0.1}`);
+        waveEls[i].setAttribute("stroke-dasharray", w.r > 60 ? `${8} ${10}` : "none");
       }
 
       // Atomic orbitals
@@ -544,50 +568,62 @@ export default function ConceptNetworkGraph({ onNodeClick, selectedNodeId }) {
         const nd = nodes[a.nodeIdx];
         if (!nd?.x) continue;
         a.angle += a.speed;
-        // Elliptical orbit (tilted)
+
         const ex = Math.cos(a.angle) * a.orbitR;
-        const ey = Math.sin(a.angle) * a.orbitR * 0.45;
-        const rx = ex * Math.cos(a.tilt) - ey * Math.sin(a.tilt);
-        const ry = ex * Math.sin(a.tilt) + ey * Math.cos(a.tilt);
-        atomEls[i].setAttribute("cx", nd.x + rx);
-        atomEls[i].setAttribute("cy", nd.y + ry);
-        // Fade based on "depth"
+        const ey = Math.sin(a.angle) * a.orbitR * 0.4;
+        const cosT = Math.cos(a.tilt), sinT = Math.sin(a.tilt);
+        const rx = ex * cosT - ey * sinT;
+        const ry = ex * sinT + ey * cosT;
+
+        atomEls[i].dot.setAttribute("cx", nd.x + rx);
+        atomEls[i].dot.setAttribute("cy", nd.y + ry);
+        atomEls[i].orbitEl.setAttribute("cx", nd.x);
+        atomEls[i].orbitEl.setAttribute("cy", nd.y);
+
         const depth = (Math.sin(a.angle) + 1) / 2;
-        atomEls[i].setAttribute("opacity", 0.4 + depth * 0.6);
-        atomEls[i].setAttribute("r", a.size * (0.6 + depth * 0.6));
+        atomEls[i].dot.setAttribute("opacity", 0.5 + depth * 0.5);
+        atomEls[i].dot.setAttribute("r", a.size * (0.7 + depth * 0.5));
       }
 
-      // Flash bursts
+      // Flash bursts (light bulb explosions)
       for (let i = 0; i < flashData.length; i++) {
         const f = flashData[i];
         const nd = nodes[f.nodeIdx];
         if (!nd?.x) { f.timer--; continue; }
         f.timer--;
-        if (f.timer <= 0) {
+        if (f.timer <= 0 && !f.active) {
           f.active = true;
           f.r = 0;
           f.timer = f.interval;
           f.nodeIdx = Math.floor(Math.random() * nodes.length);
         }
         if (f.active) {
-          f.r += 2.5;
+          f.r += 4;
           if (f.r >= f.maxR) { f.active = false; f.r = 0; }
-          const op = (1 - f.r / f.maxR) * 0.9;
-          flashEls[i].setAttribute("cx", nd.x);
-          flashEls[i].setAttribute("cy", nd.y);
-          flashEls[i].setAttribute("r", f.r);
-          flashEls[i].setAttribute("stroke", f.color);
-          flashEls[i].setAttribute("stroke-opacity", op);
-          flashEls[i].setAttribute("filter", "url(#linkGlowOuter)");
+          const prog = f.r / f.maxR;
+          const ringOp = (1 - prog) * 1.0;
+          const coreOp = prog < 0.3 ? (prog / 0.3) : (1 - prog) * 1.5;
+
+          flashEls[i].ring.setAttribute("cx", nd.x);
+          flashEls[i].ring.setAttribute("cy", nd.y);
+          flashEls[i].ring.setAttribute("r", f.r);
+          flashEls[i].ring.setAttribute("stroke", f.color);
+          flashEls[i].ring.setAttribute("stroke-opacity", ringOp);
+
+          flashEls[i].core.setAttribute("cx", nd.x);
+          flashEls[i].core.setAttribute("cy", nd.y);
+          flashEls[i].core.setAttribute("fill", f.color);
+          flashEls[i].core.setAttribute("opacity", Math.min(1, coreOp));
         } else {
-          flashEls[i].setAttribute("stroke-opacity", 0);
+          flashEls[i].ring.setAttribute("stroke-opacity", 0);
+          flashEls[i].core.setAttribute("opacity", 0);
         }
       }
 
       rafId2 = requestAnimationFrame(animateExtras);
     };
 
-    setTimeout(() => { rafId2 = requestAnimationFrame(animateExtras); }, 1000);
+    setTimeout(() => { rafId2 = requestAnimationFrame(animateExtras); }, 600);
 
     // ── Tick ──
     simRef.current.on("tick", () => {
