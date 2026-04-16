@@ -381,15 +381,16 @@ export default function InvestorCRM() {
   const handleScoreFit = async () => {
     setScoringInvestors(true);
     try {
-      // Collect all contacts from filtered buyers
-      const allContacts = filteredBuyers.flatMap(tier =>
+      // Collect all contacts from BUYERS (not filtered - we want all)
+      const allContacts = BUYERS.flatMap(tier =>
         tier.contacts.map(c => ({
           id: c.org,
           investor_name: c.org,
           investor_org: c.org,
           investor_email: c.email,
-          investor_type: "strategic",
-          notes: crm[c.org]?.comms?.map(x => x.text).join(" ") || ""
+          investor_type: tier.tier.toLowerCase().includes("energy") ? "vc_growth" : 
+                        tier.tier.toLowerCase().includes("biotech") ? "corporate" : "strategic",
+          notes: crm[c.org]?.comms?.map(x => x.text).join(" ") || c.rationale || ""
         }))
       );
 
@@ -397,7 +398,7 @@ export default function InvestorCRM() {
         investors: allContacts,
         target_investment: 1500000,
         equity_offered: 12,
-        sectors_of_interest: ["energy", "physics", "advanced materials"]
+        sectors_of_interest: ["energy", "physics", "biotech", "longevity"]
       });
       setFitScores(response.data);
     } catch (err) {
