@@ -85,7 +85,11 @@ export default function LinkedInProspectList() {
     const result = await base44.integrations.Core.InvokeLLM({
       prompt: `Write a short, personalized LinkedIn connection request message (under 300 characters) to ${prospect.name}, ${prospect.title} at ${prospect.org}.
 
-Context: I'm the founder of Zenith Apex Advanced Research Platform (ZARP) — built on Tom Bearden's scalar electromagnetics research. The platform is currently FOR SALE as a full acquisition. It includes: 21 invention build plans, AI patent + IP tools, investor CRM, a growing paid beta membership, and a full content library. A signed NDA is required before sharing the acquisition package and financials.
+Context: I'm the founder of Zenith Apex Advanced Research Platform (ZARP) — built on Tom Bearden's scalar electromagnetics research. The platform is currently FOR SALE as a full acquisition. It includes: 21 invention build plans, AI patent + IP tools, investor CRM, a growing paid beta membership, and a full content library.
+
+Important links to include naturally in the message:
+- Beta access / preview: https://zenithapex.base44.app/beta-apply
+- NDA (must be signed to receive acquisition package): https://zenithapex.base44.app/terms
 
 Reason this person is relevant: ${prospect.why}
 
@@ -93,10 +97,10 @@ Requirements:
 - MUST be under 300 characters total
 - Reference something specific about their work or background that makes them a natural acquirer or investor
 - Mention the platform is for sale (acquisition opportunity) — frame it as exclusive and discreet
-- Signal that an NDA is required to see the full package — creates intrigue and seriousness
+- Naturally include BOTH links: the beta-apply link for preview access and the NDA link to unlock the full acquisition package
 - No spam, no fluff — be direct and professional
 - Do NOT mention specific numbers or pricing
-- End with a low-friction question (e.g. "Would you be open to a brief NDA and overview?") to drive a reply`
+- End with a low-friction question (e.g. "Open to signing NDA for the full package?") to drive a reply`
     });
     const msg = typeof result === "string" ? result : result?.content || "";
     setMessages(prev => ({ ...prev, [prospect.id]: msg }));
