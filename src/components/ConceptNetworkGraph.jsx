@@ -388,82 +388,65 @@ export default function ConceptNetworkGraph({ onNodeClick, selectedNodeId }) {
 
     const boltGroup = g.append("g").attr("class", "bolts");
 
-    // Each bolt = a small circle + a short trailing line
-    const boltCircles = boltGroup.selectAll("circle.bolt")
-      .data(boltData).enter().append("circle")
-      .attr("class", "bolt")
-      .attr("r", d => d.size)
-      .attr("fill", d => d.color)
-      .attr("filter", "url(#linkGlow)")
-      .attr("pointer-events", "none");
+    // Pre-create DOM elements and store direct references for fast RAF updates
+    const boltEls = boltData.map(b => {
+      const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+      circle.setAttribute("r", b.size);
+      circle.setAttribute("fill", b.color);
+      circle.setAttribute("filter", "url(#linkGlow)");
+      circle.setAttribute("pointer-events", "none");
+      boltGroup.node().appendChild(circle);
 
-    const boltTrails = boltGroup.selectAll("line.bolt-trail")
-      .data(boltData).enter().append("line")
-      .attr("class", "bolt-trail")
-      .attr("stroke", d => d.color)
-      .attr("stroke-width", d => d.size * 0.7)
-      .attr("stroke-opacity", d => d.trail)
-      .attr("filter", "url(#linkGlow)")
-      .attr("pointer-events", "none");
+      const trail = document.createElementNS("http://www.w3.org/2000/svg", "line");
+      trail.setAttribute("stroke", b.color);
+      trail.setAttribute("stroke-width", b.size * 0.7);
+      trail.setAttribute("stroke-opacity", b.trail);
+      trail.setAttribute("filter", "url(#linkGlow)");
+      trail.setAttribute("pointer-events", "none");
+      boltGroup.node().appendChild(trail);
 
-    // Animate bolt positions via requestAnimationFrame
+      return { circle, trail };
+    });
+
+    // Animate bolt positions via requestAnimationFrame — direct DOM for performance
     let rafId;
     const animateBolts = () => {
-      boltData.forEach(b => {
+      for (let i = 0; i < boltData.length; i++) {
+        const b = boltData[i];
         b.t += b.speed;
         if (b.t > 1) {
-          // Pick a new random link and reset
           b.t = 0;
           b.linkIdx = Math.floor(Math.random() * links.length);
           b.speed = 0.012 + Math.random() * 0.022;
           b.color = boltColors[Math.floor(Math.random() * boltColors.length)];
           b.size = 2.5 + Math.random() * 4.5;
+          boltEls[i].circle.setAttribute("fill", b.color);
+          boltEls[i].circle.setAttribute("r", b.size);
+          boltEls[i].trail.setAttribute("stroke", b.color);
+          boltEls[i].trail.setAttribute("stroke-width", b.size * 0.7);
         }
-      });
 
-      boltCircles
-        .attr("r", d => d.size)
-        .attr("fill", d => d.color)
-        .attr("cx", d => {
-          const lk = links[d.linkIdx];
-          if (!lk || !lk.source?.x) return 0;
-          return lk.source.x + (lk.target.x - lk.source.x) * d.t;
-        })
-        .attr("cy", d => {
-          const lk = links[d.linkIdx];
-          if (!lk || !lk.source?.y) return 0;
-          return lk.source.y + (lk.target.y - lk.source.y) * d.t;
-        });
+        const lk = links[b.linkIdx];
+        if (!lk || !lk.source?.x) continue;
 
-      boltTrails
-        .attr("stroke", d => d.color)
-        .attr("x1", d => {
-          const lk = links[d.linkIdx];
-          if (!lk || !lk.source?.x) return 0;
-          const t0 = Math.max(0, d.t - 0.12);
-          return lk.source.x + (lk.target.x - lk.source.x) * t0;
-        })
-        .attr("y1", d => {
-          const lk = links[d.linkIdx];
-          if (!lk || !lk.source?.y) return 0;
-          const t0 = Math.max(0, d.t - 0.12);
-          return lk.source.y + (lk.target.y - lk.source.y) * t0;
-        })
-        .attr("x2", d => {
-          const lk = links[d.linkIdx];
-          if (!lk || !lk.source?.x) return 0;
-          return lk.source.x + (lk.target.x - lk.source.x) * d.t;
-        })
-        .attr("y2", d => {
-          const lk = links[d.linkIdx];
-          if (!lk || !lk.source?.y) return 0;
-          return lk.source.y + (lk.target.y - lk.source.y) * d.t;
-        });
+        const sx = lk.source.x, sy = lk.source.y;
+        const tx = lk.target.x, ty = lk.target.y;
+        const cx = sx + (tx - sx) * b.t;
+        const cy = sy + (ty - sy) * b.t;
+        const t0 = Math.max(0, b.t - 0.12);
+        const x1 = sx + (tx - sx) * t0;
+        const y1 = sy + (ty - sy) * t0;
 
+        boltEls[i].circle.setAttribute("cx", cx);
+        boltEls[i].circle.setAttribute("cy", cy);
+        boltEls[i].trail.setAttribute("x1", x1);
+        boltEls[i].trail.setAttribute("y1", y1);
+        boltEls[i].trail.setAttribute("x2", cx);
+        boltEls[i].trail.setAttribute("y2", cy);
+      }
       rafId = requestAnimationFrame(animateBolts);
     };
 
-    // Start after sim settles a bit
     setTimeout(() => { rafId = requestAnimationFrame(animateBolts); }, 800);
 
     // ── Tick ──
