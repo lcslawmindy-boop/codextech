@@ -1,0 +1,37 @@
+{
+  "name": "MemberOnboarding",
+  "type": "object",
+  "properties": {
+    "user_email": {
+      "type": "string",
+      "description": "Email of the member"
+    },
+    "completed_items": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "IDs of completed checklist items (profile, research, course, tools, shop, investor)",
+      "default": []
+    },
+    "progress_percent": {
+      "type": "integer",
+      "description": "Overall progress percentage (0-100)",
+      "default": 0
+    },
+    "first_course_started": {
+      "type": "boolean",
+      "default": false
+    },
+    "first_tool_used": {
+      "type": "boolean",
+      "default": false
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "user_email"
+  ]
+}

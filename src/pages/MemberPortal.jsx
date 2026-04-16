@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { FileText, BookOpen, Package, Zap, Shield, Download, ExternalLink, Loader2, CheckCircle, Clock, AlertCircle, ChevronRight } from "lucide-react";
 import { base44 } from "@/api/base44Client";
+import MemberOnboardingChecklist from "@/components/MemberOnboardingChecklist";
 
 const PLAN_CONTENT = {
   "Research Membership ($29/mo)": {
@@ -142,6 +143,9 @@ export default function MemberPortal() {
       </div>
 
       <div className="flex-1 overflow-y-auto px-5 py-6 max-w-6xl mx-auto w-full space-y-8">
+
+        {/* Onboarding checklist (for active members) */}
+        {isActive && <MemberOnboardingChecklist />}
 
         {/* Membership card */}
         <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6">
