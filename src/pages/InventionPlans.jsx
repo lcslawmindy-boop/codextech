@@ -9,6 +9,15 @@ import { base44 as b44 } from "@/api/base44Client";
 // Legacy admin-only gate (free energy / medical claims — still admin-only)
 const ADMIN_ONLY_KEYWORDS = ["motionless electromagnetic generator", "prioré-type multichannel"];
 const isAdminOnly = (title) => ADMIN_ONLY_KEYWORDS.some(k => title?.toLowerCase().includes(k.toLowerCase()));
+
+// Inventions freely accessible with beta access (no $97 membership required)
+const BETA_FREE_INVENTIONS = [
+  "Anenergy Pump Demonstration Circuit",
+  "Vacuum Potential Oscillator (VPO) Circuit Kit",
+  "Open-System Magnetic Generator (Prototype Plans)",
+];
+const isBetaFreeInvention = (title) => BETA_FREE_INVENTIONS.includes(title);
+const isMembershipRequired = (title) => !isBetaFreeInvention(title) && !isAdminOnly(title);
 import { tierCanAccessInvention } from "../lib/tiers";
 import TierGate from "../components/TierGate";
 import InventionBuildVideo from "../components/InventionBuildVideo";
@@ -458,6 +467,40 @@ function PaywallGate({ invention }) {
   );
 }
 
+function MembershipGate({ invention }) {
+  return (
+    <div className="flex-1 flex items-center justify-center p-12">
+      <div className="max-w-md text-center">
+        <div className="w-20 h-20 rounded-2xl bg-gray-800 border border-gray-700 flex items-center justify-center text-4xl mx-auto mb-6">
+          {invention?.icon || "🔒"}
+        </div>
+        <div className="flex items-center justify-center gap-2 mb-3">
+          <Lock size={16} className="text-indigo-400" />
+          <span className="text-indigo-400 font-bold text-sm uppercase tracking-wider">Membership Required</span>
+        </div>
+        <h2 className="text-white font-black text-2xl mb-2">{invention?.title}</h2>
+        <p className="text-gray-400 text-sm leading-relaxed italic mb-4">{invention?.tagline}</p>
+        <p className="text-gray-500 text-sm leading-relaxed mb-6">
+          This invention build plan is available exclusively to <span className="text-white font-bold">$97/mo Researcher members</span>. Join to get full access to all build plans, step-by-step instructions, schematics, and downloadable PDFs.
+        </p>
+        <div className="bg-gray-900 border border-gray-800 rounded-2xl p-4 mb-6 text-left space-y-2">
+          <p className="text-gray-500 text-xs font-bold uppercase tracking-wider mb-3">Membership includes:</p>
+          {["All 21+ invention build plans", "Step-by-step instructions & BOMs", "Full course library (20+ courses)", "AI patent & IP tools", "Downloadable PDFs for every device"].map((item, i) => (
+            <div key={i} className="flex items-center gap-2 text-sm text-gray-300">
+              <CheckCircle2 size={13} className="text-indigo-400 flex-shrink-0" />{item}
+            </div>
+          ))}
+        </div>
+        <Link to="/pricing"
+          className="flex items-center justify-center gap-2 w-full py-3 rounded-xl font-black text-white text-sm bg-indigo-700 hover:bg-indigo-600 transition-all mb-3">
+          Join for $97/mo — Unlock Everything
+        </Link>
+        <p className="text-gray-600 text-xs">Already a member? <Link to="/account" className="text-indigo-400 hover:underline">Check your account</Link></p>
+      </div>
+    </div>
+  );
+}
+
 function ClassifiedGate() {
   return (
     <div className="flex-1 flex items-center justify-center p-12">
@@ -597,6 +640,11 @@ export default function InventionPlans() {
       <div className="flex flex-1 overflow-hidden">
         {/* Sidebar — invention list */}
         <div className="w-64 flex-shrink-0 border-r border-gray-800 overflow-y-auto bg-gray-900/40">
+          {/* Access legend */}
+          <div className="px-3 py-2 border-b border-gray-800 bg-gray-900/60 space-y-1">
+            <div className="flex items-center gap-2 text-xs text-green-400"><CheckCircle2 size={10} /> 3 plans included with Beta</div>
+            <div className="flex items-center gap-2 text-xs text-indigo-400"><Lock size={10} /> All others require $97/mo</div>
+          </div>
           {inventions.map((inv, i) => {
             const accessible = tierCanAccessInvention(tier, i);
             const adminOnly = isAdminOnly(inv.title);
@@ -604,6 +652,8 @@ export default function InventionPlans() {
             const isSelected = selected?.title === inv.title;
             const isAdminLocked = adminOnly && !isAdmin;
             const isGovLocked = govClassified && !isAdmin && !tierHasGovAccess(tier);
+            const betaFree = isBetaFreeInvention(inv.title);
+            const memberLocked = isMembershipRequired(inv.title) && !isAdmin;
             return (
               <button key={i} onClick={() => setSelected(inv)}
                 className={`w-full text-left px-4 py-3 border-b border-gray-800/60 transition-all flex items-start gap-3 ${
@@ -614,17 +664,21 @@ export default function InventionPlans() {
                   <p className={`text-xs font-semibold leading-snug truncate ${
                     isAdminLocked ? "text-red-900" :
                     isGovLocked ? "text-red-400" :
+                    betaFree ? "text-green-300" :
+                    memberLocked ? "text-gray-400" :
                     accessible ? "text-white" : "text-gray-600"
                   }`}>{inv.title}</p>
-                  <p className="text-gray-600 text-xs">
-                    {isAdminLocked ? "🔐 Admin Only" :
-                     isGovLocked ? "🏛 Gov/Defense Only" :
-                     inv.price}
+                  <p className="text-xs mt-0.5">
+                    {isAdminLocked ? <span className="text-red-900">🔐 Admin Only</span> :
+                     isGovLocked ? <span className="text-red-400">🏛 Gov/Defense Only</span> :
+                     betaFree ? <span className="text-green-600">✓ Included with Beta</span> :
+                     memberLocked ? <span className="text-indigo-500">🔒 $97/mo Membership</span> :
+                     <span className="text-gray-600">{inv.price}</span>}
                   </p>
                 </div>
                 {isAdminLocked ? <Shield size={10} className="text-red-700 flex-shrink-0 mt-1" /> :
                  isGovLocked ? <Shield size={10} className="text-red-400 flex-shrink-0 mt-1" /> :
-                 !accessible && <Lock size={10} className="text-gray-700 flex-shrink-0 mt-1" />}
+                 memberLocked ? <Lock size={10} className="text-indigo-600 flex-shrink-0 mt-1" /> : null}
               </button>
             );
           })}
@@ -634,6 +688,8 @@ export default function InventionPlans() {
         <div className="flex-1 overflow-y-auto p-6">
           {!selected ? (
             <div className="flex items-center justify-center h-full text-gray-700 text-sm">Select an invention</div>
+          ) : (isMembershipRequired(selected.title) && !isAdmin) ? (
+            <MembershipGate invention={selected} />
           ) : (isAdminOnly(selected.title) && !isAdmin) ? (
             <div className="flex-1 flex items-center justify-center p-12">
               <div className="max-w-md text-center">
