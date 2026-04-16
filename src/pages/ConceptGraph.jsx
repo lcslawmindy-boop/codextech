@@ -9,7 +9,7 @@ import TopConceptsPanel from "../components/TopConceptsPanel";
 import BusinessConceptGraph from "../components/BusinessConceptGraph";
 import { groupColors, nodes } from "../lib/beardenData";
 import NewsletterSignup from "../components/NewsletterSignup";
-import NavDropdown from "../components/NavDropdown";
+import MainNav from "../components/MainNav";
 import { base44 } from "@/api/base44Client";
 import { useState as useAdminState, useEffect as useAdminEffect } from 'react';
 
@@ -102,147 +102,32 @@ export default function ConceptGraph() {
           )}
         </div>
       </div>
-      {/* Organized nav bar */}
-      <div className="flex items-center gap-2 px-4 py-2 overflow-x-auto border-t border-gray-800/60 flex-shrink-0" style={{scrollbarWidth: 'none'}}>
-          {/* Graph tools */}
-          <button
-            onClick={() => setShowTopConcepts(s => !s)}
-            className={`flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-xs font-semibold transition-all ${
-              showTopConcepts ? "bg-yellow-700/50 border-yellow-500 text-yellow-200" : "bg-yellow-900/20 border-yellow-800/50 text-yellow-400 hover:bg-yellow-900/40"
-            }`}
-          >
-            📊 Top Concepts
-          </button>
-          <button
-            onClick={() => { setClusterMode(m => { if (m) setClusterNodes([]); return !m; }); setShowSearch(false); setShowDiagnostics(false); }}
-            className={`flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-xs font-semibold transition-all ${
-              clusterMode ? "bg-indigo-700/50 border-indigo-500 text-indigo-200" : "bg-indigo-900/20 border-indigo-800/50 text-indigo-400 hover:bg-indigo-900/40"
-            }`}
-          >
-            🔗 {clusterMode ? `Cluster (${clusterNodes.length})` : "Cluster"}
-          </button>
-
-          <div className="w-px h-5 bg-gray-700 flex-shrink-0" />
-
-          {/* Inventions */}
-          <NavDropdown label="Inventions" icon="⚗️" color="#f59e0b" isAdmin={isAdmin} items={[
-            { emoji: "📚", label: "Invention Library", path: "/invention-library", desc: "Browse all device architectures" },
-            { emoji: "🧬", label: "Invention Forge", path: "/inventor-forge", desc: "AI invention generation" },
-            { emoji: "🔬", label: "R&D Sandbox", path: "/rd-sandbox", desc: "Cross-domain AI synthesis" },
-            { emoji: "🧪", label: "Hybrid Portfolio", path: "/hybrid-portfolio", desc: "AI hybrid inventions" },
-            { emoji: "📐", label: "Build Plans", path: "/invention-plans", desc: "Full engineering build plans" },
-            { emoji: "🕸️", label: "Device Knowledge Graph", path: "/device-graph", desc: "Component relationships" },
-            { emoji: "🔧", label: "Build Milestone AI", path: "/build-milestone-ai", desc: "AI build tracking" },
-            { emoji: "🛒", label: "Build Supplies Shop", path: "/build-supplies-shop", desc: "Parts & components" },
-          ]} />
-
-          {/* IP Tools */}
-          <NavDropdown label="IP Tools" icon="⚖️" color="#6366f1" isAdmin={isAdmin} items={[
-            { emoji: "🛡️", label: "FTO Analysis", path: "/fto-analysis", desc: "AI freedom-to-operate" },
-            { emoji: "⚖️", label: "Patent Attorney Chat", path: "/patent-attorney-chat", desc: "USPTO-trained AI attorney" },
-            { emoji: "🔍", label: "Patent Intelligence", path: "/patent-intelligence", desc: "4-tool IP analysis suite" },
-            { emoji: "✍️", label: "Patent Drafting Wizard", path: "/patent-drafting-wizard", desc: "7-step USPTO workflow" },
-            { emoji: "📄", label: "Patent Tool", path: "/patent-tool", desc: "Classic patent drafter" },
-            { emoji: "📋", label: "Provisional Patent", path: "/provisional-patent", desc: "35 USC 111(b) PPA" },
-            { emoji: "🗄️", label: "Prior Art Archive", path: "/prior-art", desc: "200+ documented entries" },
-            { emoji: "🗺️", label: "Patent Landscape", path: "/patent-landscape", desc: "IP landscape graph" },
-            { emoji: "💼", label: "IP Marketplace", path: "/ip-marketplace", desc: "Private IP exchange" },
-            { emoji: "🤝", label: "Co-Inventor Matching", path: "/co-inventor-matching", desc: "AI inventor introductions" },
-            { emoji: "📝", label: "Collab Patent Draft", path: "/collab-patent-draft", desc: "Multi-user editing" },
-            { emoji: "🏥", label: "IP Portfolio Health", path: "/ip-portfolio-health", desc: "Live portfolio scoring" },
-            { emoji: "🎯", label: "SBIR/STTR Pipeline", path: "/sbir-pipeline", desc: "Grant auto-matching" },
-          ]} />
-
-          {/* Research */}
-          <NavDropdown label="Research" icon="🧠" color="#a855f7" isAdmin={isAdmin} items={[
-            { emoji: "🧠", label: "AI Research Assistant", path: "/ai-research", desc: "Intelligent research tool" },
-            { emoji: "📈", label: "Dark vs Light Timeline", path: "/dark-timeline", desc: "Suppression history" },
-            { emoji: "📊", label: "Timeline Pitch Deck", path: "/timeline-pitch", desc: "Research timeline deck" },
-            { emoji: "📅", label: "Dev Timeline", path: "/invention-timeline", desc: "Invention history" },
-            { emoji: "🔬", label: "Diagnostics", path: "#diagnostics", desc: "Graph diagnostics" },
-          ]} />
-
-          {/* Labs */}
-          <NavDropdown label="Labs" icon="🌊" color="#06b6d4" isAdmin={isAdmin} items={[
-            { emoji: "〰️", label: "Scalar Wave Sim", path: "/scalar-wave-sim" },
-            { emoji: "🌊", label: "Scalar Field Sim", path: "/scalar-sim" },
-            { emoji: "⚗️", label: "Scalar EM Lab", path: "/scalar-lab" },
-            { emoji: "🗺️", label: "∇φ Potential Map", path: "/scalar-potential" },
-            { emoji: "🧪", label: "Wave Lab", path: "/lab" },
-            { emoji: "⚗️", label: "Simulator", path: "/simulator" },
-          ]} />
-
-          {/* Investors */}
-          <NavDropdown label="Investors" icon="💼" color="#22c55e" isAdmin={isAdmin} items={[
-            { emoji: "💰", label: "Investor Portal", path: "/investor-portal" },
-            { emoji: "📦", label: "Investor Package", path: "/investor-package" },
-            { emoji: "📜", label: "Term Sheets", path: "/term-sheet" },
-            { emoji: "🔒", label: "VDR Portal", path: "/vdr/:token", desc: "Investor data room" },
-            { emoji: "📊", label: "Valuation Dashboard", path: "/valuation", adminOnly: true },
-            { emoji: "🎯", label: "Acquisition CRM", path: "/acquisition-crm", adminOnly: true },
-            { emoji: "💹", label: "Investor CRM", path: "/investor-crm", adminOnly: true },
-            { emoji: "🚀", label: "Vision Fund Pitch", path: "/vision-fund-pitch" },
-            { emoji: "📋", label: "Pitch Script", path: "/pitch-script" },
-          ]} />
-
-          {/* Courses & Learning */}
-          <NavDropdown label="Learn" icon="📚" color="#f97316" isAdmin={isAdmin} items={[
-            { emoji: "📚", label: "Course Catalog", path: "/courses" },
-            { emoji: "🎓", label: "My Learning", path: "/my-learning" },
-            { emoji: "📖", label: "Course Plan", path: "/course-plan" },
-            { emoji: "📥", label: "Download Center", path: "/download-center" },
-            { emoji: "🔰", label: "Beginner Manual", path: "/beginner-manual" },
-            { emoji: "📖", label: "Glossary", path: "/glossary" },
-            { emoji: "🛠️", label: "Troubleshooting", path: "/troubleshooting" },
-          ]} />
-
-          {/* Health */}
-          <NavDropdown label="Health" icon="💚" color="#10b981" isAdmin={isAdmin} items={[
-            { emoji: "☠️", label: "EMF Impact", path: "/emf-impact" },
-            { emoji: "📊", label: "EMF Log", path: "/emf-log" },
-            { emoji: "📈", label: "Health Analytics", path: "/health-analytics" },
-            { emoji: "🌿", label: "Heavy Metal Detox", path: "/heavy-metal-detox" },
-            { emoji: "🛒", label: "EMF Protection Shop", path: "/emf-shop" },
-          ]} />
-
-          {/* Account */}
-          <NavDropdown label="Account" icon="👤" color="#94a3b8" isAdmin={isAdmin} items={[
-            { emoji: "👤", label: "My Account", path: "/account" },
-            { emoji: "📊", label: "Member Portal", path: "/member-portal" },
-            { emoji: "💳", label: "Pricing & Plans", path: "/pricing" },
-            { emoji: "✨", label: "Social Profile Gen", path: "/social-profile-gen" },
-          ]} />
-
-          {isAdmin && (
-            <>
-              <div className="w-px h-5 bg-gray-700 flex-shrink-0" />
-              <NavDropdown label="Admin" icon="🔒" color="#eab308" isAdmin={isAdmin} items={[
-                { emoji: "🏠", label: "Admin Hub", path: "/admin" },
-                { emoji: "📊", label: "Marketing", path: "/marketing" },
-                { emoji: "🚀", label: "Social Command", path: "/social-command" },
-                { emoji: "👥", label: "Beta Applications", path: "/admin-beta" },
-                { emoji: "🔒", label: "VDR Admin", path: "/vdr-admin" },
-                { emoji: "📋", label: "TRZ Patent PPA", path: "/trz-patent" },
-                { emoji: "🔧", label: "Build Tracker", path: "/build-tracker" },
-                { emoji: "🛍️", label: "Shop Orders", path: "/admin-shop-orders" },
-              ]} />
-            </>
-          )}
-
-          {view === "graph" && (
-            <>
-              <div className="w-px h-5 bg-gray-700 flex-shrink-0" />
-              <div className="flex gap-2 flex-shrink-0">
-                {groups.map(g => (
-                  <div key={g} className="flex items-center gap-1">
-                    <span className="w-2 h-2 rounded-full" style={{ backgroundColor: groupColors[g] }} />
-                    <span className="text-gray-500 text-[10px] capitalize">{g}</span>
-                  </div>
-                ))}
+      {/* Graph tool strip */}
+      <div className="flex items-center gap-2 px-4 py-1.5 bg-gray-900/60 border-t border-gray-800/40 flex-shrink-0">
+        <button
+          onClick={() => setShowTopConcepts(s => !s)}
+          className={`flex items-center gap-1.5 px-3 py-1 rounded-lg border text-xs font-semibold transition-all ${showTopConcepts ? "bg-yellow-700/40 border-yellow-500 text-yellow-200" : "bg-transparent border-yellow-800/40 text-yellow-500 hover:bg-yellow-900/30"}`}
+        >📊 Top Concepts</button>
+        <button
+          onClick={() => { setClusterMode(m => { if (m) setClusterNodes([]); return !m; }); setShowSearch(false); setShowDiagnostics(false); }}
+          className={`flex items-center gap-1.5 px-3 py-1 rounded-lg border text-xs font-semibold transition-all ${clusterMode ? "bg-indigo-700/40 border-indigo-500 text-indigo-200" : "bg-transparent border-indigo-800/40 text-indigo-400 hover:bg-indigo-900/30"}`}
+        >🔗 {clusterMode ? `Cluster (${clusterNodes.length})` : "Cluster"}</button>
+        <button
+          onClick={() => { setShowDiagnostics(s => !s); setShowSearch(false); }}
+          className="flex items-center gap-1.5 px-3 py-1 rounded-lg border border-purple-800/40 text-purple-400 text-xs font-semibold hover:bg-purple-900/30 transition-all"
+        >🔬 Diagnostics</button>
+        {view === "graph" && (
+          <div className="flex gap-3 ml-auto">
+            {groups.map(g => (
+              <div key={g} className="flex items-center gap-1">
+                <span className="w-2 h-2 rounded-full" style={{ backgroundColor: groupColors[g] }} />
+                <span className="text-gray-600 text-[10px] capitalize">{g}</span>
               </div>
-            </>
-          )}
-        </div>
+            ))}
+          </div>
+        )}
+      </div>
+      <MainNav isAdmin={isAdmin} />
       </div>
 
       {/* Content area */}
