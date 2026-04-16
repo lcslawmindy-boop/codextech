@@ -70,7 +70,7 @@ const MODES = {
   },
 };
 
-export default function ConceptNetworkGraph({ onNodeClick, selectedNodeId, graphMode = "analyst" }) {
+export default function ConceptNetworkGraph({ onNodeClick, selectedNodeId, graphMode = "analyst", onLinkClick }) {
   const svgRef = useRef(null);
   const simRef = useRef(null);
 
@@ -238,8 +238,12 @@ export default function ConceptNetworkGraph({ onNodeClick, selectedNodeId, graph
       .attr("stroke", "#000").attr("stroke-width", 2.5)
       .attr("stroke-linejoin", "round").attr("paint-order", "stroke")
       .attr("text-anchor", "middle")
-      .attr("pointer-events", "none")
-      .text(d => d.label);
+      .style("cursor", "pointer")
+      .text(d => d.label)
+      .on("click", (e, d) => {
+        e.stopPropagation();
+        if (onLinkClick) onLinkClick(d);
+      });
 
     // Raise link group to front so it renders over nodes without breaking
     linkGroup.raise();

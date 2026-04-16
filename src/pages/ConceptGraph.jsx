@@ -19,6 +19,7 @@ export default function ConceptGraph() {
     base44.auth.me().then(u => setIsAdmin(u?.role === 'admin')).catch(() => {});
   }, []);
   const [selectedNode, setSelectedNode] = useState(null);
+  const [selectedLink, setSelectedLink] = useState(null);
   const [showSearch, setShowSearch] = useState(false);
   const [showDiagnostics, setShowDiagnostics] = useState(false);
   const [clusterMode, setClusterMode] = useState(false);
@@ -189,9 +190,24 @@ export default function ConceptGraph() {
                 onNodeClick={handleNodeClick}
                 selectedNodeId={selectedNode?.id}
                 graphMode={graphMode}
+                onLinkClick={setSelectedLink}
               />
             </div>
             <NodePanel node={selectedNode} onClose={() => setSelectedNode(null)} />
+            {selectedLink && (
+              <div className="absolute top-4 right-4 w-80 bg-gray-900 border border-yellow-800/60 rounded-xl shadow-2xl z-20 p-4 flex flex-col gap-3">
+                <div className="flex items-start justify-between">
+                  <div>
+                    <h3 className="text-white font-bold text-sm">Relationship: <span className="text-yellow-400">{selectedLink.label}</span></h3>
+                    <p className="text-gray-500 text-xs mt-1">Connection between concepts</p>
+                  </div>
+                  <button onClick={() => setSelectedLink(null)} className="text-gray-500 hover:text-white text-lg flex-shrink-0">×</button>
+                </div>
+                <p className="text-gray-400 text-xs leading-relaxed">
+                  This link represents a significant relationship in Bearden's theoretical framework. Click the connected nodes to explore how these concepts relate to the broader research network.
+                </p>
+              </div>
+            )}
             {showTopConcepts && (
               <TopConceptsPanel
                 onClose={() => setShowTopConcepts(false)}
