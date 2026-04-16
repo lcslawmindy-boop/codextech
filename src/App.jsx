@@ -26,6 +26,7 @@ import InventionPlans from './pages/InventionPlans';
 import EMFImpact from './pages/EMFImpact';
 import ScalarEMLab from './pages/ScalarEMLab';
 import PatentDraftingTool from './pages/PatentDraftingTool';
+import PatentClaimsGenerator from './pages/PatentClaimsGenerator';
 import TimelinePitchDeck from './pages/TimelinePitchDeck';
 import PriorArtArchive from './pages/PriorArtArchive';
 import InvestorPortal from './pages/InvestorPortal';
@@ -168,6 +169,7 @@ const AuthenticatedApp = () => {
           <Route path="/emf-impact" element={<EMFImpact />} />
           <Route path="/scalar-lab" element={<ScalarEMLab />} />
           <Route path="/patent-tool" element={<PatentDraftingTool />} />
+          <Route path="/patent-claims-generator" element={<PatentClaimsGenerator />} />
           <Route path="/timeline-pitch" element={<TimelinePitchDeck />} />
           <Route path="/prior-art" element={<PriorArtArchive />} />
           <Route path="/investors" element={<InvestorPortal />} />

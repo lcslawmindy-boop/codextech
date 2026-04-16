@@ -1,0 +1,144 @@
+{
+  "name": "PatentClaim",
+  "type": "object",
+  "properties": {
+    "user_email": {
+      "type": "string"
+    },
+    "invention_title": {
+      "type": "string"
+    },
+    "technical_description": {
+      "type": "string"
+    },
+    "independent_claims": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "claim_number": {
+            "type": "integer"
+          },
+          "text": {
+            "type": "string"
+          },
+          "scope_breadth": {
+            "type": "string",
+            "enum": [
+              "broad",
+              "moderate",
+              "narrow"
+            ]
+          },
+          "claim_type": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "dependent_claims": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "claim_number": {
+            "type": "integer"
+          },
+          "depends_on": {
+            "type": "integer"
+          },
+          "text": {
+            "type": "string"
+          },
+          "additional_limitation": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "novelty_analysis": {
+      "type": "object",
+      "properties": {
+        "core_novelty": {
+          "type": "string"
+        },
+        "inventive_concept": {
+          "type": "string"
+        },
+        "non_obvious_features": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "prior_art_risks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "risk_level": {
+            "type": "string",
+            "enum": [
+              "critical",
+              "high",
+              "medium",
+              "low"
+            ]
+          },
+          "issue": {
+            "type": "string"
+          },
+          "affected_claims": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          },
+          "mitigation": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "upto_compliance_check": {
+      "type": "object",
+      "properties": {
+        "is_compliant": {
+          "type": "boolean"
+        },
+        "issues": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "recommendations": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "reviewed",
+        "filed",
+        "approved"
+      ],
+      "default": "draft"
+    },
+    "created_date": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "user_email",
+    "invention_title",
+    "technical_description"
+  ]
+}
