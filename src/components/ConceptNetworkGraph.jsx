@@ -38,7 +38,7 @@ const MODES = {
     linkOpacity: 0.85,
     linkWidth: 1.5,
     nodeStrokeWidth: 1.5,
-    showJolts: false,
+    showJolts: true,
     showWaves: false,
     showFlashes: false,
     glowBlur: 3,
@@ -174,23 +174,25 @@ export default function ConceptNetworkGraph({ onNodeClick, selectedNodeId, graph
       .attr("marker-end", "url(#arrow)");
 
     // ── Electric jolt layer ──
-    const joltColors = ["#7dd3fc","#c4b5fd","#86efac","#fde68a","#f9a8d4","#ffffff"];
+    const joltColorsElectric = ["#7dd3fc","#c4b5fd","#86efac","#fde68a","#f9a8d4","#ffffff"];
+    const joltColorsAnalyst  = ["#bae6fd","#e0f2fe","#93c5fd","#dbeafe","#bfdbfe","#ffffff"];
+    const joltColors = graphMode === "analyst" ? joltColorsAnalyst : joltColorsElectric;
     let joltData = [], joltEls = [];
     if (mode.showJolts) {
       const joltGroup = g.append("g").attr("class", "jolts");
       joltData = links.map((l, i) => ({
         link: l,
         color: joltColors[i % joltColors.length],
-        speed: 2.2 + (i % 5) * 0.6,
-        dashLen: 8 + (i % 4) * 5,
-        gapLen: 35 + (i % 6) * 12,
+        speed: graphMode === "analyst" ? 1.8 + (i % 5) * 0.4 : 2.2 + (i % 5) * 0.6,
+        dashLen: graphMode === "analyst" ? 12 + (i % 4) * 6 : 8 + (i % 4) * 5,
+        gapLen: graphMode === "analyst" ? 40 + (i % 6) * 14 : 35 + (i % 6) * 12,
         offset: Math.random() * 150,
       }));
       joltEls = joltData.map(jd => {
         const el = document.createElementNS("http://www.w3.org/2000/svg", "line");
         el.setAttribute("stroke", jd.color);
-        el.setAttribute("stroke-width", "1.8");
-        el.setAttribute("stroke-opacity", "0.85");
+        el.setAttribute("stroke-width", graphMode === "analyst" ? "1.4" : "1.8");
+        el.setAttribute("stroke-opacity", graphMode === "analyst" ? "0.6" : "0.85");
         el.setAttribute("stroke-linecap", "round");
         el.setAttribute("filter", "url(#joltGlow)");
         el.setAttribute("pointer-events", "none");
