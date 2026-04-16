@@ -420,6 +420,10 @@ export default function InvestorCRM() {
               <LayoutGrid size={12} /> Kanban
             </button>
           </div>
+          <Link to="/investor-outreach"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-purple-900/40 hover:bg-purple-800/60 border border-purple-700 text-purple-300 text-xs font-bold transition-all">
+            🎯 Outreach Pipeline
+          </Link>
           <Link to="/investor-package"
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-yellow-900/40 hover:bg-yellow-800/60 border border-yellow-700 text-yellow-300 text-xs font-bold transition-all">
             💼 Full Package
