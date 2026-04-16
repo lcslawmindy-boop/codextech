@@ -14,13 +14,6 @@ export default function NodePanel({ node, onClose }) {
 
   const handleSave = async () => {
     setSaving(true);
-    await base44.entities.ResearchActivity.create({
-      type: "saved_node",
-      node_id: node.id,
-      node_label: node.label,
-      node_group: node.group,
-      node_description: node.description,
-    });
     setSaved(true);
     setSaving(false);
   };
@@ -32,14 +25,6 @@ export default function NodePanel({ node, onClose }) {
       prompt: `You are a scholarly assistant analyzing the theoretical work of Lt. Col. Thomas E. Bearden. Synthesize the following text fragments about "${node.label}" into a concise, readable 3-4 sentence overview. Be accurate, neutral, and informative. Do not add opinions or judgments.\n\nFragments:\n${node.fragments.map((f, i) => `${i + 1}. ${f}`).join("\n")}`,
     });
     setSummary(result);
-    // Track summary
-    await base44.entities.ResearchActivity.create({
-      type: "ai_summary",
-      node_id: node.id,
-      node_label: node.label,
-      node_group: node.group,
-      summary_text: result,
-    });
     setLoadingSummary(false);
   };
 
