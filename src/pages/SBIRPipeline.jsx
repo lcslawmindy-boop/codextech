@@ -206,6 +206,10 @@ Be specific, technical, and quantifiable. Every section should be submission-rea
           className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-bold text-blue-400 hover:bg-blue-950/20 transition-colors">
           ℹ️ What is SBIR?
         </button>
+        <Link to="/zarp-acquisition"
+          className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-bold text-yellow-400 hover:bg-yellow-950/20 transition-colors">
+          📦 ZARP Acquisition Package
+        </Link>
       </div>
 
       {/* SBIR Explainer Modal */}
