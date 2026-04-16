@@ -152,7 +152,7 @@ export default function ConceptGraph() {
       <div className="flex-1 relative overflow-hidden">
         {/* ZARP logo background */}
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-15 z-0">
-          <img src="https://media.base44.com/images/public/69ccefebfea78b23498c66a8/a90918e3c_ZARPlogo.png" alt="ZARP" className="w-2/3 h-2/3 object-contain" />
+          <img src="https://media.base44.com/images/public/69ccefebfea78b23498c66a8/a90918e3c_ZARPlogo.png" alt="ZARP" className="w-screen h-screen object-contain" />
         </div>
 
         {view === "business" ? (
