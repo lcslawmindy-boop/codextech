@@ -175,27 +175,55 @@ export default function ConceptNetworkGraph({ onNodeClick, selectedNodeId }) {
       .attr("class", "line-bloom")
       .attr("stroke", "#ffffff")
       .attr("stroke-width", 2.5)
-      .attr("stroke-opacity", 0.25)
+      .attr("stroke-opacity", 0.2)
       .attr("filter", "url(#lineGlowWhite)");
 
-    // ── Core bright white line ──
+    // ── Core bright white line (base, static) ──
     const link = g.append("g").selectAll("line.line-core")
       .data(links).enter().append("line")
       .attr("class", "line-core")
       .attr("stroke", "#ffffff")
-      .attr("stroke-width", 1.2)
-      .attr("stroke-opacity", 0.9)
+      .attr("stroke-width", 1.0)
+      .attr("stroke-opacity", 0.45)
       .attr("filter", "url(#lineGlowWhite)")
       .attr("marker-end", "url(#arrow)");
+
+    // ── Electric jolt layer — animated dashes racing along each link ──
+    // We use <path> elements (updated each tick) so we can animate stroke-dashoffset
+    const joltColors = ["#ffffff","#a5f3fc","#d8b4fe","#86efac","#fde68a","#f9a8d4"];
+    const joltGroup = g.append("g").attr("class", "jolts");
+    const joltData = links.map((l, i) => ({
+      link: l,
+      color: joltColors[i % joltColors.length],
+      speed: 2.5 + (i % 5) * 0.8,
+      dashLen: 10 + (i % 4) * 6,
+      gapLen: 30 + (i % 6) * 14,
+      offset: Math.random() * 200,
+    }));
+    const joltEls = joltData.map((jd) => {
+      const el = document.createElementNS("http://www.w3.org/2000/svg", "line");
+      el.setAttribute("stroke", jd.color);
+      el.setAttribute("stroke-width", "2.2");
+      el.setAttribute("stroke-opacity", "0.9");
+      el.setAttribute("stroke-linecap", "round");
+      el.setAttribute("filter", "url(#lineGlowWhite)");
+      el.setAttribute("pointer-events", "none");
+      el.setAttribute("stroke-dasharray", `${jd.dashLen} ${jd.gapLen}`);
+      joltGroup.node().appendChild(el);
+      return el;
+    });
 
     // ── Link labels ──
     const linkLabel = g.append("g").selectAll("text.linklabel")
       .data(links).enter().append("text")
       .attr("class", "linklabel")
-      .attr("font-size", 10).attr("font-weight", "600")
-      .attr("fill", "#94a3b8").attr("fill-opacity", 0)
+      .attr("font-size", 11).attr("font-weight", "800")
+      .attr("fill", "#ffffff").attr("fill-opacity", 0)
+      .attr("stroke", "#000000").attr("stroke-width", 2.5)
+      .attr("stroke-linejoin", "round").attr("paint-order", "stroke")
       .attr("text-anchor", "middle")
       .attr("pointer-events", "none")
+      .attr("filter", "url(#glow-white)")
       .text(d => d.label);
 
     // ── Node groups ──
@@ -236,6 +264,17 @@ export default function ConceptNetworkGraph({ onNodeClick, selectedNodeId }) {
         d3.select(this)
           .transition().duration(200)
           .attr("stroke-width", 2.5);
+        // Brighten group label on hover
+        d3.select(this.parentNode).select(".group-label")
+          .transition().duration(150)
+          .attr("fill-opacity", 1)
+          .attr("font-size", 10);
+        // Brighten node labels
+        d3.select(this.parentNode).selectAll(".lbl-fill")
+          .transition().duration(150)
+          .attr("fill", "#ffffff")
+          .attr("filter", "url(#glow-white)");
+
         linkLabel.transition().duration(150)
           .attr("fill-opacity", l => {
             const src = typeof l.source === 'object' ? l.source.id : l.source;
@@ -269,6 +308,17 @@ export default function ConceptNetworkGraph({ onNodeClick, selectedNodeId }) {
         d3.select(this)
           .transition().duration(300)
           .attr("stroke-width", d.id === selectedNodeId ? 3 : 1.5);
+        // Restore group label
+        d3.select(this.parentNode).select(".group-label")
+          .transition().duration(300)
+          .attr("fill-opacity", 0.75)
+          .attr("font-size", 9);
+        // Restore node labels
+        d3.select(this.parentNode).selectAll(".lbl-fill")
+          .transition().duration(300)
+          .attr("fill", "#f8fafc")
+          .attr("filter", null);
+
         linkLabel.transition().duration(200).attr("fill-opacity", 0);
         link.transition().duration(200)
           .attr("stroke-opacity", 0.9)
@@ -345,13 +395,17 @@ export default function ConceptNetworkGraph({ onNodeClick, selectedNodeId }) {
 
     // ── Group label below node ──
     node.append("text")
+      .attr("class", "group-label")
       .attr("text-anchor", "middle")
-      .attr("y", d => nodeRadius(d) + 15)
-      .attr("font-size", 8)
-      .attr("font-weight", "700")
-      .attr("letter-spacing", "0.08em")
+      .attr("y", d => nodeRadius(d) + 16)
+      .attr("font-size", 9)
+      .attr("font-weight", "900")
+      .attr("letter-spacing", "0.10em")
       .attr("fill", d => groupColors[d.group])
-      .attr("fill-opacity", 0.6)
+      .attr("fill-opacity", 0.75)
+      .attr("stroke", "#000")
+      .attr("stroke-width", 1.5)
+      .attr("paint-order", "stroke")
       .attr("pointer-events", "none")
       .text(d => d.group.toUpperCase());
 
@@ -413,6 +467,13 @@ export default function ConceptNetworkGraph({ onNodeClick, selectedNodeId }) {
     // ── Combined RAF ──
     let rafId2;
     const animateExtras = () => {
+      // Electric jolts — animate dash offset along each link
+      for (let i = 0; i < joltData.length; i++) {
+        const jd = joltData[i];
+        jd.offset += jd.speed;
+        joltEls[i].setAttribute("stroke-dashoffset", -jd.offset);
+      }
+
       // Scalar waves
       for (let i = 0; i < waveData.length; i++) {
         const w = waveData[i];
@@ -480,6 +541,17 @@ export default function ConceptNetworkGraph({ onNodeClick, selectedNodeId }) {
         .attr("y1", d => d.source?.y ?? 0)
         .attr("x2", d => d.target?.x ?? 0)
         .attr("y2", d => d.target?.y ?? 0);
+
+      // Update jolt positions
+      for (let i = 0; i < joltData.length; i++) {
+        const l = joltData[i].link;
+        const sx = l.source?.x ?? 0, sy = l.source?.y ?? 0;
+        const tx = l.target?.x ?? 0, ty = l.target?.y ?? 0;
+        joltEls[i].setAttribute("x1", sx);
+        joltEls[i].setAttribute("y1", sy);
+        joltEls[i].setAttribute("x2", tx);
+        joltEls[i].setAttribute("y2", ty);
+      }
 
       linkLabel
         .attr("x", d => (d.source.x + d.target.x) / 2)
