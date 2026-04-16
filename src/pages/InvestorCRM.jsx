@@ -458,22 +458,22 @@ export default function InvestorCRM() {
 
       <div className={`flex-1 overflow-y-auto p-5 ${view === "kanban" ? "max-w-full" : "max-w-5xl"} mx-auto w-full`}>
         {/* Pre-Outreach Fit Scores */}
-        {fitScores && (
+        {fitScores && fitScores.summary && (
           <div className="mb-6 space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
               <div className="bg-green-950/20 border border-green-800/50 rounded-2xl p-4">
                 <p className="text-green-400 text-xs font-black uppercase tracking-widest mb-1">Excellent Fit</p>
-                <p className="text-white font-black text-2xl">{fitScores.summary.hot_prospects}</p>
+                <p className="text-white font-black text-2xl">{fitScores.summary?.hot_prospects || 0}</p>
                 <p className="text-gray-600 text-xs mt-1">Score 75+</p>
               </div>
               <div className="bg-yellow-950/20 border border-yellow-800/50 rounded-2xl p-4">
                 <p className="text-yellow-400 text-xs font-black uppercase tracking-widest mb-1">Good Fit</p>
-                <p className="text-white font-black text-2xl">{fitScores.summary.warm_leads}</p>
+                <p className="text-white font-black text-2xl">{fitScores.summary?.warm_leads || 0}</p>
                 <p className="text-gray-600 text-xs mt-1">Score 50-74</p>
               </div>
               <div className="bg-gray-800/50 border border-gray-700 rounded-2xl p-4">
                 <p className="text-gray-400 text-xs font-black uppercase tracking-widest mb-1">Lower Priority</p>
-                <p className="text-white font-black text-2xl">{fitScores.summary.cold_leads}</p>
+                <p className="text-white font-black text-2xl">{fitScores.summary?.cold_leads || 0}</p>
                 <p className="text-gray-600 text-xs mt-1">Score 0-49</p>
               </div>
             </div>
@@ -495,7 +495,7 @@ export default function InvestorCRM() {
                     </tr>
                   </thead>
                   <tbody>
-                    {fitScores.scored.map((inv) => (
+                    {fitScores.scored && fitScores.scored.length > 0 ? fitScores.scored.map((inv) => (
                       <tr key={inv.investor_id} className="border-b border-gray-800 hover:bg-gray-800/30 transition-colors">
                         <td className="px-4 py-3 text-sm font-bold text-white">{inv.investor_name}</td>
                         <td className="px-4 py-3 text-xs text-gray-500 uppercase">{inv.investor_type}</td>
@@ -522,7 +522,11 @@ export default function InvestorCRM() {
                           </span>
                         </td>
                       </tr>
-                    ))}
+                    )) : (
+                      <tr>
+                        <td colSpan="5" className="px-4 py-3 text-center text-gray-500 text-xs">No investors to score yet</td>
+                      </tr>
+                    )}
                   </tbody>
                 </table>
               </div>
