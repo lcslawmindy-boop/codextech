@@ -25,6 +25,7 @@ export default function ConceptGraph() {
   const [clusterNodes, setClusterNodes] = useState([]);
   const [view, setView] = useState("graph");
   const [showTopConcepts, setShowTopConcepts] = useState(false);
+  const [graphMode, setGraphMode] = useState("analyst");
 
   const groups = [...new Set(nodes.map(n => n.group))];
 
@@ -104,6 +105,23 @@ export default function ConceptGraph() {
       </div>
       {/* Graph tool strip */}
       <div className="flex items-center gap-2 px-4 py-1.5 bg-gray-900/60 border-t border-gray-800/40 flex-shrink-0">
+        {/* Graph mode switcher */}
+        <div className="flex items-center bg-gray-900 border border-gray-700 rounded-lg p-0.5 gap-0.5 mr-2">
+          {[
+            { id: "analyst", label: "⬡ ANALYST", title: "Clean government/physics style" },
+            { id: "electric", label: "⚡ ELECTRIC", title: "Animated current jolts on links" },
+            { id: "research", label: "〰 RESEARCH", title: "Subtle scalar wave pulses" },
+          ].map(m => (
+            <button key={m.id} title={m.title}
+              onClick={() => setGraphMode(m.id)}
+              className={`px-3 py-1 rounded text-xs font-bold tracking-wide transition-all ${
+                graphMode === m.id
+                  ? "bg-gray-700 text-white shadow-inner"
+                  : "text-gray-500 hover:text-gray-300"
+              }`}
+            >{m.label}</button>
+          ))}
+        </div>
         <button
           onClick={() => setShowTopConcepts(s => !s)}
           className={`flex items-center gap-1.5 px-3 py-1 rounded-lg border text-xs font-semibold transition-all ${showTopConcepts ? "bg-yellow-700/40 border-yellow-500 text-yellow-200" : "bg-transparent border-yellow-800/40 text-yellow-500 hover:bg-yellow-900/30"}`}
@@ -163,6 +181,7 @@ export default function ConceptGraph() {
             <ConceptNetworkGraph
               onNodeClick={handleNodeClick}
               selectedNodeId={selectedNode?.id}
+              graphMode={graphMode}
             />
             <NodePanel node={selectedNode} onClose={() => setSelectedNode(null)} />
             {showTopConcepts && (

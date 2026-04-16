@@ -18,7 +18,6 @@ function wrapLabel(label, maxChars = 13) {
   return lines.slice(0, 3);
 }
 
-// Count connections per node for sizing
 function getNodeDegrees(nodes, links) {
   const deg = {};
   nodes.forEach(n => { deg[n.id] = 0; });
@@ -31,11 +30,52 @@ function getNodeDegrees(nodes, links) {
   return deg;
 }
 
-export default function ConceptNetworkGraph({ onNodeClick, selectedNodeId }) {
+// Mode configs
+const MODES = {
+  analyst: {
+    bg: "#080d14",
+    linkColor: "#4a90c4",
+    linkOpacity: 0.55,
+    linkWidth: 1.2,
+    nodeStrokeWidth: 1.5,
+    showJolts: false,
+    showWaves: false,
+    showFlashes: false,
+    glowBlur: 3,
+    label: "ANALYST",
+  },
+  electric: {
+    bg: "#07090f",
+    linkColor: "#ffffff",
+    linkOpacity: 0.35,
+    linkWidth: 1.0,
+    nodeStrokeWidth: 1.5,
+    showJolts: true,
+    showWaves: false,
+    showFlashes: false,
+    glowBlur: 5,
+    label: "ELECTRIC",
+  },
+  research: {
+    bg: "#060b0f",
+    linkColor: "#94a3b8",
+    linkOpacity: 0.4,
+    linkWidth: 1.0,
+    nodeStrokeWidth: 1.5,
+    showJolts: false,
+    showWaves: true,
+    showFlashes: false,
+    glowBlur: 4,
+    label: "RESEARCH",
+  },
+};
+
+export default function ConceptNetworkGraph({ onNodeClick, selectedNodeId, graphMode = "analyst" }) {
   const svgRef = useRef(null);
   const simRef = useRef(null);
 
   useEffect(() => {
+    const mode = MODES[graphMode] || MODES.analyst;
     const container = svgRef.current.parentElement;
     const width = container.clientWidth;
     const height = container.clientHeight;
@@ -52,35 +92,19 @@ export default function ConceptNetworkGraph({ onNodeClick, selectedNodeId }) {
     Object.entries(groupColors).forEach(([group, color]) => {
       const grad = defs.append("radialGradient")
         .attr("id", `grad-${group}`)
-        .attr("cx", "35%").attr("cy", "35%")
-        .attr("r", "65%");
-      grad.append("stop").attr("offset", "0%").attr("stop-color", color).attr("stop-opacity", 0.65);
-      grad.append("stop").attr("offset", "100%").attr("stop-color", color).attr("stop-opacity", 0.12);
-
-      const gradSelected = defs.append("radialGradient")
-        .attr("id", `grad-sel-${group}`)
-        .attr("cx", "35%").attr("cy", "35%")
-        .attr("r", "65%");
-      gradSelected.append("stop").attr("offset", "0%").attr("stop-color", "#fff").attr("stop-opacity", 0.25);
-      gradSelected.append("stop").attr("offset", "100%").attr("stop-color", color).attr("stop-opacity", 0.9);
+        .attr("cx", "35%").attr("cy", "35%").attr("r", "65%");
+      grad.append("stop").attr("offset", "0%").attr("stop-color", color).attr("stop-opacity", 0.55);
+      grad.append("stop").attr("offset", "100%").attr("stop-color", color).attr("stop-opacity", 0.08);
     });
 
     // ── Arrow marker ──
     defs.append("marker")
       .attr("id", "arrow")
       .attr("viewBox", "0 -4 8 8")
-      .attr("refX", 42).attr("refY", 0)
-      .attr("markerWidth", 4).attr("markerHeight", 4)
+      .attr("refX", 44).attr("refY", 0)
+      .attr("markerWidth", 5).attr("markerHeight", 5)
       .attr("orient", "auto")
-      .append("path").attr("d", "M0,-4L8,0L0,4").attr("fill", "#475569");
-
-    defs.append("marker")
-      .attr("id", "arrow-hover")
-      .attr("viewBox", "0 -4 8 8")
-      .attr("refX", 42).attr("refY", 0)
-      .attr("markerWidth", 4).attr("markerHeight", 4)
-      .attr("orient", "auto")
-      .append("path").attr("d", "M0,-4L8,0L0,4").attr("fill", "#93c5fd");
+      .append("path").attr("d", "M0,-3L7,0L0,3").attr("fill", "#475569").attr("fill-opacity", 0.7);
 
     // ── Glow filters ──
     const makeGlow = (id, blur, color) => {
@@ -94,59 +118,37 @@ export default function ConceptNetworkGraph({ onNodeClick, selectedNodeId }) {
       fm.append("feMergeNode").attr("in", "SourceGraphic");
     };
 
-    makeGlow("glow-blue", 8, "#3b82f6");
-    makeGlow("glow-green", 8, "#22c55e");
-    makeGlow("glow-red", 8, "#ef4444");
-    makeGlow("glow-purple", 8, "#a855f7");
-    makeGlow("glow-amber", 8, "#f59e0b");
-    makeGlow("glow-cyan", 8, "#06b6d4");
-    makeGlow("glow-white", 6, "#ffffff");
+    makeGlow("glow-blue", mode.glowBlur, "#3b82f6");
+    makeGlow("glow-green", mode.glowBlur, "#22c55e");
+    makeGlow("glow-red", mode.glowBlur, "#ef4444");
+    makeGlow("glow-purple", mode.glowBlur, "#a855f7");
+    makeGlow("glow-amber", mode.glowBlur, "#f59e0b");
+    makeGlow("glow-cyan", mode.glowBlur, "#06b6d4");
+    makeGlow("glow-white", mode.glowBlur, "#ffffff");
+    makeGlow("glow-link", mode.glowBlur, mode.linkColor);
 
-    const glowMap = {
-      physics: "url(#glow-blue)", biology: "url(#glow-green)", weapons: "url(#glow-red)",
-      consciousness: "url(#glow-purple)", history: "url(#glow-amber)", philosophy: "url(#glow-cyan)"
-    };
+    // ── Jolt glow (electric mode only) ──
+    const joltFilter = defs.append("filter").attr("id", "joltGlow").attr("x", "-100%").attr("y", "-100%").attr("width", "300%").attr("height", "300%");
+    joltFilter.append("feGaussianBlur").attr("in", "SourceGraphic").attr("stdDeviation", "3").attr("result", "b");
+    const jfm = joltFilter.append("feMerge");
+    jfm.append("feMergeNode").attr("in", "b");
+    jfm.append("feMergeNode").attr("in", "SourceGraphic");
 
-    // ── Link glow (bright multi-layer) ──
-    const lf = defs.append("filter").attr("id", "linkGlow").attr("x", "-100%").attr("y", "-100%").attr("width", "300%").attr("height", "300%");
-    lf.append("feGaussianBlur").attr("in", "SourceGraphic").attr("stdDeviation", "4").attr("result", "blurred");
-    const lfm = lf.append("feMerge");
-    lfm.append("feMergeNode").attr("in", "blurred");
-    lfm.append("feMergeNode").attr("in", "blurred");
-    lfm.append("feMergeNode").attr("in", "blurred");
-    lfm.append("feMergeNode").attr("in", "SourceGraphic");
+    // ── Wave glow (research mode only) ──
+    const waveFilter = defs.append("filter").attr("id", "waveGlow").attr("x", "-80%").attr("y", "-80%").attr("width", "260%").attr("height", "260%");
+    waveFilter.append("feGaussianBlur").attr("in", "SourceGraphic").attr("stdDeviation", "3").attr("result", "wb");
+    const wfm = waveFilter.append("feMerge");
+    wfm.append("feMergeNode").attr("in", "wb");
+    wfm.append("feMergeNode").attr("in", "SourceGraphic");
 
-    // ── Link glow outer (wide halo) ──
-    const lf2 = defs.append("filter").attr("id", "linkGlowOuter").attr("x", "-150%").attr("y", "-150%").attr("width", "400%").attr("height", "400%");
-    lf2.append("feGaussianBlur").attr("in", "SourceGraphic").attr("stdDeviation", "7").attr("result", "blurred2");
-    const lfm2 = lf2.append("feMerge");
-    lfm2.append("feMergeNode").attr("in", "blurred2");
-    lfm2.append("feMergeNode").attr("in", "SourceGraphic");
-
-    // ── White neon 3D glow for lines — 3-layer: wide halo + mid bloom + tight core ──
-    const wlf1 = defs.append("filter").attr("id", "lineGlowWhite").attr("x", "-150%").attr("y", "-150%").attr("width", "400%").attr("height", "400%");
-    const wlf1Blur1 = wlf1.append("feGaussianBlur").attr("in", "SourceGraphic").attr("stdDeviation", "10").attr("result", "halo");
-    const wlf1Blur2 = wlf1.append("feGaussianBlur").attr("in", "SourceGraphic").attr("stdDeviation", "4").attr("result", "bloom");
-    const wlf1Blur3 = wlf1.append("feGaussianBlur").attr("in", "SourceGraphic").attr("stdDeviation", "1.5").attr("result", "core");
-    const wlf1m = wlf1.append("feMerge");
-    wlf1m.append("feMergeNode").attr("in", "halo");
-    wlf1m.append("feMergeNode").attr("in", "bloom");
-    wlf1m.append("feMergeNode").attr("in", "bloom");
-    wlf1m.append("feMergeNode").attr("in", "core");
-    wlf1m.append("feMergeNode").attr("in", "SourceGraphic");
-
-    // Colorful electric palette
-    const electricColors = ["#38bdf8","#a78bfa","#34d399","#fb923c","#f472b6","#facc15","#60a5fa","#4ade80"];
     const g = svg.append("g");
-
-    svg.call(d3.zoom().scaleExtent([0.15, 5]).on("zoom", e => g.attr("transform", e.transform)));
+    svg.call(d3.zoom().scaleExtent([0.1, 6]).on("zoom", e => g.attr("transform", e.transform)));
 
     const nodes = rawNodes.map(d => ({ ...d }));
     const links = rawLinks.map(d => ({ ...d }));
     const degrees = getNodeDegrees(nodes, links);
 
-    // Node radius based on degree (hub nodes are larger)
-    const minR = 30, maxR = 52;
+    const minR = 26, maxR = 46;
     const maxDeg = Math.max(...Object.values(degrees));
     const nodeRadius = d => minR + ((degrees[d.id] || 0) / maxDeg) * (maxR - minR);
 
@@ -154,76 +156,85 @@ export default function ConceptNetworkGraph({ onNodeClick, selectedNodeId }) {
       .force("link", d3.forceLink(links).id(d => d.id).distance(d => {
         const srcDeg = degrees[typeof d.source === 'object' ? d.source.id : d.source] || 0;
         const tgtDeg = degrees[typeof d.target === 'object' ? d.target.id : d.target] || 0;
-        return 180 + (srcDeg + tgtDeg) * 3;
+        return 190 + (srcDeg + tgtDeg) * 3.5;
       }))
-      .force("charge", d3.forceManyBody().strength(d => -900 - (degrees[d.id] || 0) * 25))
+      .force("charge", d3.forceManyBody().strength(d => -900 - (degrees[d.id] || 0) * 20))
       .force("center", d3.forceCenter(width / 2, height / 2))
-      .force("collision", d3.forceCollide(d => nodeRadius(d) + 20));
+      .force("collision", d3.forceCollide(d => nodeRadius(d) + 18));
 
-    // ── Wide white halo (outermost glow layer) ──
-    g.append("g").selectAll("line.line-halo")
+    // ── Links ──
+    const linkGroup = g.append("g");
+    const link = linkGroup.selectAll("line.link-line")
       .data(links).enter().append("line")
-      .attr("class", "line-halo")
-      .attr("stroke", "#ffffff")
-      .attr("stroke-width", 6)
-      .attr("stroke-opacity", 0.06)
-      .attr("filter", "url(#lineGlowWhite)");
-
-    // ── Mid neon bloom layer ──
-    g.append("g").selectAll("line.line-bloom")
-      .data(links).enter().append("line")
-      .attr("class", "line-bloom")
-      .attr("stroke", "#ffffff")
-      .attr("stroke-width", 2.5)
-      .attr("stroke-opacity", 0.2)
-      .attr("filter", "url(#lineGlowWhite)");
-
-    // ── Core bright white line (base, static) ──
-    const link = g.append("g").selectAll("line.line-core")
-      .data(links).enter().append("line")
-      .attr("class", "line-core")
-      .attr("stroke", "#ffffff")
-      .attr("stroke-width", 1.0)
-      .attr("stroke-opacity", 0.45)
-      .attr("filter", "url(#lineGlowWhite)")
+      .attr("class", "link-line")
+      .attr("stroke", mode.linkColor)
+      .attr("stroke-width", mode.linkWidth)
+      .attr("stroke-opacity", mode.linkOpacity)
+      .attr("filter", "url(#glow-link)")
       .attr("marker-end", "url(#arrow)");
 
-    // ── Electric jolt layer — animated dashes racing along each link ──
-    // We use <path> elements (updated each tick) so we can animate stroke-dashoffset
-    const joltColors = ["#ffffff","#a5f3fc","#d8b4fe","#86efac","#fde68a","#f9a8d4"];
-    const joltGroup = g.append("g").attr("class", "jolts");
-    const joltData = links.map((l, i) => ({
-      link: l,
-      color: joltColors[i % joltColors.length],
-      speed: 2.5 + (i % 5) * 0.8,
-      dashLen: 10 + (i % 4) * 6,
-      gapLen: 30 + (i % 6) * 14,
-      offset: Math.random() * 200,
-    }));
-    const joltEls = joltData.map((jd) => {
-      const el = document.createElementNS("http://www.w3.org/2000/svg", "line");
-      el.setAttribute("stroke", jd.color);
-      el.setAttribute("stroke-width", "2.2");
-      el.setAttribute("stroke-opacity", "0.9");
-      el.setAttribute("stroke-linecap", "round");
-      el.setAttribute("filter", "url(#lineGlowWhite)");
-      el.setAttribute("pointer-events", "none");
-      el.setAttribute("stroke-dasharray", `${jd.dashLen} ${jd.gapLen}`);
-      joltGroup.node().appendChild(el);
-      return el;
-    });
+    // ── Electric jolt layer ──
+    const joltColors = ["#7dd3fc","#c4b5fd","#86efac","#fde68a","#f9a8d4","#ffffff"];
+    let joltData = [], joltEls = [];
+    if (mode.showJolts) {
+      const joltGroup = g.append("g").attr("class", "jolts");
+      joltData = links.map((l, i) => ({
+        link: l,
+        color: joltColors[i % joltColors.length],
+        speed: 2.2 + (i % 5) * 0.6,
+        dashLen: 8 + (i % 4) * 5,
+        gapLen: 35 + (i % 6) * 12,
+        offset: Math.random() * 150,
+      }));
+      joltEls = joltData.map(jd => {
+        const el = document.createElementNS("http://www.w3.org/2000/svg", "line");
+        el.setAttribute("stroke", jd.color);
+        el.setAttribute("stroke-width", "1.8");
+        el.setAttribute("stroke-opacity", "0.85");
+        el.setAttribute("stroke-linecap", "round");
+        el.setAttribute("filter", "url(#joltGlow)");
+        el.setAttribute("pointer-events", "none");
+        el.setAttribute("stroke-dasharray", `${jd.dashLen} ${jd.gapLen}`);
+        joltGroup.node().appendChild(el);
+        return el;
+      });
+    }
+
+    // ── Scalar wave rings (research mode) ──
+    const waveColors = ["#38bdf8","#818cf8","#34d399","#fb923c","#f472b6"];
+    let waveData = [], waveEls = [];
+    if (mode.showWaves) {
+      const scalarGroup = g.append("g").attr("class", "scalar-waves");
+      const NUM_WAVES = 30;
+      waveData = Array.from({ length: NUM_WAVES }, (_, i) => ({
+        nodeIdx: Math.floor(Math.random() * nodes.length),
+        r: (i / NUM_WAVES) * 150,
+        maxR: 120 + Math.random() * 80,
+        speed: 0.8 + Math.random() * 0.8,
+        color: waveColors[i % waveColors.length],
+        strokeW: 0.8 + Math.random() * 0.7,
+      }));
+      waveEls = waveData.map(w => {
+        const el = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+        el.setAttribute("fill", "none");
+        el.setAttribute("stroke-width", w.strokeW);
+        el.setAttribute("filter", "url(#waveGlow)");
+        el.setAttribute("pointer-events", "none");
+        scalarGroup.node().appendChild(el);
+        return el;
+      });
+    }
 
     // ── Link labels ──
     const linkLabel = g.append("g").selectAll("text.linklabel")
       .data(links).enter().append("text")
       .attr("class", "linklabel")
-      .attr("font-size", 11).attr("font-weight", "800")
-      .attr("fill", "#ffffff").attr("fill-opacity", 0)
-      .attr("stroke", "#000000").attr("stroke-width", 2.5)
+      .attr("font-size", 10).attr("font-weight", "700")
+      .attr("fill", "#e2e8f0").attr("fill-opacity", 0)
+      .attr("stroke", "#000").attr("stroke-width", 2)
       .attr("stroke-linejoin", "round").attr("paint-order", "stroke")
       .attr("text-anchor", "middle")
       .attr("pointer-events", "none")
-      .attr("filter", "url(#glow-white)")
       .text(d => d.label);
 
     // ── Node groups ──
@@ -238,14 +249,14 @@ export default function ConceptNetworkGraph({ onNodeClick, selectedNodeId }) {
       )
       .on("click", (e, d) => { e.stopPropagation(); onNodeClick(d); });
 
-    // ── Outer ring (thin, colored) ──
+    // ── Outer ring ──
     node.append("circle")
       .attr("class", "ring")
-      .attr("r", d => nodeRadius(d) + 5)
+      .attr("r", d => nodeRadius(d) + 4)
       .attr("fill", "none")
       .attr("stroke", d => groupColors[d.group])
       .attr("stroke-width", 1)
-      .attr("stroke-opacity", 0.3)
+      .attr("stroke-opacity", 0.25)
       .attr("pointer-events", "none");
 
     // ── Main node circle ──
@@ -254,303 +265,149 @@ export default function ConceptNetworkGraph({ onNodeClick, selectedNodeId }) {
       .attr("r", d => nodeRadius(d))
       .attr("fill", d => `url(#grad-${d.group})`)
       .attr("stroke", d => groupColors[d.group])
-      .attr("stroke-width", 1.5)
+      .attr("stroke-width", mode.nodeStrokeWidth)
       .on("mouseenter", function(e, d) {
         const r = nodeRadius(d);
         d3.select(this.parentNode).select(".ring")
-          .transition().duration(200)
-          .attr("stroke-opacity", 0.7)
-          .attr("r", r + 9);
-        d3.select(this)
-          .transition().duration(200)
-          .attr("stroke-width", 2.5);
-        // Brighten group label on hover
+          .transition().duration(180).attr("stroke-opacity", 0.7).attr("r", r + 8);
+        d3.select(this).transition().duration(180).attr("stroke-width", 2.5);
         d3.select(this.parentNode).select(".group-label")
-          .transition().duration(150)
-          .attr("fill-opacity", 1)
-          .attr("font-size", 10);
-        // Brighten node labels
+          .transition().duration(150).attr("fill-opacity", 1);
         d3.select(this.parentNode).selectAll(".lbl-fill")
-          .transition().duration(150)
-          .attr("fill", "#ffffff")
-          .attr("filter", "url(#glow-white)");
-
+          .transition().duration(150).attr("fill", "#ffffff");
         linkLabel.transition().duration(150)
           .attr("fill-opacity", l => {
             const src = typeof l.source === 'object' ? l.source.id : l.source;
             const tgt = typeof l.target === 'object' ? l.target.id : l.target;
             return (src === d.id || tgt === d.id) ? 1 : 0;
           });
-        // Highlight connected links
         link.transition().duration(150)
           .attr("stroke-opacity", l => {
             const src = typeof l.source === 'object' ? l.source.id : l.source;
             const tgt = typeof l.target === 'object' ? l.target.id : l.target;
-            return (src === d.id || tgt === d.id) ? 1 : 0.15;
+            return (src === d.id || tgt === d.id) ? 1 : 0.1;
           })
           .attr("stroke", l => {
             const src = typeof l.source === 'object' ? l.source.id : l.source;
             const tgt = typeof l.target === 'object' ? l.target.id : l.target;
-            return (src === d.id || tgt === d.id) ? groupColors[d.group] : "#ffffff";
+            return (src === d.id || tgt === d.id) ? groupColors[d.group] : mode.linkColor;
           })
           .attr("stroke-width", l => {
             const src = typeof l.source === 'object' ? l.source.id : l.source;
             const tgt = typeof l.target === 'object' ? l.target.id : l.target;
-            return (src === d.id || tgt === d.id) ? 2.5 : 1.2;
+            return (src === d.id || tgt === d.id) ? 2 : mode.linkWidth;
           });
       })
       .on("mouseleave", function(e, d) {
         const r = nodeRadius(d);
         d3.select(this.parentNode).select(".ring")
-          .transition().duration(300)
-          .attr("stroke-opacity", d.id === selectedNodeId ? 0.8 : 0.3)
-          .attr("r", r + 5);
-        d3.select(this)
-          .transition().duration(300)
-          .attr("stroke-width", d.id === selectedNodeId ? 3 : 1.5);
-        // Restore group label
+          .transition().duration(300).attr("stroke-opacity", d.id === selectedNodeId ? 0.7 : 0.25).attr("r", r + 4);
+        d3.select(this).transition().duration(300).attr("stroke-width", d.id === selectedNodeId ? 2.5 : mode.nodeStrokeWidth);
         d3.select(this.parentNode).select(".group-label")
-          .transition().duration(300)
-          .attr("fill-opacity", 0.75)
-          .attr("font-size", 9);
-        // Restore node labels
+          .transition().duration(300).attr("fill-opacity", 0.6);
         d3.select(this.parentNode).selectAll(".lbl-fill")
-          .transition().duration(300)
-          .attr("fill", "#f8fafc")
-          .attr("filter", null);
-
+          .transition().duration(300).attr("fill", "#f1f5f9");
         linkLabel.transition().duration(200).attr("fill-opacity", 0);
         link.transition().duration(200)
-          .attr("stroke-opacity", 0.9)
-          .attr("stroke", "#ffffff")
-          .attr("stroke-width", 1.2);
+          .attr("stroke-opacity", mode.linkOpacity)
+          .attr("stroke", mode.linkColor)
+          .attr("stroke-width", mode.linkWidth);
       });
 
-    // ── Group color dot (top-right badge) ──
-    node.append("circle")
-      .attr("class", "badge-dot")
-      .attr("r", 4.5)
-      .attr("cx", d => nodeRadius(d) - 4)
-      .attr("cy", d => -(nodeRadius(d) - 4))
-      .attr("fill", d => groupColors[d.group])
-      .attr("stroke", "#0f172a")
-      .attr("stroke-width", 1.5)
-      .attr("pointer-events", "none");
-
-    // ── Node degree indicator (small arc) ──
+    // ── Node degree arc ──
     node.each(function(d) {
       const r = nodeRadius(d);
       const deg = degrees[d.id] || 0;
       const maxAngle = Math.PI * 2 * Math.min(deg / 15, 1);
-      const arc = d3.arc()
-        .innerRadius(r + 2).outerRadius(r + 6)
-        .startAngle(0).endAngle(maxAngle);
+      const arc = d3.arc().innerRadius(r + 2).outerRadius(r + 5).startAngle(0).endAngle(maxAngle);
       d3.select(this).append("path")
         .attr("d", arc())
         .attr("fill", groupColors[d.group])
-        .attr("fill-opacity", 0.5)
+        .attr("fill-opacity", 0.4)
         .attr("pointer-events", "none");
     });
 
-    // ── Multi-line labels ──
+    // ── Multi-line node labels ──
     node.each(function(d) {
       const lines = wrapLabel(d.label, 11);
-      const lineH = 14;
-      const r = nodeRadius(d);
+      const lineH = 13;
       const startY = -(lines.length - 1) * lineH / 2;
       const sel = d3.select(this);
       const color = groupColors[d.group];
-      const fontSize = lines.length > 2 ? 9.5 : lines.length === 2 ? 10.5 : 11;
+      const fontSize = lines.length > 2 ? 9 : lines.length === 2 ? 10 : 11;
 
-      // Shadow/glow layer
       lines.forEach((t, i) => {
-        sel.append("text")
-          .attr("class", "lbl-shadow")
-          .attr("text-anchor", "middle")
-          .attr("y", startY + i * lineH)
-          .attr("font-size", fontSize)
-          .attr("font-weight", "900")
-          .attr("fill", "none")
-          .attr("stroke", color)
-          .attr("stroke-width", 2.5)
-          .attr("stroke-linejoin", "round")
-          .attr("paint-order", "stroke")
-          .attr("pointer-events", "none")
-          .text(t);
+        sel.append("text").attr("class", "lbl-shadow")
+          .attr("text-anchor", "middle").attr("y", startY + i * lineH)
+          .attr("font-size", fontSize).attr("font-weight", "800")
+          .attr("fill", "none").attr("stroke", color).attr("stroke-width", 2)
+          .attr("stroke-linejoin", "round").attr("paint-order", "stroke")
+          .attr("pointer-events", "none").text(t);
       });
 
-      // White fill
       lines.forEach((t, i) => {
-        sel.append("text")
-          .attr("class", "lbl-fill")
-          .attr("text-anchor", "middle")
-          .attr("y", startY + i * lineH)
-          .attr("font-size", fontSize)
-          .attr("font-weight", "900")
-          .attr("fill", "#f8fafc")
-          .attr("pointer-events", "none")
-          .text(t);
+        sel.append("text").attr("class", "lbl-fill")
+          .attr("text-anchor", "middle").attr("y", startY + i * lineH)
+          .attr("font-size", fontSize).attr("font-weight", "800")
+          .attr("fill", "#f1f5f9").attr("pointer-events", "none").text(t);
       });
     });
 
-    // ── Group label below node ──
+    // ── Group subtitle ──
     node.append("text")
       .attr("class", "group-label")
       .attr("text-anchor", "middle")
-      .attr("y", d => nodeRadius(d) + 16)
-      .attr("font-size", 9)
-      .attr("font-weight", "900")
-      .attr("letter-spacing", "0.10em")
+      .attr("y", d => nodeRadius(d) + 15)
+      .attr("font-size", 8).attr("font-weight", "700")
+      .attr("letter-spacing", "0.09em")
       .attr("fill", d => groupColors[d.group])
-      .attr("fill-opacity", 0.75)
-      .attr("stroke", "#000")
-      .attr("stroke-width", 1.5)
+      .attr("fill-opacity", 0.6)
+      .attr("stroke", "#000").attr("stroke-width", 1.5)
       .attr("paint-order", "stroke")
       .attr("pointer-events", "none")
       .text(d => d.group.toUpperCase());
 
-    // ── Scalar wave rings pulsing from nodes — large, very visible ──
-    const scalarGroup = g.append("g").attr("class", "scalar-waves");
-    const NUM_WAVES = 80;
-    const waveData = Array.from({ length: NUM_WAVES }, (_, i) => ({
-      nodeIdx: Math.floor(Math.random() * nodes.length),
-      r: (i / NUM_WAVES) * 200,
-      maxR: 180 + Math.random() * 120,
-      speed: 1.2 + Math.random() * 1.8,
-      color: ["#ff0080","#00ffff","#ffe600","#00ff88","#bf5fff","#ff6600","#00bfff","#ff3399","#39ff14","#ff9500"][i % 10],
-      strokeW: 1.5 + Math.random() * 1.5,
-    }));
-
-    const waveEls = waveData.map(w => {
-      const el = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-      el.setAttribute("fill", "none");
-      el.setAttribute("stroke-width", w.strokeW);
-      el.setAttribute("filter", "url(#linkGlow)");
-      el.setAttribute("pointer-events", "none");
-      scalarGroup.node().appendChild(el);
-      return el;
-    });
-
-
-
-    // ── Light bulb flash bursts — explosive bright rings ──
-    const flashGroup = g.append("g").attr("class", "flashes");
-    const NUM_FLASHES = 25;
-    const flashData = Array.from({ length: NUM_FLASHES }, (_, i) => ({
-      nodeIdx: Math.floor(Math.random() * nodes.length),
-      timer: Math.floor((i / NUM_FLASHES) * 80),
-      interval: 40 + Math.floor(Math.random() * 80),
-      r: 0,
-      maxR: 70 + Math.random() * 80,
-      active: false,
-      color: ["#ffffff","#facc15","#38bdf8","#f472b6"][i % 4],
-    }));
-
-    // Each flash: a solid bright core + expanding ring
-    const flashEls = flashData.map(f => {
-      const ring = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-      ring.setAttribute("fill", "none");
-      ring.setAttribute("stroke-width", "3");
-      ring.setAttribute("filter", "url(#linkGlowOuter)");
-      ring.setAttribute("pointer-events", "none");
-      flashGroup.node().appendChild(ring);
-
-      const core = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-      core.setAttribute("r", "8");
-      core.setAttribute("filter", "url(#linkGlowOuter)");
-      core.setAttribute("pointer-events", "none");
-      flashGroup.node().appendChild(core);
-
-      return { ring, core };
-    });
-
-    // ── Combined RAF ──
-    let rafId2;
-    const animateExtras = () => {
-      // Electric jolts — animate dash offset along each link
-      for (let i = 0; i < joltData.length; i++) {
-        const jd = joltData[i];
-        jd.offset += jd.speed;
-        joltEls[i].setAttribute("stroke-dashoffset", -jd.offset);
-      }
-
-      // Scalar waves
-      for (let i = 0; i < waveData.length; i++) {
-        const w = waveData[i];
-        const nd = nodes[w.nodeIdx];
-        if (!nd?.x) continue;
-        w.r += w.speed;
-        if (w.r > w.maxR) {
-          w.r = 0;
-          w.nodeIdx = Math.floor(Math.random() * nodes.length);
-        }
-        const prog = w.r / w.maxR;
-        const op = Math.sin(prog * Math.PI) * 0.75; // bell curve — bright in middle
-        waveEls[i].setAttribute("cx", nd.x);
-        waveEls[i].setAttribute("cy", nd.y);
-        waveEls[i].setAttribute("r", w.r);
-        waveEls[i].setAttribute("stroke", w.color);
-        waveEls[i].setAttribute("stroke-opacity", op);
-        waveEls[i].setAttribute("stroke-dasharray", w.r > 60 ? `${8} ${10}` : "none");
-      }
-
-      // Flash bursts (light bulb explosions)
-      for (let i = 0; i < flashData.length; i++) {
-        const f = flashData[i];
-        const nd = nodes[f.nodeIdx];
-        if (!nd?.x) { f.timer--; continue; }
-        f.timer--;
-        if (f.timer <= 0 && !f.active) {
-          f.active = true;
-          f.r = 0;
-          f.timer = f.interval;
-          f.nodeIdx = Math.floor(Math.random() * nodes.length);
-        }
-        if (f.active) {
-          f.r += 4;
-          if (f.r >= f.maxR) { f.active = false; f.r = 0; }
-          const prog = f.r / f.maxR;
-          const ringOp = (1 - prog) * 1.0;
-          const coreOp = prog < 0.3 ? (prog / 0.3) : (1 - prog) * 1.5;
-
-          flashEls[i].ring.setAttribute("cx", nd.x);
-          flashEls[i].ring.setAttribute("cy", nd.y);
-          flashEls[i].ring.setAttribute("r", f.r);
-          flashEls[i].ring.setAttribute("stroke", f.color);
-          flashEls[i].ring.setAttribute("stroke-opacity", ringOp);
-
-          flashEls[i].core.setAttribute("cx", nd.x);
-          flashEls[i].core.setAttribute("cy", nd.y);
-          flashEls[i].core.setAttribute("fill", f.color);
-          flashEls[i].core.setAttribute("opacity", Math.min(1, coreOp));
-        } else {
-          flashEls[i].ring.setAttribute("stroke-opacity", 0);
-          flashEls[i].core.setAttribute("opacity", 0);
+    // ── RAF animation ──
+    let rafId;
+    const animate = () => {
+      if (mode.showJolts) {
+        for (let i = 0; i < joltData.length; i++) {
+          joltData[i].offset += joltData[i].speed;
+          joltEls[i].setAttribute("stroke-dashoffset", -joltData[i].offset);
         }
       }
-
-      rafId2 = requestAnimationFrame(animateExtras);
+      if (mode.showWaves) {
+        for (let i = 0; i < waveData.length; i++) {
+          const w = waveData[i];
+          const nd = nodes[w.nodeIdx];
+          if (!nd?.x) continue;
+          w.r += w.speed;
+          if (w.r > w.maxR) { w.r = 0; w.nodeIdx = Math.floor(Math.random() * nodes.length); }
+          const op = Math.sin((w.r / w.maxR) * Math.PI) * 0.45;
+          waveEls[i].setAttribute("cx", nd.x);
+          waveEls[i].setAttribute("cy", nd.y);
+          waveEls[i].setAttribute("r", w.r);
+          waveEls[i].setAttribute("stroke", w.color);
+          waveEls[i].setAttribute("stroke-opacity", op);
+        }
+      }
+      rafId = requestAnimationFrame(animate);
     };
-
-    setTimeout(() => { rafId2 = requestAnimationFrame(animateExtras); }, 600);
+    setTimeout(() => { rafId = requestAnimationFrame(animate); }, 400);
 
     // ── Tick ──
     simRef.current.on("tick", () => {
-      g.selectAll("line.line-halo, line.line-bloom, line.line-core")
-        .attr("x1", d => d.source?.x ?? 0)
-        .attr("y1", d => d.source?.y ?? 0)
-        .attr("x2", d => d.target?.x ?? 0)
-        .attr("y2", d => d.target?.y ?? 0);
+      link.attr("x1", d => d.source?.x ?? 0).attr("y1", d => d.source?.y ?? 0)
+          .attr("x2", d => d.target?.x ?? 0).attr("y2", d => d.target?.y ?? 0);
 
-      // Update jolt positions
-      for (let i = 0; i < joltData.length; i++) {
-        const l = joltData[i].link;
-        const sx = l.source?.x ?? 0, sy = l.source?.y ?? 0;
-        const tx = l.target?.x ?? 0, ty = l.target?.y ?? 0;
-        joltEls[i].setAttribute("x1", sx);
-        joltEls[i].setAttribute("y1", sy);
-        joltEls[i].setAttribute("x2", tx);
-        joltEls[i].setAttribute("y2", ty);
+      if (mode.showJolts) {
+        for (let i = 0; i < joltData.length; i++) {
+          const l = joltData[i].link;
+          joltEls[i].setAttribute("x1", l.source?.x ?? 0);
+          joltEls[i].setAttribute("y1", l.source?.y ?? 0);
+          joltEls[i].setAttribute("x2", l.target?.x ?? 0);
+          joltEls[i].setAttribute("y2", l.target?.y ?? 0);
+        }
       }
 
       linkLabel
@@ -562,14 +419,14 @@ export default function ConceptNetworkGraph({ onNodeClick, selectedNodeId }) {
 
     return () => {
       simRef.current?.stop();
-      if (rafId2) cancelAnimationFrame(rafId2);
+      if (rafId) cancelAnimationFrame(rafId);
     };
-  }, []);
+  }, [graphMode]);
 
-  // ── Update selected highlight ──
+  // ── Selected node highlight ──
   useEffect(() => {
     if (!svgRef.current) return;
-    const glowFilters = {
+    const glowMap = {
       physics: "url(#glow-blue)", biology: "url(#glow-green)", weapons: "url(#glow-red)",
       consciousness: "url(#glow-purple)", history: "url(#glow-amber)", philosophy: "url(#glow-cyan)"
     };
@@ -579,11 +436,11 @@ export default function ConceptNetworkGraph({ onNodeClick, selectedNodeId }) {
       const isSelected = d.id === selectedNodeId;
       const grp = d3.select(this);
       grp.select(".main-circle")
-        .attr("stroke-width", isSelected ? 3 : 1.5)
-        .attr("filter", isSelected ? (glowFilters[d.group] || null) : null);
+        .attr("stroke-width", isSelected ? 2.5 : 1.5)
+        .attr("filter", isSelected ? (glowMap[d.group] || null) : null);
       grp.select(".ring")
-        .attr("stroke-opacity", isSelected ? 0.85 : 0.3)
-        .attr("stroke-width", isSelected ? 2 : 1);
+        .attr("stroke-opacity", isSelected ? 0.75 : 0.25)
+        .attr("stroke-width", isSelected ? 1.5 : 1);
     });
   }, [selectedNodeId]);
 
