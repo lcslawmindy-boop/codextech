@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { ArrowLeft, Zap, Loader2, Copy, CheckCircle2, TrendingUp, Mail, Calendar, FileText, Clock, AlertTriangle } from "lucide-react";
+import { ArrowLeft, Zap, Loader2, Copy, CheckCircle2, TrendingUp, Mail, Calendar, FileText, Clock, AlertTriangle, HelpCircle } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import InvestorCRMDetailPanel from "@/components/InvestorCRMDetailPanel";
+import InvestorLikelihoodBreakdown from "@/components/InvestorLikelihoodBreakdown";
 
 const PIPELINE_STAGES = [
   { id: "prospect", label: "Prospect", icon: "🎯", color: "#6b7280" },
@@ -178,7 +179,7 @@ export default function InvestorOutreachWorkflow() {
                   </thead>
                   <tbody>
                     {ranked.map((inv, idx) => (
-                      <tr key={inv.investor_id} className="border-b border-gray-800 hover:bg-gray-800/30 transition-colors">
+                      <tr key={inv.investor_id} className="border-b border-gray-800 hover:bg-gray-800/30 transition-colors cursor-pointer" onClick={() => setSelectedInvestor(inv)}>
                         <td className="px-4 py-3 text-sm font-bold text-yellow-400">#{idx + 1}</td>
                         <td className="px-4 py-3 text-sm font-bold text-white">{inv.investor_name}</td>
                         <td className="px-4 py-3 text-sm text-gray-400">{inv.investor_org || "—"}</td>
@@ -206,7 +207,7 @@ export default function InvestorOutreachWorkflow() {
                             {inv.recommendation}
                           </span>
                         </td>
-                        <td className="px-4 py-3 text-center">
+                        <td className="px-4 py-3 text-center" onClick={e => e.stopPropagation()}>
                           <div className="flex items-center justify-center gap-1">
                             <button onClick={() => handleGenerateTemplate(inv, inv.current_stage)}
                               className="flex items-center gap-1 px-2 py-1 rounded-lg bg-blue-900/30 hover:bg-blue-800/40 text-blue-400 text-xs font-bold transition-all">
@@ -383,6 +384,20 @@ export default function InvestorOutreachWorkflow() {
                 <Copy size={14} /> Copy Full Email
               </button>
             </div>
+          </div>
+        )}
+
+        {/* Investor Breakdown Detail */}
+        {selectedInvestor && !template && (
+          <div className="bg-gray-900 border border-blue-800/50 rounded-2xl p-5">
+            <div className="flex items-center justify-between mb-4">
+              <div>
+                <h3 className="text-white font-bold text-base">{selectedInvestor.investor_name}</h3>
+                <p className="text-gray-500 text-xs">{selectedInvestor.investor_org}</p>
+              </div>
+              <button onClick={() => setSelectedInvestor(null)} className="text-gray-500 hover:text-white text-lg">×</button>
+            </div>
+            <InvestorLikelihoodBreakdown investor={selectedInvestor} expanded />
           </div>
         )}
 
