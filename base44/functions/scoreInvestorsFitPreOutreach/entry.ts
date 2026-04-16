@@ -10,19 +10,14 @@ Deno.serve(async (req) => {
     }
 
     const body = await req.json();
-    const { target_investment, equity_offered, sectors_of_interest } = body;
+    const { investors, target_investment, equity_offered, sectors_of_interest } = body;
 
-    if (!target_investment) {
-      return Response.json({ error: 'Missing target_investment' }, { status: 400 });
+    if (!target_investment || !investors) {
+      return Response.json({ error: 'Missing required fields' }, { status: 400 });
     }
 
-    // Fetch all investors for this user
-    const investors = await base44.entities.InvestorOutreach.filter({
-      user_email: user.email
-    });
-
-    if (!investors || investors.length === 0) {
-      return Response.json({ scored: [], total: 0 });
+    if (!Array.isArray(investors) || investors.length === 0) {
+      return Response.json({ scored: [], total: 0, summary: { hot_prospects: 0, warm_leads: 0, cold_leads: 0 } });
     }
 
     // Score each investor based on profile fit (no communication history needed)
