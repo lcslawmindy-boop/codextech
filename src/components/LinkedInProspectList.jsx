@@ -89,7 +89,7 @@ Context: I'm the founder of Zenith Apex Advanced Research Platform (ZARP) — bu
 
 Important links to include naturally in the message:
 - Beta access / preview: https://zenithapex.base44.app/beta-apply
-- NDA (must be signed to receive acquisition package): https://zenithapex.base44.app/terms
+- NDA via DocuSign (must be signed to receive acquisition package): https://na4.docusign.net/Member/PowerFormSigning.aspx?PowerFormId=ZARP-NDA&env=na4&acct=zenithapex
 
 Reason this person is relevant: ${prospect.why}
 
@@ -185,6 +185,14 @@ Requirements:
                   <a href={p.profile} target="_blank" rel="noopener noreferrer"
                     className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-800 hover:bg-blue-700 text-white text-xs font-bold transition-all">
                     💼 Open LinkedIn
+                  </a>
+                  <a href="https://zenithapex.base44.app/beta-apply" target="_blank" rel="noopener noreferrer"
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-green-900/40 hover:bg-green-800/60 border border-green-700 text-green-300 text-xs font-bold transition-all">
+                    🔬 Beta Access
+                  </a>
+                  <a href="https://na4.docusign.net/Member/PowerFormSigning.aspx?PowerFormId=ZARP-NDA&env=na4&acct=zenithapex" target="_blank" rel="noopener noreferrer"
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-yellow-900/40 hover:bg-yellow-800/60 border border-yellow-700 text-yellow-300 text-xs font-bold transition-all">
+                    📝 Sign NDA (DocuSign)
                   </a>
                   <button onClick={() => generateMessage(p)} disabled={genLoading === p.id}
                     className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-purple-900/40 hover:bg-purple-800/60 border border-purple-700 text-purple-300 text-xs font-bold transition-all disabled:opacity-50">
