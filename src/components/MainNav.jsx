@@ -96,7 +96,10 @@ const NAV_GROUPS = [
 export default function MainNav({ isAdmin }) {
   return (
     <div className="border-t border-gray-800/60 bg-gray-950/80">
-      <div className="flex gap-0 overflow-x-auto" style={{ scrollbarWidth: "none" }}>
+      <div
+        className="flex gap-0 overflow-x-auto"
+        style={{ scrollbarWidth: "thin", scrollbarColor: "#374151 transparent", WebkitOverflowScrolling: "touch" }}
+      >
         {NAV_GROUPS.map((group) => {
           const links = isAdmin ? group.links : group.links.filter(l => !l.adminOnly);
           if (links.length === 0) return null;
@@ -104,7 +107,7 @@ export default function MainNav({ isAdmin }) {
             <div key={group.label} className="flex-shrink-0 border-r border-gray-800/50 last:border-r-0">
               {/* Group label */}
               <div
-                className="px-3 py-1 text-[10px] font-black uppercase tracking-widest text-center"
+                className="px-3 py-1.5 text-[10px] font-black uppercase tracking-widest text-center"
                 style={{ color: group.color, backgroundColor: group.color + "10", borderBottom: `1px solid ${group.color}30` }}
               >
                 {group.label}
@@ -115,10 +118,10 @@ export default function MainNav({ isAdmin }) {
                   <Link
                     key={link.path}
                     to={link.path}
-                    className="flex flex-col items-center justify-center gap-0.5 px-2.5 py-1.5 hover:bg-gray-800 transition-colors min-w-[56px] border-r border-gray-800/30 last:border-r-0 group"
+                    className="flex flex-col items-center justify-center gap-1 px-3 py-2 hover:bg-gray-800 transition-colors min-w-[64px] border-r border-gray-800/30 last:border-r-0 group"
                   >
-                    <span className="text-sm leading-none">{link.emoji}</span>
-                    <span className="text-[9px] leading-tight text-gray-500 group-hover:text-gray-300 text-center whitespace-nowrap transition-colors">{link.label}</span>
+                    <span className="text-xl leading-none">{link.emoji}</span>
+                    <span className="text-[10px] leading-tight text-gray-500 group-hover:text-gray-300 text-center whitespace-nowrap transition-colors">{link.label}</span>
                   </Link>
                 ))}
               </div>
@@ -127,8 +130,8 @@ export default function MainNav({ isAdmin }) {
         })}
 
         {/* Account always visible */}
-        <div className="flex-shrink-0 ml-auto border-l border-gray-800/50">
-          <div className="px-3 py-1 text-[10px] font-black uppercase tracking-widest text-center text-gray-500 bg-gray-900/50 border-b border-gray-800/30">
+        <div className="flex-shrink-0 border-l border-gray-800/50">
+          <div className="px-3 py-1.5 text-[10px] font-black uppercase tracking-widest text-center text-gray-500 bg-gray-900/50 border-b border-gray-800/30">
             Account
           </div>
           <div className="flex gap-0">
@@ -141,10 +144,10 @@ export default function MainNav({ isAdmin }) {
               <Link
                 key={link.path}
                 to={link.path}
-                className="flex flex-col items-center justify-center gap-0.5 px-2.5 py-1.5 hover:bg-gray-800 transition-colors min-w-[52px] border-r border-gray-800/30 last:border-r-0 group"
+                className="flex flex-col items-center justify-center gap-1 px-3 py-2 hover:bg-gray-800 transition-colors min-w-[64px] border-r border-gray-800/30 last:border-r-0 group"
               >
-                <span className="text-sm leading-none">{link.emoji}</span>
-                <span className="text-[9px] leading-tight text-gray-500 group-hover:text-gray-300 text-center whitespace-nowrap transition-colors">{link.label}</span>
+                <span className="text-xl leading-none">{link.emoji}</span>
+                <span className="text-[10px] leading-tight text-gray-500 group-hover:text-gray-300 text-center whitespace-nowrap transition-colors">{link.label}</span>
               </Link>
             ))}
           </div>
