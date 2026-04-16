@@ -370,9 +370,102 @@ export default function ConceptNetworkGraph({ onNodeClick, selectedNodeId }) {
       .attr("pointer-events", "none")
       .text(d => d.group.toUpperCase());
 
+    // ── Lightning bolt particles ──
+    // Each particle travels along a random link from source to target
+    const NUM_BOLTS = 40;
+    const boltData = Array.from({ length: NUM_BOLTS }, (_, i) => ({
+      id: i,
+      linkIdx: Math.floor(Math.random() * links.length),
+      t: Math.random(), // 0..1 progress along link
+      speed: 0.004 + Math.random() * 0.008,
+      color: electricColors[i % electricColors.length],
+      size: 3 + Math.random() * 4,
+      trail: 0.3 + Math.random() * 0.5,
+    }));
+
+    const boltGroup = g.append("g").attr("class", "bolts");
+
+    // Each bolt = a small circle + a short trailing line
+    const boltCircles = boltGroup.selectAll("circle.bolt")
+      .data(boltData).enter().append("circle")
+      .attr("class", "bolt")
+      .attr("r", d => d.size)
+      .attr("fill", d => d.color)
+      .attr("filter", "url(#linkGlow)")
+      .attr("pointer-events", "none");
+
+    const boltTrails = boltGroup.selectAll("line.bolt-trail")
+      .data(boltData).enter().append("line")
+      .attr("class", "bolt-trail")
+      .attr("stroke", d => d.color)
+      .attr("stroke-width", d => d.size * 0.7)
+      .attr("stroke-opacity", d => d.trail)
+      .attr("filter", "url(#linkGlow)")
+      .attr("pointer-events", "none");
+
+    // Animate bolt positions via requestAnimationFrame
+    let rafId;
+    const animateBolts = () => {
+      boltData.forEach(b => {
+        b.t += b.speed;
+        if (b.t > 1) {
+          // Pick a new random link and reset
+          b.t = 0;
+          b.linkIdx = Math.floor(Math.random() * links.length);
+          b.speed = 0.004 + Math.random() * 0.009;
+          b.color = electricColors[Math.floor(Math.random() * electricColors.length)];
+          b.size = 3 + Math.random() * 4;
+        }
+      });
+
+      boltCircles
+        .attr("r", d => d.size)
+        .attr("fill", d => d.color)
+        .attr("cx", d => {
+          const lk = links[d.linkIdx];
+          if (!lk || !lk.source?.x) return 0;
+          return lk.source.x + (lk.target.x - lk.source.x) * d.t;
+        })
+        .attr("cy", d => {
+          const lk = links[d.linkIdx];
+          if (!lk || !lk.source?.y) return 0;
+          return lk.source.y + (lk.target.y - lk.source.y) * d.t;
+        });
+
+      boltTrails
+        .attr("stroke", d => d.color)
+        .attr("x1", d => {
+          const lk = links[d.linkIdx];
+          if (!lk || !lk.source?.x) return 0;
+          const t0 = Math.max(0, d.t - 0.12);
+          return lk.source.x + (lk.target.x - lk.source.x) * t0;
+        })
+        .attr("y1", d => {
+          const lk = links[d.linkIdx];
+          if (!lk || !lk.source?.y) return 0;
+          const t0 = Math.max(0, d.t - 0.12);
+          return lk.source.y + (lk.target.y - lk.source.y) * t0;
+        })
+        .attr("x2", d => {
+          const lk = links[d.linkIdx];
+          if (!lk || !lk.source?.x) return 0;
+          return lk.source.x + (lk.target.x - lk.source.x) * d.t;
+        })
+        .attr("y2", d => {
+          const lk = links[d.linkIdx];
+          if (!lk || !lk.source?.y) return 0;
+          return lk.source.y + (lk.target.y - lk.source.y) * d.t;
+        });
+
+      rafId = requestAnimationFrame(animateBolts);
+    };
+
+    // Start after sim settles a bit
+    setTimeout(() => { rafId = requestAnimationFrame(animateBolts); }, 800);
+
     // ── Tick ──
     simRef.current.on("tick", () => {
-      g.selectAll("line")
+      g.selectAll("line.base, line.electric-halo, line.electric")
         .attr("x1", d => d.source?.x ?? 0)
         .attr("y1", d => d.source?.y ?? 0)
         .attr("x2", d => d.target?.x ?? 0)
@@ -385,7 +478,10 @@ export default function ConceptNetworkGraph({ onNodeClick, selectedNodeId }) {
       node.attr("transform", d => `translate(${d.x},${d.y})`);
     });
 
-    return () => { simRef.current?.stop(); };
+    return () => {
+      simRef.current?.stop();
+      if (rafId) cancelAnimationFrame(rafId);
+    };
   }, []);
 
   // ── Update selected highlight ──
