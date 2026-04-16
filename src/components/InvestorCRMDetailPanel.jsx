@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { X, MessageSquare, Calendar, Phone, Mail, Plus, Loader2 } from "lucide-react";
 import { base44 } from "@/api/base44Client";
+import EmailTrackingStatus from "./EmailTrackingStatus";
 
 export default function InvestorCRMDetailPanel({ investor, onClose, onUpdate }) {
   const [showAddComm, setShowAddComm] = useState(false);
@@ -211,6 +212,15 @@ export default function InvestorCRMDetailPanel({ investor, onClose, onUpdate }) 
             </div>
           )}
         </div>
+
+        {/* Email Tracking Status */}
+        <EmailTrackingStatus 
+          investorId={investor.id}
+          onEngagement={(tracking) => {
+            console.log('Investor engaged with email:', tracking);
+            // Toast notification would go here
+          }}
+        />
 
         {/* Notes */}
         {investor.notes && (

@@ -1,0 +1,81 @@
+{
+  "name": "EmailTracking",
+  "type": "object",
+  "properties": {
+    "user_email": {
+      "type": "string"
+    },
+    "investor_id": {
+      "type": "string"
+    },
+    "investor_name": {
+      "type": "string"
+    },
+    "tracking_token": {
+      "type": "string"
+    },
+    "subject": {
+      "type": "string"
+    },
+    "sent_at": {
+      "type": "string"
+    },
+    "opened": {
+      "type": "boolean",
+      "default": false
+    },
+    "first_opened_at": {
+      "type": "string"
+    },
+    "open_count": {
+      "type": "integer",
+      "default": 0
+    },
+    "links_clicked": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string"
+          },
+          "clicked_at": {
+            "type": "string"
+          },
+          "click_count": {
+            "type": "integer"
+          }
+        }
+      }
+    },
+    "total_clicks": {
+      "type": "integer",
+      "default": 0
+    },
+    "last_engagement": {
+      "type": "string"
+    },
+    "engagement_score": {
+      "type": "integer",
+      "default": 0
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "sent",
+        "opened",
+        "clicked",
+        "engaged"
+      ],
+      "default": "sent"
+    }
+  },
+  "required": [
+    "user_email",
+    "investor_id",
+    "investor_name",
+    "tracking_token",
+    "subject",
+    "sent_at"
+  ]
+}
