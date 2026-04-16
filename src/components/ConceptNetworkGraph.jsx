@@ -280,8 +280,10 @@ export default function ConceptNetworkGraph({ onNodeClick, selectedNodeId, graph
         d3.select(this).transition().duration(180).attr("stroke-width", 2.5);
         d3.select(this.parentNode).select(".group-label")
           .transition().duration(150).attr("fill-opacity", 1);
+        d3.select(this.parentNode).selectAll(".lbl-shadow")
+          .transition().duration(150).attr("opacity", 1);
         d3.select(this.parentNode).selectAll(".lbl-fill")
-          .transition().duration(150).attr("fill", "#ffffff");
+          .transition().duration(150).attr("opacity", 1);
         linkLabel.transition().duration(150)
           .attr("fill-opacity", l => {
             const src = typeof l.source === 'object' ? l.source.id : l.source;
@@ -312,8 +314,8 @@ export default function ConceptNetworkGraph({ onNodeClick, selectedNodeId, graph
         d3.select(this).transition().duration(300).attr("stroke-width", d.id === selectedNodeId ? 2.5 : mode.nodeStrokeWidth);
         d3.select(this.parentNode).select(".group-label")
           .transition().duration(300).attr("fill-opacity", 0.6);
-        d3.select(this.parentNode).selectAll(".lbl-fill")
-          .transition().duration(300).attr("fill", "#f1f5f9");
+        d3.select(this.parentNode).selectAll(".lbl-shadow, .lbl-fill")
+          .transition().duration(300).attr("opacity", 0);
         linkLabel.transition().duration(200).attr("fill-opacity", 0);
         link.transition().duration(200)
           .attr("stroke-opacity", mode.linkOpacity)
@@ -347,16 +349,16 @@ export default function ConceptNetworkGraph({ onNodeClick, selectedNodeId, graph
         sel.append("text").attr("class", "lbl-shadow")
           .attr("text-anchor", "middle").attr("y", startY + i * lineH)
           .attr("font-size", fontSize).attr("font-weight", "800")
-          .attr("fill", "none").attr("stroke", color).attr("stroke-width", 2)
+          .attr("fill", "none").attr("stroke", "#ffffff").attr("stroke-width", 2.5)
           .attr("stroke-linejoin", "round").attr("paint-order", "stroke")
-          .attr("pointer-events", "none").text(t);
+          .attr("pointer-events", "none").attr("opacity", 0).text(t);
       });
 
       lines.forEach((t, i) => {
         sel.append("text").attr("class", "lbl-fill")
           .attr("text-anchor", "middle").attr("y", startY + i * lineH)
           .attr("font-size", fontSize).attr("font-weight", "800")
-          .attr("fill", "#f1f5f9").attr("pointer-events", "none").text(t);
+          .attr("fill", "#000000").attr("pointer-events", "none").attr("opacity", 0).text(t);
       });
     });
 
