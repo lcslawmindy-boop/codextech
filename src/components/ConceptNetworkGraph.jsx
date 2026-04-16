@@ -34,14 +34,14 @@ function getNodeDegrees(nodes, links) {
 const MODES = {
   analyst: {
     bg: "#080d14",
-    linkColor: "#c8d8e8",
-    linkOpacity: 0.85,
-    linkWidth: 1.5,
+    linkColor: "#ffffff",
+    linkOpacity: 0.9,
+    linkWidth: 1.8,
     nodeStrokeWidth: 1.5,
     showJolts: true,
     showWaves: false,
     showFlashes: false,
-    glowBlur: 3,
+    glowBlur: 5,
     label: "ANALYST",
   },
   electric: {
@@ -170,6 +170,7 @@ export default function ConceptNetworkGraph({ onNodeClick, selectedNodeId, graph
       .attr("stroke", mode.linkColor)
       .attr("stroke-width", mode.linkWidth)
       .attr("stroke-opacity", mode.linkOpacity)
+      .attr("stroke-dasharray", null)
       .attr("filter", "url(#glow-link)")
       .attr("marker-end", "url(#arrow)");
 
