@@ -55,6 +55,12 @@ Deno.serve(async (req) => {
       breakdown.stage_fit = stageScore;
       score += stageScore;
 
+      // 6. Humanitarian Impact Alignment (0-10 pts bonus)
+      // Bonus if investor's mandate aligns with human betterment
+      const humanitarianBonus = calculateHumanitarianBonus(inv);
+      breakdown.humanitarian_impact = humanitarianBonus;
+      score += humanitarianBonus;
+
       // Clamp score to 0-100
       const finalScore = Math.min(100, Math.max(0, Math.round(score)));
 
@@ -208,4 +214,47 @@ function getPriority(score) {
   if (score >= 50) return 'high';
   if (score >= 25) return 'medium';
   return 'low';
+}
+
+// Calculate humanitarian impact bonus (0-10 pts)
+// Favors investors focused on longevity, clean energy, health, and human advancement
+function calculateHumanitarianBonus(investor) {
+  const investorText = (
+    (investor.investor_name || '') + 
+    ' ' + 
+    (investor.investor_org || '') + 
+    ' ' + 
+    (investor.notes || '')
+  ).toLowerCase();
+  
+  const humanitarianKeywords = [
+    'longevity', 'aging', 'rejuvenation', 'lifespan', 'healthspan',
+    'clean energy', 'renewable', 'free energy', 'sustainability',
+    'health', 'cure', 'disease', 'healing', 'wellness',
+    'human advancement', 'humanitarian', 'collective benefit',
+    'telomere', 'cellular', 'regeneration', 'rejuven'
+  ];
+  
+  const defenseKeywords = [
+    'defense', 'military', 'weapon', 'warfare', 'classified', 'intelligence'
+  ];
+  
+  // Count humanitarian keyword matches
+  let humanScore = 0;
+  humanitarianKeywords.forEach(keyword => {
+    if (investorText.includes(keyword)) {
+      humanScore += 2;
+    }
+  });
+  
+  // Penalize purely defense-focused (but not all strategic/government)
+  let defensePenalty = 0;
+  defenseKeywords.forEach(keyword => {
+    if (investorText.includes(keyword)) {
+      defensePenalty += 1;
+    }
+  });
+  
+  // Final score: cap at 10, subtract defense focus
+  return Math.max(0, Math.min(10, humanScore - defensePenalty));
 }
