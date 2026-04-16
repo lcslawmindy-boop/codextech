@@ -85,20 +85,18 @@ export default function LinkedInProspectList() {
     const result = await base44.integrations.Core.InvokeLLM({
       prompt: `Write a short, personalized LinkedIn connection request message (under 300 characters) to ${prospect.name}, ${prospect.title} at ${prospect.org}.
 
-Context: I'm reaching out on behalf of Zenith Apex Advanced Research Platform (ZARP) — a beta-access research platform built on Tom Bearden's scalar electromagnetics research, featuring 21 invention build plans, AI patent tools, investor CRM, and a growing community of serious researchers.
+Context: I'm the founder of Zenith Apex Advanced Research Platform (ZARP) — built on Tom Bearden's scalar electromagnetics research. The platform is currently FOR SALE as a full acquisition. It includes: 21 invention build plans, AI patent + IP tools, investor CRM, a growing paid beta membership, and a full content library. A signed NDA is required before sharing the acquisition package and financials.
 
-Beta access link: https://zenithapex.base44.app/beta-apply
-
-Reason they're relevant: ${prospect.why}
+Reason this person is relevant: ${prospect.why}
 
 Requirements:
 - MUST be under 300 characters total
-- Reference something specific about their work or background
-- Invite them to apply for beta access — frame it as exclusive and limited
-- Include or reference the beta-apply link naturally
-- No spam, no marketing fluff — be direct and peer-to-peer
-- Do NOT mention pricing or money
-- End with a low-friction question to drive a reply`
+- Reference something specific about their work or background that makes them a natural acquirer or investor
+- Mention the platform is for sale (acquisition opportunity) — frame it as exclusive and discreet
+- Signal that an NDA is required to see the full package — creates intrigue and seriousness
+- No spam, no fluff — be direct and professional
+- Do NOT mention specific numbers or pricing
+- End with a low-friction question (e.g. "Would you be open to a brief NDA and overview?") to drive a reply`
     });
     const msg = typeof result === "string" ? result : result?.content || "";
     setMessages(prev => ({ ...prev, [prospect.id]: msg }));
@@ -171,7 +169,7 @@ Requirements:
                 {messages[p.id] && (
                   <div className="bg-blue-900/20 border border-blue-800/50 rounded-lg p-3">
                     <div className="flex items-center justify-between mb-2">
-                      <p className="text-blue-400 text-xs font-bold uppercase tracking-wider">AI Connection Request</p>
+                      <p className="text-blue-400 text-xs font-bold uppercase tracking-wider">AI Acquisition Pitch (NDA Required)</p>
                       <CopyBtn text={messages[p.id]} />
                     </div>
                     <p className="text-gray-300 text-sm leading-relaxed">{messages[p.id]}</p>
