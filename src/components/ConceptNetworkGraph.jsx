@@ -123,6 +123,18 @@ export default function ConceptNetworkGraph({ onNodeClick, selectedNodeId }) {
     lfm2.append("feMergeNode").attr("in", "blurred2");
     lfm2.append("feMergeNode").attr("in", "SourceGraphic");
 
+    // ── White neon 3D glow for lines — 3-layer: wide halo + mid bloom + tight core ──
+    const wlf1 = defs.append("filter").attr("id", "lineGlowWhite").attr("x", "-150%").attr("y", "-150%").attr("width", "400%").attr("height", "400%");
+    const wlf1Blur1 = wlf1.append("feGaussianBlur").attr("in", "SourceGraphic").attr("stdDeviation", "10").attr("result", "halo");
+    const wlf1Blur2 = wlf1.append("feGaussianBlur").attr("in", "SourceGraphic").attr("stdDeviation", "4").attr("result", "bloom");
+    const wlf1Blur3 = wlf1.append("feGaussianBlur").attr("in", "SourceGraphic").attr("stdDeviation", "1.5").attr("result", "core");
+    const wlf1m = wlf1.append("feMerge");
+    wlf1m.append("feMergeNode").attr("in", "halo");
+    wlf1m.append("feMergeNode").attr("in", "bloom");
+    wlf1m.append("feMergeNode").attr("in", "bloom");
+    wlf1m.append("feMergeNode").attr("in", "core");
+    wlf1m.append("feMergeNode").attr("in", "SourceGraphic");
+
     // Colorful electric palette
     const electricColors = ["#38bdf8","#a78bfa","#34d399","#fb923c","#f472b6","#facc15","#60a5fa","#4ade80"];
     const g = svg.append("g");
@@ -148,59 +160,33 @@ export default function ConceptNetworkGraph({ onNodeClick, selectedNodeId }) {
       .force("center", d3.forceCenter(width / 2, height / 2))
       .force("collision", d3.forceCollide(d => nodeRadius(d) + 20));
 
-    // ── Base dim links ──
-    g.append("g").selectAll("line.base")
+    // ── Wide white halo (outermost glow layer) ──
+    g.append("g").selectAll("line.line-halo")
       .data(links).enter().append("line")
-      .attr("class", "base")
-      .attr("stroke", "#1e293b")
-      .attr("stroke-width", 1.5)
-      .attr("stroke-opacity", 0.5)
+      .attr("class", "line-halo")
+      .attr("stroke", "#ffffff")
+      .attr("stroke-width", 6)
+      .attr("stroke-opacity", 0.06)
+      .attr("filter", "url(#lineGlowWhite)");
+
+    // ── Mid neon bloom layer ──
+    g.append("g").selectAll("line.line-bloom")
+      .data(links).enter().append("line")
+      .attr("class", "line-bloom")
+      .attr("stroke", "#ffffff")
+      .attr("stroke-width", 2.5)
+      .attr("stroke-opacity", 0.25)
+      .attr("filter", "url(#lineGlowWhite)");
+
+    // ── Core bright white line ──
+    const link = g.append("g").selectAll("line.line-core")
+      .data(links).enter().append("line")
+      .attr("class", "line-core")
+      .attr("stroke", "#ffffff")
+      .attr("stroke-width", 1.2)
+      .attr("stroke-opacity", 0.9)
+      .attr("filter", "url(#lineGlowWhite)")
       .attr("marker-end", "url(#arrow)");
-
-    // ── Outer halo electric links (wide glow) ──
-    g.append("g").selectAll("line.electric-halo")
-      .data(links).enter().append("line")
-      .attr("class", "electric-halo")
-      .attr("stroke", (d, i) => electricColors[i % electricColors.length])
-      .attr("stroke-width", 4)
-      .attr("stroke-opacity", 0.18)
-      .attr("stroke-dasharray", "8 16")
-      .attr("filter", "url(#linkGlowOuter)")
-      .each(function(d, i) {
-        const el = d3.select(this);
-        const duration = 1200 + (i % 6) * 150;
-        const offset = (i % 30) * -6;
-        el.style("stroke-dashoffset", offset)
-          .transition().duration(0)
-          .on("start", function repeat() {
-            d3.active(this)
-              .styleTween("stroke-dashoffset", () => d3.interpolateNumber(offset, offset - 80))
-              .transition().duration(duration).ease(d3.easeLinear).on("start", repeat);
-          });
-      });
-
-    // ── Core bright electric links ──
-    const link = g.append("g").selectAll("line.electric")
-      .data(links).enter().append("line")
-      .attr("class", "electric")
-      .attr("stroke", (d, i) => electricColors[i % electricColors.length])
-      .attr("stroke-width", 2)
-      .attr("stroke-opacity", 0.85)
-      .attr("stroke-dasharray", "6 14")
-      .attr("filter", "url(#linkGlow)")
-      .attr("marker-end", "url(#arrow)")
-      .each(function(d, i) {
-        const el = d3.select(this);
-        const duration = 700 + (i % 8) * 90;
-        const offset = (i % 22) * -5;
-        el.style("stroke-dashoffset", offset)
-          .transition().duration(0)
-          .on("start", function repeat() {
-            d3.active(this)
-              .styleTween("stroke-dashoffset", () => d3.interpolateNumber(offset, offset - 70))
-              .transition().duration(duration).ease(d3.easeLinear).on("start", repeat);
-          });
-      });
 
     // ── Link labels ──
     const linkLabel = g.append("g").selectAll("text.linklabel")
@@ -266,12 +252,12 @@ export default function ConceptNetworkGraph({ onNodeClick, selectedNodeId }) {
           .attr("stroke", l => {
             const src = typeof l.source === 'object' ? l.source.id : l.source;
             const tgt = typeof l.target === 'object' ? l.target.id : l.target;
-            return (src === d.id || tgt === d.id) ? groupColors[d.group] : "#38bdf8";
+            return (src === d.id || tgt === d.id) ? groupColors[d.group] : "#ffffff";
           })
           .attr("stroke-width", l => {
             const src = typeof l.source === 'object' ? l.source.id : l.source;
             const tgt = typeof l.target === 'object' ? l.target.id : l.target;
-            return (src === d.id || tgt === d.id) ? 2.5 : 1.4;
+            return (src === d.id || tgt === d.id) ? 2.5 : 1.2;
           });
       })
       .on("mouseleave", function(e, d) {
@@ -285,9 +271,9 @@ export default function ConceptNetworkGraph({ onNodeClick, selectedNodeId }) {
           .attr("stroke-width", d.id === selectedNodeId ? 3 : 1.5);
         linkLabel.transition().duration(200).attr("fill-opacity", 0);
         link.transition().duration(200)
-          .attr("stroke-opacity", 0.85)
-          .attr("stroke", (d, i) => electricColors[i % electricColors.length])
-          .attr("stroke-width", 2);
+          .attr("stroke-opacity", 0.9)
+          .attr("stroke", "#ffffff")
+          .attr("stroke-width", 1.2);
       });
 
     // ── Group color dot (top-right badge) ──
@@ -377,7 +363,7 @@ export default function ConceptNetworkGraph({ onNodeClick, selectedNodeId }) {
       r: (i / NUM_WAVES) * 200,
       maxR: 180 + Math.random() * 120,
       speed: 1.2 + Math.random() * 1.8,
-      color: ["#38bdf8","#facc15","#a78bfa","#34d399","#f472b6","#ffffff"][i % 6],
+      color: ["#ff0080","#00ffff","#ffe600","#00ff88","#bf5fff","#ff6600","#00bfff","#ff3399","#39ff14","#ff9500"][i % 10],
       strokeW: 1.5 + Math.random() * 1.5,
     }));
 
@@ -489,7 +475,7 @@ export default function ConceptNetworkGraph({ onNodeClick, selectedNodeId }) {
 
     // ── Tick ──
     simRef.current.on("tick", () => {
-      g.selectAll("line.base, line.electric-halo, line.electric")
+      g.selectAll("line.line-halo, line.line-bloom, line.line-core")
         .attr("x1", d => d.source?.x ?? 0)
         .attr("y1", d => d.source?.y ?? 0)
         .attr("x2", d => d.target?.x ?? 0)
