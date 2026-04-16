@@ -34,9 +34,9 @@ function getNodeDegrees(nodes, links) {
 const MODES = {
   analyst: {
     bg: "#080d14",
-    linkColor: "#4a90c4",
-    linkOpacity: 0.55,
-    linkWidth: 1.2,
+    linkColor: "#c8d8e8",
+    linkOpacity: 0.85,
+    linkWidth: 1.5,
     nodeStrokeWidth: 1.5,
     showJolts: false,
     showWaves: false,
@@ -360,8 +360,8 @@ export default function ConceptNetworkGraph({ onNodeClick, selectedNodeId, graph
       .attr("y", d => nodeRadius(d) + 15)
       .attr("font-size", 8).attr("font-weight", "700")
       .attr("letter-spacing", "0.09em")
-      .attr("fill", d => groupColors[d.group])
-      .attr("fill-opacity", 0.6)
+      .attr("fill", graphMode === "analyst" ? "#ffffff" : d => groupColors[d.group])
+      .attr("fill-opacity", graphMode === "analyst" ? 0.85 : 0.6)
       .attr("stroke", "#000").attr("stroke-width", 1.5)
       .attr("paint-order", "stroke")
       .attr("pointer-events", "none")
