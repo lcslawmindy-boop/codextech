@@ -284,7 +284,7 @@ export default function ConceptNetworkGraph({ onNodeClick, selectedNodeId, graph
           .attr("fill-opacity", l => {
             const src = typeof l.source === 'object' ? l.source.id : l.source;
             const tgt = typeof l.target === 'object' ? l.target.id : l.target;
-            return (src === d.id || tgt === d.id) ? 1 : 0.8;
+            return (src === d.id || tgt === d.id) ? 1 : 0.9;
           })
           .attr("font-size", l => {
             const src = typeof l.source === 'object' ? l.source.id : l.source;
@@ -295,6 +295,11 @@ export default function ConceptNetworkGraph({ onNodeClick, selectedNodeId, graph
             const src = typeof l.source === 'object' ? l.source.id : l.source;
             const tgt = typeof l.target === 'object' ? l.target.id : l.target;
             return (src === d.id || tgt === d.id) ? 3.5 : 2.5;
+          })
+          .attr("fill", l => {
+            const src = typeof l.source === 'object' ? l.source.id : l.source;
+            const tgt = typeof l.target === 'object' ? l.target.id : l.target;
+            return (src === d.id || tgt === d.id) ? "#ffff00" : "#ffffff";
           });
         link.transition().duration(150)
           .attr("stroke-opacity", l => {
@@ -323,7 +328,8 @@ export default function ConceptNetworkGraph({ onNodeClick, selectedNodeId, graph
         linkLabel.transition().duration(200)
           .attr("fill-opacity", 0.8)
           .attr("font-size", 11)
-          .attr("stroke-width", 2.5);
+          .attr("stroke-width", 2.5)
+          .attr("fill", "#ffffff");
         link.transition().duration(200)
           .attr("stroke-opacity", mode.linkOpacity)
           .attr("stroke", mode.linkColor)
