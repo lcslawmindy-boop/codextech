@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { X, BookOpen, Sparkles, Loader2, Bookmark, BookmarkCheck } from "lucide-react";
+import { X, BookOpen, Sparkles, Loader2, Bookmark, BookmarkCheck, Link2, Share2 } from "lucide-react";
 import ExportToDocButton from "./ExportToDocButton";
 import { base44 } from "@/api/base44Client";
-import { groupColors } from "../lib/beardenData";
+import { groupColors, nodes as allNodes, links as allLinks } from "../lib/beardenData";
 
 export default function NodePanel({ node, onClose }) {
   const [summary, setSummary] = useState(null);
@@ -45,64 +45,128 @@ export default function NodePanel({ node, onClose }) {
 
   const color = groupColors[node.group] || "#6b7280";
 
+  // Get related nodes (connected via links)
+  const relatedNodeIds = allLinks
+    .filter(l => {
+      const src = typeof l.source === 'object' ? l.source.id : l.source;
+      const tgt = typeof l.target === 'object' ? l.target.id : l.target;
+      return src === node.id || tgt === node.id;
+    })
+    .map(l => {
+      const src = typeof l.source === 'object' ? l.source.id : l.source;
+      const tgt = typeof l.target === 'object' ? l.target.id : l.target;
+      return src === node.id ? tgt : src;
+    });
+
+  const relatedNodes = allNodes.filter(n => relatedNodeIds.includes(n.id)).slice(0, 5);
+
   return (
-    <div className="absolute top-4 right-4 w-80 max-h-[calc(100vh-2rem)] overflow-y-auto bg-gray-900 border border-gray-700 rounded-xl shadow-2xl z-10 flex flex-col">
-      <div className="flex items-start justify-between p-4 border-b border-gray-700 sticky top-0 bg-gray-900 rounded-t-xl">
-        <div>
-          <div className="flex items-center gap-2 mb-1">
-            <span className="w-3 h-3 rounded-full flex-shrink-0" style={{ backgroundColor: color }} />
-            <span className="text-xs uppercase tracking-widest font-semibold" style={{ color }}>
-              {node.group}
-            </span>
+    <div className="fixed inset-y-0 right-0 w-96 bg-gray-900 border-l border-gray-700 shadow-2xl z-30 flex flex-col overflow-hidden">
+      <div className="absolute inset-0 pointer-events-none" style={{ background: `linear-gradient(135deg, ${color}08 0%, transparent 100%)` }} />
+      <div className="flex-shrink-0 p-6 border-b border-gray-700 sticky top-0 bg-gray-900 z-10">
+        <div className="flex items-start justify-between gap-4 mb-4">
+          <div className="flex-1">
+            <div className="flex items-center gap-2 mb-2">
+              <span className="w-2.5 h-2.5 rounded-full flex-shrink-0" style={{ backgroundColor: color }} />
+              <span className="text-xs uppercase tracking-widest font-bold" style={{ color }}>
+                {node.group}
+              </span>
+            </div>
+            <h2 className="text-white font-bold text-xl leading-tight">{node.label}</h2>
           </div>
-          <h2 className="text-white font-bold text-lg leading-tight">{node.label}</h2>
-          <p className="text-gray-400 text-sm mt-1">{node.description}</p>
+          <button onClick={onClose} className="text-gray-500 hover:text-white flex-shrink-0 mt-1">
+            <X size={20} />
+          </button>
         </div>
-        <div className="flex items-center gap-2 ml-2 mt-1 flex-shrink-0">
+        <p className="text-gray-400 text-sm leading-relaxed">{node.description}</p>
+        <div className="flex items-center gap-2 mt-4 pt-4 border-t border-gray-800">
           <button
             onClick={handleSave}
             disabled={saving || saved}
             title={saved ? "Saved!" : "Save to My Research"}
-            className="text-gray-500 hover:text-yellow-400 disabled:opacity-50 transition-colors"
+            className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-gray-800 hover:bg-gray-700 text-gray-300 text-xs font-medium transition-colors disabled:opacity-50 flex-1"
           >
-            {saved ? <BookmarkCheck size={16} className="text-yellow-400" /> : <Bookmark size={16} />}
+            {saved ? <BookmarkCheck size={13} className="text-yellow-400" /> : <Bookmark size={13} />}
+            {saved ? "Saved" : "Save"}
           </button>
-          <button onClick={onClose} className="text-gray-500 hover:text-white">
-            <X size={18} />
+          <button
+            onClick={() => {
+              navigator.clipboard.writeText(`${window.location.origin}?node=${node.id}`);
+            }}
+            className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-gray-800 hover:bg-gray-700 text-gray-300 text-xs font-medium transition-colors flex-1"
+          >
+            <Share2 size={13} />
+            Share
           </button>
         </div>
       </div>
 
-      <div className="p-4 space-y-3">
-        <div className="flex items-center gap-2 text-gray-400 text-xs uppercase tracking-widest font-semibold">
-          <BookOpen size={13} />
-          <span>Source Fragments</span>
+      <div className="flex-1 overflow-y-auto">
+        {/* AI Summary Section */}
+        <div className="p-6 border-b border-gray-800">
           <button
             onClick={handleSummarize}
             disabled={loadingSummary}
-            className="ml-auto flex items-center gap-1 px-2 py-0.5 rounded-full bg-purple-900/50 hover:bg-purple-800/60 border border-purple-700 text-purple-300 text-xs transition-colors disabled:opacity-50"
+            className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-purple-900/30 hover:bg-purple-900/50 border border-purple-700 text-purple-300 text-sm font-semibold transition-colors disabled:opacity-50"
           >
-            {loadingSummary ? <Loader2 size={11} className="animate-spin" /> : <Sparkles size={11} />}
-            {loadingSummary ? "Summarizing…" : "AI Summary"}
+            {loadingSummary ? <Loader2 size={14} className="animate-spin" /> : <Sparkles size={14} />}
+            {loadingSummary ? "Generating AI Summary…" : "Generate AI Summary"}
           </button>
-          <ExportToDocButton node={node} aiSummary={summary} />
+          {summary && (
+            <div className="mt-3 bg-purple-950/30 border border-purple-800/50 rounded-lg p-4">
+              <p className="text-purple-100 text-sm leading-relaxed">{summary}</p>
+            </div>
+          )}
         </div>
 
-        {summary && (
-          <div className="bg-purple-950/40 border border-purple-800 rounded-lg p-3">
-            <div className="flex items-center gap-1.5 mb-2">
-              <Sparkles size={12} className="text-purple-400" />
-              <span className="text-purple-400 text-xs font-semibold uppercase tracking-widest">AI Overview</span>
+        {/* Source Fragments */}
+        <div className="p-6 border-b border-gray-800">
+          <div className="flex items-center gap-2 mb-4">
+            <BookOpen size={14} className="text-gray-400" />
+            <h3 className="text-gray-300 font-semibold text-sm">Source Fragments</h3>
+            <span className="ml-auto text-gray-600 text-xs">{node.fragments.length}</span>
+          </div>
+          <div className="space-y-2">
+            {node.fragments.map((text, i) => (
+              <div key={i} className="bg-gray-800/50 border border-gray-700 rounded-lg p-3 hover:bg-gray-800 transition-colors">
+                <p className="text-gray-300 text-xs leading-relaxed italic">"{text}"</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Related Concepts */}
+        {relatedNodes.length > 0 && (
+          <div className="p-6 border-b border-gray-800">
+            <div className="flex items-center gap-2 mb-4">
+              <Link2 size={14} className="text-gray-400" />
+              <h3 className="text-gray-300 font-semibold text-sm">Related Concepts</h3>
+              <span className="ml-auto text-gray-600 text-xs">{relatedNodeIds.length}</span>
             </div>
-            <p className="text-purple-100 text-sm leading-relaxed">{summary}</p>
+            <div className="space-y-2">
+              {relatedNodes.map(rn => {
+                const rColor = groupColors[rn.group] || "#6b7280";
+                return (
+                  <div
+                    key={rn.id}
+                    className="flex items-start gap-3 p-3 bg-gray-800/50 border border-gray-700 rounded-lg hover:bg-gray-800 transition-colors cursor-pointer group"
+                  >
+                    <span className="w-2 h-2 rounded-full flex-shrink-0 mt-1.5" style={{ backgroundColor: rColor }} />
+                    <div className="flex-1 min-w-0">
+                      <p className="text-gray-200 text-xs font-medium group-hover:text-white transition-colors">{rn.label}</p>
+                      <p className="text-gray-500 text-xs mt-0.5">{rn.group}</p>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
           </div>
         )}
 
-        {node.fragments.map((text, i) => (
-          <div key={i} className="bg-gray-800 border border-gray-700 rounded-lg p-3">
-            <p className="text-gray-200 text-sm leading-relaxed italic">"{text}"</p>
-          </div>
-        ))}
+        {/* Export */}
+        <div className="p-6">
+          <ExportToDocButton node={node} aiSummary={summary} />
+        </div>
       </div>
     </div>
   );
