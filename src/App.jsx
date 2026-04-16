@@ -97,6 +97,8 @@ import FTOAnalysisTool from './pages/FTOAnalysisTool';
 import PatentAttorneyChat from './pages/PatentAttorneyChat';
 import IPMarketplace from './pages/IPMarketplace';
 import CoInventorMatching from './pages/CoInventorMatching';
+import FlashSale from './pages/FlashSale';
+import AdminPromoBlast from './pages/AdminPromoBlast';
 import WhiteLabelSaaS from './pages/WhiteLabelSaaS';
 import SBIRPipeline from './pages/SBIRPipeline';
 import ZARPAcquisitionPackage from './pages/ZARPAcquisitionPackage';
@@ -234,10 +236,12 @@ const AuthenticatedApp = () => {
           <Route path="/ip-portfolio-health" element={<IPPortfolioHealth />} />
           <Route path="/build-milestone-ai" element={<BuildMilestoneAI />} />
           <Route path="/valuation-api" element={<ValuationAPI />} />
+          <Route path="/flash-sale" element={<FlashSale />} />
 
           {/* Admin-only routes */}
           <Route element={<AdminGuard />}>
             <Route path="/admin" element={<AdminHub />} />
+            <Route path="/admin-promo" element={<AdminPromoBlast />} />
             <Route path="/admin-beta" element={<AdminBeta />} />
             <Route path="/admin-videos" element={<AdminVideos />} />
             <Route path="/admin-downloads" element={<AdminDownloadCenter />} />
