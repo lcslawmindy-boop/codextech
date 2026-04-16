@@ -125,10 +125,6 @@ export default function ConceptNetworkGraph({ onNodeClick, selectedNodeId }) {
 
     // Colorful electric palette
     const electricColors = ["#38bdf8","#a78bfa","#34d399","#fb923c","#f472b6","#facc15","#60a5fa","#4ade80"];
-    // Lightning bolt colors: white core, neon blue & yellow
-    const boltColors = ["#ffffff","#38bdf8","#facc15","#ffffff","#7dd3fc","#fde68a","#ffffff","#0ea5e9"];
-
-
     const g = svg.append("g");
 
     svg.call(d3.zoom().scaleExtent([0.15, 5]).on("zoom", e => g.attr("transform", e.transform)));
@@ -373,82 +369,6 @@ export default function ConceptNetworkGraph({ onNodeClick, selectedNodeId }) {
       .attr("pointer-events", "none")
       .text(d => d.group.toUpperCase());
 
-    // ── Lightning bolt particles ──
-    // Each particle travels along a random link from source to target
-    const NUM_BOLTS = 90;
-    const boltData = Array.from({ length: NUM_BOLTS }, (_, i) => ({
-      id: i,
-      linkIdx: Math.floor(Math.random() * links.length),
-      t: Math.random(),
-      speed: 0.012 + Math.random() * 0.022,
-      color: boltColors[i % boltColors.length],
-      size: 2.5 + Math.random() * 4.5,
-      trail: 0.5 + Math.random() * 0.5,
-    }));
-
-    const boltGroup = g.append("g").attr("class", "bolts");
-
-    // Pre-create DOM elements and store direct references for fast RAF updates
-    const boltEls = boltData.map(b => {
-      const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-      circle.setAttribute("r", b.size);
-      circle.setAttribute("fill", b.color);
-      circle.setAttribute("filter", "url(#linkGlow)");
-      circle.setAttribute("pointer-events", "none");
-      boltGroup.node().appendChild(circle);
-
-      const trail = document.createElementNS("http://www.w3.org/2000/svg", "line");
-      trail.setAttribute("stroke", b.color);
-      trail.setAttribute("stroke-width", b.size * 0.7);
-      trail.setAttribute("stroke-opacity", b.trail);
-      trail.setAttribute("filter", "url(#linkGlow)");
-      trail.setAttribute("pointer-events", "none");
-      boltGroup.node().appendChild(trail);
-
-      return { circle, trail };
-    });
-
-    // Animate bolt positions via requestAnimationFrame — direct DOM for performance
-    let rafId;
-    const animateBolts = () => {
-      for (let i = 0; i < boltData.length; i++) {
-        const b = boltData[i];
-        b.t += b.speed;
-        if (b.t > 1) {
-          b.t = 0;
-          b.linkIdx = Math.floor(Math.random() * links.length);
-          b.speed = 0.012 + Math.random() * 0.022;
-          b.color = boltColors[Math.floor(Math.random() * boltColors.length)];
-          b.size = 2.5 + Math.random() * 4.5;
-          boltEls[i].circle.setAttribute("fill", b.color);
-          boltEls[i].circle.setAttribute("r", b.size);
-          boltEls[i].trail.setAttribute("stroke", b.color);
-          boltEls[i].trail.setAttribute("stroke-width", b.size * 0.7);
-        }
-
-        const lk = links[b.linkIdx];
-        if (!lk || !lk.source?.x) continue;
-
-        const sx = lk.source.x, sy = lk.source.y;
-        const tx = lk.target.x, ty = lk.target.y;
-        const cx = sx + (tx - sx) * b.t;
-        const cy = sy + (ty - sy) * b.t;
-        const t0 = Math.max(0, b.t - 0.12);
-        const x1 = sx + (tx - sx) * t0;
-        const y1 = sy + (ty - sy) * t0;
-
-        boltEls[i].circle.setAttribute("cx", cx);
-        boltEls[i].circle.setAttribute("cy", cy);
-        boltEls[i].trail.setAttribute("x1", x1);
-        boltEls[i].trail.setAttribute("y1", y1);
-        boltEls[i].trail.setAttribute("x2", cx);
-        boltEls[i].trail.setAttribute("y2", cy);
-      }
-      rafId = requestAnimationFrame(animateBolts);
-    };
-
-    setTimeout(() => { rafId = requestAnimationFrame(animateBolts); }, 800);
-
     // ── Scalar wave rings pulsing from nodes — large, very visible ──
     const scalarGroup = g.append("g").attr("class", "scalar-waves");
     const NUM_WAVES = 80;
@@ -642,7 +562,6 @@ export default function ConceptNetworkGraph({ onNodeClick, selectedNodeId }) {
 
     return () => {
       simRef.current?.stop();
-      if (rafId) cancelAnimationFrame(rafId);
       if (rafId2) cancelAnimationFrame(rafId2);
     };
   }, []);
