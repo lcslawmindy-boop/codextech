@@ -30,6 +30,7 @@ import PatentClaimsGenerator from './pages/PatentClaimsGenerator';
 import TimelinePitchDeck from './pages/TimelinePitchDeck';
 import PriorArtArchive from './pages/PriorArtArchive';
 import InvestorPortal from './pages/InvestorPortal';
+import InvestorOutreachWorkflow from './pages/InvestorOutreachWorkflow';
 import PatentLandscapeGraph from './pages/PatentLandscapeGraph';
 import MonitoringDashboard from './pages/MonitoringDashboard';
 import PatentFilingWizard from './pages/PatentFilingWizard';
@@ -173,6 +174,7 @@ const AuthenticatedApp = () => {
           <Route path="/timeline-pitch" element={<TimelinePitchDeck />} />
           <Route path="/prior-art" element={<PriorArtArchive />} />
           <Route path="/investors" element={<InvestorPortal />} />
+          <Route path="/investor-outreach" element={<InvestorOutreachWorkflow />} />
           <Route path="/patent-landscape" element={<PatentLandscapeGraph />} />
           <Route path="/patent-wizard" element={<PatentFilingWizard />} />
           <Route path="/investor-crm" element={<InvestorCRM />} />

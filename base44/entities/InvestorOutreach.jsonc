@@ -1,0 +1,130 @@
+{
+  "name": "InvestorOutreach",
+  "type": "object",
+  "properties": {
+    "user_email": {
+      "type": "string"
+    },
+    "investor_name": {
+      "type": "string"
+    },
+    "investor_org": {
+      "type": "string"
+    },
+    "investor_email": {
+      "type": "string"
+    },
+    "investor_type": {
+      "type": "string",
+      "enum": [
+        "angel",
+        "vc_seed",
+        "vc_growth",
+        "corporate",
+        "strategic",
+        "family_office"
+      ]
+    },
+    "stage": {
+      "type": "string",
+      "enum": [
+        "prospect",
+        "initial_outreach",
+        "responded",
+        "meeting_scheduled",
+        "due_diligence",
+        "term_sheet",
+        "negotiating",
+        "closed",
+        "passed"
+      ],
+      "default": "prospect"
+    },
+    "likelihood_score": {
+      "type": "integer",
+      "default": 0,
+      "description": "0-100 score indicating probability of investment"
+    },
+    "scoring_factors": {
+      "type": "object",
+      "properties": {
+        "strategic_fit": {
+          "type": "integer"
+        },
+        "ticket_size_alignment": {
+          "type": "integer"
+        },
+        "sector_experience": {
+          "type": "integer"
+        },
+        "response_speed": {
+          "type": "integer"
+        },
+        "engagement_level": {
+          "type": "integer"
+        }
+      }
+    },
+    "communications": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "date": {
+            "type": "string"
+          },
+          "stage": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "cold_email",
+              "follow_up",
+              "meeting_notes",
+              "proposal",
+              "term_sheet",
+              "other"
+            ]
+          },
+          "content": {
+            "type": "string"
+          },
+          "response": {
+            "type": "string"
+          },
+          "response_date": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "target_investment": {
+      "type": "number",
+      "description": "Target investment amount in USD"
+    },
+    "equity_offered": {
+      "type": "number",
+      "description": "Equity percentage offered"
+    },
+    "notes": {
+      "type": "string"
+    },
+    "last_contact": {
+      "type": "string"
+    },
+    "next_action": {
+      "type": "string"
+    },
+    "next_action_date": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "user_email",
+    "investor_name"
+  ]
+}
