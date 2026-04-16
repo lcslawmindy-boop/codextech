@@ -52,12 +52,33 @@ export default function InvestorOutreachWorkflow() {
   }, [user]);
 
   const handleScoreInvestors = async () => {
+    if (!investors.length) return;
     setScoring(true);
+    setRanked([]);
+
     try {
-      const response = await base44.functions.invoke("scoreInvestorLikelihood", {});
-      if (response.data.success) {
-        setRanked(response.data.ranked_investors);
-      }
+      const ranked = await Promise.all(
+        investors.map(async (inv) => {
+          const res = await base44.functions.invoke("scoreAndSuggestInvestor", { investor: inv });
+          return {
+            investor_id: inv.id,
+            investor_name: inv.investor_name,
+            investor_org: inv.investor_org,
+            investor_type: inv.investor_type,
+            investor_email: inv.investor_email,
+            current_stage: inv.stage,
+            likelihood_score: res.likelihood_score || 0,
+            recommendation: res.recommendation || "—",
+            next_action: res.next_action || "",
+            action_priority: res.action_priority || "medium",
+            scoring_breakdown: res.scoring_breakdown || {},
+            response_rate_pct: res.response_rate_pct || 0
+          };
+        })
+      );
+
+      ranked.sort((a, b) => b.likelihood_score - a.likelihood_score);
+      setRanked(ranked);
     } catch (err) {
       console.error('Scoring failed:', err);
     } finally {
@@ -166,16 +187,17 @@ export default function InvestorOutreachWorkflow() {
               <div className="overflow-x-auto">
                 <table className="w-full">
                   <thead>
-                    <tr className="border-b border-gray-800">
-                      <th className="px-4 py-3 text-left text-xs font-bold text-gray-400">Rank</th>
-                      <th className="px-4 py-3 text-left text-xs font-bold text-gray-400">Investor</th>
-                      <th className="px-4 py-3 text-left text-xs font-bold text-gray-400">Org</th>
-                      <th className="px-4 py-3 text-left text-xs font-bold text-gray-400">Type</th>
-                      <th className="px-4 py-3 text-left text-xs font-bold text-gray-400">Stage</th>
-                      <th className="px-4 py-3 text-center text-xs font-bold text-gray-400">Score</th>
-                      <th className="px-4 py-3 text-left text-xs font-bold text-gray-400">Status</th>
-                      <th className="px-4 py-3 text-center text-xs font-bold text-gray-400">Action</th>
-                    </tr>
+                   <tr className="border-b border-gray-800">
+                     <th className="px-4 py-3 text-left text-xs font-bold text-gray-400">Rank</th>
+                     <th className="px-4 py-3 text-left text-xs font-bold text-gray-400">Investor</th>
+                     <th className="px-4 py-3 text-left text-xs font-bold text-gray-400">Org</th>
+                     <th className="px-4 py-3 text-left text-xs font-bold text-gray-400">Type</th>
+                     <th className="px-4 py-3 text-left text-xs font-bold text-gray-400">Stage</th>
+                     <th className="px-4 py-3 text-center text-xs font-bold text-gray-400">Score</th>
+                     <th className="px-4 py-3 text-left text-xs font-bold text-gray-400">Status</th>
+                     <th className="px-4 py-3 text-left text-xs font-bold text-gray-400">Next Action</th>
+                     <th className="px-4 py-3 text-center text-xs font-bold text-gray-400">Tools</th>
+                   </tr>
                   </thead>
                   <tbody>
                     {ranked.map((inv, idx) => (
@@ -206,6 +228,9 @@ export default function InvestorOutreachWorkflow() {
                           }`}>
                             {inv.recommendation}
                           </span>
+                        </td>
+                        <td className="px-4 py-3 text-xs text-gray-400 max-w-xs truncate" title={inv.next_action}>
+                          {inv.next_action}
                         </td>
                         <td className="px-4 py-3 text-center" onClick={e => e.stopPropagation()}>
                           <div className="flex items-center justify-center gap-1">
