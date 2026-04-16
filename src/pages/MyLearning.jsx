@@ -227,7 +227,7 @@ function LibrarySection({ purchasedInventions, purchasedPDFs }) {
 }
 
 export default function MyLearning() {
-  const [purchases, setPurchases] = useState([]);
+  const [purchases, setPurchases] = useState(new Set());
   const [progressMap, setProgressMap] = useState({});
   const [loading, setLoading] = useState(true);
   const [activeCourse, setActiveCourse] = useState(null);
@@ -242,11 +242,14 @@ export default function MyLearning() {
     let purchasedTitles = new Set();
     try {
       const res = await base44.functions.invoke("getUserPurchases", {});
-      (res.data?.purchases || []).forEach(p => purchasedTitles.add(p.product_title));
+      (res.data?.purchases || []).forEach(p => {
+        if (p.product_title) purchasedTitles.add(p.product_title);
+        if (p.title) purchasedTitles.add(p.title);
+      });
     } catch (e) {
       console.warn("Could not fetch purchases:", e.message);
     }
-    setPurchases(purchasedTitles);
+    setPurchases(new Set(purchasedTitles));
 
     // Fetch progress records
     const progressRecords = await base44.entities.CourseProgress.filter({ user_email: user.email });
