@@ -229,7 +229,15 @@ export default function ConceptNetworkGraph({ onNodeClick, selectedNodeId, graph
       });
     }
 
-    // ── Link labels ──
+    // ── Link labels (clickable with visual feedback) ──
+    const linkLabelBg = g.append("g").selectAll("rect.linklabel-bg")
+      .data(links).enter().append("rect")
+      .attr("class", "linklabel-bg")
+      .attr("fill", "transparent")
+      .attr("rx", 4)
+      .attr("pointer-events", "none")
+      .attr("opacity", 0);
+
     const linkLabel = g.append("g").selectAll("text.linklabel")
       .data(links).enter().append("text")
       .attr("class", "linklabel")
@@ -240,13 +248,48 @@ export default function ConceptNetworkGraph({ onNodeClick, selectedNodeId, graph
       .attr("text-anchor", "middle")
       .style("cursor", "pointer")
       .text(d => d.label)
+      .on("mouseenter", function(e, d) {
+        d3.select(this)
+          .transition().duration(150)
+          .attr("fill-opacity", 1)
+          .attr("font-size", 12);
+        d3.select(this.parentNode).selectAll("rect.linklabel-bg").filter((bd) => bd === d)
+          .transition().duration(150)
+          .attr("opacity", 0.15)
+          .attr("fill", "#fbbf24");
+      })
+      .on("mouseleave", function(e, d) {
+        d3.select(this)
+          .transition().duration(150)
+          .attr("fill-opacity", 0.8)
+          .attr("font-size", 11);
+        d3.select(this.parentNode).selectAll("rect.linklabel-bg").filter((bd) => bd === d)
+          .transition().duration(150)
+          .attr("opacity", 0);
+      })
       .on("click", (e, d) => {
         e.stopPropagation();
         if (onLinkClick) onLinkClick(d);
       });
 
-    // Raise link group to front so it renders over nodes without breaking
-    linkGroup.raise();
+    // Position label backgrounds
+    linkLabel.each(function(d, i) {
+      const bbox = this.getBBox();
+      d3.select(linkLabelBg.nodes()[i])
+        .attr("x", bbox.x - 6)
+        .attr("y", bbox.y - 2)
+        .attr("width", bbox.width + 12)
+        .attr("height", bbox.height + 4)
+        .style("pointer-events", "auto")
+        .on("click", (e) => {
+          e.stopPropagation();
+          if (onLinkClick) onLinkClick(d);
+        });
+    });
+
+    // Raise link labels to front so they're always clickable
+    g.selectAll(".linklabel-bg").raise();
+    linkLabel.raise();
 
     // ── Node groups ──
     const node = g.append("g").selectAll("g.node")
@@ -439,6 +482,19 @@ export default function ConceptNetworkGraph({ onNodeClick, selectedNodeId, graph
       linkLabel
         .attr("x", d => (d.source.x + d.target.x) / 2)
         .attr("y", d => (d.source.y + d.target.y) / 2 - 4);
+
+      // Update label background positions
+      linkLabelBg.each(function(d, i) {
+        const labelEl = linkLabel.nodes()[i];
+        if (labelEl) {
+          const bbox = labelEl.getBBox();
+          d3.select(this)
+            .attr("x", bbox.x - 6)
+            .attr("y", bbox.y - 2)
+            .attr("width", bbox.width + 12)
+            .attr("height", bbox.height + 4);
+        }
+      });
 
       node.attr("transform", d => `translate(${d.x},${d.y})`);
     });
