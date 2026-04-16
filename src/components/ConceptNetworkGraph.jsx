@@ -101,7 +101,7 @@ export default function ConceptNetworkGraph({ onNodeClick, selectedNodeId, graph
     defs.append("marker")
       .attr("id", "arrow")
       .attr("viewBox", "0 -4 8 8")
-      .attr("refX", 44).attr("refY", 0)
+      .attr("refX", 12).attr("refY", 0)
       .attr("markerWidth", 5).attr("markerHeight", 5)
       .attr("orient", "auto")
       .append("path").attr("d", "M0,-3L7,0L0,3").attr("fill", "#475569").attr("fill-opacity", 0.7);
