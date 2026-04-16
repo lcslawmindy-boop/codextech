@@ -85,17 +85,20 @@ export default function LinkedInProspectList() {
     const result = await base44.integrations.Core.InvokeLLM({
       prompt: `Write a short, personalized LinkedIn connection request message (under 300 characters) to ${prospect.name}, ${prospect.title} at ${prospect.org}.
 
-Context: I'm reaching out on behalf of Zenith Apex Advanced Research Platform (ZARP) — an AI-assisted IP generation platform containing Tom Bearden's scalar electromagnetics research, 21 invention build plans, AI patent tools, and an investor CRM.
+Context: I'm reaching out on behalf of Zenith Apex Advanced Research Platform (ZARP) — a beta-access research platform built on Tom Bearden's scalar electromagnetics research, featuring 21 invention build plans, AI patent tools, investor CRM, and a growing community of serious researchers.
+
+Beta access link: https://zenithapex.base44.app/beta-apply
 
 Reason they're relevant: ${prospect.why}
 
 Requirements:
 - MUST be under 300 characters total
-- Reference something specific about their work
-- One clear, low-friction ask (view research, quick call, or review IP)
+- Reference something specific about their work or background
+- Invite them to apply for beta access — frame it as exclusive and limited
+- Include or reference the beta-apply link naturally
 - No spam, no marketing fluff — be direct and peer-to-peer
-- Do NOT mention money or pricing
-- End with a question to drive reply`
+- Do NOT mention pricing or money
+- End with a low-friction question to drive a reply`
     });
     const msg = typeof result === "string" ? result : result?.content || "";
     setMessages(prev => ({ ...prev, [prospect.id]: msg }));
