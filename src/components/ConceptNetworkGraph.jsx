@@ -35,10 +35,10 @@ const MODES = {
   analyst: {
     bg: "#080d14",
     linkColor: "#ffffff",
-    linkOpacity: 0.9,
-    linkWidth: 1.8,
+    linkOpacity: 0.95,
+    linkWidth: 2,
     nodeStrokeWidth: 1.5,
-    showJolts: true,
+    showJolts: false,
     showWaves: false,
     showFlashes: false,
     glowBlur: 5,
