@@ -213,7 +213,7 @@ export default function ConceptNetworkGraph({ onNodeClick, selectedNodeId, graph
       waveData = Array.from({ length: NUM_WAVES }, (_, i) => ({
         nodeIdx: Math.floor(Math.random() * nodes.length),
         r: (i / NUM_WAVES) * 150,
-        maxR: 120 + Math.random() * 80,
+        maxR: 240 + Math.random() * 180,
         speed: 0.8 + Math.random() * 0.8,
         color: waveColors[i % waveColors.length],
         strokeW: 0.8 + Math.random() * 0.7,
