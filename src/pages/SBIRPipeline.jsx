@@ -86,6 +86,7 @@ export default function SBIRPipeline() {
   const [selectedSol, setSelectedSol] = useState(null);
   const [proposal, setProposal] = useState(null);
   const [generating, setGenerating] = useState(false);
+  const [showExplainer, setShowExplainer] = useState(false);
 
   const runMatch = async () => {
     if (!invention.title || !invention.description) return;
@@ -125,30 +126,86 @@ Return a JSON with:
     setProposal(null);
 
     const res = await base44.integrations.Core.InvokeLLM({
-      prompt: `You are an expert SBIR grant writer with a 90%+ success rate. Generate a complete SBIR proposal for:
+      prompt: `You are a senior federal grant consultant with 15+ years of SBIR/STTR success. You've secured $200M+ for clients across DoD, NIH, DOE, NSF, and DARPA.
 
-INVENTION:
+TASK: Generate a government-funded ELITE LEVEL SBIR proposal that will:
+1. Score 90+ on federal reviewer rubrics (innovation, feasibility, commercial potential, team strength)
+2. Use agency-specific language and priorities from the solicitation
+3. Demonstrate clear Phase I → Phase II → Phase III commercialization pathway
+4. Include specific, quantifiable technical milestones and success metrics
+5. Address technical risk mitigation strategies
+6. Show deep understanding of the federal review process and scoring criteria
+
+INVENTION DETAILS:
 Title: ${invention.title}
-Description: ${invention.description}
+Technical Description: ${invention.description}
 Domain: ${invention.domain}
-Team Background: ${invention.team_background || "Advanced R&D team with IP experience"}
+Team: ${invention.team_background || "Experienced R&D team with advanced physics/engineering background"}
 
-SOLICITATION:
+TARGET SOLICITATION:
 Agency: ${sol.agency}
 Topic: ${sol.topic}
-Title: ${sol.title}
-Description: ${sol.desc}
-Phase/Award: ${sol.phase} · ${sol.award}
+Solicitation Title: ${sol.title}
+Solicitation Description: ${sol.desc}
+Phase/Award Amount: ${sol.phase} (${sol.award})
 Deadline: ${sol.deadline}
 
-Generate all 7 sections with full, submission-ready text (not placeholders):
-- technical_abstract (250 words)
-- anticipated_results (specific, measurable outcomes)
-- technical_objectives (3-5 numbered objectives)
-- work_plan (6-month milestone plan with tasks)
-- commercial_applications (3 specific markets with size estimates)
-- qualifications (team background framed for this solicitation)
-- budget_justification (personnel, equipment, indirect costs breakdown)`,
+CRITICAL INSTRUCTIONS FOR GOVERNMENT-ELITE QUALITY:
+
+1. TECHNICAL ABSTRACT (250 words):
+   - Lead with the innovation: What makes this novel and why ${sol.agency} prioritizes it
+   - State specific technical advantages (e.g., COP, efficiency gain, enabling capability)
+   - Include preliminary data or theoretical justification if applicable
+   - End with Phase I deliverables that will de-risk Phase II
+
+2. ANTICIPATED RESULTS (specific, measurable):
+   - State 4-5 concrete, quantifiable Phase I outcomes
+   - Include technical specifications, performance metrics, and success criteria
+   - Each result should directly feed into Phase II commercialization
+   - Example: "Prototype achieving 85%+ energy conversion efficiency with <2ms response time"
+
+3. TECHNICAL OBJECTIVES (3-5 numbered, detailed):
+   - Structure as "Objective 1: [Task] will result in [specific outcome] by [month]"
+   - Ensure technical depth and feasibility
+   - Align with ${sol.agency} strategic priorities
+   - Include risk mitigation for each objective
+
+4. WORK PLAN (6-month Phase I plan with specific milestones):
+   - Month 1-2: Literature review, design optimization, preliminary testing
+   - Month 2-3: Prototype development, component sourcing, integration
+   - Month 3-5: Testing, validation, performance characterization, iteration
+   - Month 5-6: Documentation, technology readiness assessment (TRA), Phase II planning
+   - Each milestone must have deliverables (reports, prototypes, data packages)
+
+5. COMMERCIAL APPLICATIONS (3 specific markets with TAM/SAM estimates):
+   - Market 1: [Sector] · TAM: \\$[X] billion · Use case: [specific application] · Timeline: [2-5 years]
+   - Market 2: [Sector] · TAM: \\$[X] billion · Use case: [specific application] · Timeline: [3-7 years]
+   - Market 3: [Sector] · TAM: \\$[X] billion · Use case: [specific application] · Timeline: [5+ years]
+   - Include realistic competitive advantages and IP protection strategy
+
+6. TEAM QUALIFICATIONS:
+   - Frame team credentials specifically for this ${sol.agency} solicitation
+   - Emphasize relevant publications, prior SBIR awards (if applicable), patent portfolio
+   - Detail management approach: Who leads technical work? Who handles commercialization?
+   - Include letters of commitment from collaborators/subcontractors if applicable
+
+7. BUDGET JUSTIFICATION (detailed cost breakdown):
+   - Personnel: [Role] - [Hours] hrs @ \\$[Rate] = \\$[Total] (explain critical contributions)
+   - Equipment: [Specific items] = \\$[Total] (justify necessity, no redundancy)
+   - Materials & Supplies: [Specific consumables] = \\$[Total]
+   - Subcontracts: [Partner contributions] = \\$[Total]
+   - Other Direct Costs (travel, publications): \\$[Total]
+   - Indirect Costs (overhead): [XX]% of modified total direct costs = \\$[Total]
+   - TOTAL PHASE I REQUEST: \\$[Amount]
+   - Each line item must justify why it's essential to Phase I success
+
+TONE & STYLE:
+- Professional, technical, evidence-based
+- Avoid hype; use measured, credible claims
+- Federal review boards respond to clarity, specificity, and risk awareness
+- Include contingency plans (e.g., "If [risk occurs], we will [mitigation strategy]")
+
+Generate all 7 sections as complete, submission-ready text suitable for direct submission to [${sol.agency}].`,
       model: "claude_sonnet_4_6",
       response_json_schema: {
         type: "object",
@@ -174,14 +231,53 @@ Generate all 7 sections with full, submission-ready text (not placeholders):
 
   return (
     <div className="min-h-screen bg-gray-950 text-white flex flex-col">
-      <div className="flex items-center gap-4 px-5 py-3.5 border-b border-gray-800 bg-gray-900/80 sticky top-0 z-20">
-        <Link to="/" className="flex items-center gap-2 text-gray-400 hover:text-white text-sm"><ArrowLeft size={14} /> Back</Link>
-        <div className="w-px h-5 bg-gray-700" />
-        <div>
-          <h1 className="text-white font-black text-base flex items-center gap-2"><Target size={14} className="text-green-400" /> SBIR/STTR Grant Pipeline</h1>
-          <p className="text-gray-500 text-xs">AI matches inventions to open solicitations · auto-fills proposals · tracks deadlines</p>
+      <div className="flex items-center justify-between gap-4 px-5 py-3.5 border-b border-gray-800 bg-gray-900/80 sticky top-0 z-20">
+        <div className="flex items-center gap-4">
+          <Link to="/" className="flex items-center gap-2 text-gray-400 hover:text-white text-sm"><ArrowLeft size={14} /> Back</Link>
+          <div className="w-px h-5 bg-gray-700" />
+          <div>
+            <h1 className="text-white font-black text-base flex items-center gap-2"><Target size={14} className="text-green-400" /> SBIR/STTR Grant Pipeline</h1>
+            <p className="text-gray-500 text-xs">AI matches inventions to open solicitations · auto-fills proposals · tracks deadlines</p>
+          </div>
         </div>
+        <button onClick={() => setShowExplainer(!showExplainer)}
+          className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-bold text-blue-400 hover:bg-blue-950/20 transition-colors">
+          ℹ️ What is SBIR?
+        </button>
       </div>
+
+      {/* SBIR Explainer Modal */}
+      {showExplainer && (
+        <div className="bg-blue-950/30 border-b border-blue-800/40 px-5 py-4 text-sm space-y-3 max-w-6xl mx-auto w-full">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            <div>
+              <h3 className="text-blue-300 font-bold mb-2">What is SBIR?</h3>
+              <p className="text-gray-300 text-xs leading-relaxed">
+                <strong>SBIR (Small Business Innovation Research)</strong> is a $4B annual federal funding program managed by agencies including DoD, NIH, DOE, NSF, DARPA, NASA, and DHS. It provides non-dilutive R&D funding for small companies (≤500 employees) to commercialize innovative technology.
+              </p>
+              <p className="text-gray-400 text-xs mt-2">
+                <strong>Phase I:</strong> $50K–$250K proof-of-concept (6 months)
+              </p>
+              <p className="text-gray-400 text-xs">
+                <strong>Phase II:</strong> $750K–$2M development (2 years)
+              </p>
+              <p className="text-gray-400 text-xs">
+                <strong>Phase III:</strong> Commercialization (agency or private market)
+              </p>
+            </div>
+            <div>
+              <h3 className="text-blue-300 font-bold mb-2">Is NSF an IP Generation System?</h3>
+              <p className="text-gray-300 text-xs leading-relaxed">
+                <strong>NSF SBIR</strong> (National Science Foundation) specifically funds AI, software, and "dual-use" R&D. Your ZARP platform—an AI-assisted IP generation system that automates invention disclosure, patent drafting, and commercialization—<strong>directly aligns with NSF SBIR Topic: "AI-Assisted Intellectual Property Generation Systems"</strong> (NSF-SBIR-26-AI, \\$750K Phase II).
+              </p>
+              <p className="text-gray-400 text-xs mt-2">
+                This means: <strong>ZARP is a defensible SBIR project itself.</strong> You could pursue NSF SBIR to scale ZARP, not just use it to win other agencies' grants.
+              </p>
+            </div>
+          </div>
+          <p className="text-gray-500 text-xs italic">💡 Pro tip: Use ZARP to generate SBIR proposals for other inventors/companies, then use those wins to fund ZARP development via NSF SBIR.</p>
+        </div>
+      )}
 
       <div className="flex-1 overflow-y-auto px-5 py-6 max-w-6xl mx-auto w-full">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
