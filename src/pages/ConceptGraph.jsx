@@ -150,6 +150,14 @@ export default function ConceptGraph() {
 
       {/* Content area */}
       <div className="flex-1 relative overflow-hidden">
+        {/* ZARP logo background */}
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-5 z-0">
+          <div className="text-center">
+            <div className="text-9xl font-black text-white tracking-tighter">ZARP</div>
+            <div className="text-2xl text-gray-400 tracking-widest mt-2">Zenith Apex Research Portfolio</div>
+          </div>
+        </div>
+
         {view === "business" ? (
           <BusinessConceptGraph />
         ) : view === "timeline" ? (
@@ -161,6 +169,7 @@ export default function ConceptGraph() {
           />
         ) : (
           <>
+            <div className="absolute inset-0 z-0 pointer-events-none" />
             {clusterMode && clusterNodes.length > 0 && (
               <ClusterSummaryPanel
                 nodes={clusterNodes}
@@ -178,11 +187,13 @@ export default function ConceptGraph() {
                 onClose={() => setShowSearch(false)}
               />
             )}
-            <ConceptNetworkGraph
-              onNodeClick={handleNodeClick}
-              selectedNodeId={selectedNode?.id}
-              graphMode={graphMode}
-            />
+            <div className="absolute inset-0 z-10">
+              <ConceptNetworkGraph
+                onNodeClick={handleNodeClick}
+                selectedNodeId={selectedNode?.id}
+                graphMode={graphMode}
+              />
+            </div>
             <NodePanel node={selectedNode} onClose={() => setSelectedNode(null)} />
             {showTopConcepts && (
               <TopConceptsPanel
