@@ -391,42 +391,7 @@ export default function ConceptNetworkGraph({ onNodeClick, selectedNodeId }) {
       return el;
     });
 
-    // ── Atomic orbital particles — large orbits, clearly visible ──
-    const atomGroup = g.append("g").attr("class", "atoms");
-    const NUM_ATOMS = 80;
-    const atomData = Array.from({ length: NUM_ATOMS }, (_, i) => ({
-      nodeIdx: i % nodes.length,
-      angle: (i / NUM_ATOMS) * Math.PI * 2,
-      orbitR: 60 + Math.random() * 55,
-      speed: (0.025 + Math.random() * 0.04) * (i % 2 === 0 ? 1 : -1),
-      color: ["#ffffff","#38bdf8","#facc15","#f472b6","#4ade80","#a78bfa"][i % 6],
-      size: 4 + Math.random() * 4,
-      tilt: (i / NUM_ATOMS) * Math.PI,
-    }));
 
-    // Each atom: glowing dot + orbit path ellipse
-    const atomEls = atomData.map((a, i) => {
-      // Orbit ellipse (static, drawn once, updated on tick via node position)
-      const orbitEl = document.createElementNS("http://www.w3.org/2000/svg", "ellipse");
-      orbitEl.setAttribute("rx", a.orbitR);
-      orbitEl.setAttribute("ry", a.orbitR * 0.4);
-      orbitEl.setAttribute("fill", "none");
-      orbitEl.setAttribute("stroke", a.color);
-      orbitEl.setAttribute("stroke-width", "0.5");
-      orbitEl.setAttribute("stroke-opacity", "0.25");
-      orbitEl.setAttribute("pointer-events", "none");
-      orbitEl.setAttribute("transform", `rotate(${a.tilt * 180 / Math.PI})`);
-      atomGroup.node().appendChild(orbitEl);
-
-      const dot = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-      dot.setAttribute("r", a.size);
-      dot.setAttribute("fill", a.color);
-      dot.setAttribute("filter", "url(#linkGlowOuter)");
-      dot.setAttribute("pointer-events", "none");
-      atomGroup.node().appendChild(dot);
-
-      return { dot, orbitEl };
-    });
 
     // ── Light bulb flash bursts — explosive bright rings ──
     const flashGroup = g.append("g").attr("class", "flashes");
@@ -480,29 +445,6 @@ export default function ConceptNetworkGraph({ onNodeClick, selectedNodeId }) {
         waveEls[i].setAttribute("stroke", w.color);
         waveEls[i].setAttribute("stroke-opacity", op);
         waveEls[i].setAttribute("stroke-dasharray", w.r > 60 ? `${8} ${10}` : "none");
-      }
-
-      // Atomic orbitals
-      for (let i = 0; i < atomData.length; i++) {
-        const a = atomData[i];
-        const nd = nodes[a.nodeIdx];
-        if (!nd?.x) continue;
-        a.angle += a.speed;
-
-        const ex = Math.cos(a.angle) * a.orbitR;
-        const ey = Math.sin(a.angle) * a.orbitR * 0.4;
-        const cosT = Math.cos(a.tilt), sinT = Math.sin(a.tilt);
-        const rx = ex * cosT - ey * sinT;
-        const ry = ex * sinT + ey * cosT;
-
-        atomEls[i].dot.setAttribute("cx", nd.x + rx);
-        atomEls[i].dot.setAttribute("cy", nd.y + ry);
-        atomEls[i].orbitEl.setAttribute("cx", nd.x);
-        atomEls[i].orbitEl.setAttribute("cy", nd.y);
-
-        const depth = (Math.sin(a.angle) + 1) / 2;
-        atomEls[i].dot.setAttribute("opacity", 0.5 + depth * 0.5);
-        atomEls[i].dot.setAttribute("r", a.size * (0.7 + depth * 0.5));
       }
 
       // Flash bursts (light bulb explosions)
