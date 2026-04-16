@@ -137,6 +137,9 @@ export default function ConceptNetworkGraph({ onNodeClick, selectedNodeId, graph
     const g = svg.append("g");
     svg.call(d3.zoom().scaleExtent([0.1, 6]).on("zoom", e => g.attr("transform", e.transform)));
 
+    // Create link layer first (so it renders behind nodes)
+    const linkGroup = g.append("g");
+
     const nodes = rawNodes.map(d => ({ ...d }));
     const links = rawLinks.map(d => ({ ...d }));
     const degrees = getNodeDegrees(nodes, links);
@@ -161,7 +164,6 @@ export default function ConceptNetworkGraph({ onNodeClick, selectedNodeId, graph
       .force("collision", d3.forceCollide(d => nodeRadius(d) + 18));
 
     // ── Links ──
-    const linkGroup = g.append("g");
     const link = linkGroup.selectAll("line.link-line")
       .data(links).enter().append("line")
       .attr("class", "link-line")
@@ -169,6 +171,8 @@ export default function ConceptNetworkGraph({ onNodeClick, selectedNodeId, graph
       .attr("stroke-width", mode.linkWidth)
       .attr("stroke-opacity", mode.linkOpacity)
       .attr("stroke-dasharray", null)
+      .attr("stroke-linecap", "round")
+      .attr("stroke-linejoin", "round")
       .attr("filter", graphMode === "analyst" ? null : "url(#glow-link)");
 
     // ── Electric jolt layer ──
