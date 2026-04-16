@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { ArrowLeft, Zap, Loader2, Copy, CheckCircle2, TrendingUp, Mail, Calendar, FileText } from "lucide-react";
+import { ArrowLeft, Zap, Loader2, Copy, CheckCircle2, TrendingUp, Mail, Calendar, FileText, Clock, AlertTriangle } from "lucide-react";
 import { base44 } from "@/api/base44Client";
+import InvestorCRMDetailPanel from "@/components/InvestorCRMDetailPanel";
 
 const PIPELINE_STAGES = [
   { id: "prospect", label: "Prospect", icon: "🎯", color: "#6b7280" },
@@ -29,9 +30,12 @@ export default function InvestorOutreachWorkflow() {
   const [investors, setInvestors] = useState([]);
   const [ranked, setRanked] = useState([]);
   const [selectedInvestor, setSelectedInvestor] = useState(null);
+  const [detailedInvestor, setDetailedInvestor] = useState(null);
   const [template, setTemplate] = useState(null);
   const [loading, setLoading] = useState(false);
   const [scoring, setScoring] = useState(false);
+  const [followUpReminders, setFollowUpReminders] = useState(null);
+  const [loadingReminders, setLoadingReminders] = useState(false);
   const [user, setUser] = useState(null);
 
   useEffect(() => {
@@ -58,6 +62,25 @@ export default function InvestorOutreachWorkflow() {
     } finally {
       setScoring(false);
     }
+  };
+
+  const handleGenerateReminders = async () => {
+    setLoadingReminders(true);
+    try {
+      const response = await base44.functions.invoke("scheduleFollowUpReminder", {});
+      if (response.data.success) {
+        setFollowUpReminders(response.data);
+      }
+    } catch (err) {
+      console.error('Reminder generation failed:', err);
+    } finally {
+      setLoadingReminders(false);
+    }
+  };
+
+  const handleCRMDetailOpen = (inv) => {
+    const fullInvestor = investors.find(i => i.id === inv.investor_id) || inv;
+    setDetailedInvestor(fullInvestor);
   };
 
   const handleGenerateTemplate = async (inv, stage) => {
@@ -99,11 +122,18 @@ export default function InvestorOutreachWorkflow() {
             <p className="text-gray-500 text-xs">AI-guided workflow with templates · Likelihood scoring · Deal progression tracking</p>
           </div>
         </div>
-        <button onClick={handleScoreInvestors} disabled={scoring || investors.length === 0}
-          className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-yellow-800 hover:bg-yellow-700 disabled:opacity-40 text-white text-xs font-black transition-all">
-          {scoring ? <Loader2 size={12} className="animate-spin" /> : <TrendingUp size={12} />}
-          {scoring ? "Scoring..." : "Rank Investors"}
-        </button>
+        <div className="flex items-center gap-2">
+          <button onClick={handleScoreInvestors} disabled={scoring || investors.length === 0}
+            className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-yellow-800 hover:bg-yellow-700 disabled:opacity-40 text-white text-xs font-black transition-all">
+            {scoring ? <Loader2 size={12} className="animate-spin" /> : <TrendingUp size={12} />}
+            {scoring ? "Scoring..." : "Rank Investors"}
+          </button>
+          <button onClick={handleGenerateReminders} disabled={loadingReminders || investors.length === 0}
+            className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-red-800 hover:bg-red-700 disabled:opacity-40 text-white text-xs font-black transition-all">
+            {loadingReminders ? <Loader2 size={12} className="animate-spin" /> : <Clock size={12} />}
+            {loadingReminders ? "Generating..." : "Follow-up Reminders"}
+          </button>
+        </div>
       </div>
 
       <div className="flex-1 overflow-y-auto px-5 py-6 max-w-7xl mx-auto w-full">
@@ -177,16 +207,67 @@ export default function InvestorOutreachWorkflow() {
                           </span>
                         </td>
                         <td className="px-4 py-3 text-center">
-                          <button onClick={() => handleGenerateTemplate(inv, inv.current_stage)}
-                            className="flex items-center gap-1 px-3 py-1 rounded-lg bg-blue-900/30 hover:bg-blue-800/40 text-blue-400 text-xs font-bold transition-all">
-                            <Mail size={11} /> Template
-                          </button>
+                          <div className="flex items-center justify-center gap-1">
+                            <button onClick={() => handleGenerateTemplate(inv, inv.current_stage)}
+                              className="flex items-center gap-1 px-2 py-1 rounded-lg bg-blue-900/30 hover:bg-blue-800/40 text-blue-400 text-xs font-bold transition-all">
+                              <Mail size={10} /> Template
+                            </button>
+                            <button onClick={() => handleCRMDetailOpen(inv)}
+                              className="flex items-center gap-1 px-2 py-1 rounded-lg bg-purple-900/30 hover:bg-purple-800/40 text-purple-400 text-xs font-bold transition-all">
+                              <FileText size={10} /> Details
+                            </button>
+                          </div>
                         </td>
                       </tr>
                     ))}
                   </tbody>
                 </table>
               </div>
+            </div>
+          </div>
+        )}
+
+        {/* Follow-up Reminders */}
+        {followUpReminders && followUpReminders.reminders_generated > 0 && (
+          <div className="mb-8 bg-red-950/20 border border-red-800/50 rounded-2xl overflow-hidden">
+            <div className="px-5 py-3 border-b border-red-800/50 bg-red-950/30">
+              <div className="flex items-center justify-between">
+                <p className="text-red-400 text-xs font-black uppercase tracking-widest flex items-center gap-2">
+                  <AlertTriangle size={12} /> {followUpReminders.reminders_generated} Follow-up Reminders
+                </p>
+                <div className="flex gap-2 text-xs text-red-300">
+                  {followUpReminders.summary.critical > 0 && <span className="px-2 py-1 bg-red-900/40 rounded">🔴 {followUpReminders.summary.critical} Critical</span>}
+                  {followUpReminders.summary.high > 0 && <span className="px-2 py-1 bg-orange-900/40 rounded">🟠 {followUpReminders.summary.high} High</span>}
+                </div>
+              </div>
+            </div>
+            <div className="space-y-2 p-4 max-h-64 overflow-y-auto">
+              {followUpReminders.reminders.map((reminder, idx) => (
+                <div key={idx} className={`border rounded-lg p-3 ${
+                  reminder.urgency === "critical" ? "bg-red-900/20 border-red-700" :
+                  reminder.urgency === "high" ? "bg-orange-900/20 border-orange-700" :
+                  "bg-yellow-900/20 border-yellow-700"
+                }`}>
+                  <div className="flex items-start justify-between">
+                    <div className="flex-1">
+                      <p className="text-white font-bold text-sm">{reminder.investor_name}</p>
+                      <p className="text-gray-400 text-xs mt-1">{reminder.suggested_action}</p>
+                      <p className={`text-xs mt-1 font-bold ${
+                        reminder.urgency === "critical" ? "text-red-300" :
+                        reminder.urgency === "high" ? "text-orange-300" :
+                        "text-yellow-300"
+                      }`}>
+                        {reminder.days_overdue} days overdue • Last contact: {new Date(reminder.last_contact).toLocaleDateString()}
+                      </p>
+                    </div>
+                    <button
+                      onClick={() => handleCRMDetailOpen(reminder)}
+                      className="flex-shrink-0 px-2 py-1 rounded bg-gray-800 hover:bg-gray-700 text-gray-300 text-xs font-bold">
+                      Follow up
+                    </button>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         )}
@@ -313,6 +394,18 @@ export default function InvestorOutreachWorkflow() {
           </div>
         )}
       </div>
+
+      {/* CRM Detail Panel */}
+      <InvestorCRMDetailPanel
+        investor={detailedInvestor}
+        onClose={() => setDetailedInvestor(null)}
+        onUpdate={() => {
+          if (user) {
+            base44.entities.InvestorOutreach.filter({ user_email: user.email })
+              .then(data => setInvestors(data));
+          }
+        }}
+      />
     </div>
   );
 }
