@@ -97,14 +97,7 @@ export default function ConceptNetworkGraph({ onNodeClick, selectedNodeId, graph
       grad.append("stop").attr("offset", "100%").attr("stop-color", color).attr("stop-opacity", 0.08);
     });
 
-    // ── Arrow marker ──
-    defs.append("marker")
-      .attr("id", "arrow")
-      .attr("viewBox", "0 -4 8 8")
-      .attr("refX", 12).attr("refY", 0)
-      .attr("markerWidth", 5).attr("markerHeight", 5)
-      .attr("orient", "auto")
-      .append("path").attr("d", "M0,-3L7,0L0,3").attr("fill", "#475569").attr("fill-opacity", 0.7);
+
 
     // ── Glow filters ──
     const makeGlow = (id, blur, color) => {
@@ -171,8 +164,7 @@ export default function ConceptNetworkGraph({ onNodeClick, selectedNodeId, graph
       .attr("stroke-width", mode.linkWidth)
       .attr("stroke-opacity", mode.linkOpacity)
       .attr("stroke-dasharray", null)
-      .attr("filter", "url(#glow-link)")
-      .attr("marker-end", "url(#arrow)");
+      .attr("filter", "url(#glow-link)");
 
     // ── Electric jolt layer ──
     const joltColorsElectric = ["#7dd3fc","#c4b5fd","#86efac","#fde68a","#f9a8d4","#ffffff"];
