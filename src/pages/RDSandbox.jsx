@@ -206,9 +206,16 @@ Be specific, technical, and IP-focused. Treat this as a real invention disclosur
     setResult(res);
     setLoading(false);
 
-    // Save to HybridInvention entity
+    // Save to HybridInvention entity (ensure all fields are strings)
     await base44.entities.HybridInvention.create({
-      ...res,
+      hybrid_concept: res.hybrid_concept || "",
+      mechanism: res.mechanism || "",
+      synergy_score: res.synergy_score || 0,
+      patent_claims: typeof res.patent_claims === 'string' ? res.patent_claims : JSON.stringify(res.patent_claims),
+      market_applications: typeof res.market_applications === 'string' ? res.market_applications : JSON.stringify(res.market_applications),
+      required_components: res.required_components || "",
+      ip_valuation: res.ip_valuation || "",
+      suggested_next_steps: typeof res.suggested_next_steps === 'string' ? res.suggested_next_steps : JSON.stringify(res.suggested_next_steps),
       input_nodes: selected.map(n => ({ id: n.id, label: n.label, group: n.group })),
       mode,
       market_sectors: [...new Set(selected.map(n => n.group))],
