@@ -3,11 +3,12 @@ import { Link } from "react-router-dom";
 import {
   ArrowLeft, Bell, ChevronDown, ChevronRight,
   Mail, ExternalLink, Trash2, Clock, AlertCircle,
-  LayoutGrid, List, MessageSquare, Send, Lock
+  LayoutGrid, List, MessageSquare, Send, Lock, Loader2, TrendingUp
 } from "lucide-react";
 import { BUYERS, STAGES } from "../lib/buyerData";
 import { useTier } from "../hooks/useTier";
 import { TIERS } from "../lib/tiers";
+import { base44 } from "@/api/base44Client";
 
 const STORAGE_KEY = "zenith_investor_crm_v2";
 
@@ -372,8 +373,27 @@ export default function InvestorCRM() {
   const [view, setView] = useState("list"); // "list" | "kanban"
   const [stageFilter, setStageFilter] = useState("all");
   const [tierFilter, setTierFilter] = useState("All");
+  const [fitScores, setFitScores] = useState(null);
+  const [scoringInvestors, setScoringInvestors] = useState(false);
 
   const handleChange = useCallback((updated) => { setCRM(updated); saveCRM(updated); }, []);
+
+  const handleScoreFit = async () => {
+    setScoringInvestors(true);
+    try {
+      const response = await base44.functions.invoke("scoreInvestorsFitPreOutreach", {
+        target_investment: 1500000,
+        equity_offered: 12,
+        sectors_of_interest: ["energy", "physics", "advanced materials"]
+      });
+      setFitScores(response.data);
+    } catch (err) {
+      console.error('Scoring failed:', err);
+      alert('Failed to score investors. Please try again.');
+    } finally {
+      setScoringInvestors(false);
+    }
+  };
 
   const tiers = ["All", ...BUYERS.map(b => b.tier)];
   const totalContacts = BUYERS.reduce((s, b) => s + b.contacts.length, 0);
@@ -420,6 +440,11 @@ export default function InvestorCRM() {
               <LayoutGrid size={12} /> Kanban
             </button>
           </div>
+          <button onClick={handleScoreFit} disabled={scoringInvestors || filteredBuyers.length === 0}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-amber-800 hover:bg-amber-700 disabled:opacity-40 text-white text-xs font-black transition-all">
+            {scoringInvestors ? <Loader2 size={12} className="animate-spin" /> : <TrendingUp size={12} />}
+            {scoringInvestors ? "Scoring..." : "Pre-Outreach Score"}
+          </button>
           <Link to="/investor-outreach"
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-purple-900/40 hover:bg-purple-800/60 border border-purple-700 text-purple-300 text-xs font-bold transition-all">
             🎯 Outreach Pipeline
@@ -432,8 +457,89 @@ export default function InvestorCRM() {
       </div>
 
       <div className={`flex-1 overflow-y-auto p-5 ${view === "kanban" ? "max-w-full" : "max-w-5xl"} mx-auto w-full`}>
-        <PipelineSummary crm={crm} />
-        <UpcomingReminders crm={crm} />
+        {/* Pre-Outreach Fit Scores */}
+        {fitScores && (
+          <div className="mb-6 space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+              <div className="bg-green-950/20 border border-green-800/50 rounded-2xl p-4">
+                <p className="text-green-400 text-xs font-black uppercase tracking-widest mb-1">Excellent Fit</p>
+                <p className="text-white font-black text-2xl">{fitScores.summary.hot_prospects}</p>
+                <p className="text-gray-600 text-xs mt-1">Score 75+</p>
+              </div>
+              <div className="bg-yellow-950/20 border border-yellow-800/50 rounded-2xl p-4">
+                <p className="text-yellow-400 text-xs font-black uppercase tracking-widest mb-1">Good Fit</p>
+                <p className="text-white font-black text-2xl">{fitScores.summary.warm_leads}</p>
+                <p className="text-gray-600 text-xs mt-1">Score 50-74</p>
+              </div>
+              <div className="bg-gray-800/50 border border-gray-700 rounded-2xl p-4">
+                <p className="text-gray-400 text-xs font-black uppercase tracking-widest mb-1">Lower Priority</p>
+                <p className="text-white font-black text-2xl">{fitScores.summary.cold_leads}</p>
+                <p className="text-gray-600 text-xs mt-1">Score 0-49</p>
+              </div>
+            </div>
+
+            {/* Fit Scores Table */}
+            <div className="bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden">
+              <div className="px-5 py-3 border-b border-gray-800 bg-amber-950/20">
+                <p className="text-amber-400 text-xs font-black uppercase tracking-widest">Pre-Outreach Investor Fit Analysis</p>
+              </div>
+              <div className="overflow-x-auto">
+                <table className="w-full">
+                  <thead>
+                    <tr className="border-b border-gray-800">
+                      <th className="px-4 py-3 text-left text-xs font-bold text-gray-400">Investor</th>
+                      <th className="px-4 py-3 text-left text-xs font-bold text-gray-400">Type</th>
+                      <th className="px-4 py-3 text-center text-xs font-bold text-gray-400">Fit Score</th>
+                      <th className="px-4 py-3 text-left text-xs font-bold text-gray-400">Recommendation</th>
+                      <th className="px-4 py-3 text-left text-xs font-bold text-gray-400">Priority</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {fitScores.scored.map((inv) => (
+                      <tr key={inv.investor_id} className="border-b border-gray-800 hover:bg-gray-800/30 transition-colors">
+                        <td className="px-4 py-3 text-sm font-bold text-white">{inv.investor_name}</td>
+                        <td className="px-4 py-3 text-xs text-gray-500 uppercase">{inv.investor_type}</td>
+                        <td className="px-4 py-3 text-center">
+                          <div className="flex items-center justify-center gap-2">
+                            <div className="h-2 w-16 bg-gray-800 rounded-full overflow-hidden">
+                              <div className="h-full" style={{
+                                width: `${inv.fit_score}%`,
+                                backgroundColor: inv.fit_score >= 75 ? "#22c55e" : inv.fit_score >= 50 ? "#f59e0b" : "#6b7280"
+                              }} />
+                            </div>
+                            <span className="text-xs font-black w-6 text-right">{inv.fit_score}%</span>
+                          </div>
+                        </td>
+                        <td className="px-4 py-3 text-xs text-gray-400">{inv.recommendation}</td>
+                        <td className="px-4 py-3 text-xs">
+                          <span className={`px-2 py-1 rounded-lg font-bold ${
+                            inv.priority === 'critical' ? 'bg-green-900/30 text-green-400' :
+                            inv.priority === 'high' ? 'bg-yellow-900/30 text-yellow-400' :
+                            inv.priority === 'medium' ? 'bg-orange-900/30 text-orange-400' :
+                            'bg-gray-800 text-gray-500'
+                          }`}>
+                            {inv.priority.toUpperCase()}
+                          </span>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <button onClick={() => setFitScores(null)} className="text-gray-500 hover:text-gray-400 text-xs font-bold">
+              ← Back to list
+            </button>
+          </div>
+        )}
+
+        {!fitScores && (
+          <>
+            <PipelineSummary crm={crm} />
+            <UpcomingReminders crm={crm} />
+          </>
+        )}
 
         {/* Kanban View */}
         {view === "kanban" && <KanbanView crm={crm} onChange={handleChange} />}
