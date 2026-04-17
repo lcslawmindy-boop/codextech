@@ -108,6 +108,7 @@ import CollabPatentDraft from './pages/CollabPatentDraft';
 import IPPortfolioHealth from './pages/IPPortfolioHealth';
 import BuildMilestoneAI from './pages/BuildMilestoneAI';
 import ValuationAPI from './pages/ValuationAPI';
+import VDRNdaSign from './pages/VDRNdaSign';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -240,6 +241,7 @@ const AuthenticatedApp = () => {
           <Route path="/build-milestone-ai" element={<BuildMilestoneAI />} />
           <Route path="/valuation-api" element={<ValuationAPI />} />
           <Route path="/flash-sale" element={<FlashSale />} />
+          <Route path="/vdr-nda" element={<VDRNdaSign />} />
 
           {/* Admin-only routes */}
           <Route element={<AdminGuard />}>

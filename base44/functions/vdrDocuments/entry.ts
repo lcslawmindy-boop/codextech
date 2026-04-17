@@ -94,6 +94,47 @@ Deno.serve(async (req) => {
       return Response.json({ grant });
     }
 
+    // ── CHECK GRANT STATUS (for NDA sign page) ───────────────────────────────
+    if (action === 'check_grant_status') {
+      const grants = await base44.asServiceRole.entities.VDRAccessGrant.filter({ email: user.email, is_active: true });
+      if (!grants.length) return Response.json({ grant: null });
+      const grant = grants[0];
+      if (grant.nda_verified) {
+        return Response.json({ already_signed: true, grant });
+      }
+      return Response.json({ grant, already_signed: false });
+    }
+
+    // ── SIGN NDA: grantee digitally signs — auto-verifies their grant ─────────
+    if (action === 'sign_nda') {
+      const { full_name, typed_signature, nda_version } = body;
+      if (!full_name || !typed_signature) {
+        return Response.json({ error: 'Full name and typed signature are required.' }, { status: 400 });
+      }
+
+      // Find their grant
+      const grants = await base44.asServiceRole.entities.VDRAccessGrant.filter({ email: user.email, is_active: true });
+      if (!grants.length) return Response.json({ error: 'No access grant found for your email.' }, { status: 403 });
+      const grant = grants[0];
+
+      if (grant.nda_verified) {
+        return Response.json({ success: true, already_verified: true, grant });
+      }
+
+      // Get IP from request headers
+      const ip = req.headers.get('x-forwarded-for') || req.headers.get('cf-connecting-ip') || 'unknown';
+
+      // Update grant to verified
+      const updated = await base44.asServiceRole.entities.VDRAccessGrant.update(grant.id, {
+        nda_verified: true,
+        nda_verified_at: new Date().toISOString(),
+        notes: `${grant.notes || ''} | NDA signed digitally by "${full_name}" (sig: "${typed_signature}") via app on ${new Date().toISOString()} from IP ${ip} — version ${nda_version || 'VDR-2.0'}`.trim(),
+      });
+
+      console.log(`VDR NDA signed: ${user.email} ("${full_name}") — grant ${grant.id} now verified`);
+      return Response.json({ success: true, grant: updated });
+    }
+
     // ── GRANTEE ACCESS: view or download a document ───────────────────────────
     if (action === 'access_doc') {
       const { doc_id, type } = body; // type = 'view' | 'download'
