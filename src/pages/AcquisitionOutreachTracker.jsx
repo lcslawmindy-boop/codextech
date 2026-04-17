@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { ArrowLeft, Plus, ExternalLink, Copy, Check, ChevronDown, ChevronUp, Target, DollarSign, Users, FileText, Star } from "lucide-react";
+import { ArrowLeft, Plus, ExternalLink, Copy, Check, ChevronDown, ChevronUp, Target, DollarSign, Users, FileText, Star, ShieldCheck } from "lucide-react";
 
 const BROKERS = [
   {
@@ -247,6 +247,191 @@ Happy to discuss structure (full acquisition, licensing, or revenue-share).
 Best,
 [Your Name]`;
 
+const LEGAL_SECTIONS = [
+  {
+    title: "🚀 Do Today — Before Any Outreach",
+    color: "border-green-800/50 bg-green-950/10",
+    headingColor: "text-green-400",
+    items: [
+      {
+        id: "biz_email",
+        label: "Get a business email address",
+        detail: "founder@zenithapexresearch.com via Google Workspace (~$6/mo). Takes 15 min. Makes every email 10x more credible to VCs and brokers.",
+        link: "https://workspace.google.com",
+        linkLabel: "Google Workspace →",
+        urgent: true,
+      },
+      {
+        id: "exec_summary",
+        label: "Write a 1-page executive summary",
+        detail: "Title, what ZARP is, key assets (21+ build plans, AI tools, recurring revenue), asking price range, and contact. Attach to every broker email.",
+        urgent: true,
+      },
+      {
+        id: "nda_ready",
+        label: "Confirm your DocuSign NDA is active & working",
+        detail: "Test the NDA link yourself: https://na4.docusign.net/Member/PowerFormSigning.aspx?PowerFormId=ZARP-NDA — make sure it routes to you correctly.",
+        link: "https://na4.docusign.net/Member/PowerFormSigning.aspx?PowerFormId=ZARP-NDA&env=na4&acct=zenithapex",
+        linkLabel: "Test NDA Link →",
+        urgent: true,
+      },
+    ],
+  },
+  {
+    title: "🏢 This Week — Before Serious Discussions",
+    color: "border-blue-800/50 bg-blue-950/10",
+    headingColor: "text-blue-400",
+    items: [
+      {
+        id: "llc",
+        label: "Form an LLC",
+        detail: "Protects your personal assets. Do this before signing any term sheet or LOI. Cost: $50–$150. Use Stripe Atlas (Delaware LLC, easiest for investors) or your state directly.",
+        link: "https://stripe.com/atlas",
+        linkLabel: "Stripe Atlas →",
+        urgent: false,
+      },
+      {
+        id: "bank_account",
+        label: "Open a business bank account",
+        detail: "Required once you have an LLC. Mercury.com is free and perfect for startups/acquisitions. Buyers will ask about business financials.",
+        link: "https://mercury.com",
+        linkLabel: "Mercury (free) →",
+        urgent: false,
+      },
+      {
+        id: "revenue_docs",
+        label: "Gather revenue & membership records",
+        detail: "Screenshot Stripe dashboard, export revenue history, list number of active beta members. Buyers will ask for trailing 12-month revenue in first call.",
+        urgent: false,
+      },
+    ],
+  },
+  {
+    title: "⚖️ Patent & IP Risk",
+    color: "border-yellow-800/50 bg-yellow-950/10",
+    headingColor: "text-yellow-400",
+    items: [
+      {
+        id: "infringement_risk",
+        label: "Infringement risk: VERY LOW for your use case",
+        detail: "You're selling educational content, research plans, and software tools — not manufacturing patented devices. Bearden's published work is prior art that prevents others from patenting those concepts now.",
+        urgent: false,
+      },
+      {
+        id: "expired_patents",
+        label: "Bearden's patents are expired or never granted",
+        detail: "Most Bearden devices were published as research (creating prior art) but never commercially patented. Expired patents = free to use and build upon.",
+        urgent: false,
+      },
+      {
+        id: "no_medical_claims",
+        label: "Do NOT make medical or 'free energy' product claims",
+        detail: "Your content is labeled as research/educational. Keep it that way. Avoid phrasing like 'this device cures X' or 'generates unlimited energy' in marketing materials.",
+        urgent: false,
+      },
+      {
+        id: "ip_attorney",
+        label: "Optional: $300 IP attorney consult for peace of mind",
+        detail: "One hour with a patent attorney can confirm your IP position before any acquisition. Search USPTO.gov or Avvo.com for affordable IP attorneys.",
+        link: "https://www.avvo.com/patent-lawyer.html",
+        linkLabel: "Find IP Attorney →",
+        urgent: false,
+      },
+    ],
+  },
+  {
+    title: "📋 Before Signing Any Deal",
+    color: "border-purple-800/50 bg-purple-950/10",
+    headingColor: "text-purple-400",
+    items: [
+      {
+        id: "llc_before_deal",
+        label: "LLC must be formed before signing LOI or term sheet",
+        detail: "Never sign acquisition documents as an individual. The LLC is the seller. This is critical for tax and liability reasons.",
+        urgent: false,
+      },
+      {
+        id: "lawyer_review",
+        label: "Have a lawyer review any term sheet",
+        detail: "One-time cost ~$500–$1,500 to review an acquisition term sheet. Worth every dollar. Look for M&A attorneys or use Clerky.com for lighter-touch review.",
+        link: "https://www.clerky.com",
+        linkLabel: "Clerky →",
+        urgent: false,
+      },
+      {
+        id: "asset_vs_stock",
+        label: "Understand asset sale vs. stock sale",
+        detail: "Most platform/IP acquisitions are asset sales (buyer purchases specific IP, code, content — not the whole LLC). This is simpler and better for you as the seller.",
+        urgent: false,
+      },
+    ],
+  },
+];
+
+function LegalChecklist() {
+  const [checked, setChecked] = useState({});
+
+  const toggle = (id) => setChecked(prev => ({ ...prev, [id]: !prev[id] }));
+  const totalItems = LEGAL_SECTIONS.reduce((s, sec) => s + sec.items.length, 0);
+  const doneCount = Object.values(checked).filter(Boolean).length;
+
+  return (
+    <div className="space-y-5">
+      {/* Progress */}
+      <div className="bg-gray-900 border border-gray-800 rounded-2xl p-4">
+        <div className="flex items-center justify-between mb-2">
+          <p className="text-white font-bold text-sm flex items-center gap-2"><ShieldCheck size={14} className="text-green-400" /> Legal & Setup Progress</p>
+          <span className="text-green-400 font-black text-sm">{doneCount}/{totalItems}</span>
+        </div>
+        <div className="w-full h-2 bg-gray-800 rounded-full overflow-hidden">
+          <div className="h-full bg-green-500 rounded-full transition-all duration-500"
+            style={{ width: `${totalItems > 0 ? (doneCount / totalItems) * 100 : 0}%` }} />
+        </div>
+        <p className="text-gray-600 text-xs mt-1.5">Click any item to mark as done</p>
+      </div>
+
+      {LEGAL_SECTIONS.map((section, si) => (
+        <div key={si} className={`border rounded-2xl p-4 space-y-3 ${section.color}`}>
+          <p className={`font-black text-sm ${section.headingColor}`}>{section.title}</p>
+          {section.items.map((item) => (
+            <div key={item.id}
+              onClick={() => toggle(item.id)}
+              className={`flex items-start gap-3 p-3 rounded-xl cursor-pointer transition-all border ${
+                checked[item.id]
+                  ? "bg-green-950/30 border-green-800/40 opacity-60"
+                  : "bg-gray-900/60 border-gray-700/50 hover:border-gray-600"
+              }`}>
+              <div className={`w-5 h-5 rounded-md border-2 flex-shrink-0 mt-0.5 flex items-center justify-center transition-all ${
+                checked[item.id] ? "bg-green-600 border-green-600" : "border-gray-600"
+              }`}>
+                {checked[item.id] && <Check size={11} className="text-white" />}
+              </div>
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-2 flex-wrap mb-0.5">
+                  <p className={`text-sm font-semibold leading-snug ${checked[item.id] ? "line-through text-gray-600" : "text-white"}`}>
+                    {item.label}
+                  </p>
+                  {item.urgent && !checked[item.id] && (
+                    <span className="text-xs px-1.5 py-0.5 rounded bg-red-900/40 text-red-400 border border-red-800/50 font-bold">NOW</span>
+                  )}
+                </div>
+                <p className="text-gray-400 text-xs leading-relaxed">{item.detail}</p>
+                {item.link && (
+                  <a href={item.link} target="_blank" rel="noopener noreferrer"
+                    onClick={e => e.stopPropagation()}
+                    className="inline-flex items-center gap-1 mt-1.5 text-xs text-blue-400 hover:text-blue-300 transition-colors">
+                    <ExternalLink size={10} /> {item.linkLabel}
+                  </a>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+      ))}
+    </div>
+  );
+}
+
 export default function AcquisitionOutreachTracker() {
   const [tab, setTab] = useState("brokers");
   const [showTemplate, setShowTemplate] = useState(false);
@@ -327,11 +512,12 @@ export default function AcquisitionOutreachTracker() {
       </div>
 
       {/* Tabs */}
-      <div className="flex gap-1 px-5 pt-5 border-b border-gray-800">
+      <div className="flex gap-1 px-5 pt-5 border-b border-gray-800 overflow-x-auto">
         {[
           { id: "brokers", label: "IP Brokers & M&A" },
           { id: "platforms", label: "Marketplace Listings" },
           { id: "linkedin", label: "Direct Buyer Outreach" },
+          { id: "legal", label: "⚖️ Legal & Setup" },
         ].map(t => (
           <button key={t.id} onClick={() => setTab(t.id)}
             className={`px-4 py-2.5 text-sm font-semibold border-b-2 transition-all ${
@@ -357,6 +543,8 @@ export default function AcquisitionOutreachTracker() {
             {PLATFORMS.map((p, i) => <PlatformCard key={i} platform={p} />)}
           </>
         )}
+
+        {tab === "legal" && <LegalChecklist />}
 
         {tab === "linkedin" && (
           <div className="space-y-4">
