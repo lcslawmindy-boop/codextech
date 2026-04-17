@@ -1,0 +1,61 @@
+{
+  "name": "VDRAccessGrant",
+  "type": "object",
+  "properties": {
+    "email": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string"
+    },
+    "organization": {
+      "type": "string"
+    },
+    "access_level": {
+      "type": "string",
+      "enum": [
+        "view_only",
+        "download"
+      ],
+      "default": "view_only"
+    },
+    "folder_access": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "List of folders this grantee can access. Empty = all folders."
+    },
+    "nda_verified": {
+      "type": "boolean",
+      "default": false
+    },
+    "nda_verified_at": {
+      "type": "string"
+    },
+    "granted_by": {
+      "type": "string"
+    },
+    "expires_at": {
+      "type": "string"
+    },
+    "is_active": {
+      "type": "boolean",
+      "default": true
+    },
+    "last_accessed": {
+      "type": "string"
+    },
+    "access_count": {
+      "type": "integer",
+      "default": 0
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "email",
+    "access_level"
+  ]
+}

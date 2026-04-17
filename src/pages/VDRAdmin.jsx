@@ -307,6 +307,10 @@ export default function VDRAdmin() {
           </div>
         </div>
         <div className="flex items-center gap-2">
+          <Link to="/vdr-documents"
+            className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-yellow-900/40 hover:bg-yellow-800/50 border border-yellow-700 text-yellow-300 text-xs font-bold transition-all">
+            <Shield size={12} /> Data Room Docs
+          </Link>
           <Link to="/vdr-audit-log"
             className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-gray-800 hover:bg-gray-700 border border-gray-700 text-gray-300 text-xs font-bold transition-all">
             <BarChart3 size={12} /> Audit Log

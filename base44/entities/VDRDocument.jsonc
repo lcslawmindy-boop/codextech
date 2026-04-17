@@ -1,0 +1,57 @@
+{
+  "name": "VDRDocument",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "folder": {
+      "type": "string",
+      "enum": [
+        "IP & Patents",
+        "Financials",
+        "Technical",
+        "Legal",
+        "Overview",
+        "Other"
+      ],
+      "default": "Other"
+    },
+    "file_url": {
+      "type": "string"
+    },
+    "file_name": {
+      "type": "string"
+    },
+    "file_size_bytes": {
+      "type": "integer"
+    },
+    "file_type": {
+      "type": "string"
+    },
+    "uploaded_by": {
+      "type": "string"
+    },
+    "is_active": {
+      "type": "boolean",
+      "default": true
+    },
+    "view_count": {
+      "type": "integer",
+      "default": 0
+    },
+    "download_count": {
+      "type": "integer",
+      "default": 0
+    }
+  },
+  "required": [
+    "name",
+    "folder",
+    "file_url",
+    "file_name"
+  ]
+}
