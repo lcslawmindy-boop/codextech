@@ -109,6 +109,7 @@ import IPPortfolioHealth from './pages/IPPortfolioHealth';
 import BuildMilestoneAI from './pages/BuildMilestoneAI';
 import ValuationAPI from './pages/ValuationAPI';
 import VDRNdaSign from './pages/VDRNdaSign';
+import VDRDocumentGenerator from './pages/VDRDocumentGenerator';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -242,6 +243,7 @@ const AuthenticatedApp = () => {
           <Route path="/valuation-api" element={<ValuationAPI />} />
           <Route path="/flash-sale" element={<FlashSale />} />
           <Route path="/vdr-nda" element={<VDRNdaSign />} />
+          <Route path="/vdr-generator" element={<VDRDocumentGenerator />} />
 
           {/* Admin-only routes */}
           <Route element={<AdminGuard />}>

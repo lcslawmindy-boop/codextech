@@ -4,7 +4,7 @@ import {
   ArrowLeft, Shield, Upload, Folder, FileText, Lock, Unlock,
   Loader2, Plus, Trash2, Eye, Download, Check, X, Edit2,
   Users, Key, AlertTriangle, CheckCircle2, Clock, ChevronDown,
-  ChevronUp, RefreshCw, File, Filter
+  ChevronUp, RefreshCw, File, Filter, Sparkles
 } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 
@@ -459,6 +459,10 @@ export default function VirtualDataRoom() {
             className="flex items-center gap-2 px-3 py-2 rounded-xl bg-green-900/60 hover:bg-green-800/60 border border-green-700 text-green-300 text-xs font-black transition-all">
             <Key size={12} /> Grant Access
           </button>
+          <Link to="/vdr-generator"
+            className="flex items-center gap-2 px-3 py-2 rounded-xl bg-purple-900/60 hover:bg-purple-800/60 border border-purple-700 text-purple-300 text-xs font-black transition-all">
+            <Sparkles size={12} /> AI Generate
+          </Link>
           <button onClick={() => setShowUpload(true)}
             className="flex items-center gap-2 px-3 py-2 rounded-xl bg-yellow-900/60 hover:bg-yellow-800/60 border border-yellow-700 text-yellow-300 text-xs font-black transition-all">
             <Upload size={12} /> Upload Doc
