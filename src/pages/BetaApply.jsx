@@ -56,7 +56,7 @@ export default function BetaApply() {
 
     // Notify admin
     await base44.integrations.Core.SendEmail({
-      to: "zenithapexresearch@gmail.com",
+      to: "zarp.admin@gmail.com",
       subject: `🔔 New Beta Application — ${form.full_name}`,
       body: `New beta access request received:\n\nName: ${form.full_name}\nEmail: ${form.email}\nBackground: ${form.background}\nInterest: ${form.primary_interest}\nBudget: ${form.budget}\nWhy Interested: ${form.why_interested}\n\nReview at: https://zenithapex.base44.app/admin-beta`
     });
