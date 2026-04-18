@@ -54,6 +54,14 @@ export default function BetaApply() {
 
     await base44.entities.BetaApplication.create({ ...form, status: "approved", converted_at: new Date().toISOString() });
 
+    // Notify admin
+    await base44.integrations.Core.SendEmail({
+      to: "zenithapexresearch@gmail.com",
+      subject: `🔔 New Beta Application — ${form.full_name}`,
+      body: `New beta access request received:\n\nName: ${form.full_name}\nEmail: ${form.email}\nBackground: ${form.background}\nInterest: ${form.primary_interest}\nBudget: ${form.budget}\nWhy Interested: ${form.why_interested}\n\nReview at: https://zenithapex.base44.app/admin-beta`
+    });
+
+    // Welcome email to applicant
     await base44.integrations.Core.SendEmail({
       to: form.email,
       subject: "✅ Zenith Apex — Your Access is Active",
