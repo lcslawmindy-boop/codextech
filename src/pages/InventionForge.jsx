@@ -425,6 +425,17 @@ export default function InventionForge() {
     }
 
     setGenerating(false);
+
+    // Report metered usage for enterprise subscribers (fire-and-forget)
+    if (collected.length > 0) {
+      base44.functions.invoke("reportMeteredUsage", {
+        action: "report",
+        quantity: collected.length,
+        event_type: "invention_dossier",
+      }).catch(() => {
+        // Silently ignore — user may be on a flat-rate plan, not metered
+      });
+    }
   };
 
   return (

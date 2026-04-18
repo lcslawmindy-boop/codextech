@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { ArrowLeft, Check, Zap, Shield, BookOpen, Download, Users, Star, Lock, ChevronRight, Sparkles, FlaskConical, Briefcase, Mail } from "lucide-react";
+import { ArrowLeft, Check, Zap, Shield, BookOpen, Download, Users, Star, Lock, ChevronRight, Sparkles, FlaskConical, Briefcase, Mail, Activity } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 
 const PLANS = [
@@ -157,6 +157,26 @@ export default function Pricing() {
   const [loading, setLoading] = useState(null);
   const [error, setError] = useState(null);
 
+  const handleMeteredCheckout = async () => {
+    if (window !== window.top) {
+      alert("Checkout only works from the published app. Please open the app directly.");
+      return;
+    }
+    setLoading("metered");
+    setError(null);
+    const baseUrl = window.location.origin;
+    const response = await base44.functions.invoke("createMeteredSubscription", {
+      successUrl: `${baseUrl}/checkout?success=true&product=enterprise_metered`,
+      cancelUrl: `${baseUrl}/pricing`,
+    });
+    if (response.data?.url) {
+      window.location.href = response.data.url;
+    } else {
+      setError(response.data?.error || "Could not start checkout. Please try again.");
+      setLoading(null);
+    }
+  };
+
   const handleCheckout = async (product) => {
     if (window !== window.top) {
       alert("Checkout only works from the published app. Please open the app directly.");
@@ -234,6 +254,88 @@ export default function Pricing() {
           {PLANS.map(plan => (
             <PlanCard key={plan.id} plan={plan} loading={loading} onCheckout={handleCheckout} />
           ))}
+        </div>
+
+        {/* Enterprise Metered tier — pay-per-use */}
+        <div className="relative bg-gray-900 border-2 border-cyan-700 rounded-2xl overflow-hidden mb-5">
+          <div className="text-center py-2 text-xs font-black tracking-widest bg-cyan-900/30 text-cyan-300 uppercase">
+            ⚡ Enterprise Metered — Pay Per Use
+          </div>
+          <div className="p-6 md:p-8 grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
+            {/* Left: pricing */}
+            <div>
+              <div className="flex items-center gap-2 mb-2">
+                <Activity size={18} className="text-cyan-400" />
+                <h3 className="text-white font-black text-2xl">Enterprise Metered</h3>
+              </div>
+              <p className="text-gray-400 text-sm mb-4">For institutional users, IP firms, and high-volume R&D teams. Pay only for what you generate — no flat monthly seat fees.</p>
+              <div className="text-cyan-300 font-black text-3xl mb-1">$29 <span className="text-lg text-gray-400 font-normal">/ dossier</span></div>
+              <p className="text-gray-500 text-xs mb-4">Billed monthly · Usage aggregated per subscription period · No minimum</p>
+              <div className="grid grid-cols-2 gap-2 text-xs text-gray-400 mb-4">
+                {[
+                  { label: "1 dossier", price: "$29" },
+                  { label: "10 dossiers", price: "$290" },
+                  { label: "50 dossiers", price: "$1,450" },
+                  { label: "100 dossiers", price: "$2,900" },
+                ].map((r, i) => (
+                  <div key={i} className="bg-gray-800 rounded-lg px-3 py-2 flex justify-between">
+                    <span>{r.label}</span>
+                    <span className="text-cyan-300 font-bold">{r.price}</span>
+                  </div>
+                ))}
+              </div>
+              <button
+                onClick={() => handleMeteredCheckout()}
+                disabled={loading === "metered"}
+                className="w-full flex items-center justify-center gap-2 py-3 rounded-xl font-black text-sm bg-cyan-700 hover:bg-cyan-600 text-white transition-all disabled:opacity-60 shadow-[0_4px_20px_rgba(0,200,255,0.25)]"
+              >
+                {loading === "metered" ? "Redirecting…" : "Subscribe — Pay Per Use"}
+                <ChevronRight size={14} />
+              </button>
+            </div>
+
+            {/* Middle: what counts as 1 unit */}
+            <div>
+              <p className="text-gray-400 text-xs font-bold uppercase tracking-wider mb-3">What counts as 1 credit unit?</p>
+              <div className="space-y-2">
+                {[
+                  { icon: "⚡", label: "Invention Dossier", desc: "Each full AI-generated invention with IP valuation + financials" },
+                  { icon: "📋", label: "Patent Draft (PPA)", desc: "Each complete provisional patent application generated" },
+                  { icon: "🔬", label: "Market Research Report", desc: "Each AI market scan with TAM/SAM/SOM + prior art sweep" },
+                  { icon: "📊", label: "VC Pitch Deck", desc: "Each AI-generated investor pitch deck export" },
+                  { icon: "🏛️", label: "VDR AI Document", desc: "Each AI-generated VDR document (due diligence, term sheet, etc.)" },
+                ].map((item, i) => (
+                  <div key={i} className="flex items-start gap-3 bg-gray-800/50 rounded-xl px-3 py-2.5">
+                    <span className="text-base flex-shrink-0">{item.icon}</span>
+                    <div>
+                      <p className="text-white font-bold text-xs">{item.label}</p>
+                      <p className="text-gray-500 text-xs">{item.desc}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Right: features */}
+            <div className="space-y-2">
+              <p className="text-gray-400 text-xs font-bold uppercase tracking-wider mb-3">Includes everything in Pro, plus:</p>
+              {[
+                "Usage dashboard — see exactly what you've generated",
+                "Monthly invoice with itemized usage breakdown",
+                "No seat limits — add unlimited team members",
+                "Volume discount available above 200 units/mo",
+                "API access for automated invention pipelines",
+                "Dedicated account manager for 50+ units/mo",
+                "ITAR-compatible billing documentation available",
+              ].map((f, i) => (
+                <div key={i} className="flex items-start gap-2">
+                  <Check size={12} className="flex-shrink-0 mt-0.5 text-cyan-400" />
+                  <span className="text-gray-300 text-xs leading-relaxed">{f}</span>
+                </div>
+              ))}
+              <p className="text-gray-600 text-xs mt-3 italic">For 200+ units/month or custom pricing, contact us for a volume agreement.</p>
+            </div>
+          </div>
         </div>
 
         {/* Government / Defense tier — full-width banner card */}
