@@ -419,8 +419,41 @@ function generatePDF(invention, data) {
   section("TECHNICAL NOTES & REFERENCES", [148, 163, 184]);
   body(data.notes, [203, 213, 225]);
 
-  section("SOURCE DOCUMENTATION", [245, 158, 11]);
+  section("SOURCE DOCUMENTATION & CITATIONS", [245, 158, 11]);
   body(invention.source, [203, 213, 225]);
+
+  // ── Disclaimer block
+  checkPage(45);
+  doc.setFillColor(40, 30, 10);
+  doc.rect(margin - 2, y - 2, contentW + 4, 42, "F");
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(8);
+  doc.setTextColor(251, 191, 36);
+  doc.text("FOR RESEARCH AND EDUCATIONAL PURPOSES ONLY", margin, y + 5);
+  doc.setFont("helvetica", "normal");
+  doc.setFontSize(7.5);
+  doc.setTextColor(180, 160, 80);
+  const disclaimerLines = doc.splitTextToSize(
+    "These build plans are derived from publicly available patents, peer-reviewed publications, and declassified government documents cited above. No device described herein has been approved by the FDA, FCC, EPA, or any regulatory authority for medical, therapeutic, commercial, or consumer use. Do not use any device from these plans for diagnosis, treatment, cure, or prevention of any disease or medical condition. All claims regarding energy output, biological effects, or field phenomena are theoretical or experimental in nature and have not been independently verified by a regulatory body. Replicate at your own risk. Always consult a licensed professional before any experimental application. Zenith Apex Research Platform assumes no liability for use or misuse of these plans.",
+    contentW - 4
+  );
+  disclaimerLines.forEach((line, i) => { doc.text(line, margin, y + 11 + i * 4.5); });
+  y += 48;
+
+  section("PRIMARY SOURCE CITATIONS", [100, 160, 250]);
+  body(
+    "1. Bearden, T.E. (2002). Energy from the Vacuum. Cheniere Press. | " +
+    "2. Anastasovski, P.K. et al. (2001). 'Explanation of the Motionless Electromagnetic Generator with O(3) Electrodynamics.' Found. Phys. Lett. 14(1). | " +
+    "3. U.S. Patent 6,362,718 — Motionless Electromagnetic Generator (Bearden et al., 2002). | " +
+    "4. Bateman, J.B. (1978). ONR London Branch Report R-5-78 (Unclassified). Office of Naval Research. | " +
+    "5. Bohren, C.F. (1983). 'How can a particle absorb more than the light incident on it?' Am. J. Phys. 51(4). | " +
+    "6. Kaznacheyev, V.P. et al. (1974–1982). Cytopathogenic UV photon experiments. Soviet scientific literature. | " +
+    "7. Gray, E.V. (1975). U.S. Patent 3,890,548 — Pulsed Capacitor Discharge Engine. | " +
+    "8. Bearden, T.E. (1991). Gravitobiology. Tesla Book Company. | " +
+    "9. Aharonov, Y. & Bohm, D. (1959). 'Significance of Electromagnetic Potentials in Quantum Theory.' Phys. Rev. 115(3). | " +
+    "10. Popp, F.A. (1992). 'Some Essential Questions of Biophoton Research.' Biophotons. Kluwer Academic.",
+    [160, 170, 190], 7.5
+  );
 
   doc.setFontSize(7);
   doc.setTextColor(51, 65, 85);
@@ -716,6 +749,14 @@ export default function InventionPlans() {
             </div>
           ) : (
             <div className="max-w-3xl mx-auto">
+              {/* ── Global Research Disclaimer ── */}
+              <div className="bg-yellow-950/20 border border-yellow-800/50 rounded-xl px-4 py-3 mb-5 flex items-start gap-3">
+                <AlertTriangle size={14} className="text-yellow-500 flex-shrink-0 mt-0.5" />
+                <div className="text-xs text-yellow-700 leading-relaxed space-y-1">
+                  <p><strong className="text-yellow-500">For research and educational purposes only.</strong> These build plans are derived from publicly available patents, peer-reviewed publications, and declassified government documents. No device described herein has been approved by the FDA, FCC, or any regulatory body for medical, therapeutic, commercial, or consumer use.</p>
+                  <p>Do not use any device from these plans for diagnosis, treatment, or prevention of any disease or medical condition. Always consult a licensed professional before any experimental application.</p>
+                </div>
+              </div>
               <ResearchDisclaimer type="energy" />
               <AttributionFooter compact />
               <div className="mb-6">

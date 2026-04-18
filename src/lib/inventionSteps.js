@@ -400,7 +400,7 @@ export const inventionSteps = {
 
   "EM Trigger Window Therapy Device": {
     diagramType: "therapy",
-    overview: "A programmable frequency generator delivering precisely tuned EM pulses within verified biological trigger windows catalogued in Gravitobiology Table 12. Available as a consumer wristband and clinical full-body coil chamber. The trigger windows represent frequencies at which EM fields couple maximally to biological tissue — the mechanism behind Rife's mortal oscillatory rate success.",
+    overview: "FOR RESEARCH PURPOSES ONLY — NOT A MEDICAL DEVICE. A programmable frequency generator delivering precisely tuned EM pulses within biological trigger window frequencies catalogued in Bearden's Gravitobiology (Table 12, 1991). This is an experimental research instrument for studying bioelectromagnetic field interactions. It is not approved for any therapeutic, diagnostic, or medical use. Source: Bearden, T.E. (1991). Gravitobiology. Tesla Book Company. Beck R., Hunt G., Lisitsyn A. (1974–1989) — Soviet bioelectromagnetics research.",
     bom: [
       { qty: 1, item: "DDS frequency synthesizer", spec: "AD9910 evaluation board, 420 MHz, 32-bit tuning", source: "Analog Devices ~$200" },
       { qty: 1, item: "Power amplifier (clinical version)", spec: "25W linear, 100 kHz–30 MHz, class A", source: "Motorola LDMOS kit ~$85" },
@@ -510,7 +510,7 @@ export const inventionSteps = {
 
   "Prioré-Type Multichannel EM Therapy System": {
     diagramType: "priore",
-    overview: "Modern solid-state implementation of Bearden's Fig. 10 Prioré device architecture using DDS signal generators and FPGA modulation chain. The signal chain: multichannel inputs → derivative carrier/modulator → primary carrier output. Mapped to S'/S''/S''' hierarchy, this impresses a structured virtual-state template onto the target organism.",
+    overview: "FOR RESEARCH PURPOSES ONLY — NOT A MEDICAL DEVICE. A modern solid-state implementation of the Prioré device signal architecture (based on Antoine Prioré's French Patent 1,342,772 and Bateman J.B., ONR London Branch Report R-5-78, 1978, Unclassified) using DDS signal generators and FPGA modulation chain. This is an experimental research instrument only. No therapeutic, medical, or clinical use is implied or permitted without IRB approval and licensed medical supervision. All biological effects described are from historical Soviet and French government research documents — not from FDA-approved clinical trials.",
     bom: [
       { qty: 3, item: "DDS signal generator modules", spec: "AD9910 evaluation boards, 1 MHz–1 GHz each", source: "Analog Devices ~$200 ea" },
       { qty: 1, item: "FPGA board", spec: "Xilinx Artix-7 (Digilent Arty A7-100T)", source: "Digilent ~$230" },
@@ -558,7 +558,7 @@ export const inventionSteps = {
         warning: "Human therapeutic use requires IRB approval and licensed medical supervision. Research device exemption applies to in vitro and animal use only.",
       },
     ],
-    notes: "Antoine Prioré's multichannel EM device was funded by the French government in the 1960s–1980s and documented to cure terminal cancers in animals. The French government documents are included in the PDF plans as historical validation. This implementation uses modern DDS/FPGA to replicate the documented signal architecture.",
+    notes: "FOR RESEARCH AND EDUCATIONAL PURPOSES ONLY. Antoine Prioré's multichannel EM device was funded by the French government in the 1960s–1980s. Historical documents (French Patent 1,342,772; ONR R-5-78; Lwoff validation records) describe animal experiments with positive outcomes — these are historical research records, not FDA-approved clinical data. This build plan replicates the documented signal architecture for experimental research only. Human use requires IRB approval and licensed medical supervision. Sources: Prioré A. (1963). French Patent 1,342,772. Bateman J.B. (1978). ONR London Branch Report R-5-78. Bearden T.E. (2002). Energy from the Vacuum. Cheniere Press.",
     softwareNotes: "FPGA Verilog source (modulation_chain.v), Python protocol sequencer, protocol_library.json (30+ treatment protocols), experiment data logger, and IRB-ready experimental report template included in PDF plans.",
   },
 
@@ -781,7 +781,7 @@ export const inventionSteps = {
 
   "Kaznacheyev Reversal Cell Imprinting Chamber (KRCIC)": {
     diagramType: "krcic",
-    overview: "A dual-chamber precision biophoton imprinting system that inverts Kaznacheyev's cytopathogenic effect. Chamber A contains healthy donor cells whose structured UV photon frequency template is captured by a PMT and transmitted through a UV-grade fused silica quartz window to Chamber B, where diseased or dying recipient cells are progressively overwritten with the healthy cell blueprint. Based on Kaznacheyev's 5,000+ documented Soviet experiments and Bearden's MCCS framework.",
+    overview: "FOR RESEARCH PURPOSES ONLY — IN VITRO CELL CULTURE USE ONLY. A dual-chamber precision biophoton research instrument for studying UV photon transmission between cell cultures. Based on Kaznacheyev V.P. et al. (1974–1982) cytopathogenic UV photon experiments (5,000+ documented trials, Soviet peer-reviewed literature) and Bearden's MCCS theoretical framework (Bearden T.E., 2002, Energy from the Vacuum, Cheniere Press). This instrument is designed for in vitro (cell culture) research only. It has no approved medical or therapeutic application. Human or animal use requires institutional biosafety approval and IRB oversight.",
     bom: [
       { qty: 1, item: "Fused silica quartz window", spec: "UV-grade, 50\u00d750\u00d73 mm, transmits 180\u2013400 nm", source: "Edmund Optics #48-359 ~$85" },
       { qty: 1, item: "Aluminum dual-compartment enclosure", spec: "Custom-fabricated, 300\u00d7120\u00d780 mm, anodized black interior", source: "Machine per plans / ~$55 material" },

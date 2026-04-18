@@ -106,15 +106,17 @@ II. OVERUNITY ENERGY TECHNOLOGY (Peer-Reviewed, Independently Replicated)
 
 • Type 2 Engineering / Vacuum Engines — The foundational framework for gating vacuum flux rather than using external energy — the only engineering paradigm where COP>>1 is thermodynamically permitted.
 
-III. ELECTROMAGNETIC MEDICINE (US Government Validated)
+III. BIOELECTROMAGNETIC RESEARCH ARCHIVE (Historical Government & Academic Documents — For Research Purposes Only)
 
-• The Complete Priore Archive — US Office of Naval Research London Branch Report R-5-78 (J.B. Bateman, 16 August 1978, UNCLASSIFIED): formal US government validation that the Priore electromagnetic device cures implanted tumors and eliminates trypanosomiasis in controlled animal experiments. All experimental controls died; all experimentals were cured.
+Note: All items in this section are historical research documents and experimental device plans. No device described herein is approved by the FDA or any regulatory body for medical use. These materials are provided for research, education, and IP acquisition evaluation only.
 
-• Nobel Laureate Validation — André Lwoff (1965 Nobel Prize, Villejuif Institute) personally validated the Priore experimental results, documented in the 1975 Esquire investigation.
+• The Complete Prioré Archive — US Office of Naval Research London Branch Report R-5-78 (J.B. Bateman, 16 August 1978, UNCLASSIFIED): documents French government-funded animal experiments with the Prioré EM device. Historical research record — not an FDA-approved clinical trial. Source: Bateman, J.B. (1978). ONR London Branch Report R-5-78.
 
-• Telomere Regeneration Device (TRD-1) — Engineering plans implementing Bearden's MCCS telomere restoration protocol. Three 30-second sessions protocol. Full build plans with BOM included.
+• Nobel Laureate Scientific Observation — André Lwoff (1965 Nobel Prize, Villejuif Institute) reviewed the Prioré animal experiment data, documented in the 1975 Esquire investigation. Historical academic record only.
 
-• Portable Porthole Disease Treatment System — Suitcase-sized scalar EM disease reversal system for mass casualty / pandemic response. 1st generation: 70% projected survival from previously fatal scenarios.
+• Telomere Research Device (TRD-1) — Experimental research instrument implementing Bearden's MCCS scalar EM protocol (Bearden T.E., 2002, Energy from the Vacuum, Cheniere Press). For in vitro and experimental research purposes only. Not a medical device. Full build plans with BOM included.
+
+• Portable Scalar EM Research Platform — Experimental device for structured EM field research. For research use only. No clinical or therapeutic claims are made or implied.
 
 IV. DEFENSE INTELLIGENCE (Primary Source Documented)
 
