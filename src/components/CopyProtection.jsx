@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { base44 } from "@/api/base44Client";
 import { isTrialActive } from "@/hooks/useTrialPass";
 
+const TRIAL_ALERT = "Copying and downloading content is not available during the 24-hour explorer pass. Upgrade to a paid plan for full access.";
+
 /**
  * CopyProtection — mounts globally to block common data-theft vectors:
  * - Right-click context menu
@@ -22,29 +24,37 @@ export default function CopyProtection() {
     if (isAdmin === null || isAdmin === true) return; // skip protection for admins
     const blockContext = (e) => e.preventDefault();
 
+    const trial = isTrialActive();
+
     const blockKeys = (e) => {
+      const isCopy = (e.ctrlKey || e.metaKey) && (e.key === "c" || e.key === "C");
       const blocked = [
-        e.ctrlKey && e.key === "c",
-        e.ctrlKey && e.key === "u",
-        e.ctrlKey && e.key === "s",
-        e.ctrlKey && e.key === "p",
-        e.ctrlKey && e.key === "a",
-        e.metaKey && e.key === "c",
-        e.metaKey && e.key === "u",
-        e.metaKey && e.key === "s",
-        e.metaKey && e.key === "p",
-        e.metaKey && e.key === "a",
+        (e.ctrlKey || e.metaKey) && e.key === "u",
+        (e.ctrlKey || e.metaKey) && e.key === "s",
+        (e.ctrlKey || e.metaKey) && e.key === "p",
+        (e.ctrlKey || e.metaKey) && e.key === "a",
         e.ctrlKey && e.shiftKey && e.key === "I",
         e.ctrlKey && e.shiftKey && e.key === "J",
         e.ctrlKey && e.shiftKey && e.key === "C",
         e.key === "F12",
         e.key === "PrintScreen",
+        // Block copy for trial users
+        trial && isCopy,
       ];
       if (blocked.some(Boolean)) {
         e.preventDefault();
         e.stopPropagation();
+        if (trial && isCopy) alert(TRIAL_ALERT);
         return false;
       }
+    };
+
+    // Block clipboard copy for trial users
+    const blockCopy = (e) => {
+      if (!isTrialActive()) return;
+      e.preventDefault();
+      e.stopPropagation();
+      alert(TRIAL_ALERT);
     };
 
     const blockDrag = (e) => e.preventDefault();
@@ -60,7 +70,7 @@ export default function CopyProtection() {
       if (link) {
         e.preventDefault();
         e.stopPropagation();
-        alert("Downloads are not available during the 24-hour trial. Upgrade to a paid plan for full access.");
+        alert(TRIAL_ALERT);
       }
     };
 
@@ -68,12 +78,15 @@ export default function CopyProtection() {
     document.addEventListener("keydown", blockKeys, true);
     document.addEventListener("dragstart", blockDrag);
     document.addEventListener("click", blockDownloads, true);
+    document.addEventListener("copy", blockCopy, true);
+    document.addEventListener("cut", blockCopy, true);
     window.addEventListener("beforeprint", blockPrint);
 
     // CSS-level protection injected into <head>
     const style = document.createElement("style");
     style.id = "copy-protection-style";
-    style.textContent = `
+    // Trial users: full selection lock. Regular users: allow readable content selection.
+    style.textContent = trial ? `
       * {
         -webkit-user-select: none !important;
         -moz-user-select: none !important;
@@ -81,7 +94,22 @@ export default function CopyProtection() {
         user-select: none !important;
         -webkit-touch-callout: none !important;
       }
-      /* Allow selection in readable content */
+      input, textarea {
+        -webkit-user-select: text !important;
+        -moz-user-select: text !important;
+        user-select: text !important;
+      }
+      @media print {
+        body { display: none !important; }
+      }
+    ` : `
+      * {
+        -webkit-user-select: none !important;
+        -moz-user-select: none !important;
+        -ms-user-select: none !important;
+        user-select: none !important;
+        -webkit-touch-callout: none !important;
+      }
       p, li, td, blockquote, span.selectable {
         -webkit-user-select: text !important;
         -moz-user-select: text !important;
@@ -131,6 +159,8 @@ export default function CopyProtection() {
       document.removeEventListener("keydown", blockKeys, true);
       document.removeEventListener("dragstart", blockDrag);
       document.removeEventListener("click", blockDownloads, true);
+      document.removeEventListener("copy", blockCopy, true);
+      document.removeEventListener("cut", blockCopy, true);
       window.removeEventListener("beforeprint", blockPrint);
       document.getElementById("copy-protection-style")?.remove();
       document.getElementById("copy-protection-watermark")?.remove();
