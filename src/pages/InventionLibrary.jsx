@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { ArrowLeft, Film, Download, FileText, Loader2, Search, X } from "lucide-react";
+import { ArrowLeft, Film, Download, FileText, Loader2, Search, X, Lock } from "lucide-react";
 import { jsPDF } from "jspdf";
 import { businessItems } from "../lib/businessItems";
 import { inventionSteps } from "../lib/inventionSteps";
 import InventionBuildVideo from "../components/InventionBuildVideo";
+import { base44 } from "@/api/base44Client";
 
 const inventions = businessItems.filter(i => i.category === "Invention");
 
