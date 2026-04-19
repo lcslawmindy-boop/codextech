@@ -11,7 +11,7 @@ import { jsPDF } from "jspdf";
 const WACC = 0.16;         // 16% — de-risked by deep recurring revenue moat + IP defensibility
 const GROWTH_YEARS = 5;
 const TERMINAL_GROWTH = 0.055; // raised: platform compounding — more inventions → more data → better AI
-// IP floor updated Apr 2026 — full platform revaluation (v2):
+// IP floor updated Apr 2026 — full platform revaluation (v2.2):
 //   ── CORE RESEARCH PLATFORM ──
 //   • 23 invention build plans + annotated BOMs + sourcing (MEG, TRD-1, G-Com, Prioré, TRZ, etc.)
 //   • Full course library (26 modules), prior art archive (200+ entries), monitoring dashboard
@@ -24,6 +24,7 @@ const TERMINAL_GROWTH = 0.055; // raised: platform compounding — more inventio
 //   • Patent Intelligence module (claim summarizer, FTO, landscape, drafting strategy)
 //   • Provisional Patent Tool, Patent Landscape Graph, Prior Art Scanner
 //   ── IP MARKETPLACE & COLLABORATION ──
+//   • Inventor Marketplace — unlimited IP listings, global buyer access, 5% ZARP commission on deals
 //   • IP Marketplace — private brokered IP exchange (5% commission on executed deals)
 //   • Co-Inventor Matching Engine — AI-matched introductions (AngelList for inventors)
 //   • Collaborative Patent Drafting — multi-user editing, comments, version history, role-based access
@@ -42,15 +43,15 @@ const TERMINAL_GROWTH = 0.055; // raised: platform compounding — more inventio
 //   • Social Media Command Center + AI Profile Generator (8 platforms)
 //   • R&D Simulation Sandbox (AI hybrid invention synthesis + IP valuation)
 //   • Hybrid Portfolio (cross-domain IP analytics, synergy heatmap)
-const IP_BASE_VALUE = 14_800_000;
-const IP_FLOOR_LABEL = "23 build plans · AI FTO + Patent Attorney Chat · IP Marketplace · Co-Inventor Matching · Collab Patent Draft · SBIR Pipeline · IP Portfolio Health · Valuation API · White-Label SaaS · VDR · Investor CRM · Build Milestone AI · R&D Sandbox · 26 courses";
+const IP_BASE_VALUE = 16_200_000;
+const IP_FLOOR_LABEL = "23 build plans · AI FTO + Patent Attorney Chat · Inventor Marketplace (5% deals) · Co-Inventor Matching · Collab Patent Draft · SBIR Pipeline · IP Portfolio Health · Valuation API · White-Label SaaS · VDR · Investor CRM · Build Milestone AI · R&D Sandbox · 26 courses";
 const REVENUE_MULTIPLES = [
   { label: "Conservative (4×)", mult: 4 },
   { label: "Base Case (10×)", mult: 10 },
   { label: "Optimistic (18×)", mult: 18 },
   { label: "Strategic Premium (30×)", mult: 30 },
 ];
-const EBITDA_MARGIN = 0.82; // raised: API revenue, SaaS white-label, marketplace commission — all near-zero marginal cost
+const EBITDA_MARGIN = 0.84; // raised further: Inventor Marketplace 5% commission on GMV (recurring revenue from deal facilitation)
 
 function fmt(n, prefix = "$") {
   if (n >= 1_000_000) return `${prefix}${(n / 1_000_000).toFixed(2)}M`;
@@ -153,7 +154,7 @@ function exportPDF(data, dcf, multiples, growthRates) {
   doc.setFontSize(28); doc.setTextColor(212, 175, 55);
   doc.text(fmt(dcf.totalDCF), margin + 8, y + 28);
   doc.setFontSize(12); doc.setTextColor(100, 116, 139);
-  doc.text(`+ IP Asset Floor: ${fmt(IP_BASE_VALUE)} (AI FTO, Patent Chat, IP Marketplace, SBIR, Valuation API, White-Label SaaS + more)`, margin + 8, y + 38);
+  doc.text(`+ IP Asset Floor: ${fmt(IP_BASE_VALUE)} (AI FTO, Patent Chat, Inventor Marketplace 5%, SBIR, Valuation API, White-Label SaaS + more)`, margin + 8, y + 38);
   doc.setFont("helvetica", "bold"); doc.setFontSize(14); doc.setTextColor(255, 255, 255);
   const askRange = fmt(multiples.find(m => m.label.includes("15"))?.value || 0) + " – " + fmt(multiples.find(m => m.label.includes("25"))?.value || 0);
   doc.text(`Asking: ${askRange}`, W - margin - 8, y + 28, { align: "right" });
@@ -182,6 +183,10 @@ function exportPDF(data, dcf, multiples, growthRates) {
   row("Beta Applications", data.entities.betaApplications.toLocaleString());
   row("Converted Members", data.entities.convertedMembers.toLocaleString());
   row("Conversion Rate", pct(data.entities.conversionRate));
+  divider();
+  row("Active Inventor Marketplace Listings", data.entities.marketplaceListings?.toLocaleString() || "—");
+  row("Marketplace GMV (Gross Transaction Value)", fmt(data.entities.marketplaceGMV || 0));
+  row("ZARP Marketplace Commission (5%)", fmt((data.entities.marketplaceGMV || 0) * 0.05), true);
   divider();
   row("Active Investor Relationships", data.entities.activeInvestors.toLocaleString());
   row("Deals in Due Diligence / Negotiating", data.entities.dueDiligenceDeals.toLocaleString());
@@ -368,6 +373,8 @@ export default function ValuationDashboard() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
             <MetricCard label="Beta Applications" value={(data?.entities?.betaApplications || 0).toLocaleString()} sub={`${data?.entities?.convertedMembers || 0} converted`} color="#a855f7" icon={<Users size={16} />} />
             <MetricCard label="Conversion Rate" value={pct(data?.entities?.conversionRate || 0)} sub="App → Paid" color="#a855f7" icon={<TrendingUp size={16} />} />
+            <MetricCard label="Marketplace Listings" value={(data?.entities?.marketplaceListings || 0).toLocaleString()} sub="Active IP for sale" color="#ec4899" icon={<TrendingUp size={16} />} />
+            <MetricCard label="Marketplace GMV" value={fmt(data?.entities?.marketplaceGMV || 0)} sub="5% ZARP commission" color="#ec4899" icon={<DollarSign size={16} />} />
             <MetricCard label="Active Investors" value={(data?.entities?.activeInvestors || 0).toLocaleString()} sub={`${data?.entities?.dueDiligenceDeals || 0} in due diligence`} color="#f59e0b" icon={<BarChart2 size={16} />} />
             <MetricCard label="Active VDR Sessions" value={(data?.entities?.activeVDRSessions || 0).toLocaleString()} sub={`${data?.entities?.totalVDRSessions || 0} total created`} color="#f59e0b" icon={<Shield size={16} />} />
             <MetricCard label="Prior Art Entries" value={(data?.entities?.priorArtEntries || 0).toLocaleString()} sub="IP database" color="#06b6d4" />

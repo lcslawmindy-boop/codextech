@@ -4,10 +4,10 @@ import { ArrowLeft, Code, Zap, DollarSign, Copy, CheckCircle2, Loader2, Terminal
 import { base44 } from "@/api/base44Client";
 
 const PRICING_TIERS = [
-  { id: "starter", name: "Starter", price: "$99/mo", calls: "200 calls/mo", per_call: "$0.50/call", color: "#6366f1", features: ["Basic IP valuation model", "JSON response", "Domain + stage scoring", "Email support"] },
-  { id: "growth", name: "Growth", price: "$499/mo", calls: "1,000 calls/mo", per_call: "$0.50/call", color: "#f59e0b", popular: true, features: ["Full valuation model", "Comparable transactions", "Jurisdiction risk scoring", "Prior art overlap score", "Webhook support", "Priority support"] },
-  { id: "enterprise", name: "Enterprise", price: "$2,000/mo", calls: "10,000 calls/mo", per_call: "$0.20/call", color: "#22c55e", features: ["Everything in Growth", "Custom model training", "Batch endpoint (up to 100/req)", "SLA 99.9%", "Dedicated API manager", "White-label available"] },
-  { id: "payg", name: "Pay-As-You-Go", price: "No subscription", calls: "Unlimited", per_call: "$2.00/call", color: "#6b7280", features: ["Full valuation model", "No monthly commitment", "JSON response", "Standard support"] },
+  { id: "starter", name: "Starter", price: "$99/mo", calls: "200 calls/mo", per_call: "$0.50/call", color: "#6366f1", features: ["Basic IP valuation model", "JSON response", "Domain + stage scoring", "Marketplace fit scoring", "Email support"] },
+  { id: "growth", name: "Growth", price: "$499/mo", calls: "1,000 calls/mo", per_call: "$0.50/call", color: "#f59e0b", popular: true, features: ["Full valuation model", "Comparable transactions", "Jurisdiction risk scoring", "Prior art overlap score", "Marketplace opportunity analysis", "Webhook support", "Priority support"] },
+  { id: "enterprise", name: "Enterprise", price: "$2,000/mo", calls: "10,000 calls/mo", per_call: "$0.20/call", color: "#22c55e", features: ["Everything in Growth", "Custom model training", "Batch endpoint (up to 100/req)", "Marketplace commission tracking", "SLA 99.9%", "Dedicated API manager", "White-label available"] },
+  { id: "payg", name: "Pay-As-You-Go", price: "No subscription", calls: "Unlimited", per_call: "$2.00/call", color: "#6b7280", features: ["Full valuation model", "No monthly commitment", "Marketplace fit scoring", "JSON response", "Standard support"] },
 ];
 
 const SAMPLE_REQUEST = `POST /api/valuation
@@ -47,8 +47,14 @@ const SAMPLE_RESPONSE = `{
     { "title": "Non-thermal EM therapy device", "sale_price": 2800000, "year": 2023 },
     { "title": "Biofield diagnostic platform", "sale_price": 4100000, "year": 2024 }
   ],
-  "recommended_action": "File non-provisional immediately. High market fit with low prior art risk.",
-  "model_version": "zarp-val-v2.1"
+  "marketplace_opportunity": {
+    "estimated_listing_value_range": "$1.8M – $4.2M",
+    "suggested_marketplace_price": "$3.0M",
+    "zarp_commission_at_listing": 150000,
+    "marketplace_recommendation": "Strong fit for Inventor Marketplace. High market demand + low prior art risk = premium buyer interest."
+  },
+  "recommended_action": "File non-provisional immediately. High market fit with low prior art risk. List on Inventor Marketplace.",
+  "model_version": "zarp-val-v2.2"
 }`;
 
 function CopyBtn({ text, label = "Copy" }) {
@@ -162,7 +168,7 @@ Return JSON with:
             <span className="text-cyan-400">Query. Scale. Monetize.</span>
           </h2>
           <p className="text-gray-400 text-base max-w-2xl mx-auto leading-relaxed">
-            Programmatic access to ZARP's IP valuation model. VCs run batch valuations on portfolios. Law firms price IP at acquisition. Corporate R&D benchmarks technology assets. <strong className="text-white">$0.50–$2.00 per call — scales to millions in ARR.</strong>
+            Programmatic access to ZARP's IP valuation model. VCs run batch valuations on portfolios. Law firms price IP at acquisition. Corporate R&D benchmarks technology assets. <strong className="text-white">$0.50–$2.00 per call — scales to millions in ARR.</strong> Plus, every valuation includes Inventor Marketplace fit analysis & ZARP's 5% deal commission opportunity.
           </p>
         </div>
 
