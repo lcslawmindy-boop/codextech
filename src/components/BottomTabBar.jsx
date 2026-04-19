@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import { Network, FlaskConical, BookOpen, HeartPulse, Scale } from "lucide-react";
+import { Network, FlaskConical, BookOpen, HeartPulse, Scale, ShoppingCart } from "lucide-react";
 
 const TABS = [
   {
@@ -31,6 +31,12 @@ const TABS = [
     path: "/emf-impact",
     icon: HeartPulse,
     match: (p) => ["/emf-impact", "/emf-log", "/heavy-metal-detox", "/health-analytics"].includes(p),
+  },
+  {
+    label: "Pricing",
+    path: "/pricing",
+    icon: ShoppingCart,
+    match: (p) => p === "/pricing",
   },
 ];
 

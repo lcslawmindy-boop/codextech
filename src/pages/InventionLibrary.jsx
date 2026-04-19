@@ -438,8 +438,11 @@ export default function InventionLibrary() {
                     {isPdfLoading ? <Loader2 size={12} className="animate-spin" /> : <Download size={12} />}
                     {isPdfLoading ? "Building…" : "PDF Specs"}
                   </button>
-                </div>
-              </div>
+                  <Link to="/pricing" className="flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold bg-cyan-700 hover:bg-cyan-600 text-white transition-all flex-1">
+                    💳 Buy Now
+                  </Link>
+                  </div>
+                  </div>
             );
           })}
         </div>

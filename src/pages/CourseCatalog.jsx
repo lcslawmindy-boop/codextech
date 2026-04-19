@@ -130,14 +130,22 @@ function CourseCard({ item }) {
           <p className="text-gray-600 text-xs">
             <span className="text-gray-500 font-semibold">Source: </span>{item.source}
           </p>
-          {item.stripeProductId && courseSlugMap[item.stripeProductId] && (
+          <div className="flex gap-2">
+            {item.stripeProductId && courseSlugMap[item.stripeProductId] && (
+              <Link
+                to={`/course-plan?course=${courseSlugMap[item.stripeProductId]}`}
+                className="block flex-1 py-2 rounded-xl font-semibold text-xs text-center text-gray-300 border border-gray-700 hover:border-gray-500 hover:text-white transition-colors"
+              >
+                📋 Curriculum
+              </Link>
+            )}
             <Link
-              to={`/course-plan?course=${courseSlugMap[item.stripeProductId]}`}
-              className="block w-full py-2 rounded-xl font-semibold text-xs text-center text-gray-300 border border-gray-700 hover:border-gray-500 hover:text-white transition-colors"
+              to="/pricing"
+              className="block flex-1 py-2 rounded-xl font-semibold text-xs text-center text-white bg-cyan-700 hover:bg-cyan-600 transition-colors"
             >
-              📋 View Full Curriculum
+              💳 Buy Now
             </Link>
-          )}
+          </div>
           <CheckoutButton item={item} label={`Enroll Now — ${item.price}`} />
         </div>
       </div>
