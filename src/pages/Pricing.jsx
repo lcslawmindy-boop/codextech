@@ -83,7 +83,28 @@ const SUBSCRIPTION_TIERS = [
   },
 ];
 
+const ITEM_DETAILS = {
+  "Scalar EM Lab Starter Kit": { desc: "Foundation circuit kit for scalar electromagnetic experiments. Perfect for beginners learning EM field manipulation.", includes: ["EM measurement tools", "Coil assembly guides", "Field visualization software"] },
+  "G-Com Scalar Communicator Parts": { desc: "Complete component set for building a scalar communication device. Advanced precision components included.", includes: ["Precision capacitors", "Signal generation circuits", "Transmission modules", "Receiver assembly"] },
+  "EMF Protection & Shielding Kit": { desc: "Professional-grade shielding materials for EMF exposure reduction and lab safety.", includes: ["Mu-metal shielding", "Faraday cage materials", "Installation guides", "Testing equipment"] },
+  "Prioré Device Component Bundle": { desc: "Specialized components for Prioré-type multi-channel electromagnetic device research.", includes: ["Custom solenoids", "Frequency generators", "Phase control circuits", "Assembly documentation"] },
+  "MEG Replication Parts Kit": { desc: "Complete parts set for replicating the Motionless Electromagnetic Generator concept.", includes: ["Permanent magnets", "Coil winding supplies", "Control electronics", "Step-by-step guides"] },
+  "TRD-1 Telomere Device Build Kit": { desc: "Bioelectromagnetic device components for cellular regeneration research.", includes: ["Biofrequency generators", "Telomere measurement tools", "Treatment delivery systems"] },
+  "TRZ Reactor Starter Components": { desc: "Advanced reactor core components for scalar EM energy research and experimentation.", includes: ["Reactor core materials", "Containment assemblies", "Control systems", "Safety documentation"] },
+  "Advanced EM Assembly Tool Kit": { desc: "Professional tools and precision instruments for advanced electromagnetic device assembly.", includes: ["Precision measuring tools", "Specialized soldering equipment", "Diagnostic instruments", "Tool case"] },
+  
+  "Scalar Electromagnetics Fundamentals": { desc: "Foundational course covering scalar EM theory, mathematics, and experimental principles.", curriculum: ["Introduction to scalar fields", "Maxwell's equations revisited", "Scalar potential theory", "Experimental validation methods", "Lab safety protocols"] },
+  "Bearden Energy from the Vacuum Theory": { desc: "Deep dive into Tom Bearden's energy extraction from vacuum framework and implications.", curriculum: ["Overview of Bearden's work", "Vacuum energy concepts", "Curled-up dimensions", "Extraction mechanisms", "Patent landscape analysis"] },
+  "Building EM Device Prototypes": { desc: "Hands-on course for designing and building functional electromagnetic device prototypes.", curriculum: ["Circuit design fundamentals", "Coil winding techniques", "Assembly best practices", "Troubleshooting & optimization", "Testing methodologies"] },
+  "Patent Strategy for Energy Inventors": { desc: "Strategic IP planning for novel energy technologies and scalar EM inventions.", curriculum: ["Patent landscape mapping", "Claim drafting strategies", "Prior art research", "Freedom-to-operate analysis", "Commercialization planning"] },
+  "Quantum Field Theory Essentials": { desc: "Quantum mechanics fundamentals relevant to scalar EM and vacuum energy research.", curriculum: ["QFT basics for inventors", "Vacuum fluctuations", "Quantum tunneling", "Field quantization", "Advanced mathematics"] },
+  "Bioelectromagnetics & Health": { desc: "Explore bioelectromagnetic effects on living systems and research applications.", curriculum: ["Cellular bioelectricity", "EMF health effects", "Therapeutic frequencies", "Research methodologies", "Safety considerations"] },
+  "Prior Art Research & Analysis": { desc: "Master prior art research techniques to identify patentability gaps and innovation opportunities.", curriculum: ["Patent database navigation", "Citation analysis", "Novelty assessment", "Claims analysis", "Competitive intelligence"] },
+  "Investor Pitch Fundamentals": { desc: "Learn to pitch novel energy inventions to investors, VCs, and strategic partners.", curriculum: ["Pitch deck fundamentals", "Storytelling techniques", "Financial projections", "Technical communication", "Q&A strategies"] },
+};
+
 function ItemCard({ item }) {
+  const details = ITEM_DETAILS[item.name];
   const handleCheckout = async () => {
     const baseUrl = window.location.origin;
     const response = await base44.functions.invoke("createCheckoutSession", {
@@ -99,17 +120,42 @@ function ItemCard({ item }) {
   };
 
   return (
-    <div className="bg-gray-900 border border-gray-800 rounded-xl p-4 hover:border-gray-700 transition-all flex flex-col">
-      <div className="flex items-start justify-between mb-2">
-        <span className="text-2xl">{item.icon}</span>
-        <span className="text-xs text-gray-500 bg-gray-800 px-2 py-1 rounded">{item.category}</span>
+    <div className="bg-gray-900 border border-gray-800 rounded-2xl p-5 hover:border-gray-700 transition-all flex flex-col">
+      <div className="flex items-start justify-between mb-3">
+        <span className="text-3xl">{item.icon}</span>
+        <span className="text-xs font-bold px-2.5 py-1 rounded-lg bg-gray-800 text-gray-400">{item.category}</span>
       </div>
-      <h3 className="text-white font-bold text-sm leading-snug mb-3 flex-1">{item.name}</h3>
-      <div className="flex items-end justify-between">
-        <span className="text-yellow-400 font-black text-lg">${item.price}</span>
+      <h3 className="text-white font-bold text-sm leading-snug mb-2 flex-1">{item.name}</h3>
+      {details && <p className="text-gray-400 text-xs leading-relaxed mb-3">{details.desc}</p>}
+      {details?.includes && (
+        <div className="mb-4">
+          <p className="text-gray-500 text-xs font-bold uppercase mb-2">Includes:</p>
+          <ul className="space-y-1">
+            {details.includes.map((inc, i) => (
+              <li key={i} className="text-gray-400 text-xs flex items-start gap-2">
+                <span className="text-cyan-400 flex-shrink-0 mt-0.5">✓</span> {inc}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+      {details?.curriculum && (
+        <div className="mb-4">
+          <p className="text-gray-500 text-xs font-bold uppercase mb-2">Course Modules:</p>
+          <ul className="space-y-1">
+            {details.curriculum.map((mod, i) => (
+              <li key={i} className="text-gray-400 text-xs flex items-start gap-2">
+                <span className="text-cyan-400 flex-shrink-0 mt-0.5">✓</span> {mod}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+      <div className="flex items-center justify-between mt-auto pt-4 border-t border-gray-800">
+        <span className="text-cyan-400 font-black text-lg">${item.price}</span>
         <button
           onClick={handleCheckout}
-          className="px-3 py-2 rounded-lg bg-yellow-600 hover:bg-yellow-500 text-white text-xs font-bold transition-all"
+          className="px-4 py-2 rounded-lg bg-cyan-700 hover:bg-cyan-600 text-white text-xs font-bold transition-all"
         >
           Buy Now
         </button>
