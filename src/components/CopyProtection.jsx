@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { base44 } from "@/api/base44Client";
+import { isTrialActive } from "@/hooks/useTrialPass";
 
 /**
  * CopyProtection — mounts globally to block common data-theft vectors:
@@ -8,6 +9,7 @@ import { base44 } from "@/api/base44Client";
  * - Text selection via CSS
  * - Drag-and-drop of content
  * - Print attempts
+ * - Download link clicks (for trial users)
  */
 export default function CopyProtection() {
   const [isAdmin, setIsAdmin] = useState(null);
@@ -51,9 +53,21 @@ export default function CopyProtection() {
       // inject no-print style dynamically
     };
 
+    // Block download links for trial users
+    const blockDownloads = (e) => {
+      if (!isTrialActive()) return;
+      const link = e.target.closest("a[download], a[href$='.pdf'], a[href$='.zip'], a[href$='.docx']");
+      if (link) {
+        e.preventDefault();
+        e.stopPropagation();
+        alert("Downloads are not available during the 24-hour trial. Upgrade to a paid plan for full access.");
+      }
+    };
+
     document.addEventListener("contextmenu", blockContext);
     document.addEventListener("keydown", blockKeys, true);
     document.addEventListener("dragstart", blockDrag);
+    document.addEventListener("click", blockDownloads, true);
     window.addEventListener("beforeprint", blockPrint);
 
     // CSS-level protection injected into <head>
@@ -116,6 +130,7 @@ export default function CopyProtection() {
       document.removeEventListener("contextmenu", blockContext);
       document.removeEventListener("keydown", blockKeys, true);
       document.removeEventListener("dragstart", blockDrag);
+      document.removeEventListener("click", blockDownloads, true);
       window.removeEventListener("beforeprint", blockPrint);
       document.getElementById("copy-protection-style")?.remove();
       document.getElementById("copy-protection-watermark")?.remove();

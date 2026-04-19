@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Shield, Lock, Eye, AlertTriangle, CheckCircle2, ShieldCheck, Fingerprint, ChevronRight } from "lucide-react";
 import { base44 } from "@/api/base44Client";
+import { startTrialPass } from "@/hooks/useTrialPass";
 
 const AGREEMENT_VERSION = "1.0";
 const EFFECTIVE_DATE = "April 1, 2026";
@@ -146,6 +147,8 @@ export default function LegalAgreement() {
       userAgent: navigator.userAgent,
     };
     localStorage.setItem("bearden_nda_accepted", JSON.stringify(record));
+    // Start 24-hour trial pass
+    startTrialPass();
     window.location.href = "/";
   };
 

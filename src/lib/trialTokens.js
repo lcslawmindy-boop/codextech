@@ -15,6 +15,7 @@ function saveTokens(data) {
 export const TRIAL_FEATURES = {
   invention_forge: "invention_forge",
   patent_claims: "patent_claims",
+  patent_suite: "patent_suite",
 };
 
 export function hasTrialToken(feature) {

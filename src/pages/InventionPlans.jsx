@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { ArrowLeft, Download, ChevronDown, ChevronUp, AlertTriangle, CheckCircle2, Package, Loader2, FileText, Lock, ShoppingCart, Lightbulb, Eye, Film, Shield, RotateCcw } from "lucide-react";
 import { useTier } from "../hooks/useTier";
+import { useTrial } from "@/lib/TrialContext";
 import { isClassifiedInvention, tierHasGovAccess } from "../lib/tiers";
 import GovClassifiedGate from "../components/GovClassifiedGate";
 import { base44 as b44 } from "@/api/base44Client";
@@ -557,6 +558,7 @@ function ClassifiedGate() {
 
 export default function InventionPlans() {
   const { tier } = useTier();
+  const { isTrial } = useTrial();
   const [isAdmin, setIsAdmin] = useState(false);
   const [selected, setSelected] = useState(inventions[0]);
   const [showBuildVideo, setShowBuildVideo] = useState(false);
@@ -641,7 +643,10 @@ export default function InventionPlans() {
             <Film size={14} /> 🎬 Build Video
           </button>
           <button
-            onClick={handleDownload}
+            onClick={() => {
+              if (isTrial) { alert("Downloads are not available during the 24-hour trial. Upgrade to a paid plan."); return; }
+              handleDownload();
+            }}
             disabled={!data || generating || !canViewSelected}
             className="flex items-center gap-2 px-4 py-2 rounded-lg bg-red-700 hover:bg-red-600 disabled:opacity-50 text-white text-sm font-semibold transition-all"
           >
@@ -687,6 +692,8 @@ export default function InventionPlans() {
             const isGovLocked = govClassified && !isAdmin && !tierHasGovAccess(tier);
             const betaFree = isBetaFreeInvention(inv.title);
             const memberLocked = isMembershipRequired(inv.title) && !isAdmin;
+            // Trial users can only view the first invention (index 0)
+            const trialLocked = isTrial && !isAdmin && i > 0;
             return (
               <button key={i} onClick={() => setSelected(inv)}
                 className={`w-full text-left px-4 py-3 border-b border-gray-800/60 transition-all flex items-start gap-3 ${
@@ -695,6 +702,7 @@ export default function InventionPlans() {
                 <span className="text-xl flex-shrink-0 mt-0.5">{inv.icon}</span>
                 <div className="flex-1 min-w-0">
                   <p className={`text-xs font-semibold leading-snug truncate ${
+                    trialLocked ? "text-gray-600" :
                     isAdminLocked ? "text-red-900" :
                     isGovLocked ? "text-red-400" :
                     betaFree ? "text-green-300" :
@@ -702,14 +710,16 @@ export default function InventionPlans() {
                     accessible ? "text-white" : "text-gray-600"
                   }`}>{inv.title}</p>
                   <p className="text-xs mt-0.5">
-                    {isAdminLocked ? <span className="text-red-900">🔐 Admin Only</span> :
+                    {trialLocked ? <span className="text-cyan-700">⏱ Trial — upgrade to unlock</span> :
+                     isAdminLocked ? <span className="text-red-900">🔐 Admin Only</span> :
                      isGovLocked ? <span className="text-red-400">🏛 Gov/Defense Only</span> :
                      betaFree ? <span className="text-green-600">✓ Included with Beta</span> :
                      memberLocked ? <span className="text-indigo-500">🔒 $97/mo Membership</span> :
                      <span className="text-gray-600">{inv.price}</span>}
                   </p>
                 </div>
-                {isAdminLocked ? <Shield size={10} className="text-red-700 flex-shrink-0 mt-1" /> :
+                {trialLocked ? <Lock size={10} className="text-cyan-800 flex-shrink-0 mt-1" /> :
+                 isAdminLocked ? <Shield size={10} className="text-red-700 flex-shrink-0 mt-1" /> :
                  isGovLocked ? <Shield size={10} className="text-red-400 flex-shrink-0 mt-1" /> :
                  memberLocked ? <Lock size={10} className="text-indigo-600 flex-shrink-0 mt-1" /> : null}
               </button>
@@ -721,6 +731,26 @@ export default function InventionPlans() {
         <div className="flex-1 overflow-y-auto p-6">
           {!selected ? (
             <div className="flex items-center justify-center h-full text-gray-700 text-sm">Select an invention</div>
+          ) : (isTrial && !isAdmin && inventions.findIndex(i => i.title === selected.title) > 0) ? (
+            <div className="flex-1 flex items-center justify-center p-12">
+              <div className="max-w-md text-center">
+                <div className="w-20 h-20 rounded-2xl flex items-center justify-center text-4xl mx-auto mb-6"
+                  style={{ background: "rgba(14,165,233,0.1)", border: "1px solid rgba(14,165,233,0.3)" }}>⏱</div>
+                <div className="flex items-center justify-center gap-2 mb-3">
+                  <Lock size={16} className="text-cyan-400" />
+                  <span className="text-cyan-400 font-bold text-sm uppercase tracking-wider">24-Hour Trial — 1 Plan Included</span>
+                </div>
+                <h2 className="text-white font-black text-2xl mb-2">{selected.title}</h2>
+                <p className="text-gray-400 text-sm leading-relaxed mb-6">
+                  Your trial pass includes access to the first invention build plan only. Upgrade to a paid plan to unlock all {inventions.length} invention build plans with full step-by-step instructions and downloadable PDFs.
+                </p>
+                <Link to="/pricing"
+                  className="flex items-center justify-center gap-2 w-full py-3 rounded-xl font-black text-white text-sm transition-all"
+                  style={{ background: "linear-gradient(135deg, #0EA5E9, #10B981)" }}>
+                  Upgrade for Full Access — from $47
+                </Link>
+              </div>
+            </div>
           ) : (isMembershipRequired(selected.title) && !isAdmin) ? (
             <MembershipGate invention={selected} />
           ) : (isAdminOnly(selected.title) && !isAdmin) ? (

@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { ArrowLeft, FileText, Zap, DollarSign, Download, Loader2, ChevronDown, ChevronUp, CheckCircle2, AlertCircle, Lock } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import { useTier } from "../hooks/useTier";
 import { TIERS } from "../lib/tiers";
+import { hasTrialToken, consumeTrialToken, TRIAL_FEATURES } from "../lib/trialTokens";
 import { jsPDF } from "jspdf";
 
 // Bearden inventions from the portfolio
@@ -207,7 +208,15 @@ function SectionHeader({ n, title, desc }) {
 
 function ToolGate({ requiredFlag, requiredTierName, requiredPrice, children }) {
   const { tier } = useTier();
+  const [trialAllowed, setTrialAllowed] = useState(() => hasTrialToken(TRIAL_FEATURES.patent_suite));
+
   if (TIERS[tier]?.[requiredFlag]) return children;
+  if (trialAllowed) {
+    // Consume the token on first render inside the tool
+    consumeTrialToken(TRIAL_FEATURES.patent_suite);
+    return children;
+  }
+
   return (
     <div className="w-screen min-h-screen bg-gray-950 flex items-center justify-center p-8">
       <div className="max-w-md text-center">
@@ -218,7 +227,7 @@ function ToolGate({ requiredFlag, requiredTierName, requiredPrice, children }) {
         </div>
         <h2 className="text-white font-black text-2xl mb-3">AI Patent Drafting Tool</h2>
         <p className="text-gray-400 text-sm leading-relaxed mb-6">
-          The AI patent drafting &amp; IP valuation tools are exclusive to <span className="text-white font-bold">{requiredTierName}</span> members. Upgrade to unlock full patent generation, claim drafting, and multi-jurisdiction IP valuation.
+          Your 1× free trial of the Patent Suite has been used. The AI patent drafting & IP valuation tools are exclusive to <span className="text-white font-bold">{requiredTierName}</span> members. Upgrade to unlock unlimited patent generation, claim drafting, and multi-jurisdiction IP valuation.
         </p>
         <Link to="/pricing"
           className="flex items-center justify-center gap-2 w-full py-3 rounded-xl font-black text-white text-sm bg-indigo-700 hover:bg-indigo-600 transition-all">

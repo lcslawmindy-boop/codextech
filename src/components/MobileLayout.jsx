@@ -4,6 +4,7 @@ import ThemeSwitcher, { loadTheme } from "./ThemeSwitcher";
 import GlobalSearch from "./GlobalSearch";
 import { useEffect, useState } from "react";
 import { Search } from "lucide-react";
+import { useTrial } from "@/lib/TrialContext";
 
 // Pages that should NOT show the bottom tab bar
 const HIDDEN_TAB_ROUTES = ["/legal", "/checkout"];
@@ -17,6 +18,7 @@ const IMMERSIVE_ROUTES = [
 export default function MobileLayout() {
   const { pathname } = useLocation();
   const [searchOpen, setSearchOpen] = useState(false);
+  const { isTrial } = useTrial();
   useEffect(() => { loadTheme(); }, []);
 
   // Global keyboard shortcut: Cmd+K / Ctrl+K
@@ -36,7 +38,7 @@ export default function MobileLayout() {
       className="flex flex-col w-full"
       style={{
         minHeight: "100dvh",
-        paddingTop: "env(safe-area-inset-top)",
+        paddingTop: isTrial ? "calc(env(safe-area-inset-top) + 34px)" : "env(safe-area-inset-top)",
         paddingBottom: hideTab ? "env(safe-area-inset-bottom)" : "calc(env(safe-area-inset-bottom) + 64px)",
         overscrollBehavior: "none",
       }}

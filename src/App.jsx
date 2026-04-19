@@ -1,4 +1,6 @@
 import { Toaster } from "@/components/ui/toaster"
+import TrialBanner from './components/TrialBanner';
+import { TrialContext } from './lib/TrialContext';
 import { QueryClientProvider } from '@tanstack/react-query'
 import { queryClientInstance } from '@/lib/query-client'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
@@ -114,7 +116,7 @@ import VDRDocumentGenerator from './pages/VDRDocumentGenerator';
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
   const { accepted: ndaAccepted, loading: ndaLoading } = useNdaGate();
-  const { paid: hasPaid, loading: paymentLoading } = usePaymentGate();
+  const { paid: hasPaid, isTrial, loading: paymentLoading } = usePaymentGate();
 
   // Show loading spinner while checking app public settings or auth
   if (isLoadingPublicSettings || isLoadingAuth || ndaLoading || paymentLoading) {
@@ -158,8 +160,9 @@ const AuthenticatedApp = () => {
 
   // Render the main app
   return (
-    <>
+    <TrialContext.Provider value={{ isTrial }}>
       <CopyProtection />
+      {isTrial && <TrialBanner />}
       <Routes>
         <Route element={<MobileLayout />}>
           <Route path="/" element={<ConceptGraph />} />
@@ -269,7 +272,7 @@ const AuthenticatedApp = () => {
           <Route path="*" element={<PageNotFound />} />
         </Route>
       </Routes>
-    </>
+    </TrialContext.Provider>
   );
 };
 
