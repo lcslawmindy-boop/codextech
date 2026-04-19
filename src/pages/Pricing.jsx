@@ -218,7 +218,20 @@ const ITEM_DETAILS = {
 
 function ItemCard({ item }) {
   const [expanded, setExpanded] = useState(false);
+  const [hasPurchased, setHasPurchased] = useState(false);
+  const [checkingPurchase, setCheckingPurchase] = useState(true);
   const details = ITEM_DETAILS[item.name];
+
+  useState(() => {
+    base44.functions.invoke("getUserPurchases", {})
+      .then(res => {
+        const purchases = res?.data?.purchases || [];
+        setHasPurchased(purchases.some(p => p.title === item.name));
+      })
+      .catch(() => setHasPurchased(false))
+      .finally(() => setCheckingPurchase(false));
+  }, [item.name]);
+
   const handleCheckout = async () => {
     const baseUrl = window.location.origin;
     const response = await base44.functions.invoke("createCheckoutSession", {
@@ -249,11 +262,24 @@ function ItemCard({ item }) {
             className="flex items-center gap-1.5 text-cyan-400 text-xs font-bold mb-3 hover:text-cyan-300 transition-colors"
           >
             {expanded ? <ChevronUp size={12} /> : <ChevronDown size={12} />}
-            {details?.bom ? "View BOM & Materials" : "View Details"}
+            {details?.bom ? (hasPurchased ? "View BOM & Materials" : "What's Included") : "View Details"}
           </button>
         )}
 
-        {expanded && details?.bom && (
+        {expanded && details?.bom && !hasPurchased && (
+          <div className="mb-4 space-y-3 bg-blue-950/40 border border-blue-800/50 rounded-lg p-3">
+            <div>
+              <p className="text-blue-300 text-xs font-bold mb-3 flex items-center gap-1.5">
+                <Lock size={10} /> Purchase to unlock materials & suppliers
+              </p>
+              <p className="text-gray-400 text-xs leading-relaxed mb-3">
+                When you purchase this plan, you'll get instant access to the complete bill of materials, parts list, supplier recommendations, and downloadable PDF specifications.
+              </p>
+            </div>
+          </div>
+        )}
+
+        {expanded && details?.bom && hasPurchased && (
           <div className="mb-4 space-y-3 bg-gray-800/40 rounded-lg p-3">
             <div>
               <p className="text-yellow-400 text-xs font-bold mb-2">🛠️ Bill of Materials:</p>
