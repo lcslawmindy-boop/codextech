@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { ArrowLeft, Check, Zap, Shield, BookOpen, Download, Users, Star, Lock, ChevronRight, Sparkles, FlaskConical, Briefcase, Mail, Activity, CheckCircle2, Flame } from "lucide-react";
+import { ArrowLeft, Check, Zap, Shield, BookOpen, Download, Users, Star, Lock, ChevronRight, Sparkles, FlaskConical, Briefcase, Mail, Activity, CheckCircle2, Flame, ChevronDown, ChevronUp, ExternalLink } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 
 const INDIVIDUAL_BUILDS = [
@@ -105,6 +105,98 @@ const SUBSCRIPTION_TIERS = [
 ];
 
 const ITEM_DETAILS = {
+  "Anenergy Pump Demonstration Circuit": { 
+    desc: "Tabletop demonstration of the anenergy pump — the Moray mechanism in a kit. Gradient-phi extraction showing the phi-field / energy distinction.",
+    bom: [
+      { item: "Shielded toroidal coil", qty: 1, spec: "Primary winding 1000T, secondary 500T", source: "Amazon / Newark Electronics" },
+      { item: "DDS pulse controller", qty: 1, spec: "AD9910 or equivalent", source: "Digikey" },
+      { item: "Signal generator", qty: 1, spec: "1MHz-50MHz", source: "Rigol / Keysight" },
+      { item: "Measurement probes", qty: 2, spec: "HV differential probes", source: "Fluke / Tektronix" },
+    ],
+    materials: ["Copper wire (14 AWG)", "Ferrite core material", "PCB substrate", "Capacitor bank 100µF-1000µF"],
+    sources: { "Wire & Components": "Digikey.com", "Coils & Cores": "Kesco.com", "Test Equipment": "Fluke.com" }
+  },
+  "Scalar Energy Bottle Interferometer": { 
+    desc: "Two-transmitter zero-vector interference zone for tabletop energy capture demonstration. Shows scalar pulse timing mechanism.",
+    bom: [
+      { item: "Zero-vector transmitter coil", qty: 2, spec: "Push-pull topology to cancel transverse EM", source: "Custom wind or Kesco" },
+      { item: "FPGA timing module", qty: 1, spec: "Nanosecond resolution", source: "Digikey / Mouser" },
+      { item: "Dual detector panel", qty: 1, spec: "RF spectrum analyzer compatible", source: "Rigol" },
+    ],
+    materials: ["Magnet wire", "Coaxial cable (RG-58)", "SMA connectors", "Aluminum enclosure"],
+    sources: { "FPGA Modules": "Digikey.com", "RF Hardware": "Mini-Circuits.com", "Enclosures": "Hammond-mfg.com" }
+  },
+  "Vacuum Potential Oscillator (VPO) Circuit Kit": { 
+    desc: "Hands-on exploration of scalar phi-field principles. Resonant LC circuit tuned to shift vacuum-ground potential.",
+    bom: [
+      { item: "Custom wound toroids", qty: 2, spec: "Quartz resonator coupled", source: "Kesco / Custom" },
+      { item: "Quartz resonator", qty: 1, spec: "32.768 kHz or tuned frequency", source: "Amazon / Digikey" },
+      { item: "Measurement guide + software", qty: 1, spec: "PDF + oscilloscope macro", source: "Download included" },
+    ],
+    materials: ["Ferrite powder core", "Magnet wire AWG 22", "Capacitors 10pF-1000pF", "Resistor assortment"],
+    sources: { "Resonators": "Murata.com", "Capacitors": "Wyle.com", "Wire": "Adafruit.com" }
+  },
+  "Biofield Frequency Exposure Chamber": { 
+    desc: "Replicate Kaznacheyev-type UV photon transmission experiments. Quartz-windowed exposure chamber for biophysics research.",
+    bom: [
+      { item: "Quartz-windowed chamber", qty: 1, spec: "UV-transparent (not glass)", source: "Edmund Optics" },
+      { item: "UV LED driver + frequency generator", qty: 1, spec: "Programmable DDS", source: "Digikey" },
+      { item: "Dual-compartment system", qty: 1, spec: "Cell culture compatible", source: "VWR / Corning" },
+    ],
+    materials: ["UV-grade quartz panes", "Aluminum frame", "Silicone tubing", "O-ring seals"],
+    sources: { "Optics": "EdmundOptics.com", "Culture Equipment": "VWR.com", "Tubing": "Cole-Parmer.com" }
+  },
+  "Open-System Magnetic Generator (Prototype Plans)": { 
+    desc: "Engineering plans based on Kromrey/Gray/Searl design principles. Standard machining and winding techniques.",
+    bom: [
+      { item: "Rotating disk", qty: 1, spec: "Aluminum or composite, 12\" diameter", source: "McMaster / Local machine shop" },
+      { item: "Permanent magnets", qty: 8, spec: "Grade N52 1\"x1\"x0.5\"", source: "KJ Magnetics" },
+      { item: "Coil winding supplies", qty: 1, spec: "AWG 16-22 copper wire", source: "Adafruit / Amazon" },
+      { item: "Bearing set + motor coupling", qty: 1, spec: "NEMA mount", source: "Bearing Industries / VXB" },
+    ],
+    materials: ["Shaft steel (1\" diameter)", "Brush contacts", "Commutator rings", "Insulation paper"],
+    sources: { "Magnets": "KJMagnetics.com", "Bearings": "VXB.com", "Wire": "Adafruit.com", "Steel": "McMaster.com" }
+  },
+  "Quantum Potential EMI Detector": { 
+    desc: "Detect scalar EM interference invisible to standard instruments. Tuned quartz-crystal array with statistical burst-pattern firmware.",
+    bom: [
+      { item: "Quartz-crystal array", qty: 4, spec: "Tuned resonators", source: "Digikey / Mouser" },
+      { item: "Statistical analysis firmware", qty: 1, spec: "Python + DSP", source: "Download included" },
+      { item: "Sensitive RF frontend", qty: 1, spec: "Low-noise amplifier", source: "Mini-Circuits" },
+    ],
+    materials: ["PCB substrate (FR-4)", "Coaxial connectors", "SMA adapters", "Shielded enclosure"],
+    sources: { "Crystals": "Digikey.com", "RF Parts": "Mini-Circuits.com", "PCB": "PCBWay.com" }
+  },
+  "EM Trigger Window Therapy Device": { 
+    desc: "Programmable frequency generator for precision EM therapy using biological trigger windows. Consumer and clinical versions.",
+    bom: [
+      { item: "DDS frequency generator", qty: 1, spec: "AD9910 or equivalent", source: "Digikey" },
+      { item: "Wristband enclosure (consumer)", qty: 1, spec: "Aluminum + silicone", source: "Amazon" },
+      { item: "Full-body chamber coils (clinical)", qty: 2, spec: "Helmholtz coil geometry", source: "Custom or Kesco" },
+    ],
+    materials: ["Magnet wire AWG 18-22", "PCB substrate", "LiPo battery", "Timing crystal 16MHz"],
+    sources: { "ICs": "Digikey.com", "Enclosures": "Amazon.com", "Wire": "Adafruit.com" }
+  },
+  "Morphogenetic Field Coherence Monitor": { 
+    desc: "Measure species-level quantum potential coherence in biological systems. Applications in agriculture optimization.",
+    bom: [
+      { item: "Wideband antenna array", qty: 1, spec: "Tuned 10Hz-1MHz", source: "Custom or Mini-Circuits" },
+      { item: "SQUID-compatible interface", qty: 1, spec: "Magnetometry frontend", source: "Digikey" },
+      { item: "Real-time analysis software", qty: 1, spec: "Python + LabVIEW", source: "Download included" },
+    ],
+    materials: ["Shielded Faraday enclosure", "Coaxial cable", "SMA connectors", "Precision resistors 1%"],
+    sources: { "Hardware": "Mini-Circuits.com", "Enclosures": "Hampton-Roads.com", "Software": "Included" }
+  },
+  "Whittaker Wave Phase Conjugate Mirror System": { 
+    desc: "Time-reverse EM signals for scalar communications and healing. Based on Gravitobiology Figs 10-11.",
+    bom: [
+      { item: "Nonlinear optical medium", qty: 1, spec: "BaTiO₃ crystal or ferrofluid cell", source: "Edmund Optics / Sigma-Aldrich" },
+      { item: "Pump laser", qty: 1, spec: "532nm 1W DPSS", source: "Coherent / Laserland" },
+      { item: "Signal detection array", qty: 1, spec: "Photodiode + amplifier", source: "Thorlabs" },
+    ],
+    materials: ["Optical mounts", "Dichroic mirrors", "Precision apertures", "Laser safety enclosure"],
+    sources: { "Optics": "Thorlabs.com", "Crystals": "EdmundOptics.com", "Laser": "LaserLand.com" }
+  },
   "Scalar EM Lab Starter Kit": { desc: "Foundation circuit kit for scalar electromagnetic experiments. Perfect for beginners learning EM field manipulation.", includes: ["EM measurement tools", "Coil assembly guides", "Field visualization software"] },
   "G-Com Scalar Communicator Parts": { desc: "Complete component set for building a scalar communication device. Advanced precision components included.", includes: ["Precision capacitors", "Signal generation circuits", "Transmission modules", "Receiver assembly"] },
   "EMF Protection & Shielding Kit": { desc: "Professional-grade shielding materials for EMF exposure reduction and lab safety.", includes: ["Mu-metal shielding", "Faraday cage materials", "Installation guides", "Testing equipment"] },
@@ -125,6 +217,7 @@ const ITEM_DETAILS = {
 };
 
 function ItemCard({ item }) {
+  const [expanded, setExpanded] = useState(false);
   const details = ITEM_DETAILS[item.name];
   const handleCheckout = async () => {
     const baseUrl = window.location.origin;
@@ -141,38 +234,100 @@ function ItemCard({ item }) {
   };
 
   return (
-    <div className="bg-gray-900 border border-gray-800 rounded-2xl p-5 hover:border-gray-700 transition-all flex flex-col">
-      <div className="flex items-start justify-between mb-3">
-        <span className="text-3xl">{item.icon}</span>
-        <span className="text-xs font-bold px-2.5 py-1 rounded-lg bg-gray-800 text-gray-400">{item.category}</span>
+    <div className="bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden hover:border-gray-700 transition-all flex flex-col">
+      <div className="p-5 flex flex-col flex-1">
+        <div className="flex items-start justify-between mb-3">
+          <span className="text-3xl">{item.icon}</span>
+          <span className="text-xs font-bold px-2.5 py-1 rounded-lg bg-gray-800 text-gray-400">{item.category}</span>
+        </div>
+        <h3 className="text-white font-bold text-sm leading-snug mb-2">{item.name}</h3>
+        {details && <p className="text-gray-400 text-xs leading-relaxed mb-4">{details.desc}</p>}
+        
+        {(details?.bom || details?.includes || details?.curriculum) && (
+          <button
+            onClick={() => setExpanded(!expanded)}
+            className="flex items-center gap-1.5 text-cyan-400 text-xs font-bold mb-3 hover:text-cyan-300 transition-colors"
+          >
+            {expanded ? <ChevronUp size={12} /> : <ChevronDown size={12} />}
+            {details?.bom ? "View BOM & Materials" : "View Details"}
+          </button>
+        )}
+
+        {expanded && details?.bom && (
+          <div className="mb-4 space-y-3 bg-gray-800/40 rounded-lg p-3">
+            <div>
+              <p className="text-yellow-400 text-xs font-bold mb-2">🛠️ Bill of Materials:</p>
+              <div className="space-y-1.5">
+                {details.bom.map((row, i) => (
+                  <div key={i} className="text-xs text-gray-300 border-l-2 border-cyan-600/30 pl-2">
+                    <p className="font-semibold">{row.item} (Qty: {row.qty})</p>
+                    <p className="text-gray-500">{row.spec}</p>
+                    <p className="text-cyan-400 text-xs flex items-center gap-1 mt-0.5">
+                      <ExternalLink size={9} /> {row.source}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+            {details?.materials && (
+              <div>
+                <p className="text-green-400 text-xs font-bold mb-2">📦 Materials & Sources:</p>
+                <div className="space-y-1">
+                  {details.materials.map((mat, i) => (
+                    <p key={i} className="text-xs text-gray-300">• {mat}</p>
+                  ))}
+                </div>
+              </div>
+            )}
+            {details?.sources && (
+              <div>
+                <p className="text-blue-400 text-xs font-bold mb-2">🔗 Recommended Suppliers:</p>
+                <div className="space-y-1">
+                  {Object.entries(details.sources).map(([cat, url], i) => (
+                    <p key={i} className="text-xs text-cyan-300">
+                      {cat}: <span className="text-gray-400">{url}</span>
+                    </p>
+                  ))}
+                </div>
+              </div>
+            )}
+            <button className="w-full mt-2 py-2 px-3 rounded-lg bg-cyan-900/40 border border-cyan-700 text-cyan-300 text-xs font-bold hover:bg-cyan-800/50 transition-all flex items-center justify-center gap-2">
+              <Download size={11} /> Download Plans PDF
+            </button>
+          </div>
+        )}
+
+        {expanded && (details?.includes || details?.curriculum) && (
+          <div className="mb-4 bg-gray-800/40 rounded-lg p-3">
+            {details?.includes && (
+              <div className="mb-3">
+                <p className="text-gray-400 text-xs font-bold uppercase mb-2">Includes:</p>
+                <ul className="space-y-1">
+                  {details.includes.map((inc, i) => (
+                    <li key={i} className="text-gray-300 text-xs flex items-start gap-2">
+                      <span className="text-cyan-400 flex-shrink-0 mt-0.5">✓</span> {inc}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+            {details?.curriculum && (
+              <div>
+                <p className="text-gray-400 text-xs font-bold uppercase mb-2">Course Modules:</p>
+                <ul className="space-y-1">
+                  {details.curriculum.map((mod, i) => (
+                    <li key={i} className="text-gray-300 text-xs flex items-start gap-2">
+                      <span className="text-cyan-400 flex-shrink-0 mt-0.5">✓</span> {mod}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </div>
+        )}
       </div>
-      <h3 className="text-white font-bold text-sm leading-snug mb-2 flex-1">{item.name}</h3>
-      {details && <p className="text-gray-400 text-xs leading-relaxed mb-3">{details.desc}</p>}
-      {details?.includes && (
-        <div className="mb-4">
-          <p className="text-gray-500 text-xs font-bold uppercase mb-2">Includes:</p>
-          <ul className="space-y-1">
-            {details.includes.map((inc, i) => (
-              <li key={i} className="text-gray-400 text-xs flex items-start gap-2">
-                <span className="text-cyan-400 flex-shrink-0 mt-0.5">✓</span> {inc}
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
-      {details?.curriculum && (
-        <div className="mb-4">
-          <p className="text-gray-500 text-xs font-bold uppercase mb-2">Course Modules:</p>
-          <ul className="space-y-1">
-            {details.curriculum.map((mod, i) => (
-              <li key={i} className="text-gray-400 text-xs flex items-start gap-2">
-                <span className="text-cyan-400 flex-shrink-0 mt-0.5">✓</span> {mod}
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
-      <div className="flex items-center justify-between mt-auto pt-4 border-t border-gray-800">
+
+      <div className="flex items-center justify-between px-5 py-4 border-t border-gray-800 bg-gray-800/20">
         <span className="text-cyan-400 font-black text-lg">${item.price}</span>
         <button
           onClick={handleCheckout}
