@@ -15,14 +15,14 @@ const INDIVIDUAL_BUILDS = [
 ];
 
 const INDIVIDUAL_COURSES = [
-  { name: "Scalar Electromagnetics Fundamentals", price: 49, category: "Course", icon: "📚" },
-  { name: "Bearden Energy from the Vacuum Theory", price: 49, category: "Course", icon: "📖" },
-  { name: "Building EM Device Prototypes", price: 49, category: "Course", icon: "🔬" },
-  { name: "Patent Strategy for Energy Inventors", price: 49, category: "Course", icon: "⚖️" },
-  { name: "Quantum Field Theory Essentials", price: 49, category: "Course", icon: "🌌" },
-  { name: "Bioelectromagnetics & Health", price: 49, category: "Course", icon: "💊" },
-  { name: "Prior Art Research & Analysis", price: 49, category: "Course", icon: "🔍" },
-  { name: "Investor Pitch Fundamentals", price: 49, category: "Course", icon: "💼" },
+  { name: "Scalar Electromagnetics Fundamentals", price: 167, category: "Course", icon: "📚" },
+  { name: "Bearden Energy from the Vacuum Theory", price: 197, category: "Course", icon: "📖" },
+  { name: "Building EM Device Prototypes", price: 189, category: "Course", icon: "🔬" },
+  { name: "Patent Strategy for Energy Inventors", price: 197, category: "Course", icon: "⚖️" },
+  { name: "Quantum Field Theory Essentials", price: 147, category: "Course", icon: "🌌" },
+  { name: "Bioelectromagnetics & Health", price: 159, category: "Course", icon: "💊" },
+  { name: "Prior Art Research & Analysis", price: 129, category: "Course", icon: "🔍" },
+  { name: "Investor Pitch Fundamentals", price: 139, category: "Course", icon: "💼" },
 ];
 
 const SUBSCRIPTION_TIERS = [
