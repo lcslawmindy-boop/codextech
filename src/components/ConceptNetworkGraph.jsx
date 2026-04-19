@@ -34,9 +34,9 @@ function getNodeDegrees(nodes, links) {
 const MODES = {
   analyst: {
     bg: "#080d14",
-    linkColor: "#8899bb",
-    linkOpacity: 0.5,
-    linkWidth: 1.2,
+    linkColor: "#ffffff",
+    linkOpacity: 1,
+    linkWidth: 1.5,
     nodeStrokeWidth: 1,
     showJolts: false,
     showWaves: false,
@@ -111,12 +111,12 @@ export default function ConceptNetworkGraph({ onNodeClick, selectedNodeId, graph
       fm.append("feMergeNode").attr("in", "SourceGraphic");
     };
 
-    makeGlow("glow-blue", mode.glowBlur, "#4fc3f7");
-    makeGlow("glow-green", mode.glowBlur, "#69f0ae");
-    makeGlow("glow-red", mode.glowBlur, "#ff6b6b");
-    makeGlow("glow-purple", mode.glowBlur, "#ce93d8");
-    makeGlow("glow-amber", mode.glowBlur, "#ffcc02");
-    makeGlow("glow-cyan", mode.glowBlur, "#80deea");
+    makeGlow("glow-blue", mode.glowBlur, "#3b82f6");
+    makeGlow("glow-green", mode.glowBlur, "#22c55e");
+    makeGlow("glow-red", mode.glowBlur, "#ef4444");
+    makeGlow("glow-purple", mode.glowBlur, "#a855f7");
+    makeGlow("glow-amber", mode.glowBlur, "#f59e0b");
+    makeGlow("glow-cyan", mode.glowBlur, "#06b6d4");
     makeGlow("glow-white", mode.glowBlur, "#ffffff");
     makeGlow("glow-link", mode.glowBlur, mode.linkColor);
 
@@ -144,7 +144,7 @@ export default function ConceptNetworkGraph({ onNodeClick, selectedNodeId, graph
     const links = rawLinks.map(d => ({ ...d }));
     const degrees = getNodeDegrees(nodes, links);
 
-    const minR = 32, maxR = 58;
+    const minR = 26, maxR = 46;
     const maxDeg = Math.max(...Object.values(degrees));
     const nodeRadius = d => minR + ((degrees[d.id] || 0) / maxDeg) * (maxR - minR);
 
@@ -152,16 +152,16 @@ export default function ConceptNetworkGraph({ onNodeClick, selectedNodeId, graph
       .force("link", d3.forceLink(links).id(d => d.id).distance(d => {
         const srcDeg = degrees[typeof d.source === 'object' ? d.source.id : d.source] || 0;
         const tgtDeg = degrees[typeof d.target === 'object' ? d.target.id : d.target] || 0;
-        const baseDistance = 260 + (srcDeg + tgtDeg) * 5;
+        const baseDistance = 190 + (srcDeg + tgtDeg) * 3.5;
         const srcNode = nodes.find(n => n.id === (typeof d.source === 'object' ? d.source.id : d.source));
         const tgtNode = nodes.find(n => n.id === (typeof d.target === 'object' ? d.target.id : d.target));
         const srcRadius = srcNode ? nodeRadius(srcNode) : 0;
         const tgtRadius = tgtNode ? nodeRadius(tgtNode) : 0;
         return baseDistance + srcRadius + tgtRadius;
       }))
-      .force("charge", d3.forceManyBody().strength(d => -1800 - (degrees[d.id] || 0) * 35))
+      .force("charge", d3.forceManyBody().strength(d => -900 - (degrees[d.id] || 0) * 20))
       .force("center", d3.forceCenter(width / 2, height / 2))
-      .force("collision", d3.forceCollide(d => nodeRadius(d) + 28));
+      .force("collision", d3.forceCollide(d => nodeRadius(d) + 18));
 
     // ── Links ──
     const link = linkGroup.selectAll("line.link-line")
@@ -229,11 +229,11 @@ export default function ConceptNetworkGraph({ onNodeClick, selectedNodeId, graph
       });
     }
 
-    // ── Link labels (hidden by default, show on node hover) ──
+    // ── Link labels (clickable with visual feedback) ──
     const linkLabelBg = g.append("g").selectAll("rect.linklabel-bg")
       .data(links).enter().append("rect")
       .attr("class", "linklabel-bg")
-      .attr("fill", "#0a0f1a")
+      .attr("fill", "transparent")
       .attr("rx", 4)
       .attr("pointer-events", "none")
       .attr("opacity", 0);
@@ -241,15 +241,53 @@ export default function ConceptNetworkGraph({ onNodeClick, selectedNodeId, graph
     const linkLabel = g.append("g").selectAll("text.linklabel")
       .data(links).enter().append("text")
       .attr("class", "linklabel")
-      .attr("font-size", 10).attr("font-weight", "700")
-      .attr("fill", "#ffffff").attr("fill-opacity", 0)  // hidden by default
+      .attr("font-size", 11).attr("font-weight", "800")
+      .attr("fill", "#ffffff").attr("fill-opacity", 0.8)
       .attr("stroke", "#000").attr("stroke-width", 2.5)
       .attr("stroke-linejoin", "round").attr("paint-order", "stroke")
       .attr("text-anchor", "middle")
-      .attr("pointer-events", "none")
-      .text(d => d.label);
+      .style("cursor", "pointer")
+      .text(d => d.label)
+      .on("mouseenter", function(e, d) {
+        d3.select(this)
+          .transition().duration(150)
+          .attr("fill-opacity", 1)
+          .attr("font-size", 12);
+        d3.select(this.parentNode).selectAll("rect.linklabel-bg").filter((bd) => bd === d)
+          .transition().duration(150)
+          .attr("opacity", 0.15)
+          .attr("fill", "#fbbf24");
+      })
+      .on("mouseleave", function(e, d) {
+        d3.select(this)
+          .transition().duration(150)
+          .attr("fill-opacity", 0.8)
+          .attr("font-size", 11);
+        d3.select(this.parentNode).selectAll("rect.linklabel-bg").filter((bd) => bd === d)
+          .transition().duration(150)
+          .attr("opacity", 0);
+      })
+      .on("click", (e, d) => {
+        e.stopPropagation();
+        if (onLinkClick) onLinkClick(d);
+      });
 
-    // Raise link labels to front
+    // Position label backgrounds
+    linkLabel.each(function(d, i) {
+      const bbox = this.getBBox();
+      d3.select(linkLabelBg.nodes()[i])
+        .attr("x", bbox.x - 6)
+        .attr("y", bbox.y - 2)
+        .attr("width", bbox.width + 12)
+        .attr("height", bbox.height + 4)
+        .style("pointer-events", "auto")
+        .on("click", (e) => {
+          e.stopPropagation();
+          if (onLinkClick) onLinkClick(d);
+        });
+    });
+
+    // Raise link labels to front so they're always clickable
     g.selectAll(".linklabel-bg").raise();
     linkLabel.raise();
 
@@ -285,30 +323,36 @@ export default function ConceptNetworkGraph({ onNodeClick, selectedNodeId, graph
       .on("mouseenter", function(e, d) {
         const r = nodeRadius(d);
         d3.select(this.parentNode).select(".ring")
-          .transition().duration(180).attr("stroke-opacity", 0.85).attr("r", r + 10);
-        d3.select(this).transition().duration(180).attr("stroke-width", 3);
+          .transition().duration(180).attr("stroke-opacity", 0.7).attr("r", r + 8);
+        d3.select(this).transition().duration(180).attr("stroke-width", 2.5);
         d3.select(this.parentNode).select(".group-label")
           .transition().duration(150).attr("fill-opacity", 1);
-        // Show ONLY connected link labels
         linkLabel.transition().duration(150)
           .attr("fill-opacity", l => {
             const src = typeof l.source === 'object' ? l.source.id : l.source;
             const tgt = typeof l.target === 'object' ? l.target.id : l.target;
-            return (src === d.id || tgt === d.id) ? 1 : 0;
+            return (src === d.id || tgt === d.id) ? 1 : 0.9;
           })
-          .attr("font-size", 11)
-          .attr("fill", "#ffd700");
-        linkLabelBg.transition().duration(150)
-          .attr("opacity", l => {
+          .attr("font-size", l => {
             const src = typeof l.source === 'object' ? l.source.id : l.source;
             const tgt = typeof l.target === 'object' ? l.target.id : l.target;
-            return (src === d.id || tgt === d.id) ? 0.8 : 0;
+            return (src === d.id || tgt === d.id) ? 13 : 11;
+          })
+          .attr("stroke-width", l => {
+            const src = typeof l.source === 'object' ? l.source.id : l.source;
+            const tgt = typeof l.target === 'object' ? l.target.id : l.target;
+            return (src === d.id || tgt === d.id) ? 3.5 : 2.5;
+          })
+          .attr("fill", l => {
+            const src = typeof l.source === 'object' ? l.source.id : l.source;
+            const tgt = typeof l.target === 'object' ? l.target.id : l.target;
+            return (src === d.id || tgt === d.id) ? "#ffff00" : "#ffffff";
           });
         link.transition().duration(150)
           .attr("stroke-opacity", l => {
             const src = typeof l.source === 'object' ? l.source.id : l.source;
             const tgt = typeof l.target === 'object' ? l.target.id : l.target;
-            return (src === d.id || tgt === d.id) ? 1 : 0.05;
+            return (src === d.id || tgt === d.id) ? 1 : 0.1;
           })
           .attr("stroke", l => {
             const src = typeof l.source === 'object' ? l.source.id : l.source;
@@ -328,9 +372,11 @@ export default function ConceptNetworkGraph({ onNodeClick, selectedNodeId, graph
         d3.select(this).transition().duration(300).attr("stroke-width", d.id === selectedNodeId ? 2.5 : mode.nodeStrokeWidth);
         d3.select(this.parentNode).select(".group-label")
           .transition().duration(300).attr("fill-opacity", 0.6);
-        // Hide all link labels
-        linkLabel.transition().duration(200).attr("fill-opacity", 0);
-        linkLabelBg.transition().duration(200).attr("opacity", 0);
+        linkLabel.transition().duration(200)
+          .attr("fill-opacity", 0.8)
+          .attr("font-size", 11)
+          .attr("stroke-width", 2.5)
+          .attr("fill", "#ffffff");
         link.transition().duration(200)
           .attr("stroke-opacity", mode.linkOpacity)
           .attr("stroke", mode.linkColor)
@@ -352,18 +398,18 @@ export default function ConceptNetworkGraph({ onNodeClick, selectedNodeId, graph
 
     // ── Multi-line node labels ──
     node.each(function(d) {
-      const lines = wrapLabel(d.label, 12);
-      const lineH = 14;
+      const lines = wrapLabel(d.label, 11);
+      const lineH = 13;
       const startY = -(lines.length - 1) * lineH / 2;
       const sel = d3.select(this);
       const color = groupColors[d.group];
-      const fontSize = lines.length > 2 ? 11 : lines.length === 2 ? 12 : 13;
+      const fontSize = lines.length > 2 ? 10 : lines.length === 2 ? 11 : 12;
 
       lines.forEach((t, i) => {
         sel.append("text").attr("class", "lbl-shadow")
           .attr("text-anchor", "middle").attr("y", startY + i * lineH)
           .attr("font-size", fontSize).attr("font-weight", "900")
-          .attr("fill", "none").attr("stroke", "#000000").attr("stroke-width", 4)
+          .attr("fill", "none").attr("stroke", "#ffffff").attr("stroke-width", 3)
           .attr("stroke-linejoin", "round").attr("paint-order", "stroke")
           .attr("pointer-events", "none").text(t);
       });
@@ -372,7 +418,7 @@ export default function ConceptNetworkGraph({ onNodeClick, selectedNodeId, graph
         sel.append("text").attr("class", "lbl-fill")
           .attr("text-anchor", "middle").attr("y", startY + i * lineH)
           .attr("font-size", fontSize).attr("font-weight", "900")
-          .attr("fill", "#ffffff").attr("pointer-events", "none").text(t);
+          .attr("fill", "#000000").attr("pointer-events", "none").text(t);
       });
     });
 
@@ -380,12 +426,12 @@ export default function ConceptNetworkGraph({ onNodeClick, selectedNodeId, graph
     node.append("text")
       .attr("class", "group-label")
       .attr("text-anchor", "middle")
-      .attr("y", d => nodeRadius(d) + 17)
-      .attr("font-size", 9).attr("font-weight", "800")
-      .attr("letter-spacing", "0.12em")
-      .attr("fill", d => groupColors[d.group])
-      .attr("fill-opacity", 0.75)
-      .attr("stroke", "#000").attr("stroke-width", 2)
+      .attr("y", d => nodeRadius(d) + 15)
+      .attr("font-size", 8).attr("font-weight", "700")
+      .attr("letter-spacing", "0.09em")
+      .attr("fill", graphMode === "analyst" ? "#ffffff" : d => groupColors[d.group])
+      .attr("fill-opacity", graphMode === "analyst" ? 0.85 : 0.6)
+      .attr("stroke", "#000").attr("stroke-width", 1.5)
       .attr("paint-order", "stroke")
       .attr("pointer-events", "none")
       .text(d => d.group.toUpperCase());
@@ -435,22 +481,18 @@ export default function ConceptNetworkGraph({ onNodeClick, selectedNodeId, graph
 
       linkLabel
         .attr("x", d => (d.source.x + d.target.x) / 2)
-        .attr("y", d => (d.source.y + d.target.y) / 2 - 5);
+        .attr("y", d => (d.source.y + d.target.y) / 2 - 4);
 
+      // Update label background positions
       linkLabelBg.each(function(d, i) {
-        const lx = (d.source.x + d.target.x) / 2;
-        const ly = (d.source.y + d.target.y) / 2 - 5;
         const labelEl = linkLabel.nodes()[i];
         if (labelEl) {
-          try {
-            const bbox = labelEl.getBBox();
-            d3.select(this)
-              .attr("x", lx - bbox.width / 2 - 5)
-              .attr("y", ly - 11)
-              .attr("width", bbox.width + 10)
-              .attr("height", 14)
-              .attr("rx", 3);
-          } catch(e) {}
+          const bbox = labelEl.getBBox();
+          d3.select(this)
+            .attr("x", bbox.x - 6)
+            .attr("y", bbox.y - 2)
+            .attr("width", bbox.width + 12)
+            .attr("height", bbox.height + 4);
         }
       });
 

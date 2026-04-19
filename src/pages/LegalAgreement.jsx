@@ -25,8 +25,7 @@ export default function LegalAgreement() {
   };
 
   return (
-    <div className="fixed inset-0 overflow-y-auto z-50" style={{backgroundColor: "#000000", color: "white"}}>
-    <div className="min-h-screen flex flex-col items-center justify-center px-4 py-12" style={{backgroundColor: "#000000"}}>
+    <div className="w-screen min-h-screen bg-gray-950 flex flex-col items-center justify-center px-4 py-12">
       <div className="w-full max-w-3xl">
 
         {/* Header */}
@@ -57,7 +56,7 @@ export default function LegalAgreement() {
           </div>
 
           {/* Main agreement text */}
-          <div className="px-6 py-6 space-y-6 text-gray-300 text-sm leading-relaxed overflow-y-auto max-h-[50vh] bg-gray-900">
+          <div className="px-6 py-6 space-y-6 text-gray-300 text-sm leading-relaxed overflow-y-auto max-h-[50vh]">
 
             <section>
               <h2 className="text-white font-bold text-base mb-2 flex items-center gap-2">
@@ -226,7 +225,6 @@ export default function LegalAgreement() {
         </div>
 
       </div>
-    </div>
     </div>
   );
 }
