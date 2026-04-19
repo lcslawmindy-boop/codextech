@@ -111,12 +111,12 @@ export default function ConceptNetworkGraph({ onNodeClick, selectedNodeId, graph
       fm.append("feMergeNode").attr("in", "SourceGraphic");
     };
 
-    makeGlow("glow-blue", mode.glowBlur, "#00f5ff");
-    makeGlow("glow-green", mode.glowBlur, "#39ff14");
-    makeGlow("glow-red", mode.glowBlur, "#ff0040");
-    makeGlow("glow-purple", mode.glowBlur, "#bf00ff");
-    makeGlow("glow-amber", mode.glowBlur, "#ff9500");
-    makeGlow("glow-cyan", mode.glowBlur, "#ffe600");
+    makeGlow("glow-blue", mode.glowBlur, "#4fc3f7");
+    makeGlow("glow-green", mode.glowBlur, "#69f0ae");
+    makeGlow("glow-red", mode.glowBlur, "#ff6b6b");
+    makeGlow("glow-purple", mode.glowBlur, "#ce93d8");
+    makeGlow("glow-amber", mode.glowBlur, "#ffcc02");
+    makeGlow("glow-cyan", mode.glowBlur, "#80deea");
     makeGlow("glow-white", mode.glowBlur, "#ffffff");
     makeGlow("glow-link", mode.glowBlur, mode.linkColor);
 
