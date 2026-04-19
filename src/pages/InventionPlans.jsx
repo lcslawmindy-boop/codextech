@@ -514,7 +514,7 @@ function PaywallGate({ invention }) {
         </p>
         <div className="bg-gray-900 border border-gray-700 rounded-2xl p-5 mb-6 text-left space-y-2">
           <p className="text-gray-500 text-xs font-bold uppercase tracking-wider mb-3">What's included after purchase:</p>
-          {["Step-by-step build instructions", "Full bill of materials with sources", "Schematic diagrams", "Software & firmware notes", "Downloadable PDF"].map((item, i) => (
+          {["BOM", "Parts list", "Supplier recommendations", "PDF", "Step-by-step instructions", "Build video"].map((item, i) => (
             <div key={i} className="flex items-center gap-2 text-sm text-gray-300">
               <CheckCircle2 size={13} className="text-green-500 flex-shrink-0" />{item}
             </div>
