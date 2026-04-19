@@ -110,7 +110,7 @@ const SUBSCRIPTION_TIERS = [
   },
   {
     id: "pro",
-    name: "Pro Elite",
+    name: "Pro",
     price: 247,
     color: "#22c55e",
     description: "75% off all invention plans & courses + IP suite",
