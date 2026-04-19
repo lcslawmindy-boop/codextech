@@ -72,6 +72,7 @@ const SUBSCRIPTION_TIERS = [
     price: 99,
     color: "#f59e0b",
     description: "One complete AI invention dossier with all materials",
+    isOneTime: true,
     features: [
       "1 AI Invention Forge Dossier (complete package)",
       "AI Patent Draft (for your invention)",
@@ -83,7 +84,6 @@ const SUBSCRIPTION_TIERS = [
       "Prior Art Archive with AI search",
       "50% off additional plans & courses",
       "Support",
-      "Cancel anytime",
     ],
     locked: [],
   },
@@ -396,9 +396,9 @@ function PlanCard({ plan }) {
       title: plan.name,
       priceInCents: plan.price * 100,
       description: plan.description,
-      category: "membership",
-      mode: "subscription",
-      interval: "month",
+      category: plan.isOneTime ? "one_time" : "membership",
+      mode: plan.isOneTime ? "payment" : "subscription",
+      interval: plan.isOneTime ? undefined : "month",
       successUrl: `${baseUrl}/checkout?success=true&product=${plan.id}`,
       cancelUrl: `${baseUrl}/pricing`,
     });
@@ -426,9 +426,9 @@ function PlanCard({ plan }) {
           <span className="text-4xl font-black" style={{ color: plan.color }}>
             ${plan.price}
           </span>
-          <span className="text-gray-500 text-sm mb-1">/month</span>
+          <span className="text-gray-500 text-sm mb-1">{plan.isOneTime ? "one-time" : "/month"}</span>
         </div>
-        <p className="text-gray-600 text-xs mb-5">Cancel anytime • No long-term commitment</p>
+        <p className="text-gray-600 text-xs mb-5">{plan.isOneTime ? "One-time purchase" : "Cancel anytime • No long-term commitment"}</p>
 
         <div className="space-y-2 mb-6 flex-1">
           {plan.features.map((f, i) => (
@@ -453,7 +453,11 @@ function PlanCard({ plan }) {
             boxShadow: `0 4px 20px ${plan.color}40`,
           }}
         >
-          {plan.name === "Researcher" ? `Go with Researcher — $${plan.price}/mo` : `Upgrade to ${plan.name} — $${plan.price}/mo`}
+          {plan.isOneTime 
+            ? `Get ${plan.name} — $${plan.price}` 
+            : plan.name === "Researcher" 
+              ? `Go with Researcher — $${plan.price}/mo` 
+              : `Upgrade to ${plan.name} — $${plan.price}/mo`}
         </button>
       </div>
     </div>
