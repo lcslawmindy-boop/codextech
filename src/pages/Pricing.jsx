@@ -504,12 +504,7 @@ export default function Pricing() {
           </div>
         </div>
 
-        {/* Value comparison banner */}
-        <div className="bg-gradient-to-r from-cyan-950/30 to-indigo-950/30 border border-cyan-800/30 rounded-2xl p-6 text-center">
-          <p className="text-gray-300 text-sm leading-relaxed">
-            <strong className="text-cyan-300">💡 Smart Move:</strong> Get unlimited access to all 21+ plans, 26+ courses, and AI tools for just <strong className="text-cyan-300">$97/mo</strong> with Researcher. The subscription pays for itself in your first month.
-          </p>
-        </div>
+
       </div>
     </div>
   );
