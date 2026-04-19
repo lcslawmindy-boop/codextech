@@ -4,21 +4,21 @@ import { CheckCircle2, Lock, BookOpen, FlaskConical, Zap, ChevronRight, ArrowRig
 import { base44 } from "@/api/base44Client";
 
 const TIER_UNLOCKS = {
-  pay_per_plan: {
-    name: "Individual Plan",
+  starter: {
+    name: "Starter Plan",
     color: "#f59e0b",
-    inventions: 1,
-    courses: 0,
+    inventions: 5,
+    courses: 4,
     features: [
-      "✓ 1 Invention Build Plan (full PDF + BOM)",
-      "✓ Step-by-step assembly guide",
-      "✓ Lifetime access to this plan",
-      "✗ Other build plans",
-      "✗ Courses",
+      "✓ 5 Invention Build Plans (full PDF + BOM)",
+      "✓ 4 Structured courses",
+      "✓ Prior Art Archive",
+      "✓ EM Lab Simulators",
       "✗ AI Invention Forge",
+      "✗ All 21 plans",
       "✗ Patent Drafting Tool",
     ],
-    nextTier: { name: "Researcher ($97/mo — All 21 Plans)", path: "/pricing", color: "#6366f1" },
+    nextTier: { name: "Researcher ($127/mo — All 21 Plans + AI)", path: "/pricing", color: "#6366f1" },
   },
   researcher: {
     name: "Researcher Plan",
@@ -131,10 +131,10 @@ export default function PostPurchaseOnboarding() {
                 <h4 className="text-white font-bold text-lg">{tierData.inventions} Invention Build Plan{tierData.inventions > 1 ? "s" : ""}</h4>
               </div>
               <p className="text-gray-400 text-sm mb-4">Step-by-step instructions, Bills of Materials, schematics, and downloadable PDFs.</p>
-              {tierData.inventions === 1 ? (
+              {tierData.inventions === 5 ? (
                 <div className="bg-blue-900/30 border border-blue-700/50 rounded-lg p-3 mb-4">
                   <p className="text-blue-300 text-xs leading-relaxed">
-                    You've purchased <strong>1 plan</strong>. Want all 21 plans? Upgrade to <strong>Researcher ($97/mo)</strong> for unlimited access.
+                    You have <strong>5 plans</strong>. Want all 21 + AI tools? Upgrade to <strong>Researcher ($127/mo)</strong>.
                   </p>
                 </div>
               ) : null}
@@ -230,16 +230,16 @@ export default function PostPurchaseOnboarding() {
                 <p className="text-gray-400 text-xs font-bold uppercase tracking-wider mb-3">Want More?</p>
                 <h4 className="text-white font-black text-lg mb-2">Upgrade to {tierData.nextTier.name}</h4>
                 <ul className="space-y-2 mb-4 text-xs text-gray-300">
-                  {productId === "pay_per_plan" && (
+                  {productId === "starter" && (
                     <>
                       <li className="flex items-center gap-2">
-                        <span style={{ color: tierData.nextTier.color }}>+</span> All 21 build plans (no per-plan fee)
+                        <span style={{ color: tierData.nextTier.color }}>+</span> All 21 build plans (vs 5)
                       </li>
                       <li className="flex items-center gap-2">
-                        <span style={{ color: tierData.nextTier.color }}>+</span> Full course library (26+ courses)
+                        <span style={{ color: tierData.nextTier.color }}>+</span> Full course library (26+ vs 4)
                       </li>
                       <li className="flex items-center gap-2">
-                        <span style={{ color: tierData.nextTier.color }}>+</span> AI Invention Forge (unlimited)
+                        <span style={{ color: tierData.nextTier.color }}>+</span> AI Invention Forge + Patent Claims Generator
                       </li>
                     </>
                   )}

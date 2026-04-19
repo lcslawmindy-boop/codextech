@@ -9,6 +9,7 @@ const PLANS = [
     name: "Free Preview",
     price: 0,
     priceSuffix: "",
+    annualPrice: 0,
     badge: null,
     tagline: "Explore the platform before committing",
     color: "#6b7280",
@@ -21,65 +22,74 @@ const PLANS = [
       "Prior Art Archive (read-only)",
       "Research Newsletter",
     ],
-    locked: ["AI Invention Forge", "Patent Drafting Tool", "Investor CRM", "Full IP Library"],
+    locked: ["AI Invention Forge", "Patent Drafting Tool", "Investor CRM", "All 21 Plans"],
   },
   {
-    id: "pay_per_plan",
-    name: "Pay-Per-Plan",
-    price: 12,
-    type: "one_time",
-    priceSuffix: " per invention",
+    id: "starter",
+    name: "Starter",
+    price: 47,
+    annualPrice: 564,
+    type: "subscription",
+    priceSuffix: "/mo",
     badge: null,
-    tagline: "Buy only what you need, one plan at a time",
+    tagline: "Core research + 5 device plans",
     color: "#f59e0b",
-    cta: "Buy Individual Plans",
+    cta: "Start Starter — $47/mo",
     features: [
-      "Single Invention Build Plan (full PDF + BOM)",
-      "Step-by-step assembly guide included",
-      "One-time purchase — lifetime access",
-      "No subscription required",
+      "5 Invention Build Plans (full PDFs + BOMs)",
+      "4 Structured Courses",
+      "Prior Art Archive (200+ entries)",
+      "EM Lab Simulators",
+      "Step-by-step assembly guides",
+      "Downloadable PDFs",
+      "Cancel anytime",
     ],
-    locked: ["Courses", "AI Invention Forge", "Patent Drafting Tool", "Prior Art Archive", "Investor CRM"],
+    locked: ["AI Invention Forge", "Patent Drafting Tool", "Investor CRM", "All 21 Plans", "Full Course Library"],
   },
   {
     id: "researcher",
     name: "Researcher",
-    price: 97,
+    price: 127,
+    annualPrice: 1524,
     type: "subscription",
     priceSuffix: "/mo",
     badge: "MOST POPULAR",
-    tagline: "Full IP library + AI research tools",
+    tagline: "Everything a researcher needs — all plans + AI tools",
     color: "#6366f1",
-    cta: "Start Researcher — $97/mo",
+    cta: "Start Researcher — $127/mo",
     features: [
       "All 21 Invention Build Plans",
-      "Full course library + monthly new content",
+      "26+ Structured Courses (all new content)",
       "AI Invention Forge — unlimited sessions",
+      "AI Patent Claims Generator",
       "EM simulators & lab visualization tools",
-      "Prior Art Archive (200+ documented entries)",
+      "Prior Art Archive with AI search",
       "Animated Build Video generator",
+      "IP Valuation & FTO Analysis",
       "Cancel anytime",
     ],
-    locked: ["Patent Drafting Tool", "Investor CRM", "Acquisition CRM"],
+    locked: ["Patent Drafting Tool", "Investor CRM", "VDR Portal", "Acquisition CRM"],
   },
   {
     id: "pro",
     name: "Pro",
-    price: 247,
+    price: 297,
+    annualPrice: 3564,
     type: "subscription",
     priceSuffix: "/mo",
     badge: "FULL ACCESS",
-    tagline: "Complete IP + investor & commercialization suite",
+    tagline: "Complete IP + investor & acquisition suite",
     color: "#22c55e",
-    cta: "Go Pro — $247/mo",
+    cta: "Go Pro — $297/mo",
     features: [
       "Everything in Researcher",
       "AI Patent Drafting Tool — unlimited (USPTO 35 USC 111(b))",
       "Investor CRM & Pitch Deck Builder",
-      "IP Valuation Calculator",
-      "Acquisition CRM & deal pipeline",
-      "VDR Portal (Virtual Data Room)",
-      "Priority support",
+      "Virtual Data Room (VDR) — secure document sharing",
+      "Acquisition CRM & deal pipeline management",
+      "IP Portfolio Health Dashboard",
+      "Co-Inventor Matching Network",
+      "Priority support + dedicated account manager",
       "Cancel anytime",
     ],
     locked: [],
@@ -92,9 +102,12 @@ const TESTIMONIALS = [
   { name: "J.T.", role: "IP Strategy Director", text: "We white-labeled the AI Patent Suite for our firm's clients. The 7-step drafting wizard and secure sharing system cut our provisional turnaround time by 60%." },
 ];
 
-function PlanCard({ plan, loading, onCheckout }) {
+function PlanCard({ plan, loading, onCheckout, isAnnual }) {
   const isPopular = plan.badge === "MOST POPULAR";
   const isFull = plan.badge === "FULL ACCESS";
+  const displayPrice = isAnnual && plan.annualPrice ? plan.annualPrice : plan.price;
+  const savings = isAnnual && plan.annualPrice ? Math.round((1 - plan.annualPrice / (plan.price * 12)) * 100) : 0;
+  
   return (
     <div className={`relative bg-gray-900 rounded-2xl border overflow-hidden flex flex-col ${
       isPopular ? "border-indigo-600 shadow-xl shadow-indigo-900/20" :
@@ -111,13 +124,15 @@ function PlanCard({ plan, loading, onCheckout }) {
         <p className="text-gray-500 text-sm mb-4">{plan.tagline}</p>
         <div className="flex items-end gap-1 mb-1">
           <span className="text-4xl font-black" style={{ color: plan.color }}>
-            {plan.price === 0 ? "Free" : `$${plan.price}`}
+            {plan.price === 0 ? "Free" : `$${displayPrice.toLocaleString()}`}
           </span>
-          {plan.price > 0 && <span className="text-gray-500 text-sm mb-1.5">{plan.priceSuffix}</span>}
+          {plan.price > 0 && <span className="text-gray-500 text-sm mb-1.5">{isAnnual ? "/year" : plan.priceSuffix}</span>}
         </div>
+        {savings > 0 && (
+          <p className="text-green-400 font-bold text-xs mb-2">Save {savings}% with annual billing</p>
+        )}
         <p className="text-gray-600 text-xs mb-5">
-          {plan.price === 0 ? "No credit card required" :
-            plan.type === "subscription" ? "Cancel anytime." : "Lifetime access. One payment."}
+          {plan.price === 0 ? "No credit card required" : "Cancel anytime."}
         </p>
 
         <div className="space-y-2 mb-4 flex-1">
@@ -155,6 +170,7 @@ function PlanCard({ plan, loading, onCheckout }) {
 export default function Pricing() {
   const [loading, setLoading] = useState(null);
   const [error, setError] = useState(null);
+  const [isAnnual, setIsAnnual] = useState(false);
 
   const handleMeteredCheckout = async () => {
     if (window !== window.top) {
@@ -238,6 +254,26 @@ export default function Pricing() {
         {error && (
           <div className="bg-red-950/60 border border-red-800 rounded-xl p-4 mb-6 text-red-300 text-sm text-center">{error}</div>
         )}
+        
+        {/* Annual billing toggle */}
+        <div className="flex items-center justify-center gap-4 mb-10">
+          <span className={`text-sm font-semibold ${!isAnnual ? "text-white" : "text-gray-500"}`}>Monthly</span>
+          <button
+            onClick={() => setIsAnnual(!isAnnual)}
+            className={`relative inline-flex h-8 w-14 items-center rounded-full transition-all ${
+              isAnnual ? "bg-green-600" : "bg-gray-700"
+            }`}
+          >
+            <span
+              className={`inline-block h-6 w-6 transform rounded-full bg-white transition-transform ${
+                isAnnual ? "translate-x-7" : "translate-x-1"
+              }`}
+            />
+          </button>
+          <span className={`text-sm font-semibold ${isAnnual ? "text-white" : "text-gray-500"}`}>Annual</span>
+          {isAnnual && <span className="ml-2 px-3 py-1 rounded-full bg-green-900/40 text-green-300 text-xs font-bold">Save 20%</span>}
+        </div>
+
         {/* Comparison hint */}
         <div className="flex items-center justify-center gap-6 mb-8 text-xs text-gray-500 flex-wrap">
           {[
@@ -249,9 +285,9 @@ export default function Pricing() {
             <span key={i} className="flex items-center gap-1.5">{item.icon} {item.label}</span>
           ))}
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5 mb-5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5 mb-5">
           {PLANS.map(plan => (
-            <PlanCard key={plan.id} plan={plan} loading={loading} onCheckout={handleCheckout} />
+            <PlanCard key={plan.id} plan={plan} loading={loading} onCheckout={handleCheckout} isAnnual={isAnnual} />
           ))}
         </div>
 
