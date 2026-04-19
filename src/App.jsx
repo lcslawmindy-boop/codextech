@@ -113,6 +113,7 @@ import ValuationAPI from './pages/ValuationAPI';
 import VDRNdaSign from './pages/VDRNdaSign';
 import VDRDocumentGenerator from './pages/VDRDocumentGenerator';
 import Welcome from './pages/Welcome';
+import TrialOnboarding from './pages/TrialOnboarding';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -148,13 +149,14 @@ const AuthenticatedApp = () => {
     );
   }
 
-  // Redirect to pricing/apply if not paid
+  // Redirect to trial onboarding or pricing if not paid
   if (!hasPaid) {
     return (
       <Routes>
+        <Route path="/trial-onboarding" element={<TrialOnboarding />} />
         <Route path="/beta-apply" element={<BetaApply />} />
         <Route path="/pricing" element={<Pricing />} />
-        <Route path="*" element={<Pricing />} />
+        <Route path="*" element={isTrial ? <TrialOnboarding /> : <Pricing />} />
       </Routes>
     );
   }
@@ -249,6 +251,7 @@ const AuthenticatedApp = () => {
           <Route path="/vdr-nda" element={<VDRNdaSign />} />
           <Route path="/vdr-generator" element={<VDRDocumentGenerator />} />
           <Route path="/welcome" element={<Welcome />} />
+          <Route path="/trial-onboarding" element={<TrialOnboarding />} />
 
           {/* Admin-only routes */}
           <Route element={<AdminGuard />}>
