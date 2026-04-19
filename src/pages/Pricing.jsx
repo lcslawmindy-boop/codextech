@@ -129,6 +129,27 @@ const SUBSCRIPTION_TIERS = [
     ],
     locked: [],
   },
+  {
+    id: "marketplace",
+    name: "Inventor Marketplace",
+    price: 197,
+    color: "#ec4899",
+    description: "List inventions, connect with buyers — ZARP takes 5% commission",
+    features: [
+      "Unlimited invention listings",
+      "Global buyer marketplace access",
+      "Built-in messaging & negotiation tools",
+      "Deal management dashboard",
+      "Secure escrow & payment processing",
+      "IP documentation library",
+      "Buyer matching algorithms",
+      "Co-inventor collaboration tools",
+      "Monthly market reports & trends",
+      "Community of 1000+ inventors & investors",
+      "ZARP takes 5% commission on successful deals",
+    ],
+    locked: [],
+  },
 ];
 
 const ITEM_DETAILS = {
