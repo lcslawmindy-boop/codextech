@@ -4,25 +4,25 @@ import { ArrowLeft, Check, Zap, Shield, BookOpen, Download, Users, Star, Lock, C
 import { base44 } from "@/api/base44Client";
 
 const INDIVIDUAL_BUILDS = [
-  { name: "Scalar EM Lab Starter Kit", price: 167, category: "Build Plan", icon: "⚡" },
-  { name: "G-Com Scalar Communicator Parts", price: 243, category: "Build Plan", icon: "📡" },
-  { name: "EMF Protection & Shielding Kit", price: 89, category: "Build Plan", icon: "🛡️" },
-  { name: "Prioré Device Component Bundle", price: 349, category: "Build Plan", icon: "📡" },
-  { name: "MEG Replication Parts Kit", price: 287, category: "Build Plan", icon: "⚙️" },
-  { name: "TRD-1 Telomere Device Build Kit", price: 194, category: "Build Plan", icon: "🧬" },
-  { name: "TRZ Reactor Starter Components", price: 389, category: "Build Plan", icon: "⭐" },
-  { name: "Advanced EM Assembly Tool Kit", price: 127, category: "Build Plan", icon: "🔧" },
+  { name: "Scalar EM Lab Starter Kit", price: 297, category: "Build Plan", icon: "⚡" },
+  { name: "G-Com Scalar Communicator Parts", price: 497, category: "Build Plan", icon: "📡" },
+  { name: "EMF Protection & Shielding Kit", price: 197, category: "Build Plan", icon: "🛡️" },
+  { name: "Prioré Device Component Bundle", price: 649, category: "Build Plan", icon: "📡" },
+  { name: "MEG Replication Parts Kit", price: 547, category: "Build Plan", icon: "⚙️" },
+  { name: "TRD-1 Telomere Device Build Kit", price: 397, category: "Build Plan", icon: "🧬" },
+  { name: "TRZ Reactor Starter Components", price: 799, category: "Build Plan", icon: "⭐" },
+  { name: "Advanced EM Assembly Tool Kit", price: 297, category: "Build Plan", icon: "🔧" },
 ];
 
 const INDIVIDUAL_COURSES = [
-  { name: "Scalar Electromagnetics Fundamentals", price: 167, category: "Course", icon: "📚" },
-  { name: "Bearden Energy from the Vacuum Theory", price: 197, category: "Course", icon: "📖" },
-  { name: "Building EM Device Prototypes", price: 189, category: "Course", icon: "🔬" },
-  { name: "Patent Strategy for Energy Inventors", price: 197, category: "Course", icon: "⚖️" },
-  { name: "Quantum Field Theory Essentials", price: 147, category: "Course", icon: "🌌" },
-  { name: "Bioelectromagnetics & Health", price: 159, category: "Course", icon: "💊" },
-  { name: "Prior Art Research & Analysis", price: 129, category: "Course", icon: "🔍" },
-  { name: "Investor Pitch Fundamentals", price: 139, category: "Course", icon: "💼" },
+  { name: "Scalar Electromagnetics Fundamentals", price: 297, category: "Course", icon: "📚" },
+  { name: "Bearden Energy from the Vacuum Theory", price: 397, category: "Course", icon: "📖" },
+  { name: "Building EM Device Prototypes", price: 397, category: "Course", icon: "🔬" },
+  { name: "Patent Strategy for Energy Inventors", price: 397, category: "Course", icon: "⚖️" },
+  { name: "Quantum Field Theory Essentials", price: 297, category: "Course", icon: "🌌" },
+  { name: "Bioelectromagnetics & Health", price: 347, category: "Course", icon: "💊" },
+  { name: "Prior Art Research & Analysis", price: 297, category: "Course", icon: "🔍" },
+  { name: "Investor Pitch Fundamentals", price: 297, category: "Course", icon: "💼" },
 ];
 
 const SUBSCRIPTION_TIERS = [
