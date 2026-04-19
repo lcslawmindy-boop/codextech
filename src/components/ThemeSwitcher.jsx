@@ -53,13 +53,14 @@ export default function ThemeSwitcher() {
       <button
         onClick={() => setOpen(o => !o)}
         title="Change platform theme"
-        className="flex items-center justify-center w-9 h-9 rounded-xl bg-gray-800 hover:bg-gray-700 border border-gray-700 text-gray-400 hover:text-white transition-all"
+        className="flex items-center justify-center w-9 h-9 rounded-xl transition-all"
+        style={{ background: "rgba(30,41,59,0.95)", border: "1px solid rgba(51,65,85,0.8)", color: "#64748B" }}
       >
         <Palette size={15} />
       </button>
 
       {open && (
-        <div className="absolute right-0 bottom-12 z-[200] bg-gray-900 border border-gray-700 rounded-2xl p-3 shadow-2xl w-64">
+        <div className="absolute right-0 bottom-12 z-[200] rounded-2xl p-3 shadow-2xl w-64" style={{ background: "#1E293B", border: "1px solid #334155" }}>
           <p className="text-white font-black text-xs uppercase tracking-widest mb-3 px-1">Platform Theme</p>
           <div className="space-y-1">
             {THEMES.map(t => (
