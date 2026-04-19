@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { CheckCircle2, ChevronRight, Star, Zap, Shield, BookOpen, FlaskConical, Brain, FileText, Users, Download, Lock, ArrowRight, Sparkles, Globe, Target, TrendingUp, Microscope, Radio, Cpu, HeartPulse, DollarSign } from "lucide-react";
+import { CheckCircle2, ChevronRight, Star, Zap, Shield, BookOpen, FlaskConical, Brain, FileText, Users, ArrowRight, Sparkles, Globe, Target, TrendingUp, Microscope, DollarSign } from "lucide-react";
 
 const FEATURES = [
   {
