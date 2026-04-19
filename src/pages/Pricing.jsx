@@ -480,7 +480,7 @@ export default function Pricing() {
             <ShoppingCart size={24} className="text-yellow-400" />
             <div>
               <h3 className="text-white font-black text-2xl">Build Plans & Courses</h3>
-              <p className="text-gray-500 text-sm">Buy individual items</p>
+              <p className="text-gray-500 text-sm">Each build plan includes: BOM, parts list, supplier recommendations, PDF, step-by-step instructions, and build video</p>
             </div>
           </div>
 
