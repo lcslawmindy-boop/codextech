@@ -25,7 +25,8 @@ export default function LegalAgreement() {
   };
 
   return (
-    <div className="w-screen min-h-screen bg-gray-950 flex flex-col items-center justify-center px-4 py-12">
+    <div className="fixed inset-0 overflow-y-auto bg-gray-950" style={{ backgroundColor: 'hsl(222, 14%, 7%)' }}>
+    <div className="min-h-full flex flex-col items-center justify-center px-4 py-12">
       <div className="w-full max-w-3xl">
 
         {/* Header */}
@@ -225,6 +226,7 @@ export default function LegalAgreement() {
         </div>
 
       </div>
+    </div>
     </div>
   );
 }
