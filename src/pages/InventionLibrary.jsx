@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { ArrowLeft, Film, Download, FileText, Loader2, Search, X } from "lucide-react";
 import { jsPDF } from "jspdf";
@@ -318,6 +318,24 @@ export default function InventionLibrary() {
   const [search, setSearch] = useState("");
   const [buildVideoInv, setBuildVideoInv] = useState(null);
   const [generatingPdf, setGeneratingPdf] = useState(null);
+  const [hasPurchased, setHasPurchased] = useState(false);
+  const [checkingPurchase, setCheckingPurchase] = useState(true);
+
+  useEffect(() => {
+    base44.functions.invoke("getUserPurchases", {})
+      .then(res => {
+        const purchases = res?.data?.purchases || [];
+        const paid = purchases.some(p =>
+          p.category === "Invention" ||
+          p.title?.toLowerCase().includes("invention") ||
+          p.title?.toLowerCase().includes("plan") ||
+          p.title?.toLowerCase().includes("build")
+        );
+        setHasPurchased(paid);
+      })
+      .catch(() => setHasPurchased(false))
+      .finally(() => setCheckingPurchase(false));
+  }, []);
 
   const filtered = inventions.filter(inv =>
     inv.title.toLowerCase().includes(search.toLowerCase()) ||
@@ -424,24 +442,41 @@ export default function InventionLibrary() {
                 </div>
 
                 {/* Action buttons */}
-                <div className="px-4 pb-4 flex gap-2 flex-wrap">
-                  <button
-                    onClick={() => setBuildVideoInv(getBuildVideoPayload(inv))}
-                    className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold text-white transition-all hover:opacity-90 flex-1"
-                    style={{ backgroundColor: color }}>
-                    <Film size={12} /> 🎬 Build Video
-                  </button>
-                  <button
-                    onClick={() => handlePdf(inv)}
-                    disabled={isPdfLoading}
-                    className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold bg-gray-800 hover:bg-gray-700 border border-gray-700 text-gray-300 transition-all disabled:opacity-60 flex-1">
-                    {isPdfLoading ? <Loader2 size={12} className="animate-spin" /> : <Download size={12} />}
-                    {isPdfLoading ? "Building…" : "PDF Specs"}
-                  </button>
-                  <Link to="/pricing" className="flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold bg-cyan-700 hover:bg-cyan-600 text-white transition-all flex-1">
-                    💳 Buy Now
-                  </Link>
-                  </div>
+                 <div className="px-4 pb-4 flex gap-2 flex-wrap">
+                   {hasPurchased ? (
+                     <>
+                       <button
+                         onClick={() => setBuildVideoInv(getBuildVideoPayload(inv))}
+                         className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold text-white transition-all hover:opacity-90 flex-1"
+                         style={{ backgroundColor: color }}>
+                         <Film size={12} /> 🎬 Build Video
+                       </button>
+                       <button
+                         onClick={() => handlePdf(inv)}
+                         disabled={isPdfLoading}
+                         className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold bg-gray-800 hover:bg-gray-700 border border-gray-700 text-gray-300 transition-all disabled:opacity-60 flex-1">
+                         {isPdfLoading ? <Loader2 size={12} className="animate-spin" /> : <Download size={12} />}
+                         {isPdfLoading ? "Building…" : "PDF Specs"}
+                       </button>
+                     </>
+                   ) : (
+                     <>
+                       <button
+                         disabled
+                         className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold text-gray-500 bg-gray-800 border border-gray-700 flex-1 opacity-50 cursor-not-allowed">
+                         <Lock size={12} /> Video (locked)
+                       </button>
+                       <button
+                         disabled
+                         className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold text-gray-500 bg-gray-800 border border-gray-700 flex-1 opacity-50 cursor-not-allowed">
+                         <Lock size={12} /> Specs (locked)
+                       </button>
+                     </>
+                   )}
+                   <Link to="/pricing" className="flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold bg-cyan-700 hover:bg-cyan-600 text-white transition-all flex-1">
+                     💳 Buy Now
+                   </Link>
+                 </div>
                   </div>
             );
           })}
