@@ -338,11 +338,22 @@ function ItemCard({ item }) {
         )}
       </div>
 
-      <div className="flex items-center justify-between px-5 py-4 border-t border-gray-800 bg-gray-800/20">
-        <span className="text-cyan-400 font-black text-lg">${item.price}</span>
+      <div className="px-5 py-3 border-t border-gray-800 bg-gray-800/20 space-y-2">
+        <div className="flex items-center justify-between text-xs">
+          <span className="text-gray-500">Regular price:</span>
+          <span className="font-black text-cyan-400">${item.price}</span>
+        </div>
+        <div className="flex items-center justify-between text-xs">
+          <span className="text-gray-500">Researcher (50% off):</span>
+          <span className="font-black text-green-400">${(item.price * 0.5).toFixed(0)}</span>
+        </div>
+        <div className="flex items-center justify-between text-xs">
+          <span className="text-gray-500">Pro (75% off):</span>
+          <span className="font-black text-emerald-400">${(item.price * 0.25).toFixed(0)}</span>
+        </div>
         <button
           onClick={handleCheckout}
-          className="px-4 py-2 rounded-lg bg-cyan-700 hover:bg-cyan-600 text-white text-xs font-bold transition-all"
+          className="w-full mt-2 py-2 rounded-lg bg-cyan-700 hover:bg-cyan-600 text-white text-xs font-bold transition-all"
         >
           Buy Now
         </button>
