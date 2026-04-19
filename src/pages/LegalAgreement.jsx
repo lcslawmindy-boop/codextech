@@ -25,7 +25,7 @@ export default function LegalAgreement() {
   };
 
   return (
-    <div className="fixed inset-0 bg-gray-950 overflow-y-auto z-50">
+    <div className="fixed inset-0 overflow-y-auto z-50" style={{backgroundColor: "#030712"}}>
     <div className="min-h-full flex flex-col items-center justify-center px-4 py-12">
       <div className="w-full max-w-3xl">
 
