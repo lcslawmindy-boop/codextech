@@ -110,7 +110,7 @@ const SUBSCRIPTION_TIERS = [
   },
   {
     id: "pro",
-    name: "Pro",
+    name: "Pro Billionaires Club",
     price: 247,
     color: "#22c55e",
     description: "75% off all invention plans & courses + IP suite",
