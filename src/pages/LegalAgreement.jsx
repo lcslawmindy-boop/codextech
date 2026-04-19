@@ -57,7 +57,7 @@ export default function LegalAgreement() {
           </div>
 
           {/* Main agreement text */}
-          <div className="px-6 py-6 space-y-6 text-gray-300 text-sm leading-relaxed overflow-y-auto max-h-[50vh]">
+          <div className="px-6 py-6 space-y-6 text-gray-300 text-sm leading-relaxed overflow-y-auto max-h-[50vh] bg-gray-900">
 
             <section>
               <h2 className="text-white font-bold text-base mb-2 flex items-center gap-2">
