@@ -114,6 +114,7 @@ import VDRNdaSign from './pages/VDRNdaSign';
 import VDRDocumentGenerator from './pages/VDRDocumentGenerator';
 import Welcome from './pages/Welcome';
 import TrialOnboarding from './pages/TrialOnboarding';
+import PostPurchaseOnboarding from './pages/PostPurchaseOnboarding';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -252,6 +253,7 @@ const AuthenticatedApp = () => {
           <Route path="/vdr-generator" element={<VDRDocumentGenerator />} />
           <Route path="/welcome" element={<Welcome />} />
           <Route path="/trial-onboarding" element={<TrialOnboarding />} />
+          <Route path="/checkout" element={<PostPurchaseOnboarding />} />
 
           {/* Admin-only routes */}
           <Route element={<AdminGuard />}>
