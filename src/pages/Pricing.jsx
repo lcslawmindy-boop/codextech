@@ -82,7 +82,6 @@ const SUBSCRIPTION_TIERS = [
       "AI Patent Claims Generator",
       "EM Lab simulators & visualization",
       "Prior Art Archive with AI search",
-      "50% off additional plans & courses",
       "Support",
     ],
     locked: [],
