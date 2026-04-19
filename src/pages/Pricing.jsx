@@ -49,7 +49,7 @@ const INDIVIDUAL_COURSES = [
 const SUBSCRIPTION_TIERS = [
   {
     id: "researcher",
-    name: "Researcher",
+    name: "Researcher Millionaires Club",
     price: 97,
     color: "#6366f1",
     badge: "MOST POPULAR",
