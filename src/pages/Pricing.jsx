@@ -503,8 +503,8 @@ export default function Pricing() {
       {/* Hero */}
       <div className="text-center px-5 py-12 max-w-4xl mx-auto">
         <h2 className="text-4xl md:text-5xl font-black leading-tight mb-4">
-          Build Your IP Empire<br />
-          <span className="text-cyan-400">Buy Plans à la Carte or Subscribe</span>
+          Ready to Become a Millionaire or Billionaire?<br />
+          <span className="text-cyan-400">Build Your IP Empire</span>
         </h2>
         <p className="text-gray-400 text-lg max-w-2xl mx-auto leading-relaxed mb-6">
           Purchase individual build plans and courses on-demand, or save big with a monthly subscription for unlimited access to everything.
