@@ -52,20 +52,20 @@ export default function BetaApply() {
       return;
     }
 
-    await base44.entities.BetaApplication.create({ ...form, status: "approved", converted_at: new Date().toISOString() });
+    await base44.entities.BetaApplication.create({ ...form, status: "pending" });
 
     // Notify admin
     await base44.integrations.Core.SendEmail({
       to: "zarp.admin@gmail.com",
-      subject: `🔔 New Beta Application — ${form.full_name}`,
-      body: `New beta access request received:\n\nName: ${form.full_name}\nEmail: ${form.email}\nBackground: ${form.background}\nInterest: ${form.primary_interest}\nBudget: ${form.budget}\nWhy Interested: ${form.why_interested}\n\nReview at: https://zenithapex.base44.app/admin-beta`
+      subject: `🔔 New Beta Application — ${form.full_name} [ACTION REQUIRED]`,
+      body: `A new beta access application requires your review:\n\nName: ${form.full_name}\nEmail: ${form.email}\nBackground: ${form.background}\nPrimary Interest: ${form.primary_interest}\nBudget: ${form.budget}\nWhy Interested: ${form.why_interested}\n\n➡️ Review & approve at: https://zenithapex.base44.app/admin-beta\n\nThis applicant is PENDING and cannot access the platform until you approve them.`
     });
 
-    // Welcome email to applicant
+    // Confirmation email to applicant
     await base44.integrations.Core.SendEmail({
       to: form.email,
-      subject: "✅ Zenith Apex — Your Access is Active",
-      body: `Dear ${form.full_name},\n\nWelcome to the Zenith Apex Research Platform. Your founding member access is now active.\n\nYou can log in immediately at the platform URL.\n\nWhat you now have access to:\n• 5 Invention Build Plans (MEG, TRD-1, G-Com, Prioré, TRZ Reactor)\n• AI Patent Drafting Tool (unlimited provisionals)\n• Full 10-Course Library\n• AI Invention Forge\n• Prior Art Archive & IP Monitoring\n\nIMPORTANT — Legal Notice:\nZenith Apex is an independent research curation and tools platform. All third-party works referenced on this platform (including works by Thomas E. Bearden, ONR reports, and other published materials) remain the copyright of their respective authors and institutions. These are referenced for educational and research purposes. The platform's original software, tools, curation, and compiled indexes are proprietary to Zenith Apex. Please do not share your login credentials.\n\n— Zenith Apex Research Portfolio`
+      subject: "✅ Zenith Apex — Application Received",
+      body: `Dear ${form.full_name},\n\nThank you for applying to the Zenith Apex Research Platform.\n\nYour application has been received and is currently under review. You will receive a separate email once your access has been approved — typically within 24 hours.\n\nPlease do not attempt to log in until you receive your approval email.\n\n— Zenith Apex Research Portfolio`
     });
 
     setSubmitted(true);
@@ -76,22 +76,20 @@ export default function BetaApply() {
     return (
       <div className="min-h-screen bg-gray-950 flex items-center justify-center px-4">
         <div className="max-w-md w-full text-center">
-          <div className="w-20 h-20 rounded-full bg-green-900/40 border-2 border-green-600 flex items-center justify-center mx-auto mb-6">
-            <Check size={36} className="text-green-400" />
+          <div className="w-20 h-20 rounded-full bg-yellow-900/40 border-2 border-yellow-600 flex items-center justify-center mx-auto mb-6">
+            <Check size={36} className="text-yellow-400" />
           </div>
-          <h1 className="text-white font-black text-2xl mb-3">Account Created — Choose Your Plan</h1>
+          <h1 className="text-white font-black text-2xl mb-3">Application Received</h1>
           <p className="text-gray-400 text-sm leading-relaxed mb-6">
-            Your account is ready. Select a membership plan below to unlock the full platform — AI tools, patent drafting, build plans, and investor suite.
+            Your application is under review. You will receive an email once your access is approved — typically within 24 hours. Please check your inbox (and spam folder).
           </p>
-          <Link
-            to="/pricing"
-            className="block w-full py-4 rounded-2xl bg-gradient-to-r from-yellow-700 to-yellow-600 hover:from-yellow-600 hover:to-yellow-500 text-black font-black text-base text-center transition-all shadow-[0_4px_24px_rgba(200,160,0,0.3)] mb-4"
-          >
-            Choose a Plan & Get Access →
-          </Link>
           <div className="bg-gray-800/60 border border-gray-700 rounded-2xl p-5 text-left">
-            <p className="text-gray-300 font-bold text-sm mb-2">ℹ️ Legal Notice</p>
-            <p className="text-gray-400 text-xs leading-relaxed">Zenith Apex is an independent research curation platform. Third-party works referenced here remain the copyright of their respective owners. Do not share your login credentials. The platform's original tools and software are proprietary to Zenith Apex.</p>
+            <p className="text-gray-300 font-bold text-sm mb-2">ℹ️ What happens next?</p>
+            <ul className="text-gray-400 text-xs space-y-1.5 leading-relaxed">
+              <li>• Our team reviews your application</li>
+              <li>• You receive an approval email with your login link</li>
+              <li>• You select a membership plan and get full access</li>
+            </ul>
           </div>
         </div>
       </div>
