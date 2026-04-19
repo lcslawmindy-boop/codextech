@@ -47,6 +47,45 @@ const PLANS = [
     locked: ["AI Invention Forge", "Patent Drafting Tool", "Investor CRM", "All 21 Plans", "Full Course Library"],
   },
   {
+    id: "pay_per_invention",
+    name: "Pay Per Invention",
+    price: 49,
+    type: "one_time",
+    priceSuffix: "/plan",
+    badge: "À LA CARTE",
+    tagline: "Buy individual invention build plans as needed",
+    color: "#ec4899",
+    cta: "Browse Plans — $49 each",
+    features: [
+      "1 Invention Build Plan (full PDF + BOM)",
+      "Step-by-step assembly guide",
+      "Lifetime access to this plan",
+      "Downloadable schematics",
+      "Lifetime updates",
+    ],
+    locked: ["Other build plans", "Courses", "AI Invention Forge", "Patent Drafting Tool"],
+  },
+  {
+    id: "course_pass",
+    name: "All Access Courses",
+    price: 497,
+    type: "subscription",
+    priceSuffix: "/mo",
+    badge: "LEARNING",
+    tagline: "Unlimited access to all 26+ structured courses",
+    color: "#8b5cf6",
+    cta: "Start Course Pass — $497/mo",
+    features: [
+      "26+ Structured Courses (all content)",
+      "New courses added monthly",
+      "Video + workbook materials",
+      "Certificate of completion",
+      "Access to course forums",
+      "Cancel anytime",
+    ],
+    locked: ["Build Plans", "AI Invention Forge", "Patent Drafting Tool", "Investor CRM"],
+  },
+  {
     id: "researcher",
     name: "Researcher",
     price: 127,
@@ -285,10 +324,66 @@ export default function Pricing() {
             <span key={i} className="flex items-center gap-1.5">{item.icon} {item.label}</span>
           ))}
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5 mb-5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5 mb-8">
           {PLANS.map(plan => (
             <PlanCard key={plan.id} plan={plan} loading={loading} onCheckout={handleCheckout} isAnnual={isAnnual} />
           ))}
+        </div>
+
+        {/* Course Catalog Section */}
+        <div className="bg-gradient-to-br from-purple-950/40 to-indigo-950/40 border border-purple-800/30 rounded-2xl p-8 mb-8">
+          <div className="flex items-center gap-3 mb-6">
+            <BookOpen size={24} className="text-purple-400" />
+            <div>
+              <h3 className="text-white font-black text-2xl">Complete Course Library</h3>
+              <p className="text-gray-400 text-sm">26+ Structured Courses Available</p>
+            </div>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 max-h-[600px] overflow-y-auto">
+            {[
+              "Scalar Electromagnetics Fundamentals",
+              "Bearden Energy from the Vacuum Theory",
+              "Building EM Device Prototypes",
+              "Patent Strategy for Energy Inventors",
+              "Quantum Field Theory Essentials",
+              "Bioelectromagnetics & Health",
+              "Prior Art Research & Analysis",
+              "Investor Pitch Fundamentals",
+              "Free Energy Device Engineering",
+              "Gravitobiology Principles",
+              "Phase Conjugation Techniques",
+              "Motionless EM Generator Design",
+              "Scalar Wave Communication",
+              "Government R&D Pathways",
+              "IP Valuation for Deep Tech",
+              "Market Research for Inventors",
+              "Provisional Patent Drafting",
+              "Business Model Canvas for R&D",
+              "Resonance Device Theory",
+              "Advanced EM Mathematics",
+              "Commercialization Roadmap",
+              "SBIR Grant Writing",
+              "Due Diligence for Acquisitions",
+              "Co-Inventor Collaboration",
+              "Technical Writing for Patents",
+              "Regulatory Landscape for Energy",
+            ].map((course, i) => (
+              <div key={i} className="flex items-start gap-3 p-3 bg-gray-900/60 border border-gray-800 rounded-lg hover:border-purple-700/50 transition-all group">
+                <CheckCircle2 size={16} className="text-purple-400 flex-shrink-0 mt-0.5" />
+                <div className="flex-1 min-w-0">
+                  <p className="text-gray-300 text-sm group-hover:text-white transition-colors">{course}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div className="mt-6 pt-6 border-t border-purple-800/30 flex flex-wrap gap-3">
+            <button onClick={() => handleCheckout(PLANS[3])}
+              disabled={loading === "course_pass"}
+              className="px-6 py-3 rounded-xl font-black text-sm text-white bg-purple-700 hover:bg-purple-600 disabled:opacity-60 transition-all">
+              {loading === "course_pass" ? "Loading…" : "All Courses — $497/mo"}
+            </button>
+            <p className="flex items-center text-gray-400 text-sm">Or buy individual plans à la carte</p>
+          </div>
         </div>
 
         {/* Enterprise Metered tier — pay-per-use */}

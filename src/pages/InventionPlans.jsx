@@ -464,6 +464,37 @@ function generatePDF(invention, data) {
   doc.save(`Bearden_Plans_${filename}.pdf`);
 }
 
+function SpecsLockedGate({ invention }) {
+  return (
+    <div className="flex-1 flex items-center justify-center p-12">
+      <div className="max-w-md text-center">
+        <div className="w-20 h-20 rounded-2xl bg-gray-800 border border-gray-700 flex items-center justify-center text-4xl mx-auto mb-6">
+          {invention?.icon || "📋"}
+        </div>
+        <div className="flex items-center justify-center gap-2 mb-3">
+          <Lock size={16} className="text-indigo-400" />
+          <span className="text-indigo-400 font-bold text-sm uppercase tracking-wider">Specs Hidden</span>
+        </div>
+        <h2 className="text-white font-black text-2xl mb-2">{invention?.title}</h2>
+        <p className="text-gray-400 text-sm italic mb-4">{invention?.tagline}</p>
+        <p className="text-gray-500 text-sm leading-relaxed mb-6">
+          To view technical specifications, bill of materials, and build instructions for this invention, you need <span className="text-white font-bold">$97/mo Researcher membership</span> or higher. Alternatively, purchase this plan individually for $49.
+        </p>
+        <div className="space-y-2 mb-6">
+          <button onClick={() => window.location.href = '/pricing'}
+            className="flex items-center justify-center gap-2 w-full py-3 rounded-xl font-black text-white text-sm bg-indigo-700 hover:bg-indigo-600 transition-all">
+            Join Researcher — $97/mo
+          </button>
+          <button onClick={() => window.location.href = '/pricing'}
+            className="flex items-center justify-center gap-2 w-full py-3 rounded-xl font-black text-sm border border-indigo-700 text-indigo-400 hover:bg-indigo-900/20 transition-all">
+            <ShoppingCart size={15} /> Buy This Plan — $49
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function PaywallGate({ invention }) {
   return (
     <div className="flex-1 flex items-center justify-center p-12">
@@ -752,7 +783,7 @@ export default function InventionPlans() {
               </div>
             </div>
           ) : (isMembershipRequired(selected.title) && !isAdmin) ? (
-            <MembershipGate invention={selected} />
+            <SpecsLockedGate invention={selected} />
           ) : (isAdminOnly(selected.title) && !isAdmin) ? (
             <div className="flex-1 flex items-center justify-center p-12">
               <div className="max-w-md text-center">
@@ -769,14 +800,7 @@ export default function InventionPlans() {
           ) : (isClassifiedInvention(selected.title) && !isAdmin && !tierHasGovAccess(tier)) ? (
             <GovClassifiedGate inventionTitle={selected.title} />
           ) : !canViewSelected ? (
-            <div className="max-w-xl mx-auto mt-8">
-              <TierGate locked={true} requiredTier={selectedIndex < 5 ? "starter" : "researcher"}>
-                <div className="p-10 text-center">
-                  <p className="text-white font-black text-xl mb-2">{selected.title}</p>
-                  <p className="text-gray-400 text-sm">{selected.tagline}</p>
-                </div>
-              </TierGate>
-            </div>
+            <SpecsLockedGate invention={selected} />
           ) : (
             <div className="max-w-3xl mx-auto">
               {/* ── Global Research Disclaimer ── */}
