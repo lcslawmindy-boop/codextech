@@ -4,14 +4,35 @@ import { ArrowLeft, Check, Zap, Shield, BookOpen, Download, Users, Star, Lock, C
 import { base44 } from "@/api/base44Client";
 
 const INDIVIDUAL_BUILDS = [
-  { name: "Scalar EM Lab Starter Kit", price: 297, category: "Build Plan", icon: "⚡" },
-  { name: "G-Com Scalar Communicator Parts", price: 497, category: "Build Plan", icon: "📡" },
-  { name: "EMF Protection & Shielding Kit", price: 197, category: "Build Plan", icon: "🛡️" },
-  { name: "Prioré Device Component Bundle", price: 649, category: "Build Plan", icon: "📡" },
-  { name: "MEG Replication Parts Kit", price: 547, category: "Build Plan", icon: "⚙️" },
-  { name: "TRD-1 Telomere Device Build Kit", price: 397, category: "Build Plan", icon: "🧬" },
-  { name: "TRZ Reactor Starter Components", price: 799, category: "Build Plan", icon: "⭐" },
-  { name: "Advanced EM Assembly Tool Kit", price: 297, category: "Build Plan", icon: "🔧" },
+  // ── From businessItems Invention category (filtered and priced)
+  { name: "Anenergy Pump Demonstration Circuit", price: 297, category: "Build Plan", icon: "🔋" },
+  { name: "Scalar Energy Bottle Interferometer", price: 649, category: "Build Plan", icon: "🎯" },
+  { name: "Vacuum Potential Oscillator (VPO) Circuit Kit", price: 189, category: "Build Plan", icon: "🔧" },
+  { name: "Biofield Frequency Exposure Chamber", price: 397, category: "Build Plan", icon: "🧪" },
+  { name: "Open-System Magnetic Generator (Prototype Plans)", price: 179, category: "Build Plan", icon: "⚙️" },
+  { name: "Quantum Potential EMI Detector", price: 497, category: "Build Plan", icon: "📡" },
+  { name: "EM Trigger Window Therapy Device", price: 599, category: "Build Plan", icon: "💊" },
+  { name: "Morphogenetic Field Coherence Monitor", price: 799, category: "Build Plan", icon: "🌿" },
+  { name: "Whittaker Wave Phase Conjugate Mirror System", price: 849, category: "Build Plan", icon: "🔭" },
+  { name: "Prioré-Type Multichannel EM Therapy System", price: 697, category: "Build Plan", icon: "🏥" },
+  { name: "ELF Carrier Lock Detection System", price: 497, category: "Build Plan", icon: "📡" },
+  { name: "Phi-River Gradient Sensor", price: 349, category: "Build Plan", icon: "🌊" },
+  { name: "MEG Replication Kit", price: 847, category: "Build Plan", icon: "🔮" },
+  { name: "Asymmetric Regauging Overunity Generator", price: 897, category: "Build Plan", icon: "⚡" },
+  { name: "Telomere Regeneration Device (TRD-1)", price: 2397, category: "Build Plan", icon: "🧬" },
+  { name: "Portable Porthole Disease Treatment System", price: 1697, category: "Build Plan", icon: "🏥" },
+  { name: "Time-Reversal Zone Cold Fusion Reactor", price: 1297, category: "Build Plan", icon: "⚛️" },
+  { name: "Atmospheric Scalar EM Signature Recognition System", price: 897, category: "Build Plan", icon: "🛰️" },
+  { name: "Woodpecker Grid Standing Wave Detector", price: 297, category: "Build Plan", icon: "📻" },
+  { name: "T-Polarized EM Wave Transducer", price: 1197, category: "Build Plan", icon: "⏱️" },
+  { name: "Psychoenergetics Cellular Control System", price: 697, category: "Build Plan", icon: "🧬" },
+  { name: "Bedini Environmental EM Signal Conditioner", price: 897, category: "Build Plan", icon: "🎛️" },
+  { name: "Waddington Valley EM Tracer System", price: 1697, category: "Build Plan", icon: "🗺️" },
+  { name: "Cloning Efficiency Enhancement System", price: 2397, category: "Build Plan", icon: "🧬" },
+  { name: "Kaznacheyev Reversal Cell Imprinting Chamber", price: 1697, category: "Build Plan", icon: "🔬" },
+  { name: "UV Biophoton Disease Reversal Spectrometer", price: 2397, category: "Build Plan", icon: "🧬" },
+  { name: "MorphoYield TRZ-Agri Array", price: 1697, category: "Build Plan", icon: "🌾" },
+  { name: "Aegis-SV Adaptive Scalar Counterphase Shield", price: 1097, category: "Build Plan", icon: "🛡️" },
 ];
 
 const INDIVIDUAL_COURSES = [
