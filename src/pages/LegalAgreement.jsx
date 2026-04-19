@@ -25,8 +25,8 @@ export default function LegalAgreement() {
   };
 
   return (
-    <div className="fixed inset-0 overflow-y-auto z-50" style={{backgroundColor: "#030712", color: "white"}}>
-    <div className="min-h-screen flex flex-col items-center justify-center px-4 py-12" style={{backgroundColor: "#030712"}}>
+    <div className="fixed inset-0 overflow-y-auto z-50" style={{backgroundColor: "#000000", color: "white"}}>
+    <div className="min-h-screen flex flex-col items-center justify-center px-4 py-12" style={{backgroundColor: "#000000"}}>
       <div className="w-full max-w-3xl">
 
         {/* Header */}
