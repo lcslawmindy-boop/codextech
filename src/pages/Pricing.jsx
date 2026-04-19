@@ -4,16 +4,14 @@ import { ArrowLeft, Check, Zap, Shield, BookOpen, Download, Users, Star, Lock, C
 import { base44 } from "@/api/base44Client";
 
 const INDIVIDUAL_BUILDS = [
-  { name: "Anenergy Pump Demonstration Circuit", price: 49, category: "Build Plan", icon: "⚡" },
-  { name: "Vacuum Potential Oscillator (VPO) Circuit Kit", price: 49, category: "Build Plan", icon: "🌀" },
-  { name: "Open-System Magnetic Generator (Prototype Plans)", price: 49, category: "Build Plan", icon: "🧲" },
-  { name: "Scalar Potential Resonance Coil Assembly", price: 49, category: "Build Plan", icon: "🔌" },
-  { name: "Bearden MEG Replication (Scaled Plans)", price: 49, category: "Build Plan", icon: "⚙️" },
-  { name: "Prioré Multichannel EM Device Blueprint", price: 49, category: "Build Plan", icon: "📡" },
-  { name: "Scalar Wave Phase Conjugation Apparatus", price: 49, category: "Build Plan", icon: "〰️" },
-  { name: "Bioelectromagnetic Healing Resonator", price: 49, category: "Build Plan", icon: "🧬" },
-  { name: "TRZ Reactor Core Components", price: 49, category: "Build Plan", icon: "⭐" },
-  { name: "G-Com Scalar Communicator Assembly", price: 49, category: "Build Plan", icon: "📞" },
+  { name: "Scalar EM Lab Starter Kit", price: 167, category: "Build Plan", icon: "⚡" },
+  { name: "G-Com Scalar Communicator Parts", price: 243, category: "Build Plan", icon: "📡" },
+  { name: "EMF Protection & Shielding Kit", price: 89, category: "Build Plan", icon: "🛡️" },
+  { name: "Prioré Device Component Bundle", price: 349, category: "Build Plan", icon: "📡" },
+  { name: "MEG Replication Parts Kit", price: 287, category: "Build Plan", icon: "⚙️" },
+  { name: "TRD-1 Telomere Device Build Kit", price: 194, category: "Build Plan", icon: "🧬" },
+  { name: "TRZ Reactor Starter Components", price: 389, category: "Build Plan", icon: "⭐" },
+  { name: "Advanced EM Assembly Tool Kit", price: 127, category: "Build Plan", icon: "🔧" },
 ];
 
 const INDIVIDUAL_COURSES = [
