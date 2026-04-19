@@ -112,6 +112,7 @@ import BuildMilestoneAI from './pages/BuildMilestoneAI';
 import ValuationAPI from './pages/ValuationAPI';
 import VDRNdaSign from './pages/VDRNdaSign';
 import VDRDocumentGenerator from './pages/VDRDocumentGenerator';
+import Welcome from './pages/Welcome';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -247,6 +248,7 @@ const AuthenticatedApp = () => {
           <Route path="/flash-sale" element={<FlashSale />} />
           <Route path="/vdr-nda" element={<VDRNdaSign />} />
           <Route path="/vdr-generator" element={<VDRDocumentGenerator />} />
+          <Route path="/welcome" element={<Welcome />} />
 
           {/* Admin-only routes */}
           <Route element={<AdminGuard />}>
