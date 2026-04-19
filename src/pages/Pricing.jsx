@@ -48,28 +48,12 @@ const INDIVIDUAL_COURSES = [
 
 const SUBSCRIPTION_TIERS = [
   {
-    id: "starter",
-    name: "Starter",
-    price: 47,
-    color: "#f59e0b",
-    description: "Core research + 5 device plans",
-    features: [
-      "5 Invention Build Plans (full PDFs + BOMs)",
-      "4 Structured Courses",
-      "Prior Art Archive (200+ entries)",
-      "EM Lab Simulators",
-      "Step-by-step assembly guides",
-      "Cancel anytime",
-    ],
-    locked: ["AI Invention Forge", "All 21+ Plans", "Full Course Library", "Patent Drafting Tool"],
-  },
-  {
     id: "researcher",
     name: "Researcher",
     price: 97,
     color: "#6366f1",
     badge: "MOST POPULAR",
-    description: "All plans + AI tools + course library",
+    description: "All plans + AI tools + course library + 50% off individual purchases",
     features: [
       "All 21+ Invention Build Plans",
       "26+ Structured Courses (all content)",
@@ -79,6 +63,7 @@ const SUBSCRIPTION_TIERS = [
       "Prior Art Archive with AI search",
       "Build Video generator",
       "IP Valuation & FTO Analysis",
+      "50% off individual plan purchases",
       "Cancel anytime",
     ],
     locked: ["Patent Drafting Tool", "Investor CRM", "VDR Portal"],
@@ -88,7 +73,7 @@ const SUBSCRIPTION_TIERS = [
     name: "Pro",
     price: 247,
     color: "#22c55e",
-    description: "Everything + IP suite + investor tools",
+    description: "Everything + IP suite + investor tools + free individual plans",
     features: [
       "Everything in Researcher",
       "AI Patent Drafting Tool (unlimited)",
@@ -97,6 +82,7 @@ const SUBSCRIPTION_TIERS = [
       "Acquisition CRM & pipeline management",
       "IP Portfolio Health Dashboard",
       "Co-Inventor Matching Network",
+      "All individual plans included (no additional charges)",
       "Priority support",
       "Cancel anytime",
     ],
@@ -497,11 +483,11 @@ export default function Pricing() {
             <Flame size={24} className="text-red-400" />
             <div>
               <h3 className="text-white font-black text-2xl">Monthly Subscriptions</h3>
-              <p className="text-gray-500 text-sm">Unlimited access for one low monthly price — better value than buying à la carte</p>
+              <p className="text-gray-500 text-sm">Unlimited access for one low monthly price</p>
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl">
             {SUBSCRIPTION_TIERS.map(plan => (
               <PlanCard key={plan.id} plan={plan} />
             ))}
