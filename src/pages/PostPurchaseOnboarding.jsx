@@ -4,21 +4,21 @@ import { CheckCircle2, Lock, BookOpen, FlaskConical, Zap, ChevronRight, ArrowRig
 import { base44 } from "@/api/base44Client";
 
 const TIER_UNLOCKS = {
-  starter: {
-    name: "Starter Plan",
+  pay_per_plan: {
+    name: "Individual Plan",
     color: "#f59e0b",
-    inventions: 5,
-    courses: 4,
+    inventions: 1,
+    courses: 0,
     features: [
-      "✓ 5 Invention Build Plans with full PDFs",
-      "✓ 4 Complete courses with curriculum",
-      "✓ Step-by-step assembly guides",
-      "✓ Prior Art Archive access",
+      "✓ 1 Invention Build Plan (full PDF + BOM)",
+      "✓ Step-by-step assembly guide",
+      "✓ Lifetime access to this plan",
+      "✗ Other build plans",
+      "✗ Courses",
       "✗ AI Invention Forge",
       "✗ Patent Drafting Tool",
-      "✗ Investor CRM",
     ],
-    nextTier: { name: "Researcher ($97/mo)", path: "/pricing", color: "#6366f1" },
+    nextTier: { name: "Researcher ($97/mo — All 21 Plans)", path: "/pricing", color: "#6366f1" },
   },
   researcher: {
     name: "Researcher Plan",
@@ -128,29 +128,38 @@ export default function PostPurchaseOnboarding() {
             <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6 mb-6">
               <div className="flex items-center gap-3 mb-4">
                 <FlaskConical size={22} style={{ color: tierData.color }} />
-                <h4 className="text-white font-bold text-lg">{tierData.inventions} Invention Build Plans</h4>
+                <h4 className="text-white font-bold text-lg">{tierData.inventions} Invention Build Plan{tierData.inventions > 1 ? "s" : ""}</h4>
               </div>
-              <p className="text-gray-400 text-sm mb-4">Step-by-step instructions, Bills of Materials, schematics, and downloadable PDFs for each device.</p>
+              <p className="text-gray-400 text-sm mb-4">Step-by-step instructions, Bills of Materials, schematics, and downloadable PDFs.</p>
+              {tierData.inventions === 1 ? (
+                <div className="bg-blue-900/30 border border-blue-700/50 rounded-lg p-3 mb-4">
+                  <p className="text-blue-300 text-xs leading-relaxed">
+                    You've purchased <strong>1 plan</strong>. Want all 21 plans? Upgrade to <strong>Researcher ($97/mo)</strong> for unlimited access.
+                  </p>
+                </div>
+              ) : null}
               <Link to="/invention-plans"
                 className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg font-bold text-sm transition-all text-white"
                 style={{ backgroundColor: tierData.color }}>
-                Browse All Plans <ChevronRight size={14} />
+                {tierData.inventions === 1 ? "Download Your Plan" : "Browse All Plans"} <ChevronRight size={14} />
               </Link>
             </div>
 
-            {/* Courses card */}
-            <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6 mb-6">
-              <div className="flex items-center gap-3 mb-4">
-                <BookOpen size={22} style={{ color: tierData.color }} />
-                <h4 className="text-white font-bold text-lg">{tierData.courses}+ Structured Courses</h4>
+            {/* Courses card - only show if they have access */}
+            {tierData.courses > 0 && (
+              <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6 mb-6">
+                <div className="flex items-center gap-3 mb-4">
+                  <BookOpen size={22} style={{ color: tierData.color }} />
+                  <h4 className="text-white font-bold text-lg">{tierData.courses}+ Structured Courses</h4>
+                </div>
+                <p className="text-gray-400 text-sm mb-4">Learn scalar EM theory, patent strategy, investor relations, and device physics — with new content monthly.</p>
+                <Link to="/courses"
+                  className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg font-bold text-sm transition-all text-white"
+                  style={{ backgroundColor: tierData.color }}>
+                  Start Learning <ChevronRight size={14} />
+                </Link>
               </div>
-              <p className="text-gray-400 text-sm mb-4">Learn scalar EM theory, patent strategy, investor relations, and device physics — with new content monthly.</p>
-              <Link to="/courses"
-                className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg font-bold text-sm transition-all text-white"
-                style={{ backgroundColor: tierData.color }}>
-                Start Learning <ChevronRight size={14} />
-              </Link>
-            </div>
+            )}
 
             {/* Features grid */}
             <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6">
@@ -221,16 +230,16 @@ export default function PostPurchaseOnboarding() {
                 <p className="text-gray-400 text-xs font-bold uppercase tracking-wider mb-3">Want More?</p>
                 <h4 className="text-white font-black text-lg mb-2">Upgrade to {tierData.nextTier.name}</h4>
                 <ul className="space-y-2 mb-4 text-xs text-gray-300">
-                  {productId === "starter" && (
+                  {productId === "pay_per_plan" && (
                     <>
                       <li className="flex items-center gap-2">
+                        <span style={{ color: tierData.nextTier.color }}>+</span> All 21 build plans (no per-plan fee)
+                      </li>
+                      <li className="flex items-center gap-2">
+                        <span style={{ color: tierData.nextTier.color }}>+</span> Full course library (26+ courses)
+                      </li>
+                      <li className="flex items-center gap-2">
                         <span style={{ color: tierData.nextTier.color }}>+</span> AI Invention Forge (unlimited)
-                      </li>
-                      <li className="flex items-center gap-2">
-                        <span style={{ color: tierData.nextTier.color }}>+</span> All 21 build plans
-                      </li>
-                      <li className="flex items-center gap-2">
-                        <span style={{ color: tierData.nextTier.color }}>+</span> Full course library
                       </li>
                     </>
                   )}

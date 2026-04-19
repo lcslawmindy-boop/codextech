@@ -24,23 +24,22 @@ const PLANS = [
     locked: ["AI Invention Forge", "Patent Drafting Tool", "Investor CRM", "Full IP Library"],
   },
   {
-    id: "starter",
-    name: "Starter",
-    price: 47,
+    id: "pay_per_plan",
+    name: "Pay-Per-Plan",
+    price: 12,
     type: "one_time",
-    priceSuffix: " one-time",
+    priceSuffix: " per invention",
     badge: null,
-    tagline: "Core build plans & foundational courses",
+    tagline: "Buy only what you need, one plan at a time",
     color: "#f59e0b",
-    cta: "Get Starter — $47",
+    cta: "Buy Individual Plans",
     features: [
-      "5 Invention Build Plans (full PDF + BOM)",
-      "4 Courses with complete curriculum",
-      "Step-by-step assembly guides",
-      "Prior Art Archive access",
-      "Lifetime access — one payment",
+      "Single Invention Build Plan (full PDF + BOM)",
+      "Step-by-step assembly guide included",
+      "One-time purchase — lifetime access",
+      "No subscription required",
     ],
-    locked: ["AI Invention Forge", "Patent Drafting Tool", "Investor CRM"],
+    locked: ["Courses", "AI Invention Forge", "Patent Drafting Tool", "Prior Art Archive", "Investor CRM"],
   },
   {
     id: "researcher",
@@ -250,7 +249,7 @@ export default function Pricing() {
             <span key={i} className="flex items-center gap-1.5">{item.icon} {item.label}</span>
           ))}
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5 mb-5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5 mb-5">
           {PLANS.map(plan => (
             <PlanCard key={plan.id} plan={plan} loading={loading} onCheckout={handleCheckout} />
           ))}
