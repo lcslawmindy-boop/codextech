@@ -397,6 +397,10 @@ function PlanCard({ tier, billingCycle }) {
   const displayPrice = billingCycle === "annual" ? annualPrice : tier.price;
   const billingPeriod = billingCycle === "annual" ? "/year" : "/month";
   const annualSavings = (tier.price * 2).toFixed(0);
+  
+  // Founding member offer: Pro at Builder price
+  const foundingProPrice = tier.id === "pro" ? 39 : null;
+  const foundingDiscount = foundingProPrice ? Math.round((1 - foundingProPrice / tier.price) * 100) : 0;
 
   const handleCheckout = async () => {
     if (window !== window.top) {
@@ -404,9 +408,10 @@ function PlanCard({ tier, billingCycle }) {
       return;
     }
     const baseUrl = window.location.origin;
+    const checkoutPrice = foundingProPrice || displayPrice;
     const response = await base44.functions.invoke("createCheckoutSession", {
-      title: tier.name,
-      priceInCents: displayPrice * 100,
+      title: tier.name + (foundingProPrice ? " (Founding Member)" : ""),
+      priceInCents: checkoutPrice * 100,
       description: tier.description,
       category: "membership",
       mode: "subscription",
@@ -426,14 +431,24 @@ function PlanCard({ tier, billingCycle }) {
           {tier.badge}
         </div>
       )}
+      {foundingProPrice && (
+        <div className="text-center py-2 text-xs font-black tracking-widest bg-yellow-900/40 border-b border-yellow-800 text-yellow-300">
+          🚀 FOUNDING MEMBER OFFER — First 1000 Only
+        </div>
+      )}
       <div className="p-7 flex flex-col flex-1">
         <h3 className="text-white font-black text-xl mb-1">{tier.name}</h3>
         <p className="text-gray-400 text-sm mb-5">{tier.description}</p>
         <div className="flex items-end gap-1 mb-1">
-          <span className="text-5xl font-black" style={{ color: tier.color }}>${displayPrice}</span>
+          <span className="text-5xl font-black" style={{ color: tier.color }}>
+            ${foundingProPrice || displayPrice}
+          </span>
           <span className="text-gray-500 text-base mb-1.5">{billingPeriod}</span>
         </div>
-        {billingCycle === "annual" && (
+        {foundingProPrice && (
+          <p className="text-yellow-400 text-xs font-bold mb-2">Save ${(tier.price - foundingProPrice) * 12}/year vs regular Pro</p>
+        )}
+        {billingCycle === "annual" && !foundingProPrice && (
           <p className="text-green-400 text-xs font-bold mb-2">Save ${annualSavings}/year</p>
         )}
         <p className="text-gray-600 text-xs mb-6">Cancel anytime · Instant access</p>

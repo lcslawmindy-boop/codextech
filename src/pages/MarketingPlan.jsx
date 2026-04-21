@@ -68,9 +68,10 @@ const PHASES = [
 ];
 
 const MRR_BREAKDOWN = [
-  { label: "Builder Membership ($39/mo)", members: 400, value: 15600 },
-  { label: "Researcher Membership ($59/mo)", members: 450, value: 26550 },
-  { label: "Pro Membership ($89/mo)", members: 150, value: 13350 },
+  { label: "Builder Membership ($39/mo)", members: 250, value: 9750 },
+  { label: "Researcher Membership ($59/mo)", members: 200, value: 11800 },
+  { label: "Pro Membership — Founding Members ($39/mo)", members: 500, value: 19500 },
+  { label: "Pro Membership — Regular ($89/mo)", members: 50, value: 4450 },
   { label: "Standalone Build Plans (avg $300)", members: 100, value: 30000 },
 ];
 
