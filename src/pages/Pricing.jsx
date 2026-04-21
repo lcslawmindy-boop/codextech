@@ -379,7 +379,7 @@ function ItemCard({ item, userTier }) {
 
             <button onClick={handleCheckout}
               className="w-full px-3 py-2 rounded-lg text-xs font-bold bg-cyan-700 hover:bg-cyan-600 text-white transition-all">
-              💳 Buy Now {userTier ? `$${displayPrice}` : `$${basePrice}`}
+              💳 Buy Now
             </button>
           </>
         )}
