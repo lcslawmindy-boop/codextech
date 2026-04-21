@@ -53,13 +53,15 @@ const TIERS = [
   {
     id: "member",
     name: "Member",
-    price: 39,
+    price: 99,
+    foundingPrice: 49,
     color: "#06b6d4",
-    badge: "BEST VALUE",
-    description: "All 40+ courses & 50% off all plans",
+    badge: "FOUNDING OFFER",
+    description: "All 40+ courses, 50% off plans & ALL AI tools",
     features: [
       "Access to ALL 40+ courses",
       "50% off all build plans & à la carte purchases",
+      "ALL AI tools (Invention Forge, Patent Drafting, FTO, etc.)",
       "Bill of Materials & supplier guides",
       "Step-by-step build instructions",
       "Build Video generator",
@@ -187,18 +189,13 @@ function ItemCard({ item, userTier }) {
   const [expanded, setExpanded] = useState(false);
   const details = ITEM_DETAILS[item.name];
   
-  // Calculate discounted price based on tier
-  const basePrice = item.price + 100;
-  let displayPrice = basePrice;
-  if (userTier === "builder") {
-    displayPrice = Math.round(basePrice * 0.75);
-  } else if (["researcher", "pro"].includes(userTier)) {
-    displayPrice = Math.round(basePrice * 0.50);
-  }
+  // Pricing: non-member full price, member gets 50% off
+  const noMembershipPrice = item.price;
+  const membershipPrice = Math.round(item.price * 0.5);
 
   const handleCheckout = async () => {
     const baseUrl = window.location.origin;
-    const checkoutPrice = userTier ? displayPrice : basePrice;
+    const checkoutPrice = userTier === "member" ? membershipPrice : noMembershipPrice;
     const response = await base44.functions.invoke("createCheckoutSession", {
       title: item.name,
       priceInCents: checkoutPrice * 100,
@@ -299,16 +296,12 @@ function ItemCard({ item, userTier }) {
           <>
             <div className="p-2 rounded-lg bg-gray-800/50 space-y-1">
               <div className="flex items-center justify-between">
-                <span className="text-gray-400 text-xs">No membership:</span>
-                <span className="text-white text-sm font-bold">${basePrice}</span>
+                <span className="text-gray-400 text-xs">No Membership:</span>
+                <span className="text-white text-sm font-bold">${noMembershipPrice}</span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-gray-400 text-xs">Builder (25%):</span>
-                <span className="text-cyan-400 text-sm font-bold">${Math.round(basePrice * 0.75)}</span>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-gray-400 text-xs">Researcher (50%):</span>
-                <span className="text-green-400 text-sm font-bold">${Math.round(basePrice * 0.50)}</span>
+                <span className="text-gray-400 text-xs">With Member (50% off):</span>
+                <span className="text-cyan-400 text-sm font-bold">${membershipPrice}</span>
               </div>
             </div>
 
@@ -324,16 +317,12 @@ function ItemCard({ item, userTier }) {
 }
 
 function PlanCard({ tier, billingCycle }) {
-  // Founding member offer: Pro at Researcher price
-  const foundingProPrice = tier.id === "pro" ? 59 : null;
+  // Founding member offer: $49/mo for first 1000
+  const foundingPrice = tier.foundingPrice || null;
   
-  const annualPrice = foundingProPrice && billingCycle === "annual" 
-    ? foundingProPrice * 12 
-    : Math.round(tier.price * 10);
-  const displayPrice = billingCycle === "annual" ? annualPrice : (foundingProPrice || tier.price);
-  const billingPeriod = billingCycle === "annual" ? "/year" : "/month";
-  const annualSavings = (tier.price * 2).toFixed(0);
-  const foundingDiscount = foundingProPrice ? Math.round((1 - foundingProPrice / tier.price) * 100) : 0;
+  const displayPrice = foundingPrice || tier.price;
+  const billingPeriod = "/month";
+  const regularPrice = tier.price;
 
   const handleCheckout = async () => {
     if (window !== window.top) {
@@ -341,10 +330,9 @@ function PlanCard({ tier, billingCycle }) {
       return;
     }
     const baseUrl = window.location.origin;
-    const checkoutPrice = foundingProPrice || displayPrice;
     const response = await base44.functions.invoke("createCheckoutSession", {
-      title: tier.name + (foundingProPrice ? " (Founding Member)" : ""),
-      priceInCents: checkoutPrice * 100,
+      title: tier.name + (foundingPrice ? " (First 1000 Members)" : ""),
+      priceInCents: displayPrice * 100,
       description: tier.description,
       category: "membership",
       mode: "subscription",
@@ -364,28 +352,25 @@ function PlanCard({ tier, billingCycle }) {
           {tier.badge}
         </div>
       )}
-      {foundingProPrice && (
+      {foundingPrice && (
         <div className="text-center py-2 text-xs font-black tracking-widest bg-yellow-900/40 border-b border-yellow-800 text-yellow-300">
-          🚀 FOUNDING MEMBER OFFER — First 1000 Only
+          🚀 FIRST 1000 MEMBERS — Only $49/month
         </div>
       )}
       <div className="p-7 flex flex-col flex-1">
         <h3 className="text-white font-black text-xl mb-1">{tier.name}</h3>
         <p className="text-gray-400 text-sm mb-5">{tier.description}</p>
         <div className="flex items-end gap-1 mb-1">
-          {foundingProPrice && billingCycle === "monthly" && (
-            <span className="text-2xl font-black text-gray-600 line-through mr-2">${tier.price}</span>
+          {foundingPrice && (
+            <span className="text-2xl font-black text-gray-600 line-through mr-2">${regularPrice}</span>
           )}
           <span className="text-5xl font-black" style={{ color: tier.color }}>
-            ${foundingProPrice || displayPrice}
+            ${displayPrice}
           </span>
           <span className="text-gray-500 text-base mb-1.5">{billingPeriod}</span>
         </div>
-        {foundingProPrice && (
-          <p className="text-yellow-400 text-xs font-bold mb-2">Save ${(tier.price - foundingProPrice) * 12}/year vs regular Pro</p>
-        )}
-        {billingCycle === "annual" && !foundingProPrice && (
-          <p className="text-green-400 text-xs font-bold mb-2">Save ${annualSavings}/year</p>
+        {foundingPrice && (
+          <p className="text-yellow-400 text-xs font-bold mb-2">Save ${(regularPrice - foundingPrice) * 12}/year for first 1000</p>
         )}
         <p className="text-gray-600 text-xs mb-6">Cancel anytime · Instant access</p>
 
@@ -405,12 +390,12 @@ function PlanCard({ tier, billingCycle }) {
         </div>
 
         <button
-          onClick={handleCheckout}
-          className="w-full py-4 rounded-xl font-black text-base transition-all text-white"
-          style={{ backgroundColor: tier.color, boxShadow: `0 4px 20px ${tier.color}40` }}
-        >
-          Get {tier.name} — ${displayPrice}{billingCycle === "annual" ? "/year" : "/mo"}
-        </button>
+           onClick={handleCheckout}
+           className="w-full py-4 rounded-xl font-black text-base transition-all text-white"
+           style={{ backgroundColor: tier.color, boxShadow: `0 4px 20px ${tier.color}40` }}
+         >
+           Get {tier.name} — ${displayPrice}/mo
+         </button>
         <p className="text-center text-gray-600 text-xs mt-3">🔒 Secured by Stripe</p>
       </div>
     </div>
@@ -543,12 +528,9 @@ export default function Pricing() {
             </div>
           </div>
 
-          {tier && (
-            <div className="mb-4 p-3 rounded-lg bg-gray-900/60 border border-gray-800 text-xs text-gray-400">
-              <strong>Your tier:</strong> {tier.charAt(0).toUpperCase() + tier.slice(1)} membership
-              {[25, 50].includes(Math.round((tier === "builder" ? 0.25 : tier === "researcher" ? 0.50 : 0) * 100)) && (
-                <span className="ml-2 text-green-400 font-bold">({tier === "builder" ? "25" : "50"}% discount applied)</span>
-              )}
+          {tier === "member" && (
+            <div className="mb-4 p-3 rounded-lg bg-green-900/30 border border-green-800 text-xs text-green-300">
+              <strong>Your tier:</strong> Member — 50% off all plans & courses
             </div>
           )}
 
