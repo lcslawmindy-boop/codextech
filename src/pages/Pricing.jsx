@@ -60,6 +60,7 @@ const TIERS = [
     features: [
       "ALL 23 invention build plans (full access + PDFs)",
       "Course Library (26+ courses)",
+      "25% off all à la carte courses & build plans",
       "Bill of Materials & supplier guides",
       "Step-by-step instructions",
       "Build Video generator",
@@ -91,6 +92,7 @@ const TIERS = [
       "ALL 23 invention build plans (full access)",
       "AI Invention Forge (unlimited dossiers)",
       "AI Patent Claims Generator",
+      "50% off all à la carte courses & build plans",
       "Prior Art Archive with AI search (200+ entries)",
       "FTO Analysis & IP Valuation",
       "Patent Landscape Graph",
@@ -116,7 +118,7 @@ const TIERS = [
     description: "Everything in Researcher & Builder plans + full IP commercialization suite",
     features: [
       "EVERYTHING in Researcher & Builder plans",
-      "ALL 40+ platform tools unlocked",
+      "ALL 40+ AI tools unlocked",
       "Downloadable PDFs for all build plans",
       "Bill of Materials & complete supplier lists",
       "AI Patent Drafting Tool (USPTO-compliant)",
