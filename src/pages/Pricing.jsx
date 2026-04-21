@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { ArrowLeft, Check, Zap, Shield, BookOpen, Download, Users, Star, Lock, ChevronRight, Sparkles, FlaskConical, Briefcase, Mail, Activity, CheckCircle2, Flame, ChevronDown, ChevronUp, ExternalLink } from "lucide-react";
 import { base44 } from "@/api/base44Client";
+import { useTier } from "@/hooks/useTier";
 
 const INDIVIDUAL_BUILDS = [
   // ── From businessItems Invention category (filtered and priced)
@@ -244,11 +245,17 @@ const ITEM_DETAILS = {
   "Investor Pitch Fundamentals": { desc: "Learn to pitch novel energy inventions to investors, VCs, and strategic partners.", curriculum: ["Pitch deck fundamentals", "Storytelling techniques", "Financial projections", "Technical communication", "Q&A strategies"] },
 };
 
-function ItemCard({ item }) {
+function ItemCard({ item, userTier }) {
   const [expanded, setExpanded] = useState(false);
   const [hasPurchased, setHasPurchased] = useState(false);
   const [checkingPurchase, setCheckingPurchase] = useState(true);
   const details = ITEM_DETAILS[item.name];
+  
+  // Determine if user has access to this item
+  const hasAccess = 
+    item.category === "Course" 
+      ? userTier && ["builder", "researcher", "pro"].includes(userTier)
+      : userTier && ["builder", "pro"].includes(userTier);
 
   useState(() => {
     base44.functions.invoke("getUserPurchases", {})
@@ -382,9 +389,15 @@ function ItemCard({ item }) {
       </div>
 
       <div className="px-5 py-3 border-t border-gray-800 bg-cyan-950/20">
-        <div className="flex items-center gap-2 text-xs text-cyan-400 font-bold">
-          <Check size={12} /> {item.category === "Course" ? "Included in Builder Membership" : "Included with all plans"}
-        </div>
+        {hasAccess ? (
+          <div className="flex items-center gap-2 text-xs text-green-400 font-bold">
+            <CheckCircle2 size={12} /> ✓ You have access
+          </div>
+        ) : (
+          <div className="flex items-center gap-2 text-xs text-yellow-400 font-bold">
+            <Lock size={12} /> {item.category === "Course" ? "Included in Builder Membership" : "Included with all plans"}
+          </div>
+        )}
       </div>
     </div>
   );
@@ -465,11 +478,32 @@ function PlanCard({ tier, billingCycle }) {
 }
 
 export default function Pricing() {
+  const { tier } = useTier();
   const [loading, setLoading] = useState(null);
   const [error, setError] = useState(null);
   const [billingCycle, setBillingCycle] = useState("monthly");
   const [newsletterEmail, setNewsletterEmail] = useState("");
   const [newsletterStatus, setNewsletterStatus] = useState(null);
+  const [showFilter, setShowFilter] = useState("all"); // "all", "available", "locked"
+
+  // Filter items based on membership tier
+  const canAccessBuilder = tier && ["builder", "pro"].includes(tier);
+  const canAccessResearcher = tier && ["researcher", "pro"].includes(tier);
+  const canAccessPro = tier === "pro";
+  
+  let visibleItems = [...INDIVIDUAL_BUILDS, ...INDIVIDUAL_COURSES];
+  
+  if (showFilter === "available") {
+    visibleItems = visibleItems.filter(item => {
+      if (item.category === "Course") return canAccessBuilder || canAccessResearcher;
+      return canAccessBuilder;
+    });
+  } else if (showFilter === "locked") {
+    visibleItems = visibleItems.filter(item => {
+      if (item.category === "Course") return !canAccessBuilder && !canAccessResearcher;
+      return !canAccessBuilder;
+    });
+  }
 
   return (
     <div className="min-h-screen bg-gray-950 text-white">
@@ -572,19 +606,67 @@ export default function Pricing() {
 
         {/* ── À LA CARTE SECTION ── */}
         <div className="mb-16">
-          <div className="flex items-center gap-3 mb-6">
-            <ShoppingCart size={24} className="text-yellow-400" />
-            <div>
-              <h3 className="text-white font-black text-2xl">Build Plans & Courses</h3>
-              <p className="text-gray-500 text-sm">Each build plan includes: BOM, parts list, supplier recommendations, PDF, step-by-step instructions, and build video</p>
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center gap-3">
+              <ShoppingCart size={24} className="text-yellow-400" />
+              <div>
+                <h3 className="text-white font-black text-2xl">Build Plans & Courses</h3>
+                <p className="text-gray-500 text-sm">Each build plan includes: BOM, parts list, supplier recommendations, PDF, step-by-step instructions, and build video</p>
+              </div>
             </div>
+            {tier && (
+              <div className="flex gap-2">
+                <button
+                  onClick={() => setShowFilter("all")}
+                  className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
+                    showFilter === "all"
+                      ? "bg-cyan-600 text-white"
+                      : "bg-gray-800 text-gray-400 hover:bg-gray-700"
+                  }`}
+                >
+                  All
+                </button>
+                <button
+                  onClick={() => setShowFilter("available")}
+                  className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
+                    showFilter === "available"
+                      ? "bg-green-600 text-white"
+                      : "bg-gray-800 text-gray-400 hover:bg-gray-700"
+                  }`}
+                >
+                  ✓ Available
+                </button>
+                <button
+                  onClick={() => setShowFilter("locked")}
+                  className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
+                    showFilter === "locked"
+                      ? "bg-red-600 text-white"
+                      : "bg-gray-800 text-gray-400 hover:bg-gray-700"
+                  }`}
+                >
+                  🔒 Locked
+                </button>
+              </div>
+            )}
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 mb-8">
-            {[...INDIVIDUAL_BUILDS, ...INDIVIDUAL_COURSES].map((item, i) => (
-              <ItemCard key={i} item={item} />
-            ))}
-          </div>
+          {tier && (
+            <div className="mb-4 p-3 rounded-lg bg-gray-900/60 border border-gray-800 text-xs text-gray-400">
+              <strong>Your tier:</strong> {tier.charAt(0).toUpperCase() + tier.slice(1)} membership
+            </div>
+          )}
+
+          {visibleItems.length === 0 ? (
+            <div className="text-center py-12 text-gray-500">
+              <p className="text-sm">No items to display for this filter.</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 mb-8">
+              {visibleItems.map((item, i) => (
+                <ItemCard key={i} item={item} userTier={tier} />
+              ))}
+            </div>
+          )}
         </div>
 
 
