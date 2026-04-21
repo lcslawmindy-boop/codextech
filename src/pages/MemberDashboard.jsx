@@ -112,7 +112,6 @@ export default function MemberDashboard() {
                 {tier === "builder" && "Full access + PDFs"}
                 {tier === "researcher" && "Research + AI tools"}
                 {tier === "pro" && "Everything unlocked"}
-                {!tier && "Load your tier..."}
               </p>
             </div>
           </div>
