@@ -50,7 +50,7 @@ const TIERS = [
   {
     id: "builder",
     name: "Builder",
-    price: 33,
+    price: 58,
     color: "#10b981",
     badge: null,
     description: "All 23 invention build plans with PDFs",
@@ -80,7 +80,7 @@ const TIERS = [
   {
     id: "researcher",
     name: "Researcher",
-    price: 66,
+    price: 39,
     color: "#3b82f6",
     badge: "MOST POPULAR",
     description: "Build plans + full course library",
