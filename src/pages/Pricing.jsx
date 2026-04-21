@@ -439,16 +439,10 @@ function ItemCard({ item, userTier }) {
               )}
             </div>
 
-            {hasAccess ? (
-              <div className="flex items-center gap-2 text-xs text-green-400 font-bold py-2">
-                <CheckCircle2 size={12} /> ✓ You have access
-              </div>
-            ) : (
-              <button onClick={handleCheckout}
-                className="w-full px-3 py-2 rounded-lg text-xs font-bold bg-cyan-700 hover:bg-cyan-600 text-white transition-all">
-                💳 Buy Now ${displayPrice || item.price}
-              </button>
-            )}
+            <button onClick={handleCheckout}
+              className="w-full px-3 py-2 rounded-lg text-xs font-bold bg-cyan-700 hover:bg-cyan-600 text-white transition-all">
+              💳 Buy Now ${displayPrice || item.price}
+            </button>
           </>
         )}
       </div>
