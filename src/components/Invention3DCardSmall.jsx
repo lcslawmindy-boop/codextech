@@ -36,8 +36,9 @@ function create3DScene(canvasRef, geometryType) {
   if (!canvasRef.current) return () => {};
 
   const canvas = canvasRef.current;
-  const width = canvas.clientWidth;
-  const height = canvas.clientHeight;
+  const rect = canvas.getBoundingClientRect();
+  const width = rect.width || canvas.clientWidth || 300;
+  const height = rect.height || canvas.clientHeight || 160;
 
   if (width === 0 || height === 0) return () => {};
 
@@ -166,5 +167,5 @@ export default function Invention3DCardSmall({ invention }) {
     return cleanup;
   }, [geometryType]);
 
-  return <canvas ref={canvasRef} className="w-full h-full" />;
+  return <canvas ref={canvasRef} className="w-full h-full block" style={{ display: "block", width: "100%", height: "100%" }} />;
 }
