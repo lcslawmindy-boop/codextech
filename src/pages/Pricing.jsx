@@ -393,13 +393,15 @@ function ItemCard({ item, userTier }) {
 }
 
 function PlanCard({ tier, billingCycle }) {
-  const annualPrice = Math.round(tier.price * 10); // 2 months free (10 months of annual billing)
-  const displayPrice = billingCycle === "annual" ? annualPrice : tier.price;
-  const billingPeriod = billingCycle === "annual" ? "/year" : "/month";
-  const annualSavings = (tier.price * 2).toFixed(0);
-  
   // Founding member offer: Pro at Builder price
   const foundingProPrice = tier.id === "pro" ? 39 : null;
+  
+  const annualPrice = foundingProPrice && billingCycle === "annual" 
+    ? foundingProPrice * 12 
+    : Math.round(tier.price * 10);
+  const displayPrice = billingCycle === "annual" ? annualPrice : (foundingProPrice || tier.price);
+  const billingPeriod = billingCycle === "annual" ? "/year" : "/month";
+  const annualSavings = (tier.price * 2).toFixed(0);
   const foundingDiscount = foundingProPrice ? Math.round((1 - foundingProPrice / tier.price) * 100) : 0;
 
   const handleCheckout = async () => {
