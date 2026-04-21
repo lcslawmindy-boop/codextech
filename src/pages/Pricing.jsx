@@ -442,6 +442,9 @@ function PlanCard({ tier, billingCycle }) {
         <h3 className="text-white font-black text-xl mb-1">{tier.name}</h3>
         <p className="text-gray-400 text-sm mb-5">{tier.description}</p>
         <div className="flex items-end gap-1 mb-1">
+          {foundingProPrice && billingCycle === "monthly" && (
+            <span className="text-2xl font-black text-gray-600 line-through mr-2">${tier.price}</span>
+          )}
           <span className="text-5xl font-black" style={{ color: tier.color }}>
             ${foundingProPrice || displayPrice}
           </span>
