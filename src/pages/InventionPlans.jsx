@@ -24,7 +24,24 @@ const isAdminOnly = (title) => ADMIN_ONLY_KEYWORDS.some(k => title?.toLowerCase(
 // All inventions require membership or purchase
 const isMembershipRequired = (title) => !isAdminOnly(title);
 
-const inventions = businessItems.filter(i => i.category === "Invention");
+// Defense/restricted licensing inventions (hidden from public)
+const DEFENSE_RESTRICTED = [
+  "Time-Reversal Zone Cold Fusion Reactor",
+  "Aegis-SV Adaptive Scalar Counterphase Shield",
+  "Atmospheric Scalar EM Signature Recognition System",
+  "T-Polarized EM Wave Transducer",
+  "Waddington Valley EM Tracer System",
+  "Cloning Efficiency Enhancement System",
+  "Kaznacheyev Reversal Cell Imprinting Chamber",
+  "UV Biophoton Disease Reversal Spectrometer",
+  "Telomere Regeneration Device (TRD-1)",
+  "Portable Porthole Disease Treatment System",
+  "Psychoenergetics Cellular Control System"
+];
+
+const isDefenseRestricted = (title) => DEFENSE_RESTRICTED.some(d => d.toLowerCase() === title?.toLowerCase());
+
+const inventions = businessItems.filter(i => i.category === "Invention" && !isDefenseRestricted(i.title));
 
 function VisualExplainer({ visual }) {
   if (!visual) return null;
@@ -760,6 +777,7 @@ export default function InventionPlans() {
                     isGovLocked ? <span className="text-red-400">🏛 Gov/Defense Only</span> :
                     memberLocked ? <span className="text-indigo-500">🔒 Membership or Purchase</span> :
                     <span className="text-gray-600">{inv.price}</span>}
+                   {isDefenseRestricted(inv.title) && <span className="ml-1 px-1.5 py-0.5 rounded text-xs bg-red-900/40 border border-red-800 text-red-400">Defense Only</span>}
                   </p>
                 </div>
                 {trialLocked ? <Lock size={10} className="text-cyan-800 flex-shrink-0 mt-1" /> :
