@@ -390,7 +390,12 @@ function ItemCard({ item }) {
   );
 }
 
-function PlanCard({ tier }) {
+function PlanCard({ tier, billingCycle }) {
+  const annualPrice = Math.round(tier.price * 10); // 2 months free (10 months of annual billing)
+  const displayPrice = billingCycle === "annual" ? annualPrice : tier.price;
+  const billingPeriod = billingCycle === "annual" ? "/year" : "/month";
+  const annualSavings = (tier.price * 2).toFixed(0);
+
   const handleCheckout = async () => {
     if (window !== window.top) {
       alert("Checkout only works from the published app. Please open the app directly.");
@@ -399,7 +404,7 @@ function PlanCard({ tier }) {
     const baseUrl = window.location.origin;
     const response = await base44.functions.invoke("createCheckoutSession", {
       title: tier.name,
-      priceInCents: tier.price * 100,
+      priceInCents: displayPrice * 100,
       description: tier.description,
       category: "membership",
       mode: "subscription",
@@ -423,9 +428,12 @@ function PlanCard({ tier }) {
         <h3 className="text-white font-black text-xl mb-1">{tier.name}</h3>
         <p className="text-gray-400 text-sm mb-5">{tier.description}</p>
         <div className="flex items-end gap-1 mb-1">
-          <span className="text-5xl font-black" style={{ color: tier.color }}>${tier.price}</span>
-          <span className="text-gray-500 text-base mb-1.5">/month</span>
+          <span className="text-5xl font-black" style={{ color: tier.color }}>${displayPrice}</span>
+          <span className="text-gray-500 text-base mb-1.5">{billingPeriod}</span>
         </div>
+        {billingCycle === "annual" && (
+          <p className="text-green-400 text-xs font-bold mb-2">Save ${annualSavings}/year</p>
+        )}
         <p className="text-gray-600 text-xs mb-6">Cancel anytime · Instant access</p>
 
         <div className="space-y-2 mb-6 flex-1">
@@ -448,7 +456,7 @@ function PlanCard({ tier }) {
           className="w-full py-4 rounded-xl font-black text-base transition-all text-white"
           style={{ backgroundColor: tier.color, boxShadow: `0 4px 20px ${tier.color}40` }}
         >
-          Get {tier.name} — ${tier.price}/mo
+          Get {tier.name} — ${displayPrice}{billingCycle === "annual" ? "/year" : "/mo"}
         </button>
         <p className="text-center text-gray-600 text-xs mt-3">🔒 Secured by Stripe</p>
       </div>
@@ -459,6 +467,9 @@ function PlanCard({ tier }) {
 export default function Pricing() {
   const [loading, setLoading] = useState(null);
   const [error, setError] = useState(null);
+  const [billingCycle, setBillingCycle] = useState("monthly");
+  const [newsletterEmail, setNewsletterEmail] = useState("");
+  const [newsletterStatus, setNewsletterStatus] = useState(null);
 
   return (
     <div className="min-h-screen bg-gray-950 text-white">
@@ -478,11 +489,37 @@ export default function Pricing() {
           <span className="text-cyan-400">Forge Your Future</span><br />
           Start Building Your IP Portfolio Today
         </h2>
-        <p className="text-gray-400 text-lg max-w-2xl mx-auto leading-relaxed mb-10">
+        <p className="text-gray-400 text-lg max-w-2xl mx-auto leading-relaxed mb-8">
           Three tiers. One platform. Pick the plan that fits your stage.
         </p>
+
+        {/* Billing Toggle */}
+        <div className="flex items-center justify-center gap-4 mb-10">
+          <button
+            onClick={() => setBillingCycle("monthly")}
+            className={`px-6 py-2 rounded-lg font-bold text-sm transition-all ${
+              billingCycle === "monthly"
+                ? "bg-cyan-600 text-white"
+                : "bg-gray-800 text-gray-400 hover:bg-gray-700"
+            }`}
+          >
+            Monthly
+          </button>
+          <button
+            onClick={() => setBillingCycle("annual")}
+            className={`px-6 py-2 rounded-lg font-bold text-sm transition-all flex items-center gap-2 ${
+              billingCycle === "annual"
+                ? "bg-green-600 text-white"
+                : "bg-gray-800 text-gray-400 hover:bg-gray-700"
+            }`}
+          >
+            Annual
+            <span className="text-xs bg-yellow-500/20 text-yellow-400 px-2 py-0.5 rounded">Save 2 months</span>
+          </button>
+        </div>
+
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
-          {TIERS.map(tier => <PlanCard key={tier.id} tier={tier} />)}
+          {TIERS.map(tier => <PlanCard key={tier.id} tier={tier} billingCycle={billingCycle} />)}
         </div>
       </div>
 
@@ -490,6 +527,48 @@ export default function Pricing() {
         {error && (
           <div className="bg-red-950/60 border border-red-800 rounded-xl p-4 mb-6 text-red-300 text-sm text-center">{error}</div>
         )}
+
+        {/* Newsletter Section */}
+        <div className="mb-16 max-w-2xl mx-auto bg-gradient-to-r from-cyan-950/40 to-purple-950/40 border border-cyan-900/30 rounded-2xl p-8">
+          <div className="text-center mb-6">
+            <Mail size={24} className="text-cyan-400 mx-auto mb-3" />
+            <h3 className="text-white font-black text-2xl mb-2">Stay Updated</h3>
+            <p className="text-gray-400 text-sm">Get insights on scalar EM research, new build plans, and exclusive offers straight to your inbox.</p>
+          </div>
+          <div className="flex flex-col sm:flex-row gap-3">
+            <input
+              type="email"
+              placeholder="your@email.com"
+              value={newsletterEmail}
+              onChange={(e) => setNewsletterEmail(e.target.value)}
+              className="flex-1 px-4 py-3 rounded-lg bg-gray-900 border border-gray-800 text-white placeholder-gray-600 text-sm focus:outline-none focus:border-cyan-500 transition-colors"
+            />
+            <button
+              onClick={async () => {
+                if (!newsletterEmail) return;
+                try {
+                  await base44.entities.NewsletterSubscriber.create({
+                    email: newsletterEmail,
+                    source: "pricing_page",
+                    status: "active"
+                  });
+                  setNewsletterStatus("success");
+                  setNewsletterEmail("");
+                  setTimeout(() => setNewsletterStatus(null), 3000);
+                } catch (err) {
+                  setNewsletterStatus("error");
+                  setTimeout(() => setNewsletterStatus(null), 3000);
+                }
+              }}
+              className="px-6 py-3 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white font-bold text-sm transition-all whitespace-nowrap"
+            >
+              {newsletterStatus === "success" ? "✓ Subscribed!" : "Subscribe"}
+            </button>
+          </div>
+          {newsletterStatus === "success" && (
+            <p className="text-green-400 text-xs mt-3 text-center">Thanks for subscribing! Check your email for confirmation.</p>
+          )}
+        </div>
 
         {/* ── À LA CARTE SECTION ── */}
         <div className="mb-16">
