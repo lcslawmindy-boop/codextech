@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { ArrowLeft, Check, Zap, Shield, BookOpen, Download, Users, Star, Lock, ChevronRight, Sparkles, FlaskConical, Briefcase, Mail, Activity, CheckCircle2, Flame, ChevronDown, ChevronUp, ExternalLink } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import { useTier } from "@/hooks/useTier";
+import { deviceImages } from "@/lib/deviceImages";
 
 const INDIVIDUAL_BUILDS = [
   // ── From businessItems Invention category (filtered and priced)
@@ -281,8 +282,16 @@ function ItemCard({ item, userTier }) {
     if (response.data?.url) window.location.href = response.data.url;
   };
 
+  const deviceImage = deviceImages[item.name];
+
   return (
     <div className="bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden hover:border-gray-700 transition-all flex flex-col">
+      {/* Image preview for build plans */}
+      {item.category === "Build Plan" && deviceImage && (
+        <div className="w-full h-32 bg-gray-800 overflow-hidden border-b border-gray-700">
+          <img src={deviceImage} alt={item.name} className="w-full h-full object-cover" />
+        </div>
+      )}
       <div className="p-5 flex flex-col flex-1">
         <div className="flex items-start justify-between mb-3">
           <span className="text-3xl">{item.icon}</span>
