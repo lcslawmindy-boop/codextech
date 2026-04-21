@@ -115,6 +115,7 @@ import VDRDocumentGenerator from './pages/VDRDocumentGenerator';
 import Welcome from './pages/Welcome';
 import TrialOnboarding from './pages/TrialOnboarding';
 import PostPurchaseOnboarding from './pages/PostPurchaseOnboarding';
+import MemberDashboard from './pages/MemberDashboard';
 import PublicPreview from './pages/PublicPreview';
 import AcquisitionPitchDeck from './pages/AcquisitionPitchDeck';
 
@@ -214,6 +215,7 @@ const AuthenticatedApp = () => {
           <Route path="/pricing" element={<Pricing />} />
           <Route path="/investor-portal" element={<InvestorPortal />} />
           <Route path="/account" element={<AccountSettings />} />
+          <Route path="/member-dashboard" element={<MemberDashboard />} />
           <Route path="/beta-apply" element={<BetaApply />} />
           <Route path="/member-portal" element={<MemberPortal />} />
           <Route path="/licensing" element={<LicensingPortal />} />
