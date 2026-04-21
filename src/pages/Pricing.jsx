@@ -56,7 +56,7 @@ const TIERS = [
     price: 49,
     color: "#10b981",
     badge: null,
-    description: "Complete course library with full access & PDFs",
+    description: "Course library & build essentials",
     features: [
       "Course Library (26+ courses)",
       "25% off all à la carte courses & build plans",
