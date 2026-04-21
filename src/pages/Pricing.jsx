@@ -77,7 +77,7 @@ const TIERS = [
   },
   {
     id: "pro",
-    name: "Pro — Billionaires Club",
+    name: "Pro Researcher",
     price: 97,
     color: "#a855f7",
     badge: "MOST POPULAR",
