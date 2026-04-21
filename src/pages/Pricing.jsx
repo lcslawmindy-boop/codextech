@@ -46,31 +46,60 @@ const INDIVIDUAL_COURSES = [
   { name: "Investor Pitch Fundamentals", price: 297, category: "Course", icon: "💼" },
 ];
 
-const PLAN = {
-  id: "all-access",
-  name: "All Access Member",
-  price: 39,
-  color: "#22d3ee",
-  description: "Everything unlocked — all tools, all invention plans, all courses",
-  features: [
-    "ALL 23 invention build plans (full access + PDFs)",
-    "ALL 40+ platform tools unlocked",
-    "AI Invention Forge (unlimited dossiers)",
-    "AI Patent Drafting Tool (USPTO-compliant)",
-    "AI Patent Claims Generator",
-    "FTO Analysis & IP Valuation",
-    "EM Lab simulators & visualization",
-    "Prior Art Archive with AI search (200+ entries)",
-    "Investor CRM & Pitch Builder",
-    "Virtual Data Room (VDR)",
-    "IP Portfolio Health Dashboard",
-    "Co-Inventor Matching Network",
-    "Build Video generator",
-    "SBIR Grant Pipeline",
-    "Patent Intelligence Monitor",
-    "Cancel anytime · No long-term commitment",
-  ],
-};
+const TIERS = [
+  {
+    id: "researcher",
+    name: "Researcher",
+    price: 39,
+    color: "#22d3ee",
+    badge: null,
+    description: "Core tools + all invention build plans",
+    features: [
+      "ALL 23 invention build plans (full access + PDFs)",
+      "AI Invention Forge (unlimited dossiers)",
+      "AI Patent Claims Generator",
+      "FTO Analysis & IP Valuation",
+      "EM Lab simulators & visualization",
+      "Prior Art Archive with AI search (200+ entries)",
+      "Build Video generator",
+      "Course Library access",
+      "Cancel anytime",
+    ],
+    locked: [
+      "AI Patent Drafting Tool",
+      "Investor CRM & Pitch Builder",
+      "Virtual Data Room (VDR)",
+      "IP Portfolio Health Dashboard",
+      "Co-Inventor Matching Network",
+      "SBIR Grant Pipeline",
+      "Patent Intelligence Monitor",
+    ],
+  },
+  {
+    id: "pro",
+    name: "Pro — Billionaires Club",
+    price: 97,
+    color: "#a855f7",
+    badge: "MOST POPULAR",
+    description: "Everything in Researcher + full IP commercialization suite",
+    features: [
+      "EVERYTHING in Researcher plan",
+      "ALL 40+ platform tools unlocked",
+      "AI Patent Drafting Tool (USPTO-compliant)",
+      "Investor CRM & Pitch Builder",
+      "Virtual Data Room (VDR)",
+      "IP Portfolio Health Dashboard",
+      "Co-Inventor Matching Network",
+      "SBIR Grant Pipeline",
+      "Patent Intelligence Monitor",
+      "Acquisition CRM & pipeline management",
+      "White-Label SaaS rights",
+      "Priority support",
+      "Cancel anytime",
+    ],
+    locked: [],
+  },
+];
 
 const ITEM_DETAILS = {
   "Anenergy Pump Demonstration Circuit": { 
@@ -323,14 +352,14 @@ function ItemCard({ item }) {
 
       <div className="px-5 py-3 border-t border-gray-800 bg-cyan-950/20">
         <div className="flex items-center gap-2 text-xs text-cyan-400 font-bold">
-          <Check size={12} /> Included with $39/mo All Access Membership
+          <Check size={12} /> Included with Researcher $39/mo & Pro $97/mo
         </div>
       </div>
     </div>
   );
 }
 
-function PlanCard() {
+function PlanCard({ tier }) {
   const handleCheckout = async () => {
     if (window !== window.top) {
       alert("Checkout only works from the published app. Please open the app directly.");
@@ -338,44 +367,57 @@ function PlanCard() {
     }
     const baseUrl = window.location.origin;
     const response = await base44.functions.invoke("createCheckoutSession", {
-      title: PLAN.name,
-      priceInCents: PLAN.price * 100,
-      description: PLAN.description,
+      title: tier.name,
+      priceInCents: tier.price * 100,
+      description: tier.description,
       category: "membership",
       mode: "subscription",
       interval: "month",
-      successUrl: `${baseUrl}/checkout?success=true&product=${PLAN.id}`,
+      successUrl: `${baseUrl}/checkout?success=true&product=${tier.id}`,
       cancelUrl: `${baseUrl}/pricing`,
     });
     if (response.data?.url) window.location.href = response.data.url;
   };
 
+  const isPro = tier.id === "pro";
+
   return (
-    <div className="bg-gray-900 rounded-2xl border-2 border-cyan-500 overflow-hidden shadow-2xl shadow-cyan-900/30 max-w-md mx-auto">
-      <div className="text-center py-3 text-xs font-black tracking-widest bg-cyan-500/20 text-cyan-400">
-        ONE SIMPLE PLAN — EVERYTHING INCLUDED
-      </div>
-      <div className="p-8">
-        <h3 className="text-white font-black text-2xl mb-1">{PLAN.name}</h3>
-        <p className="text-gray-400 text-sm mb-6">{PLAN.description}</p>
-        <div className="flex items-end gap-1 mb-1">
-          <span className="text-6xl font-black text-cyan-400">$39</span>
-          <span className="text-gray-500 text-lg mb-2">/month</span>
+    <div className={`relative bg-gray-900 rounded-2xl overflow-hidden flex flex-col ${isPro ? "border-2 border-purple-500 shadow-2xl shadow-purple-900/30" : "border border-gray-700"}`}>
+      {tier.badge && (
+        <div className="text-center py-2.5 text-xs font-black tracking-widest" style={{ backgroundColor: tier.color + "25", color: tier.color }}>
+          {tier.badge}
         </div>
-        <p className="text-gray-600 text-xs mb-8">Cancel anytime · No long-term commitment · Instant access</p>
-        <div className="grid grid-cols-1 gap-2 mb-8">
-          {PLAN.features.map((f, i) => (
+      )}
+      <div className="p-7 flex flex-col flex-1">
+        <h3 className="text-white font-black text-xl mb-1">{tier.name}</h3>
+        <p className="text-gray-400 text-sm mb-5">{tier.description}</p>
+        <div className="flex items-end gap-1 mb-1">
+          <span className="text-5xl font-black" style={{ color: tier.color }}>${tier.price}</span>
+          <span className="text-gray-500 text-base mb-1.5">/month</span>
+        </div>
+        <p className="text-gray-600 text-xs mb-6">Cancel anytime · Instant access</p>
+
+        <div className="space-y-2 mb-6 flex-1">
+          {tier.features.map((f, i) => (
             <div key={i} className="flex items-start gap-2">
-              <Check size={13} className="flex-shrink-0 mt-0.5 text-cyan-400" />
-              <span className="text-gray-300 text-sm leading-relaxed">{f}</span>
+              <Check size={12} className="flex-shrink-0 mt-0.5" style={{ color: tier.color }} />
+              <span className="text-gray-300 text-sm">{f}</span>
+            </div>
+          ))}
+          {tier.locked?.map((f, i) => (
+            <div key={i} className="flex items-start gap-2 opacity-35">
+              <Lock size={12} className="flex-shrink-0 mt-0.5 text-gray-600" />
+              <span className="text-gray-500 text-sm line-through">{f}</span>
             </div>
           ))}
         </div>
+
         <button
           onClick={handleCheckout}
-          className="w-full py-4 rounded-xl font-black text-base text-black transition-all bg-cyan-400 hover:bg-cyan-300 shadow-[0_4px_24px_rgba(34,211,238,0.4)]"
+          className="w-full py-4 rounded-xl font-black text-base transition-all text-white"
+          style={{ backgroundColor: tier.color, boxShadow: `0 4px 20px ${tier.color}40` }}
         >
-          Get All Access — $39/mo
+          Get {tier.name} — ${tier.price}/mo
         </button>
         <p className="text-center text-gray-600 text-xs mt-3">🔒 Secured by Stripe</p>
       </div>
@@ -404,10 +446,12 @@ export default function Pricing() {
           Ready to Become a Millionaire or Billionaire?<br />
           <span className="text-cyan-400">Build Your IP Empire</span>
         </h2>
-        <p className="text-gray-400 text-lg max-w-2xl mx-auto leading-relaxed mb-6">
-          One plan. Everything included. All 23 invention build plans, all 40+ tools, unlimited AI — for $39/mo.
+        <p className="text-gray-400 text-lg max-w-2xl mx-auto leading-relaxed mb-10">
+          Two tiers. One platform. Pick the plan that fits your stage.
         </p>
-        <PlanCard />
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-3xl mx-auto">
+          {TIERS.map(tier => <PlanCard key={tier.id} tier={tier} />)}
+        </div>
       </div>
 
       <div className="px-5 pb-12 max-w-7xl mx-auto">
