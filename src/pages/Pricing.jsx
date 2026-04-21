@@ -48,6 +48,30 @@ const INDIVIDUAL_COURSES = [
 
 const SUBSCRIPTION_TIERS = [
   {
+    id: "all-access",
+    name: "All Access Member",
+    price: 39,
+    color: "#22d3ee",
+    badge: "BEST VALUE",
+    description: "Full platform + all 23 invention plans included",
+    features: [
+      "ALL 23 invention build plans (full access)",
+      "ALL 40+ platform tools unlocked",
+      "AI Invention Forge (unlimited)",
+      "AI Patent Claims Generator",
+      "AI Patent Drafting Tool",
+      "FTO Analysis & IP Valuation",
+      "EM Lab simulators & visualization",
+      "Prior Art Archive with AI search",
+      "Investor CRM & Pitch Builder",
+      "IP Portfolio Health Dashboard",
+      "Co-Inventor Matching",
+      "Build Video generator",
+      "Cancel anytime",
+    ],
+    locked: [],
+  },
+  {
     id: "researcher",
     name: "Researcher Millionaires Club",
     price: 97,
