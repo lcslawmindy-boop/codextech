@@ -648,8 +648,27 @@ export default function InventionPlans() {
   const selectedIndex = inventions.findIndex(i => i.title === selected?.title);
   const canViewSelected = tierCanAccessInvention(tier, selectedIndex);
 
+  // Disable copy/paste for non-admins viewing plans
+  useEffect(() => {
+    if (!isAdmin) {
+      const handleCopy = (e) => e.preventDefault();
+      const handlePaste = (e) => e.preventDefault();
+      const handleContextMenu = (e) => e.preventDefault();
+      
+      document.addEventListener("copy", handleCopy);
+      document.addEventListener("paste", handlePaste);
+      document.addEventListener("contextmenu", handleContextMenu);
+      
+      return () => {
+        document.removeEventListener("copy", handleCopy);
+        document.removeEventListener("paste", handlePaste);
+        document.removeEventListener("contextmenu", handleContextMenu);
+      };
+    }
+  }, [isAdmin]);
+
   return (
-    <div className="w-screen h-screen bg-gray-950 flex flex-col overflow-hidden">
+    <div className="w-screen h-screen bg-gray-950 flex flex-col overflow-hidden" style={!isAdmin ? { userSelect: "none" } : {}}>
       {/* Header */}
       <div className="flex items-center justify-between px-6 py-3 border-b border-gray-800 flex-shrink-0">
         <div className="flex items-center gap-4">
@@ -675,11 +694,16 @@ export default function InventionPlans() {
           </button>
           <button
             onClick={() => {
-              if (isTrial) { alert("Downloads are not available during the 24-hour trial. Upgrade to a paid plan."); return; }
+              if (!isAdmin && !hasPurchased) {
+                alert("PDF downloads are only available after purchase. Visit /checkout to buy this plan.");
+                return;
+              }
+              if (isTrial && !isAdmin) { alert("Downloads are not available during the 24-hour trial. Upgrade to a paid plan."); return; }
               handleDownload();
             }}
-            disabled={!data || generating || !canViewSelected}
-            className="flex items-center gap-2 px-4 py-2 rounded-lg bg-red-700 hover:bg-red-600 disabled:opacity-50 text-white text-sm font-semibold transition-all"
+            disabled={!data || generating || (!isAdmin && !hasPurchased)}
+            title={!isAdmin && !hasPurchased ? "Purchase required to download" : "Download"}
+            className="flex items-center gap-2 px-4 py-2 rounded-lg bg-red-700 hover:bg-red-600 disabled:opacity-50 disabled:cursor-not-allowed text-white text-sm font-semibold transition-all"
           >
             {generating ? <Loader2 size={14} className="animate-spin" /> : <Download size={14} />}
             {generating ? "Generating PDF…" : "Download Plans PDF"}
