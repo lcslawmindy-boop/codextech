@@ -56,6 +56,7 @@ const TIERS = [
     description: "All 23 invention build plans with PDFs",
     features: [
       "ALL 23 invention build plans (full access + PDFs)",
+      "Course Library (26+ courses)",
       "Bill of Materials & supplier guides",
       "Step-by-step instructions",
       "Build Video generator",
@@ -64,7 +65,6 @@ const TIERS = [
       "Cancel anytime",
     ],
     locked: [
-      "Course Library (26+ courses)",
       "AI Invention Forge",
       "AI Patent Claims Generator",
       "FTO Analysis & IP Valuation",
