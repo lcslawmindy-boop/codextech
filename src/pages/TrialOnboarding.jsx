@@ -210,20 +210,20 @@ export default function TrialOnboarding() {
           </div>
 
           {/* Upgrade CTA */}
-          <div className="mt-12 bg-gradient-to-br from-gray-900 to-gray-950 border border-cyan-800/30 rounded-2xl p-8 text-center">
-            <h3 className="text-white font-black text-xl mb-3">Ready to unlock everything?</h3>
-            <p className="text-gray-400 text-sm mb-6 max-w-xl mx-auto">
-              Join the Researcher plan ($97/mo) for unlimited AI invention generation, full patent drafting, all build plans, and complete access to the IP toolkit. Cancel anytime.
-            </p>
-            <Link
-              to="/pricing"
-              className="inline-flex items-center gap-2 px-8 py-4 rounded-xl font-black text-base bg-cyan-700 hover:bg-cyan-600 text-white transition-all"
-            >
-              Start Researcher Plan — $97/mo
-              <ChevronRight size={16} />
-            </Link>
-            <p className="text-gray-600 text-xs mt-4">🔒 Secured by Stripe · Cancel anytime</p>
-          </div>
+           <div className="mt-12 bg-gradient-to-br from-gray-900 to-gray-950 border border-cyan-800/30 rounded-2xl p-8 text-center">
+             <h3 className="text-white font-black text-xl mb-3">Ready to unlock everything?</h3>
+             <p className="text-gray-400 text-sm mb-6 max-w-xl mx-auto">
+               Join the Member plan for just <span className="text-cyan-400 font-black">$39/month</span> and get 50% off all build plans & courses, plus full access to the AI IP toolkit. Cancel anytime.
+             </p>
+             <Link
+               to="/pricing"
+               className="inline-flex items-center gap-2 px-8 py-4 rounded-xl font-black text-base bg-cyan-700 hover:bg-cyan-600 text-white transition-all"
+             >
+               Start Member Plan — $39/mo
+               <ChevronRight size={16} />
+             </Link>
+             <p className="text-gray-600 text-xs mt-4">🔒 Secured by Stripe · Cancel anytime</p>
+           </div>
         </div>
       </div>
 
