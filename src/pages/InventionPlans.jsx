@@ -4,32 +4,25 @@ import { ArrowLeft, Download, ChevronDown, ChevronUp, AlertTriangle, CheckCircle
 import { useTier } from "../hooks/useTier";
 import { useTrial } from "@/lib/TrialContext";
 import { isClassifiedInvention, tierHasGovAccess } from "../lib/tiers";
+import { tierCanAccessInvention } from "../lib/tiers";
 import GovClassifiedGate from "../components/GovClassifiedGate";
-import { base44 as b44 } from "@/api/base44Client";
+import TierGate from "../components/TierGate";
+import InventionBuildVideo from "../components/InventionBuildVideo";
+import InventionDiagram from "../components/InventionDiagram";
+import { base44 } from "@/api/base44Client";
+import { inventionVisuals } from "../lib/inventionVisuals";
+import { businessItems } from "../lib/businessItems";
+import { inventionSteps } from "../lib/inventionSteps";
+import { jsPDF } from "jspdf";
+import ResearchDisclaimer from "../components/ResearchDisclaimer";
+import AttributionFooter from "../components/AttributionFooter";
 
 // Legacy admin-only gate (free energy / medical claims — still admin-only)
 const ADMIN_ONLY_KEYWORDS = ["motionless electromagnetic generator", "prioré-type multichannel"];
 const isAdminOnly = (title) => ADMIN_ONLY_KEYWORDS.some(k => title?.toLowerCase().includes(k.toLowerCase()));
 
-// Inventions freely accessible with beta access (no $97 membership required)
-const BETA_FREE_INVENTIONS = [
-  "Anenergy Pump Demonstration Circuit",
-  "Vacuum Potential Oscillator (VPO) Circuit Kit",
-  "Open-System Magnetic Generator (Prototype Plans)",
-];
-const isBetaFreeInvention = (title) => BETA_FREE_INVENTIONS.includes(title);
-const isMembershipRequired = (title) => !isBetaFreeInvention(title) && !isAdminOnly(title);
-import { tierCanAccessInvention } from "../lib/tiers";
-import TierGate from "../components/TierGate";
-import InventionBuildVideo from "../components/InventionBuildVideo";
-import { base44 } from "@/api/base44Client";
-import { inventionVisuals } from "../lib/inventionVisuals";
-import { businessItems } from "../lib/businessItems";
-import { inventionSteps } from "../lib/inventionSteps";
-import InventionDiagram from "../components/InventionDiagram";
-import { jsPDF } from "jspdf";
-import ResearchDisclaimer from "../components/ResearchDisclaimer";
-import AttributionFooter from "../components/AttributionFooter";
+// All inventions require membership or purchase
+const isMembershipRequired = (title) => !isAdminOnly(title);
 
 const inventions = businessItems.filter(i => i.category === "Invention");
 
@@ -478,12 +471,12 @@ function SpecsLockedGate({ invention }) {
         <h2 className="text-white font-black text-2xl mb-2">{invention?.title}</h2>
         <p className="text-gray-400 text-sm italic mb-4">{invention?.tagline}</p>
         <p className="text-gray-500 text-sm leading-relaxed mb-6">
-          To view technical specifications, bill of materials, and build instructions for this invention, you need <span className="text-white font-bold">$97/mo Researcher membership</span> or higher. Alternatively, purchase this plan individually for $49.
+          To view technical specifications, bill of materials, and build instructions for this invention, you need a membership or purchase this plan individually.
         </p>
         <div className="space-y-2 mb-6">
           <button onClick={() => window.location.href = '/pricing'}
             className="flex items-center justify-center gap-2 w-full py-3 rounded-xl font-black text-white text-sm bg-indigo-700 hover:bg-indigo-600 transition-all">
-            Join Researcher — $97/mo
+            View Membership Plans
           </button>
           <button onClick={() => window.location.href = '/pricing'}
             className="flex items-center justify-center gap-2 w-full py-3 rounded-xl font-black text-sm border border-indigo-700 text-indigo-400 hover:bg-indigo-900/20 transition-all">
@@ -546,7 +539,7 @@ function MembershipGate({ invention }) {
         <h2 className="text-white font-black text-2xl mb-2">{invention?.title}</h2>
         <p className="text-gray-400 text-sm leading-relaxed italic mb-4">{invention?.tagline}</p>
         <p className="text-gray-500 text-sm leading-relaxed mb-6">
-          This invention build plan is available exclusively to <span className="text-white font-bold">$97/mo Researcher members</span>. Join to get full access to all build plans, step-by-step instructions, schematics, and downloadable PDFs.
+          This invention build plan is available to members. Join to get full access to all build plans, step-by-step instructions, schematics, and downloadable PDFs.
         </p>
         <div className="bg-gray-900 border border-gray-800 rounded-2xl p-4 mb-6 text-left space-y-2">
           <p className="text-gray-500 text-xs font-bold uppercase tracking-wider mb-3">Membership includes:</p>
@@ -557,8 +550,8 @@ function MembershipGate({ invention }) {
           ))}
         </div>
         <Link to="/pricing"
-          className="flex items-center justify-center gap-2 w-full py-3 rounded-xl font-black text-white text-sm bg-indigo-700 hover:bg-indigo-600 transition-all mb-3">
-          Join for $97/mo — Unlock Everything
+         className="flex items-center justify-center gap-2 w-full py-3 rounded-xl font-black text-white text-sm bg-indigo-700 hover:bg-indigo-600 transition-all mb-3">
+         View Membership Plans
         </Link>
         <p className="text-gray-600 text-xs">Already a member? <Link to="/account" className="text-indigo-400 hover:underline">Check your account</Link></p>
       </div>
@@ -735,8 +728,7 @@ export default function InventionPlans() {
         <div className="w-64 flex-shrink-0 border-r border-gray-800 overflow-y-auto bg-gray-900/40">
           {/* Access legend */}
           <div className="px-3 py-2 border-b border-gray-800 bg-gray-900/60 space-y-1">
-            <div className="flex items-center gap-2 text-xs text-green-400"><CheckCircle2 size={10} /> 3 plans included with Beta</div>
-            <div className="flex items-center gap-2 text-xs text-indigo-400"><Lock size={10} /> All others require $97/mo</div>
+            <div className="flex items-center gap-2 text-xs text-indigo-400"><Lock size={10} /> Available with membership or purchase</div>
           </div>
           {inventions.map((inv, i) => {
             const accessible = tierCanAccessInvention(tier, i);
@@ -745,7 +737,6 @@ export default function InventionPlans() {
             const isSelected = selected?.title === inv.title;
             const isAdminLocked = adminOnly && !isAdmin;
             const isGovLocked = govClassified && !isAdmin && !tierHasGovAccess(tier);
-            const betaFree = isBetaFreeInvention(inv.title);
             const memberLocked = isMembershipRequired(inv.title) && !isAdmin;
             // Trial users can only view the first invention (index 0)
             const trialLocked = isTrial && !isAdmin && i > 0;
@@ -757,20 +748,18 @@ export default function InventionPlans() {
                 <span className="text-xl flex-shrink-0 mt-0.5">{inv.icon}</span>
                 <div className="flex-1 min-w-0">
                   <p className={`text-xs font-semibold leading-snug truncate ${
-                    trialLocked ? "text-gray-600" :
-                    isAdminLocked ? "text-red-900" :
-                    isGovLocked ? "text-red-400" :
-                    betaFree ? "text-green-300" :
-                    memberLocked ? "text-gray-400" :
-                    accessible ? "text-white" : "text-gray-600"
+                   trialLocked ? "text-gray-600" :
+                   isAdminLocked ? "text-red-900" :
+                   isGovLocked ? "text-red-400" :
+                   memberLocked ? "text-gray-400" :
+                   accessible ? "text-white" : "text-gray-600"
                   }`}>{inv.title}</p>
                   <p className="text-xs mt-0.5">
-                    {trialLocked ? <span className="text-cyan-700">⏱ Trial — upgrade to unlock</span> :
-                     isAdminLocked ? <span className="text-red-900">🔐 Admin Only</span> :
-                     isGovLocked ? <span className="text-red-400">🏛 Gov/Defense Only</span> :
-                     betaFree ? <span className="text-green-600">✓ Included with Beta</span> :
-                     memberLocked ? <span className="text-indigo-500">🔒 $97/mo Membership</span> :
-                     <span className="text-gray-600">{inv.price}</span>}
+                   {trialLocked ? <span className="text-cyan-700">⏱ Trial — upgrade to unlock</span> :
+                    isAdminLocked ? <span className="text-red-900">🔐 Admin Only</span> :
+                    isGovLocked ? <span className="text-red-400">🏛 Gov/Defense Only</span> :
+                    memberLocked ? <span className="text-indigo-500">🔒 Membership or Purchase</span> :
+                    <span className="text-gray-600">{inv.price}</span>}
                   </p>
                 </div>
                 {trialLocked ? <Lock size={10} className="text-cyan-800 flex-shrink-0 mt-1" /> :
