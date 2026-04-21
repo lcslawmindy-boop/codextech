@@ -110,9 +110,9 @@ const TIERS = [
     name: "Pro",
     price: 97,
     color: "#a855f7",
-    description: "Everything + full IP commercialization suite",
+    description: "Everything in Researcher & Builder plans + full IP commercialization suite",
     features: [
-      "EVERYTHING in Researcher plan",
+      "EVERYTHING in Researcher & Builder plans",
       "ALL 40+ platform tools unlocked",
       "Downloadable PDFs for all build plans",
       "Bill of Materials & complete supplier lists",
