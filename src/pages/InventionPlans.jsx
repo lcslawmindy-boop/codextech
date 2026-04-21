@@ -32,7 +32,7 @@ const DEFENSE_RESTRICTED = [
   "T-Polarized EM Wave Transducer",
   "Waddington Valley EM Tracer System",
   "Cloning Efficiency Enhancement System",
-  "Kaznacheyev Reversal Cell Imprinting Chamber",
+  "Kaznacheyev Reversal Cell Imprinting Chamber (KRCIC)",
   "UV Biophoton Disease Reversal Spectrometer",
   "Telomere Regeneration Device (TRD-1)",
   "Portable Porthole Disease Treatment System",
