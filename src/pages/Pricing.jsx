@@ -85,6 +85,7 @@ const TIERS = [
     badge: "MOST POPULAR",
     description: "AI tools, IP analysis & prior art search",
     features: [
+      "ALL 23 invention build plans (full access)",
       "AI Invention Forge (unlimited dossiers)",
       "AI Patent Claims Generator",
       "Prior Art Archive with AI search (200+ entries)",
