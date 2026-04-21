@@ -263,9 +263,10 @@ function ItemCard({ item, userTier }) {
 
   const handleCheckout = async () => {
     const baseUrl = window.location.origin;
+    const checkoutPrice = userTier ? displayPrice : basePrice;
     const response = await base44.functions.invoke("createCheckoutSession", {
       title: item.name,
-      priceInCents: basePrice * 100,
+      priceInCents: checkoutPrice * 100,
       description: item.category,
       category: "one_time",
       mode: "payment",
