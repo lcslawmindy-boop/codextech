@@ -393,8 +393,8 @@ function ItemCard({ item, userTier }) {
 }
 
 function PlanCard({ tier, billingCycle }) {
-  // Founding member offer: Pro at Builder price
-  const foundingProPrice = tier.id === "pro" ? 39 : null;
+  // Founding member offer: Pro at Researcher price
+  const foundingProPrice = tier.id === "pro" ? 59 : null;
   
   const annualPrice = foundingProPrice && billingCycle === "annual" 
     ? foundingProPrice * 12 
