@@ -410,8 +410,10 @@ export default function InventionLibrary() {
               <div key={i} className="bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden flex flex-col"
                 style={{ borderLeftColor: color, borderLeftWidth: 3 }}>
                 {/* 3D Device Visualization */}
-                <div className="w-full h-40 bg-gradient-to-br from-gray-800 to-gray-700 overflow-hidden border-b border-gray-700">
-                  <Invention3DCardSmall invention={inv} />
+                <div className="w-full h-40 bg-gradient-to-br from-gray-800 to-gray-700 overflow-hidden border-b border-gray-700 flex">
+                  <div className="w-full h-full">
+                    <Invention3DCardSmall invention={inv} />
+                  </div>
                 </div>
                 {/* Card header */}
                 <div className="p-4 flex-1">
