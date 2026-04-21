@@ -443,7 +443,9 @@ export default function Pricing() {
       {/* Hero */}
       <div className="text-center px-5 py-12 max-w-4xl mx-auto">
         <h2 className="text-4xl md:text-5xl font-black leading-tight mb-4">
-          <span className="text-cyan-400">Build Your IP Empire</span>
+          Create with Passion<br />Build for Impact<br />
+          <span className="text-cyan-400">Forge Your Future</span><br />
+          Start Building Your IP Portfolio Today
         </h2>
         <p className="text-gray-400 text-lg max-w-2xl mx-auto leading-relaxed mb-10">
           Two tiers. One platform. Pick the plan that fits your stage.
