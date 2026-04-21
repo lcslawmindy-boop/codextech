@@ -53,7 +53,7 @@ const TIERS = [
     price: 58,
     color: "#10b981",
     badge: null,
-    description: "All 23 invention build plans with PDFs",
+    description: "All 20 inventions + 26 courses with full access & PDFs",
     features: [
       "ALL 23 invention build plans (full access + PDFs)",
       "Course Library (26+ courses)",
@@ -83,7 +83,7 @@ const TIERS = [
     price: 39,
     color: "#3b82f6",
     badge: "MOST POPULAR",
-    description: "AI tools, IP analysis & prior art search",
+    description: "All 20 build plans + AI tools, IP analysis & prior art search",
     features: [
       "ALL 23 invention build plans (full access)",
       "AI Invention Forge (unlimited dossiers)",
