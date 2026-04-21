@@ -68,10 +68,10 @@ const PHASES = [
 ];
 
 const MRR_BREAKDOWN = [
-  { label: "Research Membership ($97/mo)", members: 600, value: 58200 },
-  { label: "Invention Plans Bundle ($197)", members: 200, value: 39400 },
-  { label: "Complete Course Library ($497)", members: 120, value: 59640 },
-  { label: "Pro Membership ($247/mo)", members: 80, value: 19760 },
+  { label: "Builder Membership ($39/mo)", members: 400, value: 15600 },
+  { label: "Researcher Membership ($59/mo)", members: 450, value: 26550 },
+  { label: "Pro Membership ($89/mo)", members: 150, value: 13350 },
+  { label: "Standalone Build Plans (avg $300)", members: 100, value: 30000 },
 ];
 
 function CopyButton({ text }) {
