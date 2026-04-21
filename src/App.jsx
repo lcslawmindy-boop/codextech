@@ -121,6 +121,8 @@ import PublicPreview from './pages/PublicPreview';
 import AcquisitionPitchDeck from './pages/AcquisitionPitchDeck';
 import InstitutionalLicensing from './pages/InstitutionalLicensing';
 import ReferralDashboard from './pages/ReferralDashboard';
+import ContestPage from './pages/ContestPage';
+import AdminContest from './pages/AdminContest';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -265,10 +267,12 @@ const AuthenticatedApp = () => {
           <Route path="/acquire" element={<AcquisitionPitchDeck />} />
           <Route path="/institutional-licensing" element={<InstitutionalLicensing />} />
           <Route path="/referrals" element={<ReferralDashboard />} />
+          <Route path="/contest" element={<ContestPage />} />
 
           {/* Admin-only routes */}
           <Route element={<AdminGuard />}>
             <Route path="/admin" element={<AdminHub />} />
+            <Route path="/admin-contest" element={<AdminContest />} />
             <Route path="/admin-tier-access" element={<AdminTierAccess />} />
             <Route path="/admin-promo" element={<AdminPromoBlast />} />
             <Route path="/admin-beta" element={<AdminBeta />} />

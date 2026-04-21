@@ -1,0 +1,76 @@
+{
+  "name": "ContestEntry",
+  "type": "object",
+  "properties": {
+    "contest_id": {
+      "type": "string"
+    },
+    "entrant_email": {
+      "type": "string"
+    },
+    "entrant_name": {
+      "type": "string"
+    },
+    "invention_name": {
+      "type": "string"
+    },
+    "invention_description": {
+      "type": "string"
+    },
+    "video_url": {
+      "type": "string"
+    },
+    "video_duration_seconds": {
+      "type": "number"
+    },
+    "thumbnail_url": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "approved",
+        "rejected",
+        "featured"
+      ],
+      "default": "pending"
+    },
+    "membership_tier_at_entry": {
+      "type": "string",
+      "enum": [
+        "builder",
+        "researcher",
+        "pro",
+        "trial",
+        "none"
+      ]
+    },
+    "video_views": {
+      "type": "integer",
+      "default": 0
+    },
+    "likes": {
+      "type": "integer",
+      "default": 0
+    },
+    "submitted_date": {
+      "type": "string"
+    },
+    "approved_date": {
+      "type": "string"
+    },
+    "rejection_reason": {
+      "type": "string"
+    },
+    "admin_notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "contest_id",
+    "entrant_email",
+    "invention_name",
+    "video_url"
+  ]
+}

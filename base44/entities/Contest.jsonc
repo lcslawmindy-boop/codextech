@@ -1,0 +1,78 @@
+{
+  "name": "Contest",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "rules": {
+      "type": "string"
+    },
+    "grand_prize": {
+      "type": "string"
+    },
+    "grand_prize_value": {
+      "type": "number"
+    },
+    "start_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "end_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "closed",
+        "ended",
+        "draft"
+      ],
+      "default": "draft"
+    },
+    "entry_count": {
+      "type": "integer",
+      "default": 0
+    },
+    "winner_id": {
+      "type": "string"
+    },
+    "winner_email": {
+      "type": "string"
+    },
+    "winner_announcement_date": {
+      "type": "string"
+    },
+    "featured_videos": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "entry_id": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "featured_order": {
+            "type": "integer"
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "title",
+    "grand_prize",
+    "start_date",
+    "end_date"
+  ]
+}
