@@ -16,7 +16,7 @@ const INDIVIDUAL_BUILDS = [
   { name: "Quantum Potential EMI Detector", price: 497, category: "Build Plan", icon: "📡", public: true },
   { name: "EM Trigger Window Therapy Device", price: 599, category: "Build Plan", icon: "💊", public: true },
   { name: "Bedini Environmental EM Signal Conditioner", price: 697, category: "Build Plan", icon: "🎛️", public: true },
-  { name: "Biofield Frequency Exposure Chamber", price: 397, category: "Build Plan", icon: "🧪", public: true },
+
   { name: "Morphogenetic Field Coherence Monitor", price: 799, category: "Build Plan", icon: "🌿", public: true },
   { name: "Whittaker Wave Phase Conjugate Mirror System", price: 849, category: "Build Plan", icon: "🔭", public: true },
   { name: "Prioré-Type Multichannel EM Therapy System", price: 697, category: "Build Plan", icon: "🏥", public: true },
