@@ -255,14 +255,15 @@ function ItemCard({ item, userTier }) {
   const details = ITEM_DETAILS[item.name];
   
   // Calculate discounted price based on tier
-  let displayPrice = item.price;
+  const basePrice = item.price + 100;
+  let displayPrice = basePrice;
   let discount = 0;
   if (userTier === "builder") {
     discount = 0.25;
-    displayPrice = Math.round(item.price * 0.75);
+    displayPrice = Math.round(basePrice * 0.75);
   } else if (["researcher", "pro"].includes(userTier)) {
     discount = 0.50;
-    displayPrice = Math.round(item.price * 0.50);
+    displayPrice = Math.round(basePrice * 0.50);
   }
   
   // Determine if user has access to this item
@@ -421,18 +422,22 @@ function ItemCard({ item, userTier }) {
             {/* Price Display */}
             <div className="p-2 rounded-lg bg-gray-800/50 space-y-1">
               <div className="flex items-center justify-between">
+                <span className="text-gray-400 text-xs">No membership:</span>
+                <span className="text-white text-sm font-bold">${basePrice}</span>
+              </div>
+              <div className="flex items-center justify-between">
                 <span className="text-gray-400 text-xs">Builder (25%):</span>
-                <span className="text-cyan-400 text-sm font-bold">${Math.round(item.price * 0.75)}</span>
+                <span className="text-cyan-400 text-sm font-bold">${Math.round(basePrice * 0.75)}</span>
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-gray-400 text-xs">Researcher (50%):</span>
-                <span className="text-green-400 text-sm font-bold">${Math.round(item.price * 0.50)}</span>
+                <span className="text-green-400 text-sm font-bold">${Math.round(basePrice * 0.50)}</span>
               </div>
             </div>
 
             <button onClick={handleCheckout}
               className="w-full px-3 py-2 rounded-lg text-xs font-bold bg-cyan-700 hover:bg-cyan-600 text-white transition-all">
-              💳 Buy Now {userTier ? `$${displayPrice}` : `$${item.price}`}
+              💳 Buy Now {userTier ? `$${displayPrice}` : `$${basePrice}`}
             </button>
           </>
         )}
