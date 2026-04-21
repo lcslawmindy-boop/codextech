@@ -270,7 +270,7 @@ function ItemCard({ item, userTier }) {
       description: item.category,
       category: "one_time",
       mode: "payment",
-      successUrl: `${baseUrl}/checkout?success=true&product=${item.name}`,
+      successUrl: `${baseUrl}/checkout?success=true&product=${encodeURIComponent(item.name)}`,
       cancelUrl: `${baseUrl}/pricing`,
     });
     if (response.data?.url) window.location.href = response.data.url;
