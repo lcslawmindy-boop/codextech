@@ -412,8 +412,12 @@ export default function InventionLibrary() {
               <div key={i} className="bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden flex flex-col"
                 style={{ borderLeftColor: color, borderLeftWidth: 3 }}>
                 {/* Device Image */}
-                <div className="w-full h-40 bg-gradient-to-br from-gray-800 to-gray-700 overflow-hidden border-b border-gray-700">
-                  <img src={deviceImage} alt={inv.title} className="w-full h-full object-cover" />
+                <div className="w-full h-40 bg-gradient-to-br from-gray-800 to-gray-700 overflow-hidden border-b border-gray-700 flex items-center justify-center">
+                  {deviceImage ? (
+                    <img src={deviceImage} alt={inv.title} className="w-full h-full object-cover" onError={(e) => e.target.style.display = 'none'} />
+                  ) : (
+                    <div className="text-5xl">{inv.icon}</div>
+                  )}
                 </div>
                 {/* Card header */}
                 <div className="p-4 flex-1">
