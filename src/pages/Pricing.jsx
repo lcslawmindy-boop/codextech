@@ -48,21 +48,52 @@ const INDIVIDUAL_COURSES = [
 
 const TIERS = [
   {
-    id: "researcher",
-    name: "Researcher",
-    price: 39,
-    color: "#22d3ee",
+    id: "builder",
+    name: "Builder",
+    price: 33,
+    color: "#10b981",
     badge: null,
-    description: "Core tools + all invention build plans",
+    description: "All 23 invention build plans with PDFs",
     features: [
       "ALL 23 invention build plans (full access + PDFs)",
+      "Bill of Materials & supplier guides",
+      "Step-by-step instructions",
+      "Build Video generator",
+      "EM Lab simulators & visualization",
+      "Prior Art Archive (200+ entries)",
+      "Cancel anytime",
+    ],
+    locked: [
+      "Course Library (26+ courses)",
+      "AI Invention Forge",
+      "AI Patent Claims Generator",
+      "FTO Analysis & IP Valuation",
+      "AI Patent Drafting Tool",
+      "Investor CRM & Pitch Builder",
+      "Virtual Data Room (VDR)",
+      "IP Portfolio Health Dashboard",
+      "Co-Inventor Matching Network",
+      "SBIR Grant Pipeline",
+      "Patent Intelligence Monitor",
+    ],
+  },
+  {
+    id: "researcher",
+    name: "Researcher",
+    price: 66,
+    color: "#3b82f6",
+    badge: "MOST POPULAR",
+    description: "Build plans + full course library",
+    features: [
+      "ALL 23 invention build plans (full access + PDFs)",
+      "Full Course Library (26+ courses)",
+      "Bill of Materials & supplier guides",
+      "Step-by-step instructions & build videos",
+      "EM Lab simulators & visualization",
+      "Prior Art Archive with AI search (200+ entries)",
       "AI Invention Forge (unlimited dossiers)",
       "AI Patent Claims Generator",
       "FTO Analysis & IP Valuation",
-      "EM Lab simulators & visualization",
-      "Prior Art Archive with AI search (200+ entries)",
-      "Build Video generator",
-      "Course Library access",
       "Cancel anytime",
     ],
     locked: [
@@ -77,11 +108,10 @@ const TIERS = [
   },
   {
     id: "pro",
-    name: "Pro Researcher",
-    price: 97,
+    name: "Pro",
+    price: 99,
     color: "#a855f7",
-    badge: "MOST POPULAR",
-    description: "Everything in Researcher + full IP commercialization suite",
+    description: "Everything + full IP commercialization suite",
     features: [
       "EVERYTHING in Researcher plan",
       "ALL 40+ platform tools unlocked",
@@ -352,7 +382,7 @@ function ItemCard({ item }) {
 
       <div className="px-5 py-3 border-t border-gray-800 bg-cyan-950/20">
         <div className="flex items-center gap-2 text-xs text-cyan-400 font-bold">
-          <Check size={12} /> Included with Researcher $39/mo & Pro $97/mo
+          <Check size={12} /> Included with all plans
         </div>
       </div>
     </div>
@@ -448,9 +478,9 @@ export default function Pricing() {
           Start Building Your IP Portfolio Today
         </h2>
         <p className="text-gray-400 text-lg max-w-2xl mx-auto leading-relaxed mb-10">
-          Two tiers. One platform. Pick the plan that fits your stage.
+          Three tiers. One platform. Pick the plan that fits your stage.
         </p>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-3xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
           {TIERS.map(tier => <PlanCard key={tier.id} tier={tier} />)}
         </div>
       </div>
