@@ -118,6 +118,7 @@ import PostPurchaseOnboarding from './pages/PostPurchaseOnboarding';
 import MemberDashboard from './pages/MemberDashboard';
 import PublicPreview from './pages/PublicPreview';
 import AcquisitionPitchDeck from './pages/AcquisitionPitchDeck';
+import InstitutionalLicensing from './pages/InstitutionalLicensing';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -260,6 +261,7 @@ const AuthenticatedApp = () => {
           <Route path="/checkout" element={<PostPurchaseOnboarding />} />
           <Route path="/preview" element={<PublicPreview />} />
           <Route path="/acquire" element={<AcquisitionPitchDeck />} />
+          <Route path="/institutional-licensing" element={<InstitutionalLicensing />} />
 
           {/* Admin-only routes */}
           <Route element={<AdminGuard />}>

@@ -1,0 +1,80 @@
+{
+  "name": "InstitutionalLicensingInquiry",
+  "type": "object",
+  "properties": {
+    "organization_name": {
+      "type": "string"
+    },
+    "organization_type": {
+      "type": "string",
+      "enum": [
+        "Defense Contractor",
+        "Government Agency",
+        "Research Institution",
+        "Academic",
+        "Medical",
+        "Private Company",
+        "Other"
+      ]
+    },
+    "contact_name": {
+      "type": "string"
+    },
+    "contact_email": {
+      "type": "string"
+    },
+    "contact_phone": {
+      "type": "string"
+    },
+    "interested_technologies": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Names of restricted inventions of interest"
+    },
+    "intended_use": {
+      "type": "string"
+    },
+    "security_clearance": {
+      "type": "string"
+    },
+    "annual_rd_budget": {
+      "type": "string"
+    },
+    "project_timeline": {
+      "type": "string"
+    },
+    "technical_requirements": {
+      "type": "string"
+    },
+    "nda_signed": {
+      "type": "boolean",
+      "default": false
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "submitted",
+        "under_review",
+        "awaiting_vetting",
+        "approved",
+        "rejected"
+      ],
+      "default": "submitted"
+    },
+    "admin_notes": {
+      "type": "string"
+    },
+    "reviewed_date": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "organization_name",
+    "organization_type",
+    "contact_name",
+    "contact_email",
+    "interested_technologies"
+  ]
+}
