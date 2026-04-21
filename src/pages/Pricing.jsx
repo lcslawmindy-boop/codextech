@@ -109,7 +109,7 @@ const TIERS = [
   {
     id: "pro",
     name: "Pro",
-    price: 99,
+    price: 97,
     color: "#a855f7",
     description: "Everything + full IP commercialization suite",
     features: [
