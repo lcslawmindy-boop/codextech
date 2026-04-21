@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useSearchParams, Link, useNavigate } from "react-router-dom";
 import { CheckCircle2, Lock, BookOpen, FlaskConical, Zap, ChevronRight, ArrowRight, Award } from "lucide-react";
 import { base44 } from "@/api/base44Client";
+import OnboardingGuide from "../components/OnboardingGuide";
 
 const TIER_UNLOCKS = {
   starter: {
@@ -60,6 +61,7 @@ export default function PostPurchaseOnboarding() {
   const navigate = useNavigate();
   const [tier, setTier] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [showOnboarding, setShowOnboarding] = useState(false);
 
   const productId = searchParams.get("product");
   const tierData = TIER_UNLOCKS[productId];
@@ -68,6 +70,8 @@ export default function PostPurchaseOnboarding() {
     // Verify purchase and set tier
     if (tierData) {
       setTier(productId);
+      // Auto-show onboarding after a short delay
+      setTimeout(() => setShowOnboarding(true), 800);
     }
     setLoading(false);
   }, [productId, tierData]);
@@ -95,7 +99,11 @@ export default function PostPurchaseOnboarding() {
   }
 
   return (
-    <div className="w-screen min-h-screen bg-gray-950 text-white">
+    <>
+      {showOnboarding && (
+        <OnboardingGuide onComplete={() => setShowOnboarding(false)} autoStart={true} />
+      )}
+      <div className="w-screen min-h-screen bg-gray-950 text-white">
       {/* Header */}
       <div className="border-b border-gray-800 bg-gray-900/80 px-5 py-4">
         <div className="max-w-6xl mx-auto flex items-center justify-between">
@@ -281,5 +289,6 @@ export default function PostPurchaseOnboarding() {
         </div>
       </div>
     </div>
+    </>
   );
 }
