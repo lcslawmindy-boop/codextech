@@ -250,43 +250,22 @@ const ITEM_DETAILS = {
 
 function ItemCard({ item, userTier }) {
   const [expanded, setExpanded] = useState(false);
-  const [hasPurchased, setHasPurchased] = useState(false);
-  const [checkingPurchase, setCheckingPurchase] = useState(true);
   const details = ITEM_DETAILS[item.name];
   
   // Calculate discounted price based on tier
   const basePrice = item.price + 100;
   let displayPrice = basePrice;
-  let discount = 0;
   if (userTier === "builder") {
-    discount = 0.25;
     displayPrice = Math.round(basePrice * 0.75);
   } else if (["researcher", "pro"].includes(userTier)) {
-    discount = 0.50;
     displayPrice = Math.round(basePrice * 0.50);
   }
-  
-  // Determine if user has access to this item
-  const hasAccess = 
-    item.category === "Course" 
-      ? userTier && ["builder", "researcher", "pro"].includes(userTier)
-      : userTier && ["builder", "pro"].includes(userTier);
-
-  useState(() => {
-    base44.functions.invoke("getUserPurchases", {})
-      .then(res => {
-        const purchases = res?.data?.purchases || [];
-        setHasPurchased(purchases.some(p => p.title === item.name));
-      })
-      .catch(() => setHasPurchased(false))
-      .finally(() => setCheckingPurchase(false));
-  }, [item.name]);
 
   const handleCheckout = async () => {
     const baseUrl = window.location.origin;
     const response = await base44.functions.invoke("createCheckoutSession", {
       title: item.name,
-      priceInCents: item.price * 100,
+      priceInCents: basePrice * 100,
       description: item.category,
       category: "one_time",
       mode: "payment",
@@ -297,121 +276,84 @@ function ItemCard({ item, userTier }) {
   };
 
   const deviceImage = deviceImages[item.name];
+  const colors = ["#3b82f6","#22c55e","#a855f7","#f59e0b","#ef4444","#06b6d4","#ec4899","#84cc16","#f97316","#8b5cf6","#14b8a6","#fb923c"];
+  const color = item.color || colors[Math.random() * colors.length | 0];
 
   return (
-    <div className="bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden hover:border-gray-700 transition-all flex flex-col">
+    <div className="bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden flex flex-col"
+      style={{ borderLeftColor: color, borderLeftWidth: 3 }}>
       {/* Image preview for build plans */}
       {item.category === "Build Plan" && deviceImage && (
-        <div className="w-full h-32 bg-gray-800 overflow-hidden border-b border-gray-700">
+        <div className="w-full h-40 bg-gradient-to-br from-gray-800 to-gray-700 overflow-hidden border-b border-gray-700">
           <img src={deviceImage} alt={item.name} className="w-full h-full object-cover" />
         </div>
       )}
-      <div className="p-5 flex flex-col flex-1">
-        <div className="flex items-start justify-between mb-3">
-          <span className="text-3xl">{item.icon}</span>
-          <span className="text-xs font-bold px-2.5 py-1 rounded-lg bg-gray-800 text-gray-400">{item.category}</span>
+      
+      <div className="p-4 flex-1">
+        <div className="flex items-start gap-3 mb-3">
+          <span className="text-2xl flex-shrink-0">{item.icon}</span>
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center gap-2 mb-1">
+              <span className="text-xs px-2 py-0.5 rounded font-bold uppercase" style={{ backgroundColor: color + "22", color }}>{item.price}</span>
+            </div>
+            <h3 className="text-white font-bold text-sm leading-snug">{item.name}</h3>
+            {item.tagline && <p className="text-gray-500 text-xs mt-1 italic">{item.tagline}</p>}
+          </div>
         </div>
-        <h3 className="text-white font-bold text-sm leading-snug mb-2">{item.name}</h3>
-        {details && <p className="text-gray-400 text-xs leading-relaxed mb-4">{details.desc}</p>}
-        
+
+        {details?.desc && (
+          <p className="text-gray-400 text-xs leading-relaxed line-clamp-2 mb-3">{details.desc}</p>
+        )}
+
         {(details?.bom || details?.includes || details?.curriculum) && (
           <button
             onClick={() => setExpanded(!expanded)}
             className="flex items-center gap-1.5 text-cyan-400 text-xs font-bold mb-3 hover:text-cyan-300 transition-colors"
           >
             {expanded ? <ChevronUp size={12} /> : <ChevronDown size={12} />}
-            {details?.bom ? (hasPurchased ? "View BOM & Materials" : "What's Included") : "View Details"}
+            View Details
           </button>
         )}
 
-        {expanded && details?.bom && !hasPurchased && (
-          <div className="mb-4 space-y-3 bg-blue-950/40 border border-blue-800/50 rounded-lg p-3">
-            <div>
-              <p className="text-blue-300 text-xs font-bold mb-3 flex items-center gap-1.5">
-                <Lock size={10} /> Purchase to unlock materials & suppliers
-              </p>
-              <p className="text-gray-400 text-xs leading-relaxed mb-3">
-                When you purchase this plan, you'll get instant access to the complete bill of materials, parts list, supplier recommendations, and downloadable PDF specifications.
-              </p>
-            </div>
-          </div>
-        )}
-
-        {expanded && details?.bom && hasPurchased && (
-          <div className="mb-4 space-y-3 bg-gray-800/40 rounded-lg p-3">
-            <div>
-              <p className="text-yellow-400 text-xs font-bold mb-2">🛠️ Bill of Materials:</p>
-              <div className="space-y-1.5">
-                {details.bom.map((row, i) => (
-                  <div key={i} className="text-xs text-gray-300 border-l-2 border-cyan-600/30 pl-2">
-                    <p className="font-semibold">{row.item} (Qty: {row.qty})</p>
-                    <p className="text-gray-500">{row.spec}</p>
-                    <p className="text-cyan-400 text-xs flex items-center gap-1 mt-0.5">
-                      <ExternalLink size={9} /> {row.source}
-                    </p>
-                  </div>
-                ))}
-              </div>
-            </div>
-            {details?.materials && (
-              <div>
-                <p className="text-green-400 text-xs font-bold mb-2">📦 Materials & Sources:</p>
-                <div className="space-y-1">
-                  {details.materials.map((mat, i) => (
-                    <p key={i} className="text-xs text-gray-300">• {mat}</p>
-                  ))}
+        {expanded && details?.bom && (
+          <div className="mb-3 bg-gray-800/50 rounded-lg p-3 text-xs space-y-2">
+            <p className="text-gray-400 font-bold uppercase">BOM Preview:</p>
+            <div className="space-y-1">
+              {details.bom.slice(0, 2).map((row, i) => (
+                <div key={i} className="text-gray-300">
+                  <p className="font-semibold">{row.item}</p>
+                  <p className="text-gray-500 text-xs">{row.spec}</p>
                 </div>
-              </div>
-            )}
-            {details?.sources && (
-              <div>
-                <p className="text-blue-400 text-xs font-bold mb-2">🔗 Recommended Suppliers:</p>
-                <div className="space-y-1">
-                  {Object.entries(details.sources).map(([cat, url], i) => (
-                    <p key={i} className="text-xs text-cyan-300">
-                      {cat}: <span className="text-gray-400">{url}</span>
-                    </p>
-                  ))}
-                </div>
-              </div>
-            )}
-            <button className="w-full mt-2 py-2 px-3 rounded-lg bg-cyan-900/40 border border-cyan-700 text-cyan-300 text-xs font-bold hover:bg-cyan-800/50 transition-all flex items-center justify-center gap-2">
-              <Download size={11} /> Download Plans PDF
-            </button>
+              ))}
+            </div>
           </div>
         )}
 
         {expanded && (details?.includes || details?.curriculum) && (
-          <div className="mb-4 bg-gray-800/40 rounded-lg p-3">
+          <div className="mb-3 bg-gray-800/50 rounded-lg p-3 text-xs">
             {details?.includes && (
-              <div className="mb-3">
-                <p className="text-gray-400 text-xs font-bold uppercase mb-2">Includes:</p>
-                <ul className="space-y-1">
-                  {details.includes.map((inc, i) => (
-                    <li key={i} className="text-gray-300 text-xs flex items-start gap-2">
-                      <span className="text-cyan-400 flex-shrink-0 mt-0.5">✓</span> {inc}
-                    </li>
-                  ))}
-                </ul>
-              </div>
+              <ul className="space-y-1">
+                {details.includes.slice(0, 3).map((inc, i) => (
+                  <li key={i} className="text-gray-300 flex items-start gap-2">
+                    <span className="text-cyan-400 flex-shrink-0">✓</span> {inc}
+                  </li>
+                ))}
+              </ul>
             )}
             {details?.curriculum && (
-              <div>
-                <p className="text-gray-400 text-xs font-bold uppercase mb-2">Course Modules:</p>
-                <ul className="space-y-1">
-                  {details.curriculum.map((mod, i) => (
-                    <li key={i} className="text-gray-300 text-xs flex items-start gap-2">
-                      <span className="text-cyan-400 flex-shrink-0 mt-0.5">✓</span> {mod}
-                    </li>
-                  ))}
-                </ul>
-              </div>
+              <ul className="space-y-1">
+                {details.curriculum.slice(0, 3).map((mod, i) => (
+                  <li key={i} className="text-gray-300 flex items-start gap-2">
+                    <span className="text-cyan-400 flex-shrink-0">✓</span> {mod}
+                  </li>
+                ))}
+              </ul>
             )}
           </div>
         )}
       </div>
 
-      <div className="px-5 py-3 border-t border-gray-800 bg-cyan-950/20 space-y-2">
+      <div className="px-4 pb-4 flex flex-col gap-2">
         {item.restricted ? (
           <a href={`mailto:licensing@zenithapex.com?subject=Defense%20Contractor%20Licensing%20Inquiry:%20${encodeURIComponent(item.name)}`}
             className="flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg text-xs font-bold bg-red-900/60 hover:bg-red-800/60 border border-red-700 text-red-300 transition-colors w-full">
@@ -419,7 +361,6 @@ function ItemCard({ item, userTier }) {
           </a>
         ) : (
           <>
-            {/* Price Display */}
             <div className="p-2 rounded-lg bg-gray-800/50 space-y-1">
               <div className="flex items-center justify-between">
                 <span className="text-gray-400 text-xs">No membership:</span>
