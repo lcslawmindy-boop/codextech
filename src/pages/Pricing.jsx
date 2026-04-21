@@ -58,7 +58,6 @@ const TIERS = [
     badge: null,
     description: "Course library & build essentials",
     features: [
-      "Course Library (26+ courses)",
       "25% off all à la carte courses & build plans",
       "Bill of Materials & supplier guides",
       "Step-by-step instructions",
@@ -89,6 +88,9 @@ const TIERS = [
     description: "AI tools, IP analysis & prior art search",
     features: [
       "50% off all à la carte courses & build plans",
+      "Bill of Materials & supplier guides",
+      "Step-by-step instructions",
+      "Build Video generator",
       "AI Invention Forge (unlimited dossiers)",
       "AI Patent Claims Generator",
       "AI Patent Drafting Tool (USPTO-compliant)",
