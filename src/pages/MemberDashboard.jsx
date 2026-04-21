@@ -44,13 +44,7 @@ export default function MemberDashboard() {
   const accessibleInventions = canAccessBuilder ? inventions : [];
   const accessibleCourses = canAccessBuilder || canAccessResearcher ? courses : [];
 
-  const tierColors = {
-    builder: { bg: "#10b981", text: "green" },
-    researcher: { bg: "#3b82f6", text: "blue" },
-    pro: { bg: "#a855f7", text: "purple" }
-  };
 
-  const tierColor = tier ? tierColors[tier] : tierColors.builder;
 
   return (
     <div className="min-h-screen bg-gray-950 text-white">
@@ -69,8 +63,8 @@ export default function MemberDashboard() {
           </div>
           <div className="flex items-center gap-4">
             <div className="text-right">
-              <p className="text-sm font-bold" style={{ color: tierColor.bg }}>
-                {tier.charAt(0).toUpperCase() + tier.slice(1)} Plan
+              <p className="text-sm font-bold text-cyan-400">
+                {tier ? tier.charAt(0).toUpperCase() + tier.slice(1) : "Membership"} Plan
               </p>
               {user && <p className="text-xs text-gray-500">{user.email}</p>}
             </div>
@@ -118,6 +112,7 @@ export default function MemberDashboard() {
                 {tier === "builder" && "Full access + PDFs"}
                 {tier === "researcher" && "Research + AI tools"}
                 {tier === "pro" && "Everything unlocked"}
+                {!tier && "Load your tier..."}
               </p>
             </div>
           </div>
