@@ -6,35 +6,36 @@ import { useTier } from "@/hooks/useTier";
 import { deviceImages } from "@/lib/deviceImages";
 
 const INDIVIDUAL_BUILDS = [
-  // ── From businessItems Invention category (filtered and priced)
-  { name: "Anenergy Pump Demonstration Circuit", price: 297, category: "Build Plan", icon: "🔋" },
-  { name: "Scalar Energy Bottle Interferometer", price: 649, category: "Build Plan", icon: "🎯" },
-  { name: "Vacuum Potential Oscillator (VPO) Circuit Kit", price: 189, category: "Build Plan", icon: "🔧" },
-  { name: "Biofield Frequency Exposure Chamber", price: 397, category: "Build Plan", icon: "🧪" },
-  { name: "Open-System Magnetic Generator (Prototype Plans)", price: 179, category: "Build Plan", icon: "⚙️" },
-  { name: "Quantum Potential EMI Detector", price: 497, category: "Build Plan", icon: "📡" },
-  { name: "EM Trigger Window Therapy Device", price: 599, category: "Build Plan", icon: "💊" },
-  { name: "Morphogenetic Field Coherence Monitor", price: 799, category: "Build Plan", icon: "🌿" },
-  { name: "Whittaker Wave Phase Conjugate Mirror System", price: 849, category: "Build Plan", icon: "🔭" },
-  { name: "Prioré-Type Multichannel EM Therapy System", price: 697, category: "Build Plan", icon: "🏥" },
-  { name: "ELF Carrier Lock Detection System", price: 497, category: "Build Plan", icon: "📡" },
-  { name: "Phi-River Gradient Sensor", price: 349, category: "Build Plan", icon: "🌊" },
-  { name: "MEG Replication Kit", price: 847, category: "Build Plan", icon: "🔮" },
-  { name: "Asymmetric Regauging Overunity Generator", price: 897, category: "Build Plan", icon: "⚡" },
-  { name: "Telomere Regeneration Device (TRD-1)", price: 2397, category: "Build Plan", icon: "🧬" },
-  { name: "Portable Porthole Disease Treatment System", price: 1697, category: "Build Plan", icon: "🏥" },
-  { name: "Time-Reversal Zone Cold Fusion Reactor", price: 1297, category: "Build Plan", icon: "⚛️" },
-  { name: "Atmospheric Scalar EM Signature Recognition System", price: 897, category: "Build Plan", icon: "🛰️" },
-  { name: "Woodpecker Grid Standing Wave Detector", price: 297, category: "Build Plan", icon: "📻" },
-  { name: "T-Polarized EM Wave Transducer", price: 1197, category: "Build Plan", icon: "⏱️" },
-  { name: "Psychoenergetics Cellular Control System", price: 697, category: "Build Plan", icon: "🧬" },
-  { name: "Bedini Environmental EM Signal Conditioner", price: 897, category: "Build Plan", icon: "🎛️" },
-  { name: "Waddington Valley EM Tracer System", price: 1697, category: "Build Plan", icon: "🗺️" },
-  { name: "Cloning Efficiency Enhancement System", price: 2397, category: "Build Plan", icon: "🧬" },
-  { name: "Kaznacheyev Reversal Cell Imprinting Chamber", price: 1697, category: "Build Plan", icon: "🔬" },
-  { name: "UV Biophoton Disease Reversal Spectrometer", price: 2397, category: "Build Plan", icon: "🧬" },
-  { name: "MorphoYield TRZ-Agri Array", price: 1697, category: "Build Plan", icon: "🌾" },
-  { name: "Aegis-SV Adaptive Scalar Counterphase Shield", price: 1097, category: "Build Plan", icon: "🛡️" },
+  // ── PUBLIC TIER BUILD PLANS ──
+  { name: "Vacuum Potential Oscillator (VPO) Circuit Kit", price: 189, category: "Build Plan", icon: "🔧", public: true },
+  { name: "Open-System Magnetic Generator (Prototype Plans)", price: 179, category: "Build Plan", icon: "⚙️", public: true },
+  { name: "Woodpecker Grid Standing Wave Detector", price: 249, category: "Build Plan", icon: "📻", public: true },
+  { name: "Phi-River Gradient Sensor", price: 349, category: "Build Plan", icon: "🌊", public: true },
+  { name: "Anenergy Pump Demonstration Circuit", price: 297, category: "Build Plan", icon: "🔋", public: true },
+  { name: "Scalar Energy Bottle Interferometer", price: 449, category: "Build Plan", icon: "🎯", public: true },
+  { name: "Quantum Potential EMI Detector", price: 497, category: "Build Plan", icon: "📡", public: true },
+  { name: "EM Trigger Window Therapy Device", price: 599, category: "Build Plan", icon: "💊", public: true },
+  { name: "Bedini Environmental EM Signal Conditioner", price: 697, category: "Build Plan", icon: "🎛️", public: true },
+  { name: "Biofield Frequency Exposure Chamber", price: 397, category: "Build Plan", icon: "🧪", public: true },
+  { name: "Morphogenetic Field Coherence Monitor", price: 799, category: "Build Plan", icon: "🌿", public: true },
+  { name: "Whittaker Wave Phase Conjugate Mirror System", price: 849, category: "Build Plan", icon: "🔭", public: true },
+  { name: "Prioré-Type Multichannel EM Therapy System", price: 697, category: "Build Plan", icon: "🏥", public: true },
+  { name: "MEG Replication Kit", price: 847, category: "Build Plan", icon: "🔮", public: true },
+  { name: "Asymmetric Regauging Overunity Generator", price: 897, category: "Build Plan", icon: "⚡", public: true },
+  { name: "MorphoYield TRZ-Agri Array", price: 697, category: "Build Plan", icon: "🌾", public: true },
+  
+  // ── RESTRICTED TIER (Defense Contractor Licensing Only) ──
+  { name: "Time-Reversal Zone Cold Fusion Reactor", price: 0, category: "Build Plan", icon: "⚛️", public: false, restricted: true },
+  { name: "Aegis-SV Adaptive Scalar Counterphase Shield", price: 0, category: "Build Plan", icon: "🛡️", public: false, restricted: true },
+  { name: "Atmospheric Scalar EM Signature Recognition System", price: 0, category: "Build Plan", icon: "🛰️", public: false, restricted: true },
+  { name: "T-Polarized EM Wave Transducer", price: 0, category: "Build Plan", icon: "⏱️", public: false, restricted: true },
+  { name: "Waddington Valley EM Tracer System", price: 0, category: "Build Plan", icon: "🗺️", public: false, restricted: true },
+  { name: "Cloning Efficiency Enhancement System", price: 0, category: "Build Plan", icon: "🧬", public: false, restricted: true },
+  { name: "Kaznacheyev Reversal Cell Imprinting Chamber", price: 0, category: "Build Plan", icon: "🔬", public: false, restricted: true },
+  { name: "UV Biophoton Disease Reversal Spectrometer", price: 0, category: "Build Plan", icon: "🧬", public: false, restricted: true },
+  { name: "Telomere Regeneration Device (TRD-1)", price: 0, category: "Build Plan", icon: "🧬", public: false, restricted: true },
+  { name: "Portable Porthole Disease Treatment System", price: 0, category: "Build Plan", icon: "🏥", public: false, restricted: true },
+  { name: "Psychoenergetics Cellular Control System", price: 0, category: "Build Plan", icon: "🧬", public: false, restricted: true },
 ];
 
 const INDIVIDUAL_COURSES = [
@@ -397,15 +398,26 @@ function ItemCard({ item, userTier }) {
         )}
       </div>
 
-      <div className="px-5 py-3 border-t border-gray-800 bg-cyan-950/20">
-        {hasAccess ? (
+      <div className="px-5 py-3 border-t border-gray-800 bg-cyan-950/20 space-y-2">
+        {item.restricted ? (
+          <a href={`mailto:licensing@zenithapex.com?subject=Defense%20Contractor%20Licensing%20Inquiry:%20${encodeURIComponent(item.name)}`}
+            className="flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg text-xs font-bold bg-red-900/60 hover:bg-red-800/60 border border-red-700 text-red-300 transition-colors w-full">
+            🔐 Licensing Inquiries Only
+          </a>
+        ) : hasAccess ? (
           <div className="flex items-center gap-2 text-xs text-green-400 font-bold">
             <CheckCircle2 size={12} /> ✓ You have access
           </div>
         ) : (
-          <div className="flex items-center gap-2 text-xs text-yellow-400 font-bold">
-            <Lock size={12} /> {item.category === "Course" ? "Included in Builder Membership" : "Included with all plans"}
-          </div>
+          <>
+            <div className="flex items-center gap-2 text-xs text-yellow-400 font-bold">
+              <Lock size={12} /> {item.category === "Course" ? "Included in Builder Membership" : "Included with all plans"}
+            </div>
+            <button onClick={handleCheckout}
+              className="w-full px-3 py-2 rounded-lg text-xs font-bold bg-cyan-700 hover:bg-cyan-600 text-white transition-all">
+              💳 Buy Now
+            </button>
+          </>
         )}
       </div>
     </div>
