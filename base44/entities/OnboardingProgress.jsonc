@@ -1,0 +1,53 @@
+{
+  "name": "OnboardingProgress",
+  "type": "object",
+  "properties": {
+    "user_email": {
+      "type": "string"
+    },
+    "purchased_plan": {
+      "type": "string",
+      "enum": [
+        "starter",
+        "researcher",
+        "pro"
+      ]
+    },
+    "first_course_enrolled": {
+      "type": "boolean",
+      "default": false
+    },
+    "first_course_name": {
+      "type": "string"
+    },
+    "first_invention_generated": {
+      "type": "boolean",
+      "default": false
+    },
+    "first_invention_name": {
+      "type": "string"
+    },
+    "first_project_created": {
+      "type": "boolean",
+      "default": false
+    },
+    "first_project_name": {
+      "type": "string"
+    },
+    "welcome_email_sent": {
+      "type": "boolean",
+      "default": false
+    },
+    "welcome_email_sent_at": {
+      "type": "string"
+    },
+    "completion_percent": {
+      "type": "integer",
+      "default": 0
+    }
+  },
+  "required": [
+    "user_email",
+    "purchased_plan"
+  ]
+}

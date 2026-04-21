@@ -3,6 +3,7 @@ import { useSearchParams, Link, useNavigate } from "react-router-dom";
 import { CheckCircle2, Lock, BookOpen, FlaskConical, Zap, ChevronRight, ArrowRight, Award } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import OnboardingGuide from "../components/OnboardingGuide";
+import QuickWinsTracker from "../components/QuickWinsTracker";
 
 const TIER_UNLOCKS = {
   starter: {
@@ -72,6 +73,23 @@ export default function PostPurchaseOnboarding() {
       setTier(productId);
       // Auto-show onboarding after a short delay
       setTimeout(() => setShowOnboarding(true), 800);
+      
+      // Send welcome email sequence
+      const sendWelcome = async () => {
+        try {
+          const userEmail = sessionStorage.getItem("checkout_email") || "user@example.com";
+          const firstName = sessionStorage.getItem("checkout_name") || "there";
+          await base44.functions.invoke("sendWelcomeEmailSequence", {
+            email: userEmail,
+            plan: productId,
+            firstName: firstName
+          });
+          console.log("Welcome email sent");
+        } catch (error) {
+          console.error("Error sending welcome email:", error);
+        }
+      };
+      sendWelcome();
     }
     setLoading(false);
   }, [productId, tierData]);
@@ -188,10 +206,15 @@ export default function PostPurchaseOnboarding() {
             </div>
           </div>
 
-          {/* Right: Quick start + upgrade path */}
+          {/* Right: Quick wins + upgrade path */}
           <div>
+            {/* Quick wins tracker */}
+            <div className="mb-6 sticky top-6">
+              <QuickWinsTracker userEmail={sessionStorage.getItem("checkout_email") || "user@example.com"} />
+            </div>
+
             {/* Quick start card */}
-            <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6 mb-6 sticky top-6">
+            <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6 mb-6 sticky top-96">
               <h3 className="text-white font-bold text-lg mb-4">Next Steps</h3>
               <div className="space-y-3">
                 <Link to="/invention-plans"
