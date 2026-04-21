@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { ArrowLeft, Plus, Search, Filter, DollarSign, Tag, Eye, Send, X, ChevronRight, Lock, TrendingUp, Briefcase, Loader2, CheckCircle2, Star } from "lucide-react";
+import { ArrowLeft, Plus, Search, Filter, DollarSign, Tag, Eye, Send, X, ChevronRight, Lock, TrendingUp, Briefcase, Loader2, CheckCircle2, Star, Users } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 
 const CATEGORIES = ["All", "Vacuum Energy", "Bioelectromagnetics", "Scalar EM", "AI / Software", "Clean Energy", "Biotech", "Defense", "Other"];
@@ -60,6 +60,94 @@ function formatCurrency(val) {
   if (val >= 1000000) return `$${(val / 1000000).toFixed(1)}M`;
   if (val >= 1000) return `$${(val / 1000).toFixed(0)}K`;
   return `$${val}`;
+}
+
+function InventorSignupModal({ onClose }) {
+  const [form, setForm] = useState({ name: "", email: "", organization: "", invention_title: "", bio: "" });
+  const [submitting, setSubmitting] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+
+  const handleSubmit = async () => {
+    if (!form.name || !form.email || !form.invention_title) return;
+    setSubmitting(true);
+    
+    await base44.entities.User.create({
+      full_name: form.name,
+      email: form.email,
+      role: "inventor"
+    }).catch(() => {});
+    
+    await base44.integrations.Core.SendEmail({
+      to: form.email,
+      subject: "Welcome to ZARP IP Marketplace — Inventor Program",
+      body: `Hi ${form.name},\n\nWelcome to the ZARP IP Marketplace Inventor Program!\n\nYou can now list your inventions and connect with buyers, investors, and partners. ZARP takes a 5% commission only on successfully executed deals.\n\nNext steps:\n1. List your invention in the marketplace\n2. Receive inquiries from interested buyers\n3. Negotiate terms confidentially\n4. Close the deal and earn 95% of the transaction value\n\nGet started: https://zarpapp.com/ip-marketplace\n\nQuestions? Reply to this email.\n\nBest regards,\nZARP Team`
+    });
+    
+    setSubmitted(true);
+    setSubmitting(false);
+  };
+
+  return (
+    <div className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4">
+      <div className="bg-gray-900 border border-gray-700 rounded-2xl w-full max-w-lg">
+        <div className="flex items-center justify-between px-5 py-4 border-b border-gray-800">
+          <div>
+            <p className="text-white font-black text-base flex items-center gap-2"><Users size={16} /> Become an Inventor</p>
+            <p className="text-gray-500 text-xs">List your IP and earn 95% on successful deals</p>
+          </div>
+          <button onClick={onClose} className="text-gray-600 hover:text-gray-300"><X size={16} /></button>
+        </div>
+        {submitted ? (
+          <div className="p-8 text-center">
+            <CheckCircle2 size={40} className="text-green-400 mx-auto mb-3" />
+            <p className="text-white font-black text-lg mb-2">Welcome to ZARP!</p>
+            <p className="text-gray-400 text-sm">Check your email for next steps. You're ready to list your inventions and connect with buyers.</p>
+            <button onClick={onClose} className="mt-5 px-6 py-2 rounded-xl bg-gray-800 text-gray-300 text-sm font-bold">Close</button>
+          </div>
+        ) : (
+          <div className="p-5 space-y-4">
+            <div className="bg-indigo-950/30 border border-indigo-900/40 rounded-xl p-3">
+              <p className="text-indigo-400 text-xs font-bold">💡 List your inventions and earn 95% commission. ZARP takes 5% only on successful deals.</p>
+            </div>
+            {[
+              { key: "name", label: "Full Name *", placeholder: "Your name" },
+              { key: "email", label: "Email Address *", placeholder: "contact@example.com", type: "email" },
+              { key: "organization", label: "Organization / Company", placeholder: "Your company or solo" },
+              { key: "invention_title", label: "Primary Invention / Project *", placeholder: "e.g. Scalar Wave Communicator" },
+            ].map(f => (
+              <div key={f.key}>
+                <label className="block text-gray-400 text-xs font-semibold mb-1">{f.label}</label>
+                <input 
+                  type={f.type || "text"}
+                  value={form[f.key]} 
+                  onChange={e => setForm(p => ({ ...p, [f.key]: e.target.value }))}
+                  placeholder={f.placeholder}
+                  className="w-full bg-gray-800 border border-gray-700 rounded-xl px-3 py-2.5 text-white text-sm focus:outline-none focus:border-indigo-600 placeholder-gray-600" 
+                />
+              </div>
+            ))}
+            <div>
+              <label className="block text-gray-400 text-xs font-semibold mb-1">Bio / Background (optional)</label>
+              <textarea 
+                value={form.bio} 
+                onChange={e => setForm(p => ({ ...p, bio: e.target.value }))}
+                placeholder="Brief background in physics, engineering, or your area of expertise…"
+                rows={2}
+                className="w-full bg-gray-800 border border-gray-700 rounded-xl px-3 py-2.5 text-white text-sm focus:outline-none focus:border-indigo-600 placeholder-gray-600 resize-none" 
+              />
+            </div>
+            <button 
+              onClick={handleSubmit} 
+              disabled={submitting || !form.name || !form.email || !form.invention_title}
+              className="w-full py-3 rounded-xl bg-indigo-700 hover:bg-indigo-600 disabled:opacity-40 text-white font-black text-sm flex items-center justify-center gap-2 transition-all">
+              {submitting ? <Loader2 size={14} className="animate-spin" /> : <Plus size={14} />}
+              {submitting ? "Registering…" : "Register as Inventor"}
+            </button>
+          </div>
+        )}
+      </div>
+    </div>
+  );
 }
 
 function LOIModal({ listing, onClose }) {
@@ -208,6 +296,7 @@ export default function IPMarketplace() {
   const [stageFilter, setStageFilter] = useState("All");
   const [loiTarget, setLoiTarget] = useState(null);
   const [showList, setShowList] = useState(true);
+  const [showInventorSignup, setShowInventorSignup] = useState(false);
   const [listForm, setListForm] = useState({ alias: "", category: "", stage: "", headline: "", problem_statement: "", solution_summary: "", market_size: "", ip_valuation: "", funding_ask: "", equity_offered: "", jurisdiction: "", tags: "" });
   const [submittingList, setSubmittingList] = useState(false);
   const [listSubmitted, setListSubmitted] = useState(false);
@@ -262,13 +351,17 @@ export default function IPMarketplace() {
           </div>
         </div>
         <div className="flex items-center gap-2">
-          <button onClick={() => setShowList(l => !l)}
-            className={`flex items-center gap-1.5 px-4 py-2 rounded-xl border text-xs font-black transition-all ${
-              !showList ? "bg-yellow-900/40 border-yellow-700 text-yellow-300" : "bg-gray-800 border-gray-700 text-gray-400 hover:border-gray-600"
-            }`}>
-            <Plus size={12} /> List an Invention
-          </button>
-        </div>
+           <button onClick={() => setShowInventorSignup(true)}
+             className="flex items-center gap-1.5 px-4 py-2 rounded-xl border bg-indigo-900/40 border-indigo-700 text-indigo-300 hover:bg-indigo-900/60 text-xs font-black transition-all">
+             <Users size={12} /> Become an Inventor
+           </button>
+           <button onClick={() => setShowList(l => !l)}
+             className={`flex items-center gap-1.5 px-4 py-2 rounded-xl border text-xs font-black transition-all ${
+               !showList ? "bg-yellow-900/40 border-yellow-700 text-yellow-300" : "bg-gray-800 border-gray-700 text-gray-400 hover:border-gray-600"
+             }`}>
+             <Plus size={12} /> List an Invention
+           </button>
+         </div>
       </div>
 
       {/* Stats bar */}
@@ -409,6 +502,7 @@ export default function IPMarketplace() {
       </div>
 
       {loiTarget && <LOIModal listing={loiTarget} onClose={() => setLoiTarget(null)} />}
+      {showInventorSignup && <InventorSignupModal onClose={() => setShowInventorSignup(false)} />}
     </div>
   );
 }
