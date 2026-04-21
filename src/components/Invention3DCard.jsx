@@ -35,118 +35,132 @@ const DEVICE_GEOMETRIES = {
 };
 
 function create3DScene(canvasRef, geometryType) {
-  if (!canvasRef.current) return;
+  if (!canvasRef.current) return () => {};
 
-  const width = canvasRef.current.clientWidth;
-  const height = canvasRef.current.clientHeight;
+  const canvas = canvasRef.current;
+  const width = canvas.clientWidth;
+  const height = canvas.clientHeight;
 
-  const scene = new THREE.Scene();
-  scene.background = new THREE.Color(0x111827);
+  if (width === 0 || height === 0) return () => {};
 
-  const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
-  camera.position.z = 3;
+  try {
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x111827);
 
-  const renderer = new THREE.WebGLRenderer({ canvas: canvasRef.current, antialias: true, alpha: true });
-  renderer.setSize(width, height);
-  renderer.setPixelRatio(window.devicePixelRatio);
+    const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
+    camera.position.z = 3;
 
-  // Lighting
-  const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
-  scene.add(ambientLight);
+    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, powerPreference: "low-power" });
+    renderer.setSize(width, height);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
-  const pointLight = new THREE.PointLight(0x0ea5e9, 1);
-  pointLight.position.set(5, 5, 5);
-  scene.add(pointLight);
+    // Lighting
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+    scene.add(ambientLight);
 
-  let mesh;
+    const pointLight = new THREE.PointLight(0x0ea5e9, 1);
+    pointLight.position.set(5, 5, 5);
+    scene.add(pointLight);
 
-  // Create geometry based on type
-  switch (geometryType) {
-    case "toroid": {
-      const tubeGeometry = new THREE.TorusGeometry(1, 0.4, 16, 100);
-      mesh = new THREE.Mesh(tubeGeometry, new THREE.MeshPhongMaterial({ color: 0x0ea5e9, emissive: 0x0a4f8f }));
-      break;
-    }
-    case "sphere-coil": {
-      const group = new THREE.Group();
-      const sphere = new THREE.Mesh(new THREE.SphereGeometry(0.8, 32, 32), new THREE.MeshPhongMaterial({ color: 0x10b981, emissive: 0x047857 }));
-      const toroid = new THREE.Mesh(new THREE.TorusGeometry(1.2, 0.15, 16, 100), new THREE.MeshPhongMaterial({ color: 0x0ea5e9, emissive: 0x0a4f8f }));
-      toroid.rotation.x = Math.PI / 4;
-      group.add(sphere);
-      group.add(toroid);
-      mesh = group;
-      break;
-    }
-    case "oscillator": {
-      const group = new THREE.Group();
-      const cylinder = new THREE.Mesh(new THREE.CylinderGeometry(0.3, 0.3, 1.5, 32), new THREE.MeshPhongMaterial({ color: 0xa855f7, emissive: 0x7c3aed }));
-      const coil = new THREE.Mesh(new THREE.TorusGeometry(0.6, 0.1, 16, 100), new THREE.MeshPhongMaterial({ color: 0x0ea5e9 }));
-      coil.rotation.z = Math.PI / 3;
-      group.add(cylinder);
-      group.add(coil);
-      mesh = group;
-      break;
-    }
-    case "chamber": {
-      const box = new THREE.Mesh(new THREE.BoxGeometry(1, 1.2, 1), new THREE.MeshPhongMaterial({ color: 0xf59e0b, emissive: 0xd97706, wireframe: true }));
-      mesh = box;
-      break;
-    }
-    case "rotor": {
-      const disk = new THREE.Mesh(new THREE.CylinderGeometry(1, 1, 0.2, 32), new THREE.MeshPhongMaterial({ color: 0x8b5cf6, emissive: 0x6d28d9 }));
-      const shaft = new THREE.Mesh(new THREE.CylinderGeometry(0.1, 0.1, 1.5, 16), new THREE.MeshPhongMaterial({ color: 0x6b7280 }));
-      const group = new THREE.Group();
-      group.add(disk);
-      group.add(shaft);
-      mesh = group;
-      break;
-    }
-    case "antenna": {
-      const group = new THREE.Group();
-      for (let i = 0; i < 4; i++) {
-        const rod = new THREE.Mesh(new THREE.CylinderGeometry(0.05, 0.05, 1.2, 8), new THREE.MeshPhongMaterial({ color: 0xfbbf24 }));
-        rod.position.set(Math.cos(i * Math.PI / 2) * 0.5, 0.3, Math.sin(i * Math.PI / 2) * 0.5);
-        group.add(rod);
+    let mesh;
+
+    // Create geometry based on type
+    switch (geometryType) {
+      case "toroid": {
+        const tubeGeometry = new THREE.TorusGeometry(1, 0.4, 16, 100);
+        mesh = new THREE.Mesh(tubeGeometry, new THREE.MeshPhongMaterial({ color: 0x0ea5e9, emissive: 0x0a4f8f }));
+        break;
       }
-      const base = new THREE.Mesh(new THREE.SphereGeometry(0.3, 16, 16), new THREE.MeshPhongMaterial({ color: 0x6b7280 }));
-      group.add(base);
-      mesh = group;
-      break;
+      case "sphere-coil": {
+        const group = new THREE.Group();
+        const sphere = new THREE.Mesh(new THREE.SphereGeometry(0.8, 32, 32), new THREE.MeshPhongMaterial({ color: 0x10b981, emissive: 0x047857 }));
+        const toroid = new THREE.Mesh(new THREE.TorusGeometry(1.2, 0.15, 16, 100), new THREE.MeshPhongMaterial({ color: 0x0ea5e9, emissive: 0x0a4f8f }));
+        toroid.rotation.x = Math.PI / 4;
+        group.add(sphere);
+        group.add(toroid);
+        mesh = group;
+        break;
+      }
+      case "oscillator": {
+        const group = new THREE.Group();
+        const cylinder = new THREE.Mesh(new THREE.CylinderGeometry(0.3, 0.3, 1.5, 32), new THREE.MeshPhongMaterial({ color: 0xa855f7, emissive: 0x7c3aed }));
+        const coil = new THREE.Mesh(new THREE.TorusGeometry(0.6, 0.1, 16, 100), new THREE.MeshPhongMaterial({ color: 0x0ea5e9 }));
+        coil.rotation.z = Math.PI / 3;
+        group.add(cylinder);
+        group.add(coil);
+        mesh = group;
+        break;
+      }
+      case "chamber": {
+        const box = new THREE.Mesh(new THREE.BoxGeometry(1, 1.2, 1), new THREE.MeshPhongMaterial({ color: 0xf59e0b, emissive: 0xd97706, wireframe: true }));
+        mesh = box;
+        break;
+      }
+      case "rotor": {
+        const disk = new THREE.Mesh(new THREE.CylinderGeometry(1, 1, 0.2, 32), new THREE.MeshPhongMaterial({ color: 0x8b5cf6, emissive: 0x6d28d9 }));
+        const shaft = new THREE.Mesh(new THREE.CylinderGeometry(0.1, 0.1, 1.5, 16), new THREE.MeshPhongMaterial({ color: 0x6b7280 }));
+        const group = new THREE.Group();
+        group.add(disk);
+        group.add(shaft);
+        mesh = group;
+        break;
+      }
+      case "antenna": {
+        const group = new THREE.Group();
+        for (let i = 0; i < 4; i++) {
+          const rod = new THREE.Mesh(new THREE.CylinderGeometry(0.05, 0.05, 1.2, 8), new THREE.MeshPhongMaterial({ color: 0xfbbf24 }));
+          rod.position.set(Math.cos(i * Math.PI / 2) * 0.5, 0.3, Math.sin(i * Math.PI / 2) * 0.5);
+          group.add(rod);
+        }
+        const base = new THREE.Mesh(new THREE.SphereGeometry(0.3, 16, 16), new THREE.MeshPhongMaterial({ color: 0x6b7280 }));
+        group.add(base);
+        mesh = group;
+        break;
+      }
+      default: {
+        mesh = new THREE.Mesh(new THREE.IcosahedronGeometry(1, 4), new THREE.MeshPhongMaterial({ color: 0x0ea5e9, emissive: 0x0a4f8f }));
+      }
     }
-    default: {
-      mesh = new THREE.Mesh(new THREE.IcosahedronGeometry(1, 4), new THREE.MeshPhongMaterial({ color: 0x0ea5e9, emissive: 0x0a4f8f }));
-    }
+
+    scene.add(mesh);
+
+    // Animation loop
+    let animationId;
+    let isRunning = true;
+
+    const animate = () => {
+      if (!isRunning) return;
+      animationId = requestAnimationFrame(animate);
+      if (mesh.rotation) {
+        mesh.rotation.x += 0.005;
+        mesh.rotation.y += 0.008;
+      }
+      renderer.render(scene, camera);
+    };
+    animate();
+
+    const handleResize = () => {
+      const newWidth = canvas.clientWidth || width;
+      const newHeight = canvas.clientHeight || height;
+      if (newWidth > 0 && newHeight > 0) {
+        camera.aspect = newWidth / newHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(newWidth, newHeight);
+      }
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      isRunning = false;
+      window.removeEventListener("resize", handleResize);
+      cancelAnimationFrame(animationId);
+      renderer.dispose();
+    };
+  } catch (error) {
+    console.warn("Three.js scene initialization failed:", error);
+    return () => {};
   }
-
-  scene.add(mesh);
-
-  // Animation loop
-  let animationId;
-  const animate = () => {
-    animationId = requestAnimationFrame(animate);
-    if (mesh.rotation) {
-      mesh.rotation.x += 0.005;
-      mesh.rotation.y += 0.008;
-    }
-    renderer.render(scene, camera);
-  };
-  animate();
-
-  const handleResize = () => {
-    const newWidth = canvasRef.current?.clientWidth || width;
-    const newHeight = canvasRef.current?.clientHeight || height;
-    camera.aspect = newWidth / newHeight;
-    camera.updateProjectionMatrix();
-    renderer.setSize(newWidth, newHeight);
-  };
-
-  window.addEventListener("resize", handleResize);
-
-  return () => {
-    window.removeEventListener("resize", handleResize);
-    cancelAnimationFrame(animationId);
-    renderer.dispose();
-  };
 }
 
 export default function Invention3DCard({ invention, tier }) {
