@@ -53,7 +53,7 @@ const TIERS = [
   {
     id: "builder",
     name: "Builder",
-    price: 58,
+    price: 49,
     color: "#10b981",
     badge: null,
     description: "All 23 inventions + 26 courses with full access & PDFs",
@@ -111,7 +111,7 @@ const TIERS = [
   {
     id: "pro",
     name: "Pro",
-    price: 97,
+    price: 89,
     color: "#a855f7",
     description: "Everything in Researcher & Builder plans + full IP commercialization suite",
     features: [
