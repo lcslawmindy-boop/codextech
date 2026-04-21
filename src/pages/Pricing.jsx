@@ -56,9 +56,8 @@ const TIERS = [
     price: 49,
     color: "#10b981",
     badge: null,
-    description: "All 23 inventions + 26 courses with full access & PDFs",
+    description: "Complete course library with full access & PDFs",
     features: [
-      "ALL 23 invention build plans (full access + PDFs)",
       "Course Library (26+ courses)",
       "25% off all à la carte courses & build plans",
       "Bill of Materials & supplier guides",
@@ -87,9 +86,8 @@ const TIERS = [
     price: 39,
     color: "#3b82f6",
     badge: "MOST POPULAR",
-    description: "All 23 build plans + AI tools, IP analysis & prior art search",
+    description: "AI tools, IP analysis & prior art search",
     features: [
-      "ALL 23 invention build plans (full access)",
       "50% off all à la carte courses & build plans",
       "AI Invention Forge (unlimited dossiers)",
       "AI Patent Claims Generator",
@@ -115,9 +113,8 @@ const TIERS = [
     name: "Pro",
     price: 89,
     color: "#a855f7",
-    description: "Everything in Researcher & Builder plans + full IP commercialization suite",
+    description: "Full IP commercialization suite + all platform tools",
     features: [
-      "EVERYTHING in Researcher & Builder plans",
       "50% off all à la carte courses & build plans",
       "ALL 40+ AI tools unlocked",
       "Downloadable PDFs for all build plans",
