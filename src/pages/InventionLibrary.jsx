@@ -4,7 +4,7 @@ import { ArrowLeft, Film, Download, FileText, Loader2, Search, X, Lock } from "l
 import { jsPDF } from "jspdf";
 import { businessItems } from "../lib/businessItems";
 import { inventionSteps } from "../lib/inventionSteps";
-import { deviceImages } from "../lib/deviceImages";
+import Invention3DCardSmall from "../components/Invention3DCardSmall";
 import InventionBuildVideo from "../components/InventionBuildVideo";
 import { base44 } from "@/api/base44Client";
 
@@ -406,17 +406,12 @@ export default function InventionLibrary() {
             const color = inv.color || colors[i % colors.length];
             const isPdfLoading = generatingPdf === inv.title;
 
-            const deviceImage = deviceImages[inv.title];
-
             return (
               <div key={i} className="bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden flex flex-col"
                 style={{ borderLeftColor: color, borderLeftWidth: 3 }}>
-                {/* Device Image */}
-                <div className="w-full h-40 bg-gradient-to-br from-gray-800 to-gray-700 overflow-hidden border-b border-gray-700 flex items-center justify-center relative">
-                  <div className="absolute inset-0 flex items-center justify-center text-5xl pointer-events-none">{inv.icon}</div>
-                  {deviceImage && (
-                    <img src={deviceImage} alt={inv.title} className="w-full h-full object-cover relative z-10" />
-                  )}
+                {/* 3D Device Visualization */}
+                <div className="w-full h-40 bg-gradient-to-br from-gray-800 to-gray-700 overflow-hidden border-b border-gray-700">
+                  <Invention3DCardSmall invention={inv} />
                 </div>
                 {/* Card header */}
                 <div className="p-4 flex-1">
