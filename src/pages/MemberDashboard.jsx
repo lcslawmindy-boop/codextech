@@ -50,7 +50,7 @@ export default function MemberDashboard() {
     pro: { bg: "#a855f7", text: "purple" }
   };
 
-  const tierColor = tierColors[tier];
+  const tierColor = tier ? tierColors[tier] : tierColors.builder;
 
   return (
     <div className="min-h-screen bg-gray-950 text-white">
