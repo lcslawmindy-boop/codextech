@@ -120,6 +120,7 @@ import MemberDashboard from './pages/MemberDashboard';
 import PublicPreview from './pages/PublicPreview';
 import AcquisitionPitchDeck from './pages/AcquisitionPitchDeck';
 import InstitutionalLicensing from './pages/InstitutionalLicensing';
+import ReferralDashboard from './pages/ReferralDashboard';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -263,6 +264,7 @@ const AuthenticatedApp = () => {
           <Route path="/preview" element={<PublicPreview />} />
           <Route path="/acquire" element={<AcquisitionPitchDeck />} />
           <Route path="/institutional-licensing" element={<InstitutionalLicensing />} />
+          <Route path="/referrals" element={<ReferralDashboard />} />
 
           {/* Admin-only routes */}
           <Route element={<AdminGuard />}>

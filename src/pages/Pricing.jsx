@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { ArrowLeft, Check, Zap, Shield, BookOpen, Download, Users, Star, Lock, ChevronRight, Sparkles, FlaskConical, Briefcase, Mail, Activity, CheckCircle2, Flame, ChevronDown, ChevronUp, ExternalLink } from "lucide-react";
+import { ArrowLeft, Check, Zap, Shield, BookOpen, Download, Users, Star, Lock, ChevronRight, Sparkles, FlaskConical, Briefcase, Mail, Activity, CheckCircle2, Flame, ChevronDown, ChevronUp, ExternalLink, Gift } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import { useTier } from "@/hooks/useTier";
 import { deviceImages } from "@/lib/deviceImages";
@@ -477,12 +477,17 @@ export default function Pricing() {
   return (
     <div className="min-h-screen bg-gray-950 text-white">
       {/* Header */}
-      <div className="border-b border-gray-800 bg-gray-900/80 px-5 py-4 flex items-center gap-4">
-        <Link to="/" className="flex items-center gap-2 text-gray-400 hover:text-white text-sm transition-colors">
-          <ArrowLeft size={14} /> Back
+      <div className="border-b border-gray-800 bg-gray-900/80 px-5 py-4 flex items-center justify-between gap-4">
+        <div className="flex items-center gap-4">
+          <Link to="/" className="flex items-center gap-2 text-gray-400 hover:text-white text-sm transition-colors">
+            <ArrowLeft size={14} /> Back
+          </Link>
+          <div className="w-px h-5 bg-gray-700" />
+          <h1 className="text-white font-black text-lg">ZARP Pricing</h1>
+        </div>
+        <Link to="/referrals" className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-green-900/40 border border-green-700 text-green-300 hover:bg-green-900/60 transition-all text-xs font-bold">
+          <Gift size={14} /> Earn Credits
         </Link>
-        <div className="w-px h-5 bg-gray-700" />
-        <h1 className="text-white font-black text-lg">ZARP Pricing</h1>
       </div>
 
       {/* Hero */}
