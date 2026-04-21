@@ -53,7 +53,7 @@ const TIERS = [
   {
     id: "builder",
     name: "Builder",
-    price: 49,
+    price: 39,
     color: "#10b981",
     badge: null,
     description: "Course library & build essentials",
@@ -83,7 +83,7 @@ const TIERS = [
   {
     id: "researcher",
     name: "Researcher",
-    price: 39,
+    price: 59,
     color: "#3b82f6",
     badge: "MOST POPULAR",
     description: "AI tools, IP analysis & prior art search",
