@@ -254,6 +254,17 @@ function ItemCard({ item, userTier }) {
   const [checkingPurchase, setCheckingPurchase] = useState(true);
   const details = ITEM_DETAILS[item.name];
   
+  // Calculate discounted price based on tier
+  let displayPrice = item.price;
+  let discount = 0;
+  if (userTier === "builder") {
+    discount = 0.25;
+    displayPrice = Math.round(item.price * 0.75);
+  } else if (["researcher", "pro"].includes(userTier)) {
+    discount = 0.50;
+    displayPrice = Math.round(item.price * 0.50);
+  }
+  
   // Determine if user has access to this item
   const hasAccess = 
     item.category === "Course" 
@@ -405,19 +416,39 @@ function ItemCard({ item, userTier }) {
             className="flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg text-xs font-bold bg-red-900/60 hover:bg-red-800/60 border border-red-700 text-red-300 transition-colors w-full">
             🔐 Licensing Inquiries Only
           </a>
-        ) : hasAccess ? (
-          <div className="flex items-center gap-2 text-xs text-green-400 font-bold">
-            <CheckCircle2 size={12} /> ✓ You have access
-          </div>
         ) : (
           <>
-            <div className="flex items-center gap-2 text-xs text-yellow-400 font-bold">
-              <Lock size={12} /> {item.category === "Course" ? "Included in Builder Membership" : "Included with all plans"}
+            {/* Price Display */}
+            <div className="p-2 rounded-lg bg-gray-800/50">
+              {userTier && discount > 0 ? (
+                <div className="space-y-1">
+                  <div className="flex items-center justify-between">
+                    <span className="text-gray-400 text-xs">Original:</span>
+                    <span className="text-gray-500 text-xs line-through">${item.price}</span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-green-400 text-xs font-bold">{Math.round(discount * 100)}% off:</span>
+                    <span className="text-green-400 text-sm font-black">${displayPrice}</span>
+                  </div>
+                </div>
+              ) : (
+                <div className="flex items-center justify-between">
+                  <span className="text-gray-400 text-xs">Price:</span>
+                  <span className="text-white text-sm font-bold">${item.price}</span>
+                </div>
+              )}
             </div>
-            <button onClick={handleCheckout}
-              className="w-full px-3 py-2 rounded-lg text-xs font-bold bg-cyan-700 hover:bg-cyan-600 text-white transition-all">
-              💳 Buy Now
-            </button>
+
+            {hasAccess ? (
+              <div className="flex items-center gap-2 text-xs text-green-400 font-bold py-2">
+                <CheckCircle2 size={12} /> ✓ You have access
+              </div>
+            ) : (
+              <button onClick={handleCheckout}
+                className="w-full px-3 py-2 rounded-lg text-xs font-bold bg-cyan-700 hover:bg-cyan-600 text-white transition-all">
+                💳 Buy Now ${displayPrice || item.price}
+              </button>
+            )}
           </>
         )}
       </div>
@@ -508,24 +539,8 @@ export default function Pricing() {
   const [newsletterStatus, setNewsletterStatus] = useState(null);
   const [showFilter, setShowFilter] = useState("all"); // "all", "available", "locked"
 
-  // Filter items based on membership tier
-  const canAccessBuilder = tier && ["builder", "pro"].includes(tier);
-  const canAccessResearcher = tier && ["researcher", "pro"].includes(tier);
-  const canAccessPro = tier === "pro";
-  
+  // Show all items regardless of tier
   let visibleItems = [...INDIVIDUAL_BUILDS, ...INDIVIDUAL_COURSES];
-  
-  if (showFilter === "available") {
-    visibleItems = visibleItems.filter(item => {
-      if (item.category === "Course") return canAccessBuilder || canAccessResearcher;
-      return canAccessBuilder;
-    });
-  } else if (showFilter === "locked") {
-    visibleItems = visibleItems.filter(item => {
-      if (item.category === "Course") return !canAccessBuilder && !canAccessResearcher;
-      return !canAccessBuilder;
-    });
-  }
 
   return (
     <div className="min-h-screen bg-gray-950 text-white">
@@ -628,67 +643,28 @@ export default function Pricing() {
 
         {/* ── À LA CARTE SECTION ── */}
         <div className="mb-16">
-          <div className="flex items-center justify-between mb-6">
-            <div className="flex items-center gap-3">
-              <ShoppingCart size={24} className="text-yellow-400" />
-              <div>
-                <h3 className="text-white font-black text-2xl">Build Plans & Courses</h3>
-                <p className="text-gray-500 text-sm">Each build plan includes: BOM, parts list, supplier recommendations, PDF, step-by-step instructions, and build video</p>
-              </div>
+          <div className="flex items-center gap-3 mb-6">
+            <ShoppingCart size={24} className="text-yellow-400" />
+            <div>
+              <h3 className="text-white font-black text-2xl">Build Plans & Courses</h3>
+              <p className="text-gray-500 text-sm">Each build plan includes: BOM, parts list, supplier recommendations, PDF, step-by-step instructions, and build video</p>
             </div>
-            {tier && (
-              <div className="flex gap-2">
-                <button
-                  onClick={() => setShowFilter("all")}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
-                    showFilter === "all"
-                      ? "bg-cyan-600 text-white"
-                      : "bg-gray-800 text-gray-400 hover:bg-gray-700"
-                  }`}
-                >
-                  All
-                </button>
-                <button
-                  onClick={() => setShowFilter("available")}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
-                    showFilter === "available"
-                      ? "bg-green-600 text-white"
-                      : "bg-gray-800 text-gray-400 hover:bg-gray-700"
-                  }`}
-                >
-                  ✓ Available
-                </button>
-                <button
-                  onClick={() => setShowFilter("locked")}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
-                    showFilter === "locked"
-                      ? "bg-red-600 text-white"
-                      : "bg-gray-800 text-gray-400 hover:bg-gray-700"
-                  }`}
-                >
-                  🔒 Locked
-                </button>
-              </div>
-            )}
           </div>
 
           {tier && (
             <div className="mb-4 p-3 rounded-lg bg-gray-900/60 border border-gray-800 text-xs text-gray-400">
               <strong>Your tier:</strong> {tier.charAt(0).toUpperCase() + tier.slice(1)} membership
+              {[25, 50].includes(Math.round((tier === "builder" ? 0.25 : tier === "researcher" ? 0.50 : 0) * 100)) && (
+                <span className="ml-2 text-green-400 font-bold">({tier === "builder" ? "25" : "50"}% discount applied)</span>
+              )}
             </div>
           )}
 
-          {visibleItems.length === 0 ? (
-            <div className="text-center py-12 text-gray-500">
-              <p className="text-sm">No items to display for this filter.</p>
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 mb-8">
-              {visibleItems.map((item, i) => (
-                <ItemCard key={i} item={item} userTier={tier} />
-              ))}
-            </div>
-          )}
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 mb-8">
+            {visibleItems.map((item, i) => (
+              <ItemCard key={i} item={item} userTier={tier} />
+            ))}
+          </div>
         </div>
 
 
