@@ -59,7 +59,6 @@ export default function PublicPreview() {
             <span className="hidden md:block text-gray-600 text-xs ml-2">Zenith Apex Research Portfolio</span>
           </div>
           <div className="flex items-center gap-3">
-            <Link to="/beta-apply" className="text-gray-400 hover:text-white text-sm font-semibold transition-colors hidden md:block">Apply for Access</Link>
             <Link to="/pricing" className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-cyan-700 hover:bg-cyan-600 text-white text-sm font-black transition-all">
               Get Started <ArrowRight size={13} />
             </Link>
@@ -83,9 +82,9 @@ export default function PublicPreview() {
             ZARP is the first end-to-end platform for inventors — from AI-generated invention dossiers and patent drafts to an IP marketplace with global buyers. Everything a millionaire or billionaire inventor needs in one place.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-6">
-            <Link to="/beta-apply"
+            <Link to="/pricing"
               className="flex items-center gap-2 px-8 py-4 rounded-xl font-black text-base text-black bg-gradient-to-r from-cyan-400 to-green-400 hover:opacity-90 transition-all shadow-[0_4px_24px_rgba(14,165,233,0.4)] w-full sm:w-auto justify-center">
-              <Zap size={16} /> Apply for Access
+              <Zap size={16} /> Get Started — $39/mo
             </Link>
             <Link to="/pricing"
               className="flex items-center gap-2 px-8 py-4 rounded-xl font-black text-base border border-gray-700 text-gray-300 hover:border-gray-500 transition-all w-full sm:w-auto justify-center">
@@ -217,9 +216,9 @@ export default function PublicPreview() {
             Join researchers, independent inventors, and IP professionals using ZARP to create, protect, and monetize breakthrough inventions.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <Link to="/beta-apply"
+            <Link to="/pricing"
               className="flex items-center justify-center gap-2 px-8 py-4 rounded-xl font-black text-base text-black bg-gradient-to-r from-cyan-400 to-green-400 hover:opacity-90 transition-all shadow-[0_4px_24px_rgba(14,165,233,0.3)]">
-              <Zap size={16} /> Apply for Access
+              <Zap size={16} /> Get Started — $39/mo
             </Link>
             <Link to="/pricing"
               className="flex items-center justify-center gap-2 px-8 py-4 rounded-xl font-black text-base border border-gray-700 text-gray-300 hover:border-gray-500 transition-all">
@@ -243,7 +242,7 @@ export default function PublicPreview() {
             <Link to="/terms" className="hover:text-gray-300 transition-colors">Terms of Service</Link>
             <Link to="/refund-policy" className="hover:text-gray-300 transition-colors">Refund Policy</Link>
             <Link to="/pricing" className="hover:text-gray-300 transition-colors">Pricing</Link>
-            <Link to="/beta-apply" className="hover:text-gray-300 transition-colors">Apply</Link>
+
           </div>
           <p className="text-gray-700 text-xs">© 2026 Zenith Apex LLC. All rights reserved.</p>
         </div>

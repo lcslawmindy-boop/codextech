@@ -306,11 +306,7 @@ export default function Welcome() {
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
             <Link to="/pricing"
               className="flex items-center gap-2 px-8 py-4 rounded-xl font-black text-base text-black bg-gradient-to-r from-cyan-400 to-green-400 hover:opacity-90 transition-all shadow-[0_4px_24px_rgba(14,165,233,0.4)] w-full sm:w-auto justify-center">
-              <Zap size={16} /> Start Researcher — $97/mo
-            </Link>
-            <Link to="/beta-apply"
-              className="flex items-center gap-2 px-8 py-4 rounded-xl font-black text-base border border-gray-700 text-gray-300 hover:border-gray-500 transition-all w-full sm:w-auto justify-center">
-              Apply for Founding Access
+              <Zap size={16} /> Get All Access — $39/mo
             </Link>
           </div>
           <p className="text-gray-600 text-xs mt-4">🔒 Secured by Stripe · Cancel anytime · Instant access after payment</p>
