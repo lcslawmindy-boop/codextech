@@ -382,7 +382,7 @@ function ItemCard({ item }) {
 
       <div className="px-5 py-3 border-t border-gray-800 bg-cyan-950/20">
         <div className="flex items-center gap-2 text-xs text-cyan-400 font-bold">
-          <Check size={12} /> {item.category === "Course" ? "Included with $66 membership" : "Included with all plans"}
+          <Check size={12} /> {item.category === "Course" ? "Included with $58 membership" : "Included with all plans"}
         </div>
       </div>
     </div>
