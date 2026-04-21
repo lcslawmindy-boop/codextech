@@ -46,135 +46,31 @@ const INDIVIDUAL_COURSES = [
   { name: "Investor Pitch Fundamentals", price: 297, category: "Course", icon: "💼" },
 ];
 
-const SUBSCRIPTION_TIERS = [
-  {
-    id: "all-access",
-    name: "All Access Member",
-    price: 39,
-    color: "#22d3ee",
-    badge: "BEST VALUE",
-    description: "Full platform + all 23 invention plans included",
-    features: [
-      "ALL 23 invention build plans (full access)",
-      "ALL 40+ platform tools unlocked",
-      "AI Invention Forge (unlimited)",
-      "AI Patent Claims Generator",
-      "AI Patent Drafting Tool",
-      "FTO Analysis & IP Valuation",
-      "EM Lab simulators & visualization",
-      "Prior Art Archive with AI search",
-      "Investor CRM & Pitch Builder",
-      "IP Portfolio Health Dashboard",
-      "Co-Inventor Matching",
-      "Build Video generator",
-      "Cancel anytime",
-    ],
-    locked: [],
-  },
-  {
-    id: "researcher",
-    name: "Researcher Millionaires Club",
-    price: 97,
-    color: "#6366f1",
-    badge: "MOST POPULAR",
-    description: "50% off all invention plans & courses",
-    features: [
-      "AI Invention Forge (unlimited)",
-      "AI Patent Claims Generator",
-      "EM Lab simulators & visualization",
-      "Prior Art Archive with AI search",
-      "Build Video generator",
-      "IP Valuation & FTO Analysis",
-      "50% off all invention plans & courses",
-      "Cancel anytime",
-    ],
-    locked: ["Patent Drafting Tool", "Investor CRM", "VDR Portal"],
-  },
-  {
-    id: "forge-dossier",
-    name: "Invention Forge Dossier",
-    price: 99,
-    color: "#f59e0b",
-    description: "One complete AI invention dossier with all materials",
-    isOneTime: true,
-    features: [
-      "1 AI Invention Forge Dossier (complete package)",
-      "AI Patent Draft (for your invention)",
-      "Pitch Deck Builder (investor-ready)",
-      "IP Valuation Report",
-      "Investor Potential List (pre-screened matches)",
-      "AI Patent Claims Generator",
-      "EM Lab simulators & visualization",
-      "Prior Art Archive with AI search",
-      "Support",
-    ],
-    locked: [],
-  },
-  {
-    id: "all-courses",
-    name: "All Access Courses",
-    price: 497,
-    color: "#ec4899",
-    description: "Unlimited access to all 20+ courses",
-    isOneTime: true,
-    features: [
-      "All 20+ courses in our library",
-      "Scalar Electromagnetics Fundamentals",
-      "Bearden Energy from the Vacuum Theory",
-      "Building EM Device Prototypes",
-      "Patent Strategy for Energy Inventors",
-      "Quantum Field Theory Essentials",
-      "Bioelectromagnetics & Health",
-      "Prior Art Research & Analysis",
-      "Investor Pitch Fundamentals",
-      "Lifetime access to all course materials",
-      "Support",
-    ],
-    locked: [],
-  },
-  {
-    id: "pro",
-    name: "Pro Billionaires Club",
-    price: 247,
-    color: "#22c55e",
-    description: "75% off all invention plans & courses + IP suite",
-    features: [
-      "AI Invention Forge (unlimited)",
-      "AI Patent Claims Generator",
-      "AI Patent Drafting Tool (unlimited)",
-      "Investor CRM & Pitch Deck Builder",
-      "Virtual Data Room (VDR)",
-      "Acquisition CRM & pipeline management",
-      "IP Portfolio Health Dashboard",
-      "Co-Inventor Matching Network",
-      "75% off all invention plans & courses",
-      "Priority support",
-      "Cancel anytime",
-    ],
-    locked: [],
-  },
-  {
-    id: "marketplace",
-    name: "Inventor Marketplace",
-    price: 197,
-    color: "#ec4899",
-    description: "List inventions, connect with buyers — ZARP takes 5% commission",
-    features: [
-      "Unlimited invention listings",
-      "Global buyer marketplace access",
-      "Built-in messaging & negotiation tools",
-      "Deal management dashboard",
-      "Secure escrow & payment processing",
-      "IP documentation library",
-      "Buyer matching algorithms",
-      "Co-inventor collaboration tools",
-      "Monthly market reports & trends",
-      "Community of 1000+ inventors & investors",
-      "ZARP takes 5% commission on successful deals",
-    ],
-    locked: [],
-  },
-];
+const PLAN = {
+  id: "all-access",
+  name: "All Access Member",
+  price: 39,
+  color: "#22d3ee",
+  description: "Everything unlocked — all tools, all invention plans, all courses",
+  features: [
+    "ALL 23 invention build plans (full access + PDFs)",
+    "ALL 40+ platform tools unlocked",
+    "AI Invention Forge (unlimited dossiers)",
+    "AI Patent Drafting Tool (USPTO-compliant)",
+    "AI Patent Claims Generator",
+    "FTO Analysis & IP Valuation",
+    "EM Lab simulators & visualization",
+    "Prior Art Archive with AI search (200+ entries)",
+    "Investor CRM & Pitch Builder",
+    "Virtual Data Room (VDR)",
+    "IP Portfolio Health Dashboard",
+    "Co-Inventor Matching Network",
+    "Build Video generator",
+    "SBIR Grant Pipeline",
+    "Patent Intelligence Monitor",
+    "Cancel anytime · No long-term commitment",
+  ],
+};
 
 const ITEM_DETAILS = {
   "Anenergy Pump Demonstration Circuit": { 
@@ -425,33 +321,16 @@ function ItemCard({ item }) {
         )}
       </div>
 
-      <div className="px-5 py-3 border-t border-gray-800 bg-gray-800/20 space-y-2">
-        <div className="flex items-center justify-between text-xs">
-          <span className="text-gray-500">Regular price:</span>
-          <span className="font-black text-cyan-400">${item.price}</span>
+      <div className="px-5 py-3 border-t border-gray-800 bg-cyan-950/20">
+        <div className="flex items-center gap-2 text-xs text-cyan-400 font-bold">
+          <Check size={12} /> Included with $39/mo All Access Membership
         </div>
-        <div className="flex items-center justify-between text-xs">
-          <span className="text-gray-500">Researcher (50% off):</span>
-          <span className="font-black text-green-400">${(item.price * 0.5).toFixed(0)}</span>
-        </div>
-        <div className="flex items-center justify-between text-xs">
-          <span className="text-gray-500">Pro (75% off):</span>
-          <span className="font-black text-emerald-400">${(item.price * 0.25).toFixed(0)}</span>
-        </div>
-        <button
-          onClick={handleCheckout}
-          className="w-full mt-2 py-2 rounded-lg bg-cyan-700 hover:bg-cyan-600 text-white text-xs font-bold transition-all"
-        >
-          Buy Now
-        </button>
       </div>
     </div>
   );
 }
 
-function PlanCard({ plan }) {
-  const isPopular = plan.badge === "MOST POPULAR";
-
+function PlanCard() {
   const handleCheckout = async () => {
     if (window !== window.top) {
       alert("Checkout only works from the published app. Please open the app directly.");
@@ -459,72 +338,46 @@ function PlanCard({ plan }) {
     }
     const baseUrl = window.location.origin;
     const response = await base44.functions.invoke("createCheckoutSession", {
-      title: plan.name,
-      priceInCents: plan.price * 100,
-      description: plan.description,
-      category: plan.isOneTime ? "one_time" : "membership",
-      mode: plan.isOneTime ? "payment" : "subscription",
-      interval: plan.isOneTime ? undefined : "month",
-      successUrl: `${baseUrl}/checkout?success=true&product=${plan.id}`,
+      title: PLAN.name,
+      priceInCents: PLAN.price * 100,
+      description: PLAN.description,
+      category: "membership",
+      mode: "subscription",
+      interval: "month",
+      successUrl: `${baseUrl}/checkout?success=true&product=${PLAN.id}`,
       cancelUrl: `${baseUrl}/pricing`,
     });
     if (response.data?.url) window.location.href = response.data.url;
   };
 
   return (
-    <div
-      className={`relative bg-gray-900 rounded-2xl border overflow-hidden flex flex-col ${
-        isPopular ? "border-indigo-600 shadow-xl shadow-indigo-900/20 scale-105" : "border-gray-800"
-      }`}
-    >
-      {plan.badge && (
-        <div
-          className="text-center py-2 text-xs font-black tracking-widest"
-          style={{ backgroundColor: plan.color + "25", color: plan.color }}
-        >
-          {plan.badge}
-        </div>
-      )}
-      <div className="p-6 flex flex-col flex-1">
-        <h3 className="text-white font-black text-xl mb-1">{plan.name}</h3>
-        <p className="text-gray-500 text-sm mb-4">{plan.description}</p>
+    <div className="bg-gray-900 rounded-2xl border-2 border-cyan-500 overflow-hidden shadow-2xl shadow-cyan-900/30 max-w-md mx-auto">
+      <div className="text-center py-3 text-xs font-black tracking-widest bg-cyan-500/20 text-cyan-400">
+        ONE SIMPLE PLAN — EVERYTHING INCLUDED
+      </div>
+      <div className="p-8">
+        <h3 className="text-white font-black text-2xl mb-1">{PLAN.name}</h3>
+        <p className="text-gray-400 text-sm mb-6">{PLAN.description}</p>
         <div className="flex items-end gap-1 mb-1">
-          <span className="text-4xl font-black" style={{ color: plan.color }}>
-            ${plan.price}
-          </span>
-          <span className="text-gray-500 text-sm mb-1">{plan.isOneTime ? "one-time" : "/month"}</span>
+          <span className="text-6xl font-black text-cyan-400">$39</span>
+          <span className="text-gray-500 text-lg mb-2">/month</span>
         </div>
-        <p className="text-gray-600 text-xs mb-5">{plan.isOneTime ? "One-time purchase" : "Cancel anytime • No long-term commitment"}</p>
-
-        <div className="space-y-2 mb-6 flex-1">
-          {plan.features.map((f, i) => (
+        <p className="text-gray-600 text-xs mb-8">Cancel anytime · No long-term commitment · Instant access</p>
+        <div className="grid grid-cols-1 gap-2 mb-8">
+          {PLAN.features.map((f, i) => (
             <div key={i} className="flex items-start gap-2">
-              <Check size={12} className="flex-shrink-0 mt-0.5" style={{ color: plan.color }} />
-              <span className="text-gray-300 text-xs leading-relaxed">{f}</span>
-            </div>
-          ))}
-          {plan.locked.map((f, i) => (
-            <div key={i} className="flex items-start gap-2 opacity-40">
-              <Lock size={12} className="flex-shrink-0 mt-0.5 text-gray-600" />
-              <span className="text-gray-600 text-xs line-through">{f}</span>
+              <Check size={13} className="flex-shrink-0 mt-0.5 text-cyan-400" />
+              <span className="text-gray-300 text-sm leading-relaxed">{f}</span>
             </div>
           ))}
         </div>
-
         <button
           onClick={handleCheckout}
-          className="w-full py-3 rounded-xl font-black text-sm transition-all text-white"
-          style={{
-            backgroundColor: plan.color,
-            boxShadow: `0 4px 20px ${plan.color}40`,
-          }}
+          className="w-full py-4 rounded-xl font-black text-base text-black transition-all bg-cyan-400 hover:bg-cyan-300 shadow-[0_4px_24px_rgba(34,211,238,0.4)]"
         >
-          {plan.isOneTime 
-            ? `Get ${plan.name} — $${plan.price}` 
-            : plan.name === "Researcher" 
-              ? `Go with Researcher — $${plan.price}/mo` 
-              : `Upgrade to ${plan.name} — $${plan.price}/mo`}
+          Get All Access — $39/mo
         </button>
+        <p className="text-center text-gray-600 text-xs mt-3">🔒 Secured by Stripe</p>
       </div>
     </div>
   );
@@ -552,8 +405,9 @@ export default function Pricing() {
           <span className="text-cyan-400">Build Your IP Empire</span>
         </h2>
         <p className="text-gray-400 text-lg max-w-2xl mx-auto leading-relaxed mb-6">
-          Purchase individual build plans and courses on-demand, or save big with a monthly subscription for unlimited access to everything.
+          One plan. Everything included. All 23 invention build plans, all 40+ tools, unlimited AI — for $39/mo.
         </p>
+        <PlanCard />
       </div>
 
       <div className="px-5 pb-12 max-w-7xl mx-auto">
@@ -578,22 +432,7 @@ export default function Pricing() {
           </div>
         </div>
 
-        {/* ── SUBSCRIPTION TIERS ── */}
-        <div className="mb-8">
-          <div className="flex items-center gap-3 mb-8">
-            <Flame size={24} className="text-red-400" />
-            <div>
-              <h3 className="text-white font-black text-2xl">Monthly Subscriptions</h3>
-              <p className="text-gray-500 text-sm">Unlimited access for one low monthly price</p>
-            </div>
-          </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl">
-            {SUBSCRIPTION_TIERS.map(plan => (
-              <PlanCard key={plan.id} plan={plan} />
-            ))}
-          </div>
-        </div>
 
 
       </div>
