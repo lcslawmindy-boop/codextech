@@ -594,7 +594,7 @@ export default function InventionPlans() {
   const [checkingPurchase, setCheckingPurchase] = useState(true);
 
   useEffect(() => {
-    b44.auth.me().then(u => setIsAdmin(u?.role === 'admin')).catch(() => {});
+    base44.auth.me().then(u => setIsAdmin(u?.role === 'admin')).catch(() => {});
   }, []);
 
   useEffect(() => {
