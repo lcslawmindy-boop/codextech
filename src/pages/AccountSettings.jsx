@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { User, LogOut, Trash2, Shield, Bell, ChevronRight, AlertTriangle, Loader2, Package } from "lucide-react";
+import { User, LogOut, Trash2, Shield, Bell, ChevronRight, AlertTriangle, Loader2, Package, Zap } from "lucide-react";
 import { Link } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import PageHeader from "../components/PageHeader";
@@ -47,6 +47,18 @@ export default function AccountSettings() {
             </div>
           </div>
         </div>
+
+        {/* Member Dashboard Link - Prominent */}
+        <Link to="/member-dashboard" className="flex items-center gap-3 px-5 py-5 bg-gradient-to-r from-cyan-900/40 to-cyan-900/20 border-2 border-cyan-500/60 rounded-2xl hover:border-cyan-400 hover:from-cyan-900/50 transition-all shadow-lg shadow-cyan-900/20" style={{ minHeight: 70 }}>
+          <div className="w-12 h-12 rounded-lg bg-cyan-500/20 border border-cyan-500/40 flex items-center justify-center flex-shrink-0">
+            <Zap size={24} className="text-cyan-400" />
+          </div>
+          <div className="flex-1">
+            <p className="text-white text-base font-black">My Content & Build Plans</p>
+            <p className="text-cyan-300 text-xs font-semibold">Access your unlocked inventions, courses & downloads</p>
+          </div>
+          <ChevronRight size={18} className="text-cyan-400" />
+        </Link>
 
         {/* Member Portal Link */}
         <Link to="/member-portal" className="flex items-center gap-3 px-5 py-4 bg-gray-900 border border-yellow-900/40 rounded-2xl hover:bg-gray-800/60 transition-colors" style={{ minHeight: 64 }}>
