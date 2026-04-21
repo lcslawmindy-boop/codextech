@@ -78,6 +78,7 @@ import SocialMediaCommand from './pages/SocialMediaCommand';
 import SocialMediaAgent from './pages/SocialMediaAgent';
 import AdminHub from './pages/AdminHub';
 import AdminGuard from './components/AdminGuard';
+import AdminTierAccess from './pages/AdminTierAccess';
 import BuildSuppliesShop from './pages/BuildSuppliesShop';
 import AdminShopOrders from './pages/AdminShopOrders';
 import TroubleshootingGuides from './pages/TroubleshootingGuides';
@@ -266,6 +267,7 @@ const AuthenticatedApp = () => {
           {/* Admin-only routes */}
           <Route element={<AdminGuard />}>
             <Route path="/admin" element={<AdminHub />} />
+            <Route path="/admin-tier-access" element={<AdminTierAccess />} />
             <Route path="/admin-promo" element={<AdminPromoBlast />} />
             <Route path="/admin-beta" element={<AdminBeta />} />
             <Route path="/admin-videos" element={<AdminVideos />} />
