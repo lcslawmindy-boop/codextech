@@ -419,29 +419,20 @@ function ItemCard({ item, userTier }) {
         ) : (
           <>
             {/* Price Display */}
-            <div className="p-2 rounded-lg bg-gray-800/50">
-              {userTier && discount > 0 ? (
-                <div className="space-y-1">
-                  <div className="flex items-center justify-between">
-                    <span className="text-gray-400 text-xs">Original:</span>
-                    <span className="text-gray-500 text-xs line-through">${item.price}</span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-green-400 text-xs font-bold">{Math.round(discount * 100)}% off:</span>
-                    <span className="text-green-400 text-sm font-black">${displayPrice}</span>
-                  </div>
-                </div>
-              ) : (
-                <div className="flex items-center justify-between">
-                  <span className="text-gray-400 text-xs">Price:</span>
-                  <span className="text-white text-sm font-bold">${item.price}</span>
-                </div>
-              )}
+            <div className="p-2 rounded-lg bg-gray-800/50 space-y-1">
+              <div className="flex items-center justify-between">
+                <span className="text-gray-400 text-xs">Builder (25%):</span>
+                <span className="text-cyan-400 text-sm font-bold">${Math.round(item.price * 0.75)}</span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-gray-400 text-xs">Researcher (50%):</span>
+                <span className="text-green-400 text-sm font-bold">${Math.round(item.price * 0.50)}</span>
+              </div>
             </div>
 
             <button onClick={handleCheckout}
               className="w-full px-3 py-2 rounded-lg text-xs font-bold bg-cyan-700 hover:bg-cyan-600 text-white transition-all">
-              💳 Buy Now ${displayPrice || item.price}
+              💳 Buy Now {userTier ? `$${displayPrice}` : `$${item.price}`}
             </button>
           </>
         )}
