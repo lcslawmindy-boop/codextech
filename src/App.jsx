@@ -115,6 +115,8 @@ import VDRDocumentGenerator from './pages/VDRDocumentGenerator';
 import Welcome from './pages/Welcome';
 import TrialOnboarding from './pages/TrialOnboarding';
 import PostPurchaseOnboarding from './pages/PostPurchaseOnboarding';
+import PublicPreview from './pages/PublicPreview';
+import AcquisitionPitchDeck from './pages/AcquisitionPitchDeck';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -254,6 +256,8 @@ const AuthenticatedApp = () => {
           <Route path="/welcome" element={<Welcome />} />
           <Route path="/trial-onboarding" element={<TrialOnboarding />} />
           <Route path="/checkout" element={<PostPurchaseOnboarding />} />
+          <Route path="/preview" element={<PublicPreview />} />
+          <Route path="/acquire" element={<AcquisitionPitchDeck />} />
 
           {/* Admin-only routes */}
           <Route element={<AdminGuard />}>
