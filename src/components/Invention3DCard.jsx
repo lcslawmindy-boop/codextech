@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { Download, ChevronRight } from "lucide-react";
 import * as THREE from "three";
 import { inventionVisuals } from "@/lib/inventionVisuals";
+import { deviceImages } from "@/lib/deviceImages";
 
 const DEVICE_GEOMETRIES = {
   "Anenergy Pump Demonstration Circuit": "toroid",
@@ -174,11 +175,17 @@ export default function Invention3DCard({ invention, tier }) {
     return cleanup;
   }, [geometryType]);
 
+  const deviceImage = deviceImages[invention.title];
+
   return (
     <div className="group rounded-2xl overflow-hidden bg-gray-900 border border-gray-800 hover:border-cyan-700/50 transition-all flex flex-col h-full">
-      {/* 3D Canvas */}
+      {/* 3D Image or Canvas */}
       <div className="relative h-48 bg-gradient-to-br from-gray-800 to-gray-950 overflow-hidden">
-        <canvas ref={canvasRef} className="w-full h-full" />
+        {deviceImage ? (
+          <img src={deviceImage} alt={invention.title} className="w-full h-full object-cover" />
+        ) : (
+          <canvas ref={canvasRef} className="w-full h-full" />
+        )}
         <div className="absolute inset-0 bg-gradient-to-t from-gray-900/50 to-transparent pointer-events-none" />
       </div>
 
