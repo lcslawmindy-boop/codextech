@@ -73,6 +73,33 @@
     },
     "contact_email_encrypted": {
       "type": "string"
+    },
+    "verified_inventor": {
+      "type": "boolean",
+      "default": false,
+      "description": "True if inventor identity and patents have been verified by admin"
+    },
+    "patent_docs_verified": {
+      "type": "boolean",
+      "default": false,
+      "description": "True if patent documents have been reviewed and confirmed"
+    },
+    "identity_verified": {
+      "type": "boolean",
+      "default": false,
+      "description": "True if inventor identity has been confirmed"
+    },
+    "verification_date": {
+      "type": "string",
+      "description": "Date when verified_inventor status was set"
+    },
+    "verified_by_admin": {
+      "type": "string",
+      "description": "Email of admin who verified this listing"
+    },
+    "verification_notes": {
+      "type": "string",
+      "description": "Admin notes from the verification review"
     }
   },
   "required": [

@@ -81,6 +81,7 @@ import AdminGuard from './components/AdminGuard';
 import AdminTierAccess from './pages/AdminTierAccess';
 import BuildSuppliesShop from './pages/BuildSuppliesShop';
 import AdminShopOrders from './pages/AdminShopOrders';
+import AdminInventorReviews from './pages/AdminInventorReviews';
 import TroubleshootingGuides from './pages/TroubleshootingGuides';
 import BeginnerManual from './pages/BeginnerManual';
 import Glossary from './pages/Glossary';
@@ -290,6 +291,7 @@ const AuthenticatedApp = () => {
             <Route path="/build-tracker" element={<InventionBuildTracker />} />
             <Route path="/trz-patent" element={<TRZPatent />} />
             <Route path="/admin-shop-orders" element={<AdminShopOrders />} />
+            <Route path="/admin-inventor-reviews" element={<AdminInventorReviews />} />
             <Route path="/material-sourcing" element={<MaterialSourcing />} />
           </Route>
 
