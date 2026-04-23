@@ -16,6 +16,7 @@ import { inventionSteps } from "../lib/inventionSteps";
 import { jsPDF } from "jspdf";
 import ResearchDisclaimer from "../components/ResearchDisclaimer";
 import AttributionFooter from "../components/AttributionFooter";
+import { itemImages } from "../lib/itemImages";
 
 // Legacy admin-only gate (free energy / medical claims — still admin-only)
 const ADMIN_ONLY_KEYWORDS = ["motionless electromagnetic generator", "prioré-type multichannel"];
@@ -845,6 +846,12 @@ export default function InventionPlans() {
               <ResearchDisclaimer type="energy" />
               <AttributionFooter compact />
               <div className="mb-6">
+                {itemImages[selected.title] && (
+                  <div className="w-full h-52 rounded-2xl overflow-hidden mb-4 relative">
+                    <img src={itemImages[selected.title]} alt={selected.title} className="w-full h-full object-cover" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-gray-950 via-transparent to-transparent" />
+                  </div>
+                )}
                 <div className="flex items-center gap-3 mb-2">
                   <span className="text-4xl">{selected.icon}</span>
                   <div>

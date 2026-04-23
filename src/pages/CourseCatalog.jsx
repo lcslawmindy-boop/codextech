@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { itemImages } from "../lib/itemImages";
 import { courseSlugMap } from "../lib/coursePlans";
 import { Link, useLocation } from "react-router-dom";
 import { ArrowLeft, BookOpen, Play, Download, ChevronDown, ChevronUp, Star, Users, CheckCircle2, Loader2, AlertCircle } from "lucide-react";
@@ -84,10 +85,18 @@ function CheckoutButton({ item, label }) {
 
 function CourseCard({ item }) {
   const [expanded, setExpanded] = useState(false);
+  const image = itemImages[item.title];
 
   return (
     <div className="bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden hover:border-gray-600 transition-all flex flex-col">
-      <div className="h-1.5 w-full" style={{ backgroundColor: item.color }} />
+      {image ? (
+        <div className="w-full h-44 overflow-hidden relative">
+          <img src={image} alt={item.title} className="w-full h-full object-cover" />
+          <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-transparent to-transparent" />
+        </div>
+      ) : (
+        <div className="h-1.5 w-full" style={{ backgroundColor: item.color }} />
+      )}
       <div className="p-6 flex flex-col flex-1">
         <div className="flex items-start justify-between gap-3 mb-3">
           <span className="text-3xl">{item.icon}</span>

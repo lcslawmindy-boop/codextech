@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { itemImages } from "../lib/itemImages";
 import { Link } from "react-router-dom";
 import { ArrowLeft, BookOpen, Zap, FlaskConical, DollarSign, Package, GraduationCap, Lightbulb, ChevronDown, ChevronUp } from "lucide-react";
 import { businessItems as items } from "../lib/businessItems";
@@ -53,11 +54,19 @@ function ItemCard({ item }) {
   const [expanded, setExpanded] = useState(false);
   const [showVisuals, setShowVisuals] = useState(false);
   const hasVisuals = item.category === "Invention" && !!inventionVisuals[item.title];
+  const image = itemImages[item.title];
   return (
     <div
-      className="bg-gray-900 border border-gray-800 rounded-xl p-5 hover:border-gray-600 transition-colors flex flex-col gap-3"
+      className="bg-gray-900 border border-gray-800 rounded-xl overflow-hidden hover:border-gray-600 transition-colors flex flex-col gap-3"
       style={{ borderLeftColor: item.color, borderLeftWidth: 3 }}
     >
+      {image && (
+        <div className="w-full h-40 overflow-hidden relative">
+          <img src={image} alt={item.title} className="w-full h-full object-cover" />
+          <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-transparent to-transparent" />
+        </div>
+      )}
+      <div className="px-5 pb-5 flex flex-col gap-3">
       <div className="flex items-start justify-between gap-3">
         <div className="flex items-start gap-3 flex-1 min-w-0">
           <span className="text-2xl flex-shrink-0 mt-0.5">{item.icon}</span>
@@ -120,6 +129,7 @@ function ItemCard({ item }) {
         <p className="text-gray-600 text-xs mt-1">
           <span className="text-gray-500 font-semibold">Target audience: </span>{item.audience}
         </p>
+      </div>
       </div>
     </div>
   );
