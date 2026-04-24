@@ -8,6 +8,8 @@ import PageNotFound from './lib/PageNotFound';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 // Add page imports here
+import ZarpLanding from './pages/ZarpLanding';
+import FreeVault from './pages/FreeVault';
 import ConceptGraph from './pages/ConceptGraph';
 import LegalAgreement from './pages/LegalAgreement';
 import CopyProtection from './components/CopyProtection';
@@ -154,6 +156,9 @@ const AuthenticatedApp = () => {
   if (!ndaAccepted) {
     return (
       <Routes>
+        <Route path="/" element={<ZarpLanding />} />
+        <Route path="/free-vault" element={<FreeVault />} />
+        <Route path="/pricing" element={<Pricing />} />
         <Route path="*" element={<LegalAgreement />} />
       </Routes>
     );
@@ -163,10 +168,12 @@ const AuthenticatedApp = () => {
   if (!hasPaid) {
     return (
       <Routes>
+        <Route path="/" element={<ZarpLanding />} />
+        <Route path="/free-vault" element={<FreeVault />} />
         <Route path="/trial-onboarding" element={<TrialOnboarding />} />
         <Route path="/beta-apply" element={<BetaApply />} />
         <Route path="/pricing" element={<Pricing />} />
-        <Route path="*" element={isTrial ? <TrialOnboarding /> : <Pricing />} />
+        <Route path="*" element={isTrial ? <TrialOnboarding /> : <ZarpLanding />} />
       </Routes>
     );
   }
@@ -178,7 +185,10 @@ const AuthenticatedApp = () => {
       {isTrial && <TrialBanner />}
       <Routes>
         <Route element={<MobileLayout />}>
-          <Route path="/" element={<ConceptGraph />} />
+          <Route path="/" element={<ZarpLanding />} />
+          <Route path="/vault" element={<ConceptGraph />} />
+          <Route path="/free-vault" element={<FreeVault />} />
+          <Route path="/member-dashboard" element={<MemberDashboard />} />
           <Route path="/business" element={<BusinessModels />} />
           <Route path="/pitch" element={<PitchBuilder />} />
           <Route path="/market-deck" element={<MarketDeck />} />
@@ -222,7 +232,6 @@ const AuthenticatedApp = () => {
           <Route path="/pricing" element={<Pricing />} />
           <Route path="/investor-portal" element={<InvestorPortal />} />
           <Route path="/account" element={<AccountSettings />} />
-          <Route path="/member-dashboard" element={<MemberDashboard />} />
           <Route path="/beta-apply" element={<BetaApply />} />
           <Route path="/member-portal" element={<MemberPortal />} />
           <Route path="/licensing" element={<LicensingPortal />} />

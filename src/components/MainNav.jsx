@@ -136,8 +136,10 @@ export default function MainNav({ isAdmin }) {
           </div>
           <div className="flex gap-0">
             {[
+              { emoji: "🏠", label: "Home", path: "/" },
+              { emoji: "🔓", label: "Free Vault", path: "/free-vault" },
               { emoji: "💳", label: "Pricing", path: "/pricing" },
-              { emoji: "📜", label: "Licensing", path: "/licensing" },
+              { emoji: "📊", label: "Dashboard", path: "/member-dashboard" },
               { emoji: "👤", label: "Account", path: "/account" },
               ...(isAdmin ? [{ emoji: "🔒", label: "Admin", path: "/admin" }] : []),
             ].map((link) => (
