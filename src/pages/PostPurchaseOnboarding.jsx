@@ -1,7 +1,7 @@
-import { useState, useEffect } from "react";
+import React from "react";
 import { useSearchParams, Link } from "react-router-dom";
 import { CheckCircle2, ArrowRight, Wrench, BookOpen, Shield, TrendingUp, Star, Zap, Package } from "lucide-react";
-import KitUpsellModal from "@/components/KitUpsellModal";
+
 
 // ── Kit upsells — physical products ──────────────────────────────────────────
 const KIT_UPSELLS = [
@@ -55,24 +55,10 @@ export default function PostPurchaseOnboarding() {
   const [searchParams] = useSearchParams();
   const productId = searchParams.get("product") || "pro";
   const tier = TIER_CONFIG[productId] || TIER_CONFIG.pro;
-  const [showUpsell, setShowUpsell] = useState(false);
 
-  // Fire upsell modal 2.5s after landing on this page
-  useEffect(() => {
-    const t = setTimeout(() => setShowUpsell(true), 2500);
-    return () => clearTimeout(t);
-  }, []);
 
   return (
     <div className="min-h-screen bg-gray-950 text-white">
-      {showUpsell && (
-        <KitUpsellModal
-          trigger="post_purchase"
-          kitId="meg"
-          onDismiss={() => setShowUpsell(false)}
-        />
-      )}
-
       {/* ── Success header ── */}
       <div className="border-b border-gray-800 bg-gray-900/80 px-5 py-4 flex items-center justify-between">
         <div className="flex items-center gap-2">

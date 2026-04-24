@@ -1,4 +1,4 @@
-import { createClientFromRequest } from 'npm:@base44/sdk@0.8.23';
+import { createClientFromRequest } from 'npm:@base44/sdk@0.8.25';
 import Stripe from 'npm:stripe@14.21.0';
 
 const stripe = new Stripe(Deno.env.get("STRIPE_SECRET_KEY"));
@@ -20,9 +20,16 @@ Deno.serve(async (req) => {
 
   if (event.type === "checkout.session.completed") {
     const session = event.data.object;
-    const email = session.customer_email || session.metadata?.user_email;
+    // customer_details.email is the most reliable — set by Stripe at checkout
+    const email = session.customer_details?.email || session.customer_email || session.metadata?.user_email;
 
-    // Save shop order if it's a physical product (has shipping address or product metadata)
+    console.log("checkout.session.completed:", session.id, "email:", email, "payment_status:", session.payment_status, "subscription:", session.subscription);
+
+    if (!email) {
+      console.error("No email found on session:", session.id);
+    }
+
+    // Save shop order for physical products (one-time payments with shipping)
     const productName = session.metadata?.product_name || session.metadata?.product_title;
     const isShopOrder = productName && !session.subscription;
     if (isShopOrder) {
@@ -50,62 +57,55 @@ Deno.serve(async (req) => {
       }
     }
 
+    // Set subscription_status = active on User — Stripe is the ONLY source of truth
     if (email) {
       try {
-        // Update User entity subscription status
         const users = await base44.asServiceRole.entities.User.filter({ email });
         if (users.length > 0) {
           await base44.asServiceRole.entities.User.update(users[0].id, {
             subscription_status: "active",
             stripe_customer_id: session.customer,
-            subscription_id: session.subscription,
+            subscription_id: session.subscription || null,
           });
-          console.log("Subscription activated for:", email);
-        }
-
-        // Also mark BetaApplication as converted so payment gate check 2 also passes
-        const apps = await base44.asServiceRole.entities.BetaApplication.filter({ email });
-        if (apps.length > 0) {
-          const planName = session.metadata?.plan_name || "researcher";
-          await base44.asServiceRole.entities.BetaApplication.update(apps[0].id, {
-            status: "converted",
-            plan_purchased: planName,
-            converted_at: new Date().toISOString(),
-            mrr_value: session.amount_total ? session.amount_total / 100 : 0,
-          });
-          console.log("BetaApplication converted for:", email);
+          console.log("subscription_status set to active for:", email);
         } else {
-          // No application exists yet — create one automatically so payment gate works
-          await base44.asServiceRole.entities.BetaApplication.create({
-            email,
-            full_name: email,
-            background: "Other",
-            why_interested: "Paid via Stripe checkout",
-            status: "converted",
-            plan_purchased: session.metadata?.plan_name || "researcher",
-            converted_at: new Date().toISOString(),
-            mrr_value: session.amount_total ? session.amount_total / 100 : 0,
-          });
-          console.log("BetaApplication auto-created for paid user:", email);
+          console.warn("No User found for email:", email, "— user may not have registered yet. restoreAccess will sync on login.");
         }
       } catch (e) {
-        console.error("Error updating user subscription:", e.message);
+        console.error("Error setting subscription_status:", e.message);
       }
     }
   }
 
-  if (event.type === "customer.subscription.deleted" || event.type === "customer.subscription.updated") {
+  if (event.type === "customer.subscription.updated") {
     const sub = event.data.object;
-    if (sub.status !== "active") {
-      try {
-        const users = await base44.asServiceRole.entities.User.filter({ stripe_customer_id: sub.customer });
-        if (users.length > 0) {
-          await base44.asServiceRole.entities.User.update(users[0].id, { subscription_status: sub.status });
-          console.log("Subscription status updated:", sub.status, "for customer:", sub.customer);
-        }
-      } catch (e) {
-        console.error("Error updating subscription status:", e.message);
+    console.log("subscription.updated:", sub.id, "status:", sub.status, "customer:", sub.customer);
+    try {
+      const users = await base44.asServiceRole.entities.User.filter({ stripe_customer_id: sub.customer });
+      if (users.length > 0) {
+        await base44.asServiceRole.entities.User.update(users[0].id, { subscription_status: sub.status });
+        console.log("subscription_status updated to:", sub.status, "for customer:", sub.customer);
+      } else {
+        console.warn("No User found for stripe_customer_id:", sub.customer);
       }
+    } catch (e) {
+      console.error("Error updating subscription status:", e.message);
+    }
+  }
+
+  if (event.type === "customer.subscription.deleted") {
+    const sub = event.data.object;
+    console.log("subscription.deleted:", sub.id, "customer:", sub.customer);
+    try {
+      const users = await base44.asServiceRole.entities.User.filter({ stripe_customer_id: sub.customer });
+      if (users.length > 0) {
+        await base44.asServiceRole.entities.User.update(users[0].id, { subscription_status: "canceled" });
+        console.log("subscription_status set to canceled for customer:", sub.customer);
+      } else {
+        console.warn("No User found for stripe_customer_id:", sub.customer);
+      }
+    } catch (e) {
+      console.error("Error canceling subscription:", e.message);
     }
   }
 

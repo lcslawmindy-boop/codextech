@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { useTier } from "@/hooks/useTier";
-import { Zap, BookOpen, Wrench, TrendingUp, Star, ArrowRight, Lock, Shield, ChevronRight, Award, Package } from "lucide-react";
+import { Zap, BookOpen, Wrench, TrendingUp, Star, ArrowRight, Lock, Shield, ChevronRight, Award, Package, CheckCircle2 } from "lucide-react";
 import UpgradeBar from "@/components/UpgradeBar";
 
 // ── Kit upsells ───────────────────────────────────────────────────────────────
@@ -114,6 +114,56 @@ export default function MemberDashboard() {
             </Link>
           </div>
         )}
+
+        {/* ── Start Here ── */}
+        <div className="mb-10 bg-gradient-to-br from-gray-900 to-gray-950 border border-cyan-900/40 rounded-2xl p-6">
+          <div className="flex items-center gap-2 mb-1">
+            <Zap size={18} className="text-cyan-400" />
+            <h2 className="text-lg font-black text-white">Start Here</h2>
+          </div>
+          <p className="text-gray-500 text-sm mb-5">Three steps to your first working build.</p>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            {[
+              {
+                step: 1,
+                title: "Pick Your First Build",
+                desc: "Start with the MEG — 23 components, peer-reviewed, 8 hours to assemble.",
+                cta: "Open Build Plans →",
+                href: "/invention-plans",
+                color: "#f97316",
+              },
+              {
+                step: 2,
+                title: "Understand the Physics",
+                desc: "Module 1: What Maxwell actually wrote. Why mainstream EM is truncated.",
+                cta: "Start Module 1 →",
+                href: "/courses",
+                color: "#3b82f6",
+              },
+              {
+                step: 3,
+                title: "Protect Your Work",
+                desc: "Generate a USPTO-compliant provisional patent application in one session.",
+                cta: "Draft Patent →",
+                href: "/patent-tool",
+                color: "#22c55e",
+              },
+            ].map((s) => (
+              <Link key={s.step} to={s.href}
+                className="group bg-gray-950 border border-gray-800 hover:border-gray-600 rounded-xl p-4 flex flex-col transition-all">
+                <div className="flex items-center gap-2 mb-2">
+                  <div className="w-6 h-6 rounded-full flex items-center justify-center text-xs font-black text-gray-900"
+                    style={{ backgroundColor: s.color }}>
+                    {s.step}
+                  </div>
+                  <span className="text-white font-bold text-sm">{s.title}</span>
+                </div>
+                <p className="text-gray-500 text-xs leading-relaxed flex-1 mb-3">{s.desc}</p>
+                <span className="text-xs font-black transition-colors" style={{ color: s.color }}>{s.cta}</span>
+              </Link>
+            ))}
+          </div>
+        </div>
 
         {/* Quick Access */}
         <h2 className="text-lg font-black mb-4 flex items-center gap-2">
