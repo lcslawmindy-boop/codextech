@@ -197,9 +197,9 @@ export default function VaultHeroAnimation({ children }) {
             <defs>
               <path id="curve" d="M 50, 200 A 150, 150 0 0, 1 350, 200" fill="none" />
             </defs>
-            <text style={{ textShadow: "0 0 20px #FFFF00, 0 0 40px #FFFF00, 0 0 60px #FFFF00" }} className="text-white font-black uppercase tracking-widest fill-white" fontSize="32" fontWeight="900">
-              <textPath href="#curve" startOffset="50%" textAnchor="middle" style={{ fontSize: '52px', fontWeight: 900 }}>
-                ⚡ CLICK HERE ⚡
+            <text style={{ textShadow: "0 0 20px #22c55e, 0 0 40px #22c55e, 0 0 60px #22c55e" }} className="font-black uppercase tracking-widest fill-green-400" fontSize="32" fontWeight="900">
+              <textPath href="#curve" startOffset="50%" textAnchor="middle" style={{ fontSize: '52px', fontWeight: 900, fill: '#22c55e' }}>
+                ⚠️ CAUTION ⚠️
               </textPath>
             </text>
           </svg>
