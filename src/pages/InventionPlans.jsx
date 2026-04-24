@@ -17,6 +17,7 @@ import { jsPDF } from "jspdf";
 import ResearchDisclaimer from "../components/ResearchDisclaimer";
 import AttributionFooter from "../components/AttributionFooter";
 import { itemImages } from "../lib/itemImages";
+import BuildUpsellPanel from "../components/BuildUpsellPanel";
 
 // Legacy admin-only gate (free energy / medical claims — still admin-only)
 const ADMIN_ONLY_KEYWORDS = ["motionless electromagnetic generator", "prioré-type multichannel"];
@@ -916,6 +917,9 @@ export default function InventionPlans() {
                       <p className="text-gray-400 text-sm leading-relaxed">{data.notes}</p>
                     </div>
                   )}
+
+                  {/* Kit upsell — fires after user has seen the full build */}
+                  <BuildUpsellPanel trigger="after_build" />
                 </>
               ) : (
                 <div className="bg-gray-900 border border-gray-800 rounded-2xl p-8 text-center">

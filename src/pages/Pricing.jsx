@@ -152,49 +152,93 @@ function FaqAccordion() {
 }
 
 function TierCard({ tier, onCheckout }) {
+  const isStarter = tier.id === "starter";
+  const isPro = tier.id === "pro";
+  const isElite = tier.id === "elite";
+
   return (
     <div className={`relative flex flex-col rounded-2xl overflow-hidden transition-all
-      ${tier.popular
-        ? "border-2 border-purple-500 shadow-2xl shadow-purple-900/30 scale-[1.02]"
-        : "border border-gray-700"
+      ${isPro
+        ? "border-2 border-purple-500 shadow-2xl shadow-purple-900/40 scale-[1.03] z-10"
+        : isElite
+        ? "border border-yellow-800/60 bg-gradient-to-b from-gray-900 to-gray-950"
+        : "border border-gray-800 opacity-90"
       } bg-gray-900`}>
-      {tier.badge && (
-        <div className="py-2.5 text-center text-xs font-black tracking-widest text-white"
-          style={{ backgroundColor: tier.color }}>
-          {tier.badge}
+
+      {/* Badge bar */}
+      {isPro && (
+        <div className="py-3 text-center text-xs font-black tracking-widest text-white bg-purple-600">
+          ⚡ MOST POPULAR — BEST VALUE
         </div>
       )}
-      <div className="p-7 flex flex-col flex-1">
-        <h3 className="text-white font-black text-2xl mb-1">{tier.name}</h3>
-        <p className="text-gray-400 text-sm mb-5">{tier.description}</p>
-
-        <div className="flex items-end gap-1 mb-1">
-          <span className="text-5xl font-black" style={{ color: tier.color }}>${tier.price}</span>
-          <span className="text-gray-400 mb-1.5">/month</span>
+      {isElite && (
+        <div className="py-3 text-center text-xs font-black tracking-widest text-yellow-300 bg-yellow-900/40 border-b border-yellow-800/50">
+          🔐 CLASSIFIED ACCESS — ELITE ONLY
         </div>
-        <p className="text-gray-600 text-xs mb-7">Cancel anytime · Instant access · Secured by Stripe</p>
+      )}
+      {isStarter && (
+        <div className="py-2.5 text-center text-xs font-semibold tracking-wide text-gray-500 border-b border-gray-800">
+          Entry level — limited vault
+        </div>
+      )}
 
+      <div className={`flex flex-col flex-1 ${isPro ? "p-7" : "p-6"}`}>
+        {/* Name */}
+        <h3 className={`font-black mb-1 ${isPro ? "text-white text-2xl" : isElite ? "text-yellow-300 text-xl" : "text-gray-400 text-xl"}`}>
+          {tier.name}
+        </h3>
+        <p className={`text-sm mb-5 ${isPro ? "text-gray-300" : "text-gray-500"}`}>{tier.description}</p>
+
+        {/* Price */}
+        <div className="flex items-end gap-1 mb-1">
+          {tier.id === "pro" && (
+            <span className="text-gray-600 line-through text-base mb-1.5 mr-1">$199</span>
+          )}
+          <span className={`font-black ${isPro ? "text-5xl" : "text-4xl"}`} style={{ color: tier.color }}>${tier.price}</span>
+          <span className="text-gray-500 mb-1.5">/mo</span>
+        </div>
+        {isPro && <p className="text-purple-400 text-xs font-bold mb-1">Founding rate — saves $120/mo vs retail</p>}
+        <p className="text-gray-700 text-xs mb-6">Cancel anytime · Instant access · Stripe</p>
+
+        {/* Features */}
         <div className="space-y-2.5 mb-6 flex-1">
           {tier.features.map((f, i) => (
             <div key={i} className="flex items-start gap-2.5">
-              <Check size={13} className="flex-shrink-0 mt-0.5" style={{ color: tier.color }} />
-              <span className="text-gray-200 text-sm">{f}</span>
+              <Check size={13} className="flex-shrink-0 mt-0.5" style={{ color: isPro ? "#a78bfa" : tier.color }} />
+              <span className={`text-sm ${isPro ? "text-gray-200 font-medium" : isElite ? "text-gray-300" : "text-gray-500"}`}>{f}</span>
             </div>
           ))}
           {tier.locked?.map((f, i) => (
-            <div key={i} className="flex items-start gap-2.5 opacity-35">
+            <div key={i} className="flex items-start gap-2.5 opacity-30">
               <Lock size={13} className="flex-shrink-0 mt-0.5 text-gray-600" />
-              <span className="text-gray-500 text-sm line-through">{f}</span>
+              <span className="text-gray-600 text-sm line-through">{f}</span>
             </div>
           ))}
         </div>
 
-        <button onClick={() => onCheckout(tier)}
-          className="w-full py-4 rounded-xl font-black text-base text-white transition-all hover:opacity-90 active:scale-95"
-          style={{ backgroundColor: tier.color, boxShadow: `0 4px 20px ${tier.color}40` }}>
-          {tier.cta}
-        </button>
-        <p className="text-center text-gray-600 text-xs mt-3">🔒 Stripe · SSL · Cancel anytime</p>
+        {/* CTA */}
+        {isPro ? (
+          <button onClick={() => onCheckout(tier)}
+            className="w-full py-4 rounded-xl font-black text-lg text-white transition-all hover:opacity-90 active:scale-[0.98]"
+            style={{ background: "linear-gradient(135deg, #7c3aed, #2563eb)", boxShadow: "0 6px 28px rgba(139,92,246,0.50)" }}>
+            {tier.cta} — ${tier.price}/mo →
+          </button>
+        ) : isElite ? (
+          <button onClick={() => onCheckout(tier)}
+            className="w-full py-3.5 rounded-xl font-black text-sm text-gray-900 transition-all hover:opacity-90 active:scale-[0.98]"
+            style={{ backgroundColor: "#f59e0b" }}>
+            {tier.cta}
+          </button>
+        ) : (
+          <button onClick={() => onCheckout(tier)}
+            className="w-full py-3 rounded-xl font-semibold text-sm text-gray-400 border border-gray-700 hover:bg-gray-800 transition-all">
+            {tier.cta}
+          </button>
+        )}
+
+        {isPro && <p className="text-center text-purple-400/60 text-xs mt-2">🔒 Stripe · SSL · Cancel anytime</p>}
+        {isElite && <p className="text-center text-gray-600 text-xs mt-2">Optional upgrade from Pro at any time</p>}
+        {isStarter && <p className="text-center text-gray-700 text-xs mt-2">Upgrade to Pro anytime — same price locked</p>}
       </div>
     </div>
   );
@@ -334,7 +378,9 @@ export default function Pricing() {
                 <tr className="border-b border-gray-800">
                   <th className="text-left text-gray-500 text-xs font-bold uppercase py-3 pr-6 w-48">Feature</th>
                   {TIERS.map(t => (
-                    <th key={t.id} className="text-center py-3 px-4 font-black" style={{ color: t.color }}>{t.name}</th>
+                    <th key={t.id} className={`text-center py-3 px-4 font-black ${t.popular ? "bg-purple-950/40 rounded-t-lg" : ""}`} style={{ color: t.color }}>
+                {t.name}{t.popular ? " ⚡" : ""}
+              </th>
                   ))}
                 </tr>
               </thead>
