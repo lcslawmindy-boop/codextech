@@ -194,26 +194,55 @@ export default function VaultHeroAnimation({ children }) {
           </div>
         ))}
 
-        {/* Falling Matrix Elements — Binary, Devices, Equations, Tools */}
-        {Array.from({ length: 30 }).map((_, i) => {
-          const types = ['binary', 'device', 'equation', 'tool'];
+        {/* Falling Matrix Elements — Binary, Devices, Equations, Tools, Medical, Sacred Geometry */}
+        {Array.from({ length: 50 }).map((_, i) => {
+          const types = ['binary', 'device', 'equation', 'tool', 'periodic', 'medical', 'lab', 'sacred', 'tower', 'book', 'lightbulb', 'bubble'];
           const type = types[i % types.length];
           const colors = ['#22c55e', '#ea580c']; // green or orange
           const color = colors[i % 2];
           const glowColor = color === '#22c55e' ? '#16a34a' : '#dc2626';
           
           let content = '';
+          let isEmoji = false;
+          
           if (type === 'binary') {
             content = Array.from({ length: 4 }).map(() => Math.random() > 0.5 ? '1' : '0').join('');
           } else if (type === 'device') {
             const devices = ['MEG', 'VPO', 'TRZ', 'TRD-1', 'Scalar', 'Prioré'];
             content = devices[Math.floor(Math.random() * devices.length)];
           } else if (type === 'equation') {
-            const equations = ['E=mc²', '∇²φ', 'F=qE', 'P=VI', 'λν=c'];
+            const equations = ['E=mc²', '∇²φ', 'F=qE', 'P=VI', 'λν=c', 'ω=2πf'];
             content = equations[Math.floor(Math.random() * equations.length)];
-          } else {
-            const tools = ['⚙️', '🔧', '🔩', '⚡', '🛠️'];
+          } else if (type === 'tool') {
+            const tools = ['⚙️', '🔧', '🔩', '⚡', '🛠️', '🪛', '📏'];
             content = tools[Math.floor(Math.random() * tools.length)];
+            isEmoji = true;
+          } else if (type === 'periodic') {
+            const elements = ['Cu', 'Fe', 'Li', 'Au', 'Ag', 'Ni', 'Co', 'Zn', 'Pb'];
+            content = elements[Math.floor(Math.random() * elements.length)];
+          } else if (type === 'medical') {
+            const medical = ['💉', '🧬', '💊', '🩺', '🔬'];
+            content = medical[Math.floor(Math.random() * medical.length)];
+            isEmoji = true;
+          } else if (type === 'lab') {
+            const lab = ['🧪', '⚗️', '🧫', '📊'];
+            content = lab[Math.floor(Math.random() * lab.length)];
+            isEmoji = true;
+          } else if (type === 'sacred') {
+            const sacred = ['π', '◯', '✡️', '☬', '∞'];
+            content = sacred[Math.floor(Math.random() * sacred.length)];
+          } else if (type === 'tower') {
+            content = '📡';
+            isEmoji = true;
+          } else if (type === 'book') {
+            const books = ['📚', '📖', '📕'];
+            content = books[Math.floor(Math.random() * books.length)];
+            isEmoji = true;
+          } else if (type === 'lightbulb') {
+            content = '💡';
+            isEmoji = true;
+          } else if (type === 'bubble') {
+            content = '◉';
           }
           
           return (
@@ -223,23 +252,26 @@ export default function VaultHeroAnimation({ children }) {
               style={{
                 left: `${Math.random() * 100}%`,
                 top: `-50px`,
-                animationDelay: `${i * 0.25}s`,
+                animationDelay: `${i * 0.2}s`,
                 animation: `moneyFall 8s ease-in infinite`,
               }}
             >
               <div
                 style={{
-                  padding: '6px 12px',
-                  borderRadius: '6px',
+                  padding: isEmoji ? '8px 10px' : '6px 12px',
+                  borderRadius: isEmoji ? '50%' : '6px',
                   border: `2px solid ${color}`,
                   backgroundColor: `${color}15`,
                   color: color,
-                  fontSize: '12px',
+                  fontSize: isEmoji ? '18px' : '12px',
                   fontWeight: 'bold',
                   whiteSpace: 'nowrap',
                   textShadow: `0 0 8px ${color}, 0 0 16px ${glowColor}`,
                   boxShadow: `0 0 12px ${color}, inset 0 0 8px ${color}20`,
-                  fontFamily: 'monospace',
+                  fontFamily: isEmoji ? 'inherit' : 'monospace',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
                 }}
               >
                 {content}
