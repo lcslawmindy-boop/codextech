@@ -4,6 +4,7 @@ import { base44 } from "@/api/base44Client";
 import ScalarWaveWatermark from "@/components/ScalarWaveWatermark";
 import { Lock, ChevronRight, Star, Shield, BookOpen, Wrench, TrendingUp, CheckCircle2, ArrowRight, Flame, Zap } from "lucide-react";
 import LeadMagnetPopup, { useLeadMagnetTrigger } from "@/components/LeadMagnetPopup";
+import VaultDoorAnimation from "@/components/VaultDoorAnimation";
 
 // ── REAL persistent countdown (48h from first visit) ─────────────────────────
 const DEADLINE_KEY = "zarp_founding_deadline";
@@ -155,28 +156,31 @@ export default function ZarpLanding() {
         </Link>
       </nav>
 
-      {/* ── Hero — single focused message, one primary CTA ── */}
+      {/* ── Hero — vault door animation ── */}
       <section className="px-5 py-16 sm:py-24 text-center max-w-4xl mx-auto">
-        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-cyan-950/60 border border-cyan-800 text-cyan-300 text-xs font-black mb-6 uppercase tracking-widest">
-          <Zap size={10} /> 40+ Systems. All Sourced. All Buildable.
-        </div>
+        <VaultDoorAnimation delay={0.3}>
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-cyan-950/60 border border-cyan-800 text-cyan-300 text-xs font-black mb-6 uppercase tracking-widest">
+            <Zap size={10} /> 40+ Systems. All Sourced. All Buildable.
+          </div>
 
-        <h1 className="text-5xl sm:text-6xl md:text-7xl font-black leading-[1.05] mb-5">
-          Learn. Build.<br />
-          Patent. Fund.<br />
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">
-            Complete Execution Platform.
-          </span>
-        </h1>
+          <h1 className="text-5xl sm:text-6xl md:text-7xl font-black leading-[1.05] mb-5">
+            Learn. Build.<br />
+            Patent. Fund.<br />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">
+              Complete Execution Platform.
+            </span>
+          </h1>
 
-        <p className="text-lg sm:text-xl text-gray-300 max-w-2xl mx-auto mb-3 leading-relaxed">
-          40+ complete builds + 26 courses + AI patent tools + investor toolkit. Everything sourced from granted patents and peer-reviewed research.
-        </p>
-        <p className="text-gray-500 text-sm max-w-xl mx-auto mb-10">
-          C.O.D.E.X.T.E.C.H. consolidates electromagnetic engineering research—courses, builds, documentation, execution frameworks, toolkits, and community—all in one membership platform.
-        </p>
+          <p className="text-lg sm:text-xl text-gray-300 max-w-2xl mx-auto mb-3 leading-relaxed">
+            40+ complete builds + 26 courses + AI patent tools + investor toolkit. Everything sourced from granted patents and peer-reviewed research.
+          </p>
+          <p className="text-gray-500 text-sm max-w-xl mx-auto mb-10">
+            C.O.D.E.X.T.E.C.H. consolidates electromagnetic engineering research—courses, builds, documentation, execution frameworks, toolkits, and community—all in one membership platform.
+          </p>
+        </VaultDoorAnimation>
 
-        {/* ── Email capture — stays on page after submit ── */}
+      {/* ── Email capture — stays on page after submit ── */}
+      <div className="px-5 text-center">
         <div className="max-w-lg mx-auto mb-5">
           {emailSubmitted ? (
             <div className="bg-green-950/40 border border-green-800 rounded-xl p-5 text-center">
@@ -212,6 +216,7 @@ export default function ZarpLanding() {
             View free course preview →
           </Link>
         )}
+      </div>
       </section>
 
       {/* ── Course preview — DESIRE engine. Show what's locked. ── */}
