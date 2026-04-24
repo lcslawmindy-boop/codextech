@@ -280,7 +280,7 @@ export default function VaultHeroAnimation({ children }) {
 
         {/* Floating Background Elements — Icons floating around in the background */}
         {Array.from({ length: 350 }).map((_, i) => {
-          const types = ['binary', 'device', 'equation', 'tool', 'periodic', 'medical', 'lab', 'sacred', 'tower', 'book', 'lightbulb', 'bubble', 'atom', 'molecule', 'wave', 'platonic', 'chakra', 'planet', 'shield', 'coil', 'cage', 'medbed', 'gold', 'logo', 'flag'];
+          const types = ['binary', 'device', 'equation', 'tool', 'periodic', 'medical', 'lab', 'sacred', 'tower', 'book', 'lightbulb', 'bubble', 'atom', 'molecule', 'wave', 'platonic', 'chakra', 'planet', 'shield', 'coil', 'cage', 'medbed', 'gold', 'logo', 'flag', 'rocket'];
           const type = types[i % types.length];
           
           // Logo URLs array
@@ -394,6 +394,10 @@ export default function VaultHeroAnimation({ children }) {
             isEmoji = true;
           } else if (type === 'flag') {
             content = 'https://media.base44.com/images/public/69ccefebfea78b23498c66a8/0bbe1f37e_615783632_25669650249318403_7814581183133987149_n.jpg';
+            isEmoji = true;
+          } else if (type === 'rocket') {
+            const rockets = ['🚀', '🛸', '✈️', '🛩️'];
+            content = rockets[Math.floor(Math.random() * rockets.length)];
             isEmoji = true;
           }
           
