@@ -1,10 +1,9 @@
 import { useState, useRef } from "react";
 import { Link } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
-import { Lock, Zap, ChevronRight, Star, Eye, ArrowRight, CheckCircle2 } from "lucide-react";
+import { Lock, Zap, ChevronRight, Star, Eye, ArrowRight, CheckCircle2, X } from "lucide-react";
 import UpgradeBar from "@/components/UpgradeBar";
 
-// ── Free content — 3 items so gate fires after meaningful engagement ──────────
 const FREE_ITEMS = [
   {
     id: "emf-trigger",
@@ -60,7 +59,6 @@ Runtime: ~45 min | Format: Text + diagrams + lab reference
   },
 ];
 
-// ── Locked grid — high desire items ──────────────────────────────────────────
 const LOCKED_ITEMS = [
   { title: "MEG Replication Kit", category: "Free Energy", hook: "COP>1 peer-reviewed device", img: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/b177d065d_generated_image.png" },
   { title: "Vacuum Potential Oscillator", category: "Energy Systems", hook: "Independent vacuum-ground shift", img: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/fc3cb2842_generated_image.png" },
@@ -73,39 +71,80 @@ const LOCKED_ITEMS = [
   { title: "AI Patent Drafting Tool", category: "IP Tools", hook: "Provisional patent in one session", img: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/a90918e3c_ZARPlogo.png" },
 ];
 
-// Gate fires after viewing this many free items
+// Hard paywall — fires at 2 views, no dismiss
 const GATE_AFTER = 2;
 
-function PaywallModal({ onDismiss }) {
+// What members unlock — specific outcomes not feature names
+const UNLOCK_OUTCOMES = [
+  { icon: "🔧", text: "Build 40+ EM devices — full BOM, exact part numbers, step-by-step, PDF" },
+  { icon: "📄", text: "Draft a USPTO provisional patent in one session — AI does the legal writing" },
+  { icon: "📚", text: "Complete 40+ courses from scalar EM fundamentals to advanced IP strategy" },
+  { icon: "💼", text: "Generate an investor pitch deck and VDR for any invention — in under 30 min" },
+  { icon: "🔬", text: "Run FTO analysis and prior art scans — what a $500/hr patent attorney would do" },
+];
+
+function HardPaywall() {
   return (
-    <div className="fixed inset-0 z-50 bg-black/75 flex items-end sm:items-center justify-center p-4">
-      <div className="bg-gray-900 border-2 border-purple-700 rounded-2xl max-w-md w-full p-8 shadow-2xl shadow-purple-950/50">
-        <div className="text-center mb-6">
-          <div className="text-4xl mb-3">🔐</div>
-          <h3 className="text-2xl font-black mb-2">You've Seen What's Possible</h3>
-          <p className="text-gray-400 text-sm leading-relaxed">
-            That's the quality of everything in the vault. 37 more systems are waiting — with the same sourcing, the same rigor, the same build-ready documentation.
-          </p>
-        </div>
-        <div className="space-y-2 mb-6">
-          {[
-            "All 40+ build plans — BOM, steps, PDF, video",
-            "All 40+ courses — foundational to advanced",
-            "AI patent suite — draft a provisional in minutes",
-            "Investor toolkit — CRM, pitch decks, VDR",
-          ].map((f, i) => (
-            <div key={i} className="flex items-center gap-2 text-sm text-gray-300">
-              <CheckCircle2 size={13} className="text-purple-400 flex-shrink-0" /> {f}
+    <div className="fixed inset-0 z-50 bg-gray-950/95 backdrop-blur-sm flex flex-col items-center justify-center px-5">
+      {/* Lock icon */}
+      <div className="w-20 h-20 rounded-full bg-purple-950 border-2 border-purple-600 flex items-center justify-center mb-6 shadow-2xl shadow-purple-900/50">
+        <Lock size={36} className="text-purple-400" />
+      </div>
+
+      <div className="max-w-md w-full text-center">
+        <h2 className="text-3xl font-black mb-2 text-white">That's Your 2 Free Views</h2>
+        <p className="text-gray-400 text-sm leading-relaxed mb-8">
+          You've seen the quality. The other 38 systems are identical — same engineering rigor, same primary sources, same build-ready documentation. The door is locked. The key is $29.
+        </p>
+
+        {/* Specific outcomes */}
+        <div className="space-y-2 mb-8 text-left">
+          {UNLOCK_OUTCOMES.map((o, i) => (
+            <div key={i} className="flex items-start gap-3 px-4 py-3 bg-gray-900 border border-gray-800 rounded-xl">
+              <span className="text-lg flex-shrink-0">{o.icon}</span>
+              <span className="text-gray-200 text-sm leading-snug">{o.text}</span>
             </div>
           ))}
         </div>
+
+        {/* Primary CTA */}
         <Link to="/pricing"
-          className="block w-full text-center py-4 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-black text-base transition-all mb-3">
+          className="block w-full py-4 rounded-xl bg-gradient-to-r from-purple-600 to-blue-700 hover:from-purple-500 hover:to-blue-600 text-white font-black text-lg transition-all shadow-xl shadow-purple-900/40 mb-3">
           Unlock Full Vault — From $29/mo
         </Link>
-        <button onClick={onDismiss}
-          className="block w-full text-center text-gray-600 hover:text-gray-400 text-sm transition-colors py-1">
-          Keep browsing free content
+        <p className="text-gray-600 text-xs mb-6">Cancel anytime · Stripe · SSL · Instant access</p>
+
+        {/* Only escape: leave */}
+        <Link to="/" className="text-gray-700 hover:text-gray-500 text-xs transition-colors underline underline-offset-2">
+          ← Go back to homepage
+        </Link>
+      </div>
+    </div>
+  );
+}
+
+function LockedItem({ item }) {
+  return (
+    <div className="bg-gray-900 border border-gray-800 rounded-xl overflow-hidden opacity-60 select-none">
+      <div className="relative">
+        <button className="w-full flex items-center gap-4 p-4 text-left cursor-not-allowed">
+          <div className="w-14 h-14 rounded-lg overflow-hidden flex-shrink-0 relative">
+            <img src={item.img} alt={item.title} className="w-full h-full object-cover blur-sm" />
+            <div className="absolute inset-0 bg-gray-950/70 flex items-center justify-center">
+              <Lock size={16} className="text-purple-500" />
+            </div>
+          </div>
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center gap-2 mb-1">
+              <span className="text-xs font-black px-2 py-0.5 rounded border bg-purple-900/40 text-purple-400 border-purple-800">
+                🔒 LOCKED
+              </span>
+              <span className="text-gray-700 text-xs">{item.category}</span>
+            </div>
+            <h3 className="text-gray-500 font-bold text-sm blur-[2px] select-none">{item.title}</h3>
+            <p className="text-gray-700 text-xs mt-0.5 blur-[2px] select-none line-clamp-1">{item.hook}</p>
+          </div>
+          <Lock size={16} className="text-purple-600 flex-shrink-0" />
         </button>
       </div>
     </div>
@@ -115,19 +154,25 @@ function PaywallModal({ onDismiss }) {
 export default function FreeVault() {
   const [views, setViews] = useState(() => parseInt(localStorage.getItem("zarp_vault_views") || "0"));
   const [expandedId, setExpandedId] = useState(null);
-  const [showPaywall, setShowPaywall] = useState(false);
+  const [paywallHit, setPaywallHit] = useState(() => parseInt(localStorage.getItem("zarp_vault_views") || "0") >= GATE_AFTER);
   const [email, setEmail] = useState("");
   const [emailDone, setEmailDone] = useState(false);
   const bottomRef = useRef(null);
 
   const handleExpand = (id) => {
+    // Already at gate — do nothing, paywall is showing
+    if (paywallHit) return;
+
     if (expandedId === id) { setExpandedId(null); return; }
+
     const newViews = views + 1;
     setViews(newViews);
     localStorage.setItem("zarp_vault_views", newViews);
     setExpandedId(id);
+
+    // Fire hard paywall immediately on 2nd view
     if (newViews >= GATE_AFTER) {
-      setTimeout(() => setShowPaywall(true), 1200);
+      setTimeout(() => setPaywallHit(true), 800);
     }
   };
 
@@ -137,12 +182,15 @@ export default function FreeVault() {
     setEmailDone(true);
   };
 
+  const viewsLeft = Math.max(0, GATE_AFTER - views);
+
   return (
     <div className="min-h-screen bg-gray-950 text-white">
 
-      {showPaywall && <PaywallModal onDismiss={() => setShowPaywall(false)} />}
+      {/* Hard paywall overlay — no dismiss button */}
+      {paywallHit && <HardPaywall />}
 
-      <UpgradeBar message="Free Vault — 3 items. 40+ more unlock with membership." ctaLabel="See Plans" ctaHref="/paywall" />
+      <UpgradeBar message="Free Vault — 2 free views. 40+ systems unlock with membership." ctaLabel="See Plans" ctaHref="/paywall" />
 
       {/* Nav */}
       <div className="border-b border-gray-800 bg-gray-900/90 backdrop-blur px-5 py-4 flex items-center justify-between sticky top-0 z-40">
@@ -165,24 +213,31 @@ export default function FreeVault() {
         <div className="text-center mb-10">
           <h1 className="text-3xl font-black mb-3">Free Engineering Vault</h1>
           <p className="text-gray-400 max-w-lg mx-auto text-sm leading-relaxed">
-            Explore 3 full free items below. Click any to expand — this is the real content, not a summary.
+            {viewsLeft > 0
+              ? `You have ${viewsLeft} free view${viewsLeft !== 1 ? "s" : ""} remaining. Expand any item below.`
+              : "You've used your 2 free views. Upgrade to access the full vault."}
           </p>
-          {views > 0 && views < GATE_AFTER && (
-            <div className="mt-4 inline-flex items-center gap-2 px-4 py-2 rounded-full bg-yellow-950/40 border border-yellow-800 text-yellow-300 text-xs font-bold">
-              <Eye size={11} /> {GATE_AFTER - views} free view{GATE_AFTER - views !== 1 ? "s" : ""} left before the door opens
+          {views > 0 && !paywallHit && (
+            <div className="mt-4 inline-flex items-center gap-2 px-4 py-2 rounded-full bg-red-950/40 border border-red-800 text-red-300 text-xs font-bold">
+              <Eye size={11} /> {viewsLeft} free view{viewsLeft !== 1 ? "s" : ""} left — then the vault locks
             </div>
           )}
         </div>
 
-        {/* Free items — expanded view is the hook */}
+        {/* Free items */}
         <div className="space-y-3 mb-14">
-          {FREE_ITEMS.map((item) => {
+          {FREE_ITEMS.map((item, idx) => {
             const isOpen = expandedId === item.id;
+            // After 2nd view, 3rd item becomes locked
+            const isLocked = paywallHit && !isOpen;
+            const wasViewed = views >= GATE_AFTER && isOpen;
+
+            if (isLocked) return <LockedItem key={item.id} item={item} />;
+
             return (
               <div key={item.id}
                 className={`bg-gray-900 border rounded-xl overflow-hidden transition-all ${isOpen ? "border-purple-700 shadow-lg shadow-purple-950/30" : "border-gray-800 hover:border-gray-600"}`}>
 
-                {/* Header row */}
                 <button onClick={() => handleExpand(item.id)}
                   className="w-full flex items-center gap-4 p-4 text-left hover:bg-gray-800/20 transition-colors min-h-0">
                   <div className="w-14 h-14 rounded-lg overflow-hidden flex-shrink-0">
@@ -199,7 +254,6 @@ export default function FreeVault() {
                   <ChevronRight size={16} className={`text-gray-600 flex-shrink-0 transition-transform ${isOpen ? "rotate-90 text-purple-400" : ""}`} />
                 </button>
 
-                {/* Expanded — real content, not just a tease */}
                 {isOpen && (
                   <div className="border-t border-gray-800 bg-gray-950/50 p-5">
                     <p className="text-gray-300 text-sm leading-relaxed mb-4">{item.hook}</p>
@@ -223,10 +277,10 @@ export default function FreeVault() {
           })}
         </div>
 
-        {/* Locked vault grid — desire driver */}
+        {/* Locked vault grid */}
         <div className="mb-14">
           <h2 className="text-xl font-black mb-1">What's Behind the Lock</h2>
-          <p className="text-gray-500 text-sm mb-5">37+ more systems — same sourcing, same build-ready docs. Unlocked with membership.</p>
+          <p className="text-gray-500 text-sm mb-5">38+ more systems — same sourcing, same build-ready docs. Unlocked with membership.</p>
 
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-6">
             {LOCKED_ITEMS.map((item, i) => (
@@ -256,7 +310,7 @@ export default function FreeVault() {
           </div>
         </div>
 
-        {/* Email capture at bottom — second chance for those not ready to pay */}
+        {/* Email capture */}
         <div ref={bottomRef} className="bg-gray-900 border border-gray-800 rounded-2xl p-7 text-center">
           <h3 className="font-black text-white text-lg mb-2">Not ready to join?</h3>
           <p className="text-gray-500 text-sm mb-5">Get a free build guide + weekly vault drops. No spam. Unsubscribe anytime.</p>

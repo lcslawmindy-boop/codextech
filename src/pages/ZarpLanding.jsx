@@ -65,17 +65,42 @@ const LOCKED_PREVIEWS = [
   },
 ];
 
-const FEATURES = [
-  { icon: <Wrench size={18} className="text-orange-400" />, title: "Full Build Plans", desc: "BOM, steps, supplier links, PDF, build video. Every device." },
-  { icon: <BookOpen size={18} className="text-blue-400" />, title: "40+ Courses", desc: "Scalar EM, bioelectromagnetics, vacuum energy, patent strategy." },
-  { icon: <Shield size={18} className="text-green-400" />, title: "AI Patent Suite", desc: "Provisional patents, FTO, claims, investor packages. Minutes, not months." },
-  { icon: <TrendingUp size={18} className="text-purple-400" />, title: "Investor Toolkit", desc: "CRM, pitch decks, term sheets, VDR. Full capital-raise system." },
+// Transformation-first: what you can DO after joining
+const TRANSFORMATIONS = [
+  {
+    icon: <Wrench size={20} className="text-orange-400" />,
+    before: "Watching YouTube videos about 'free energy' with no idea how to build anything",
+    after: "Order $85 in parts from Digikey, follow a 23-step BOM, and have a working EM device in 8 hours",
+    deliverable: "40+ build plans — exact part numbers, supplier links, PDF download, build video",
+    color: "#f97316",
+  },
+  {
+    icon: <Shield size={20} className="text-green-400" />,
+    before: "Paying $3,000–$15,000 to a patent attorney for a provisional application",
+    after: "Generate a USPTO-compliant provisional patent application in one session — all 9 required sections",
+    deliverable: "AI Patent Suite — draft, FTO analysis, claims, attorney-ready PDF export",
+    color: "#22c55e",
+  },
+  {
+    icon: <BookOpen size={20} className="text-blue-400" />,
+    before: "Reading Bearden's books without the engineering background to apply any of it",
+    after: "Complete structured modules from quaternion math fundamentals to prototype construction",
+    deliverable: "40+ courses — 12 modules each, primary sources cited, lab reference guides included",
+    color: "#3b82f6",
+  },
+  {
+    icon: <TrendingUp size={20} className="text-purple-400" />,
+    before: "A promising invention idea with no idea how to present it to investors",
+    after: "Send a tokenized NDA-gated data room URL and a 15-slide pitch deck to 6 qualified buyers",
+    deliverable: "Investor CRM + VDR Portal + Pitch Deck Generator — complete capital-raise stack",
+    color: "#8b5cf6",
+  },
 ];
 
 const TESTIMONIALS = [
-  { quote: "The MEG build plans alone are worth 10x the membership. Nothing like this exists anywhere else.", name: "R.K.", role: "Electrical Engineer" },
-  { quote: "Generated my full provisional patent in one session. My attorney called it the best pre-draft she'd seen.", name: "A.S.", role: "Inventor" },
-  { quote: "ZARP is the first platform that actually teaches you to BUILD, not just theorize.", name: "M.T.", role: "Independent Researcher, 20 yrs" },
+  { quote: "I had the MEG parts in hand within 72 hours of joining. The BOM is exact — part numbers, quantities, specs. This is engineering documentation, not YouTube.", name: "R.K.", role: "Electrical Engineer, 14 yrs" },
+  { quote: "My attorney reviewed the provisional patent I generated in one ZARP session. She said it was the most complete pre-draft she'd ever received from a client.", name: "A.S.", role: "Independent Inventor" },
+  { quote: "I've studied Bearden for 20 years and never had the structured curriculum to actually build anything. ZARP changed that in the first week.", name: "M.T.", role: "Independent Researcher, 20 yrs" },
 ];
 
 export default function ZarpLanding() {
@@ -135,18 +160,18 @@ export default function ZarpLanding() {
         </div>
 
         <h1 className="text-5xl sm:text-6xl md:text-7xl font-black leading-[1.05] mb-5">
-          They Patented It.<br />
-          They Buried It.<br />
+          Build Real EM Devices.<br />
+          File Real Patents.<br />
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">
-            We Built the Vault.
+            From $29/Month.
           </span>
         </h1>
 
         <p className="text-lg sm:text-xl text-gray-300 max-w-2xl mx-auto mb-3 leading-relaxed">
-          40+ advanced engineering systems from granted US patents, peer-reviewed journals, and declassified government documents. Full build plans. Complete BOMs. AI patent tools.
+          40+ engineering build plans with exact BOMs and supplier links. AI patent drafting that generates USPTO-compliant provisional applications in one session. 40+ courses from fundamentals to prototype construction.
         </p>
         <p className="text-gray-500 text-sm max-w-xl mx-auto mb-10">
-          No other platform documents these devices at the engineering level. No speculation. No YouTube energy. Primary sources only.
+          Every device sourced from granted US patents, peer-reviewed journals, and declassified government documents. Exact part numbers. Step-by-step. Primary sources only.
         </p>
 
         {/* ── Email capture — stays on page after submit ── */}
@@ -223,17 +248,33 @@ export default function ZarpLanding() {
         </div>
       </section>
 
-      {/* ── Features — brief, benefit-led ── */}
-      <section className="border-y border-gray-800 bg-gray-900/30 px-5 py-14">
+      {/* ── Transformation section — before/after/deliverable ── */}
+      <section className="border-y border-gray-800 bg-gray-900/20 px-5 py-16">
         <div className="max-w-4xl mx-auto">
-          <h2 className="text-2xl font-black text-center mb-8">Everything Inside One Membership</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {FEATURES.map((f, i) => (
-              <div key={i} className="flex gap-4 p-5 bg-gray-900 border border-gray-800 rounded-xl">
-                <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-gray-800 flex items-center justify-center mt-0.5">{f.icon}</div>
-                <div>
-                  <h3 className="font-bold text-white mb-0.5">{f.title}</h3>
-                  <p className="text-gray-400 text-sm leading-relaxed">{f.desc}</p>
+          <div className="text-center mb-10">
+            <p className="text-xs font-black uppercase tracking-widest text-gray-600 mb-2">What changes after you join</p>
+            <h2 className="text-2xl font-black text-white">Before ZARP → After ZARP</h2>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+            {TRANSFORMATIONS.map((t, i) => (
+              <div key={i} className="bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden">
+                <div className="h-0.5" style={{ background: t.color }} />
+                <div className="p-5">
+                  {/* Before */}
+                  <div className="flex items-start gap-2 mb-3">
+                    <span className="text-red-500 text-xs font-black mt-0.5 flex-shrink-0">✗ BEFORE</span>
+                    <p className="text-gray-500 text-xs leading-relaxed italic">{t.before}</p>
+                  </div>
+                  {/* After */}
+                  <div className="flex items-start gap-2 mb-4">
+                    <span className="text-xs font-black mt-0.5 flex-shrink-0" style={{ color: t.color }}>✓ AFTER</span>
+                    <p className="text-gray-200 text-sm leading-relaxed font-semibold">{t.after}</p>
+                  </div>
+                  {/* What you get */}
+                  <div className="flex items-start gap-2 pt-3 border-t border-gray-800">
+                    <div className="flex-shrink-0 mt-0.5">{t.icon}</div>
+                    <p className="text-gray-400 text-xs leading-relaxed">{t.deliverable}</p>
+                  </div>
                 </div>
               </div>
             ))}
