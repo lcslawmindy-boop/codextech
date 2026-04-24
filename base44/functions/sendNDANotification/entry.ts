@@ -1,60 +1,50 @@
-import { createClientFromRequest } from "npm:@base44/sdk@0.8.25";
+import { createClientFromRequest } from 'npm:@base44/sdk@0.8.25';
 
 Deno.serve(async (req) => {
+  if (req.method !== 'POST') {
+    return Response.json({ error: 'Method not allowed' }, { status: 405 });
+  }
+
   try {
     const base44 = createClientFromRequest(req);
     const body = await req.json();
-
+    
     const { full_name, email, organization } = body;
 
-    // Track NDA signature event
-    console.log(`[NDA Signature] ${full_name} (${email}) from ${organization || "Unknown"}`);
+    if (!full_name || !email) {
+      return Response.json({ error: 'Missing required fields' }, { status: 400 });
+    }
 
-    // Send email to admin with details
-    const adminEmail = Deno.env.get("ADMIN_EMAIL") || "admin@codextech.com";
-    
+    console.log('NDA signature received from:', { full_name, email, organization });
+
+    // Send notification email to admin
     await base44.integrations.Core.SendEmail({
-      to: adminEmail,
-      subject: `🔓 NDA Signed - New Vault Access: ${full_name}`,
+      to: 'admin@zenithapex.com',
+      subject: `New NDA Signature - ${full_name}`,
       body: `
-NEW VAULT ACCESS REQUEST
+NDA Signature Received
 
 Name: ${full_name}
 Email: ${email}
-Organization: ${organization || "N/A"}
-Signed At: ${new Date().toISOString()}
-IP: ${req.headers.get("x-forwarded-for") || "N/A"}
+Organization: ${organization || 'N/A'}
+Signed: ${new Date().toISOString()}
 
----
-This user has electronically signed the NDA and gained access to the C.O.D.E.X.T.E.C.H. vault.
-
-Next Steps:
-- Monitor their engagement in the platform
-- They will be auto-enrolled in the free trial onboarding
-- Consider follow-up outreach after 7 days
-
-Admin Dashboard: [link to admin panel]
+This user has agreed to the NDA and may access the vault.
       `,
     });
 
     // Track analytics
-    base44.analytics.track({
-      eventName: "nda_signature_completed",
+    await base44.analytics.track({
+      eventName: 'nda_signature_completed',
       properties: {
         email,
-        organization,
-      },
-    }).catch(() => {});
-
-    return Response.json({
-      success: true,
-      message: "NDA signature recorded and admin notified",
+        organization: organization || 'none',
+      }
     });
+
+    return Response.json({ success: true, message: 'NDA signature recorded' });
   } catch (error) {
-    console.error("[sendNDANotification Error]:", error);
-    return Response.json(
-      { error: error.message },
-      { status: 500 }
-    );
+    console.error('Error in sendNDANotification:', error);
+    return Response.json({ error: error.message || 'Internal server error' }, { status: 500 });
   }
 });

@@ -84,11 +84,15 @@ export default function VaultNDALanding() {
       console.log("NDA signature created:", result);
 
       // Send admin notification
-      await base44.functions.invoke("sendNDANotification", {
-        full_name: fullName,
-        email,
-        organization,
-      });
+      try {
+        await base44.functions.invoke("sendNDANotification", {
+          full_name: fullName,
+          email,
+          organization,
+        });
+      } catch (notificationErr) {
+        console.warn("Notification send failed (non-blocking):", notificationErr);
+      }
 
       setSubmitted(true);
       setLoading(false);
