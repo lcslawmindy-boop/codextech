@@ -7,7 +7,7 @@
  *   onCapture: fn(email)
  */
 import { useState, useEffect } from "react";
-import { X, Check, ArrowRight, Download, Zap, Lock } from "lucide-react";
+import { X, Check, ArrowRight, Download, Zap, Lock, AlertCircle } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 
 const MAGNETS = {
@@ -74,29 +74,52 @@ const TRIGGER_CONTEXT = {
   build_view: { badge: "You're Viewing This Build Plan", urgency: "Get the engineering breakdown delivered to your inbox." },
 };
 
-export default function LeadMagnetPopup({ trigger = "time", magnetId = "meg_blueprint", onDismiss }) {
+export default function LeadMagnetPopup({ trigger = "time", magnetId = "meg_blueprint", onDismiss, onCapture }) {
   const magnet = MAGNETS[magnetId] || MAGNETS.meg_blueprint;
   const ctx = TRIGGER_CONTEXT[trigger] || TRIGGER_CONTEXT.time;
   const [email, setEmail] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState(null);
 
   const handleSubmit = async () => {
     if (!email || submitting) return;
+    setError(null);
     setSubmitting(true);
-    await base44.entities.NewsletterSubscriber.create({
-      email,
-      source: magnet.source,
-      status: "active",
-    });
-    setSubmitted(true);
-    setSubmitting(false);
-    setTimeout(() => { if (onDismiss) onDismiss(); }, 3500);
+    
+    try {
+      await base44.entities.NewsletterSubscriber.create({
+        email,
+        source: magnet.source,
+        status: "active",
+      });
+      
+      // Track conversion
+      base44.analytics.track({
+        eventName: "lead_magnet_captured",
+        properties: {
+          magnet_id: magnetId,
+          trigger_type: trigger,
+          email: email,
+        }
+      }).catch(() => {}); // Silent fail on analytics
+      
+      setSubmitted(true);
+      setSubmitting(false);
+      
+      // Call optional callback
+      if (onCapture) onCapture(email);
+      
+      setTimeout(() => { if (onDismiss) onDismiss(); }, 3500);
+    } catch (err) {
+      setError("Something went wrong. Please try again.");
+      setSubmitting(false);
+    }
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/75 flex items-end sm:items-center justify-center p-4">
-      <div className="bg-gray-900 border border-gray-700 rounded-2xl max-w-md w-full shadow-2xl overflow-hidden">
+    <div className="fixed inset-0 z-50 bg-black/75 flex items-end sm:items-center justify-center p-4 animate-in fade-in">
+      <div className="bg-gray-900 border border-gray-700 rounded-2xl max-w-md w-full shadow-2xl overflow-hidden animate-in zoom-in-95">
 
         {/* Color bar */}
         <div className="h-1 w-full" style={{ background: `linear-gradient(90deg, ${magnet.color}, transparent)` }} />
@@ -154,25 +177,37 @@ export default function LeadMagnetPopup({ trigger = "time", magnetId = "meg_blue
           ) : (
             <>
               {/* Email form */}
-              <div className="flex flex-col gap-2.5 mb-2">
-                <input
-                  type="email"
-                  placeholder="your@email.com"
-                  value={email}
-                  onChange={e => setEmail(e.target.value)}
-                  onKeyDown={e => e.key === "Enter" && handleSubmit()}
-                  className="w-full px-4 py-3 rounded-xl bg-gray-800 border border-gray-700 text-white placeholder-gray-600 text-sm focus:outline-none focus:border-cyan-500 transition-colors"
-                />
-                <button
-                  onClick={handleSubmit}
-                  disabled={submitting || !email}
-                  className="w-full flex items-center justify-center gap-2 py-3 rounded-xl font-black text-sm text-black transition-all hover:opacity-90 disabled:opacity-50"
-                  style={{ backgroundColor: magnet.color }}>
-                  <Download size={14} />
-                  {submitting ? "Sending…" : magnet.ctaLabel}
-                </button>
-              </div>
-              <p className="text-center text-gray-600 text-xs">{magnet.subLabel}</p>
+                  <div className="flex flex-col gap-2.5 mb-2">
+                    <input
+                      type="email"
+                      placeholder="your@email.com"
+                      value={email}
+                      onChange={e => { setEmail(e.target.value); setError(null); }}
+                      onKeyDown={e => e.key === "Enter" && handleSubmit()}
+                      disabled={submitting}
+                      className={`w-full px-4 py-3 rounded-xl bg-gray-800 border text-white placeholder-gray-600 text-sm focus:outline-none transition-colors ${
+                        error ? "border-red-500 focus:border-red-500" : "border-gray-700 focus:border-cyan-500"
+                      }`}
+                    />
+
+                    {/* Error message */}
+                    {error && (
+                      <div className="flex items-start gap-2 px-3 py-2 rounded-lg bg-red-950/30 border border-red-800/50">
+                        <AlertCircle size={12} className="text-red-400 flex-shrink-0 mt-0.5" />
+                        <p className="text-red-300 text-xs">{error}</p>
+                      </div>
+                    )}
+
+                    <button
+                      onClick={handleSubmit}
+                      disabled={submitting || !email}
+                      className="w-full flex items-center justify-center gap-2 py-3 rounded-xl font-black text-sm text-black transition-all hover:opacity-90 disabled:opacity-50"
+                      style={{ backgroundColor: magnet.color }}>
+                      <Download size={14} />
+                      {submitting ? "Sending…" : magnet.ctaLabel}
+                    </button>
+                  </div>
+                  <p className="text-center text-gray-600 text-xs">{magnet.subLabel}</p>
             </>
           )}
         </div>
