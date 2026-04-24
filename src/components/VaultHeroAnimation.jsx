@@ -80,17 +80,17 @@ export default function VaultHeroAnimation({ children }) {
         @keyframes floatFormula {
           0% {
             opacity: 0;
-            transform: translateY(100px) translateX(0);
+            transform: translateY(0) translateX(0);
           }
-          15% {
+          10% {
             opacity: 1;
           }
-          85% {
+          90% {
             opacity: 1;
           }
           100% {
             opacity: 0;
-            transform: translateY(-200px) translateX(var(--drift));
+            transform: translateY(-600px) translateX(var(--drift));
           }
         }
 
@@ -127,7 +127,7 @@ export default function VaultHeroAnimation({ children }) {
         }
 
         .floating-formula {
-          animation: floatFormula 6s ease-in forwards;
+          animation: floatFormula 12s ease-in forwards;
         }
 
         .gold-bar {
@@ -141,10 +141,10 @@ export default function VaultHeroAnimation({ children }) {
         {FLOATING_FORMULAS.map((elem, i) => (
           <div
             key={`formula-${i}`}
-            className="absolute floating-formula text-cyan-400 font-black text-sm md:text-lg opacity-0"
+            className="absolute floating-formula text-cyan-400 font-black text-sm md:text-lg"
             style={{
               left: elem.x,
-              bottom: "-50px",
+              bottom: "0px",
               animationDelay: `${elem.delay}s`,
               "--drift": `${Math.random() * 100 - 50}px`,
             }}
@@ -157,10 +157,10 @@ export default function VaultHeroAnimation({ children }) {
         {INVENTORS.map((inventor, i) => (
           <div
             key={`inventor-${i}`}
-            className="absolute floating-formula opacity-0 flex flex-col items-center gap-1"
+            className="absolute floating-formula flex flex-col items-center gap-1"
             style={{
               left: inventor.x,
-              bottom: "-150px",
+              bottom: "0px",
               animationDelay: `${inventor.delay}s`,
               "--drift": `${Math.random() * 80 - 40}px`,
             }}
