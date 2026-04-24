@@ -63,6 +63,7 @@ export default function VaultNDALanding() {
     e.preventDefault();
     if (!fullName || !email || !agreed) {
       setError("Please fill all fields and agree to the NDA");
+      console.error("Validation failed:", { fullName, email, agreed });
       return;
     }
 
@@ -71,7 +72,7 @@ export default function VaultNDALanding() {
 
     try {
       // Save NDA signature
-      await base44.entities.NDASignature.create({
+      const result = await base44.entities.NDASignature.create({
         full_name: fullName,
         email,
         company: organization,
@@ -79,6 +80,8 @@ export default function VaultNDALanding() {
         accepted_terms: true,
         signed_at: new Date().toISOString(),
       });
+      
+      console.log("NDA signature created:", result);
 
       // Send admin notification
       await base44.functions.invoke("sendNDANotification", {
@@ -90,7 +93,8 @@ export default function VaultNDALanding() {
       setSubmitted(true);
       setLoading(false);
     } catch (err) {
-      setError("Error processing signature. Please try again.");
+      console.error("Error processing NDA:", err);
+      setError(err.message || "Error processing signature. Please try again.");
       setLoading(false);
     }
   };
