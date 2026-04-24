@@ -191,26 +191,26 @@ export default function VaultHeroAnimation({ children }) {
           className="neon-logo w-96 sm:w-[500px] md:w-[600px] object-contain"
         />
         
-        {/* Caution Tape at Top */}
+        {/* Caution Tape at Very Top */}
         {!clicked && (
-          <div className="absolute top-0 left-0 right-0 pointer-events-none w-full">
-            {/* Caution Tape */}
-            <div className="w-full h-20 bg-gradient-to-r from-yellow-400 via-black via-30% to-yellow-400" style={{
-              backgroundImage: "repeating-linear-gradient(45deg, #facc15, #facc15 10px, #000 10px, #000 20px)",
-              boxShadow: "0 4px 20px rgba(250, 204, 21, 0.4)",
+          <div className="absolute -top-12 left-0 right-0 pointer-events-none w-full z-50">
+            {/* Caution Tape Stripes */}
+            <div className="w-full h-24" style={{
+              backgroundImage: "repeating-linear-gradient(45deg, #facc15, #facc15 12px, #000 12px, #000 24px)",
+              boxShadow: "0 8px 30px rgba(250, 204, 21, 0.5), inset 0 0 20px rgba(0, 0, 0, 0.3)",
             }}></div>
             
             {/* CAUTION Text */}
             <div style={{
-              fontSize: '64px',
+              fontSize: '72px',
               fontWeight: 900,
               color: '#facc15',
-              textShadow: "0 0 20px #facc15, 0 0 40px #000",
-              letterSpacing: '0.15em',
+              textShadow: "0 0 30px #facc15, 0 0 60px rgba(250, 204, 21, 0.6), 0 4px 15px rgba(0, 0, 0, 0.5)",
+              letterSpacing: '0.2em',
               textAlign: 'center',
-              marginTop: '-50px',
+              marginTop: '-65px',
               position: 'relative',
-              zIndex: 10,
+              zIndex: 50,
               whiteSpace: 'nowrap'
             }}>
               ⚠️ CAUTION ⚠️
