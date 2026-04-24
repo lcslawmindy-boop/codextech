@@ -697,9 +697,6 @@ export default function VaultHeroAnimation({ children }) {
                 backdropFilter: 'blur(4px)',
               }}>
                 {item.letter}
-                <span className="absolute top-1 right-2 text-[10px] md:text-[12px] lg:text-sm font-bold opacity-95">{item.num}</span>
-                <span className="absolute bottom-1 left-2 text-[9px] md:text-[11px] lg:text-xs font-bold opacity-75">EX</span>
-                <span className="absolute bottom-1 right-2 text-[8px] md:text-[10px] lg:text-xs font-bold opacity-60">M</span>
               </div>
               <span className="text-xs md:text-sm lg:text-base font-black text-gray-200 whitespace-nowrap text-center px-2" style={{
                 textShadow: `0 0 10px rgba(0,0,0,0.8)`,
