@@ -119,15 +119,15 @@ export default function VaultHeroAnimation({ children }) {
 
         @keyframes lightning {
           0%, 100% { opacity: 0; }
-          10%, 15% { opacity: 1; }
-          20%, 100% { opacity: 0; }
+          8%, 12% { opacity: 1; }
+          13%, 100% { opacity: 0; }
         }
 
         @keyframes boltPath {
           0% {
             stroke-dashoffset: 1000;
           }
-          10%, 15% {
+          8%, 12% {
             stroke-dashoffset: 0;
           }
           100% {
@@ -135,15 +135,18 @@ export default function VaultHeroAnimation({ children }) {
           }
         }
 
+        @keyframes lightningGlow {
+          0%, 100% { filter: drop-shadow(0 0 5px #ffffff); }
+          8%, 12% { filter: drop-shadow(0 0 20px #ffffff) drop-shadow(0 0 40px #06b6d4) drop-shadow(0 0 60px #06b6d4) drop-shadow(0 0 100px rgba(6,182,212,0.8)); }
+        }
+
         .money-fall {
           animation: moneyFall 8s ease-in forwards;
         }
 
         .lightning-bolt {
-          animation: lightning 3s ease-in-out infinite;
+          animation: lightning 2s ease-in-out infinite, boltPath 2s ease-in-out infinite, lightningGlow 2s ease-in-out infinite;
           stroke-dasharray: 1000;
-          animation-name: lightning, boltPath;
-          animation-duration: 3s, 3s;
         }
 
         .neon-logo {
@@ -191,52 +194,67 @@ export default function VaultHeroAnimation({ children }) {
           </div>
         ))}
 
-        {/* Falling money */}
-        {Array.from({ length: 15 }).map((_, i) => (
+        {/* Falling money — $100 bills */}
+        {Array.from({ length: 25 }).map((_, i) => (
           <div
             key={`money-${i}`}
-            className="absolute money-fall text-4xl font-black"
+            className="absolute money-fall text-3xl font-black"
             style={{
               left: `${Math.random() * 100}%`,
               top: `-50px`,
-              animationDelay: `${i * 0.5}s`,
+              animationDelay: `${i * 0.3}s`,
               animation: `moneyFall 8s ease-in infinite`,
+              color: '#22c55e',
+              textShadow: "0 0 10px #22c55e, 0 0 20px #16a34a",
+              filter: "brightness(1.3)",
             }}
           >
-            💰
+            $100
           </div>
         ))}
 
         {/* Lightning bolts SVG */}
         <svg className="absolute inset-0 w-full h-full pointer-events-none" style={{ overflow: 'visible' }}>
-          {/* Random lightning bolts */}
-          {Array.from({ length: 5 }).map((_, i) => {
+          {/* Intense random lightning bolts */}
+          {Array.from({ length: 10 }).map((_, i) => {
             const startX = Math.random() * window.innerWidth;
             const startY = Math.random() * 300;
-            const endX = startX + (Math.random() - 0.5) * 200;
-            const endY = startY + 400;
+            const endX = startX + (Math.random() - 0.5) * 300;
+            const endY = startY + 500;
             return (
               <g key={`lightning-${i}`}>
+                {/* Outer glow bolt */}
                 <path
-                  d={`M ${startX} ${startY} Q ${startX + Math.random() * 100 - 50} ${startY + 100} ${endX} ${endY}`}
-                  stroke="#fff"
-                  strokeWidth="3"
+                  d={`M ${startX} ${startY} Q ${startX + Math.random() * 150 - 75} ${startY + 150} ${endX} ${endY}`}
+                  stroke="#06b6d4"
+                  strokeWidth="8"
                   fill="none"
                   className="lightning-bolt"
                   style={{
-                    animationDelay: `${i * 0.6}s`,
-                    filter: "drop-shadow(0 0 10px #ffffff) drop-shadow(0 0 20px #06b6d4)",
+                    animationDelay: `${i * 0.4}s`,
+                    opacity: 0.3,
                   }}
                 />
+                {/* Main bright bolt */}
                 <path
-                  d={`M ${startX} ${startY} Q ${startX + Math.random() * 100 - 50} ${startY + 100} ${endX} ${endY}`}
-                  stroke="#06b6d4"
-                  strokeWidth="1"
+                  d={`M ${startX} ${startY} Q ${startX + Math.random() * 150 - 75} ${startY + 150} ${endX} ${endY}`}
+                  stroke="#fff"
+                  strokeWidth="4"
                   fill="none"
                   className="lightning-bolt"
                   style={{
-                    animationDelay: `${i * 0.6 + 0.1}s`,
-                    filter: "drop-shadow(0 0 20px #06b6d4)",
+                    animationDelay: `${i * 0.4}s`,
+                  }}
+                />
+                {/* Inner core bolt */}
+                <path
+                  d={`M ${startX} ${startY} Q ${startX + Math.random() * 150 - 75} ${startY + 150} ${endX} ${endY}`}
+                  stroke="#06b6d4"
+                  strokeWidth="1.5"
+                  fill="none"
+                  className="lightning-bolt"
+                  style={{
+                    animationDelay: `${i * 0.4 + 0.05}s`,
                   }}
                 />
               </g>
