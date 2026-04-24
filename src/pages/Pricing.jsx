@@ -29,23 +29,26 @@ const TIERS = [
   {
     id: "starter",
     name: "Starter",
-    price: 29,
+    price: 49,
     color: "#06b6d4",
-    badge: null,
-    description: "Core vault access — builds, courses & AI tools",
-    cta: "Start with Starter",
+    badge: "CONSUMPTION-BASED",
+    description: "Perfect for trying out. 15 builds/month.",
+    cta: "Start Free",
     popular: false,
     features: [
-      "15 build plans (BOM, steps, PDF)",
-      "15 courses from the archive",
-      "AI Patent Drafting Tool",
+      "15 build plans per month access",
+      "10 courses from the archive",
+      "AI Patent Drafting Tool (basic)",
       "Prior Art Archive — 50 entries",
       "EM Lab simulator (basic)",
       "20% off all à la carte purchases",
+      "Monthly reset — unused builds roll over",
       "Cancel anytime",
     ],
     locked: [
-      "Full vault (40+ builds & courses)",
+      "Unlimited vault access",
+      "Video assembly guides",
+      "Supplier sourcing links",
       "Investor & capital toolkit",
       "Elite restricted systems",
     ],
@@ -53,20 +56,21 @@ const TIERS = [
   {
     id: "pro",
     name: "Pro",
-    price: 79,
+    price: 99,
     color: "#8b5cf6",
-    badge: "MOST POPULAR",
-    description: "Full vault + AI tools + investor system",
-    cta: "Get Pro — Best Value",
+    badge: "UNLIMITED VAULT",
+    description: "Unlimited access to all 40+ systems + execution tools",
+    cta: "Go Pro",
     popular: true,
     features: [
-      "All 40+ build plans (BOM, steps, PDF, video)",
-      "All 40+ courses from the archive",
+      "Unlimited build plans (40+ all included)",
+      "Unlimited courses (40+ all included)",
       "Full AI suite: Patent, FTO, Claims, Investor Package",
       "Prior Art Archive — 200+ entries",
+      "Video assembly guides for all builds",
+      "Verified supplier links & pricing",
       "Full EM lab simulators & visualizations",
-      "Build video generator",
-      "Investor CRM, pitch decks & VDR",
+      "Private engineering forum & community",
       "50% off all à la carte purchases",
       "Cancel anytime",
     ],
@@ -79,18 +83,19 @@ const TIERS = [
     name: "Elite",
     price: 149,
     color: "#f59e0b",
-    badge: "CLASSIFIED ACCESS",
-    description: "Everything + restricted systems + priority support",
+    badge: "CLASSIFIED + ADVISORY",
+    description: "Everything + restricted systems + 1-on-1 strategy",
     cta: "Go Elite",
     popular: false,
     features: [
       "Everything in Pro",
       "Restricted / defense-adjacent technology systems",
-      "Institutional licensing inquiries prioritized",
-      "1-on-1 patent strategy session (monthly)",
+      "1-on-1 monthly patent strategy session",
+      "Institutional licensing prioritized",
       "Early access to new build plans",
-      "Priority email support",
+      "Priority email + phone support",
       "Co-inventor matching priority queue",
+      "60% off all à la carte purchases",
     ],
     locked: [],
   },
@@ -131,6 +136,36 @@ const INDIVIDUAL_COURSES = [
   { name: "Bioelectromagnetics & Health", price: 347, icon: "💊" },
   { name: "Prior Art Research & Analysis", price: 297, icon: "🔍" },
   { name: "Investor Pitch Fundamentals", price: 297, icon: "💼" },
+];
+
+const BUILD_BUNDLES = [
+  {
+    name: "Free Energy Starter Bundle",
+    description: "MEG, VPO, Anenergy Pump — the holy trinity",
+    builds: ["MEG Replication Kit", "Vacuum Potential Oscillator", "Anenergy Pump Circuit"],
+    regularPrice: 2543,
+    bundlePrice: 1999,
+    savings: 544,
+    icon: "⚡",
+  },
+  {
+    name: "Bioelectromagnetics Bundle",
+    description: "Prioré System, TRD-1, EM Trigger — healing devices",
+    builds: ["Prioré-Type Multichannel EM System", "TRD-1 Telomere Device", "EM Trigger Window Therapy"],
+    regularPrice: 2143,
+    bundlePrice: 1699,
+    savings: 444,
+    icon: "💊",
+  },
+  {
+    name: "Advanced Inventor Bundle",
+    description: "5 of the most advanced systems for $799",
+    builds: ["Scalar Interferometer", "Whittaker Phase Mirror", "Morphogenetic Monitor", "Bedini Conditioner", "Quantum Potential Detector"],
+    regularPrice: 4088,
+    bundlePrice: 2999,
+    savings: 1089,
+    icon: "🔬",
+  },
 ];
 
 function FaqAccordion() {
@@ -349,8 +384,11 @@ export default function Pricing() {
           Unlock the World's Most Advanced<br />
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">EM Engineering Vault</span>
         </h1>
-        <p className="text-gray-400 text-lg max-w-xl mx-auto">
+        <p className="text-gray-400 text-lg max-w-xl mx-auto mb-3">
           Choose the tier that fits your stage. Upgrade anytime. Cancel anytime.
+        </p>
+        <p className="text-sm text-green-400 flex items-center justify-center gap-1">
+          <Gift size={13} /> Refer a friend → earn $50 credit per referral
         </p>
       </div>
 
@@ -386,16 +424,18 @@ export default function Pricing() {
               </thead>
               <tbody className="divide-y divide-gray-800/50">
                 {[
-                  ["Build Plans", "15", "40+", "40+ + Restricted"],
-                  ["Courses", "15", "40+", "40+ + Priority"],
-                  ["AI Patent Tool", "✓", "✓", "✓"],
+                  ["Build Plans Access", "15/month", "Unlimited (40+)", "Unlimited (40+)"],
+                  ["Courses", "10 courses", "40+ courses", "40+ courses"],
+                  ["PDF Downloads", "—", "✓ All builds", "✓ All builds"],
+                  ["Video Assembly Guides", "—", "✓ All builds", "✓ All builds"],
+                  ["Supplier Links & Pricing", "—", "✓ Verified", "✓ Verified"],
+                  ["AI Patent Tool", "Basic", "Full Suite", "Full Suite"],
                   ["FTO Analysis", "—", "✓", "✓"],
-                  ["Investor Package AI", "—", "✓", "✓"],
                   ["Prior Art Archive", "50 entries", "200+ entries", "200+ entries"],
-                  ["EM Lab Simulators", "Basic", "Full", "Full"],
+                  ["Private Forum", "—", "✓", "✓"],
                   ["À la carte discount", "20% off", "50% off", "60% off"],
                   ["Restricted Systems", "—", "—", "✓"],
-                  ["Strategy Session", "—", "—", "Monthly 1-on-1"],
+                  ["Monthly Strategy Session", "—", "—", "✓"],
                 ].map(([label, starter, pro, elite], i) => (
                   <tr key={i} className={i % 2 === 0 ? "bg-gray-900/20" : ""}>
                     <td className="py-2.5 pr-6 text-gray-300 text-xs font-medium">{label}</td>
@@ -481,6 +521,43 @@ export default function Pricing() {
               ))}
             </div>
           )}
+        </div>
+
+        {/* Build Bundles */}
+        <div className="mb-16">
+          <div className="text-center mb-8">
+           <h2 className="text-2xl font-black mb-2">Build Bundles — Save 20%</h2>
+           <p className="text-gray-500 text-sm">Curated packages of related systems. Perfect for focused learners.</p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {BUILD_BUNDLES.map((bundle, i) => (
+              <div key={i} className="bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden hover:border-purple-700 transition-all">
+                <div className="bg-gradient-to-r from-purple-950 to-blue-950 border-b border-purple-800/50 px-5 py-4 flex items-start justify-between">
+                  <div>
+                    <span className="text-2xl block mb-1">{bundle.icon}</span>
+                    <p className="text-white font-black text-sm">{bundle.name}</p>
+                    <p className="text-gray-400 text-xs mt-1">{bundle.description}</p>
+                  </div>
+                  <span className="text-xs px-2.5 py-1 rounded-full bg-green-900 text-green-300 font-bold flex-shrink-0 whitespace-nowrap">Save ${bundle.savings}</span>
+                </div>
+                <div className="p-5">
+                  <div className="space-y-1 mb-4 pb-4 border-b border-gray-800">
+                    {bundle.builds.map((b, j) => (
+                      <p key={j} className="text-gray-400 text-xs">✓ {b}</p>
+                    ))}
+                  </div>
+                  <div className="flex items-end gap-2 mb-4">
+                    <span className="text-gray-600 line-through text-sm">${bundle.regularPrice}</span>
+                    <span className="text-2xl font-black text-purple-400">${bundle.bundlePrice}</span>
+                  </div>
+                  <button onClick={() => handleAlaCarteCheckout({ name: bundle.name, price: bundle.bundlePrice })}
+                    className="w-full py-2.5 rounded-lg bg-purple-700 hover:bg-purple-600 text-white text-sm font-bold transition-colors">
+                    Add Bundle to Cart
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
 
         {/* FAQ */}
