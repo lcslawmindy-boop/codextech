@@ -1,352 +1,237 @@
-import { Link } from "react-router-dom";
-import { CheckCircle2, ChevronRight, Star, Zap, Shield, BookOpen, FlaskConical, Brain, FileText, Users, ArrowRight, Sparkles, Globe, Target, TrendingUp, Microscope, DollarSign } from "lucide-react";
+import { useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
+import { ArrowRight, Zap, Lock, CheckCircle2, Wrench, BookOpen, Shield, ChevronRight } from "lucide-react";
 
-const FEATURES = [
-  {
-    icon: "⚡",
-    title: "AI Invention Engine",
-    path: "/inventor-forge",
-    badge: "Most Popular",
-    badgeColor: "text-yellow-400 bg-yellow-900/30 border-yellow-700",
-    desc: "Generate fully-formed invention dossiers — technical specs, IP valuation, 5-year financials, and GTM strategy — from a single prompt. No engineering background required.",
-    tier: "Researcher $97/mo",
-  },
-  {
-    icon: "📋",
-    title: "AI Patent Drafting Tool",
-    path: "/patent-tool",
-    badge: "Pro Tool",
-    badgeColor: "text-blue-400 bg-blue-900/30 border-blue-700",
-    desc: "USPTO-compliant patent drafting with claim generation, novelty scoring, prior art analysis, and multi-jurisdiction IP valuation in one workflow.",
-    tier: "Researcher $97/mo",
-  },
-  {
-    icon: "🔬",
-    title: "23 Device Build Plans",
-    path: "/invention-plans",
-    badge: "Exclusive",
-    badgeColor: "text-purple-400 bg-purple-900/30 border-purple-700",
-    desc: "Step-by-step hardware blueprints for scalar EM, vacuum energy, bioelectromagnetic, and advanced sensing devices — each with full Bill of Materials and downloadable PDFs.",
-    tier: "Researcher $97/mo",
-  },
-  {
-    icon: "📚",
-    title: "26-Course Library",
-    path: "/courses",
-    badge: "Growing",
-    badgeColor: "text-green-400 bg-green-900/30 border-green-700",
-    desc: "Structured learning from IP strategy and patent law to scalar electromagnetics, research-to-revenue workflows, and advanced device physics. New content monthly.",
-    tier: "Researcher $97/mo",
-  },
-  {
-    icon: "🧠",
-    title: "AI Research Assistant",
-    path: "/ai-research",
-    badge: "AI-Powered",
-    badgeColor: "text-cyan-400 bg-cyan-900/30 border-cyan-700",
-    desc: "Ask any research question and get deep, cited answers sourced from the full Bearden scalar EM archive, patent databases, and peer-reviewed literature.",
-    tier: "Researcher $97/mo",
-  },
-  {
-    icon: "🗺️",
-    title: "Concept Knowledge Graph",
-    path: "/",
-    badge: "Free",
-    badgeColor: "text-gray-400 bg-gray-800 border-gray-600",
-    desc: "Interactive network map of 200+ interconnected scalar EM, bioelectromagnetics, and free energy concepts — click any node to explore deep research connections.",
-    tier: "Free with trial",
-  },
-  {
-    icon: "📜",
-    title: "Prior Art Archive",
-    path: "/prior-art",
-    badge: "200+ Entries",
-    badgeColor: "text-orange-400 bg-orange-900/30 border-orange-700",
-    desc: "Searchable database of documented historical inventions — successes, failures, patents granted/denied, suppression records, and key claims. Essential for novelty analysis.",
-    tier: "Researcher $97/mo",
-  },
-  {
-    icon: "💼",
-    title: "Investor CRM & Pitch Builder",
-    path: "/investor-crm",
-    badge: "Pro",
-    badgeColor: "text-indigo-400 bg-indigo-900/30 border-indigo-700",
-    desc: "Full investor pipeline management, VC pitch deck builder, outreach tracking, meeting scheduler, and AI-generated investor emails — all in one place.",
-    tier: "Researcher $97/mo",
-  },
-  {
-    icon: "🏛️",
-    title: "Virtual Data Room (VDR)",
-    path: "/vdr-admin",
-    badge: "Pro",
-    badgeColor: "text-indigo-400 bg-indigo-900/30 border-indigo-700",
-    desc: "Secure NDA-gated document sharing portal for buyers and investors. Upload IP documents, grant folder-level access, and track engagement analytics.",
-    tier: "Pro $247/mo",
-  },
-  {
-    icon: "⚖️",
-    title: "FTO Analysis Tool",
-    path: "/fto-analysis",
-    badge: "IP Tool",
-    badgeColor: "text-red-400 bg-red-900/30 border-red-700",
-    desc: "Freedom-to-Operate analysis to identify patent landscape blockers before commercializing your invention. Protect your IP position from day one.",
-    tier: "Researcher $97/mo",
-  },
-  {
-    icon: "🌊",
-    title: "Scalar Wave Simulator",
-    path: "/scalar-wave-sim",
-    badge: "Lab",
-    badgeColor: "text-cyan-400 bg-cyan-900/30 border-cyan-700",
-    desc: "Real-time interactive simulation of scalar EM fields, wave interference patterns, and phase conjugation effects — visualize the physics behind every device.",
-    tier: "Researcher $97/mo",
-  },
-  {
-    icon: "📡",
-    title: "Patent Intelligence Monitor",
-    path: "/patent-intelligence",
-    badge: "Live Data",
-    badgeColor: "text-yellow-400 bg-yellow-900/30 border-yellow-700",
-    desc: "Track new patent filings in your technology domains, get alerts on competitor activity, and monitor the global scalar EM patent landscape in real time.",
-    tier: "Researcher $97/mo",
-  },
-  {
-    icon: "🏗️",
-    title: "Provisional Patent Wizard",
-    path: "/provisional-patent",
-    badge: "Legal",
-    badgeColor: "text-blue-400 bg-blue-900/30 border-blue-700",
-    desc: "Generate USPTO 35 USC 111(b) compliant provisional patent applications with AI-assisted claim drafting, drawings descriptions, and formal legal language.",
-    tier: "Researcher $97/mo",
-  },
-  {
-    icon: "🛒",
-    title: "Build Supplies Shop",
-    path: "/build-supplies-shop",
-    badge: "New",
-    badgeColor: "text-green-400 bg-green-900/30 border-green-700",
-    desc: "Pre-sourced component kits for every device build plan — order exact parts bundles and start building immediately without the sourcing research.",
-    tier: "All members",
-  },
-  {
-    icon: "📊",
-    title: "IP Portfolio Health",
-    path: "/ip-portfolio-health",
-    badge: "Analytics",
-    badgeColor: "text-purple-400 bg-purple-900/30 border-purple-700",
-    desc: "Track the health, coverage gaps, expiration risks, and commercialization readiness of your full intellectual property portfolio in one dashboard.",
-    tier: "Researcher $97/mo",
-  },
-  {
-    icon: "🤝",
-    title: "Co-Inventor Matching",
-    path: "/co-inventor-matching",
-    badge: "Network",
-    badgeColor: "text-pink-400 bg-pink-900/30 border-pink-700",
-    desc: "Find co-inventors, engineering partners, and technical collaborators aligned with your invention category, skill requirements, and development stage.",
-    tier: "Researcher $97/mo",
-  },
+// ── The one build we let them "experience" for free ───────────────────────────
+const TEASER_BUILD = {
+  title: "MEG Replication Kit",
+  category: "Free Energy — US Patent 6,362,718",
+  hook: "Motionless Electromagnetic Generator. Peer-reviewed. COP>1 demonstrated. Co-authored by PhD physicist, published in Foundations of Physics Letters.",
+  img: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/b177d065d_generated_image.png",
+  preview: [
+    { label: "Components", value: "23 parts", free: true },
+    { label: "Est. build cost", value: "~$180–240", free: true },
+    { label: "Build time", value: "12–18 hours", free: true },
+    { label: "Primary sources", value: "7 citations", free: true },
+    { label: "Full BOM (Digikey part numbers)", value: "Unlock", free: false },
+    { label: "Step-by-step assembly (14 steps)", value: "Unlock", free: false },
+    { label: "Downloadable PDF", value: "Unlock", free: false },
+    { label: "Build video walkthrough", value: "Unlock", free: false },
+  ],
+};
+
+const VALUE_PROPS = [
+  { icon: <Wrench size={20} className="text-orange-400" />, title: "40+ Full Build Plans", detail: "BOM, assembly steps, PDF, build video — for every device in the vault." },
+  { icon: <BookOpen size={20} className="text-blue-400" />, title: "40+ Advanced Courses", detail: "Scalar EM, patent strategy, bioelectromagnetics, vacuum energy. New content monthly." },
+  { icon: <Shield size={20} className="text-green-400" />, title: "AI Patent Suite", detail: "Provisional patents, FTO analysis, claims generator. Minutes, not months." },
 ];
 
-const HOW_TO_START = [
-  { step: "01", title: "Read the NDA & Gain Access", desc: "Accept the platform NDA on entry. Your 24-hour explorer pass activates immediately — explore the knowledge graph and first build plan free.", icon: Shield },
-  { step: "02", title: "Explore the Concept Graph", desc: "Start at the homepage. The interactive knowledge graph shows every research concept and how they connect. Click any node to drill into primary sources.", icon: Globe },
-  { step: "03", title: "Browse the Prior Art Archive", desc: "Before building or filing, search 200+ documented historical devices at /prior-art. Understand what worked, what failed, and what's patentable.", icon: BookOpen },
-  { step: "04", title: "Pick a Device & Study the Build Plan", desc: "Go to Invention Plans. Study the Bill of Materials, step-by-step assembly guide, and technical overview for the device you want to build.", icon: FlaskConical },
-  { step: "05", title: "Run the AI Research Assistant", desc: "Ask any question at /ai-research. Get deep answers with citations from the full Bearden archive, patents, and peer-reviewed papers — instantly.", icon: Brain },
-  { step: "06", title: "Draft Your Patent with AI", desc: "Use the Patent Drafting Tool at /patent-tool. Select your invention, configure jurisdictions, and generate a full USPTO-compliant provisional in minutes.", icon: FileText },
-  { step: "07", title: "Build Your Investor Package", desc: "Use the Pitch Builder, Investor CRM, and VDR Portal to prepare for fundraising or acquisition. Everything from deck to term sheet in one workflow.", icon: DollarSign },
-];
+// ── Step components ───────────────────────────────────────────────────────────
 
-const WHY_97 = [
-  { icon: Zap, label: "Unlimited AI Invention Generation", value: "vs $5,000+ per invention with consultants" },
-  { icon: FileText, label: "Unlimited Patent Drafting", value: "vs $3,000–$15,000 per attorney-drafted application" },
-  { icon: FlaskConical, label: "All 23 Device Build Plans (PDF)", value: "vs $500–$2,000 per individual dossier" },
-  { icon: BookOpen, label: "Full 26-Course Library", value: "vs $200–$500 per course elsewhere" },
-  { icon: Microscope, label: "EM Lab Simulators", value: "Exclusive — not available anywhere else" },
-  { icon: Target, label: "Prior Art Archive (200+ entries)", value: "vs $500+ per professional prior art search" },
-  { icon: TrendingUp, label: "IP Portfolio Health Dashboard", value: "vs $1,000+/mo with an IP management firm" },
-  { icon: Users, label: "Co-Inventor & Partner Matching", value: "Exclusive to ZARP members" },
-];
-
-export default function Welcome() {
+function StepWelcome({ onNext }) {
   return (
-    <div className="min-h-screen bg-gray-950 text-white">
-
-      {/* Hero */}
-      <div className="relative overflow-hidden border-b border-gray-800">
-        <div className="absolute inset-0 pointer-events-none"
-          style={{ backgroundImage: "radial-gradient(ellipse at 50% 0%, rgba(14,165,233,0.08) 0%, transparent 70%)" }} />
-        <div className="max-w-5xl mx-auto px-5 py-16 text-center relative">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-cyan-950/60 border border-cyan-800 text-cyan-400 text-xs font-black mb-6 uppercase tracking-widest">
-            <Sparkles size={11} /> Welcome to ZARP — Your Complete Platform Guide
-          </div>
-          <h1 className="text-4xl md:text-5xl font-black leading-tight mb-4">
-            Everything You Need to Know<br />
-            <span className="text-cyan-400">to Get the Most Out of ZARP</span>
-          </h1>
-          <p className="text-gray-400 text-lg max-w-2xl mx-auto leading-relaxed mb-8">
-            The Zenith Apex Research Portfolio is an AI-native operating system for invention, IP creation, and commercialization. Here's your complete map of every tool, where to find it, and how to use it.
-          </p>
-          <div className="flex flex-wrap items-center justify-center gap-3">
-            <Link to="/pricing"
-              className="flex items-center gap-2 px-6 py-3 rounded-xl font-black text-sm bg-cyan-700 hover:bg-cyan-600 text-white transition-all shadow-[0_4px_20px_rgba(14,165,233,0.3)]">
-              Start $97/mo — Unlock Everything <ArrowRight size={14} />
-            </Link>
-            <Link to="/"
-              className="flex items-center gap-2 px-6 py-3 rounded-xl font-black text-sm border border-gray-700 text-gray-300 hover:border-gray-500 transition-all">
-              Explore the Platform →
-            </Link>
-          </div>
+    <div className="flex flex-col items-center text-center max-w-lg mx-auto px-5 py-16 min-h-[80vh] justify-center">
+      <div className="mb-8">
+        <img
+          src="https://media.base44.com/images/public/69ccefebfea78b23498c66a8/a90918e3c_ZARPlogo.png"
+          alt="ZARP"
+          className="h-16 w-16 object-contain mx-auto mb-5"
+        />
+        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-cyan-950/60 border border-cyan-800 text-cyan-300 text-xs font-black mb-5 uppercase tracking-widest">
+          <Zap size={10} /> You're Inside the Vault
         </div>
+        <h1 className="text-4xl font-black leading-tight mb-4">
+          Welcome to<br />
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">ZARP Engineering Vault</span>
+        </h1>
+        <p className="text-gray-400 text-base leading-relaxed mb-2">
+          40+ advanced engineering systems sourced from <strong className="text-white">granted US patents</strong>, <strong className="text-white">peer-reviewed journals</strong>, and <strong className="text-white">declassified government documents</strong>.
+        </p>
+        <p className="text-gray-500 text-sm leading-relaxed">
+          Full build plans. Complete BOMs. AI patent tools. Physical kit delivery. Every system is documented at the engineering level — not the theory level.
+        </p>
       </div>
 
-      {/* How to Get Started */}
-      <div className="max-w-4xl mx-auto px-5 py-14">
-        <div className="text-center mb-10">
-          <h2 className="text-white font-black text-2xl mb-2">How to Get Started — Step by Step</h2>
-          <p className="text-gray-500 text-sm">Follow this path to go from new member to active inventor in your first week.</p>
-        </div>
-        <div className="space-y-4">
-          {HOW_TO_START.map((item, i) => (
-            <div key={i} className="flex gap-5 items-start bg-gray-900 border border-gray-800 rounded-2xl p-5 hover:border-gray-700 transition-all">
-              <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-gray-800 border border-gray-700 flex items-center justify-center">
-                <item.icon size={20} className="text-cyan-400" />
-              </div>
-              <div className="flex-1">
-                <div className="flex items-center gap-3 mb-1">
-                  <span className="text-cyan-600 font-mono text-xs font-black">STEP {item.step}</span>
-                  <h3 className="text-white font-black text-base">{item.title}</h3>
-                </div>
-                <p className="text-gray-400 text-sm leading-relaxed">{item.desc}</p>
-              </div>
-              <ChevronRight size={16} className="text-gray-700 flex-shrink-0 mt-1" />
+      <button
+        onClick={onNext}
+        className="w-full max-w-xs py-4 rounded-xl font-black text-white text-base transition-all hover:opacity-90 flex items-center justify-center gap-2"
+        style={{ background: "linear-gradient(135deg, #06b6d4, #3b82f6)", boxShadow: "0 4px 20px rgba(6,182,212,0.4)" }}
+      >
+        Show Me What's Inside <ArrowRight size={16} />
+      </button>
+      <p className="text-gray-700 text-xs mt-3">Takes 60 seconds</p>
+    </div>
+  );
+}
+
+function StepValue({ onNext }) {
+  return (
+    <div className="max-w-lg mx-auto px-5 py-12 min-h-[80vh] flex flex-col justify-center">
+      <div className="text-center mb-8">
+        <p className="text-cyan-400 text-xs font-black uppercase tracking-widest mb-2">Step 2 of 3 — What You Get</p>
+        <h2 className="text-3xl font-black mb-3">
+          One Membership.<br />The Entire Vault.
+        </h2>
+        <p className="text-gray-400 text-sm leading-relaxed">
+          No other platform documents these systems at the engineering level. Primary sources. Real build specs. Everything.
+        </p>
+      </div>
+
+      <div className="space-y-3 mb-8">
+        {VALUE_PROPS.map((item, i) => (
+          <div key={i} className="flex gap-4 p-4 bg-gray-900 border border-gray-800 rounded-xl">
+            <div className="w-10 h-10 rounded-lg bg-gray-800 flex items-center justify-center flex-shrink-0">
+              {item.icon}
             </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Everything the Platform Offers */}
-      <div className="border-t border-gray-800 bg-gray-900/30 px-5 py-14">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-10">
-            <h2 className="text-white font-black text-2xl mb-2">Every Tool on the Platform</h2>
-            <p className="text-gray-500 text-sm">Click any card to navigate directly to that section.</p>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {FEATURES.map((f, i) => (
-              <Link key={i} to={f.path}
-                className="bg-gray-900 border border-gray-800 rounded-2xl p-5 hover:border-gray-600 transition-all group flex flex-col gap-3">
-                <div className="flex items-start justify-between">
-                  <span className="text-3xl">{f.icon}</span>
-                  <span className={`text-xs font-black px-2 py-0.5 rounded-lg border ${f.badgeColor}`}>{f.badge}</span>
-                </div>
-                <div>
-                  <h3 className="text-white font-black text-sm mb-1 group-hover:text-cyan-300 transition-colors">{f.title}</h3>
-                  <p className="text-gray-500 text-xs leading-relaxed">{f.desc}</p>
-                </div>
-                <div className="mt-auto flex items-center justify-between">
-                  <span className="text-gray-700 text-xs">{f.tier}</span>
-                  <ChevronRight size={13} className="text-gray-700 group-hover:text-cyan-400 transition-colors" />
-                </div>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* Why $97/mo */}
-      <div className="max-w-4xl mx-auto px-5 py-14">
-        <div className="text-center mb-10">
-          <h2 className="text-white font-black text-2xl mb-2">Why $97/mo Is the Best Investment You'll Make</h2>
-          <p className="text-gray-500 text-sm max-w-xl mx-auto">Compare what you get on the platform vs. what it would cost to replicate outside of it.</p>
-        </div>
-        <div className="bg-gray-900 border border-cyan-900/50 rounded-2xl overflow-hidden mb-8">
-          <div className="bg-cyan-950/40 border-b border-cyan-900/40 px-6 py-4 flex items-center gap-3">
-            <Sparkles size={16} className="text-cyan-400" />
-            <p className="text-cyan-300 font-black text-sm">Researcher Plan — $97/mo — What You Actually Get</p>
-          </div>
-          <div className="divide-y divide-gray-800">
-            {WHY_97.map((item, i) => (
-              <div key={i} className="flex items-center gap-4 px-6 py-4">
-                <div className="w-9 h-9 rounded-xl bg-gray-800 flex items-center justify-center flex-shrink-0">
-                  <item.icon size={16} className="text-cyan-400" />
-                </div>
-                <div className="flex-1">
-                  <p className="text-white font-bold text-sm">{item.label}</p>
-                  <p className="text-gray-500 text-xs">{item.value}</p>
-                </div>
-                <CheckCircle2 size={16} className="text-green-400 flex-shrink-0" />
-              </div>
-            ))}
-          </div>
-          <div className="px-6 py-5 bg-gray-800/40 flex items-center justify-between flex-wrap gap-3">
             <div>
-              <p className="text-gray-400 text-xs mb-1">Total value if purchased separately</p>
-              <p className="text-white font-black text-2xl">$30,000+ <span className="text-gray-600 text-base font-normal">/ year</span></p>
-            </div>
-            <div className="text-right">
-              <p className="text-gray-400 text-xs mb-1">Your cost on ZARP</p>
-              <p className="text-cyan-400 font-black text-2xl">$1,164 <span className="text-gray-500 text-base font-normal">/ year</span></p>
+              <h3 className="text-white font-bold text-sm mb-0.5">{item.title}</h3>
+              <p className="text-gray-400 text-xs leading-relaxed">{item.detail}</p>
             </div>
           </div>
-        </div>
+        ))}
+      </div>
 
-        {/* CTA */}
-        <div className="bg-gradient-to-br from-gray-900 to-gray-950 border-2 border-cyan-800/50 rounded-2xl p-8 text-center">
-          <div className="flex gap-0.5 justify-center mb-3">
-            {[...Array(5)].map((_, i) => <Star key={i} size={14} className="text-yellow-500 fill-yellow-500" />)}
-          </div>
-          <h3 className="text-white font-black text-xl mb-3">
-            Join the AI Operating System for Global R&D
-          </h3>
-          <p className="text-gray-400 text-sm leading-relaxed max-w-xl mx-auto mb-6">
-            More inventions → more data → exponentially more powerful system. Every member makes the platform smarter. Lock in your founding member rate before pricing increases.
-          </p>
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-            <Link to="/pricing"
-              className="flex items-center gap-2 px-8 py-4 rounded-xl font-black text-base text-black bg-gradient-to-r from-cyan-400 to-green-400 hover:opacity-90 transition-all shadow-[0_4px_24px_rgba(14,165,233,0.4)] w-full sm:w-auto justify-center">
-              <Zap size={16} /> Get All Access — $39/mo
-            </Link>
-          </div>
-          <p className="text-gray-600 text-xs mt-4">🔒 Secured by Stripe · Cancel anytime · Instant access after payment</p>
+      {/* Price anchor */}
+      <div className="bg-gray-900 border border-gray-800 rounded-xl p-4 mb-7 flex items-center justify-between">
+        <div>
+          <p className="text-gray-500 text-xs mb-1">À la carte value</p>
+          <p className="text-white font-black text-xl line-through opacity-40">$27,800+</p>
+        </div>
+        <div className="text-right">
+          <p className="text-gray-500 text-xs mb-1">Your membership</p>
+          <p className="text-green-400 font-black text-2xl">From $29<span className="text-gray-500 text-sm font-normal">/month</span></p>
         </div>
       </div>
 
-      {/* Quick Nav Links */}
-      <div className="border-t border-gray-800 bg-gray-900/40 px-5 py-10">
-        <div className="max-w-4xl mx-auto">
-          <p className="text-gray-500 text-xs font-bold uppercase tracking-widest text-center mb-6">Quick Navigation — Jump to Any Section</p>
-          <div className="flex flex-wrap justify-center gap-2">
-            {[
-              { label: "Knowledge Graph", path: "/" },
-              { label: "Invention Plans", path: "/invention-plans" },
-              { label: "Course Library", path: "/courses" },
-              { label: "AI Research", path: "/ai-research" },
-              { label: "Patent Drafting", path: "/patent-tool" },
-              { label: "Prior Art Archive", path: "/prior-art" },
-              { label: "Inventor Forge", path: "/inventor-forge" },
-              { label: "Investor CRM", path: "/investor-crm" },
-              { label: "Pitch Builder", path: "/pitch" },
-              { label: "Scalar Simulator", path: "/scalar-wave-sim" },
-              { label: "Build Supplies Shop", path: "/build-supplies-shop" },
-              { label: "FTO Analysis", path: "/fto-analysis" },
-              { label: "Co-Inventor Matching", path: "/co-inventor-matching" },
-              { label: "IP Portfolio Health", path: "/ip-portfolio-health" },
-              { label: "Patent Intelligence", path: "/patent-intelligence" },
-              { label: "Glossary", path: "/glossary" },
-              { label: "Pricing & Plans", path: "/pricing" },
-              { label: "Account Settings", path: "/account" },
-            ].map((item, i) => (
-              <Link key={i} to={item.path}
-                className="px-3 py-1.5 rounded-lg bg-gray-800 border border-gray-700 text-gray-400 hover:text-white hover:border-gray-500 text-xs font-semibold transition-all">
-                {item.label}
-              </Link>
+      <button
+        onClick={onNext}
+        className="w-full py-4 rounded-xl font-black text-white text-base transition-all hover:opacity-90 flex items-center justify-center gap-2"
+        style={{ background: "linear-gradient(135deg, #8b5cf6, #4f46e5)", boxShadow: "0 4px 20px rgba(139,92,246,0.4)" }}
+      >
+        Show Me a Real Build Plan <ArrowRight size={16} />
+      </button>
+    </div>
+  );
+}
+
+function StepBuild({ onPaywall }) {
+  const [revealed, setRevealed] = useState(false);
+
+  const handleRevealAttempt = () => {
+    if (!revealed) {
+      setRevealed(true);
+      // After 1.2s of "revealing", trigger the paywall
+      setTimeout(onPaywall, 1200);
+    }
+  };
+
+  return (
+    <div className="max-w-lg mx-auto px-5 py-12 min-h-[80vh] flex flex-col justify-center">
+      <div className="text-center mb-6">
+        <p className="text-purple-400 text-xs font-black uppercase tracking-widest mb-2">Step 3 of 3 — Your First Build</p>
+        <h2 className="text-3xl font-black mb-2">The MEG Build Plan</h2>
+        <p className="text-gray-500 text-sm">The most documented COP&gt;1 device in peer-reviewed literature.</p>
+      </div>
+
+      {/* Build card */}
+      <div className="bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden mb-6">
+        <div className="h-40 relative overflow-hidden">
+          <img
+            src={TEASER_BUILD.img}
+            alt={TEASER_BUILD.title}
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-gray-900/90 to-transparent" />
+          <div className="absolute bottom-3 left-4 right-4">
+            <p className="text-white font-black text-base leading-snug">{TEASER_BUILD.title}</p>
+            <p className="text-cyan-400 text-xs">{TEASER_BUILD.category}</p>
+          </div>
+        </div>
+
+        <div className="p-4">
+          <p className="text-gray-400 text-xs leading-relaxed mb-4 italic">{TEASER_BUILD.hook}</p>
+          <div className="space-y-2">
+            {TEASER_BUILD.preview.map((row, i) => (
+              <div key={i} className="flex items-center justify-between py-1.5 border-b border-gray-800 last:border-0">
+                <span className="text-gray-400 text-xs">{row.label}</span>
+                {row.free ? (
+                  <span className="text-white text-xs font-bold">{row.value}</span>
+                ) : (
+                  <button
+                    onClick={handleRevealAttempt}
+                    className={`flex items-center gap-1.5 text-xs font-black px-2.5 py-1 rounded-lg transition-all ${
+                      revealed
+                        ? "bg-purple-600 text-white animate-pulse"
+                        : "bg-gray-800 hover:bg-purple-900/60 text-purple-300 border border-purple-800/50"
+                    }`}
+                  >
+                    <Lock size={10} />
+                    {revealed ? "Unlocking…" : "Unlock"}
+                  </button>
+                )}
+              </div>
             ))}
           </div>
         </div>
       </div>
 
+      <p className="text-center text-gray-500 text-xs mb-4">
+        Click any locked item above — or go straight to the vault:
+      </p>
+      <button
+        onClick={onPaywall}
+        className="w-full py-4 rounded-xl font-black text-white text-base transition-all hover:opacity-90 flex items-center justify-center gap-2"
+        style={{ background: "linear-gradient(135deg, #f59e0b, #d97706)", boxShadow: "0 4px 20px rgba(245,158,11,0.4)" }}
+      >
+        Unlock the Full Build Plan <ChevronRight size={16} />
+      </button>
+      <p className="text-center text-gray-700 text-xs mt-2">From $29/month · Cancel anytime</p>
+    </div>
+  );
+}
+
+// ── Progress indicator ─────────────────────────────────────────────────────────
+function ProgressDots({ step }) {
+  return (
+    <div className="flex items-center justify-center gap-2 pt-8 pb-2">
+      {[0, 1, 2].map((i) => (
+        <div
+          key={i}
+          className="rounded-full transition-all duration-300"
+          style={{
+            width: step === i ? 24 : 8,
+            height: 8,
+            background: step === i
+              ? "linear-gradient(90deg, #06b6d4, #8b5cf6)"
+              : step > i ? "#374151" : "#1f2937",
+          }}
+        />
+      ))}
+    </div>
+  );
+}
+
+// ── Main ──────────────────────────────────────────────────────────────────────
+export default function Welcome() {
+  const [step, setStep] = useState(0);
+  const navigate = useNavigate();
+
+  const goToPaywall = () => navigate("/paywall");
+
+  return (
+    <div className="min-h-screen bg-gray-950 text-white relative">
+      {/* Skip link — low friction, high trust */}
+      <div className="absolute top-4 right-4 z-20">
+        <Link to="/free-vault" className="text-gray-600 hover:text-gray-400 text-xs transition-colors">
+          Skip intro →
+        </Link>
+      </div>
+
+      <ProgressDots step={step} />
+
+      {step === 0 && <StepWelcome onNext={() => setStep(1)} />}
+      {step === 1 && <StepValue onNext={() => setStep(2)} />}
+      {step === 2 && <StepBuild onPaywall={goToPaywall} />}
     </div>
   );
 }
