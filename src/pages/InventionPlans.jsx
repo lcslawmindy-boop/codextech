@@ -18,6 +18,7 @@ import ResearchDisclaimer from "../components/ResearchDisclaimer";
 import AttributionFooter from "../components/AttributionFooter";
 import { itemImages } from "../lib/itemImages";
 import BuildKitUpsellPanel from "../components/BuildKitUpsellPanel";
+import ComponentKitMarketplace from "../components/ComponentKitMarketplace";
 
 // Legacy admin-only gate (free energy / medical claims — still admin-only)
 const ADMIN_ONLY_KEYWORDS = ["motionless electromagnetic generator", "prioré-type multichannel"];
@@ -925,6 +926,14 @@ export default function InventionPlans() {
                       <p className="text-purple-400 font-bold text-xs uppercase tracking-wider mb-2">Technical Notes</p>
                       <p className="text-gray-400 text-sm leading-relaxed">{data.notes}</p>
                     </div>
+                  )}
+
+                  {/* Component Kit Marketplace — direct purchase from plan page */}
+                  {canViewSelected && (
+                    <ComponentKitMarketplace
+                      inventionTitle={selected.title}
+                      inventionIcon={selected.icon}
+                    />
                   )}
 
                   {/* Kit upsell — fires after user has seen the full build */}

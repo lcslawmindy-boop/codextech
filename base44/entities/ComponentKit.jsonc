@@ -1,0 +1,58 @@
+{
+  "name": "ComponentKit",
+  "type": "object",
+  "properties": {
+    "invention_name": {
+      "type": "string",
+      "description": "Which invention this kit is for"
+    },
+    "kit_name": {
+      "type": "string",
+      "description": "Name of the pre-assembled kit"
+    },
+    "description": {
+      "type": "string",
+      "description": "What's included in the kit"
+    },
+    "price_cents": {
+      "type": "integer",
+      "description": "Price in cents (e.g., 28700 = $287.00)"
+    },
+    "components": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "List of included components"
+    },
+    "stripe_product_id": {
+      "type": "string",
+      "description": "Stripe product ID for this kit"
+    },
+    "assembly_level": {
+      "type": "string",
+      "enum": [
+        "bare_components",
+        "partially_assembled",
+        "fully_assembled"
+      ],
+      "default": "bare_components",
+      "description": "How assembled is the kit"
+    },
+    "lead_time_days": {
+      "type": "integer",
+      "description": "Estimated days to ship"
+    },
+    "available": {
+      "type": "boolean",
+      "default": true,
+      "description": "Is this kit available for purchase"
+    }
+  },
+  "required": [
+    "invention_name",
+    "kit_name",
+    "price_cents",
+    "components"
+  ]
+}

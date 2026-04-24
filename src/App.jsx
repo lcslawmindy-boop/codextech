@@ -11,6 +11,7 @@ import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 import ZarpLanding from './pages/ZarpLanding';
 import VaultNDALanding from './pages/VaultNDALanding';
 import FreeVault from './pages/FreeVault';
+import OrderTracking from './pages/OrderTracking';
 import ConceptGraph from './pages/ConceptGraph';
 import LegalAgreement from './pages/LegalAgreement';
 import CopyProtection from './components/CopyProtection';
@@ -209,6 +210,7 @@ const AuthenticatedApp = () => {
           <Route path="/vault" element={<ConceptGraph />} />
           <Route path="/free-vault" element={<FreeVault />} />
           <Route path="/member-dashboard" element={<MemberDashboard />} />
+          <Route path="/orders" element={<OrderTracking />} />
           <Route path="/business" element={<BusinessModels />} />
           <Route path="/pitch" element={<PitchBuilder />} />
           <Route path="/market-deck" element={<MarketDeck />} />
