@@ -134,6 +134,7 @@ import RetentionDashboard from './pages/RetentionDashboard';
 import UpsellEngine from './pages/UpsellEngine';
 import LeadMagnetSystem from './pages/LeadMagnetSystem';
 import ABTestingDashboard from './pages/ABTestingDashboard';
+import RevenueAudit from './pages/RevenueAudit';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -320,6 +321,7 @@ const AuthenticatedApp = () => {
             <Route path="/upsell-engine" element={<UpsellEngine />} />
             <Route path="/lead-magnets" element={<LeadMagnetSystem />} />
             <Route path="/ab-testing" element={<ABTestingDashboard />} />
+            <Route path="/revenue-audit" element={<RevenueAudit />} />
           </Route>
 
           <Route path="*" element={<PageNotFound />} />

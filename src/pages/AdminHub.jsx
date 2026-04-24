@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import {
   Shield, Download, Video, FileText, Users, BarChart2,
   TrendingUp, Database, Settings, ArrowRight, Star, Zap, Target, ShoppingCart, Flame, ShieldCheck,
-  Scale, Briefcase, Building2, Code, Wrench, RefreshCw, Package, FlaskConical
+  Scale, Briefcase, Building2, Code, Wrench, RefreshCw, Package, FlaskConical, ShieldAlert
 } from "lucide-react";
 
 const ADMIN_SECTIONS = [
@@ -35,6 +35,7 @@ const ADMIN_SECTIONS = [
       { path: "/upsell-engine", icon: <ShoppingCart size={20} />, label: "Upsell Engine", desc: "Bundle configs, upsell triggers, cross-sell map & pricing psychology", badge: "NEW" },
       { path: "/lead-magnets", icon: <Download size={20} />, label: "Lead Magnet System", desc: "3 engineering magnets, placement map, timing rules & copy vault", badge: "NEW" },
       { path: "/ab-testing", icon: <FlaskConical size={20} />, label: "A/B Testing System", desc: "16-week roadmap, 8 tests, measurement framework & optimization loop", badge: "NEW" },
+      { path: "/revenue-audit", icon: <ShieldAlert size={20} />, label: "Revenue Audit", desc: "5 fatal problems, exact fixes & monetization redesign — brutally honest", badge: "🔥" },
     ]
   },
   {
