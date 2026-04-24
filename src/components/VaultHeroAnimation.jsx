@@ -283,11 +283,13 @@ export default function VaultHeroAnimation({ children }) {
           const types = ['binary', 'device', 'equation', 'tool', 'periodic', 'medical', 'lab', 'sacred', 'tower', 'book', 'lightbulb', 'bubble', 'atom', 'molecule', 'wave', 'platonic', 'chakra', 'planet', 'shield', 'coil', 'cage', 'medbed', 'gold'];
           const type = types[i % types.length];
           const colors = ['#22c55e', '#ea580c'];
-          const color = colors[i % 2];
-          const glowColor = color === '#22c55e' ? '#16a34a' : '#dc2626';
+          let color = colors[i % 2];
+          let glowColor = color === '#22c55e' ? '#16a34a' : '#dc2626';
           
           let content = '';
           let isEmoji = false;
+          let fontSize = 22;
+          let padding = '18px 24px';
           
           if (type === 'binary') {
             content = Array.from({ length: 4 }).map(() => Math.random() > 0.5 ? '1' : '0').join('');
