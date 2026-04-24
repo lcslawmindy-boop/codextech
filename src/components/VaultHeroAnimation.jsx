@@ -191,17 +191,26 @@ export default function VaultHeroAnimation({ children }) {
           className="neon-logo w-96 sm:w-[500px] md:w-[600px] object-contain"
         />
         
-        {/* Caution Text - Straight, not curved */}
+        {/* Caution Tape at Top */}
         {!clicked && (
-          <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+          <div className="absolute top-0 left-0 right-0 pointer-events-none w-full">
+            {/* Caution Tape */}
+            <div className="w-full h-20 bg-gradient-to-r from-yellow-400 via-black via-30% to-yellow-400" style={{
+              backgroundImage: "repeating-linear-gradient(45deg, #facc15, #facc15 10px, #000 10px, #000 20px)",
+              boxShadow: "0 4px 20px rgba(250, 204, 21, 0.4)",
+            }}></div>
+            
+            {/* CAUTION Text */}
             <div style={{
-              fontSize: '72px',
+              fontSize: '64px',
               fontWeight: 900,
-              color: '#22c55e',
-              textShadow: "0 0 30px #22c55e, 0 0 60px #22c55e, 0 0 90px #22c55e",
-              letterSpacing: '0.1em',
+              color: '#facc15',
+              textShadow: "0 0 20px #facc15, 0 0 40px #000",
+              letterSpacing: '0.15em',
               textAlign: 'center',
-              marginTop: '320px',
+              marginTop: '-50px',
+              position: 'relative',
+              zIndex: 10,
               whiteSpace: 'nowrap'
             }}>
               ⚠️ CAUTION ⚠️
