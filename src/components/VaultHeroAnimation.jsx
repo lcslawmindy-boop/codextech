@@ -279,8 +279,8 @@ export default function VaultHeroAnimation({ children }) {
         ))}
 
         {/* Floating Background Elements — Icons floating around in the background */}
-        {Array.from({ length: 120 }).map((_, i) => {
-          const types = ['binary', 'device', 'equation', 'tool', 'periodic', 'medical', 'lab', 'sacred', 'tower', 'book', 'lightbulb', 'bubble', 'atom', 'molecule', 'wave', 'platonic', 'chakra', 'planet', 'shield', 'coil', 'cage', 'medbed', 'gold', 'logo'];
+        {Array.from({ length: 350 }).map((_, i) => {
+          const types = ['binary', 'device', 'equation', 'tool', 'periodic', 'medical', 'lab', 'sacred', 'tower', 'book', 'lightbulb', 'bubble', 'atom', 'molecule', 'wave', 'platonic', 'chakra', 'planet', 'shield', 'coil', 'cage', 'medbed', 'gold', 'logo', 'flag'];
           const type = types[i % types.length];
           
           // Logo URLs array
@@ -324,7 +324,7 @@ export default function VaultHeroAnimation({ children }) {
             const equations = ['E=mc²', '∇²φ', 'F=qE', 'PV=nRT', 'λν=c', 'ω=2πf', 'α', 'β', 'ΔG=ΔH-TΔS'];
             content = equations[Math.floor(Math.random() * equations.length)];
           } else if (type === 'tool') {
-            const tools = ['⚙️', '🔧', '🔩', '⚡', '🛠️', '🪛', '📏'];
+            const tools = ['⚙️', '🔧', '🔩', '⚡', '🛠️', '🪛', '📏', '🔨', '⚒️', '🪚', '🧰', '⛏️'];
             content = tools[Math.floor(Math.random() * tools.length)];
             isEmoji = true;
           } else if (type === 'periodic') {
@@ -361,7 +361,7 @@ export default function VaultHeroAnimation({ children }) {
           } else if (type === 'wave') {
             content = '≈';
           } else if (type === 'platonic') {
-            const solids = ['⬡', '🔷', '🔶', '⬢', '◆'];
+            const solids = ['⬡', '🔷', '🔶', '⬢', '◆', '△', '▽', '◇', '□', '●'];
             content = solids[Math.floor(Math.random() * solids.length)];
             isEmoji = true;
           } else if (type === 'chakra') {
@@ -369,26 +369,31 @@ export default function VaultHeroAnimation({ children }) {
             content = chakras[Math.floor(Math.random() * chakras.length)];
             isEmoji = true;
           } else if (type === 'planet') {
-            const planets = ['🌍', '🌎', '🌏', '☀️', '🌙', '⭐', '🪐'];
+            const planets = ['🌍', '🌎', '🌏', '☀️', '🌙', '⭐', '🪐', '🔴', '🟡', '⚪'];
             content = planets[Math.floor(Math.random() * planets.length)];
             isEmoji = true;
           } else if (type === 'shield') {
             content = '🛡️';
             isEmoji = true;
           } else if (type === 'coil') {
-            content = '🌀';
-            isEmoji = true;
+            const coils = ['🌀', '↻', '⟳', '⟰'];
+            content = coils[Math.floor(Math.random() * coils.length)];
+            isEmoji = content === '🌀';
           } else if (type === 'cage') {
             content = '⬜';
           } else if (type === 'medbed') {
             content = '🛏️';
             isEmoji = true;
           } else if (type === 'gold') {
-            content = '■';
+            const golds = ['■', '◆', '▪️', '⬛', '$'];
+            content = golds[Math.floor(Math.random() * golds.length)];
             color = '#fbbf24';
             glowColor = '#f59e0b';
           } else if (type === 'logo') {
             content = logoUrls[Math.floor(Math.random() * logoUrls.length)];
+            isEmoji = true;
+          } else if (type === 'flag') {
+            content = 'https://media.base44.com/images/public/69ccefebfea78b23498c66a8/0bbe1f37e_615783632_25669650249318403_7814581183133987149_n.jpg';
             isEmoji = true;
           }
           
@@ -411,11 +416,11 @@ export default function VaultHeroAnimation({ children }) {
                 opacity: 0.6,
               }}
             >
-              {type === 'logo' ? (
+              {(type === 'logo' || type === 'flag') ? (
                 <img
                   src={content}
-                  alt="logo"
-                  className="w-20 h-20 object-contain rounded-lg border border-cyan-400/30 backdrop-blur-sm"
+                  alt={type}
+                  className={`object-contain rounded-lg border border-cyan-400/30 backdrop-blur-sm ${type === 'flag' ? 'w-16 h-16' : 'w-20 h-20'}`}
                   style={{
                     boxShadow: '0 0 16px rgba(6,182,212,0.4)',
                     opacity: 0.7,
