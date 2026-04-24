@@ -11,21 +11,17 @@
       "default": "user"
     },
     "subscription_status": {
-      "type": "string",
-      "enum": [
-        "active",
-        "canceled",
-        "past_due",
-        "trialing",
-        "inactive"
-      ],
-      "default": "inactive"
+      "type": "string"
     },
     "stripe_customer_id": {
       "type": "string"
     },
     "subscription_id": {
       "type": "string"
+    },
+    "admin_access_granted": {
+      "type": "boolean",
+      "default": false
     }
   }
 }

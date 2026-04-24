@@ -12,35 +12,18 @@ export function usePaymentGate() {
       try {
         const user = await base44.auth.me();
         if (!user) {
-          // Check trial pass even for unauthenticated users
-          if (isTrialActive()) { setPaid(true); setIsTrial(true); }
           setLoading(false);
           return;
         }
-        // Admin users always have access
-        if (user.role === "admin") { setPaid(true); setLoading(false); return; }
+        // Admin users or explicit override
+        if (user.role === "admin" || user.admin_access_granted) { setPaid(true); setLoading(false); return; }
 
-        // Check 1: User entity has active subscription (set by Stripe webhook)
+        // Only rely on Stripe Webhook populated status
         if (user.subscription_status === "active") { setPaid(true); setLoading(false); return; }
-
-        // Check 2: BetaApplication record shows converted or a paid plan
-        const apps = await base44.entities.BetaApplication.filter({ email: user.email });
-        const app = apps[0];
-        if (app) {
-          const plan = app.plan_purchased?.toLowerCase() || "";
-          const hasPaid = app.status === "converted" ||
-            plan.includes("starter") || plan.includes("researcher") || plan.includes("pro");
-          if (hasPaid) { setPaid(true); setLoading(false); return; }
-        }
-
-        // Check 3: 24-hour trial pass
-        if (isTrialActive()) { setPaid(true); setIsTrial(true); setLoading(false); return; }
 
         setPaid(false);
       } catch {
-        // Even on auth error, check trial pass
-        if (isTrialActive()) { setPaid(true); setIsTrial(true); }
-        else { setPaid(false); }
+        setPaid(false);
       } finally {
         setLoading(false);
       }

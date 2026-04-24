@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { User, LogOut, Trash2, Shield, Bell, ChevronRight, AlertTriangle, Loader2, Package, Zap } from "lucide-react";
+import { User, LogOut, Trash2, Shield, Bell, ChevronRight, AlertTriangle, Loader2, Package, Zap, RefreshCw } from "lucide-react";
 import { Link } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import PageHeader from "../components/PageHeader";
@@ -8,6 +8,7 @@ import PageHeader from "../components/PageHeader";
 export default function AccountSettings() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [restoring, setRestoring] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -16,6 +17,22 @@ export default function AccountSettings() {
 
   const handleLogout = () => {
     base44.auth.logout("/");
+  };
+
+  const handleRestoreAccess = async () => {
+    setRestoring(true);
+    try {
+      const res = await base44.functions.invoke("restoreAccess", {});
+      if (res.data.success && res.data.status === 'active') {
+        alert("Access restored successfully.");
+        window.location.reload();
+      } else {
+        alert("No active payment or subscription found.");
+      }
+    } catch (e) {
+      alert("Error restoring access: " + e.message);
+    }
+    setRestoring(false);
   };
 
 
@@ -70,29 +87,29 @@ export default function AccountSettings() {
           <ChevronRight size={15} className="text-gray-600" />
         </Link>
 
-        {/* Settings Rows */}
+        {/* Access & Billing */}
         <div className="bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden divide-y divide-gray-800">
-          <div className="flex items-center gap-3 px-5 py-4" style={{ minHeight: 56 }}>
-            <Shield size={18} className="text-indigo-400 flex-shrink-0" />
-            <div className="flex-1">
-              <p className="text-white text-sm font-semibold">NDA Status</p>
-              <p className="text-gray-500 text-xs">Confidentiality agreement accepted</p>
-            </div>
-            <span className="text-xs px-2 py-1 rounded-full bg-green-900/40 border border-green-800 text-green-400 font-bold">Active</span>
-          </div>
-
           <button
-            onClick={() => localStorage.removeItem("bearden_nda_accepted")}
-            className="w-full flex items-center gap-3 px-5 py-4 hover:bg-gray-800/60 transition-colors text-left"
+            onClick={handleRestoreAccess}
+            disabled={restoring}
+            className="w-full flex items-center gap-3 px-5 py-4 hover:bg-gray-800/60 transition-colors text-left disabled:opacity-50"
             style={{ minHeight: 56 }}
           >
-            <Bell size={18} className="text-gray-400 flex-shrink-0" />
+            {restoring ? <Loader2 size={18} className="text-cyan-400 animate-spin flex-shrink-0" /> : <RefreshCw size={18} className="text-cyan-400 flex-shrink-0" />}
             <div className="flex-1">
-              <p className="text-white text-sm font-semibold">Reset NDA Agreement</p>
-              <p className="text-gray-500 text-xs">Forces re-acceptance on next visit</p>
+              <p className="text-white text-sm font-semibold">Restore Access</p>
+              <p className="text-gray-500 text-xs">Re-check Stripe for active subscriptions</p>
             </div>
             <ChevronRight size={15} className="text-gray-600" />
           </button>
+
+          <div className="flex items-center gap-3 px-5 py-4" style={{ minHeight: 56 }}>
+            <Shield size={18} className="text-indigo-400 flex-shrink-0" />
+            <div className="flex-1">
+              <p className="text-white text-sm font-semibold">Stripe Status</p>
+              <p className="text-gray-500 text-xs">{user?.subscription_status === 'active' ? 'Active subscription' : 'No active subscription'}</p>
+            </div>
+          </div>
         </div>
 
         {/* Danger Zone */}
