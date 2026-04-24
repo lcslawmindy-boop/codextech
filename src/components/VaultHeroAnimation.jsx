@@ -193,12 +193,12 @@ export default function VaultHeroAnimation({ children }) {
         
         {/* Click Here Text - Curved around dial */}
         {!clicked && (
-          <svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 400 400" style={{ top: '-60px' }}>
+          <svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 400 400" style={{ top: '-20px' }}>
             <defs>
               <path id="curve" d="M 50, 200 A 150, 150 0 0, 1 350, 200" fill="none" />
             </defs>
             <text style={{ textShadow: "0 0 20px #FFFF00, 0 0 40px #FFFF00, 0 0 60px #FFFF00" }} className="text-white font-black uppercase tracking-widest fill-white" fontSize="32" fontWeight="900">
-              <textPath href="#curve" startOffset="50%" textAnchor="middle" style={{ fontSize: '40px', fontWeight: 900 }}>
+              <textPath href="#curve" startOffset="50%" textAnchor="middle" style={{ fontSize: '52px', fontWeight: 900 }}>
                 ⚡ CLICK HERE ⚡
               </textPath>
             </text>
