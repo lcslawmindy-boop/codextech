@@ -545,7 +545,7 @@ export default function VaultHeroAnimation({ children }) {
         <img
           src="https://media.base44.com/images/public/69ccefebfea78b23498c66a8/5da1807d1_generated_image.png"
           alt="C.O.D.E.X.T.E.C.H. Neon"
-          className="neon-logo w-96 sm:w-[500px] md:w-[600px] object-contain"
+          className="neon-logo w-[420px] sm:w-[580px] md:w-[720px] object-contain"
         />
         
         {/* Caution Tape at Very Top */}
