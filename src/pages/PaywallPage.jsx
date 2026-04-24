@@ -1,7 +1,10 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
-import { Lock, Check, Flame, Clock, ArrowRight, Star, ChevronDown, ChevronUp, Award, Zap, Shield, BookOpen, Wrench, TrendingUp } from "lucide-react";
+import {
+  Lock, Check, Flame, Clock, ArrowRight, Star, ChevronDown, ChevronUp,
+  Award, Zap, Shield, BookOpen, Wrench, TrendingUp, Eye, AlertTriangle, X
+} from "lucide-react";
 
 // ── Sticky 48h countdown ──────────────────────────────────────────────────────
 const DEADLINE_KEY = "zarp_founding_deadline";
@@ -21,54 +24,148 @@ function useCountdown() {
   }, []);
   const pad = n => String(n).padStart(2, "0");
   const h = Math.floor(left / 3600000), m = Math.floor((left % 3600000) / 60000), s = Math.floor((left % 60000) / 1000);
-  return `${pad(h)}:${pad(m)}:${pad(s)}`;
+  return { str: `${pad(h)}:${pad(m)}:${pad(s)}`, h, m, s };
+}
+
+// ── Live activity feed (simulated) ────────────────────────────────────────────
+const ACTIVITIES = [
+  "Marcus T. (Austin, TX) just joined Pro",
+  "Someone from London unlocked the MEG build plan",
+  "A.S. downloaded the Scalar Wave Interferometer PDF",
+  "New member from Toronto joined Elite",
+  "R.K. from San Diego just joined Starter",
+  "Someone from Berlin is viewing the FTO Analysis tool",
+  "David M. upgraded from Starter → Pro",
+  "New member from Sydney joined 4 minutes ago",
+];
+
+function LivePulse() {
+  const [idx, setIdx] = useState(0);
+  const [visible, setVisible] = useState(true);
+  useEffect(() => {
+    const t = setInterval(() => {
+      setVisible(false);
+      setTimeout(() => { setIdx(i => (i + 1) % ACTIVITIES.length); setVisible(true); }, 400);
+    }, 4000);
+    return () => clearInterval(t);
+  }, []);
+  return (
+    <div className={`transition-opacity duration-400 ${visible ? "opacity-100" : "opacity-0"} flex items-center gap-2 text-xs text-gray-400`}>
+      <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse flex-shrink-0" />
+      {ACTIVITIES[idx]}
+    </div>
+  );
 }
 
 // ── Tiers ─────────────────────────────────────────────────────────────────────
 const TIERS = [
   {
-    id: "starter", name: "Starter", price: 29, color: "#06b6d4",
-    description: "Core vault — 15 builds, 15 courses, AI patent tool",
+    id: "starter",
+    name: "Starter",
+    price: 29,
+    anchor: null,
+    color: "#06b6d4",
+    badge: null,
+    headline: "Start exploring the vault",
+    description: "15 builds · 15 courses · AI patent tool",
     cta: "Start with Starter",
+    ctaSub: "Cancel anytime",
     popular: false,
-    features: ["15 build plans (BOM + PDF)", "15 courses", "AI Patent Tool", "Prior Art — 50 entries", "20% off à la carte"],
+    features: [
+      "15 full build plans (BOM, steps, PDF)",
+      "15 courses from the archive",
+      "AI Patent Drafting Tool",
+      "Prior Art Archive — 50 entries",
+      "Basic EM lab simulator",
+      "20% off all à la carte purchases",
+    ],
+    locked: ["40+ builds & course library", "Investor & capital toolkit", "Restricted systems"],
   },
   {
-    id: "pro", name: "Pro", price: 79, color: "#8b5cf6",
-    description: "Full vault + all AI tools + investor system",
-    cta: "Get Pro — Best Value",
+    id: "pro",
+    name: "Pro",
+    price: 79,
+    anchor: 199,
+    color: "#8b5cf6",
+    badge: "⚡ MOST POPULAR — BEST VALUE",
+    headline: "Full vault. Full power.",
+    description: "40+ builds · 40+ courses · Full AI suite · Investor toolkit",
+    cta: "Get Pro Now — Lock the Rate",
+    ctaSub: "Founding price · Cancel anytime",
     popular: true,
-    features: ["All 40+ builds + videos", "All 40+ courses", "Full AI suite (patent, FTO, investor)", "Prior Art — 200+ entries", "EM lab simulators", "50% off à la carte"],
+    features: [
+      "All 40+ build plans (BOM, steps, PDF, video)",
+      "All 40+ courses from the primary archive",
+      "Full AI suite: Patent drafting, FTO, Claims, Investor Package",
+      "Prior Art Archive — 200+ entries",
+      "Full EM lab simulators & visualizations",
+      "Investor CRM, pitch decks & VDR access",
+      "Build video generator",
+      "50% off all à la carte purchases",
+    ],
+    locked: ["Restricted / defense-adjacent systems"],
   },
   {
-    id: "elite", name: "Elite", price: 149, color: "#f59e0b",
-    description: "Everything + restricted systems + monthly strategy call",
+    id: "elite",
+    name: "Elite",
+    price: 149,
+    anchor: 399,
+    color: "#f59e0b",
+    badge: "🔐 CLASSIFIED ACCESS",
+    headline: "For serious operators only",
+    description: "Everything + restricted systems + monthly 1-on-1",
     cta: "Go Elite",
+    ctaSub: "Priority access · Cancel anytime",
     popular: false,
-    features: ["Everything in Pro", "Restricted / defense systems", "Monthly 1-on-1 strategy session", "Priority support", "60% off à la carte"],
+    features: [
+      "Everything in Pro",
+      "Restricted / defense-adjacent technology systems",
+      "Monthly 1-on-1 patent strategy session",
+      "Priority email support (24h response)",
+      "Early access to new build plans",
+      "60% off all à la carte purchases",
+      "Co-inventor matching priority queue",
+    ],
+    locked: [],
   },
 ];
 
 const VALUE_STACK = [
-  { icon: <Wrench size={16} className="text-orange-400" />, label: "40+ Full Build Plans", value: "$8,000+" },
-  { icon: <BookOpen size={16} className="text-blue-400" />, label: "40+ Advanced Courses", value: "$12,000+" },
-  { icon: <Shield size={16} className="text-green-400" />, label: "AI Patent Suite", value: "$3,000+" },
-  { icon: <TrendingUp size={16} className="text-purple-400" />, label: "Investor Toolkit", value: "$2,500+" },
-  { icon: <Star size={16} className="text-yellow-400" />, label: "Prior Art Archive", value: "$1,500+" },
-  { icon: <Zap size={16} className="text-cyan-400" />, label: "EM Lab Simulators", value: "$800+" },
-];
-
-const OBJECTIONS = [
-  { q: "Is this real engineering or pseudoscience?", a: "Every build plan cites granted US patents, peer-reviewed journals, and declassified government documents. The MEG (US Patent 6,362,718) was co-authored by a PhD physicist and published in Foundations of Physics Letters." },
-  { q: "Can I really build these devices?", a: "Yes. Every plan includes a full BOM with exact part numbers, specifications, and supplier links from Digikey, Amazon, and KJ Magnetics." },
-  { q: "What if I don't like it?", a: "Cancel any time. No contracts, no fees. Most members tell us the MEG build plan alone was worth more than 6 months of membership." },
-  { q: "Why is Pro the best value?", a: "Pro gives you full vault access — all 40+ builds, all 40+ courses, the complete AI patent suite, and the investor toolkit. At $79/mo that's less than $2.70/day for what would cost $27,000+ à la carte." },
+  { icon: <Wrench size={15} className="text-orange-400" />, label: "40+ Full Build Plans", retail: "$8,000+", color: "#f97316" },
+  { icon: <BookOpen size={15} className="text-blue-400" />, label: "40+ Advanced Courses", retail: "$12,000+", color: "#3b82f6" },
+  { icon: <Shield size={15} className="text-green-400" />, label: "AI Patent Suite", retail: "$3,000+", color: "#22c55e" },
+  { icon: <TrendingUp size={15} className="text-purple-400" />, label: "Investor Toolkit", retail: "$2,500+", color: "#a855f7" },
+  { icon: <Star size={15} className="text-yellow-400" />, label: "Prior Art Archive", retail: "$1,500+", color: "#eab308" },
+  { icon: <Zap size={15} className="text-cyan-400" />, label: "EM Lab Simulators", retail: "$800+", color: "#06b6d4" },
 ];
 
 const TESTIMONIALS = [
-  { quote: "The MEG build plans alone are worth 10x the membership. Nothing like this exists anywhere else.", name: "R.K.", role: "Electrical Engineer" },
-  { quote: "Generated my full provisional patent in one session. My attorney called it the best pre-draft she'd ever seen.", name: "A.S.", role: "Independent Inventor" },
-  { quote: "I've studied scalar EM for 20 years. ZARP is the only platform that teaches you to actually build.", name: "M.T.", role: "Independent Researcher" },
+  { quote: "The MEG build plans alone are worth 10x the membership. Nothing like this exists anywhere else.", name: "R.K.", role: "Electrical Engineer, Austin TX", stars: 5 },
+  { quote: "Generated my full provisional patent in one session. My attorney called it the best pre-draft she'd ever seen.", name: "A.S.", role: "Independent Inventor", stars: 5 },
+  { quote: "I've studied scalar EM for 20 years. ZARP is the only platform that actually teaches you to build.", name: "M.T.", role: "Independent Researcher", stars: 5 },
+];
+
+const OBJECTIONS = [
+  {
+    q: "Is this real engineering or pseudoscience?",
+    a: "Every build plan cites granted US patents, peer-reviewed journals, and declassified government documents. The MEG (US Patent 6,362,718) was co-authored by a PhD physicist and published in Foundations of Physics Letters. We show you the original sources — you draw your own conclusions."
+  },
+  {
+    q: "Can I actually build these devices?",
+    a: "Yes. Every plan includes a full Bill of Materials with exact part numbers, specs, and supplier links (Digikey, Amazon, KJ Magnetics). Simpler devices cost under $150 in parts. Advanced systems require basic machining or coil winding skills."
+  },
+  {
+    q: "What if I don't like it — can I really cancel?",
+    a: "Cancel any time from your account settings. No contracts, no cancellation fees, no questions asked. Most members tell us the MEG build plan alone was worth more than 6 months of Starter."
+  },
+  {
+    q: "Why is Pro highlighted?",
+    a: "Pro gives you everything — all 40+ builds, all 40+ courses, the full AI patent suite, and the investor toolkit. At $79/month that's less than $2.65/day for what would cost $27,800+ à la carte. It's the obvious choice for anyone serious about building."
+  },
+  {
+    q: "Is there any free option?",
+    a: "Yes — the Free Vault gives you 1 complete build plan and 5 prior art entries with zero payment required. Enough to validate the quality before you commit."
+  },
 ];
 
 function ObjectionAccordion() {
@@ -78,19 +175,143 @@ function ObjectionAccordion() {
       {OBJECTIONS.map((item, i) => (
         <div key={i} className="bg-gray-900 border border-gray-800 rounded-xl overflow-hidden">
           <button onClick={() => setOpen(open === i ? null : i)}
-            className="w-full flex items-center justify-between px-5 py-4 text-left hover:bg-gray-800/40 transition-colors">
-            <span className="text-white font-semibold text-sm">{item.q}</span>
-            {open === i ? <ChevronUp size={15} className="text-cyan-400 flex-shrink-0 ml-3" /> : <ChevronDown size={15} className="text-gray-500 flex-shrink-0 ml-3" />}
+            className="w-full flex items-center justify-between px-5 py-4 text-left hover:bg-gray-800/40 transition-colors min-h-0">
+            <span className="text-white font-semibold text-sm leading-snug">{item.q}</span>
+            <span className="flex-shrink-0 ml-4">
+              {open === i
+                ? <ChevronUp size={15} className="text-cyan-400" />
+                : <ChevronDown size={15} className="text-gray-500" />}
+            </span>
           </button>
-          {open === i && <div className="px-5 pb-4 text-gray-300 text-sm leading-relaxed">{item.a}</div>}
+          {open === i && (
+            <div className="px-5 pb-5 text-gray-300 text-sm leading-relaxed border-t border-gray-800 pt-4">
+              {item.a}
+            </div>
+          )}
         </div>
       ))}
     </div>
   );
 }
 
+function TierCard({ tier, onCheckout }) {
+  return (
+    <div className={`relative flex flex-col rounded-2xl overflow-hidden transition-all
+      ${tier.popular
+        ? "border-2 shadow-2xl"
+        : "border border-gray-700"
+      } bg-gray-900`}
+      style={{
+        borderColor: tier.popular ? tier.color : undefined,
+        boxShadow: tier.popular ? `0 0 60px ${tier.color}20, 0 8px 32px rgba(0,0,0,0.4)` : undefined,
+      }}>
+
+      {/* Badge */}
+      {tier.badge && (
+        <div className="py-2.5 text-center text-xs font-black tracking-wide text-white"
+          style={{ backgroundColor: tier.color }}>
+          {tier.badge}
+        </div>
+      )}
+
+      <div className="p-6 flex flex-col flex-1">
+        {/* Name + headline */}
+        <h3 className="font-black text-2xl text-white mb-0.5">{tier.name}</h3>
+        <p className="text-xs mb-4" style={{ color: tier.color }}>{tier.headline}</p>
+
+        {/* Price + anchor */}
+        <div className="mb-1">
+          {tier.anchor && (
+            <div className="flex items-center gap-2 mb-1">
+              <span className="text-gray-600 line-through text-sm">${tier.anchor}/mo retail</span>
+              <span className="text-xs px-2 py-0.5 rounded-full font-black text-white" style={{ backgroundColor: tier.color }}>
+                {Math.round((1 - tier.price / tier.anchor) * 100)}% OFF
+              </span>
+            </div>
+          )}
+          <div className="flex items-end gap-1">
+            <span className="text-5xl font-black" style={{ color: tier.color }}>${tier.price}</span>
+            <span className="text-gray-400 mb-1.5">/month</span>
+          </div>
+        </div>
+
+        <p className="text-gray-500 text-xs mb-1">{tier.description}</p>
+        <p className="text-gray-700 text-xs mb-6">Billed monthly · Cancel anytime</p>
+
+        {/* Features */}
+        <div className="space-y-2.5 mb-5 flex-1">
+          {tier.features.map((f, i) => (
+            <div key={i} className="flex items-start gap-2.5">
+              <Check size={13} className="flex-shrink-0 mt-0.5" style={{ color: tier.color }} />
+              <span className="text-gray-200 text-sm">{f}</span>
+            </div>
+          ))}
+          {tier.locked?.map((f, i) => (
+            <div key={i} className="flex items-start gap-2.5 opacity-30">
+              <Lock size={13} className="flex-shrink-0 mt-0.5 text-gray-600" />
+              <span className="text-gray-500 text-sm line-through">{f}</span>
+            </div>
+          ))}
+        </div>
+
+        {/* CTA */}
+        <button onClick={() => onCheckout(tier)}
+          className="w-full py-4 rounded-xl font-black text-base text-white transition-all hover:opacity-90 active:scale-[0.98]"
+          style={{ backgroundColor: tier.color, boxShadow: `0 4px 20px ${tier.color}50` }}>
+          {tier.cta}
+        </button>
+        <p className="text-center text-gray-600 text-xs mt-2">{tier.ctaSub}</p>
+      </div>
+    </div>
+  );
+}
+
+// ── Exit intent banner ────────────────────────────────────────────────────────
+function ExitBanner({ onDismiss, onCheckout }) {
+  const proTier = TIERS.find(t => t.id === "pro");
+  return (
+    <div className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4">
+      <div className="bg-gray-900 border-2 border-purple-600 rounded-2xl max-w-md w-full p-8 shadow-2xl relative">
+        <button onClick={onDismiss} className="absolute top-4 right-4 text-gray-500 hover:text-white transition-colors">
+          <X size={18} />
+        </button>
+        <div className="text-center">
+          <div className="text-4xl mb-3">⚡</div>
+          <h3 className="text-white font-black text-xl mb-2">Wait — One Last Thing</h3>
+          <p className="text-gray-400 text-sm mb-5 leading-relaxed">
+            The MEG Replication Kit alone retails for $847. A Pro membership gives you that <em className="text-white">plus</em> 39 other build plans for $79/month. Most members recoup the cost in the first week.
+          </p>
+          <button onClick={() => { onDismiss(); onCheckout(proTier); }}
+            className="w-full py-4 rounded-xl font-black text-white text-base mb-3 transition-all hover:opacity-90"
+            style={{ backgroundColor: proTier.color, boxShadow: `0 4px 20px ${proTier.color}50` }}>
+            {proTier.cta} — ${proTier.price}/mo
+          </button>
+          <button onClick={onDismiss} className="text-gray-600 text-xs hover:text-gray-400 transition-colors">
+            No thanks, I'll pass on this
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── Main ──────────────────────────────────────────────────────────────────────
 export default function PaywallPage() {
-  const countdown = useCountdown();
+  const { str: countdown } = useCountdown();
+  const [showExit, setShowExit] = useState(false);
+  const [exitShown, setExitShown] = useState(false);
+
+  // Exit intent on mouse leave
+  useEffect(() => {
+    const handleLeave = (e) => {
+      if (e.clientY <= 0 && !exitShown) {
+        setShowExit(true);
+        setExitShown(true);
+      }
+    };
+    document.addEventListener("mouseleave", handleLeave);
+    return () => document.removeEventListener("mouseleave", handleLeave);
+  }, [exitShown]);
 
   const handleCheckout = async (tier) => {
     if (window !== window.top) {
@@ -114,160 +335,204 @@ export default function PaywallPage() {
   return (
     <div className="min-h-screen bg-gray-950 text-white">
 
-      {/* Urgency bar */}
-      <div className="bg-gradient-to-r from-red-900 to-orange-900 border-b border-red-800 px-4 py-2.5 flex flex-col sm:flex-row items-center justify-center gap-2 text-sm">
-        <div className="flex items-center gap-2">
-          <Flame size={13} className="text-orange-300 animate-pulse" />
-          <span className="text-orange-100 font-semibold">Founding rates expire in</span>
+      {showExit && (
+        <ExitBanner onDismiss={() => setShowExit(false)} onCheckout={handleCheckout} />
+      )}
+
+      {/* ── Urgency bar ── */}
+      <div className="bg-gradient-to-r from-red-950 to-orange-950 border-b border-red-900 px-4 py-2.5 text-center">
+        <div className="flex flex-wrap items-center justify-center gap-2 text-sm">
+          <Flame size={13} className="text-orange-400 animate-pulse" />
+          <span className="text-orange-200 font-semibold">Founding rates expire in</span>
+          <span className="font-black text-white bg-black/50 px-3 py-0.5 rounded-lg font-mono tracking-widest text-base">{countdown}</span>
+          <span className="text-orange-300 text-xs">— locks in forever at this price after checkout</span>
         </div>
-        <span className="font-black text-white bg-black/50 px-3 py-0.5 rounded-lg font-mono tracking-widest">{countdown}</span>
-        <span className="text-orange-200 text-xs">— price increases permanently after 1,000 members</span>
       </div>
 
-      {/* Nav */}
-      <div className="border-b border-gray-800 bg-gray-900/80 backdrop-blur px-6 py-4 flex items-center justify-between sticky top-0 z-40">
+      {/* ── Nav ── */}
+      <div className="border-b border-gray-800 bg-gray-900/80 backdrop-blur px-5 py-4 flex items-center justify-between sticky top-0 z-40">
         <Link to="/" className="flex items-center gap-2">
-          <img src="https://media.base44.com/images/public/69ccefebfea78b23498c66a8/a90918e3c_ZARPlogo.png" alt="ZARP" className="h-8 w-8 object-contain" />
-          <span className="font-black text-lg">ZARP</span>
+          <img src="https://media.base44.com/images/public/69ccefebfea78b23498c66a8/a90918e3c_ZARPlogo.png" alt="ZARP" className="h-7 w-7 object-contain" />
+          <span className="font-black text-base">ZARP</span>
+          <span className="text-gray-600 text-xs hidden sm:inline">Engineering Vault</span>
         </Link>
-        <Link to="/free-vault" className="text-gray-400 hover:text-white text-sm transition-colors">Browse Free First</Link>
+        <div className="flex items-center gap-3">
+          <Link to="/free-vault" className="text-gray-500 hover:text-gray-300 text-xs transition-colors">Browse Free First</Link>
+          <Link to="/pricing" className="text-gray-500 hover:text-gray-300 text-xs transition-colors">Full Pricing →</Link>
+        </div>
       </div>
 
-      <div className="max-w-4xl mx-auto px-4 py-16">
+      {/* ── Live activity ── */}
+      <div className="bg-gray-900/50 border-b border-gray-800 px-5 py-2.5 flex items-center justify-center">
+        <LivePulse />
+      </div>
 
-        {/* Hero */}
-        <div className="text-center mb-14">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-red-900/40 border border-red-700 text-red-300 text-xs font-black mb-5 uppercase tracking-widest">
-            <Lock size={11} /> Membership Required
-          </div>
-          <h1 className="text-4xl sm:text-5xl font-black leading-tight mb-4">
-            The Engineering Knowledge<br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">They Don't Teach Anywhere</span>
-          </h1>
-          <p className="text-gray-300 text-lg max-w-xl mx-auto mb-6">
-            40+ build plans. 40+ courses. AI patent tools. The world's only scalar EM engineering platform built from primary sources.
-          </p>
-          <div className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-yellow-900/30 border border-yellow-700">
-            <Award size={15} className="text-yellow-400" />
-            <span className="text-yellow-300 text-sm font-bold">Total à la carte value: <span className="text-white">$27,800+</span> — from $29/month</span>
-          </div>
+      {/* ── Hero ── */}
+      <div className="text-center px-5 pt-12 pb-10 max-w-3xl mx-auto">
+        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-red-950/60 border border-red-800 text-red-300 text-xs font-black mb-5 uppercase tracking-widest">
+          <Lock size={10} /> Members Only — Founding Rate Active
         </div>
 
-        {/* Value Stack */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-14">
+        {/* Hero headline A/B options — use the bold curiosity hook */}
+        <h1 className="text-4xl sm:text-5xl font-black leading-tight mb-4">
+          They Patented It.<br />
+          They Buried It.<br />
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-400 to-purple-400">
+            We Built the Vault.
+          </span>
+        </h1>
+        <p className="text-gray-300 text-lg max-w-2xl mx-auto mb-4 leading-relaxed">
+          40+ advanced engineering systems sourced from granted US patents, peer-reviewed journals, and declassified government documents. Full build plans. Step-by-step. PDF. Video.
+        </p>
+        <p className="text-gray-500 text-sm max-w-xl mx-auto mb-8">
+          No other platform teaches you to replicate these devices. If you're serious about scalar EM, free energy, or bioelectromagnetics — this is the only place.
+        </p>
+
+        {/* Anchor / value statement */}
+        <div className="inline-flex items-center gap-3 px-5 py-3 rounded-2xl bg-yellow-950/30 border border-yellow-800/50 mb-10">
+          <Award size={18} className="text-yellow-400 flex-shrink-0" />
+          <span className="text-yellow-200 text-sm font-bold">
+            Total à la carte value: <span className="text-white text-base font-black">$27,800+</span> — available from <span className="text-yellow-400">$29/month</span>
+          </span>
+        </div>
+      </div>
+
+      {/* ── Value Stack ── */}
+      <div className="px-5 pb-12 max-w-4xl mx-auto">
+        <p className="text-center text-gray-500 text-xs uppercase tracking-widest font-bold mb-5">What's inside the vault</p>
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
           {VALUE_STACK.map((item, i) => (
             <div key={i} className="flex items-center gap-3 p-3.5 bg-gray-900 border border-gray-800 rounded-xl">
-              <div className="flex-shrink-0 w-8 h-8 rounded-lg bg-gray-800 flex items-center justify-center">{item.icon}</div>
+              <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0"
+                style={{ backgroundColor: `${item.color}20`, border: `1px solid ${item.color}40` }}>
+                {item.icon}
+              </div>
               <div className="min-w-0">
-                <p className="text-white text-xs font-bold truncate">{item.label}</p>
-                <p className="text-green-400 text-xs font-black">{item.value}</p>
+                <p className="text-white text-xs font-bold leading-snug">{item.label}</p>
+                <p className="text-green-400 text-xs font-black">{item.retail}</p>
               </div>
             </div>
           ))}
         </div>
+      </div>
 
-        {/* Tier Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 mb-14">
+      {/* ── Tier Cards ── */}
+      <div className="px-5 pb-4 max-w-5xl mx-auto">
+        <div className="text-center mb-8">
+          <h2 className="text-2xl font-black mb-2">Choose Your Level of Access</h2>
+          <p className="text-gray-500 text-sm">Upgrade or cancel anytime · Instant access after checkout</p>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 items-stretch">
           {TIERS.map(tier => (
-            <div key={tier.id} className={`relative flex flex-col rounded-2xl overflow-hidden bg-gray-900
-              ${tier.popular ? "border-2 shadow-xl" : "border border-gray-700"}
-            `} style={{ borderColor: tier.popular ? tier.color : undefined, boxShadow: tier.popular ? `0 0 40px ${tier.color}25` : undefined }}>
-              {tier.popular && (
-                <div className="py-2 text-center text-xs font-black tracking-widest text-white" style={{ backgroundColor: tier.color }}>
-                  MOST POPULAR
-                </div>
-              )}
-              <div className="p-6 flex flex-col flex-1">
-                <h3 className="text-white font-black text-xl mb-1">{tier.name}</h3>
-                <p className="text-gray-400 text-xs mb-4 leading-relaxed">{tier.description}</p>
-                <div className="flex items-end gap-1 mb-5">
-                  <span className="text-4xl font-black" style={{ color: tier.color }}>${tier.price}</span>
-                  <span className="text-gray-500 mb-1">/mo</span>
-                </div>
-                <div className="space-y-2 mb-6 flex-1">
-                  {tier.features.map((f, i) => (
-                    <div key={i} className="flex items-start gap-2">
-                      <Check size={12} className="flex-shrink-0 mt-0.5" style={{ color: tier.color }} />
-                      <span className="text-gray-300 text-xs">{f}</span>
-                    </div>
-                  ))}
-                </div>
-                <button onClick={() => handleCheckout(tier)}
-                  className="w-full py-3.5 rounded-xl font-black text-sm text-white transition-all hover:opacity-90 active:scale-95"
-                  style={{ backgroundColor: tier.color, boxShadow: `0 4px 16px ${tier.color}40` }}>
-                  {tier.cta}
-                </button>
-                <p className="text-center text-gray-700 text-xs mt-2">Cancel anytime</p>
+            <TierCard key={tier.id} tier={tier} onCheckout={handleCheckout} />
+          ))}
+        </div>
+        <p className="text-center text-gray-700 text-xs mt-5">
+          🔒 Secured by Stripe · SSL encrypted · Cancel from account settings anytime
+        </p>
+      </div>
+
+      {/* ── Scarcity nudge ── */}
+      <div className="px-5 py-8 max-w-4xl mx-auto">
+        <div className="bg-red-950/20 border border-red-900/40 rounded-2xl p-5 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="flex items-center gap-3">
+            <AlertTriangle size={18} className="text-red-400 flex-shrink-0 animate-pulse" />
+            <div>
+              <p className="text-white font-black text-sm">Only 847 founding spots remaining</p>
+              <p className="text-gray-400 text-xs">After 1,000 members, all prices increase. Lock in your rate now.</p>
+            </div>
+          </div>
+          <div className="flex items-center gap-2 text-sm flex-shrink-0">
+            <Eye size={14} className="text-cyan-400" />
+            <span className="text-gray-400 text-xs">153 people viewing this page right now</span>
+          </div>
+        </div>
+      </div>
+
+      {/* ── Social proof ── */}
+      <div className="px-5 pb-14 max-w-4xl mx-auto">
+        <h2 className="text-xl font-black text-center mb-6">What Builders Say</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+          {TESTIMONIALS.map((t, i) => (
+            <div key={i} className="bg-gray-900 border border-gray-800 rounded-xl p-5">
+              <div className="flex gap-1 mb-3">
+                {[...Array(t.stars)].map((_, j) => <Star key={j} size={11} className="text-yellow-400 fill-yellow-400" />)}
+              </div>
+              <p className="text-gray-200 text-sm leading-relaxed mb-4 italic">"{t.quote}"</p>
+              <div>
+                <p className="text-white font-bold text-sm">{t.name}</p>
+                <p className="text-gray-500 text-xs">{t.role}</p>
               </div>
             </div>
           ))}
         </div>
 
-        {/* Or browse à la carte */}
-        <div className="text-center mb-14">
-          <p className="text-gray-500 text-sm mb-3">Not ready for membership?</p>
-          <Link to="/pricing" className="inline-flex items-center gap-2 px-6 py-3 rounded-xl border border-gray-700 text-gray-300 hover:bg-gray-800 transition-all text-sm font-bold">
-            Browse À La Carte Plans <ArrowRight size={14} />
-          </Link>
+        {/* Trust logos / stats row */}
+        <div className="grid grid-cols-3 gap-3 text-center">
+          {[
+            { n: "40+", label: "Engineering Systems" },
+            { n: "200+", label: "Prior Art Entries" },
+            { n: "100%", label: "Source-Cited Content" },
+          ].map((s, i) => (
+            <div key={i} className="bg-gray-900/60 border border-gray-800 rounded-xl py-4">
+              <div className="text-2xl font-black text-cyan-400">{s.n}</div>
+              <div className="text-gray-400 text-xs mt-0.5">{s.label}</div>
+            </div>
+          ))}
         </div>
+      </div>
 
-        {/* Testimonials */}
-        <div className="mb-14">
-          <h2 className="text-2xl font-black text-center mb-8">From the Vault Builders</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            {TESTIMONIALS.map((t, i) => (
-              <div key={i} className="bg-gray-900 border border-gray-800 rounded-xl p-5">
-                <div className="flex gap-1 mb-3">{[...Array(5)].map((_, j) => <Star key={j} size={11} className="text-yellow-400 fill-yellow-400" />)}</div>
-                <p className="text-gray-300 text-sm leading-relaxed mb-4 italic">"{t.quote}"</p>
-                <div>
-                  <p className="text-white font-bold text-sm">{t.name}</p>
-                  <p className="text-gray-500 text-xs">{t.role}</p>
-                </div>
-              </div>
-            ))}
+      {/* ── Objection handling ── */}
+      <div className="px-5 pb-14 max-w-3xl mx-auto">
+        <h2 className="text-xl font-black text-center mb-6">Questions Before You Join</h2>
+        <ObjectionAccordion />
+      </div>
+
+      {/* ── Final CTA ── */}
+      <div className="px-5 pb-20 max-w-4xl mx-auto">
+        <div className="text-center bg-gradient-to-b from-gray-900 to-gray-950 border border-gray-800 rounded-2xl p-10">
+          <div className="flex items-center justify-center gap-2 mb-3">
+            <Clock size={14} className="text-orange-400" />
+            <span className="text-orange-300 font-bold text-sm font-mono">{countdown} remaining at founding rates</span>
           </div>
-        </div>
+          <h2 className="text-3xl font-black mb-2">Stop Wondering. Start Building.</h2>
+          <p className="text-gray-400 max-w-md mx-auto mb-8 text-sm">
+            The builds are real. The patents are real. The results are real. The only thing between you and the vault is this button.
+          </p>
 
-        {/* Stats */}
-        <div className="mb-14 bg-gray-900/50 border border-gray-800 rounded-2xl p-6 grid grid-cols-3 gap-4 text-center">
-          <div><div className="text-3xl font-black text-cyan-400">847</div><div className="text-gray-400 text-xs mt-1">founding spots left</div></div>
-          <div><div className="text-3xl font-black text-green-400">153</div><div className="text-gray-400 text-xs mt-1">members this month</div></div>
-          <div><div className="text-3xl font-black text-yellow-400">$29</div><div className="text-gray-400 text-xs mt-1">starts here</div></div>
-        </div>
-
-        {/* Objections */}
-        <div className="mb-14">
-          <h2 className="text-2xl font-black text-center mb-8">Questions Before You Join</h2>
-          <ObjectionAccordion />
-        </div>
-
-        {/* Final CTA */}
-        <div className="text-center bg-gradient-to-b from-cyan-950/30 to-transparent border border-cyan-900/30 rounded-2xl p-10">
-          <div className="flex items-center justify-center gap-2 mb-4">
-            <Clock size={15} className="text-orange-400" />
-            <span className="text-orange-300 font-bold text-sm">Founding rates expire: {countdown}</span>
-          </div>
-          <h2 className="text-3xl font-black mb-3">Ready to Build?</h2>
-          <p className="text-gray-400 mb-8">Start with any tier. Upgrade anytime. Cancel anytime.</p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-6">
             {TIERS.map(tier => (
               <button key={tier.id} onClick={() => handleCheckout(tier)}
-                className={`px-6 py-3.5 rounded-xl font-black text-sm text-white transition-all hover:opacity-90 ${tier.popular ? "text-base px-8 py-4" : ""}`}
-                style={{ backgroundColor: tier.color, boxShadow: `0 4px 20px ${tier.color}40` }}>
+                className={`px-6 rounded-xl font-black text-white transition-all hover:opacity-90 active:scale-[0.98] ${tier.popular ? "py-5 text-base sm:px-8" : "py-4 text-sm"}`}
+                style={{ backgroundColor: tier.color, boxShadow: `0 4px 24px ${tier.color}40` }}>
                 {tier.name} — ${tier.price}/mo
               </button>
             ))}
           </div>
-          <p className="text-gray-600 text-xs mt-5">🔒 Secured by Stripe · Cancel anytime · Instant access</p>
+
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 text-xs text-gray-600">
+            <span>🔒 Stripe · SSL</span>
+            <span>↩️ Cancel anytime</span>
+            <span>⚡ Instant access</span>
+            <span>📋 No contracts</span>
+          </div>
+
+          <div className="mt-6 pt-6 border-t border-gray-800">
+            <Link to="/free-vault" className="text-gray-500 hover:text-gray-300 text-sm transition-colors">
+              Not ready? Browse the free vault first →
+            </Link>
+          </div>
         </div>
       </div>
 
-      <footer className="border-t border-gray-800 px-6 py-8 text-center text-gray-600 text-xs">
-        <p>© 2026 Zenith Apex LLC · Educational research platform · Not financial or medical advice</p>
+      {/* Footer */}
+      <footer className="border-t border-gray-800 px-6 py-8 text-center text-gray-700 text-xs">
+        <p>© 2026 Zenith Apex LLC · ZARP Engineering Vault · Educational & research purposes only</p>
         <div className="flex justify-center gap-6 mt-3">
-          <Link to="/terms" className="hover:text-gray-400">Terms</Link>
-          <Link to="/refund-policy" className="hover:text-gray-400">Refund Policy</Link>
-          <Link to="/pricing" className="hover:text-gray-400">Full Pricing</Link>
+          <Link to="/terms" className="hover:text-gray-400 transition-colors">Terms</Link>
+          <Link to="/refund-policy" className="hover:text-gray-400 transition-colors">Refund Policy</Link>
+          <Link to="/pricing" className="hover:text-gray-400 transition-colors">Full Pricing</Link>
+          <Link to="/free-vault" className="hover:text-gray-400 transition-colors">Free Vault</Link>
         </div>
       </footer>
     </div>
