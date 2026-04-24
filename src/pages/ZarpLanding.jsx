@@ -158,7 +158,7 @@ export default function ZarpLanding() {
       </nav>
 
       {/* ── Hero — vault door animation ── */}
-      <section className="px-5 py-8 sm:py-16 text-center">
+      <section className="px-5 py-4 sm:py-8 text-center">
         <VaultHeroAnimation>
           <div className="max-w-3xl mx-auto">
             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-cyan-950/60 border border-cyan-800 text-cyan-300 text-xs font-black mb-6 uppercase tracking-widest">
