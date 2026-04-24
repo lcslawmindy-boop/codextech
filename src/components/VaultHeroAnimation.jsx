@@ -229,7 +229,7 @@ export default function VaultHeroAnimation({ children }) {
           </div>
 
           {/* Glowing C.O.D.E.X.T.E.C.H. text on vault - HUGE */}
-          <div className="absolute inset-0 flex items-center justify-center z-20 pointer-events-none flex-col gap-4">
+          <div className="absolute top-1/4 left-1/2 -translate-x-1/2 z-20 pointer-events-none flex-col gap-2 flex items-center">
             <div className="vault-text-lighting text-gray-200 text-3xl sm:text-4xl md:text-5xl text-center px-8 font-black drop-shadow-xl" style={{ textShadow: "0 2px 8px rgba(0,0,0,0.6), 0 0 20px rgba(107,118,132,0.4)" }}>
               C.O.D.E.X.T.E.C.H.
             </div>
