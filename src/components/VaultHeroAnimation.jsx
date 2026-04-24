@@ -163,6 +163,20 @@ export default function VaultHeroAnimation({ children }) {
           8%, 12% { filter: drop-shadow(0 0 20px #ffffff) drop-shadow(0 0 40px #06b6d4) drop-shadow(0 0 60px #06b6d4) drop-shadow(0 0 100px rgba(6,182,212,0.8)); }
         }
 
+        @keyframes shockwave {
+          0%, 100% { opacity: 0; r: 100px; }
+          8%, 12% { opacity: 0.8; r: 200px; }
+        }
+
+        @keyframes electricPulse {
+          0%, 100% { filter: drop-shadow(0 0 2px #ffffff); }
+          8%, 12% { filter: drop-shadow(0 0 30px #06b6d4) drop-shadow(0 0 60px #00ffff) drop-shadow(0 0 100px rgba(6,182,212,0.9)); }
+        }
+
+        .shockwave-circle {
+          animation: shockwave 2s ease-out infinite, electricPulse 2s ease-out infinite;
+        }
+
         .money-fall {
           animation: moneyFall 8s ease-in forwards;
         }
@@ -311,48 +325,51 @@ export default function VaultHeroAnimation({ children }) {
           );
         })}
 
-        {/* Lightning bolts SVG */}
+        {/* Electric Shockwaves SVG */}
         <svg className="absolute inset-0 w-full h-full pointer-events-none" style={{ overflow: 'visible' }}>
-          {/* Intense random lightning bolts */}
-          {Array.from({ length: 10 }).map((_, i) => {
-            const startX = Math.random() * window.innerWidth;
-            const startY = Math.random() * 300;
-            const endX = startX + (Math.random() - 0.5) * 300;
-            const endY = startY + 500;
+          {/* Expanding electric shockwave circles */}
+          {Array.from({ length: 8 }).map((_, i) => {
+            const centerX = Math.random() * window.innerWidth;
+            const centerY = Math.random() * (window.innerHeight * 0.6);
             return (
-              <g key={`lightning-${i}`}>
-                {/* Outer glow bolt */}
-                <path
-                  d={`M ${startX} ${startY} Q ${startX + Math.random() * 150 - 75} ${startY + 150} ${endX} ${endY}`}
-                  stroke="#06b6d4"
-                  strokeWidth="8"
+              <g key={`shock-${i}`} transform={`translate(${centerX}, ${centerY})`}>
+                {/* Main shockwave circle */}
+                <circle
+                  cx="0"
+                  cy="0"
+                  r="100"
                   fill="none"
-                  className="lightning-bolt"
+                  stroke="#06b6d4"
+                  strokeWidth="3"
+                  className="shockwave-circle"
                   style={{
-                    animationDelay: `${i * 0.4}s`,
-                    opacity: 0.3,
+                    animationDelay: `${i * 0.5}s`,
                   }}
                 />
-                {/* Main bright bolt */}
-                <path
-                  d={`M ${startX} ${startY} Q ${startX + Math.random() * 150 - 75} ${startY + 150} ${endX} ${endY}`}
-                  stroke="#fff"
-                  strokeWidth="4"
+                {/* Secondary pulse */}
+                <circle
+                  cx="0"
+                  cy="0"
+                  r="100"
                   fill="none"
-                  className="lightning-bolt"
-                  style={{
-                    animationDelay: `${i * 0.4}s`,
-                  }}
-                />
-                {/* Inner core bolt */}
-                <path
-                  d={`M ${startX} ${startY} Q ${startX + Math.random() * 150 - 75} ${startY + 150} ${endX} ${endY}`}
-                  stroke="#06b6d4"
+                  stroke="#00ffff"
                   strokeWidth="1.5"
-                  fill="none"
-                  className="lightning-bolt"
+                  className="shockwave-circle"
                   style={{
-                    animationDelay: `${i * 0.4 + 0.05}s`,
+                    animationDelay: `${i * 0.5 + 0.1}s`,
+                    opacity: 0.6,
+                  }}
+                />
+                {/* Bright center flash */}
+                <circle
+                  cx="0"
+                  cy="0"
+                  r="8"
+                  fill="#ffffff"
+                  opacity="0"
+                  style={{
+                    animation: `electricPulse 2s ease-out infinite`,
+                    animationDelay: `${i * 0.5}s`,
                   }}
                 />
               </g>
@@ -435,32 +452,38 @@ export default function VaultHeroAnimation({ children }) {
       {!clicked && (
         <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none z-20 max-w-4xl mx-auto px-6 gap-6">
           {children}
-          
-          {/* CODEXTECH Explanation */}
-          <div className="absolute bottom-32 left-0 right-0 flex justify-center gap-2 sm:gap-4 flex-wrap px-4">
-            {[
-              { letter: 'C', meaning: 'Consciousness' },
-              { letter: 'O', meaning: 'Oscillation' },
-              { letter: 'D', meaning: 'Devices' },
-              { letter: 'E', meaning: 'Engineering' },
-              { letter: 'X', meaning: 'eXperimental' },
-              { letter: 'T', meaning: 'Technology' },
-              { letter: 'E', meaning: 'Extraction' },
-              { letter: 'C', meaning: 'Construct' },
-              { letter: 'H', meaning: 'Harmonic' },
-            ].map((item, i) => (
-              <div key={i} className="flex flex-col items-center gap-1">
-                <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-lg flex items-center justify-center font-black text-lg sm:text-xl" style={{
-                  background: "linear-gradient(135deg, #06b6d4, #0891b2)",
-                  color: "#fff",
-                  boxShadow: "0 0 20px #06b6d4, inset 0 0 10px rgba(255,255,255,0.2)",
-                }}>
-                  {item.letter}
-                </div>
-                <span className="text-xs sm:text-sm font-bold text-cyan-300 whitespace-nowrap drop-shadow-lg">{item.meaning}</span>
+        </div>
+      )}
+
+      {/* CODEXTECH Acronym - Below Vault, Above Get Free Course */}
+      {!clicked && (
+        <div className="absolute left-0 right-0 flex justify-center flex-wrap px-4 pointer-events-none z-20" style={{ bottom: 'calc(15% + 80px)' }}>
+          {[
+            { letter: 'C', meaning: 'Consciousness', color: '#ff006e' },
+            { letter: 'O', meaning: 'Oscillation', color: '#fb5607' },
+            { letter: 'D', meaning: 'Devices', color: '#ffbe0b' },
+            { letter: 'E', meaning: 'Engineering', color: '#8338ec' },
+            { letter: 'X', meaning: 'eXperimental', color: '#3a86ff' },
+            { letter: 'T', meaning: 'Technology', color: '#06ffa5' },
+            { letter: 'E', meaning: 'Extraction', color: '#ff006e' },
+            { letter: 'C', meaning: 'Construct', color: '#fb5607' },
+            { letter: 'H', meaning: 'Harmonic', color: '#ffbe0b' },
+          ].map((item, i) => (
+            <div key={i} className="flex flex-col items-center gap-2 mx-1.5 sm:mx-3">
+              <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-lg flex items-center justify-center font-black text-xl sm:text-2xl" style={{
+                backgroundColor: item.color,
+                color: "#fff",
+                boxShadow: `0 0 20px ${item.color}, inset 0 0 10px rgba(255,255,255,0.2)`,
+              }}>
+                {item.letter}
               </div>
-            ))}
-          </div>
+              <span className="text-xs sm:text-sm font-black text-white whitespace-nowrap drop-shadow-lg" style={{
+                textShadow: `0 0 10px ${item.color}, 0 0 20px ${item.color}`,
+              }}>
+                {item.meaning}
+              </span>
+            </div>
+          ))}
         </div>
       )}
 
