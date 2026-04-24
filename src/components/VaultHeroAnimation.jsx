@@ -590,7 +590,7 @@ export default function VaultHeroAnimation({ children }) {
 
       {/* CODEXTECH Acronym - Single line below vault */}
       {!clicked && (
-        <div className="absolute left-0 right-0 flex justify-center items-end gap-1.5 sm:gap-2 px-4 pointer-events-none z-20" style={{ bottom: '-80px' }}>
+        <div className="absolute left-1/2 -translate-x-1/2 flex justify-center items-end gap-0.5 md:gap-1 px-2 pointer-events-none z-20" style={{ bottom: '-110px' }}>
           {[
             { letter: 'C', meaning: 'Consciousness', color: '#ff006e' },
             { letter: 'O', meaning: 'Oscillation', color: '#fb5607' },
@@ -602,16 +602,16 @@ export default function VaultHeroAnimation({ children }) {
             { letter: 'C', meaning: 'Construct', color: '#fb5607' },
             { letter: 'H', meaning: 'Harmonic', color: '#ffbe0b' },
           ].map((item, i) => (
-            <div key={i} className="flex flex-col items-center gap-1">
-              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg flex items-center justify-center font-black text-lg sm:text-xl" style={{
+            <div key={i} className="flex flex-col items-center gap-0.5 md:gap-1">
+              <div className="w-12 h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 rounded-xl flex items-center justify-center font-black text-xl md:text-2xl lg:text-3xl transition-transform hover:scale-110" style={{
                 backgroundColor: item.color,
                 color: "#fff",
-                boxShadow: `0 0 20px ${item.color}, inset 0 0 10px rgba(255,255,255,0.2)`,
+                boxShadow: `0 0 30px ${item.color}, 0 0 60px ${item.color}80, inset 0 0 15px rgba(255,255,255,0.3)`,
               }}>
                 {item.letter}
               </div>
-              <span className="text-[10px] sm:text-xs font-black text-white whitespace-nowrap drop-shadow-lg text-center" style={{
-                textShadow: `0 0 10px ${item.color}, 0 0 20px ${item.color}`,
+              <span className="text-[8px] md:text-[9px] lg:text-xs font-black text-white whitespace-nowrap drop-shadow-lg text-center" style={{
+                textShadow: `0 0 15px ${item.color}, 0 0 30px ${item.color}`,
               }}>
                 {item.meaning}
               </span>
