@@ -599,25 +599,28 @@ export default function VaultHeroAnimation({ children }) {
       {!clicked && (
         <div className="absolute left-1/2 -translate-x-1/2 flex justify-center items-end gap-2 md:gap-4 px-2 pointer-events-none z-20" style={{ bottom: '20px' }}>
           {[
-            { letter: 'C', meaning: 'Consciousness', color: '#ff006e' },
-            { letter: 'O', meaning: 'Oscillation', color: '#fb5607' },
-            { letter: 'D', meaning: 'Devices', color: '#ffbe0b' },
-            { letter: 'E', meaning: 'Engineering', color: '#8338ec' },
-            { letter: 'X', meaning: 'eXperimental', color: '#3a86ff' },
-            { letter: 'T', meaning: 'Technology', color: '#06ffa5' },
-            { letter: 'E', meaning: 'Extraction', color: '#ff006e' },
-            { letter: 'C', meaning: 'Construct', color: '#fb5607' },
-            { letter: 'H', meaning: 'Harmonic', color: '#ffbe0b' },
+            { letter: 'C', meaning: 'Consciousness', num: '1', color: '#ff006e' },
+            { letter: 'O', meaning: 'Oscillation', num: '2', color: '#fb5607' },
+            { letter: 'D', meaning: 'Devices', num: '3', color: '#ffbe0b' },
+            { letter: 'E', meaning: 'Engineering', num: '4', color: '#8338ec' },
+            { letter: 'X', meaning: 'eXperimental', num: '5', color: '#3a86ff' },
+            { letter: 'T', meaning: 'Technology', num: '6', color: '#06ffa5' },
+            { letter: 'E', meaning: 'Extraction', num: '7', color: '#ff006e' },
+            { letter: 'C', meaning: 'Construct', num: '8', color: '#fb5607' },
+            { letter: 'H', meaning: 'Harmonic', num: '9', color: '#ffbe0b' },
           ].map((item, i) => (
-            <div key={i} className="flex flex-col items-center gap-1 md:gap-2">
-              <div className="w-16 h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 rounded-xl flex items-center justify-center font-black text-2xl md:text-3xl lg:text-4xl transition-transform hover:scale-110" style={{
+            <div key={i} className="flex flex-col items-center gap-2 md:gap-3">
+              <div className="relative w-16 h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 rounded-lg flex items-center justify-center font-black text-2xl md:text-3xl lg:text-4xl transition-transform hover:scale-110 border-2" style={{
                 backgroundColor: item.color,
                 color: "#fff",
+                borderColor: "rgba(255,255,255,0.4)",
                 boxShadow: `0 0 30px ${item.color}, 0 0 60px ${item.color}80, inset 0 0 15px rgba(255,255,255,0.3)`,
               }}>
                 {item.letter}
+                <span className="absolute top-0.5 right-1 text-[8px] md:text-[9px] font-bold opacity-90">{item.num}</span>
+                <span className="absolute bottom-0.5 left-1 text-[7px] md:text-[8px] font-bold opacity-70">EX</span>
               </div>
-              <span className="text-[10px] md:text-[12px] lg:text-sm font-black text-white whitespace-nowrap drop-shadow-lg text-center" style={{
+              <span className="text-[11px] md:text-[13px] lg:text-base font-black text-white whitespace-nowrap drop-shadow-lg text-center" style={{
                 textShadow: `0 0 15px ${item.color}, 0 0 30px ${item.color}`,
               }}>
                 {item.meaning}
