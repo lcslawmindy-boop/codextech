@@ -26,8 +26,16 @@ const isAdminOnly = (title) => ADMIN_ONLY_KEYWORDS.some(k => title?.toLowerCase(
 // All inventions require membership or purchase
 const isMembershipRequired = (title) => !isAdminOnly(title);
 
-// Defense/restricted licensing inventions (hidden from public)
+// Defense/restricted licensing inventions (hidden from public view — specs visible but specs locked, no PDF download)
 const DEFENSE_RESTRICTED = [
+  // Medical/bioelectromagnetic treatment claims (regulatory risk)
+  "Telomere Regeneration Device (TRD-1)",
+  "Prioré-Type Multichannel EM System",
+  "UV Biophoton Disease Reversal Spectrometer",
+  "Portable Porthole Disease Treatment System",
+  "EM Trigger Window Therapy Device",
+  
+  // Defense-adjacent (classified potential)
   "Time-Reversal Zone Cold Fusion Reactor",
   "Aegis-SV Adaptive Scalar Counterphase Shield",
   "Atmospheric Scalar EM Signature Recognition System",
@@ -35,10 +43,11 @@ const DEFENSE_RESTRICTED = [
   "Waddington Valley EM Tracer System",
   "Cloning Efficiency Enhancement System",
   "Kaznacheyev Reversal Cell Imprinting Chamber (KRCIC)",
-  "UV Biophoton Disease Reversal Spectrometer",
-  "Telomere Regeneration Device (TRD-1)",
-  "Portable Porthole Disease Treatment System",
-  "Psychoenergetics Cellular Control System"
+  "Psychoenergetics Cellular Control System",
+  
+  // High-liability free energy (suppress per USPTO/regulatory pressure)
+  "Motionless Electromagnetic Generator (MEG) — Advanced Phase",
+  "Asymmetric Regauging Overunity Generator",
 ];
 
 const isDefenseRestricted = (title) => DEFENSE_RESTRICTED.some(d => d.toLowerCase() === title?.toLowerCase());
@@ -706,19 +715,19 @@ export default function InventionPlans() {
           </button>
           <button
             onClick={() => {
-              if (!isAdmin && !hasPurchased) {
-                alert("PDF downloads are only available after purchase. Visit /checkout to buy this plan.");
+              if (!isAdmin) {
+                alert("PDF downloads are restricted to administrators only. Please contact support.");
                 return;
               }
               if (isTrial && !isAdmin) { alert("Downloads are not available during the 24-hour trial. Upgrade to a paid plan."); return; }
               handleDownload();
             }}
-            disabled={!data || generating || (!isAdmin && !hasPurchased)}
-            title={!isAdmin && !hasPurchased ? "Purchase required to download" : "Download"}
+            disabled={!data || generating || !isAdmin}
+            title={!isAdmin ? "Admin only" : "Download"}
             className="flex items-center gap-2 px-4 py-2 rounded-lg bg-red-700 hover:bg-red-600 disabled:opacity-50 disabled:cursor-not-allowed text-white text-sm font-semibold transition-all"
           >
             {generating ? <Loader2 size={14} className="animate-spin" /> : <Download size={14} />}
-            {generating ? "Generating PDF…" : "Download Plans PDF"}
+            {generating ? "Generating PDF…" : isAdmin ? "Download Plans PDF" : "PDF (Admin Only)"}
           </button>
         </div>
       </div>
