@@ -107,13 +107,30 @@ export default function ScalarWaveWatermark({ className = "fixed inset-0 pointer
               <line x1="-92" y1="-92" x2="-106" y2="-106" />
             </g>
 
-            {/* Central lock circle */}
-            <circle cx="0" cy="0" r="60" fill="none" stroke="#06b6d4" strokeWidth="3" opacity="0.6" />
-            <circle cx="0" cy="0" r="40" fill="none" stroke="#06b6d4" strokeWidth="2" opacity="0.4" />
+            {/* Vault door — thick outer frame */}
+            <rect x="-70" y="-70" width="140" height="140" fill="none" stroke="#06b6d4" strokeWidth="5" opacity="0.7" rx="8" />
+            
+            {/* Vault door inner frame */}
+            <rect x="-60" y="-60" width="120" height="120" fill="none" stroke="#06b6d4" strokeWidth="2" opacity="0.4" rx="4" />
 
-            {/* Keyhole */}
-            <circle cx="0" cy="-15" r="8" fill="none" stroke="#06b6d4" strokeWidth="2" opacity="0.5" />
-            <rect x="-3" y="0" width="6" height="20" fill="none" stroke="#06b6d4" strokeWidth="2" opacity="0.5" />
+            {/* Vault dial/combination lock circle */}
+            <circle cx="0" cy="0" r="35" fill="none" stroke="#06b6d4" strokeWidth="4" opacity="0.6" />
+            <circle cx="0" cy="0" r="28" fill="none" stroke="#06b6d4" strokeWidth="1" opacity="0.3" />
+
+            {/* Center spindle */}
+            <circle cx="0" cy="0" r="6" fill="#06b6d4" opacity="0.6" />
+
+            {/* Dial tick marks */}
+            <g stroke="#06b6d4" strokeWidth="2" opacity="0.4">
+              <line x1="0" y1="-32" x2="0" y2="-37" />
+              <line x1="23" y1="-23" x2="26" y2="-26" />
+              <line x1="32" y1="0" x2="37" y2="0" />
+              <line x1="23" y1="23" x2="26" y2="26" />
+              <line x1="0" y1="32" x2="0" y2="37" />
+              <line x1="-23" y1="23" x2="-26" y2="26" />
+              <line x1="-32" y1="0" x2="-37" y2="0" />
+              <line x1="-23" y1="-23" x2="-26" y2="-26" />
+            </g>
           </g>
 
           {/* Scalar wave pattern (radiating lines) */}

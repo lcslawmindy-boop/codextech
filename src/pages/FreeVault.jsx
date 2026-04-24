@@ -111,8 +111,8 @@ export default function FreeVault() {
       {/* Nav */}
       <div className="border-b border-gray-800 bg-gray-900/90 backdrop-blur px-5 py-4 flex items-center justify-between sticky top-0 z-40">
         <div className="flex items-center gap-3">
-          <Link to="/" className="flex items-center gap-2">
-            <img src="https://media.base44.com/images/public/69ccefebfea78b23498c66a8/afb5ad292_CODEXTECHLOGO.png" alt="C.O.D.E.X.T.E.C.H." className="h-7 w-7 object-contain" />
+          <Link to="/" className="flex items-center gap-3">
+            <img src="https://media.base44.com/images/public/69ccefebfea78b23498c66a8/afb5ad292_CODEXTECHLOGO.png" alt="C.O.D.E.X.T.E.C.H." className="h-11 w-11 object-contain" />
             <span className="font-black text-lg">C.O.D.E.X.T.E.C.H.</span>
           </Link>
           <span className="text-xs text-green-600 border border-green-800 px-2 py-0.5 rounded font-bold">100% FREE</span>

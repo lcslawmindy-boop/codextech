@@ -354,9 +354,9 @@ export default function PaywallPage() {
 
       {/* ── Nav ── */}
       <div className="border-b border-gray-800 bg-gray-900/80 backdrop-blur px-5 py-4 flex items-center justify-between sticky top-0 z-40">
-        <Link to="/" className="flex items-center gap-2">
-          <img src="https://media.base44.com/images/public/69ccefebfea78b23498c66a8/afb5ad292_CODEXTECHLOGO.png" alt="C.O.D.E.X.T.E.C.H." className="h-7 w-7 object-contain" />
-          <span className="font-black text-base">C.O.D.E.X.T.E.C.H.</span>
+        <Link to="/" className="flex items-center gap-3">
+          <img src="https://media.base44.com/images/public/69ccefebfea78b23498c66a8/afb5ad292_CODEXTECHLOGO.png" alt="C.O.D.E.X.T.E.C.H." className="h-11 w-11 object-contain" />
+          <span className="font-black text-lg">C.O.D.E.X.T.E.C.H.</span>
           <span className="text-gray-600 text-xs hidden sm:inline">The Engineering Platform</span>
         </Link>
         <div className="flex items-center gap-3">
