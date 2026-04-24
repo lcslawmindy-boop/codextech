@@ -609,19 +609,21 @@ export default function VaultHeroAnimation({ children }) {
             { letter: 'C', meaning: 'Construct', num: '8', color: '#fb5607' },
             { letter: 'H', meaning: 'Harmonic', num: '9', color: '#ffbe0b' },
           ].map((item, i) => (
-            <div key={i} className="flex flex-col items-center gap-2 md:gap-3">
-              <div className="relative w-16 h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 rounded-lg flex items-center justify-center font-black text-2xl md:text-3xl lg:text-4xl transition-transform hover:scale-110 border-2" style={{
+            <div key={i} className="flex flex-col items-center gap-3 md:gap-4">
+              <div className="relative w-20 h-20 md:w-28 md:h-28 lg:w-36 lg:h-36 rounded-lg flex items-center justify-center font-black text-4xl md:text-5xl lg:text-6xl transition-transform hover:scale-105 border-2" style={{
                 backgroundColor: item.color,
                 color: "#fff",
-                borderColor: "rgba(255,255,255,0.4)",
-                boxShadow: `0 0 30px ${item.color}, 0 0 60px ${item.color}80, inset 0 0 15px rgba(255,255,255,0.3)`,
+                borderColor: "rgba(255,255,255,0.5)",
+                boxShadow: `0 0 40px ${item.color}, 0 0 80px ${item.color}a0, inset 0 0 20px rgba(255,255,255,0.4), 0 8px 16px rgba(0,0,0,0.4)`,
               }}>
                 {item.letter}
-                <span className="absolute top-0.5 right-1 text-[8px] md:text-[9px] font-bold opacity-90">{item.num}</span>
-                <span className="absolute bottom-0.5 left-1 text-[7px] md:text-[8px] font-bold opacity-70">EX</span>
+                <span className="absolute top-1 right-2 text-[10px] md:text-[12px] lg:text-sm font-bold opacity-95">{item.num}</span>
+                <span className="absolute bottom-1 left-2 text-[9px] md:text-[11px] lg:text-xs font-bold opacity-75">EX</span>
+                <span className="absolute bottom-1 right-2 text-[8px] md:text-[10px] lg:text-xs font-bold opacity-60">M</span>
               </div>
-              <span className="text-[11px] md:text-[13px] lg:text-base font-black text-white whitespace-nowrap drop-shadow-lg text-center" style={{
-                textShadow: `0 0 15px ${item.color}, 0 0 30px ${item.color}`,
+              <span className="text-[13px] md:text-[16px] lg:text-lg font-black text-white whitespace-nowrap drop-shadow-lg text-center" style={{
+                textShadow: `0 0 20px ${item.color}, 0 0 40px ${item.color}`,
+                letterSpacing: '0.5px'
               }}>
                 {item.meaning}
               </span>
