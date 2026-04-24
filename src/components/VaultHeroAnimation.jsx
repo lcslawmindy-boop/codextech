@@ -2,14 +2,26 @@ import { useEffect, useState } from "react";
 import { Lock } from "lucide-react";
 
 const FLOATING_ELEMENTS = [
-  { text: "E=mc²", x: "10%", delay: 0 },
-  { text: "∫∞", x: "25%", delay: 0.5 },
-  { text: "∇²φ", x: "40%", delay: 1 },
-  { text: "ψ = Ae^(ikx)", x: "65%", delay: 1.5 },
-  { text: "F = qE", x: "80%", delay: 2 },
-  { text: "⚛", x: "15%", delay: 0.3 },
-  { text: "⚡", x: "55%", delay: 1.2 },
-  { text: "🔄", x: "90%", delay: 2.3 },
+  { text: "E=mc²", x: "5%", delay: 0 },
+  { text: "∇×E = -∂B/∂t", x: "12%", delay: 0.5 },
+  { text: "∫∞", x: "20%", delay: 1 },
+  { text: "∇²φ = ρ/ε₀", x: "28%", delay: 1.5 },
+  { text: "ψ = Ae^(ikx)", x: "36%", delay: 2 },
+  { text: "F = qE + q(v×B)", x: "44%", delay: 0.3 },
+  { text: "iℏ∂ψ/∂t = Ĥψ", x: "52%", delay: 1.2 },
+  { text: "∮ E·dl = -dΦ_B/dt", x: "60%", delay: 1.8 },
+  { text: "G_μν = 8πT_μν", x: "68%", delay: 0.8 },
+  { text: "Φ = BA cos(θ)", x: "76%", delay: 2.3 },
+  { text: "∇·E = ρ/ε₀", x: "84%", delay: 0.6 },
+  { text: "c = 1/√(μ₀ε₀)", x: "92%", delay: 1.4 },
+  { text: "ω = 2πf", x: "15%", delay: 2.1 },
+  { text: "∮ B·dl = μ₀I", x: "40%", delay: 0.9 },
+  { text: "e = ∑(n!)⁻¹", x: "70%", delay: 1.7 },
+  { text: "⚛", x: "22%", delay: 0.4 },
+  { text: "⚡", x: "50%", delay: 2.2 },
+  { text: "∞", x: "88%", delay: 1.1 },
+  { text: "π", x: "10%", delay: 1.9 },
+  { text: "φ = (1+√5)/2", x: "85%", delay: 0.7 },
 ];
 
 export default function VaultHeroAnimation({ children }) {
