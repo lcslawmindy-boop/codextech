@@ -342,16 +342,16 @@ export default function VaultHeroAnimation({ children }) {
             >
               <div
                 style={{
-                  padding: isEmoji ? '8px 10px' : '6px 12px',
-                  borderRadius: isEmoji ? '50%' : '6px',
-                  border: `2px solid ${color}`,
+                  padding: isEmoji ? '12px 14px' : '10px 16px',
+                  borderRadius: isEmoji ? '50%' : '8px',
+                  border: `3px solid ${color}`,
                   backgroundColor: `${color}15`,
                   color: color,
-                  fontSize: isEmoji ? '16px' : '11px',
+                  fontSize: isEmoji ? '28px' : '15px',
                   fontWeight: 'bold',
                   whiteSpace: 'nowrap',
-                  textShadow: `0 0 8px ${color}, 0 0 16px ${glowColor}`,
-                  boxShadow: `0 0 12px ${color}, inset 0 0 8px ${color}20`,
+                  textShadow: `0 0 12px ${color}, 0 0 24px ${glowColor}`,
+                  boxShadow: `0 0 16px ${color}, inset 0 0 12px ${color}20`,
                   fontFamily: isEmoji ? 'inherit' : 'monospace',
                   display: 'flex',
                   alignItems: 'center',
@@ -447,6 +447,7 @@ export default function VaultHeroAnimation({ children }) {
       <div
         onClick={!isOpen && !clicked ? handleVaultClick : null}
         className={`vault-door-main relative transition-all ${!isOpen && !clicked ? "cursor-pointer hover:scale-110" : ""}`}
+        style={{ marginBottom: '120px' }}
       >
         <img
           src="https://media.base44.com/images/public/69ccefebfea78b23498c66a8/5da1807d1_generated_image.png"
@@ -494,9 +495,9 @@ export default function VaultHeroAnimation({ children }) {
         </div>
       )}
 
-      {/* CODEXTECH Acronym - Below Vault, Above Get Free Course */}
+      {/* CODEXTECH Acronym - Single line below vault */}
       {!clicked && (
-        <div className="absolute left-0 right-0 flex justify-center flex-wrap px-4 pointer-events-none z-20" style={{ bottom: 'calc(8% + 20px)' }}>
+        <div className="absolute left-0 right-0 flex justify-center items-end gap-1.5 sm:gap-2 px-4 pointer-events-none z-20" style={{ bottom: '-80px' }}>
           {[
             { letter: 'C', meaning: 'Consciousness', color: '#ff006e' },
             { letter: 'O', meaning: 'Oscillation', color: '#fb5607' },
@@ -508,15 +509,15 @@ export default function VaultHeroAnimation({ children }) {
             { letter: 'C', meaning: 'Construct', color: '#fb5607' },
             { letter: 'H', meaning: 'Harmonic', color: '#ffbe0b' },
           ].map((item, i) => (
-            <div key={i} className="flex flex-col items-center gap-2 mx-1.5 sm:mx-3">
-              <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-lg flex items-center justify-center font-black text-xl sm:text-2xl" style={{
+            <div key={i} className="flex flex-col items-center gap-1">
+              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg flex items-center justify-center font-black text-lg sm:text-xl" style={{
                 backgroundColor: item.color,
                 color: "#fff",
                 boxShadow: `0 0 20px ${item.color}, inset 0 0 10px rgba(255,255,255,0.2)`,
               }}>
                 {item.letter}
               </div>
-              <span className="text-xs sm:text-sm font-black text-white whitespace-nowrap drop-shadow-lg" style={{
+              <span className="text-[10px] sm:text-xs font-black text-white whitespace-nowrap drop-shadow-lg text-center" style={{
                 textShadow: `0 0 10px ${item.color}, 0 0 20px ${item.color}`,
               }}>
                 {item.meaning}
