@@ -164,30 +164,31 @@ export default function VaultHeroAnimation({ children }) {
         ))}
       </div>
 
-      {/* Main vault door - LARGE - STEEL GREY BANK VAULT */}
+      {/* Main vault door - LARGE - REALISTIC BANK VAULT */}
       <div
         onClick={!isOpen && !clicked ? handleVaultClick : null}
         className={`vault-door-main relative w-96 sm:w-[500px] md:w-[600px] h-[500px] sm:h-[600px] md:h-[700px] rounded-3xl border-12 shadow-2xl transition-all ${!isOpen && !clicked ? "cursor-pointer hover:scale-105" : ""}`}
         style={{
-          borderWidth: "20px",
-          borderColor: "#4b5563",
-          background: "linear-gradient(135deg, #6b7684 0%, #4b5563 50%, #3a4450 100%)",
-          boxShadow: isOpen ? "none" : "inset 0 0 60px rgba(0,0,0,0.8), inset 0 0 30px rgba(255,255,255,0.05), 0 40px 100px rgba(0,0,0,0.8), 0 0 120px rgba(107,118,132,0.3)",
+          borderWidth: "24px",
+          borderColor: "#2a2e34",
+          background: "linear-gradient(180deg, #404854 0%, #2a2e34 50%, #1a1d23 100%)",
+          boxShadow: isOpen ? "none" : "inset 0 0 80px rgba(0,0,0,0.9), inset 0 20px 40px rgba(255,255,255,0.08), inset 0 -20px 40px rgba(0,0,0,0.8), 0 60px 120px rgba(0,0,0,0.9), 0 0 80px rgba(42,46,52,0.8)",
           transformStyle: "preserve-3d",
+          position: "relative",
         }}
       >
-        {/* Vault handle - larger */}
-        <div className="absolute -right-8 top-1/2 -translate-y-1/2 w-8 h-32 bg-gradient-to-r from-yellow-600 to-yellow-400 rounded-full shadow-2xl border-4 border-yellow-500" />
+        {/* Vault handle - realistic steel */}
+        <div className="absolute -right-10 top-1/2 -translate-y-1/2 w-10 h-36 bg-gradient-to-b from-gray-600 to-gray-500 rounded-full shadow-2xl border-4 border-gray-700" style={{ boxShadow: "inset -2px 0 4px rgba(0,0,0,0.6), inset 2px 0 4px rgba(255,255,255,0.1), 0 10px 30px rgba(0,0,0,0.8)" }} />
 
-        {/* Vault bolts - circular pattern - larger - STEEL */}
+        {/* Vault bolts - circular pattern - realistic STEEL */}
         {[...Array(16)].map((_, i) => (
           <div
             key={i}
-            className="absolute w-6 h-6 bg-gradient-to-br from-gray-400 to-gray-700 rounded-full border-2 border-gray-500 shadow-lg"
+            className="absolute w-7 h-7 bg-gradient-to-br from-gray-500 to-gray-800 rounded-full border-2 border-gray-900 shadow-lg"
             style={{
               top: `${6 + (i % 4) * 28}%`,
               left: `${6 + Math.floor(i / 4) * 30}%`,
-              boxShadow: "inset 0 1px 2px rgba(255,255,255,0.2), 0 2px 4px rgba(0,0,0,0.5)",
+              boxShadow: "inset 0 2px 3px rgba(255,255,255,0.15), inset 0 -2px 3px rgba(0,0,0,0.8), 0 4px 8px rgba(0,0,0,0.7)",
             }}
           />
         ))}
@@ -195,20 +196,21 @@ export default function VaultHeroAnimation({ children }) {
         {/* Main vault dial - MASSIVE combination lock */}
         <div className="absolute inset-0 flex items-center justify-center">
           <div className="relative w-64 sm:w-80 h-64 sm:h-80">
-            {/* Outer dial ring - STEEL */}
-            <div className="absolute inset-0 rounded-full border-8 border-gray-500 shadow-2xl"
+            {/* Outer dial ring - REALISTIC STEEL */}
+            <div className="absolute inset-0 rounded-full border-8 border-gray-700 shadow-2xl"
               style={{
-                background: "radial-gradient(circle at 30% 30%, rgba(255,255,255,0.15), rgba(0,0,0,0.6))",
+                background: "radial-gradient(circle at 30% 30%, rgba(255,255,255,0.1), rgba(0,0,0,0.8))",
+                boxShadow: "inset 0 4px 12px rgba(0,0,0,0.8), inset 0 -4px 12px rgba(255,255,255,0.05), 0 6px 20px rgba(0,0,0,0.8)",
               }}
             />
 
-            {/* Middle ring - STEEL */}
-            <div className="absolute inset-6 rounded-full border-4 border-gray-600 opacity-70" />
+            {/* Middle ring - REALISTIC STEEL */}
+            <div className="absolute inset-6 rounded-full border-4 border-gray-800 opacity-80" style={{ boxShadow: "inset 0 2px 6px rgba(0,0,0,0.7)" }} />
 
-            {/* Inner circle - STEEL */}
-            <div className="absolute inset-16 rounded-full bg-gray-700 border-4 border-gray-500 flex items-center justify-center shadow-inner">
+            {/* Inner circle - REALISTIC STEEL */}
+            <div className="absolute inset-16 rounded-full bg-gradient-to-br from-gray-800 to-gray-950 border-4 border-gray-900 flex items-center justify-center shadow-inner" style={{ boxShadow: "inset 0 8px 16px rgba(0,0,0,0.9), 0 4px 12px rgba(0,0,0,0.7)" }}>
               {/* Center spindle with glow */}
-              <div className="w-8 h-8 bg-yellow-400 rounded-full shadow-2xl shadow-yellow-500/70" />
+              <div className="w-10 h-10 bg-gradient-to-br from-yellow-300 via-yellow-400 to-yellow-600 rounded-full shadow-2xl" style={{ boxShadow: "inset -2px -2px 5px rgba(0,0,0,0.4), inset 2px 2px 5px rgba(255,255,255,0.4), 0 0 25px rgba(250,204,21,0.7)" }} />
             </div>
 
             {/* Dial numbers - larger - STEEL */}
@@ -229,7 +231,7 @@ export default function VaultHeroAnimation({ children }) {
           </div>
 
           {/* Glowing C.O.D.E.X.T.E.C.H. text on vault - HUGE */}
-          <div className="absolute top-1/4 left-1/2 -translate-x-1/2 z-20 pointer-events-none flex-col gap-2 flex items-center">
+          <div className="absolute top-1/12 left-1/2 -translate-x-1/2 z-20 pointer-events-none flex-col gap-2 flex items-center">
             <div className="vault-text-lighting text-gray-200 text-3xl sm:text-4xl md:text-5xl text-center px-8 font-black drop-shadow-xl" style={{ textShadow: "0 2px 8px rgba(0,0,0,0.6), 0 0 20px rgba(107,118,132,0.4)" }}>
               C.O.D.E.X.T.E.C.H.
             </div>
