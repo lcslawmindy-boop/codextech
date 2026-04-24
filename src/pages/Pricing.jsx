@@ -243,6 +243,7 @@ export default function Pricing() {
       interval: "month",
       successUrl: `${baseUrl}/checkout?success=true&product=${tier.id}`,
       cancelUrl: `${baseUrl}/pricing`,
+      customerEmail: null, // public app — no auth required
     });
     if (response.data?.url) window.location.href = response.data.url;
   };
@@ -261,6 +262,7 @@ export default function Pricing() {
       mode: "payment",
       successUrl: `${baseUrl}/checkout?success=true&product=${encodeURIComponent(item.name)}`,
       cancelUrl: `${baseUrl}/pricing`,
+      customerEmail: null,
     });
     if (response.data?.url) window.location.href = response.data.url;
   };

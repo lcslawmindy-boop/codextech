@@ -1,317 +1,205 @@
 import { useState, useEffect } from "react";
-import { useSearchParams, Link, useNavigate } from "react-router-dom";
-import { CheckCircle2, Lock, BookOpen, FlaskConical, Zap, ChevronRight, ArrowRight, Award } from "lucide-react";
-import { base44 } from "@/api/base44Client";
-import OnboardingGuide from "../components/OnboardingGuide";
-import QuickWinsTracker from "../components/QuickWinsTracker";
+import { useSearchParams, Link } from "react-router-dom";
+import { CheckCircle2, ArrowRight, Wrench, BookOpen, Shield, TrendingUp, Star, Zap, Package } from "lucide-react";
 
-const TIER_UNLOCKS = {
-  starter: {
-    name: "Starter Plan",
-    color: "#f59e0b",
-    inventions: 5,
-    courses: 4,
-    features: [
-      "✓ 5 Invention Build Plans (full PDF + BOM)",
-      "✓ 4 Structured courses",
-      "✓ Prior Art Archive",
-      "✓ EM Lab Simulators",
-      "✗ AI Invention Forge",
-      "✗ All 21 plans",
-      "✗ Patent Drafting Tool",
-    ],
-    nextTier: { name: "Researcher ($127/mo — All 21 Plans + AI)", path: "/pricing", color: "#6366f1" },
+// ── Kit upsells — physical products ──────────────────────────────────────────
+const KIT_UPSELLS = [
+  {
+    name: "MEG Replication Parts Kit",
+    desc: "All 23 components to build the peer-reviewed COP>1 device. Sourced & pre-verified.",
+    price: "$287",
+    badge: "Best Seller",
+    badgeColor: "bg-orange-900/50 border-orange-800 text-orange-300",
+    img: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/b177d065d_generated_image.png",
+    href: "/build-supplies-shop",
+    priceId: "prod_UKE3yIddCPw1IV",
   },
-  researcher: {
-    name: "Researcher Plan",
-    color: "#6366f1",
-    inventions: 21,
-    courses: 26,
-    features: [
-      "✓ All 21 Invention Build Plans",
-      "✓ Full course library (26+ courses)",
-      "✓ AI Invention Forge (unlimited)",
-      "✓ EM Lab simulators & visualization",
-      "✓ Prior Art Archive (200+ entries)",
-      "✓ Build Video generator",
-      "✗ Patent Drafting Tool",
-      "✗ Investor CRM",
-    ],
-    nextTier: { name: "Pro ($247/mo)", path: "/pricing", color: "#22c55e" },
+  {
+    name: "Scalar EM Lab Starter Kit",
+    desc: "Foundation circuit components for your first scalar build. Beginner-friendly sourcing.",
+    price: "$167",
+    badge: "Start Here",
+    badgeColor: "bg-cyan-900/50 border-cyan-800 text-cyan-300",
+    img: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/fc3cb2842_generated_image.png",
+    href: "/build-supplies-shop",
+    priceId: "prod_UKE33DR5C4nFUQ",
   },
-  pro: {
-    name: "Pro Plan",
-    color: "#22c55e",
-    inventions: 21,
-    courses: 26,
-    features: [
-      "✓ Everything in Researcher",
-      "✓ AI Patent Drafting Tool (unlimited)",
-      "✓ Investor CRM & Pitch Deck Builder",
-      "✓ IP Valuation Calculator",
-      "✓ Acquisition CRM & deal pipeline",
-      "✓ VDR Portal (Virtual Data Room)",
-      "✓ Priority support",
-    ],
-    nextTier: null,
+  {
+    name: "Prioré Device Component Bundle",
+    desc: "Multichannel EM therapy components. Sourced, bundled, and ready for assembly.",
+    price: "$349",
+    badge: "Advanced",
+    badgeColor: "bg-purple-900/50 border-purple-800 text-purple-300",
+    img: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/4a992c230_generated_image.png",
+    href: "/build-supplies-shop",
+    priceId: "prod_UKE3JFoRjrxfmV",
   },
+];
+
+// ── Tier config ───────────────────────────────────────────────────────────────
+const TIER_CONFIG = {
+  starter: { name: "Starter", color: "#06b6d4", builds: 15, courses: 15 },
+  pro:     { name: "Pro",     color: "#8b5cf6", builds: "40+", courses: "40+" },
+  elite:   { name: "Elite",   color: "#f59e0b", builds: "40+ (incl. restricted)", courses: "40+ (priority)" },
 };
+
+const QUICK_START = [
+  { emoji: "🔧", label: "Browse Build Plans", sub: "Pick your first device to build", href: "/invention-plans" },
+  { emoji: "📚", label: "Start a Course", sub: "Scalar EM fundamentals — Module 1", href: "/courses" },
+  { emoji: "🛡️", label: "Draft a Patent", sub: "AI patent tool — provisional in minutes", href: "/patent-tool" },
+  { emoji: "📊", label: "Your Dashboard", sub: "Access all your unlocked content", href: "/member-dashboard" },
+];
 
 export default function PostPurchaseOnboarding() {
   const [searchParams] = useSearchParams();
-  const navigate = useNavigate();
-  const [tier, setTier] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [showOnboarding, setShowOnboarding] = useState(false);
-
-  const productId = searchParams.get("product");
-  const tierData = TIER_UNLOCKS[productId];
-
-  useEffect(() => {
-    // Verify purchase and set tier
-    if (tierData) {
-      setTier(productId);
-      // Auto-show onboarding after a short delay
-      setTimeout(() => setShowOnboarding(true), 800);
-      
-      // Send welcome email sequence
-      const sendWelcome = async () => {
-        try {
-          const userEmail = sessionStorage.getItem("checkout_email") || "user@example.com";
-          const firstName = sessionStorage.getItem("checkout_name") || "there";
-          await base44.functions.invoke("sendWelcomeEmailSequence", {
-            email: userEmail,
-            plan: productId,
-            firstName: firstName
-          });
-          console.log("Welcome email sent");
-        } catch (error) {
-          console.error("Error sending welcome email:", error);
-        }
-      };
-      sendWelcome();
-    }
-    setLoading(false);
-  }, [productId, tierData]);
-
-  if (loading) {
-    return (
-      <div className="w-screen h-screen bg-gray-950 flex items-center justify-center">
-        <div className="w-8 h-8 border-4 border-gray-700 border-t-cyan-400 rounded-full animate-spin"></div>
-      </div>
-    );
-  }
-
-  if (!tierData) {
-    return (
-      <div className="w-screen min-h-screen bg-gray-950 flex items-center justify-center p-6">
-        <div className="max-w-md text-center">
-          <h1 className="text-white font-black text-2xl mb-2">Purchase confirmed!</h1>
-          <p className="text-gray-400 text-sm mb-6">Your account is being set up. Redirecting in a moment…</p>
-          <Link to="/" className="inline-flex items-center gap-2 px-6 py-2 rounded-lg bg-blue-700 text-white font-bold text-sm hover:bg-blue-600 transition-all">
-            Go to Dashboard <ArrowRight size={14} />
-          </Link>
-        </div>
-      </div>
-    );
-  }
+  const productId = searchParams.get("product") || "pro";
+  const tier = TIER_CONFIG[productId] || TIER_CONFIG.pro;
 
   return (
-    <>
-      {showOnboarding && (
-        <OnboardingGuide onComplete={() => setShowOnboarding(false)} autoStart={true} />
-      )}
-      <div className="w-screen min-h-screen bg-gray-950 text-white">
-      {/* Header */}
-      <div className="border-b border-gray-800 bg-gray-900/80 px-5 py-4">
-        <div className="max-w-6xl mx-auto flex items-center justify-between">
-          <h1 className="text-white font-black text-xl">Welcome to Zenith Apex</h1>
-          <p className="text-gray-500 text-sm">Plan: <span style={{ color: tierData.color }} className="font-bold">{tierData.name}</span></p>
+    <div className="min-h-screen bg-gray-950 text-white">
+
+      {/* ── Success header ── */}
+      <div className="border-b border-gray-800 bg-gray-900/80 px-5 py-4 flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <img src="https://media.base44.com/images/public/69ccefebfea78b23498c66a8/a90918e3c_ZARPlogo.png" alt="ZARP" className="h-7 w-7 object-contain" />
+          <span className="font-black text-base">ZARP Engineering Vault</span>
         </div>
+        <span className="text-xs px-3 py-1 rounded-full font-black" style={{ backgroundColor: `${tier.color}20`, color: tier.color, border: `1px solid ${tier.color}50` }}>
+          {tier.name} Member
+        </span>
       </div>
 
-      {/* Hero — Success confirmation */}
-      <div className="bg-gradient-to-b from-gray-900 to-gray-950 px-5 py-12 text-center border-b border-gray-800">
-        <div className="max-w-2xl mx-auto">
-          <div className="flex justify-center mb-6">
-            <div className="w-16 h-16 rounded-full flex items-center justify-center" style={{ backgroundColor: tierData.color + "20", border: `2px solid ${tierData.color}` }}>
-              <CheckCircle2 size={32} style={{ color: tierData.color }} />
-            </div>
-          </div>
-          <h2 className="text-white font-black text-3xl mb-2">Payment Successful!</h2>
-          <p className="text-gray-400 text-lg mb-6">Your {tierData.name} membership is active. Now let's get you started on your first invention or course.</p>
+      {/* ── Hero confirmation ── */}
+      <div className="text-center px-5 py-16 bg-gradient-to-b from-gray-900 to-gray-950 border-b border-gray-800">
+        <div className="w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6"
+          style={{ backgroundColor: `${tier.color}15`, border: `2px solid ${tier.color}` }}>
+          <CheckCircle2 size={36} style={{ color: tier.color }} />
         </div>
-      </div>
-
-      {/* Main content: 2 columns */}
-      <div className="px-5 py-12">
-        <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Left: What you've unlocked */}
-          <div className="lg:col-span-2">
-            <h3 className="text-white font-black text-xl mb-6">Here's what you can access now</h3>
-
-            {/* Invention plans card */}
-            <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6 mb-6">
-              <div className="flex items-center gap-3 mb-4">
-                <FlaskConical size={22} style={{ color: tierData.color }} />
-                <h4 className="text-white font-bold text-lg">{tierData.inventions} Invention Build Plan{tierData.inventions > 1 ? "s" : ""}</h4>
-              </div>
-              <p className="text-gray-400 text-sm mb-4">Step-by-step instructions, Bills of Materials, schematics, and downloadable PDFs.</p>
-              {tierData.inventions === 5 ? (
-                <div className="bg-blue-900/30 border border-blue-700/50 rounded-lg p-3 mb-4">
-                  <p className="text-blue-300 text-xs leading-relaxed">
-                    You have <strong>5 plans</strong>. Want all 21 + AI tools? Upgrade to <strong>Researcher ($127/mo)</strong>.
-                  </p>
-                </div>
-              ) : null}
-              <Link to="/invention-plans"
-                className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg font-bold text-sm transition-all text-white"
-                style={{ backgroundColor: tierData.color }}>
-                {tierData.inventions === 1 ? "Download Your Plan" : "Browse All Plans"} <ChevronRight size={14} />
-              </Link>
-            </div>
-
-            {/* Courses card - only show if they have access */}
-            {tierData.courses > 0 && (
-              <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6 mb-6">
-                <div className="flex items-center gap-3 mb-4">
-                  <BookOpen size={22} style={{ color: tierData.color }} />
-                  <h4 className="text-white font-bold text-lg">{tierData.courses}+ Structured Courses</h4>
-                </div>
-                <p className="text-gray-400 text-sm mb-4">Learn scalar EM theory, patent strategy, investor relations, and device physics — with new content monthly.</p>
-                <Link to="/courses"
-                  className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg font-bold text-sm transition-all text-white"
-                  style={{ backgroundColor: tierData.color }}>
-                  Start Learning <ChevronRight size={14} />
-                </Link>
-              </div>
-            )}
-
-            {/* Features grid */}
-            <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6">
-              <h4 className="text-white font-bold text-sm uppercase tracking-wider mb-4 flex items-center gap-2">
-                <Award size={16} style={{ color: tierData.color }} />
-                Full Feature Access
-              </h4>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                {tierData.features.map((f, i) => (
-                  <div key={i} className={`flex items-start gap-2 text-sm ${f.startsWith("✓") ? "text-gray-300" : "text-gray-600 opacity-50"}`}>
-                    <span className={f.startsWith("✓") ? "text-green-400" : "text-gray-700"} style={f.startsWith("✓") ? { color: tierData.color } : {}}>
-                      {f.startsWith("✓") ? "✓" : "✗"}
-                    </span>
-                    <span>{f.replace(/^[✓✗] /, "")}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-
-          {/* Right: Quick wins + upgrade path */}
-          <div>
-            {/* Quick wins tracker */}
-            <div className="mb-6 sticky top-6">
-              <QuickWinsTracker userEmail={sessionStorage.getItem("checkout_email") || "user@example.com"} />
-            </div>
-
-            {/* Quick start card */}
-            <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6 mb-6 sticky top-96">
-              <h3 className="text-white font-bold text-lg mb-4">Next Steps</h3>
-              <div className="space-y-3">
-                <Link to="/invention-plans"
-                  className="flex items-center gap-3 p-3 rounded-xl border border-gray-700 hover:border-gray-600 bg-gray-800/40 transition-all text-left">
-                  <span className="text-2xl">🔧</span>
-                  <div>
-                    <p className="text-white font-bold text-sm">Pick a Device to Build</p>
-                    <p className="text-gray-500 text-xs">Browse all {tierData.inventions} build plans</p>
-                  </div>
-                </Link>
-
-                <Link to="/courses"
-                  className="flex items-center gap-3 p-3 rounded-xl border border-gray-700 hover:border-gray-600 bg-gray-800/40 transition-all text-left">
-                  <span className="text-2xl">📚</span>
-                  <div>
-                    <p className="text-white font-bold text-sm">Take a Course</p>
-                    <p className="text-gray-500 text-xs">Learn theory & best practices</p>
-                  </div>
-                </Link>
-
-                <Link to="/inventor-forge"
-                  className="flex items-center gap-3 p-3 rounded-xl border border-gray-700 hover:border-gray-600 bg-gray-800/40 transition-all text-left">
-                  <span className="text-2xl">⚡</span>
-                  <div>
-                    <p className="text-white font-bold text-sm">Generate an Invention</p>
-                    <p className="text-gray-500 text-xs">Use AI Forge (if in your plan)</p>
-                  </div>
-                </Link>
-
-                <Link to="/account"
-                  className="flex items-center gap-3 p-3 rounded-xl border border-gray-700 hover:border-gray-600 bg-gray-800/40 transition-all text-left">
-                  <span className="text-2xl">👤</span>
-                  <div>
-                    <p className="text-white font-bold text-sm">View Your Account</p>
-                    <p className="text-gray-500 text-xs">Manage subscription & settings</p>
-                  </div>
-                </Link>
-              </div>
-            </div>
-
-            {/* Upgrade card (if not Pro) */}
-            {tierData.nextTier && (
-              <div className="bg-gradient-to-br from-gray-800 to-gray-900 border border-gray-700 rounded-2xl p-6">
-                <p className="text-gray-400 text-xs font-bold uppercase tracking-wider mb-3">Want More?</p>
-                <h4 className="text-white font-black text-lg mb-2">Upgrade to {tierData.nextTier.name}</h4>
-                <ul className="space-y-2 mb-4 text-xs text-gray-300">
-                  {productId === "starter" && (
-                    <>
-                      <li className="flex items-center gap-2">
-                        <span style={{ color: tierData.nextTier.color }}>+</span> All 21 build plans (vs 5)
-                      </li>
-                      <li className="flex items-center gap-2">
-                        <span style={{ color: tierData.nextTier.color }}>+</span> Full course library (26+ vs 4)
-                      </li>
-                      <li className="flex items-center gap-2">
-                        <span style={{ color: tierData.nextTier.color }}>+</span> AI Invention Forge + Patent Claims Generator
-                      </li>
-                    </>
-                  )}
-                  {productId === "researcher" && (
-                    <>
-                      <li className="flex items-center gap-2">
-                        <span style={{ color: tierData.nextTier.color }}>+</span> AI Patent Drafting Tool
-                      </li>
-                      <li className="flex items-center gap-2">
-                        <span style={{ color: tierData.nextTier.color }}>+</span> Investor CRM & Pitch Builder
-                      </li>
-                      <li className="flex items-center gap-2">
-                        <span style={{ color: tierData.nextTier.color }}>+</span> VDR Portal
-                      </li>
-                    </>
-                  )}
-                </ul>
-                <Link to={tierData.nextTier.path}
-                  className="block w-full py-2.5 rounded-lg font-bold text-sm text-center transition-all text-white"
-                  style={{ backgroundColor: tierData.nextTier.color }}>
-                  Explore Upgrade
-                </Link>
-              </div>
-            )}
-          </div>
-        </div>
-      </div>
-
-      {/* Bottom CTA */}
-      <div className="border-t border-gray-800 px-5 py-12 text-center bg-gray-900/40">
-        <div className="max-w-2xl mx-auto">
-          <h3 className="text-white font-black text-xl mb-2">Ready to get started?</h3>
-          <p className="text-gray-400 text-sm mb-6">Your membership is active immediately. Start exploring invention plans, taking courses, and using AI tools.</p>
-          <Link to="/"
-            className="inline-flex items-center gap-2 px-8 py-3 rounded-xl font-bold text-white transition-all"
-            style={{ backgroundColor: tierData.color }}>
-            Go to Dashboard <ArrowRight size={16} />
+        <h1 className="text-3xl sm:text-4xl font-black mb-3">You're In. Welcome to the Vault.</h1>
+        <p className="text-gray-400 max-w-lg mx-auto text-base leading-relaxed mb-6">
+          Your <span style={{ color: tier.color }} className="font-black">{tier.name} membership</span> is active. Access {tier.builds} build plans, {tier.courses} courses, and the full AI toolkit — right now.
+        </p>
+        <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <Link to="/member-dashboard"
+            className="inline-flex items-center gap-2 px-8 py-4 rounded-xl font-black text-white transition-all hover:opacity-90"
+            style={{ backgroundColor: tier.color, boxShadow: `0 4px 20px ${tier.color}40` }}>
+            Go to My Dashboard <ArrowRight size={16} />
+          </Link>
+          <Link to="/invention-plans"
+            className="inline-flex items-center gap-2 px-8 py-4 rounded-xl font-black text-gray-300 bg-gray-800 hover:bg-gray-700 transition-all border border-gray-700">
+            <Wrench size={16} /> Browse Build Plans
           </Link>
         </div>
       </div>
+
+      <div className="max-w-5xl mx-auto px-5 py-14">
+
+        {/* ── What's unlocked ── */}
+        <h2 className="text-xl font-black mb-6 flex items-center gap-2">
+          <Zap size={18} style={{ color: tier.color }} /> What You Just Unlocked
+        </h2>
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-14">
+          {[
+            { icon: <Wrench size={20} className="text-orange-400" />, value: tier.builds, label: "Build Plans" },
+            { icon: <BookOpen size={20} className="text-blue-400" />, value: tier.courses, label: "Courses" },
+            { icon: <Shield size={20} className="text-green-400" />, value: "Full", label: "AI Patent Suite" },
+            { icon: <TrendingUp size={20} className="text-purple-400" />, value: "200+", label: "Prior Art Entries" },
+          ].map((item, i) => (
+            <div key={i} className="bg-gray-900 border border-gray-800 rounded-xl p-4 text-center">
+              <div className="flex justify-center mb-2">{item.icon}</div>
+              <div className="text-2xl font-black text-white">{item.value}</div>
+              <div className="text-gray-500 text-xs mt-0.5">{item.label}</div>
+            </div>
+          ))}
+        </div>
+
+        {/* ── Quick start ── */}
+        <h2 className="text-xl font-black mb-5">Where Do You Want to Start?</h2>
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-16">
+          {QUICK_START.map((item, i) => (
+            <Link key={i} to={item.href}
+              className="bg-gray-900 border border-gray-800 hover:border-gray-600 rounded-xl p-4 transition-all group">
+              <div className="text-3xl mb-2">{item.emoji}</div>
+              <p className="text-white font-bold text-sm leading-snug">{item.label}</p>
+              <p className="text-gray-500 text-xs mt-1">{item.sub}</p>
+            </Link>
+          ))}
+        </div>
+
+        {/* ── Kit upsell — first CTA to physical revenue ── */}
+        <div className="bg-gradient-to-r from-gray-900 to-gray-900 border border-orange-900/40 rounded-2xl p-7 mb-14">
+          <div className="flex items-center gap-2 mb-2">
+            <Package size={20} className="text-orange-400" />
+            <h2 className="text-xl font-black">Stop Simulating. Buy the Kit.</h2>
+          </div>
+          <p className="text-gray-400 text-sm mb-6">
+            You now have the build plans. Get the components delivered to your door — pre-verified, sourced, and ready for assembly.
+          </p>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            {KIT_UPSELLS.map((kit, i) => (
+              <div key={i} className="bg-gray-950 border border-gray-800 rounded-xl overflow-hidden hover:border-gray-600 transition-all">
+                <div className="h-32 overflow-hidden relative">
+                  <img src={kit.img} alt={kit.name} className="w-full h-full object-cover" />
+                  <div className="absolute top-2 left-2">
+                    <span className={`text-xs font-black px-2 py-0.5 rounded border ${kit.badgeColor}`}>{kit.badge}</span>
+                  </div>
+                </div>
+                <div className="p-4">
+                  <h3 className="text-white font-bold text-sm mb-1">{kit.name}</h3>
+                  <p className="text-gray-400 text-xs leading-relaxed mb-3">{kit.desc}</p>
+                  <div className="flex items-center justify-between">
+                    <span className="text-green-400 font-black">{kit.price}</span>
+                    <Link to={kit.href}
+                      className="px-3 py-1.5 rounded-lg bg-orange-700 hover:bg-orange-600 text-white text-xs font-black transition-colors">
+                      Buy Kit →
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* ── Upgrade nudge for non-elite ── */}
+        {productId !== "elite" && (
+          <div className="bg-gradient-to-r from-purple-950/40 to-blue-950/40 border border-purple-800/40 rounded-2xl p-7 mb-14 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5">
+            <div>
+              <div className="flex items-center gap-2 mb-2">
+                <Star size={16} className="text-yellow-400" />
+                <span className="text-yellow-400 font-black text-sm uppercase tracking-wider">Next Level</span>
+              </div>
+              <h3 className="text-white font-black text-lg mb-1">
+                {productId === "starter" ? "Upgrade to Pro — Unlock 25 More Systems" : "Upgrade to Elite — Restricted Systems + Monthly 1-on-1"}
+              </h3>
+              <p className="text-gray-400 text-sm">
+                {productId === "starter"
+                  ? "Pro gives you all 40+ builds, all 40+ courses, the full AI patent suite, and the investor toolkit. $79/month."
+                  : "Elite unlocks defense-adjacent systems and gives you a monthly strategy call. $149/month."}
+              </p>
+            </div>
+            <Link to="/pricing"
+              className="px-6 py-3 rounded-xl font-black text-sm text-white whitespace-nowrap transition-all hover:opacity-90 flex-shrink-0"
+              style={{ backgroundColor: productId === "starter" ? "#8b5cf6" : "#f59e0b", boxShadow: `0 4px 16px ${productId === "starter" ? "#8b5cf644" : "#f59e0b44"}` }}>
+              Upgrade Now →
+            </Link>
+          </div>
+        )}
+
+        {/* ── Final nav ── */}
+        <div className="text-center bg-gray-900 border border-gray-800 rounded-2xl p-8">
+          <h3 className="font-black text-white text-xl mb-2">The vault is open. Go build something.</h3>
+          <p className="text-gray-500 text-sm mb-6">Every system is waiting. Full BOMs. Step-by-step. PDF. Video.</p>
+          <Link to="/member-dashboard"
+            className="inline-flex items-center gap-2 px-10 py-4 rounded-xl font-black text-white transition-all hover:opacity-90"
+            style={{ backgroundColor: tier.color, boxShadow: `0 4px 20px ${tier.color}40` }}>
+            Open My Dashboard <ArrowRight size={18} />
+          </Link>
+        </div>
+      </div>
+
+      <footer className="border-t border-gray-800 px-6 py-8 text-center text-gray-700 text-xs">
+        <p>© 2026 Zenith Apex LLC · ZARP Engineering Vault · Educational & research purposes only</p>
+      </footer>
     </div>
-    </>
   );
 }

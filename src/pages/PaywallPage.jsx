@@ -328,6 +328,7 @@ export default function PaywallPage() {
       interval: "month",
       successUrl: `${baseUrl}/checkout?success=true&product=${tier.id}`,
       cancelUrl: `${baseUrl}/paywall`,
+      customerEmail: null,
     });
     if (response.data?.url) window.location.href = response.data.url;
   };
