@@ -65,15 +65,30 @@ const FLOATING_FORMULAS = [
   { text: "B·A (flux density)", x: "45%", delay: 1.3 },
   { text: "Z_out = √(L/C)", x: "79%", delay: 0.8 },
   { text: "f_0 = 1/(2π√LC)", x: "9%", delay: 1.6 },
+  { text: "∇²T = ρC_p ∂T/∂t", x: "41%", delay: 0.5 },
+  { text: "M = I α (torque)", x: "18%", delay: 1.2 },
+  { text: "J = σE (current density)", x: "52%", delay: 0.8 },
+  { text: "Q = mcΔT", x: "89%", delay: 1.9 },
+  { text: "x(t) = A cos(ωt + φ)", x: "31%", delay: 0.3 },
+  { text: "∫∫ E·dA = Q/ε₀", x: "66%", delay: 1.5 },
+  { text: "sin²θ + cos²θ = 1", x: "7%", delay: 2.1 },
+  { text: "e^(iπ) + 1 = 0", x: "84%", delay: 0.6 },
+  { text: "d²x/dt² + ω₀²x = 0", x: "42%", delay: 1.7 },
+  { text: "∮ F·dr = 0", x: "73%", delay: 0.4 },
+  { text: "y = mx + b", x: "25%", delay: 1.0 },
+  { text: "∫ f(x)dx", x: "58%", delay: 2.3 },
 ];
 
 const INVENTORS = [
   { name: "Albert Einstein", img: "https://upload.wikimedia.org/wikipedia/commons/d/d3/Albert_Einstein_Head.jpg", x: "8%", delay: 0.2 },
   { name: "Nikola Tesla", img: "https://upload.wikimedia.org/wikipedia/commons/7/79/Tesla_circa_1890.jpeg", x: "22%", delay: 1.3 },
+  { name: "Nikola Tesla", img: "https://upload.wikimedia.org/wikipedia/commons/7/79/Tesla_circa_1890.jpeg", x: "15%", delay: 0.5 },
   { name: "Socrates", img: "https://upload.wikimedia.org/wikipedia/commons/6/65/Socrates_Louvre.jpg", x: "38%", delay: 0.7 },
   { name: "Aristotle", img: "https://upload.wikimedia.org/wikipedia/commons/a/ac/Aristotle_Altemps_Inv8575.jpg", x: "54%", delay: 2.1 },
+  { name: "Nikola Tesla", img: "https://upload.wikimedia.org/wikipedia/commons/7/79/Tesla_circa_1890.jpeg", x: "62%", delay: 1.8 },
   { name: "John Bedini", img: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/3b865883a_CODEXTECHLOGO.png", x: "70%", delay: 0.9 },
   { name: "T. Henry Moray", img: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/3b865883a_CODEXTECHLOGO.png", x: "86%", delay: 1.5 },
+  { name: "Nikola Tesla", img: "https://upload.wikimedia.org/wikipedia/commons/7/79/Tesla_circa_1890.jpeg", x: "78%", delay: 0.4 },
 ];
 
 export default function VaultHeroAnimation({ children }) {
@@ -264,7 +279,7 @@ export default function VaultHeroAnimation({ children }) {
         ))}
 
         {/* Floating Background Elements — Icons floating around in the background */}
-        {Array.from({ length: 50 }).map((_, i) => {
+        {Array.from({ length: 70 }).map((_, i) => {
           const types = ['binary', 'device', 'equation', 'tool', 'periodic', 'medical', 'lab', 'sacred', 'tower', 'book', 'lightbulb', 'bubble', 'atom', 'molecule', 'wave'];
           const type = types[i % types.length];
           const colors = ['#22c55e', '#ea580c'];
@@ -342,12 +357,12 @@ export default function VaultHeroAnimation({ children }) {
             >
               <div
                 style={{
-                  padding: isEmoji ? '18px 20px' : '14px 20px',
-                  borderRadius: isEmoji ? '50%' : '10px',
-                  border: `3px solid ${color}`,
+                  padding: isEmoji ? '24px 28px' : '18px 24px',
+                  borderRadius: isEmoji ? '50%' : '12px',
+                  border: `4px solid ${color}`,
                   backgroundColor: `${color}15`,
                   color: color,
-                  fontSize: isEmoji ? '40px' : '18px',
+                  fontSize: isEmoji ? '52px' : '22px',
                   fontWeight: 'bold',
                   whiteSpace: 'nowrap',
                   textShadow: `0 0 12px ${color}, 0 0 24px ${glowColor}`,
