@@ -5,6 +5,7 @@ import ScalarWaveWatermark from "@/components/ScalarWaveWatermark";
 import { Lock, ChevronRight, Star, Shield, BookOpen, Wrench, TrendingUp, CheckCircle2, ArrowRight, Flame, Zap } from "lucide-react";
 import LeadMagnetPopup, { useLeadMagnetTrigger } from "@/components/LeadMagnetPopup";
 import VaultHeroAnimation from "@/components/VaultHeroAnimation";
+import CodextechAcronym from "@/components/CodextechAcronym";
 
 // ── REAL persistent countdown (48h from first visit) ─────────────────────────
 const DEADLINE_KEY = "zarp_founding_deadline";
@@ -178,47 +179,48 @@ export default function ZarpLanding() {
             <p className="text-gray-500 text-sm max-w-xl mx-auto mb-8">
               C.O.D.E.X.T.E.C.H. consolidates electromagnetic engineering research—courses, builds, documentation, execution frameworks, toolkits, and community—all in one membership platform.
             </p>
+            <CodextechAcronym />
           </div>
         </VaultHeroAnimation>
 
-      {/* ── Email capture — stays on page after submit ── */}
-      <div className="px-5 text-center">
-        <div className="max-w-lg mx-auto mb-5">
-          {emailSubmitted ? (
-            <div className="bg-green-950/40 border border-green-800 rounded-xl p-5 text-center">
-              <CheckCircle2 size={24} className="text-green-400 mx-auto mb-2" />
-              <p className="text-green-300 font-bold">Course preview on its way — check your inbox.</p>
-              <p className="text-gray-500 text-sm mt-1">Ready to unlock the full library?</p>
-              <Link to="/pricing" className="inline-flex items-center gap-2 mt-3 px-6 py-3 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-black transition-colors">
-                See Membership Options <ArrowRight size={14} />
-              </Link>
-            </div>
-          ) : (
-            <div className="flex flex-col sm:flex-row gap-3">
-              <input
-                type="email"
-                placeholder="your@email.com"
-                value={email}
-                onChange={e => setEmail(e.target.value)}
-                onKeyDown={e => e.key === "Enter" && handleEmailCapture()}
-                className="flex-1 px-4 py-3.5 rounded-xl bg-gray-900 border border-gray-700 text-white placeholder-gray-600 text-sm focus:outline-none focus:border-cyan-500 transition-colors"
-              />
-              <button onClick={handleEmailCapture} disabled={submitting}
-                className="px-6 py-3.5 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-black text-sm transition-all whitespace-nowrap disabled:opacity-60">
-                {submitting ? "Sending..." : "Get Free Course Preview →"}
-              </button>
-            </div>
-          )}
-          {!emailSubmitted && <p className="text-gray-600 text-xs mt-2">One free course module. No spam. Unsubscribe anytime.</p>}
-        </div>
+        {/* ── Email capture — stays on page after submit ── */}
+        <div className="px-5 text-center">
+          <div className="max-w-lg mx-auto mb-5">
+            {emailSubmitted ? (
+              <div className="bg-green-950/40 border border-green-800 rounded-xl p-5 text-center">
+                <CheckCircle2 size={24} className="text-green-400 mx-auto mb-2" />
+                <p className="text-green-300 font-bold">Course preview on its way — check your inbox.</p>
+                <p className="text-gray-500 text-sm mt-1">Ready to unlock the full library?</p>
+                <Link to="/pricing" className="inline-flex items-center gap-2 mt-3 px-6 py-3 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-black transition-colors">
+                  See Membership Options <ArrowRight size={14} />
+                </Link>
+              </div>
+            ) : (
+              <div className="flex flex-col sm:flex-row gap-3">
+                <input
+                  type="email"
+                  placeholder="your@email.com"
+                  value={email}
+                  onChange={e => setEmail(e.target.value)}
+                  onKeyDown={e => e.key === "Enter" && handleEmailCapture()}
+                  className="flex-1 px-4 py-3.5 rounded-xl bg-gray-900 border border-gray-700 text-white placeholder-gray-600 text-sm focus:outline-none focus:border-cyan-500 transition-colors"
+                />
+                <button onClick={handleEmailCapture} disabled={submitting}
+                  className="px-6 py-3.5 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-black text-sm transition-all whitespace-nowrap disabled:opacity-60">
+                  {submitting ? "Sending..." : "Get Free Course Preview →"}
+                </button>
+              </div>
+            )}
+            {!emailSubmitted && <p className="text-gray-600 text-xs mt-2">One free course module. No spam. Unsubscribe anytime.</p>}
+          </div>
 
-        {/* Secondary text CTA — low commitment */}
-        {!emailSubmitted && (
-          <Link to="/free-vault" className="text-gray-500 hover:text-gray-300 text-sm transition-colors underline underline-offset-4">
-            View free course preview →
-          </Link>
-        )}
-      </div>
+          {/* Secondary text CTA — low commitment */}
+          {!emailSubmitted && (
+            <Link to="/free-vault" className="text-gray-500 hover:text-gray-300 text-sm transition-colors underline underline-offset-4">
+              View free course preview →
+            </Link>
+          )}
+        </div>
       </section>
 
 
