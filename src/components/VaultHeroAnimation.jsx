@@ -1,27 +1,41 @@
 import { useEffect, useState } from "react";
 import { Lock } from "lucide-react";
 
-const FLOATING_ELEMENTS = [
+const FLOATING_FORMULAS = [
   { text: "E=mc²", x: "5%", delay: 0 },
-  { text: "∇×E = -∂B/∂t", x: "12%", delay: 0.5 },
-  { text: "∫∞", x: "20%", delay: 1 },
-  { text: "∇²φ = ρ/ε₀", x: "28%", delay: 1.5 },
-  { text: "ψ = Ae^(ikx)", x: "36%", delay: 2 },
-  { text: "F = qE + q(v×B)", x: "44%", delay: 0.3 },
-  { text: "iℏ∂ψ/∂t = Ĥψ", x: "52%", delay: 1.2 },
-  { text: "∮ E·dl = -dΦ_B/dt", x: "60%", delay: 1.8 },
-  { text: "G_μν = 8πT_μν", x: "68%", delay: 0.8 },
-  { text: "Φ = BA cos(θ)", x: "76%", delay: 2.3 },
-  { text: "∇·E = ρ/ε₀", x: "84%", delay: 0.6 },
-  { text: "c = 1/√(μ₀ε₀)", x: "92%", delay: 1.4 },
+  { text: "c = 299,792,458 m/s", x: "12%", delay: 0.5 },
+  { text: "ax² + bx + c = 0", x: "8%", delay: 1 },
+  { text: "∇×E = -∂B/∂t", x: "18%", delay: 1.5 },
+  { text: "x = (-b ± √(b²-4ac))/2a", x: "25%", delay: 2 },
+  { text: "∇²φ = ρ/ε₀", x: "32%", delay: 0.3 },
+  { text: "ψ = Ae^(ikx)", x: "39%", delay: 1.2 },
+  { text: "F = qE + q(v×B)", x: "46%", delay: 1.8 },
+  { text: "iℏ∂ψ/∂t = Ĥψ", x: "53%", delay: 0.8 },
+  { text: "∮ E·dl = -dΦ_B/dt", x: "60%", delay: 2.3 },
+  { text: "G_μν = 8πT_μν", x: "67%", delay: 0.6 },
+  { text: "Φ = BA cos(θ)", x: "74%", delay: 1.4 },
+  { text: "∇·E = ρ/ε₀", x: "81%", delay: 0.9 },
+  { text: "c = 1/√(μ₀ε₀)", x: "88%", delay: 1.7 },
   { text: "ω = 2πf", x: "15%", delay: 2.1 },
-  { text: "∮ B·dl = μ₀I", x: "40%", delay: 0.9 },
-  { text: "e = ∑(n!)⁻¹", x: "70%", delay: 1.7 },
-  { text: "⚛", x: "22%", delay: 0.4 },
-  { text: "⚡", x: "50%", delay: 2.2 },
-  { text: "∞", x: "88%", delay: 1.1 },
-  { text: "π", x: "10%", delay: 1.9 },
-  { text: "φ = (1+√5)/2", x: "85%", delay: 0.7 },
+  { text: "∮ B·dl = μ₀I", x: "42%", delay: 0.4 },
+  { text: "e = ∑(n!)⁻¹", x: "70%", delay: 1.3 },
+  { text: "F = ma", x: "10%", delay: 2.2 },
+  { text: "P = VI", x: "95%", delay: 0.7 },
+  { text: "Q = It", x: "20%", delay: 1.6 },
+  { text: "Z = √(R² + X²)", x: "55%", delay: 0.5 },
+  { text: "∂²u/∂t² = c²∇²u", x: "75%", delay: 1.9 },
+  { text: "V = IR", x: "35%", delay: 0.2 },
+  { text: "ε = E₀sin(ωt)", x: "65%", delay: 2.0 },
+  { text: "λν = c", x: "28%", delay: 1.1 },
+];
+
+const INVENTORS = [
+  { name: "Albert Einstein", img: "https://upload.wikimedia.org/wikipedia/commons/d/d3/Albert_Einstein_Head.jpg", x: "8%", delay: 0.2 },
+  { name: "Nikola Tesla", img: "https://upload.wikimedia.org/wikipedia/commons/7/79/Tesla_circa_1890.jpeg", x: "22%", delay: 1.3 },
+  { name: "Socrates", img: "https://upload.wikimedia.org/wikipedia/commons/6/65/Socrates_Louvre.jpg", x: "38%", delay: 0.7 },
+  { name: "Aristotle", img: "https://upload.wikimedia.org/wikipedia/commons/a/ac/Aristotle_Altemps_Inv8575.jpg", x: "54%", delay: 2.1 },
+  { name: "John Bedini", img: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/3b865883a_CODEXTECHLOGO.png", x: "70%", delay: 0.9 },
+  { name: "T. Henry Moray", img: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/3b865883a_CODEXTECHLOGO.png", x: "86%", delay: 1.5 },
 ];
 
 export default function VaultHeroAnimation({ children }) {
@@ -123,10 +137,11 @@ export default function VaultHeroAnimation({ children }) {
 
       {/* Floating formulas & elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {FLOATING_ELEMENTS.map((elem, i) => (
+        {/* Mathematical formulas */}
+        {FLOATING_FORMULAS.map((elem, i) => (
           <div
-            key={i}
-            className="absolute floating-formula text-cyan-400 font-black text-xl md:text-2xl opacity-0"
+            key={`formula-${i}`}
+            className="absolute floating-formula text-cyan-400 font-black text-sm md:text-lg opacity-0"
             style={{
               left: elem.x,
               bottom: "-50px",
@@ -138,18 +153,29 @@ export default function VaultHeroAnimation({ children }) {
           </div>
         ))}
 
-        {/* Gold bars */}
-        {[...Array(4)].map((_, i) => (
+        {/* Inventor portraits */}
+        {INVENTORS.map((inventor, i) => (
           <div
-            key={`gold-${i}`}
-            className="absolute gold-bar text-yellow-500 text-3xl opacity-0"
+            key={`inventor-${i}`}
+            className="absolute floating-formula opacity-0 flex flex-col items-center gap-1"
             style={{
-              left: `${20 + i * 20}%`,
-              top: `${30 + i * 15}%`,
-              animationDelay: `${0.8 + i * 0.3}s`,
+              left: inventor.x,
+              bottom: "-150px",
+              animationDelay: `${inventor.delay}s`,
+              "--drift": `${Math.random() * 80 - 40}px`,
             }}
           >
-            ⬜
+            <img
+              src={inventor.img}
+              alt={inventor.name}
+              className="w-16 h-16 md:w-20 md:h-20 rounded-full border-2 border-cyan-400 object-cover shadow-lg"
+              onError={(e) => {
+                e.target.style.display = "none";
+              }}
+            />
+            <span className="text-cyan-300 text-xs md:text-sm font-bold drop-shadow-lg whitespace-nowrap text-center px-1">
+              {inventor.name}
+            </span>
           </div>
         ))}
       </div>
