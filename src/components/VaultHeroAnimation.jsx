@@ -132,6 +132,28 @@ export default function VaultHeroAnimation({ children }) {
           }
         }
 
+        @keyframes vaultDoorOpen {
+          0% {
+            transform: rotateY(0deg) scale(1);
+            opacity: 1;
+          }
+          100% {
+            transform: rotateY(-45deg) scale(0.9);
+            opacity: 0.3;
+          }
+        }
+
+        @keyframes dashboardReveal {
+          0% {
+            opacity: 0;
+            transform: translateZ(-100px);
+          }
+          100% {
+            opacity: 1;
+            transform: translateZ(0);
+          }
+        }
+
         @keyframes floatFormula {
           0% {
             opacity: 0;
@@ -240,13 +262,13 @@ export default function VaultHeroAnimation({ children }) {
         }
 
         .vault-door-main {
-          animation: ${isOpen ? "neonGlow 0.8s ease-in-out forwards" : "none"};
+          animation: ${clicked ? "vaultDoorOpen 1.2s ease-in-out forwards" : "none"};
           transform-style: preserve-3d;
           perspective: 1000px;
         }
 
         .vault-content-reveal {
-          animation: ${isOpen ? "contentFadeIn 0.8s ease-out 0.5s forwards" : "none"};
+          animation: ${isOpen ? "dashboardReveal 1s ease-out 0.3s forwards" : "none"};
           opacity: ${isOpen ? 1 : 0};
         }
 
@@ -579,6 +601,61 @@ export default function VaultHeroAnimation({ children }) {
           </div>
         )}
       </div>
+
+      {/* Dashboard Feature Reveal (Behind vault door) */}
+      {clicked && (
+        <div className="vault-content-reveal absolute inset-0 flex items-center justify-center z-10 px-6">
+          <div className="bg-gray-900/95 border border-cyan-500/30 backdrop-blur-md rounded-3xl p-8 md:p-12 max-w-4xl shadow-2xl">
+            <div className="text-center mb-8">
+              <h2 className="text-3xl md:text-4xl font-black text-cyan-300 mb-3">Welcome to C.O.D.E.X.T.E.C.H.</h2>
+              <p className="text-gray-300 text-lg">Complete Engineering Execution Platform</p>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+              <div className="bg-gray-800/50 border border-cyan-500/20 rounded-xl p-5 hover:border-cyan-500/50 transition-all">
+                <div className="text-3xl mb-2">📐</div>
+                <h3 className="font-black text-cyan-300 mb-2">Build Plans</h3>
+                <p className="text-gray-400 text-sm">40+ complete execution workflows with exact BOMs, schematics, and assembly guides</p>
+              </div>
+              
+              <div className="bg-gray-800/50 border border-cyan-500/20 rounded-xl p-5 hover:border-cyan-500/50 transition-all">
+                <div className="text-3xl mb-2">🎓</div>
+                <h3 className="font-black text-cyan-300 mb-2">40+ Courses</h3>
+                <p className="text-gray-400 text-sm">Structured learning from fundamentals to advanced prototyping and patent strategy</p>
+              </div>
+              
+              <div className="bg-gray-800/50 border border-cyan-500/20 rounded-xl p-5 hover:border-cyan-500/50 transition-all">
+                <div className="text-3xl mb-2">🛡️</div>
+                <h3 className="font-black text-cyan-300 mb-2">AI Patent Tools</h3>
+                <p className="text-gray-400 text-sm">Generate USPTO-compliant provisional patents, FTO analysis, and investor packages</p>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-8">
+              {['Supplier Links', 'Video Guides', 'FTO Analysis', 'Investor CRM', 'Prior Art Archive', 'VDR Portal', 'Pitch Deck Generator', 'Capital Raising'].map((feature, i) => (
+                <div key={i} className="bg-cyan-500/10 border border-cyan-500/30 rounded-lg px-4 py-2 text-center">
+                  <p className="text-cyan-300 text-xs font-bold">{feature}</p>
+                </div>
+              ))}
+            </div>
+
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <button
+                onClick={() => {
+                  if (typeof window !== 'undefined') window.location.replace('/vault-nda');
+                }}
+                className="px-8 py-4 rounded-xl font-black text-white bg-gradient-to-r from-cyan-600 to-blue-600 hover:opacity-90 transition-all shadow-lg">
+                Enter Vault → NDA
+              </button>
+              <button
+                onClick={() => setClicked(false)}
+                className="px-8 py-4 rounded-xl font-bold text-cyan-300 border border-cyan-500 hover:bg-cyan-500/10 transition-all">
+                Go Back
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Redirect to NDA on vault open */}
       {isOpen && (
