@@ -342,12 +342,12 @@ export default function VaultHeroAnimation({ children }) {
             >
               <div
                 style={{
-                  padding: isEmoji ? '12px 14px' : '10px 16px',
-                  borderRadius: isEmoji ? '50%' : '8px',
+                  padding: isEmoji ? '18px 20px' : '14px 20px',
+                  borderRadius: isEmoji ? '50%' : '10px',
                   border: `3px solid ${color}`,
                   backgroundColor: `${color}15`,
                   color: color,
-                  fontSize: isEmoji ? '28px' : '15px',
+                  fontSize: isEmoji ? '40px' : '18px',
                   fontWeight: 'bold',
                   whiteSpace: 'nowrap',
                   textShadow: `0 0 12px ${color}, 0 0 24px ${glowColor}`,
@@ -431,12 +431,12 @@ export default function VaultHeroAnimation({ children }) {
             <img
               src={inventor.img}
               alt={inventor.name}
-              className="w-16 h-16 md:w-20 md:h-20 rounded-full border-2 border-cyan-400 object-cover shadow-lg"
+              className="w-24 h-24 md:w-32 md:h-32 rounded-full border-3 border-cyan-400 object-cover shadow-lg"
               onError={(e) => {
                 e.target.style.display = "none";
               }}
             />
-            <span className="text-cyan-300 text-xs md:text-sm font-bold drop-shadow-lg whitespace-nowrap text-center px-1">
+            <span className="text-cyan-300 text-sm md:text-base font-bold drop-shadow-lg whitespace-nowrap text-center px-1">
               {inventor.name}
             </span>
           </div>
