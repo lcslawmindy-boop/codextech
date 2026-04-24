@@ -145,8 +145,8 @@ export default function ZarpLanding() {
       {/* ── Nav — ONE primary CTA only ── */}
       <nav className="border-b border-gray-800 bg-gray-900/90 backdrop-blur px-5 py-4 flex items-center justify-between sticky top-0 z-40">
         <div className="flex items-center gap-2">
-          <img src="https://media.base44.com/images/public/69ccefebfea78b23498c66a8/a90918e3c_ZARPlogo.png" alt="ZARP" className="h-8 w-8 object-contain" />
-          <span className="font-black text-xl">C.O.D.E.X</span>
+          <img src="https://media.base44.com/images/public/69ccefebfea78b23498c66a8/afb5ad292_CODEXTECHLOGO.png" alt="C.O.D.E.X.T.E.C.H." className="h-8 w-8 object-contain" />
+          <span className="font-black text-xl">C.O.D.E.X.T.E.C.H.</span>
           <span className="text-gray-600 text-xs hidden sm:inline">The Engineering Platform</span>
         </div>
         <Link to="/pricing"

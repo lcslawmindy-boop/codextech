@@ -367,8 +367,8 @@ export default function Pricing() {
           </Link>
           <div className="w-px h-5 bg-gray-700" />
           <div className="flex items-center gap-2">
-            <img src="https://media.base44.com/images/public/69ccefebfea78b23498c66a8/a90918e3c_ZARPlogo.png" alt="ZARP" className="h-7 w-7 object-contain" />
-            <h1 className="text-white font-black text-lg">ZARP Membership</h1>
+            <img src="https://media.base44.com/images/public/69ccefebfea78b23498c66a8/afb5ad292_CODEXTECHLOGO.png" alt="C.O.D.E.X.T.E.C.H." className="h-7 w-7 object-contain" />
+            <h1 className="text-white font-black text-lg">C.O.D.E.X.T.E.C.H. Membership</h1>
           </div>
         </div>
         <Link to="/referrals" className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-green-900/40 border border-green-700 text-green-300 hover:bg-green-900/60 text-xs font-bold transition-all">
