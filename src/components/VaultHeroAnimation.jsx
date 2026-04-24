@@ -279,8 +279,8 @@ export default function VaultHeroAnimation({ children }) {
         ))}
 
         {/* Floating Background Elements — Icons floating around in the background */}
-        {Array.from({ length: 70 }).map((_, i) => {
-          const types = ['binary', 'device', 'equation', 'tool', 'periodic', 'medical', 'lab', 'sacred', 'tower', 'book', 'lightbulb', 'bubble', 'atom', 'molecule', 'wave'];
+        {Array.from({ length: 100 }).map((_, i) => {
+          const types = ['binary', 'device', 'equation', 'tool', 'periodic', 'medical', 'lab', 'sacred', 'tower', 'book', 'lightbulb', 'bubble', 'atom', 'molecule', 'wave', 'platonic', 'chakra', 'planet', 'shield', 'coil', 'cage', 'medbed', 'gold'];
           const type = types[i % types.length];
           const colors = ['#22c55e', '#ea580c'];
           const color = colors[i % 2];
@@ -334,6 +334,33 @@ export default function VaultHeroAnimation({ children }) {
             content = molecules[Math.floor(Math.random() * molecules.length)];
           } else if (type === 'wave') {
             content = '≈';
+          } else if (type === 'platonic') {
+            const solids = ['⬡', '🔷', '🔶', '⬢', '◆'];
+            content = solids[Math.floor(Math.random() * solids.length)];
+            isEmoji = true;
+          } else if (type === 'chakra') {
+            const chakras = ['🔴', '🟠', '🟡', '🟢', '🔵', '🟣', '⚪'];
+            content = chakras[Math.floor(Math.random() * chakras.length)];
+            isEmoji = true;
+          } else if (type === 'planet') {
+            const planets = ['🌍', '🌎', '🌏', '☀️', '🌙', '⭐', '🪐'];
+            content = planets[Math.floor(Math.random() * planets.length)];
+            isEmoji = true;
+          } else if (type === 'shield') {
+            content = '🛡️';
+            isEmoji = true;
+          } else if (type === 'coil') {
+            content = '🌀';
+            isEmoji = true;
+          } else if (type === 'cage') {
+            content = '⬜';
+          } else if (type === 'medbed') {
+            content = '🛏️';
+            isEmoji = true;
+          } else if (type === 'gold') {
+            content = '■';
+            color = '#fbbf24';
+            glowColor = '#f59e0b';
           }
           
           const startX = Math.random() * window.innerWidth - window.innerWidth / 2;
