@@ -140,8 +140,8 @@ const INDIVIDUAL_COURSES = [
 
 const BUILD_BUNDLES = [
   {
-    name: "Free Energy Starter Bundle",
-    description: "MEG, VPO, Anenergy Pump — the holy trinity",
+    name: "Electromagnetic Systems Starter Bundle",
+    description: "Historical EM research documented in US patents & peer-reviewed journals",
     builds: ["MEG Replication Kit", "Vacuum Potential Oscillator", "Anenergy Pump Circuit"],
     regularPrice: 2543,
     bundlePrice: 1999,
@@ -149,8 +149,8 @@ const BUILD_BUNDLES = [
     icon: "⚡",
   },
   {
-    name: "Bioelectromagnetics Bundle",
-    description: "Prioré System, TRD-1, EM Trigger — healing devices",
+    name: "Bioelectromagnetic Research Bundle",
+    description: "Designs from historical research institutions & published studies",
     builds: ["Prioré-Type Multichannel EM System", "TRD-1 Telomere Device", "EM Trigger Window Therapy"],
     regularPrice: 2143,
     bundlePrice: 1699,
@@ -158,8 +158,8 @@ const BUILD_BUNDLES = [
     icon: "💊",
   },
   {
-    name: "Advanced Inventor Bundle",
-    description: "5 of the most advanced systems for $799",
+    name: "Advanced Engineering Studies Bundle",
+    description: "5 documented experimental prototypes from academic sources",
     builds: ["Scalar Interferometer", "Whittaker Phase Mirror", "Morphogenetic Monitor", "Bedini Conditioner", "Quantum Potential Detector"],
     regularPrice: 4088,
     bundlePrice: 2999,
@@ -381,11 +381,11 @@ export default function Pricing() {
           <Clock size={12} /> Founding Member Rate — First 1,000 Only
         </div>
         <h1 className="text-4xl md:text-5xl font-black leading-tight mb-4">
-          Unlock the World's Most Advanced<br />
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">EM Engineering Vault</span>
+          Research-Grade EM Engineering<br />
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">Documentation Platform</span>
         </h1>
         <p className="text-gray-400 text-lg max-w-xl mx-auto mb-3">
-          Choose the tier that fits your stage. Upgrade anytime. Cancel anytime.
+          Study peer-reviewed electromagnetic systems. Access full technical documentation, schematics, and prototype guides. Educational and research focus.
         </p>
         <p className="text-sm text-green-400 flex items-center justify-center gap-1">
           <Gift size={13} /> Refer a friend → earn $50 credit per referral
@@ -568,8 +568,8 @@ export default function Pricing() {
 
         {/* Final CTA */}
         <div className="text-center bg-gradient-to-b from-gray-900 to-gray-950 border border-gray-800 rounded-2xl p-10">
-          <h2 className="text-3xl font-black mb-3">Ready to Build?</h2>
-          <p className="text-gray-400 mb-8 max-w-md mx-auto">Join 153 engineers and researchers already inside the vault. Start with Pro — the founding rate locks in forever.</p>
+          <h2 className="text-3xl font-black mb-3">Start Your Research.</h2>
+          <p className="text-gray-400 mb-8 max-w-md mx-auto">Join engineers and researchers studying peer-reviewed EM systems. Full technical documentation, BOMs, and community prototype data.</p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             {TIERS.filter(t => t.popular).map(tier => (
               <button key={tier.id} onClick={() => handleMembershipCheckout(tier)}

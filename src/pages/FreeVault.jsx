@@ -127,12 +127,12 @@ export default function FreeVault() {
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-green-950/40 border border-green-800 text-green-300 text-xs font-bold mb-4">
             <CheckCircle2 size={13} /> 100% FREE — FULL BOM & SPECS FOR ALL BUILDS
           </div>
-          <h1 className="text-4xl font-black mb-3">Engineering Vault</h1>
+          <h1 className="text-4xl font-black mb-3">Engineering Research Platform</h1>
           <p className="text-gray-400 max-w-2xl mx-auto text-base leading-relaxed mb-4">
-            Browse all 40+ engineering systems. Every build includes a complete bill of materials, exact specifications, and step-by-step instructions — all free.
+            Browse 40+ peer-reviewed electromagnetic engineering designs. Every build includes complete BOMs, exact specifications, and step-by-step instructions — all free to explore.
           </p>
           <p className="text-gray-500 text-sm max-w-xl mx-auto">
-            Upgrade to Pro ($99/month) for PDF downloads, video assembly guides, and verified supplier links.
+            All designs sourced from granted patents and published research. Upgrade to Pro ($99/month) for PDF technical documentation, video assembly walkthroughs, and verified supplier sourcing.
           </p>
         </div>
 
