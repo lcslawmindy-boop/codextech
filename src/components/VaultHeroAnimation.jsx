@@ -597,7 +597,7 @@ export default function VaultHeroAnimation({ children }) {
 
       {/* CODEXTECH Acronym - Single line below vault */}
       {!clicked && (
-        <div className="absolute left-1/2 -translate-x-1/2 flex justify-center items-end gap-2 md:gap-4 px-2 pointer-events-none z-20" style={{ bottom: '-40px' }}>
+        <div className="absolute left-1/2 -translate-x-1/2 flex justify-center items-end gap-2 md:gap-4 px-2 pointer-events-none z-20" style={{ bottom: '-80px' }}>
           {[
             { letter: 'C', meaning: 'Consciousness', num: '1', color: '#ff006e' },
             { letter: 'O', meaning: 'Oscillation', num: '2', color: '#fb5607' },
