@@ -27,6 +27,12 @@ const FLOATING_FORMULAS = [
   { text: "V = IR", x: "35%", delay: 0.2 },
   { text: "ε = E₀sin(ωt)", x: "65%", delay: 2.0 },
   { text: "λν = c", x: "28%", delay: 1.1 },
+  { text: "H = -∇²/2m + V", x: "3%", delay: 0.9 },
+  { text: "S = kT ln(Ω)", x: "48%", delay: 1.4 },
+  { text: "τ = r × F", x: "92%", delay: 0.3 },
+  { text: "Θ = ∫ L dt", x: "22%", delay: 2.0 },
+  { text: "∆E·∆t ≥ ℏ/4π", x: "57%", delay: 0.6 },
+  { text: "A = ∫ B·dA", x: "78%", delay: 1.5 },
 ];
 
 const INVENTORS = [
@@ -94,21 +100,50 @@ export default function VaultHeroAnimation({ children }) {
           }
         }
 
-        @keyframes goldBarsSlide {
+        @keyframes moneyFall {
           0% {
             opacity: 0;
-            transform: translateX(-50px) rotateZ(-5deg);
+            transform: translateY(-100px) rotateZ(0deg);
           }
           10% {
-            opacity: 0.6;
+            opacity: 1;
           }
           90% {
-            opacity: 0.4;
+            opacity: 0.7;
           }
           100% {
             opacity: 0;
-            transform: translateX(50px) rotateZ(5deg);
+            transform: translateY(800px) rotateZ(360deg);
           }
+        }
+
+        @keyframes lightning {
+          0%, 100% { opacity: 0; }
+          10%, 15% { opacity: 1; }
+          20%, 100% { opacity: 0; }
+        }
+
+        @keyframes boltPath {
+          0% {
+            stroke-dashoffset: 1000;
+          }
+          10%, 15% {
+            stroke-dashoffset: 0;
+          }
+          100% {
+            stroke-dashoffset: 0;
+          }
+        }
+
+        .money-fall {
+          animation: moneyFall 8s ease-in forwards;
+        }
+
+        .lightning-bolt {
+          animation: lightning 3s ease-in-out infinite;
+          stroke-dasharray: 1000;
+          animation-name: lightning, boltPath;
+          animation-duration: 3s, 3s;
         }
 
         .neon-logo {
@@ -137,21 +172,77 @@ export default function VaultHeroAnimation({ children }) {
 
       {/* Floating formulas & elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {/* Mathematical formulas */}
+        {/* Mathematical formulas with glow */}
         {FLOATING_FORMULAS.map((elem, i) => (
           <div
             key={`formula-${i}`}
-            className="absolute floating-formula text-cyan-400 font-black text-sm md:text-lg"
+            className="absolute floating-formula font-black text-sm md:text-lg"
             style={{
               left: elem.x,
               bottom: "0px",
               animationDelay: `${elem.delay}s`,
               "--drift": `${Math.random() * 100 - 50}px`,
+              color: '#ffffff',
+              textShadow: "0 0 10px #ffffff, 0 0 20px #06b6d4, 0 0 30px #06b6d4",
+              filter: "brightness(1.2)",
             }}
           >
             {elem.text}
           </div>
         ))}
+
+        {/* Falling money */}
+        {Array.from({ length: 15 }).map((_, i) => (
+          <div
+            key={`money-${i}`}
+            className="absolute money-fall text-4xl font-black"
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `-50px`,
+              animationDelay: `${i * 0.5}s`,
+              animation: `moneyFall 8s ease-in infinite`,
+            }}
+          >
+            💰
+          </div>
+        ))}
+
+        {/* Lightning bolts SVG */}
+        <svg className="absolute inset-0 w-full h-full pointer-events-none" style={{ overflow: 'visible' }}>
+          {/* Random lightning bolts */}
+          {Array.from({ length: 5 }).map((_, i) => {
+            const startX = Math.random() * window.innerWidth;
+            const startY = Math.random() * 300;
+            const endX = startX + (Math.random() - 0.5) * 200;
+            const endY = startY + 400;
+            return (
+              <g key={`lightning-${i}`}>
+                <path
+                  d={`M ${startX} ${startY} Q ${startX + Math.random() * 100 - 50} ${startY + 100} ${endX} ${endY}`}
+                  stroke="#fff"
+                  strokeWidth="3"
+                  fill="none"
+                  className="lightning-bolt"
+                  style={{
+                    animationDelay: `${i * 0.6}s`,
+                    filter: "drop-shadow(0 0 10px #ffffff) drop-shadow(0 0 20px #06b6d4)",
+                  }}
+                />
+                <path
+                  d={`M ${startX} ${startY} Q ${startX + Math.random() * 100 - 50} ${startY + 100} ${endX} ${endY}`}
+                  stroke="#06b6d4"
+                  strokeWidth="1"
+                  fill="none"
+                  className="lightning-bolt"
+                  style={{
+                    animationDelay: `${i * 0.6 + 0.1}s`,
+                    filter: "drop-shadow(0 0 20px #06b6d4)",
+                  }}
+                />
+              </g>
+            );
+          })}
+        </svg>
 
         {/* Inventor portraits */}
         {INVENTORS.map((inventor, i) => (
@@ -226,8 +317,34 @@ export default function VaultHeroAnimation({ children }) {
 
       {/* Text overlay on vault door before opening */}
       {!clicked && (
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-20 max-w-3xl mx-auto px-6">
+        <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none z-20 max-w-4xl mx-auto px-6 gap-6">
           {children}
+          
+          {/* CODEXTECH Explanation */}
+          <div className="absolute bottom-32 left-0 right-0 flex justify-center gap-2 sm:gap-4 flex-wrap px-4">
+            {[
+              { letter: 'C', meaning: 'Consciousness' },
+              { letter: 'O', meaning: 'Oscillation' },
+              { letter: 'D', meaning: 'Devices' },
+              { letter: 'E', meaning: 'Engineering' },
+              { letter: 'X', meaning: 'eXperimental' },
+              { letter: 'T', meaning: 'Technology' },
+              { letter: 'E', meaning: 'Extraction' },
+              { letter: 'C', meaning: 'Construct' },
+              { letter: 'H', meaning: 'Harmonic' },
+            ].map((item, i) => (
+              <div key={i} className="flex flex-col items-center gap-1">
+                <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-lg flex items-center justify-center font-black text-lg sm:text-xl" style={{
+                  background: "linear-gradient(135deg, #06b6d4, #0891b2)",
+                  color: "#fff",
+                  boxShadow: "0 0 20px #06b6d4, inset 0 0 10px rgba(255,255,255,0.2)",
+                }}>
+                  {item.letter}
+                </div>
+                <span className="text-xs sm:text-sm font-bold text-cyan-300 whitespace-nowrap drop-shadow-lg">{item.meaning}</span>
+              </div>
+            ))}
+          </div>
         </div>
       )}
 
