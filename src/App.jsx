@@ -131,6 +131,7 @@ import EmailFunnel from './pages/EmailFunnel';
 import ProductLadder from './pages/ProductLadder';
 import ViralScripts from './pages/ViralScripts';
 import RetentionDashboard from './pages/RetentionDashboard';
+import UpsellEngine from './pages/UpsellEngine';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -314,6 +315,7 @@ const AuthenticatedApp = () => {
             <Route path="/viral-scripts" element={<ViralScripts />} />
             <Route path="/material-sourcing" element={<MaterialSourcing />} />
             <Route path="/retention" element={<RetentionDashboard />} />
+            <Route path="/upsell-engine" element={<UpsellEngine />} />
           </Route>
 
           <Route path="*" element={<PageNotFound />} />
