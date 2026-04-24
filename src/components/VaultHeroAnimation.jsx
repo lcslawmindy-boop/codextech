@@ -257,26 +257,11 @@ export default function VaultHeroAnimation({ children }) {
         ))}
       </div>
 
-      {/* Revealed content - COOL REVEAL */}
+      {/* Redirect to NDA on vault open */}
       {isOpen && (
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-auto z-50 p-6">
-          <div className="vault-content-reveal max-w-2xl w-full">
-            {/* Inner vault glow */}
-            <div className="absolute inset-0 bg-gradient-to-b from-cyan-500/20 to-transparent rounded-2xl blur-2xl" />
-            
-            {/* Content container */}
-            <div className="relative bg-gradient-to-b from-gray-900 to-gray-950 border-2 border-cyan-500 rounded-2xl p-8 sm:p-12 shadow-2xl shadow-cyan-500/50">
-              <div className="text-center">
-                <div className="text-6xl mb-4">🔐</div>
-                <h2 className="text-3xl sm:text-4xl font-black text-cyan-300 mb-4">VAULT UNLOCKED</h2>
-                <p className="text-gray-300 text-lg mb-8 leading-relaxed">
-                  You've accessed the complete C.O.D.E.X.T.E.C.H. engineering platform. 40+ build systems, 26 courses, AI patent tools, and the full investor toolkit await.
-                </p>
-                {children}
-              </div>
-            </div>
-          </div>
-        </div>
+        <script>
+          {typeof window !== 'undefined' && window.location.replace('/nda')}
+        </script>
       )}
 
       {/* Text overlay on vault door before opening */}

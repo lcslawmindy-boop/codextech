@@ -1,0 +1,45 @@
+{
+  "name": "NDASignature",
+  "type": "object",
+  "properties": {
+    "full_name": {
+      "type": "string",
+      "description": "Full name of signer"
+    },
+    "email": {
+      "type": "string",
+      "description": "Email address of signer"
+    },
+    "company": {
+      "type": "string",
+      "description": "Organization/company name"
+    },
+    "signature_data": {
+      "type": "string",
+      "description": "Digital signature (base64 canvas data)"
+    },
+    "accepted_terms": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether user accepted NDA terms"
+    },
+    "ip_address": {
+      "type": "string",
+      "description": "IP address of signer"
+    },
+    "user_agent": {
+      "type": "string",
+      "description": "Browser user agent"
+    },
+    "signed_at": {
+      "type": "string",
+      "description": "Timestamp of signature"
+    }
+  },
+  "required": [
+    "full_name",
+    "email",
+    "accepted_terms",
+    "signed_at"
+  ]
+}

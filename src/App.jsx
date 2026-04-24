@@ -9,6 +9,7 @@ import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 // Add page imports here
 import ZarpLanding from './pages/ZarpLanding';
+import VaultNDALanding from './pages/VaultNDALanding';
 import FreeVault from './pages/FreeVault';
 import ConceptGraph from './pages/ConceptGraph';
 import LegalAgreement from './pages/LegalAgreement';
@@ -204,6 +205,7 @@ const AuthenticatedApp = () => {
       <Routes>
         <Route element={<MobileLayout />}>
           <Route path="/" element={<ZarpLanding />} />
+          <Route path="/vault-nda" element={<VaultNDALanding />} />
           <Route path="/vault" element={<ConceptGraph />} />
           <Route path="/free-vault" element={<FreeVault />} />
           <Route path="/member-dashboard" element={<MemberDashboard />} />
