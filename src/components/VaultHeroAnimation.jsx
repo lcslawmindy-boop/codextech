@@ -117,6 +117,29 @@ export default function VaultHeroAnimation({ children }) {
           }
         }
 
+        @keyframes floatAround {
+          0% {
+            opacity: 0.3;
+            transform: translate(var(--tx-start), var(--ty-start)) rotateZ(0deg) scale(1);
+          }
+          25% {
+            opacity: 0.8;
+            transform: translate(calc(var(--tx-start) + 80px), calc(var(--ty-start) - 60px)) rotateZ(90deg) scale(1.1);
+          }
+          50% {
+            opacity: 1;
+            transform: translate(calc(var(--tx-start) + 40px), calc(var(--ty-start) + 100px)) rotateZ(180deg) scale(0.95);
+          }
+          75% {
+            opacity: 0.8;
+            transform: translate(calc(var(--tx-start) - 100px), calc(var(--ty-start) + 50px)) rotateZ(270deg) scale(1.05);
+          }
+          100% {
+            opacity: 0.3;
+            transform: translate(var(--tx-start), var(--ty-start)) rotateZ(360deg) scale(1);
+          }
+        }
+
         @keyframes lightning {
           0%, 100% { opacity: 0; }
           8%, 12% { opacity: 1; }
@@ -194,11 +217,11 @@ export default function VaultHeroAnimation({ children }) {
           </div>
         ))}
 
-        {/* Falling Matrix Elements — Binary, Devices, Equations, Tools, Medical, Sacred Geometry */}
-        {Array.from({ length: 50 }).map((_, i) => {
+        {/* Floating Background Elements — Icons floating around in the background */}
+        {Array.from({ length: 40 }).map((_, i) => {
           const types = ['binary', 'device', 'equation', 'tool', 'periodic', 'medical', 'lab', 'sacred', 'tower', 'book', 'lightbulb', 'bubble'];
           const type = types[i % types.length];
-          const colors = ['#22c55e', '#ea580c']; // green or orange
+          const colors = ['#22c55e', '#ea580c'];
           const color = colors[i % 2];
           const glowColor = color === '#22c55e' ? '#16a34a' : '#dc2626';
           
@@ -245,15 +268,23 @@ export default function VaultHeroAnimation({ children }) {
             content = '◉';
           }
           
+          const startX = Math.random() * window.innerWidth - window.innerWidth / 2;
+          const startY = Math.random() * window.innerHeight - window.innerHeight / 2;
+          
           return (
             <div
-              key={`matrix-${i}`}
-              className="absolute money-fall"
+              key={`float-${i}`}
+              className="absolute"
               style={{
-                left: `${Math.random() * 100}%`,
-                top: `-50px`,
-                animationDelay: `${i * 0.2}s`,
-                animation: `moneyFall 8s ease-in infinite`,
+                '--tx-start': `${startX}px`,
+                '--ty-start': `${startY}px`,
+                left: '50%',
+                top: '50%',
+                marginLeft: `-${isEmoji ? 9 : 20}px`,
+                marginTop: `-${isEmoji ? 9 : 14}px`,
+                animation: `floatAround ${12 + i % 8}s ease-in-out infinite`,
+                animationDelay: `${i * 0.3}s`,
+                opacity: 0.5,
               }}
             >
               <div
@@ -263,7 +294,7 @@ export default function VaultHeroAnimation({ children }) {
                   border: `2px solid ${color}`,
                   backgroundColor: `${color}15`,
                   color: color,
-                  fontSize: isEmoji ? '18px' : '12px',
+                  fontSize: isEmoji ? '16px' : '11px',
                   fontWeight: 'bold',
                   whiteSpace: 'nowrap',
                   textShadow: `0 0 8px ${color}, 0 0 16px ${glowColor}`,
