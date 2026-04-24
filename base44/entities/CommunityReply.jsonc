@@ -1,0 +1,50 @@
+{
+  "name": "CommunityReply",
+  "type": "object",
+  "properties": {
+    "post_id": {
+      "type": "string",
+      "description": "ID of parent post"
+    },
+    "content": {
+      "type": "string",
+      "description": "Reply text content"
+    },
+    "author_email": {
+      "type": "string",
+      "description": "Email of reply author"
+    },
+    "author_name": {
+      "type": "string",
+      "description": "Display name of author"
+    },
+    "upvotes": {
+      "type": "integer",
+      "default": 0,
+      "description": "Number of upvotes on this reply"
+    },
+    "upvoted_by": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": [],
+      "description": "List of user emails who upvoted this reply"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "published",
+        "pending_review",
+        "hidden"
+      ],
+      "default": "published",
+      "description": "Moderation status"
+    }
+  },
+  "required": [
+    "post_id",
+    "content",
+    "author_email"
+  ]
+}

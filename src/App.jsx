@@ -133,6 +133,8 @@ import ViralScripts from './pages/ViralScripts';
 import RetentionDashboard from './pages/RetentionDashboard';
 import UpsellEngine from './pages/UpsellEngine';
 import LeadMagnetSystem from './pages/LeadMagnetSystem';
+import CommunityForum from './pages/CommunityForum';
+import NewCommunityPost from './pages/NewCommunityPost';
 import ABTestingDashboard from './pages/ABTestingDashboard';
 import RevenueAudit from './pages/RevenueAudit';
 import ScalarVentureHome from './pages/ScalarVentureHome';
@@ -295,6 +297,8 @@ const AuthenticatedApp = () => {
           <Route path="/referrals" element={<ReferralDashboard />} />
           <Route path="/contest" element={<ContestPage />} />
           <Route path="/paywall" element={<PaywallPage />} />
+          <Route path="/community" element={<CommunityForum />} />
+          <Route path="/community/new" element={<NewCommunityPost />} />
 
           {/* Admin-only routes */}
           <Route element={<AdminGuard />}>

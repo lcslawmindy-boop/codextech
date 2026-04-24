@@ -1,0 +1,84 @@
+{
+  "name": "CommunityPost",
+  "type": "object",
+  "properties": {
+    "invention_name": {
+      "type": "string",
+      "description": "Which invention this post is about"
+    },
+    "title": {
+      "type": "string",
+      "description": "Post title"
+    },
+    "content": {
+      "type": "string",
+      "description": "Post content/description"
+    },
+    "post_type": {
+      "type": "string",
+      "enum": [
+        "build_photo",
+        "troubleshooting",
+        "tip",
+        "question"
+      ],
+      "description": "Category of post"
+    },
+    "image_url": {
+      "type": "string",
+      "description": "URL of build photo or diagram"
+    },
+    "author_email": {
+      "type": "string",
+      "description": "Email of post author"
+    },
+    "author_name": {
+      "type": "string",
+      "description": "Display name of author"
+    },
+    "upvotes": {
+      "type": "integer",
+      "default": 0,
+      "description": "Number of upvotes"
+    },
+    "upvoted_by": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": [],
+      "description": "List of user emails who upvoted"
+    },
+    "reply_count": {
+      "type": "integer",
+      "default": 0,
+      "description": "Number of replies to this post"
+    },
+    "is_featured": {
+      "type": "boolean",
+      "default": false,
+      "description": "Admin-curated featured post"
+    },
+    "featured_date": {
+      "type": "string",
+      "description": "When this was featured"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "published",
+        "pending_review",
+        "hidden"
+      ],
+      "default": "published",
+      "description": "Moderation status"
+    }
+  },
+  "required": [
+    "invention_name",
+    "title",
+    "content",
+    "post_type",
+    "author_email"
+  ]
+}
