@@ -160,18 +160,18 @@ export default function ZarpLanding() {
         </div>
 
         <h1 className="text-5xl sm:text-6xl md:text-7xl font-black leading-[1.05] mb-5">
-          Build Real EM Devices.<br />
-          File Real Patents.<br />
+          Engineering-Grade Build Plans<br />
+          for Advanced EM Devices.<br />
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">
             From $29/Month.
           </span>
         </h1>
 
         <p className="text-lg sm:text-xl text-gray-300 max-w-2xl mx-auto mb-3 leading-relaxed">
-          40+ engineering build plans with exact BOMs and supplier links. AI patent drafting that generates USPTO-compliant provisional applications in one session. 40+ courses from fundamentals to prototype construction.
+          40+ full build plans with exact BOMs, supplier links, and step-by-step assembly. AI patent drafting generates USPTO-compliant provisional applications in one session.
         </p>
         <p className="text-gray-500 text-sm max-w-xl mx-auto mb-10">
-          Every device sourced from granted US patents, peer-reviewed journals, and declassified government documents. Exact part numbers. Step-by-step. Primary sources only.
+          US Patent 6,362,718. Foundations of Physics Letters. Full 23-component BOM. Build the MEG device in 8 hours. Every device sourced from granted patents and peer-reviewed publications.
         </p>
 
         {/* ── Email capture — stays on page after submit ── */}
