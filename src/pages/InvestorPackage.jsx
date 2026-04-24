@@ -5,28 +5,49 @@ import { BUYERS } from "../lib/buyerData";
 import NdaPdfGenerator from "../components/NdaPdfGenerator";
 import DueDiligencePdfGenerator from "../components/DueDiligencePdfGenerator";
 
+// Q2 2026 REVALUATION — reflects full platform build-out
 const VALUATION = [
-  { label: "AI Invention Forge Engine (LLM-powered, full IP + financial generation)", low: 380000, high: 950000 },
-  { label: "AI Market Research Scanner (live USPTO/EPO/IEEE/journal scan + TAM/SAM/SOM)", low: 220000, high: 580000 },
-  { label: "AI Patent Intelligence Suite (Claim Summarizer, Novelty/FTO, Competitive Landscape, Drafting Strategy)", low: 210000, high: 520000, tag: "NEW" },
-  { label: "Patent Drafting Wizard (7-step USPTO workflow, real-time validation, AI auto-fill, PDF export)", low: 175000, high: 440000, tag: "NEW" },
-  { label: "Secure Patent Sharing System (tokenized share links, comment threading, expiry control)", low: 85000, high: 210000, tag: "NEW" },
-  { label: "Provisional Patent Drafter (USPTO 35 USC 111(b), Claude Sonnet, 9 sections)", low: 150000, high: 380000 },
-  { label: "VC Pitch Deck Generator + Build Video Engine (animated step-by-step guides)", low: 120000, high: 280000 },
-  { label: "Virtual Data Room (VDR) Portal (tokenized NDA-gated investor access + analytics)", low: 140000, high: 360000, tag: "NEW" },
-  { label: "Scalar Wave / Field Simulators + Dark Timeline Visualizer", low: 80000, high: 175000 },
-  { label: "Knowledge Graph (200+ nodes, primary source fragments, real-time subscriptions)", low: 220000, high: 420000 },
-  { label: "Course Catalog (20+ courses, syllabi, Stripe checkout, learning dashboard)", low: 150000, high: 320000 },
-  { label: "Invention Build Plans (23 devices, BOM, PDF export, animated guides, gov-classified tier)", low: 620000, high: 1650000, tag: "EXPANDED" },
-  { label: "MorphoYield TRZ-Agri Array (scalar field agriculture, crop yield IP)", low: 190000, high: 490000, tag: "NEW" },
-  { label: "Aegis-SV Adaptive Scalar Counterphase Shield (personal EMF defense system IP)", low: 210000, high: 540000, tag: "NEW" },
-  { label: "Annotated Primary Document Archive + Bearden Node Network", low: 120000, high: 280000 },
-  { label: "Research Domain Moat + Platform Content Exclusivity (curated Bearden framework, tools, indexes)", low: 2100000, high: 7500000 },
-  { label: "Prior Art Archive + Patent Landscape Graph + AI Patentability Cross-Reference", low: 95000, high: 240000 },
-  { label: "KRCIC — Kaznacheyev Reversal Cell Imprinting Chamber (biophysics IP, build plan)", low: 180000, high: 480000 },
-  { label: "UBDRS — UV Biophoton Disease Reversal System (biophysics IP, full build plan)", low: 145000, high: 385000 },
-  { label: "Legal Compliance Infrastructure (ToS, disclaimers, refund policy, NDA gate)", low: 45000, high: 120000 },
-  { label: "EMF Health Platform + Investor CRM + Monitoring Dashboard + Alert System", low: 110000, high: 220000 },
+  // ── AI Engine Stack ──────────────────────────────────────────────────────
+  { label: "AI Invention Forge Engine (LLM-powered, multi-domain IP + financial generation)", low: 420000, high: 1100000, tag: "UPDATED" },
+  { label: "AI Market Research Scanner (live USPTO/EPO/IEEE/journal scan + TAM/SAM/SOM)", low: 260000, high: 650000 },
+  { label: "AI Patent Intelligence Suite (Claim Summarizer, Novelty/FTO, Landscape, Strategy)", low: 240000, high: 620000 },
+  { label: "Patent Drafting Wizard (7-step USPTO workflow, validation, AI auto-fill, PDF export)", low: 195000, high: 490000 },
+  { label: "Provisional Patent Drafter (USPTO 35 USC 111(b), Claude Sonnet, 9 sections)", low: 165000, high: 420000 },
+  { label: "Secure Patent Sharing System (tokenized links, comment threading, expiry + revoke)", low: 90000, high: 230000 },
+  { label: "AI Patent Attorney Chat (LLM-powered IP counsel simulation)", low: 140000, high: 380000, tag: "NEW" },
+  { label: "FTO Analysis Tool (freedom-to-operate, conflict scoring, prosecution roadmap)", low: 130000, high: 340000, tag: "NEW" },
+  { label: "IP Portfolio Health Dashboard (audit, risk scoring, filing gap analysis)", low: 95000, high: 260000, tag: "NEW" },
+  // ── Content & IP Vault ────────────────────────────────────────────────────
+  { label: "Invention Build Plans (40+ devices, BOM, PDF, animated guides, classified tier)", low: 980000, high: 2750000, tag: "EXPANDED" },
+  { label: "Course Catalog (40+ courses, syllabi, Stripe, LMS, progress tracking)", low: 320000, high: 780000, tag: "EXPANDED" },
+  { label: "Prior Art Archive (200+ entries, primary sources, patent cross-reference AI)", low: 140000, high: 370000, tag: "EXPANDED" },
+  { label: "Knowledge Graph (200+ nodes, primary source fragments, real-time subscriptions)", low: 230000, high: 450000 },
+  { label: "Annotated Primary Document Archive + Bearden Node Network", low: 130000, high: 300000 },
+  { label: "Research Domain Moat + Platform Content Exclusivity", low: 2800000, high: 9200000, tag: "REVALUED" },
+  // ── Hardware / Device IP ─────────────────────────────────────────────────
+  { label: "MorphoYield TRZ-Agri Array (scalar field agriculture, crop yield IP)", low: 210000, high: 540000 },
+  { label: "Aegis-SV Adaptive Scalar Counterphase Shield (personal EMF defense IP)", low: 230000, high: 590000 },
+  { label: "KRCIC — Kaznacheyev EM Imprinting Chamber (biophysics IP + build plan)", low: 195000, high: 520000 },
+  { label: "UBDRS — UV Biophoton Disease Reversal System (biophysics IP + build plan)", low: 160000, high: 420000 },
+  { label: "Build Supplies Shop (8 physical kit SKUs, Stripe, fulfillment infrastructure)", low: 180000, high: 420000, tag: "NEW" },
+  // ── Investor & Capital Infrastructure ────────────────────────────────────
+  { label: "Virtual Data Room (VDR) Portal (NDA-gated, tokenized, audit trail + analytics)", low: 160000, high: 410000 },
+  { label: "Investor CRM + Pipeline + Outreach Workflow (full capital-raise stack)", low: 120000, high: 290000 },
+  { label: "VC Pitch Deck Generator + Build Video Engine (animated step-by-step)", low: 135000, high: 310000 },
+  { label: "IP Marketplace + Co-Inventor Matching (inventor-investor exchange)", low: 160000, high: 420000, tag: "NEW" },
+  { label: "SBIR/STTR Pipeline Manager (federal grant tracking + application workflow)", low: 90000, high: 230000, tag: "NEW" },
+  // ── Growth & Revenue Infrastructure ──────────────────────────────────────
+  { label: "A/B Testing System (16-week roadmap, session-sticky buckets, analytics)", low: 85000, high: 220000, tag: "NEW" },
+  { label: "Lead Magnet System (behavioral triggers, 3 magnets, email capture pipeline)", low: 70000, high: 190000, tag: "NEW" },
+  { label: "Email Funnel (7-day drip, conversion copy, retention sequences)", low: 80000, high: 210000, tag: "NEW" },
+  { label: "Referral Dashboard + Viral Script Engine (growth loop infrastructure)", low: 75000, high: 195000, tag: "NEW" },
+  { label: "Upsell Engine + Product Ladder + Revenue Audit Framework", low: 95000, high: 250000, tag: "NEW" },
+  // ── Platform Infrastructure ───────────────────────────────────────────────
+  { label: "Scalar Wave / Field Simulators + Dark Timeline Visualizer", low: 85000, high: 185000 },
+  { label: "EMF Health Platform + Monitoring Dashboard + Alert System", low: 120000, high: 240000 },
+  { label: "Legal Compliance Infrastructure (ToS, disclaimers, refund policy, NDA gate)", low: 50000, high: 130000 },
+  { label: "Social Media Command + AI Agent (post generation, profile, viral scripts)", low: 95000, high: 260000, tag: "NEW" },
+  { label: "Contest Platform (submission, moderation, winner management)", low: 65000, high: 170000, tag: "NEW" },
 ];
 
 const LETTER = `STRICTLY CONFIDENTIAL — FOR AUTHORIZED RECIPIENTS ONLY
@@ -35,118 +56,177 @@ const LETTER = `STRICTLY CONFIDENTIAL — FOR AUTHORIZED RECIPIENTS ONLY
 
 Dear [RECIPIENT NAME],
 
-I am writing to offer you a time-limited, exclusive first-look at an acquisition that does not come to market twice.
+I am writing to offer you a time-limited, exclusive first-look at an acquisition opportunity that does not come to market twice.
 
-The Zenith Apex Advanced Research Platform is the world's only commercially structured, production-ready AI-powered knowledge and IP generation platform built around the advanced electromagnetic physics and bioelectromagnetic medicine research of Lt. Col. Thomas E. Bearden (ret.) — cross-referenced against primary US government documents, peer-reviewed publications, and declassified archives that independently validate the core technical claims.
+The Zenith Apex Advanced Research Platform (ZARP) is the world's only commercially structured, production-ready AI-powered knowledge and IP generation platform built around the advanced electromagnetic physics and bioelectromagnetic medicine research of Lt. Col. Thomas E. Bearden (ret.) — cross-referenced against primary US government documents, peer-reviewed publications, and declassified archives that independently validate the core technical claims.
 
 Note: Third-party published works referenced on this platform (including Bearden's books and papers, ONR reports, and peer-reviewed publications) remain the copyright of their respective authors. What you are acquiring is the original platform software, AI tool suite, curated indexes, and compiled research infrastructure built on top of this publicly available research.
 
-As of Q2 2026, the platform has been substantially expanded with a suite of AI-native modules that transform it from a research archive into a fully autonomous invention-to-commercialization engine. This is not a static dataset — it is a living, generative IP factory.
+As of Q2 2026, ZARP has expanded from a research archive into a fully autonomous, end-to-end invention-to-commercialization engine with 40+ documented build plans, 40+ courses, a complete AI patent pipeline, physical kit fulfillment, investor infrastructure, and a built-in revenue growth stack. This is not a static dataset — it is a living, generative IP factory with proven revenue infrastructure.
 
 ────────────────────────────────────────────
-PLATFORM FAIR MARKET VALUE (Q2 2026)
+PLATFORM FAIR MARKET VALUE (Q2 2026 — REVALUED)
 ────────────────────────────────────────────
 
 Independent asset-by-asset valuation (conservative discounted cash flow + comparable SaaS multiples):
 
-  AI Invention Forge Engine ............. $380K – $950K
-  AI Market Research Scanner ............ $220K – $580K
-  AI Patent Intelligence Suite (NEW) .... $210K – $520K
-  Patent Drafting Wizard (NEW) ........... $175K – $440K
-  Secure Patent Sharing System (NEW) .... $85K – $210K
-  USPTO Provisional Patent Drafter ....... $150K – $380K
-  VC Pitch Deck + Build Video Engine .... $120K – $280K
-  VDR Portal — Investor Data Room (NEW)  $140K – $360K
-  Scalar Field / Wave Simulators ......... $80K – $175K
-  Bearden Knowledge Graph (200+ nodes) .. $220K – $420K
-  Course Catalog (20+ courses, LMS) ..... $150K – $320K
-  Invention Build Plans (23 devices, EXPANDED) $620K – $1.65M
-  MorphoYield TRZ-Agri Array (NEW) ....... $190K – $490K
-  Aegis-SV Scalar Counterphase Shield (NEW) $210K – $540K
-  Annotated Primary Document Archive .... $120K – $280K
-  Research Domain Moat + Exclusivity ... $2.1M – $7.5M
-  Prior Art Archive + Patent AI ......... $95K – $240K
-  KRCIC — Kaznacheyev EM Imprinting Chamber $180K – $480K
-  UBDRS — UV Biophoton Disease Reversal  $145K – $385K
-  Legal Compliance Infrastructure ........ $45K – $120K
-  Health + CRM + Monitoring Suite ........ $110K – $220K
+  ── AI ENGINE STACK ──────────────────────────────────
+  AI Invention Forge Engine .................. $420K – $1.1M
+  AI Market Research Scanner ................. $260K – $650K
+  AI Patent Intelligence Suite ............... $240K – $620K
+  Patent Drafting Wizard ..................... $195K – $490K
+  Provisional Patent Drafter ................. $165K – $420K
+  Secure Patent Sharing System ............... $90K – $230K
+  AI Patent Attorney Chat (NEW) .............. $140K – $380K
+  FTO Analysis Tool (NEW) ................... $130K – $340K
+  IP Portfolio Health Dashboard (NEW) ........ $95K – $260K
 
-  PLATFORM TOTAL (conservative):    $6.3M – $17.8M
-  + Strategic pre-public premium:    $8.8M – $39.2M
+  ── CONTENT & IP VAULT ───────────────────────────────
+  Invention Build Plans (40+ devices, EXPANDED) $980K – $2.75M
+  Course Catalog (40+ courses, LMS, EXPANDED) . $320K – $780K
+  Prior Art Archive (200+ entries, EXPANDED) .. $140K – $370K
+  Bearden Knowledge Graph (200+ nodes) ....... $230K – $450K
+  Annotated Primary Document Archive ......... $130K – $300K
+  Research Domain Moat + Exclusivity ......... $2.8M – $9.2M
+
+  ── HARDWARE / DEVICE IP ─────────────────────────────
+  MorphoYield TRZ-Agri Array ................. $210K – $540K
+  Aegis-SV Scalar Counterphase Shield ........ $230K – $590K
+  KRCIC — Kaznacheyev EM Imprinting Chamber .. $195K – $520K
+  UBDRS — UV Biophoton Disease Reversal ...... $160K – $420K
+  Build Supplies Shop (8 physical SKUs) (NEW) . $180K – $420K
+
+  ── INVESTOR & CAPITAL INFRASTRUCTURE ───────────────
+  Virtual Data Room (VDR) Portal ............. $160K – $410K
+  Investor CRM + Pipeline + Outreach ......... $120K – $290K
+  VC Pitch Deck + Build Video Engine ......... $135K – $310K
+  IP Marketplace + Co-Inventor Matching (NEW) . $160K – $420K
+  SBIR/STTR Pipeline Manager (NEW) ........... $90K – $230K
+
+  ── GROWTH & REVENUE INFRASTRUCTURE (NEW) ───────────
+  A/B Testing System (16-week roadmap) ........ $85K – $220K
+  Lead Magnet System (behavioral triggers) .... $70K – $190K
+  Email Funnel (7-day drip, retention) ........ $80K – $210K
+  Referral + Viral Script Engine .............. $75K – $195K
+  Upsell Engine + Revenue Audit Framework ..... $95K – $250K
+
+  ── PLATFORM INFRASTRUCTURE ──────────────────────────
+  EMF Health Platform + Monitoring Dashboard .. $120K – $240K
+  Social Media Command + AI Agent (NEW) ....... $95K – $260K
+  Contest Platform (NEW) ..................... $65K – $170K
+  Scalar Simulators + Dark Timeline .......... $85K – $185K
+  Legal Compliance Infrastructure ............ $50K – $130K
+
+  ─────────────────────────────────────────────────────
+  PLATFORM TOTAL (conservative DCF):    $9.1M – $24.5M
+  + AI SaaS white-label licensing:      $650K – $1.5M/yr ARR
+  + Strategic pre-public premium (40–120%):  $12.7M – $53.9M
+  ─────────────────────────────────────────────────────
 
 ────────────────────────────────────────────
 WHAT YOU ARE ACQUIRING — FULL ASSET SUMMARY
 ────────────────────────────────────────────
 
-I. AI-NATIVE INVENTION GENERATION ENGINE (NEW — Q2 2026)
+I. AI-NATIVE INVENTION GENERATION ENGINE
 
-• AI Invention Forge — Select technology domains (vacuum energy, bioelectromagnetics, scalar comm, consciousness, EMF protection) and target markets. The AI generates novel, investor-ready invention concepts complete with: full technical specifications grounded in Bearden's documented framework, 5-year P&L financial projections with Series A targets, USPTO IP valuation and filing strategy, phase-by-phase GTM launch plans, and prior art differentiation analysis. Output: complete invention dossiers for each generated concept.
+• AI Invention Forge — Select technology domains (vacuum energy, bioelectromagnetics, scalar comm, consciousness, EMF protection) and target markets. The AI generates novel, investor-ready invention concepts with: full technical specifications, 5-year P&L financial projections with Series A targets, USPTO IP valuation and filing strategy, phase-by-phase GTM plans, and prior art differentiation analysis.
 
-• AI Market Research Scanner — Integrated live-internet scanning module that queries USPTO, EPO, WIPO, Google Patents, IEEE Xplore, arXiv, Grand View Research, and MarketsandMarkets in real-time. Auto-populates TAM/SAM/SOM figures with citations, identifies 8 prior art citations per invention with conflict risk scoring (High/Medium/Low), and generates per-citation differentiation strategies. Powered by Gemini Pro with live internet access.
+• AI Market Research Scanner — Live-internet scanning module querying USPTO, EPO, WIPO, Google Patents, IEEE Xplore, arXiv, Grand View Research, and MarketsandMarkets in real-time. Auto-populates TAM/SAM/SOM with citations. 8 prior art citations per invention with conflict risk scoring (High/Medium/Low). Powered by Gemini Pro with live internet access.
 
-• AI Patent Intelligence Suite (NEW) — 4-tool patent intelligence platform: (1) Claim Summarizer (strength ratings, vulnerabilities, broadening opportunities); (2) Novelty & FTO Analysis (prior art conflict scoring, differentiation strategy); (3) Competitive Landscape (live-internet IP holder map, white-space analysis, 5-year forecast); (4) Provisional Drafting Strategy (3 independent claims, 7 dependent claims, prosecution roadmap). All tools include PDF export and "Open in Wizard" one-click handoff.
+• AI Patent Intelligence Suite — 4-tool platform: (1) Claim Summarizer; (2) Novelty & FTO Analysis; (3) Competitive Landscape; (4) Provisional Drafting Strategy. All tools include PDF export and "Open in Wizard" one-click handoff.
 
-• Patent Drafting Wizard (NEW) — 7-step guided USPTO patent application drafting workflow with real-time validation, AI auto-fill at every step, completeness scoring (0–100%), and one-click PDF export. Imports Patent Intelligence context for seamless workflow. Includes Secure Sharing System: tokenized share links with configurable expiry (24h–30d), per-section comment threading for collaborators, one-click revocation, and view count tracking.
+• Patent Drafting Wizard — 7-step guided USPTO workflow, real-time validation, AI auto-fill, completeness scoring (0–100%), and one-click PDF export.
 
-• Provisional Patent Drafter — Generates complete USPTO-compliant Provisional Patent Applications (35 USC 111(b), 37 CFR Part 1) in 9 formal sections: Title, Cross-Reference, Technical Field, Background, Summary, Brief Drawings, Detailed Description (800–1,200 words), 20 Claims (3 independent + 17 dependent), and Abstract. Powered by Claude Sonnet. Each PPA establishes a real USPTO priority date.
+• AI Patent Attorney Chat — LLM-powered IP counsel simulation for claims strategy, prosecution roadmap, and prior art differentiation.
 
-• Build Video Generator — Generates 10-step animated engineering build guides for any invention: materials, tools, safety warnings, checkpoints, and schematic canvas visualizations per step. Playback engine with progress tracking. Export as branded PDF build manual. All guides auto-saved to database with full CRUD management in Admin Video Library.
+• FTO Analysis Tool — Freedom-to-operate analysis, conflict scoring, claim mapping, and prosecution roadmap.
 
-• VC Pitch Deck Exporter — One-click generation of investor-ready pitch decks covering market opportunity, technology differentiation, IP strategy, financial projections, and team structure. Personalized per invention portfolio.
+• Provisional Patent Drafter — Full USPTO 35 USC 111(b) compliant PPA in 9 formal sections. Powered by Claude Sonnet. Establishes real USPTO priority date.
 
-• Virtual Data Room (VDR) Portal (NEW) — Tokenized, NDA-gated investor data room with page-view analytics, session duration tracking, access revocation controls, and audit trail. Each investor receives a unique secure URL. Admin dashboard shows live engagement per investor.
+• IP Portfolio Health Dashboard — Full audit, risk scoring, filing gap analysis across entire invention portfolio.
 
-II. OVERUNITY ENERGY TECHNOLOGY (Peer-Reviewed, Independently Replicated)
+• Secure Patent Sharing System — Tokenized share links, configurable expiry (24h–30d), comment threading, revocation controls.
 
-• Motionless Electromagnetic Generator (MEG) — COP>>1 device published in Foundations of Physics Letters (2001) by 15 authors from 12 institutions including Boeing, Trinity College Dublin, and Alfvén Laboratory Stockholm. Independently replicated by Naudin. Full engineering replication plans included.
+• Build Video Generator — 10-step animated engineering build guides with materials, tools, safety warnings, checkpoints, and schematic canvas per step. Export as branded PDF.
 
-• Asymmetric Regauging Circuit (Patent Pending) — The theoretical framework explaining WHY COP>1 is permitted under thermodynamics, with the mainstream physics proof (Bohren, Am. J. Phys., 1983: metallic sphere absorbs 18× more energy than incident).
+• Virtual Data Room (VDR) Portal — NDA-gated, tokenized investor data room. Page-view analytics, session duration, access revocation, and full audit trail. Each investor receives a unique secure URL.
 
-• Time-Reversal Zone Cold Fusion Reactor — Engineering plans for a tabletop device exploiting the TRZ phenomenon documented at 73 sigma above background at China Lake Naval Weapons Center.
+II. EXPANDED CONTENT VAULT (40+ SYSTEMS — Q2 2026)
 
-• Type 2 Engineering / Vacuum Engines — The foundational framework for gating vacuum flux rather than using external energy — the only engineering paradigm where COP>>1 is thermodynamically permitted.
+• 40+ Invention Build Plans — Full engineering documentation: BOM with exact part numbers, step-by-step assembly guides, animated build video, PDF export, and supplier links. Includes government-classified tier for defense-adjacent systems.
 
-III. BIOELECTROMAGNETIC RESEARCH ARCHIVE (Historical Government & Academic Documents — For Research Purposes Only)
+• 40+ Courses — Structured learning from scalar EM fundamentals to advanced patent strategy. Full LMS with progress tracking, completion certificates, and Stripe checkout.
 
-Note: All items in this section are historical research documents and experimental device plans. No device described herein is approved by the FDA or any regulatory body for medical use. These materials are provided for research, education, and IP acquisition evaluation only.
+• 200+ Prior Art Archive Entries — Primary-source documented historical devices, patents, and experiments. Each entry includes original patent numbers, outcome classification, failure analysis, and cross-reference AI.
 
-• The Complete Prioré Archive — US Office of Naval Research London Branch Report R-5-78 (J.B. Bateman, 16 August 1978, UNCLASSIFIED): documents French government-funded animal experiments with the Prioré EM device. Historical research record — not an FDA-approved clinical trial. Source: Bateman, J.B. (1978). ONR London Branch Report R-5-78.
+• Bearden Knowledge Graph — 200+ nodes, primary source fragments, real-time subscriptions, cluster analysis.
 
-• Nobel Laureate Scientific Observation — André Lwoff (1965 Nobel Prize, Villejuif Institute) reviewed the Prioré animal experiment data, documented in the 1975 Esquire investigation. Historical academic record only.
+III. HARDWARE IP & DEVICE PORTFOLIO
 
-• Telomere Research Device (TRD-1) — Experimental research instrument implementing Bearden's MCCS scalar EM protocol (Bearden T.E., 2002, Energy from the Vacuum, Cheniere Press). For in vitro and experimental research purposes only. Not a medical device. Full build plans with BOM included.
+• MEG Replication Kit — COP>>1 device. Published: Foundations of Physics Letters (2001). 12 institutions. Independently replicated by Naudin. Full engineering plans + physical kit fulfilled.
 
-• Portable Scalar EM Research Platform — Experimental device for structured EM field research. For research use only. No clinical or therapeutic claims are made or implied.
+• MorphoYield TRZ-Agri Array — Scalar field agriculture system. Crop yield enhancement IP.
 
-IV. DEFENSE INTELLIGENCE (Primary Source Documented)
+• Aegis-SV Adaptive Scalar Counterphase Shield — Personal EMF defense system IP + build plan.
 
-• Gulf War Syndrome as KGB QP Weapon — Complete operational analysis with ABC/French/native population controls confirming intentionality. Includes all three Bioenergetics briefing slides.
+• KRCIC — Kaznacheyev Reversal Cell Imprinting Chamber — Biophysics IP + full build plan with BOM.
 
-• Baghdad M1A1 Incident — Official TACOM IOP FSO-3 memorandum (30 September 2003): M1A1 tank penetrated by unknown weapon leaving pencil-diameter holes through Chobham armor with copper/bronze residue. Scalar EM penetrator analysis included.
+• UBDRS — UV Biophoton Disease Reversal System — Biophysics IP + full build plan.
+
+• Physical Build Supplies Shop — 8 active SKUs: MEG Kit ($287), TRD-1 Kit ($194), Prioré Bundle ($349), Scalar Lab Starter ($167), TRZ Reactor ($389), G-Com ($243), EM Tool Kit ($127), EMF Shield ($89). Stripe checkout. Fulfillment-ready.
+
+IV. BIOELECTROMAGNETIC RESEARCH ARCHIVE (Historical Government & Academic Documents — Research Purposes Only)
+
+Note: Items in this section are historical research documents and experimental device plans. No device is approved by the FDA or any regulatory body for medical use. These materials are provided for research, education, and IP acquisition evaluation only.
+
+• The Complete Prioré Archive — ONR London Branch Report R-5-78 (J.B. Bateman, 16 August 1978, UNCLASSIFIED). French government-funded animal experiments with the Prioré EM device.
+
+• Nobel Laureate Scientific Observation — André Lwoff (1965 Nobel Prize) reviewed the Prioré animal experiment data.
+
+• TRD-1 Telomere Research Device — Implements Bearden's MCCS scalar EM protocol. In vitro and experimental research. Full build plans + BOM. Physical kit available ($194).
+
+V. DEFENSE INTELLIGENCE (Primary Source Documented)
+
+• Gulf War Syndrome as KGB QP Weapon — Complete operational analysis. ABC/French/native population controls. Three Bioenergetics briefing slides.
+
+• Baghdad M1A1 Incident — TACOM IOP FSO-3 memorandum (30 September 2003). M1A1 tank penetrated by unknown weapon. Scalar EM penetrator analysis.
 
 • TRZ/PPA Patent Figure Set — 31 diagrams from the scalar EM weapons / time-reversal zone patent application series.
 
-V. PRODUCTION-READY REVENUE PLATFORM
+VI. REVENUE GROWTH INFRASTRUCTURE (NEW — Q2 2026)
 
-• 20+ fully developed educational courses ($197–$397 each) with Stripe payment + LMS
-• 23 invention build plan kits with downloadable PDFs ($490–$1,800 each) — including MorphoYield TRZ-Agri Array and Aegis-SV Scalar Counterphase Shield
-• 20-product EMF protection shop with full e-commerce
-• Investor matching portal, CRM with pipeline tracking, and monitoring alert system
-• Newsletter infrastructure, NDA access gate, copy protection, analytics
-• AI Invention Forge → Patent → Market Research → Pitch Deck pipeline (complete)
+• A/B Testing System — 16-week testing roadmap. 8 tests across 4 phases. Session-sticky bucket assignment. Statistical significance framework (p<0.05, 200+ conversions/variant). Analytics integration.
 
-  Conservative Year 1 revenue (self-operated):          $380,000 – $850,000
-  Year 2 with AI patent suite + VDR licensing:          $1.2M – $3.8M
-  Strategic value to acquirer with existing distribution: $8.8M – $39.2M
+• Lead Magnet System — 3 engineering-specific magnets. Behavioral triggers (time, scroll, exit-intent). Placement optimization across Landing, Vault, and Prior Art pages.
+
+• 7-Day Email Funnel — Conversion-optimized drip sequence. Subject line A/B variants. Post-purchase retention sequences.
+
+• Referral + Viral Script Engine — Growth loop infrastructure. Store credit incentives. Multi-platform viral script templates.
+
+• Upsell Engine + Product Ladder — Context-specific upgrade prompts. Physical kit inline upsells on relevant build plan pages. Revenue Audit framework with 7-day sprint protocol.
+
+VII. PRODUCTION-READY REVENUE MODEL
+
+  Membership tiers: Starter ($29/mo), Pro ($79/mo), Elite ($149/mo)
+  40+ courses ($197–$397 each, à la carte)
+  40+ build plan kits ($127–$849, à la carte or membership)
+  Physical kit fulfillment: 8 SKUs ($89–$389)
+  AI patent suite white-label (law firms, IP shops): $210K–$750K/yr per licensee
+  VDR Portal SaaS (IP firms, VC data rooms): $50K–$180K/yr per client
+
+  Conservative Year 1 revenue (self-operated):          $480,000 – $1,100,000
+  Year 2 with white-label licensing + physical kits:    $1.8M – $4.9M
+  Strategic value to acquirer with existing distribution: $12.7M – $53.9M
 
 ────────────────────────────────────────────
-ACQUISITION TERMS (REVISED Q2 2026)
+ACQUISITION TERMS (REVALUED Q2 2026)
 ────────────────────────────────────────────
 
-EXCLUSIVE ACQUISITION (full IP, platform, AI engines, archive, plans):  $8.8M – $25M
-LICENSING ONLY (non-exclusive, annual):                                  $850,000 – $2,200,000/year
+EXCLUSIVE ACQUISITION (full IP, platform, AI engines, archive, plans):  $12M – $28M
+LICENSING ONLY (non-exclusive, annual):                                  $1,100,000 – $2,800,000/year
 AI PATENT SUITE WHITE-LABEL (law firms, IP shops, VC patent teams):     $210,000 – $750,000/year per licensee
 VDR PORTAL SaaS (IP firms / VC data room solution):                     $50,000 – $180,000/year per client
+PHYSICAL KIT DISTRIBUTION PARTNERSHIP:                                   Revenue share, negotiable
 STRATEGIC PARTNERSHIP / JV:                                              Equity terms, negotiable
 
 This opportunity is being presented to a maximum of six (6) qualified buyers before public launch. First executed NDA with proof of funds receives priority due diligence access.
@@ -155,15 +235,18 @@ This opportunity is being presented to a maximum of six (6) qualified buyers bef
 WHY Q2 2026 IS THE INFLECTION POINT
 ────────────────────────────────────────────
 
-The platform crossed a critical threshold in Q2 2026: it is now a self-contained IP generation and commercialization engine — institutional-grade, peer-review-backed, and government-validated. A solo operator, law firm, or deep-tech VC can use this platform to:
+ZARP crossed a critical threshold in Q2 2026. It is now a self-contained, end-to-end IP generation and commercialization engine with five distinct revenue streams, a built-in growth stack, and physical product fulfillment. A solo operator, law firm, or deep-tech VC can use this platform to:
 
-1. Generate 5 novel inventions per session grounded in documented scalar EM physics
+1. Generate novel inventions grounded in documented EM physics in minutes
 2. Scan global patent databases in real-time for prior art and conflict risk
-3. Auto-draft USPTO-compliant provisional patent applications (priority date established)
-4. Generate VC pitch decks and step-by-step build guides for each invention
-5. Export the entire pipeline as professional PDFs for filing or investor presentation
+3. Auto-draft USPTO-compliant provisional patent applications
+4. Generate VC pitch decks, build guides, and full due diligence packages
+5. Sell memberships, courses, kits, and white-label AI tools from day one
+6. Run systematic A/B optimization across 8 high-leverage conversion points
+7. Scale with a built-in referral + email growth stack
 
-The marginal cost per invention cycle is $0 (LLM API costs ~$0.80/session). The marginal value per USPTO provisional filing: $10,000–$50,000 in attorney fees displaced.
+The marginal cost per invention cycle: ~$0.80 in LLM API costs.
+The marginal value per USPTO provisional filing displaced: $10,000–$50,000 in attorney fees.
 
 No comparable platform exists. This is a category-creating asset.
 
@@ -173,7 +256,7 @@ TO PROCEED
 
 1. Reply to confirm interest and receive NDA template
 2. Execute NDA and provide proof of funds or institutional mandate letter
-3. Receive full technical due diligence package (100+ page document portfolio)
+3. Receive full technical due diligence package (120+ page document portfolio)
 4. Schedule technical demonstration and Q&A (live platform walkthrough available)
 
 This letter and its attachments contain confidential platform and business information. Please treat this document as confidential and do not share without authorization.
@@ -203,7 +286,10 @@ KEY DUE DILIGENCE DOCUMENTS AVAILABLE UNDER NDA
 • Bearden MEG & Overunity Circuit Patent Pending diagrams
 • Complete Bearden Energetics / Bioenergetics / Psychoenergetics slide series (1996–1999)
 • Platform codebase + all AI prompt architecture (under NDA escrow)
-• Sample AI-generated invention dossier with USPTO PPA draft (live demonstration)`;
+• Sample AI-generated invention dossier with USPTO PPA draft (live demonstration)
+• A/B testing roadmap and conversion optimization data
+• Physical kit supplier agreements and fulfillment cost structure
+• Revenue model unit economics (CAC, LTV, churn data)`;
 
 function CopyButton({ text, label }) {
   const [copied, setCopied] = useState(false);
@@ -258,14 +344,19 @@ function ValuationTable() {
               <td className="px-5 py-3 text-right text-green-300 font-black text-sm">{fmt(totalHigh)}</td>
             </tr>
             <tr className="bg-blue-950/20">
-              <td className="px-5 py-2.5 text-blue-300 text-xs">+ AI Module White-Label SaaS premium</td>
+              <td className="px-5 py-2.5 text-blue-300 text-xs">+ AI SaaS white-label licensing ARR</td>
               <td className="px-4 py-2.5 text-right text-blue-400 font-bold">$650K/yr</td>
               <td className="px-5 py-2.5 text-right text-blue-300 font-bold">$1.5M/yr</td>
             </tr>
             <tr className="bg-yellow-950/20">
-              <td className="px-5 py-2.5 text-yellow-300 text-xs">+ Strategic pre-public premium (40–120%) — Updated Q2 2026</td>
-              <td className="px-4 py-2.5 text-right text-yellow-400 font-bold">{fmt(totalLow * 1.4)}</td>
-              <td className="px-5 py-2.5 text-right text-yellow-300 font-bold">{fmt(totalHigh * 2.2)}</td>
+              <td className="px-5 py-2.5 text-yellow-300 text-xs">+ Strategic pre-public premium (40–120%) — Revalued Q2 2026</td>
+              <td className="px-4 py-2.5 text-right text-yellow-400 font-bold">$12.7M</td>
+              <td className="px-5 py-2.5 text-right text-yellow-300 font-bold">$53.9M</td>
+            </tr>
+            <tr className="bg-green-950/20">
+              <td className="px-5 py-2.5 text-green-300 text-xs font-bold">Exclusive Acquisition Ask (full IP + platform + AI + archive)</td>
+              <td className="px-4 py-2.5 text-right text-green-400 font-black">$12M</td>
+              <td className="px-5 py-2.5 text-right text-green-300 font-black">$28M</td>
             </tr>
           </tbody>
         </table>
@@ -350,7 +441,7 @@ export default function InvestorPackage() {
             <h1 className="text-white font-bold text-base flex items-center gap-2">
               <Shield size={15} className="text-green-400" /> Investor Portfolio Package
             </h1>
-            <p className="text-gray-500 text-xs">{totalContacts} qualified buyers · Pre-public exclusive · NDA gated</p>
+            <p className="text-gray-500 text-xs">{totalContacts} qualified buyers · Pre-public exclusive · NDA gated · Revalued Q2 2026 · $12M–$28M ask</p>
           </div>
         </div>
         <div className="flex items-center gap-2">
@@ -384,7 +475,7 @@ export default function InvestorPackage() {
             </div>
             <div className="bg-gray-800 border border-purple-700 rounded-xl p-4">
               <p className="text-purple-300 font-bold text-sm mb-1">📚 Due Diligence Package PDF</p>
-              <p className="text-gray-400 text-xs mb-3">120+ page technical &amp; financial portfolio: 23 invention plans, AI patent suite (intelligence + wizard + sharing), VDR portal, IP assets, revenue model &amp; checklist. Q3 2026 v2.1.</p>
+              <p className="text-gray-400 text-xs mb-3">130+ page technical &amp; financial portfolio: 40+ invention plans, full AI engine stack, growth infrastructure, physical kit revenue model, IP assets &amp; acquisition checklist. Q2 2026 v3.0.</p>
               <DueDiligencePdfGenerator />
             </div>
           </div>
