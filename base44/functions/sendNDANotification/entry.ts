@@ -17,6 +17,32 @@ Deno.serve(async (req) => {
 
     console.log('NDA signature received from:', { full_name, email, organization });
 
+    // Send confirmation email to member
+    await base44.integrations.Core.SendEmail({
+      to: email,
+      subject: 'NDA Signature Confirmed — Welcome to C.O.D.E.X.T.E.C.H.',
+      body: `
+Hello ${full_name},
+
+Your electronic signature on the C.O.D.E.X.T.E.C.H. Non-Disclosure Agreement has been recorded.
+
+You now have access to:
+- 40+ engineering build plans with exact BOMs and supplier links
+- 40+ structured courses on scalar electromagnetics and advanced physics
+- AI-powered patent drafting tools and FTO analysis
+- Investor package generation and capital-raising resources
+- Complete archive of suppressed research and prior art analysis
+
+Please do not share your login credentials. Your access is personal and monitored.
+
+Questions? Contact support@zenithapex.com
+
+—
+Zenith Apex LLC
+C.O.D.E.X.T.E.C.H. Platform
+      `,
+    });
+
     // Send notification email to admin
     await base44.integrations.Core.SendEmail({
       to: 'admin@zenithapex.com',
