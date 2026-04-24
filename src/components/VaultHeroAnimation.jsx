@@ -281,7 +281,7 @@ export default function VaultHeroAnimation({ children }) {
 
       {/* Text overlay on vault door before opening */}
       {!clicked && (
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-10">
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-20 max-w-3xl mx-auto px-6">
           {children}
         </div>
       )}
