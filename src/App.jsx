@@ -126,6 +126,10 @@ import InstitutionalLicensing from './pages/InstitutionalLicensing';
 import ReferralDashboard from './pages/ReferralDashboard';
 import ContestPage from './pages/ContestPage';
 import AdminContest from './pages/AdminContest';
+import PaywallPage from './pages/PaywallPage';
+import EmailFunnel from './pages/EmailFunnel';
+import ProductLadder from './pages/ProductLadder';
+import ViralScripts from './pages/ViralScripts';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -159,6 +163,7 @@ const AuthenticatedApp = () => {
         <Route path="/" element={<ZarpLanding />} />
         <Route path="/free-vault" element={<FreeVault />} />
         <Route path="/pricing" element={<Pricing />} />
+        <Route path="/paywall" element={<PaywallPage />} />
         <Route path="*" element={<LegalAgreement />} />
       </Routes>
     );
@@ -170,6 +175,7 @@ const AuthenticatedApp = () => {
       <Routes>
         <Route path="/" element={<ZarpLanding />} />
         <Route path="/free-vault" element={<FreeVault />} />
+        <Route path="/paywall" element={<PaywallPage />} />
         <Route path="/trial-onboarding" element={<TrialOnboarding />} />
         <Route path="/beta-apply" element={<BetaApply />} />
         <Route path="/pricing" element={<Pricing />} />
@@ -279,6 +285,7 @@ const AuthenticatedApp = () => {
           <Route path="/institutional-licensing" element={<InstitutionalLicensing />} />
           <Route path="/referrals" element={<ReferralDashboard />} />
           <Route path="/contest" element={<ContestPage />} />
+          <Route path="/paywall" element={<PaywallPage />} />
 
           {/* Admin-only routes */}
           <Route element={<AdminGuard />}>
@@ -301,6 +308,9 @@ const AuthenticatedApp = () => {
             <Route path="/trz-patent" element={<TRZPatent />} />
             <Route path="/admin-shop-orders" element={<AdminShopOrders />} />
             <Route path="/admin-inventor-reviews" element={<AdminInventorReviews />} />
+            <Route path="/email-funnel" element={<EmailFunnel />} />
+            <Route path="/product-ladder" element={<ProductLadder />} />
+            <Route path="/viral-scripts" element={<ViralScripts />} />
             <Route path="/material-sourcing" element={<MaterialSourcing />} />
           </Route>
 
