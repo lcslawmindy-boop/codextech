@@ -102,23 +102,17 @@ export default function VaultBrowser() {
                   {/* ── Footer ── */}
                   <div className="flex items-center justify-between">
                     <span className="text-green-400 font-black text-sm">{build.cost}</span>
-                    {build.locked ? (
-                      <Lock size={16} className="text-gray-600" />
-                    ) : (
-                      <Zap size={16} className="text-cyan-400" />
-                    )}
+                    <Zap size={16} className="text-cyan-400" />
                   </div>
                 </div>
 
-                {/* ── Locked overlay ── */}
-                {build.locked && (
-                  <div className="absolute inset-0 bg-gray-950/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                    <div className="text-center">
-                      <Lock size={32} className="text-gray-400 mx-auto mb-2" />
-                      <p className="text-white font-bold text-sm">View Details</p>
-                    </div>
+                {/* ── Hover overlay ── */}
+                <div className="absolute inset-0 bg-gray-950/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                  <div className="text-center">
+                    <Zap size={32} className="text-cyan-400 mx-auto mb-2" />
+                    <p className="text-white font-bold text-sm">View Details</p>
                   </div>
-                )}
+                </div>
               </Link>
             ))}
           </div>
@@ -126,10 +120,10 @@ export default function VaultBrowser() {
 
         {/* ── CTA ── */}
         <div className="text-center bg-gray-900/60 border border-gray-800 rounded-2xl p-12">
-          <h2 className="text-2xl font-black mb-3">Ready to access the full vault?</h2>
-          <p className="text-gray-400 mb-6 max-w-md mx-auto">Join thousands of engineers building advanced systems. Full BOMs, step-by-step guides, supplier links, and video assembly included.</p>
-          <Link to="/pricing" className="inline-flex items-center gap-2 px-8 py-3 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-black transition-all">
-            View Membership Plans
+          <h2 className="text-2xl font-black mb-3">Upgrade to Premium</h2>
+          <p className="text-gray-400 mb-6 max-w-md mx-auto">Unlock video assembly guides, supplier sourcing links, and access to engineer community. All BOMs & schematics stay free forever.</p>
+          <Link to="/pricing-vault" className="inline-flex items-center gap-2 px-8 py-3 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-black transition-all">
+            See Premium Tiers
           </Link>
         </div>
       </div>

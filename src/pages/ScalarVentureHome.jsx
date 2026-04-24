@@ -58,55 +58,55 @@ export default function ScalarVentureHome() {
         </div>
 
         <h1 className="text-5xl sm:text-6xl lg:text-7xl font-black leading-[1.1] mb-6">
-          Build Advanced<br />
+          40 Documented<br />
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">
             Engineering Systems
           </span><br />
-          Most People Never See
+          Peer-Reviewed & Source-Linked
         </h1>
 
         <p className="text-lg text-gray-300 max-w-2xl mx-auto mb-4">
-          Access a private vault of complete build frameworks, BOMs, and execution systems for advanced electromagnetic and energy devices. Source-documented. Execution-ready.
+          Complete build frameworks with verified patents, peer-reviewed publications, and suppressed research declassified. Every build includes full BOMs, schematics, supplier sourcing, and video assembly.
         </p>
 
         <p className="text-sm text-gray-500 max-w-xl mx-auto mb-10">
-          From free energy systems to biofield resonance chambers — every device includes exact part numbers, supplier links, and video assembly guides.
+          For makers, engineers, researchers, and institutions. Free vault access. Premium on execution tools, community, and advanced builds.
         </p>
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
           <Link to="/vault" className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl bg-gradient-to-r from-cyan-600 to-blue-700 hover:from-cyan-500 hover:to-blue-600 text-white font-black text-base transition-all shadow-lg shadow-cyan-900/40">
-            Unlock the Vault <ArrowRight size={18} />
+            Browse Free Vault <ArrowRight size={18} />
           </Link>
-          <a href="#preview" className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl border border-gray-700 text-gray-300 hover:bg-gray-800 font-bold transition-all">
-            See Free Preview
-          </a>
+          <Link to="/institutional-licensing" className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl border border-gray-700 text-gray-300 hover:bg-gray-800 font-bold transition-all">
+            Universities & Teams
+          </Link>
         </div>
 
         <p className="text-xs text-gray-600">
-          🔒 Stripe · 30-day money-back guarantee · Cancel anytime
+          ✓ Free vault access · Stripe · Optional premium tier · No credit card required
         </p>
       </section>
 
       {/* ── Preview cards ── */}
       <section id="preview" className="px-6 py-20 max-w-6xl mx-auto">
-        <h2 className="text-3xl font-black mb-4 text-center">Inside the Vault</h2>
+        <h2 className="text-3xl font-black mb-4 text-center">40 Complete Build Systems</h2>
         <p className="text-gray-500 text-center mb-10 text-sm max-w-xl mx-auto">
-          40+ complete build systems. Click to see previews — full details unlock with membership.
+          Browse all 40+ builds free. Download BOMs, schematics, and assembly guides instantly. Premium: video assembly + sourcing + community.
         </p>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
           {PREVIEW_BUILDS.map((build, i) => (
-            <Link key={i} to="/paywall"
+            <Link key={i} to={`/build/${build.id || i + 1}`}
               className="group relative bg-gray-900 border border-gray-800 hover:border-cyan-700 rounded-xl overflow-hidden transition-all">
               <div className="h-40 bg-gradient-to-br from-gray-800 to-gray-950 flex items-center justify-center text-4xl relative">
                 {build.emoji}
-                <div className="absolute inset-0 bg-gray-950/50 group-hover:bg-gray-950/30 transition-all" />
+                <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
               </div>
               <div className="p-4">
-                <p className="text-xs text-gray-500 mb-1">{build.category}</p>
+                <p className="text-xs text-cyan-400 font-bold mb-1">{build.category}</p>
                 <h3 className="text-white font-bold text-sm leading-snug mb-2">{build.title}</h3>
                 <div className="flex items-center justify-between">
-                  <span className="text-green-400 font-black text-sm">{build.cost}</span>
-                  <Lock size={14} className="text-gray-600" />
+                  <span className="text-gray-500 text-xs font-mono">{build.cost}</span>
+                  <span className="text-green-400 text-xs font-bold">View →</span>
                 </div>
               </div>
             </Link>
@@ -148,17 +148,17 @@ export default function ScalarVentureHome() {
         </div>
       </section>
 
-      {/* ── Tiers preview ── */}
+      {/* ── Pricing tiers ── */}
       <section className="px-6 py-20 bg-gray-900/40 border-y border-gray-800">
         <div className="max-w-4xl mx-auto text-center mb-12">
-          <h2 className="text-3xl font-black mb-4">Simple Membership Pricing</h2>
-          <p className="text-gray-400">Choose your tier. Cancel anytime. No contracts.</p>
+          <h2 className="text-3xl font-black mb-4">Vault Access + Optional Tiers</h2>
+          <p className="text-gray-400">Free vault forever. Premium features for serious builders.</p>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-4xl mx-auto mb-8">
           {[
-            { name: "Starter", price: "$49", builds: "15 builds", highlight: false },
-            { name: "Pro", price: "$99", builds: "40+ builds (recommended)", highlight: true },
-            { name: "Elite", price: "$199", builds: "40+ builds + early access", highlight: false },
+            { name: "Free", price: "Vault Access", builds: "All 40+ builds, BOMs, schematics", highlight: false },
+            { name: "Pro", price: "$99/mo", builds: "Video assembly + sourcing + community", highlight: true },
+            { name: "Enterprise", price: "Custom", builds: "University/team licensing, API access", highlight: false },
           ].map((tier, i) => (
             <div
               key={i}
@@ -170,29 +170,21 @@ export default function ScalarVentureHome() {
             >
               {tier.highlight && (
                 <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full bg-cyan-600 text-white text-xs font-black">
-                  RECOMMENDED
+                  POPULAR
                 </div>
               )}
               <h3 className="text-white font-black text-lg mb-1">{tier.name}</h3>
-              <div className="text-3xl font-black text-cyan-400 mb-2">
-                {tier.price}
-                <span className="text-sm text-gray-500 font-normal">/month</span>
-              </div>
+              <div className="text-2xl font-black text-cyan-400 mb-2">{tier.price}</div>
               <p className="text-gray-400 text-sm mb-4">{tier.builds}</p>
-              <Link to="/pricing" className={`block py-2 rounded-lg font-bold text-sm transition-all ${
+              <Link to={tier.name === "Enterprise" ? "/institutional-licensing" : "/pricing"} className={`block py-2 rounded-lg font-bold text-sm transition-all ${
                 tier.highlight
                   ? "bg-cyan-600 hover:bg-cyan-500 text-white"
                   : "border border-gray-700 text-gray-300 hover:bg-gray-800"
               }`}>
-                Learn More
+                {tier.name === "Enterprise" ? "Contact Sales" : "Learn More"}
               </Link>
             </div>
           ))}
-        </div>
-        <div className="text-center">
-          <Link to="/pricing" className="inline-flex items-center gap-2 px-8 py-4 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-black transition-all">
-            See All Plans <ArrowRight size={14} />
-          </Link>
         </div>
       </section>
 
@@ -222,12 +214,12 @@ export default function ScalarVentureHome() {
       {/* ── Final CTA ── */}
       <section className="px-6 py-16 bg-gradient-to-b from-gray-900 to-gray-950 border-t border-gray-800">
         <div className="max-w-3xl mx-auto text-center">
-          <h2 className="text-3xl font-black mb-4">Ready to Build?</h2>
-          <p className="text-gray-400 mb-8">Join 500+ engineers, researchers, and innovators accessing the complete vault.</p>
+          <h2 className="text-3xl font-black mb-4">Free Vault. Premium Optional.</h2>
+          <p className="text-gray-400 mb-8">Browse 40 documented builds. Download BOMs today. Upgrade for video, community, and sourcing when you're ready to build.</p>
           <Link to="/vault" className="inline-flex items-center gap-2 px-10 py-4 rounded-xl bg-gradient-to-r from-cyan-600 to-blue-700 hover:from-cyan-500 hover:to-blue-600 text-white font-black text-base transition-all shadow-lg shadow-cyan-900/40">
-            Unlock the Vault Now <ArrowRight size={18} />
+            Browse Builds Now <ArrowRight size={18} />
           </Link>
-          <p className="text-xs text-gray-600 mt-4">30-day money-back guarantee · Cancel anytime · No credit card required to browse</p>
+          <p className="text-xs text-gray-600 mt-4">Free forever. No login required. No email to browse.</p>
         </div>
       </section>
 

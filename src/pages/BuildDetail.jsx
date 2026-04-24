@@ -1,6 +1,7 @@
 import { useState } from "react";
+import { useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { ArrowLeft, Lock, ShoppingCart, Eye, FileText, ChevronDown, ChevronUp } from "lucide-react";
+import { ArrowLeft, Lock, ShoppingCart, Eye, FileText, ChevronDown, ChevronUp, Zap } from "lucide-react";
 
 // Mock build data — in production, fetch by ID
 const BUILDS_DATA = {
@@ -68,20 +69,20 @@ export default function BuildDetail() {
           </div>
 
           <div>
-            {/* ── Locked info ── */}
+            {/* ── Premium upsell ── */}
             <div className="bg-gray-900 border border-gray-700 rounded-2xl p-6 mb-6">
               <div className="flex items-center gap-2 mb-4">
-                <Lock size={18} className="text-amber-500" />
-                <span className="text-amber-500 font-bold text-sm">Membership Required</span>
+                <Zap size={18} className="text-cyan-400" />
+                <span className="text-cyan-400 font-bold text-sm">Premium</span>
               </div>
               <p className="text-gray-400 text-sm leading-relaxed mb-6">
-                Full BOM, step-by-step guide, sourcing links, and video assembly are unlocked with any plan membership.
+                BOMs and schematics are free. Upgrade for: video assembly (3–12 hrs), verified supplier links, and access to engineer forums.
               </p>
-              <Link to="/paywall" className="w-full py-3 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-black text-center transition-all">
-                Unlock Full Build
+              <Link to="/pricing-vault" className="w-full py-3 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-black text-center transition-all">
+                Upgrade to Pro
               </Link>
               <div className="text-xs text-gray-600 mt-4 space-y-1">
-                <p>✓ 30-day money-back guarantee</p>
+                <p>✓ $99/month or $299 one-time per build</p>
                 <p>✓ Cancel anytime</p>
               </div>
             </div>
@@ -167,7 +168,7 @@ export default function BuildDetail() {
                 </table>
               </div>
               <div className="p-4 bg-gray-900 text-xs text-gray-500 border-t border-gray-800">
-                Preview only. Full 23-component BOM with exact part numbers unlocked after purchase.
+                ✓ Full 23-component BOM included above. Premium: verified supplier links & 3-hour video assembly guide.
               </div>
             </div>
           )}
@@ -198,9 +199,9 @@ export default function BuildDetail() {
                 </div>
               ))}
               <div className="text-center py-6 border-t border-gray-800">
-                <p className="text-gray-500 text-sm mb-3">Full 12-step video assembly + written guide included</p>
-                <Link to="/paywall" className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-black text-sm transition-all">
-                  <Eye size={14} /> Unlock Full Walkthrough
+                <p className="text-gray-500 text-sm mb-3">Premium: 12-step video assembly + written guide</p>
+                <Link to="/pricing-vault" className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-black text-sm transition-all">
+                  <Eye size={14} /> Watch Video Assembly
                 </Link>
               </div>
             </div>
@@ -210,9 +211,9 @@ export default function BuildDetail() {
         {/* ── Final CTA ── */}
         <div className="text-center bg-gray-900 border border-cyan-900/30 rounded-2xl p-12">
           <h2 className="text-2xl font-black mb-2">Ready to Build?</h2>
-          <p className="text-gray-400 mb-6">Get full access to this plan and 40+ others with a membership.</p>
-          <Link to="/pricing" className="inline-flex items-center gap-2 px-10 py-4 rounded-xl bg-gradient-to-r from-cyan-600 to-blue-700 hover:from-cyan-500 hover:to-blue-600 text-white font-black transition-all">
-            View Membership Plans
+          <p className="text-gray-400 mb-6">You have the full BOM above. Upgrade to Pro for video assembly guide, verified supplier links, and engineer forums.</p>
+          <Link to="/pricing-vault" className="inline-flex items-center gap-2 px-10 py-4 rounded-xl bg-gradient-to-r from-cyan-600 to-blue-700 hover:from-cyan-500 hover:to-blue-600 text-white font-black transition-all">
+            Upgrade to Pro
           </Link>
         </div>
       </div>

@@ -3,23 +3,23 @@ import { ArrowRight, Check, Star } from "lucide-react";
 
 const TIERS = [
   {
-    name: "Starter",
-    price: "$49",
-    period: "/month",
+    name: "Free Vault",
+    price: "Always Free",
+    period: "",
     highlight: false,
-    cta: "Start Free Trial",
-    desc: "Perfect for exploring",
+    cta: "Start Browsing",
+    desc: "Forever free",
     features: [
-      "15 build systems",
-      "BOM previews",
-      "Email support",
-      "Community access",
-      "Basic course library",
+      "All 40 builds searchable",
+      "Complete BOMs & schematics",
+      "Supplier recommendations",
+      "PDF downloads",
+      "No login required",
     ],
     notIncluded: [
-      "Full video assembly",
-      "Supplier sourcing",
-      "Advanced builds",
+      "Video assembly",
+      "Community forums",
+      "Sourcing links",
     ],
   },
   {
@@ -30,38 +30,36 @@ const TIERS = [
     cta: "Start Free Trial",
     desc: "Most popular",
     features: [
-      "40+ complete builds",
-      "Full BOMs & schematics",
-      "Assembly videos included",
-      "Supplier links & sourcing",
-      "40+ courses",
-      "Patent drafting suite",
-      "200+ prior art entries",
+      "Everything in Free Vault",
+      "Video assembly guides (3–12 hrs each)",
+      "Verified supplier links & pricing",
+      "Engineer community & forums",
+      "Priority support",
       "Weekly new builds",
-      "Priority email support",
+      "Advanced courses",
     ],
     notIncluded: [
-      "Early access",
+      "One-time purchase option",
     ],
   },
   {
-    name: "Elite",
-    price: "$199",
-    period: "/month",
+    name: "À La Carte",
+    price: "$299",
+    period: "per build",
     highlight: false,
-    cta: "Start Free Trial",
-    desc: "Full acceleration",
+    cta: "Buy Single Build",
+    desc: "Pay as you go",
     features: [
-      "Everything in Pro",
-      "Early access to new builds (48h)",
-      "Advanced restricted systems",
-      "Monthly 1-on-1 strategy call",
-      "VIP community channel",
-      "Direct engineering support",
-      "Investor intro network",
-      "Custom research requests",
+      "One complete build (video + sourcing)",
+      "Lifetime access",
+      "No subscription",
+      "No cancellation",
+      "30 downloads included",
     ],
-    notIncluded: [],
+    notIncluded: [
+      "Community access",
+      "Course library",
+    ],
   },
 ];
 
@@ -147,24 +145,24 @@ export default function VaultPricing() {
           <div className="space-y-6">
             {[
               {
-                q: "Can I try before buying?",
-                a: "Yes. All plans come with a 30-day money-back guarantee. Try any tier, and if you're not satisfied, we'll refund your full membership cost—no questions asked.",
+                q: "Do I need to sign up to browse the vault?",
+                a: "No. The entire vault is free and searchable without login. You only need to register if you want to upgrade to Pro or purchase à la carte.",
               },
               {
-                q: "Do you offer annual discounts?",
-                a: "Not currently, but we offer monthly billing with full flexibility. You can upgrade, downgrade, or cancel anytime. Some customers commit to annual at their own choice for continuity.",
+                q: "Can I download BOMs and schematics for free?",
+                a: "Yes. All 40 builds include complete BOMs, schematics, and supplier recommendations. Pro tier adds video assembly guides and verified supplier links.",
               },
               {
-                q: "What if I upgrade mid-month?",
-                a: "Upgrades are prorated. If you upgrade to Pro, you'll pay the difference from today until your next billing date, and continue on that date.",
+                q: "Is there a refund guarantee?",
+                a: "Yes. Pro subscriptions come with a 30-day money-back guarantee. À la carte purchases are final but include lifetime access.",
               },
               {
-                q: "Are builds updated?",
-                a: "Yes. Pro and Elite members get weekly new builds. We also update existing builds with new supplier links, better component sourcing, and community feedback.",
+                q: "What's the difference between Pro ($99/mo) and À La Carte ($299)?",
+                a: "Pro: video assembly + sourcing + community for all 40 builds, recurring. À La Carte: one complete build, one-time payment, lifetime access. Choose based on how many builds you plan to use.",
               },
               {
-                q: "Is there team/institutional pricing?",
-                a: "We're working on it. Contact us at team@scalarventure.com for custom quotes for teams of 5+.",
+                q: "Do universities and institutions get discounts?",
+                a: "Yes! Universities and corporate R&D teams can license our entire vault. Visit our institutional licensing page or contact licensing@scalarvault.io.",
               },
             ].map((faq, i) => (
               <div key={i} className="bg-gray-900 border border-gray-800 rounded-xl p-6">
@@ -175,14 +173,23 @@ export default function VaultPricing() {
           </div>
         </div>
 
+        {/* ── Institutional CTA ── */}
+        <div className="bg-purple-900/20 border border-purple-800/40 rounded-2xl p-10 mb-12 text-center">
+          <h3 className="text-2xl font-black mb-3">Institution or Corporate Team?</h3>
+          <p className="text-gray-400 mb-6">License our entire library for student labs, internal R&D, or client delivery. Custom pricing, white-label, and API access available.</p>
+          <Link to="/institutional-licensing" className="inline-flex items-center gap-2 px-8 py-3 rounded-xl border border-purple-700 text-purple-300 hover:bg-purple-900/40 font-bold transition-all">
+            Institutional Licensing <ArrowRight size={14} />
+          </Link>
+        </div>
+
         {/* ── CTA ── */}
-        <div className="text-center mt-16">
-          <h2 className="text-2xl font-black mb-4">Ready to unlock the vault?</h2>
+        <div className="text-center">
+          <h2 className="text-2xl font-black mb-4">Ready to get started?</h2>
           <p className="text-gray-400 mb-8 max-w-md mx-auto">
-            Join engineers, researchers, and innovators building the future of advanced engineering.
+            Browse 40 builds free. Upgrade to Pro for video guides & sourcing. Or buy individual builds à la carte.
           </p>
           <Link to="/vault" className="inline-flex items-center gap-2 px-10 py-4 rounded-xl bg-gradient-to-r from-cyan-600 to-blue-700 hover:from-cyan-500 hover:to-blue-600 text-white font-black transition-all">
-            Browse Builds First <ArrowRight size={16} />
+            Browse All Builds <ArrowRight size={16} />
           </Link>
         </div>
       </div>

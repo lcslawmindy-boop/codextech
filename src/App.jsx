@@ -138,8 +138,8 @@ import RevenueAudit from './pages/RevenueAudit';
 import ScalarVentureHome from './pages/ScalarVentureHome';
 import VaultBrowser from './pages/VaultBrowser';
 import BuildDetail from './pages/BuildDetail';
-import PaywallGate from './pages/PaywallGate';
 import VaultPricing from './pages/VaultPricing';
+import InstitutionalLicensing from './pages/InstitutionalLicensing';
 import MemberVault from './pages/MemberVault';
 
 const AuthenticatedApp = () => {
@@ -293,7 +293,6 @@ const AuthenticatedApp = () => {
           <Route path="/checkout" element={<PostPurchaseOnboarding />} />
           <Route path="/preview" element={<PublicPreview />} />
           <Route path="/acquire" element={<AcquisitionPitchDeck />} />
-          <Route path="/institutional-licensing" element={<InstitutionalLicensing />} />
           <Route path="/referrals" element={<ReferralDashboard />} />
           <Route path="/contest" element={<ContestPage />} />
           <Route path="/paywall" element={<PaywallPage />} />
@@ -334,8 +333,8 @@ const AuthenticatedApp = () => {
           <Route path="/venture" element={<ScalarVentureHome />} />
           <Route path="/vault" element={<VaultBrowser />} />
           <Route path="/build/:id" element={<BuildDetail />} />
-          <Route path="/paywall" element={<PaywallGate />} />
           <Route path="/pricing-vault" element={<VaultPricing />} />
+          <Route path="/institutional-licensing" element={<InstitutionalLicensing />} />
           <Route path="/my-vault" element={<MemberVault />} />
 
           <Route path="*" element={<PageNotFound />} />
