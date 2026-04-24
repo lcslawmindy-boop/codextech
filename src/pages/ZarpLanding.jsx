@@ -160,24 +160,24 @@ export default function ZarpLanding() {
       {/* ── Hero — vault door animation ── */}
       <section className="px-5 py-4 sm:py-8 text-center">
         <VaultHeroAnimation>
-          <div className="max-w-3xl mx-auto">
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-cyan-950/60 border border-cyan-800 text-cyan-300 text-xs font-black mb-6 uppercase tracking-widest">
+          <div className="max-w-2xl mx-auto text-center">
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-cyan-950/60 border border-cyan-800 text-cyan-300 text-xs font-black mb-4 uppercase tracking-widest">
               <Zap size={10} /> 40+ Systems. All Sourced. All Buildable.
             </div>
 
-            <h1 className="text-4xl sm:text-5xl md:text-6xl font-black leading-[1.1] mb-4">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-black leading-tight mb-3">
               Learn. Build.<br />
               Patent. Fund.<br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">
-                Complete Execution Platform.
+                Complete Execution.
               </span>
             </h1>
 
-            <p className="text-lg sm:text-xl text-gray-300 max-w-2xl mx-auto mb-3 leading-relaxed">
-              40+ complete builds + 26 courses + AI patent tools + investor toolkit. Everything sourced from granted patents and peer-reviewed research.
+            <p className="text-sm sm:text-base text-gray-300 max-w-xl mx-auto mb-2 leading-relaxed">
+              40+ builds + 26 courses + AI patent tools + investor toolkit.
             </p>
-            <p className="text-gray-500 text-sm max-w-xl mx-auto mb-8">
-              C.O.D.E.X.T.E.C.H. consolidates electromagnetic engineering research—courses, builds, documentation, execution frameworks, toolkits, and community—all in one membership platform.
+            <p className="text-gray-500 text-xs max-w-md mx-auto mb-4">
+              Everything sourced from granted patents and peer-reviewed research.
             </p>
             <CodextechAcronym />
           </div>
