@@ -1,42 +1,25 @@
 import { Link, useLocation } from "react-router-dom";
-import { Network, FlaskConical, BookOpen, HeartPulse, Scale, ShoppingCart } from "lucide-react";
+import { Vault, Wrench, Zap } from "lucide-react";
 
 const TABS = [
   {
-    label: "Graph",
-    path: "/",
-    icon: Network,
-    match: (p) => p === "/",
+    label: "Vault",
+    path: "/free-vault",
+    icon: Vault,
+    match: (p) => ["/free-vault", "/", "/vault", "/prior-art", "/invention-library", "/courses", "/my-learning"].includes(p),
   },
   {
-    label: "Inventions",
-    path: "/invention-library",
-    icon: FlaskConical,
-    match: (p) => ["/invention-library", "/inventor-forge", "/rd-sandbox", "/hybrid-portfolio", "/patent-intelligence", "/fto-analysis", "/patent-attorney-chat", "/patent-drafting-wizard", "/prior-art"].includes(p),
+    label: "Builds",
+    path: "/invention-plans",
+    icon: Wrench,
+    match: (p) => ["/invention-plans", "/inventor-forge", "/build-supplies-shop", "/download-center", "/scalar-lab", "/lab"].includes(p),
   },
   {
-    label: "Courses",
-    path: "/courses",
-    icon: BookOpen,
-    match: (p) => ["/courses", "/my-learning", "/ai-research", "/course-plan"].includes(p),
-  },
-  {
-    label: "IP Tools",
-    path: "/patent-intelligence",
-    icon: Scale,
-    match: (p) => ["/patent-intelligence", "/fto-analysis", "/patent-attorney-chat", "/ip-marketplace", "/co-inventor-matching", "/sbir-pipeline", "/ip-portfolio-health"].includes(p),
-  },
-  {
-    label: "Health",
-    path: "/emf-impact",
-    icon: HeartPulse,
-    match: (p) => ["/emf-impact", "/emf-log", "/heavy-metal-detox", "/health-analytics"].includes(p),
-  },
-  {
-    label: "Pricing",
-    path: "/pricing",
-    icon: ShoppingCart,
-    match: (p) => p === "/pricing",
+    label: "Upgrade",
+    path: "/paywall",
+    icon: Zap,
+    match: (p) => ["/paywall", "/pricing", "/checkout"].includes(p),
+    highlight: true,
   },
 ];
 
@@ -50,15 +33,36 @@ export default function BottomTabBar() {
         background: "rgba(15,23,42,0.97)",
         borderTop: "1px solid rgba(51,65,85,0.8)",
         paddingBottom: "env(safe-area-inset-bottom)",
-        overscrollBehavior: "none",
       }}
     >
-      {/* Cyan accent line at top of bar */}
-      <div style={{ height: 1, background: "linear-gradient(90deg, transparent, rgba(14,165,233,0.4), rgba(16,185,129,0.4), transparent)" }} />
+      <div style={{ height: 1, background: "linear-gradient(90deg, transparent, rgba(14,165,233,0.4), rgba(139,92,246,0.4), transparent)" }} />
       <div className="flex items-stretch h-16">
         {TABS.map((tab) => {
           const Icon = tab.icon;
           const active = tab.match(pathname);
+
+          if (tab.highlight) {
+            return (
+              <Link
+                key={tab.path}
+                to={tab.path}
+                className="flex-1 flex flex-col items-center justify-center gap-1 relative"
+                style={{ minHeight: 44 }}
+              >
+                <div className="flex flex-col items-center justify-center gap-1 px-4 py-1.5 rounded-xl mx-2"
+                  style={{
+                    background: active
+                      ? "linear-gradient(135deg, #7c3aed, #4f46e5)"
+                      : "linear-gradient(135deg, #6d28d9, #4338ca)",
+                    boxShadow: "0 2px 12px rgba(109,40,217,0.5)",
+                  }}>
+                  <Icon size={18} strokeWidth={2.2} style={{ color: "#fff" }} />
+                  <span className="text-[10px] font-black tracking-wide text-white">Upgrade</span>
+                </div>
+              </Link>
+            );
+          }
+
           return (
             <Link
               key={tab.path}
@@ -69,7 +73,7 @@ export default function BottomTabBar() {
               {active && (
                 <div
                   className="absolute top-0 left-1/2 -translate-x-1/2 w-8 h-0.5 rounded-full"
-                  style={{ background: "linear-gradient(90deg, #0EA5E9, #10B981)" }}
+                  style={{ background: "linear-gradient(90deg, #0EA5E9, #8b5cf6)" }}
                 />
               )}
               <Icon

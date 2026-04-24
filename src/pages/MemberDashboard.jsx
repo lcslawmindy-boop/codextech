@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { useTier } from "@/hooks/useTier";
 import { Zap, BookOpen, Wrench, TrendingUp, Star, ArrowRight, Lock, Shield, ChevronRight, Award, Package } from "lucide-react";
+import UpgradeBar from "@/components/UpgradeBar";
 
 // ── Kit upsells ───────────────────────────────────────────────────────────────
 const KITS = [
@@ -54,6 +55,14 @@ export default function MemberDashboard() {
 
   return (
     <div className="min-h-screen bg-gray-950 text-white">
+
+      {tier !== "elite" && (
+        <UpgradeBar
+          message={tier === "starter" || tier === "member" ? "Pro unlocks 25 more systems + full AI suite — $79/month" : "Elite unlocks restricted systems + monthly strategy call — $149/month"}
+          ctaLabel="Upgrade"
+          ctaHref="/paywall"
+        />
+      )}
 
       {/* Top bar */}
       <div className="border-b border-gray-800 bg-gray-900/80 backdrop-blur px-6 py-4 flex items-center justify-between sticky top-0 z-30">

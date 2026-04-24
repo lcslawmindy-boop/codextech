@@ -2,6 +2,7 @@ import { useState, useRef } from "react";
 import { Link } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { Lock, Zap, ChevronRight, Star, Eye, ArrowRight, CheckCircle2 } from "lucide-react";
+import UpgradeBar from "@/components/UpgradeBar";
 
 // ── Free content — 3 items so gate fires after meaningful engagement ──────────
 const FREE_ITEMS = [
@@ -140,6 +141,8 @@ export default function FreeVault() {
     <div className="min-h-screen bg-gray-950 text-white">
 
       {showPaywall && <PaywallModal onDismiss={() => setShowPaywall(false)} />}
+
+      <UpgradeBar message="Free Vault — 3 items. 40+ more unlock with membership." ctaLabel="See Plans" ctaHref="/paywall" />
 
       {/* Nav */}
       <div className="border-b border-gray-800 bg-gray-900/90 backdrop-blur px-5 py-4 flex items-center justify-between sticky top-0 z-40">
