@@ -39,8 +39,8 @@ export default function MemberDashboard() {
     }).catch(() => {});
   }, []);
 
-  const tierLabel = { free: "Free", starter: "Starter", researcher: "Researcher", pro: "Pro", member: "Member" }[tier] || "Member";
-  const tierColor = { free: "text-gray-400", starter: "text-cyan-400", researcher: "text-blue-400", pro: "text-purple-400", member: "text-cyan-400" }[tier] || "text-cyan-400";
+  const tierLabel = { free: "Free", starter: "Starter", pro: "Pro", elite: "Elite", researcher: "Pro", member: "Starter" }[tier] || "Member";
+  const tierColor = { free: "text-gray-400", starter: "text-cyan-400", pro: "text-purple-400", elite: "text-yellow-400", researcher: "text-purple-400", member: "text-cyan-400" }[tier] || "text-purple-400";
 
   if (loading) {
     return <div className="min-h-screen bg-gray-950 flex items-center justify-center"><div className="w-8 h-8 border-4 border-gray-700 border-t-cyan-400 rounded-full animate-spin" /></div>;
@@ -69,13 +69,19 @@ export default function MemberDashboard() {
 
       <div className="max-w-6xl mx-auto px-6 py-10">
         {/* Upgrade banner for non-pro */}
-        {tier !== "pro" && (
-          <div className="mb-8 bg-gradient-to-r from-cyan-950/60 to-purple-950/40 border border-cyan-800 rounded-2xl p-5 flex flex-col sm:flex-row items-center justify-between gap-4">
+        {tier !== "elite" && (
+          <div className="mb-8 bg-gradient-to-r from-purple-950/60 to-cyan-950/40 border border-purple-800 rounded-2xl p-5 flex flex-col sm:flex-row items-center justify-between gap-4">
             <div>
-              <div className="font-black text-white mb-1">Unlock Pro — Full Vault + All AI Tools</div>
-              <p className="text-gray-400 text-sm">You're on {tierLabel}. Upgrade to access all 40+ builds, courses, and AI tools.</p>
+              <div className="font-black text-white mb-1">
+                {tier === "starter" ? "Upgrade to Pro — Full Vault + All AI Tools" : "Upgrade to Elite — Restricted Systems + Strategy Calls"}
+              </div>
+              <p className="text-gray-400 text-sm">
+                {tier === "starter"
+                  ? `You're on Starter. Pro unlocks all 40+ builds, courses, and the full AI patent + investor suite.`
+                  : `You're on Pro. Elite unlocks restricted/defense systems and monthly 1-on-1 strategy sessions.`}
+              </p>
             </div>
-            <Link to="/pricing" className="px-6 py-3 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-black text-sm whitespace-nowrap transition-all hover:opacity-90 flex items-center gap-2">
+            <Link to="/pricing" className="px-6 py-3 rounded-xl bg-gradient-to-r from-purple-600 to-blue-600 text-white font-black text-sm whitespace-nowrap transition-all hover:opacity-90 flex items-center gap-2">
               Upgrade Now <ArrowRight size={14} />
             </Link>
           </div>

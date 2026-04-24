@@ -23,9 +23,9 @@ export function useTier() {
 
         const plan = app.plan_purchased?.toLowerCase() || "";
 
-        if (plan.includes("pro")) { setTier("pro"); }
-        else if (plan.includes("researcher") || app.status === "converted") { setTier("researcher"); }
-        else if (plan.includes("starter")) { setTier("starter"); }
+        if (plan.includes("elite")) { setTier("elite"); }
+        else if (plan.includes("pro") || plan.includes("researcher") || app.status === "converted") { setTier("pro"); }
+        else if (plan.includes("starter") || plan.includes("member")) { setTier("starter"); }
         else { setTier("free"); }
       } catch {
         setTier("free");

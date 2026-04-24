@@ -1,338 +1,242 @@
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { ArrowLeft, Check, Zap, Shield, BookOpen, Download, Users, Star, Lock, ChevronRight, Sparkles, FlaskConical, Briefcase, Mail, Activity, CheckCircle2, Flame, ChevronDown, ChevronUp, ExternalLink, Gift } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import { ArrowLeft, Check, Lock, Gift, Flame, Clock, Star, ChevronDown, ChevronUp, Zap, Shield, BookOpen, Wrench, TrendingUp } from "lucide-react";
 import { base44 } from "@/api/base44Client";
-import { useTier } from "@/hooks/useTier";
-import { deviceImages } from "@/lib/deviceImages";
 
-const INDIVIDUAL_BUILDS = [
-  // ── PUBLIC TIER BUILD PLANS ──
-  { name: "Vacuum Potential Oscillator (VPO) Circuit Kit", price: 189, category: "Build Plan", icon: "🔧", public: true },
-  { name: "Open-System Magnetic Generator (Prototype Plans)", price: 179, category: "Build Plan", icon: "⚙️", public: true },
-  { name: "Woodpecker Grid Standing Wave Detector", price: 249, category: "Build Plan", icon: "📻", public: true },
-  { name: "Phi-River Gradient Sensor", price: 349, category: "Build Plan", icon: "🌊", public: true },
-  { name: "Anenergy Pump Demonstration Circuit", price: 297, category: "Build Plan", icon: "🔋", public: true },
-  { name: "Scalar Energy Bottle Interferometer", price: 449, category: "Build Plan", icon: "🎯", public: true },
-  { name: "Quantum Potential EMI Detector", price: 497, category: "Build Plan", icon: "📡", public: true },
-  { name: "EM Trigger Window Therapy Device", price: 599, category: "Build Plan", icon: "💊", public: true },
-  { name: "Bedini Environmental EM Signal Conditioner", price: 697, category: "Build Plan", icon: "🎛️", public: true },
+// ── Countdown (48h sticky deadline) ──────────────────────────────────────────
+const DEADLINE_KEY = "zarp_founding_deadline";
+function getDeadline() {
+  let d = localStorage.getItem(DEADLINE_KEY);
+  if (!d) { d = (Date.now() + 48 * 3600 * 1000).toString(); localStorage.setItem(DEADLINE_KEY, d); }
+  return parseInt(d);
+}
+function useCountdown() {
+  const [left, setLeft] = useState(0);
+  useEffect(() => {
+    const dl = getDeadline();
+    const tick = () => setLeft(Math.max(0, dl - Date.now()));
+    tick();
+    const t = setInterval(tick, 1000);
+    return () => clearInterval(t);
+  }, []);
+  const pad = n => String(n).padStart(2, "0");
+  const h = Math.floor(left / 3600000), m = Math.floor((left % 3600000) / 60000), s = Math.floor((left % 60000) / 1000);
+  return `${pad(h)}:${pad(m)}:${pad(s)}`;
+}
 
-  { name: "Morphogenetic Field Coherence Monitor", price: 799, category: "Build Plan", icon: "🌿", public: true },
-  { name: "Whittaker Wave Phase Conjugate Mirror System", price: 849, category: "Build Plan", icon: "🔭", public: true },
-  { name: "Prioré-Type Multichannel EM Therapy System", price: 697, category: "Build Plan", icon: "🏥", public: true },
-  { name: "MEG Replication Kit", price: 847, category: "Build Plan", icon: "🔮", public: true },
-  { name: "Asymmetric Regauging Overunity Generator", price: 897, category: "Build Plan", icon: "⚡", public: true },
-  { name: "MorphoYield TRZ-Agri Array", price: 697, category: "Build Plan", icon: "🌾", public: true },
-  
-  // ── RESTRICTED TIER (Defense Contractor Licensing Only) ──
-  { name: "Time-Reversal Zone Cold Fusion Reactor", price: 0, category: "Build Plan", icon: "⚛️", public: false, restricted: true },
-  { name: "Aegis-SV Adaptive Scalar Counterphase Shield", price: 0, category: "Build Plan", icon: "🛡️", public: false, restricted: true },
-  { name: "Atmospheric Scalar EM Signature Recognition System", price: 0, category: "Build Plan", icon: "🛰️", public: false, restricted: true },
-  { name: "T-Polarized EM Wave Transducer", price: 0, category: "Build Plan", icon: "⏱️", public: false, restricted: true },
-  { name: "Waddington Valley EM Tracer System", price: 0, category: "Build Plan", icon: "🗺️", public: false, restricted: true },
-  { name: "Cloning Efficiency Enhancement System", price: 0, category: "Build Plan", icon: "🧬", public: false, restricted: true },
-  { name: "Kaznacheyev Reversal Cell Imprinting Chamber", price: 0, category: "Build Plan", icon: "🔬", public: false, restricted: true },
-  { name: "UV Biophoton Disease Reversal Spectrometer", price: 0, category: "Build Plan", icon: "🧬", public: false, restricted: true },
-  { name: "Telomere Regeneration Device (TRD-1)", price: 0, category: "Build Plan", icon: "🧬", public: false, restricted: true },
-  { name: "Portable Porthole Disease Treatment System", price: 0, category: "Build Plan", icon: "🏥", public: false, restricted: true },
-  { name: "Psychoenergetics Cellular Control System", price: 0, category: "Build Plan", icon: "🧬", public: false, restricted: true },
-];
-
-const INDIVIDUAL_COURSES = [
-  { name: "Scalar Electromagnetics Fundamentals", price: 297, category: "Course", icon: "📚" },
-  { name: "Bearden Energy from the Vacuum Theory", price: 397, category: "Course", icon: "📖" },
-  { name: "Building EM Device Prototypes", price: 397, category: "Course", icon: "🔬" },
-  { name: "Patent Strategy for Energy Inventors", price: 397, category: "Course", icon: "⚖️" },
-  { name: "Quantum Field Theory Essentials", price: 297, category: "Course", icon: "🌌" },
-  { name: "Bioelectromagnetics & Health", price: 347, category: "Course", icon: "💊" },
-  { name: "Prior Art Research & Analysis", price: 297, category: "Course", icon: "🔍" },
-  { name: "Investor Pitch Fundamentals", price: 297, category: "Course", icon: "💼" },
-];
-
+// ── Tiers ─────────────────────────────────────────────────────────────────────
 const TIERS = [
   {
-    id: "member",
-    name: "Member",
-    price: 99,
-    foundingPrice: 49,
+    id: "starter",
+    name: "Starter",
+    price: 29,
     color: "#06b6d4",
-    badge: "FOUNDING OFFER",
-    description: "All 40+ courses, 50% off plans & ALL AI tools",
+    badge: null,
+    description: "Core vault access — builds, courses & AI tools",
+    cta: "Start with Starter",
+    popular: false,
     features: [
-      "Access to ALL 40+ courses",
-      "50% off all build plans & à la carte purchases",
-      "ALL AI tools (Invention Forge, Patent Drafting, FTO, etc.)",
-      "Bill of Materials & supplier guides",
-      "Step-by-step build instructions",
-      "Build Video generator",
-      "Prior Art Archive (200+ entries)",
-      "EM Lab simulators & visualization",
+      "15 build plans (BOM, steps, PDF)",
+      "15 courses from the archive",
+      "AI Patent Drafting Tool",
+      "Prior Art Archive — 50 entries",
+      "EM Lab simulator (basic)",
+      "20% off all à la carte purchases",
       "Cancel anytime",
+    ],
+    locked: [
+      "Full vault (40+ builds & courses)",
+      "Investor & capital toolkit",
+      "Elite restricted systems",
+    ],
+  },
+  {
+    id: "pro",
+    name: "Pro",
+    price: 79,
+    color: "#8b5cf6",
+    badge: "MOST POPULAR",
+    description: "Full vault + AI tools + investor system",
+    cta: "Get Pro — Best Value",
+    popular: true,
+    features: [
+      "All 40+ build plans (BOM, steps, PDF, video)",
+      "All 40+ courses from the archive",
+      "Full AI suite: Patent, FTO, Claims, Investor Package",
+      "Prior Art Archive — 200+ entries",
+      "Full EM lab simulators & visualizations",
+      "Build video generator",
+      "Investor CRM, pitch decks & VDR",
+      "50% off all à la carte purchases",
+      "Cancel anytime",
+    ],
+    locked: [
+      "Defense-restricted technology systems",
+    ],
+  },
+  {
+    id: "elite",
+    name: "Elite",
+    price: 149,
+    color: "#f59e0b",
+    badge: "CLASSIFIED ACCESS",
+    description: "Everything + restricted systems + priority support",
+    cta: "Go Elite",
+    popular: false,
+    features: [
+      "Everything in Pro",
+      "Restricted / defense-adjacent technology systems",
+      "Institutional licensing inquiries prioritized",
+      "1-on-1 patent strategy session (monthly)",
+      "Early access to new build plans",
+      "Priority email support",
+      "Co-inventor matching priority queue",
     ],
     locked: [],
   },
 ];
 
-const ITEM_DETAILS = {
-  "Anenergy Pump Demonstration Circuit": { 
-    desc: "Tabletop demonstration of the anenergy pump — the Moray mechanism in a kit. Gradient-phi extraction showing the phi-field / energy distinction.",
-    bom: [
-      { item: "Shielded toroidal coil", qty: 1, spec: "Primary winding 1000T, secondary 500T", source: "Amazon / Newark Electronics" },
-      { item: "DDS pulse controller", qty: 1, spec: "AD9910 or equivalent", source: "Digikey" },
-      { item: "Signal generator", qty: 1, spec: "1MHz-50MHz", source: "Rigol / Keysight" },
-      { item: "Measurement probes", qty: 2, spec: "HV differential probes", source: "Fluke / Tektronix" },
-    ],
-    materials: ["Copper wire (14 AWG)", "Ferrite core material", "PCB substrate", "Capacitor bank 100µF-1000µF"],
-    sources: { "Wire & Components": "Digikey.com", "Coils & Cores": "Kesco.com", "Test Equipment": "Fluke.com" }
-  },
-  "Scalar Energy Bottle Interferometer": { 
-    desc: "Two-transmitter zero-vector interference zone for tabletop energy capture demonstration. Shows scalar pulse timing mechanism.",
-    bom: [
-      { item: "Zero-vector transmitter coil", qty: 2, spec: "Push-pull topology to cancel transverse EM", source: "Custom wind or Kesco" },
-      { item: "FPGA timing module", qty: 1, spec: "Nanosecond resolution", source: "Digikey / Mouser" },
-      { item: "Dual detector panel", qty: 1, spec: "RF spectrum analyzer compatible", source: "Rigol" },
-    ],
-    materials: ["Magnet wire", "Coaxial cable (RG-58)", "SMA connectors", "Aluminum enclosure"],
-    sources: { "FPGA Modules": "Digikey.com", "RF Hardware": "Mini-Circuits.com", "Enclosures": "Hammond-mfg.com" }
-  },
-  "Vacuum Potential Oscillator (VPO) Circuit Kit": { 
-    desc: "Hands-on exploration of scalar phi-field principles. Resonant LC circuit tuned to shift vacuum-ground potential.",
-    bom: [
-      { item: "Custom wound toroids", qty: 2, spec: "Quartz resonator coupled", source: "Kesco / Custom" },
-      { item: "Quartz resonator", qty: 1, spec: "32.768 kHz or tuned frequency", source: "Amazon / Digikey" },
-      { item: "Measurement guide + software", qty: 1, spec: "PDF + oscilloscope macro", source: "Download included" },
-    ],
-    materials: ["Ferrite powder core", "Magnet wire AWG 22", "Capacitors 10pF-1000pF", "Resistor assortment"],
-    sources: { "Resonators": "Murata.com", "Capacitors": "Wyle.com", "Wire": "Adafruit.com" }
-  },
-  "Biofield Frequency Exposure Chamber": { 
-    desc: "Replicate Kaznacheyev-type UV photon transmission experiments. Quartz-windowed exposure chamber for biophysics research.",
-    bom: [
-      { item: "Quartz-windowed chamber", qty: 1, spec: "UV-transparent (not glass)", source: "Edmund Optics" },
-      { item: "UV LED driver + frequency generator", qty: 1, spec: "Programmable DDS", source: "Digikey" },
-      { item: "Dual-compartment system", qty: 1, spec: "Cell culture compatible", source: "VWR / Corning" },
-    ],
-    materials: ["UV-grade quartz panes", "Aluminum frame", "Silicone tubing", "O-ring seals"],
-    sources: { "Optics": "EdmundOptics.com", "Culture Equipment": "VWR.com", "Tubing": "Cole-Parmer.com" }
-  },
-  "Open-System Magnetic Generator (Prototype Plans)": { 
-    desc: "Engineering plans based on Kromrey/Gray/Searl design principles. Standard machining and winding techniques.",
-    bom: [
-      { item: "Rotating disk", qty: 1, spec: "Aluminum or composite, 12\" diameter", source: "McMaster / Local machine shop" },
-      { item: "Permanent magnets", qty: 8, spec: "Grade N52 1\"x1\"x0.5\"", source: "KJ Magnetics" },
-      { item: "Coil winding supplies", qty: 1, spec: "AWG 16-22 copper wire", source: "Adafruit / Amazon" },
-      { item: "Bearing set + motor coupling", qty: 1, spec: "NEMA mount", source: "Bearing Industries / VXB" },
-    ],
-    materials: ["Shaft steel (1\" diameter)", "Brush contacts", "Commutator rings", "Insulation paper"],
-    sources: { "Magnets": "KJMagnetics.com", "Bearings": "VXB.com", "Wire": "Adafruit.com", "Steel": "McMaster.com" }
-  },
-  "Quantum Potential EMI Detector": { 
-    desc: "Detect scalar EM interference invisible to standard instruments. Tuned quartz-crystal array with statistical burst-pattern firmware.",
-    bom: [
-      { item: "Quartz-crystal array", qty: 4, spec: "Tuned resonators", source: "Digikey / Mouser" },
-      { item: "Statistical analysis firmware", qty: 1, spec: "Python + DSP", source: "Download included" },
-      { item: "Sensitive RF frontend", qty: 1, spec: "Low-noise amplifier", source: "Mini-Circuits" },
-    ],
-    materials: ["PCB substrate (FR-4)", "Coaxial connectors", "SMA adapters", "Shielded enclosure"],
-    sources: { "Crystals": "Digikey.com", "RF Parts": "Mini-Circuits.com", "PCB": "PCBWay.com" }
-  },
-  "EM Trigger Window Therapy Device": { 
-    desc: "Programmable frequency generator for precision EM therapy using biological trigger windows. Consumer and clinical versions.",
-    bom: [
-      { item: "DDS frequency generator", qty: 1, spec: "AD9910 or equivalent", source: "Digikey" },
-      { item: "Wristband enclosure (consumer)", qty: 1, spec: "Aluminum + silicone", source: "Amazon" },
-      { item: "Full-body chamber coils (clinical)", qty: 2, spec: "Helmholtz coil geometry", source: "Custom or Kesco" },
-    ],
-    materials: ["Magnet wire AWG 18-22", "PCB substrate", "LiPo battery", "Timing crystal 16MHz"],
-    sources: { "ICs": "Digikey.com", "Enclosures": "Amazon.com", "Wire": "Adafruit.com" }
-  },
-  "Morphogenetic Field Coherence Monitor": { 
-    desc: "Measure species-level quantum potential coherence in biological systems. Applications in agriculture optimization.",
-    bom: [
-      { item: "Wideband antenna array", qty: 1, spec: "Tuned 10Hz-1MHz", source: "Custom or Mini-Circuits" },
-      { item: "SQUID-compatible interface", qty: 1, spec: "Magnetometry frontend", source: "Digikey" },
-      { item: "Real-time analysis software", qty: 1, spec: "Python + LabVIEW", source: "Download included" },
-    ],
-    materials: ["Shielded Faraday enclosure", "Coaxial cable", "SMA connectors", "Precision resistors 1%"],
-    sources: { "Hardware": "Mini-Circuits.com", "Enclosures": "Hampton-Roads.com", "Software": "Included" }
-  },
-  "Whittaker Wave Phase Conjugate Mirror System": { 
-    desc: "Time-reverse EM signals for scalar communications and healing. Based on Gravitobiology Figs 10-11.",
-    bom: [
-      { item: "Nonlinear optical medium", qty: 1, spec: "BaTiO₃ crystal or ferrofluid cell", source: "Edmund Optics / Sigma-Aldrich" },
-      { item: "Pump laser", qty: 1, spec: "532nm 1W DPSS", source: "Coherent / Laserland" },
-      { item: "Signal detection array", qty: 1, spec: "Photodiode + amplifier", source: "Thorlabs" },
-    ],
-    materials: ["Optical mounts", "Dichroic mirrors", "Precision apertures", "Laser safety enclosure"],
-    sources: { "Optics": "Thorlabs.com", "Crystals": "EdmundOptics.com", "Laser": "LaserLand.com" }
-  },
-  "Scalar EM Lab Starter Kit": { desc: "Foundation circuit kit for scalar electromagnetic experiments. Perfect for beginners learning EM field manipulation.", includes: ["EM measurement tools", "Coil assembly guides", "Field visualization software"] },
-  "G-Com Scalar Communicator Parts": { desc: "Complete component set for building a scalar communication device. Advanced precision components included.", includes: ["Precision capacitors", "Signal generation circuits", "Transmission modules", "Receiver assembly"] },
-  "EMF Protection & Shielding Kit": { desc: "Professional-grade shielding materials for EMF exposure reduction and lab safety.", includes: ["Mu-metal shielding", "Faraday cage materials", "Installation guides", "Testing equipment"] },
-  "Prioré Device Component Bundle": { desc: "Specialized components for Prioré-type multi-channel electromagnetic device research.", includes: ["Custom solenoids", "Frequency generators", "Phase control circuits", "Assembly documentation"] },
-  "MEG Replication Parts Kit": { desc: "Complete parts set for replicating the Motionless Electromagnetic Generator concept.", includes: ["Permanent magnets", "Coil winding supplies", "Control electronics", "Step-by-step guides"] },
-  "TRD-1 Telomere Device Build Kit": { desc: "Bioelectromagnetic device components for cellular regeneration research.", includes: ["Biofrequency generators", "Telomere measurement tools", "Treatment delivery systems"] },
-  "TRZ Reactor Starter Components": { desc: "Advanced reactor core components for scalar EM energy research and experimentation.", includes: ["Reactor core materials", "Containment assemblies", "Control systems", "Safety documentation"] },
-  "Advanced EM Assembly Tool Kit": { desc: "Professional tools and precision instruments for advanced electromagnetic device assembly.", includes: ["Precision measuring tools", "Specialized soldering equipment", "Diagnostic instruments", "Tool case"] },
-  
-  "Scalar Electromagnetics Fundamentals": { desc: "Foundational course covering scalar EM theory, mathematics, and experimental principles.", curriculum: ["Introduction to scalar fields", "Maxwell's equations revisited", "Scalar potential theory", "Experimental validation methods", "Lab safety protocols"] },
-  "Bearden Energy from the Vacuum Theory": { desc: "Deep dive into Tom Bearden's energy extraction from vacuum framework and implications.", curriculum: ["Overview of Bearden's work", "Vacuum energy concepts", "Curled-up dimensions", "Extraction mechanisms", "Patent landscape analysis"] },
-  "Building EM Device Prototypes": { desc: "Hands-on course for designing and building functional electromagnetic device prototypes.", curriculum: ["Circuit design fundamentals", "Coil winding techniques", "Assembly best practices", "Troubleshooting & optimization", "Testing methodologies"] },
-  "Patent Strategy for Energy Inventors": { desc: "Strategic IP planning for novel energy technologies and scalar EM inventions.", curriculum: ["Patent landscape mapping", "Claim drafting strategies", "Prior art research", "Freedom-to-operate analysis", "Commercialization planning"] },
-  "Quantum Field Theory Essentials": { desc: "Quantum mechanics fundamentals relevant to scalar EM and vacuum energy research.", curriculum: ["QFT basics for inventors", "Vacuum fluctuations", "Quantum tunneling", "Field quantization", "Advanced mathematics"] },
-  "Bioelectromagnetics & Health": { desc: "Explore bioelectromagnetic effects on living systems and research applications.", curriculum: ["Cellular bioelectricity", "EMF health effects", "Therapeutic frequencies", "Research methodologies", "Safety considerations"] },
-  "Prior Art Research & Analysis": { desc: "Master prior art research techniques to identify patentability gaps and innovation opportunities.", curriculum: ["Patent database navigation", "Citation analysis", "Novelty assessment", "Claims analysis", "Competitive intelligence"] },
-  "Investor Pitch Fundamentals": { desc: "Learn to pitch novel energy inventions to investors, VCs, and strategic partners.", curriculum: ["Pitch deck fundamentals", "Storytelling techniques", "Financial projections", "Technical communication", "Q&A strategies"] },
-};
+const FAQS = [
+  { q: "Is this real engineering or pseudoscience?", a: "Every build plan cites granted US patents, peer-reviewed journals, and declassified government documents. The MEG (US Patent 6,362,718) was co-authored by a PhD physicist and published in Foundations of Physics Letters." },
+  { q: "Can I really build these devices?", a: "Yes. Every plan includes a full BOM with exact part numbers, specifications, and supplier links. Simpler devices use off-the-shelf Digikey / Amazon components. Advanced systems require standard machining or coil winding." },
+  { q: "What if I want to cancel?", a: "Cancel any time from your account settings. No contracts, no fees. Most members tell us the MEG build plan alone was worth more than 6 months of the Starter tier." },
+  { q: "Can I upgrade or downgrade?", a: "Yes — upgrades take effect immediately and you're only charged the prorated difference. Downgrades take effect at the next billing cycle." },
+  { q: "Is there a free trial?", a: "The Free Vault gives you access to 1 full build plan and 5 prior art entries with no payment required. That's enough to validate the quality before committing." },
+];
 
-function ItemCard({ item, userTier }) {
-  const [expanded, setExpanded] = useState(false);
-  const details = ITEM_DETAILS[item.name];
-  
-  // Pricing: non-member full price, member gets 50% off
-  const noMembershipPrice = item.price;
-  const membershipPrice = Math.round(item.price * 0.5);
+const INDIVIDUAL_BUILDS = [
+  { name: "Vacuum Potential Oscillator (VPO) Circuit Kit", price: 189, icon: "🔧" },
+  { name: "Open-System Magnetic Generator (Prototype Plans)", price: 179, icon: "⚙️" },
+  { name: "Woodpecker Grid Standing Wave Detector", price: 249, icon: "📻" },
+  { name: "Phi-River Gradient Sensor", price: 349, icon: "🌊" },
+  { name: "Anenergy Pump Demonstration Circuit", price: 297, icon: "🔋" },
+  { name: "Scalar Energy Bottle Interferometer", price: 449, icon: "🎯" },
+  { name: "Quantum Potential EMI Detector", price: 497, icon: "📡" },
+  { name: "EM Trigger Window Therapy Device", price: 599, icon: "💊" },
+  { name: "Bedini Environmental EM Signal Conditioner", price: 697, icon: "🎛️" },
+  { name: "Morphogenetic Field Coherence Monitor", price: 799, icon: "🌿" },
+  { name: "Whittaker Wave Phase Conjugate Mirror System", price: 849, icon: "🔭" },
+  { name: "Prioré-Type Multichannel EM Therapy System", price: 697, icon: "🏥" },
+  { name: "MEG Replication Kit", price: 847, icon: "🔮" },
+  { name: "Asymmetric Regauging Overunity Generator", price: 897, icon: "⚡" },
+  { name: "MorphoYield TRZ-Agri Array", price: 697, icon: "🌾" },
+];
 
-  const handleCheckout = async () => {
-    const baseUrl = window.location.origin;
-    const checkoutPrice = userTier === "member" ? membershipPrice : noMembershipPrice;
-    const response = await base44.functions.invoke("createCheckoutSession", {
-      title: item.name,
-      priceInCents: checkoutPrice * 100,
-      description: item.category,
-      category: "one_time",
-      mode: "payment",
-      successUrl: `${baseUrl}/checkout?success=true&product=${encodeURIComponent(item.name)}`,
-      cancelUrl: `${baseUrl}/pricing`,
-    });
-    if (response.data?.url) window.location.href = response.data.url;
-  };
+const INDIVIDUAL_COURSES = [
+  { name: "Scalar Electromagnetics Fundamentals", price: 297, icon: "📚" },
+  { name: "Bearden Energy from the Vacuum Theory", price: 397, icon: "📖" },
+  { name: "Building EM Device Prototypes", price: 397, icon: "🔬" },
+  { name: "Patent Strategy for Energy Inventors", price: 397, icon: "⚖️" },
+  { name: "Quantum Field Theory Essentials", price: 297, icon: "🌌" },
+  { name: "Bioelectromagnetics & Health", price: 347, icon: "💊" },
+  { name: "Prior Art Research & Analysis", price: 297, icon: "🔍" },
+  { name: "Investor Pitch Fundamentals", price: 297, icon: "💼" },
+];
 
-  const deviceImage = deviceImages[item.name];
-  const colors = ["#3b82f6","#22c55e","#a855f7","#f59e0b","#ef4444","#06b6d4","#ec4899","#84cc16","#f97316","#8b5cf6","#14b8a6","#fb923c"];
-  const color = item.color || colors[Math.random() * colors.length | 0];
-
+function FaqAccordion() {
+  const [open, setOpen] = useState(null);
   return (
-    <div className="bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden flex flex-col"
-      style={{ borderLeftColor: color, borderLeftWidth: 3 }}>
-      {/* Image preview for build plans */}
-      {item.category === "Build Plan" && deviceImage && (
-        <div className="w-full h-40 bg-gradient-to-br from-gray-800 to-gray-700 overflow-hidden border-b border-gray-700">
-          <img src={deviceImage} alt={item.name} className="w-full h-full object-cover" />
+    <div className="space-y-2">
+      {FAQS.map((f, i) => (
+        <div key={i} className="bg-gray-900 border border-gray-800 rounded-xl overflow-hidden">
+          <button onClick={() => setOpen(open === i ? null : i)}
+            className="w-full flex items-center justify-between px-5 py-4 text-left hover:bg-gray-800/40 transition-colors">
+            <span className="text-white font-semibold text-sm">{f.q}</span>
+            {open === i ? <ChevronUp size={15} className="text-cyan-400 flex-shrink-0 ml-3" /> : <ChevronDown size={15} className="text-gray-500 flex-shrink-0 ml-3" />}
+          </button>
+          {open === i && <div className="px-5 pb-4 text-gray-300 text-sm leading-relaxed">{f.a}</div>}
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function TierCard({ tier, onCheckout }) {
+  return (
+    <div className={`relative flex flex-col rounded-2xl overflow-hidden transition-all
+      ${tier.popular
+        ? "border-2 border-purple-500 shadow-2xl shadow-purple-900/30 scale-[1.02]"
+        : "border border-gray-700"
+      } bg-gray-900`}>
+      {tier.badge && (
+        <div className="py-2.5 text-center text-xs font-black tracking-widest text-white"
+          style={{ backgroundColor: tier.color }}>
+          {tier.badge}
         </div>
       )}
-      
-      <div className="p-4 flex-1">
-        <div className="flex items-start gap-3 mb-3">
-          <span className="text-2xl flex-shrink-0">{item.icon}</span>
-          <div className="flex-1 min-w-0">
-            <div className="flex items-center gap-2 mb-1">
-              <span className="text-xs px-2 py-0.5 rounded font-bold uppercase" style={{ backgroundColor: color + "22", color }}>{item.price}</span>
+      <div className="p-7 flex flex-col flex-1">
+        <h3 className="text-white font-black text-2xl mb-1">{tier.name}</h3>
+        <p className="text-gray-400 text-sm mb-5">{tier.description}</p>
+
+        <div className="flex items-end gap-1 mb-1">
+          <span className="text-5xl font-black" style={{ color: tier.color }}>${tier.price}</span>
+          <span className="text-gray-400 mb-1.5">/month</span>
+        </div>
+        <p className="text-gray-600 text-xs mb-7">Cancel anytime · Instant access · Secured by Stripe</p>
+
+        <div className="space-y-2.5 mb-6 flex-1">
+          {tier.features.map((f, i) => (
+            <div key={i} className="flex items-start gap-2.5">
+              <Check size={13} className="flex-shrink-0 mt-0.5" style={{ color: tier.color }} />
+              <span className="text-gray-200 text-sm">{f}</span>
             </div>
-            <h3 className="text-white font-bold text-sm leading-snug">{item.name}</h3>
-            {item.tagline && <p className="text-gray-500 text-xs mt-1 italic">{item.tagline}</p>}
-          </div>
+          ))}
+          {tier.locked?.map((f, i) => (
+            <div key={i} className="flex items-start gap-2.5 opacity-35">
+              <Lock size={13} className="flex-shrink-0 mt-0.5 text-gray-600" />
+              <span className="text-gray-500 text-sm line-through">{f}</span>
+            </div>
+          ))}
         </div>
 
-        {details?.desc && (
-          <p className="text-gray-400 text-xs leading-relaxed line-clamp-2 mb-3">{details.desc}</p>
-        )}
-
-        {(details?.bom || details?.includes || details?.curriculum) && (
-          <button
-            onClick={() => setExpanded(!expanded)}
-            className="flex items-center gap-1.5 text-cyan-400 text-xs font-bold mb-3 hover:text-cyan-300 transition-colors"
-          >
-            {expanded ? <ChevronUp size={12} /> : <ChevronDown size={12} />}
-            View Details
-          </button>
-        )}
-
-        {expanded && details?.bom && (
-          <div className="mb-3 bg-gray-800/50 rounded-lg p-3 text-xs space-y-2">
-            <p className="text-gray-400 font-bold uppercase">BOM Preview:</p>
-            <div className="space-y-1">
-              {details.bom.slice(0, 2).map((row, i) => (
-                <div key={i} className="text-gray-300">
-                  <p className="font-semibold">{row.item}</p>
-                  <p className="text-gray-500 text-xs">{row.spec}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {expanded && (details?.includes || details?.curriculum) && (
-          <div className="mb-3 bg-gray-800/50 rounded-lg p-3 text-xs">
-            {details?.includes && (
-              <ul className="space-y-1">
-                {details.includes.slice(0, 3).map((inc, i) => (
-                  <li key={i} className="text-gray-300 flex items-start gap-2">
-                    <span className="text-cyan-400 flex-shrink-0">✓</span> {inc}
-                  </li>
-                ))}
-              </ul>
-            )}
-            {details?.curriculum && (
-              <ul className="space-y-1">
-                {details.curriculum.slice(0, 3).map((mod, i) => (
-                  <li key={i} className="text-gray-300 flex items-start gap-2">
-                    <span className="text-cyan-400 flex-shrink-0">✓</span> {mod}
-                  </li>
-                ))}
-              </ul>
-            )}
-          </div>
-        )}
-      </div>
-
-      <div className="px-4 pb-4 flex flex-col gap-2">
-        {item.restricted ? (
-          <a href={`mailto:licensing@zenithapex.com?subject=Defense%20Contractor%20Licensing%20Inquiry:%20${encodeURIComponent(item.name)}`}
-            className="flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg text-xs font-bold bg-red-900/60 hover:bg-red-800/60 border border-red-700 text-red-300 transition-colors w-full">
-            🔐 Licensing Inquiries Only
-          </a>
-        ) : (
-          <>
-            <div className="p-2 rounded-lg bg-gray-800/50 space-y-1">
-              <div className="flex items-center justify-between">
-                <span className="text-gray-400 text-xs">No Membership:</span>
-                <span className="text-white text-sm font-bold">${noMembershipPrice}</span>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-gray-400 text-xs">With Member (50% off):</span>
-                <span className="text-cyan-400 text-sm font-bold">${membershipPrice}</span>
-              </div>
-            </div>
-
-            <button onClick={handleCheckout}
-              className="w-full px-3 py-2 rounded-lg text-xs font-bold bg-cyan-700 hover:bg-cyan-600 text-white transition-all">
-              💳 Buy Now
-            </button>
-          </>
-        )}
+        <button onClick={() => onCheckout(tier)}
+          className="w-full py-4 rounded-xl font-black text-base text-white transition-all hover:opacity-90 active:scale-95"
+          style={{ backgroundColor: tier.color, boxShadow: `0 4px 20px ${tier.color}40` }}>
+          {tier.cta}
+        </button>
+        <p className="text-center text-gray-600 text-xs mt-3">🔒 Stripe · SSL · Cancel anytime</p>
       </div>
     </div>
   );
 }
 
-function PlanCard({ tier, billingCycle }) {
-  // Founding member offer: $49/mo for first 1000
-  const foundingPrice = tier.foundingPrice || null;
-  
-  const displayPrice = foundingPrice || tier.price;
-  const billingPeriod = "/month";
-  const regularPrice = tier.price;
+function AlaCarteItem({ item, onCheckout }) {
+  return (
+    <div className="bg-gray-900 border border-gray-800 rounded-xl p-4 flex items-center justify-between gap-3 hover:border-gray-600 transition-colors">
+      <div className="flex items-center gap-3 min-w-0">
+        <span className="text-xl flex-shrink-0">{item.icon}</span>
+        <div className="min-w-0">
+          <p className="text-white text-sm font-semibold truncate">{item.name}</p>
+          <p className="text-gray-500 text-xs">One-time purchase</p>
+        </div>
+      </div>
+      <div className="flex items-center gap-3 flex-shrink-0">
+        <span className="text-white font-black">${item.price}</span>
+        <button onClick={() => onCheckout(item)}
+          className="px-3 py-1.5 rounded-lg bg-gray-800 hover:bg-gray-700 text-white text-xs font-bold transition-colors">
+          Buy
+        </button>
+      </div>
+    </div>
+  );
+}
 
-  const handleCheckout = async () => {
+export default function Pricing() {
+  const countdown = useCountdown();
+  const [newsletterEmail, setNewsletterEmail] = useState("");
+  const [newsletterStatus, setNewsletterStatus] = useState(null);
+  const [showAlaCarteBuilds, setShowAlaCarteBuilds] = useState(false);
+  const [showAlaCCarteCourses, setShowAlaCCarteCourses] = useState(false);
+
+  const handleMembershipCheckout = async (tier) => {
     if (window !== window.top) {
       alert("Checkout only works from the published app. Please open the app directly.");
       return;
     }
     const baseUrl = window.location.origin;
     const response = await base44.functions.invoke("createCheckoutSession", {
-      title: tier.name + (foundingPrice ? " (First 1000 Members)" : ""),
-      priceInCents: displayPrice * 100,
+      title: `ZARP ${tier.name} Membership`,
+      priceInCents: tier.price * 100,
       description: tier.description,
       category: "membership",
       mode: "subscription",
@@ -343,229 +247,229 @@ function PlanCard({ tier, billingCycle }) {
     if (response.data?.url) window.location.href = response.data.url;
   };
 
-  const isPro = tier.id === "pro";
-
-  return (
-    <div className={`relative bg-gray-900 rounded-2xl overflow-hidden flex flex-col ${isPro ? "border-2 border-purple-500 shadow-2xl shadow-purple-900/30" : "border border-gray-700"}`}>
-      {tier.badge && (
-        <div className="text-center py-2.5 text-xs font-black tracking-widest" style={{ backgroundColor: tier.color + "25", color: tier.color }}>
-          {tier.badge}
-        </div>
-      )}
-      {foundingPrice && (
-        <div className="text-center py-2 text-xs font-black tracking-widest bg-yellow-900/40 border-b border-yellow-800 text-yellow-300">
-          🚀 FIRST 1000 MEMBERS — Only $49/month
-        </div>
-      )}
-      <div className="p-7 flex flex-col flex-1">
-        <h3 className="text-white font-black text-xl mb-1">{tier.name}</h3>
-        <p className="text-gray-400 text-sm mb-5">{tier.description}</p>
-        <div className="flex items-end gap-1 mb-1">
-          {foundingPrice && (
-            <span className="text-2xl font-black text-gray-600 line-through mr-2">${regularPrice}</span>
-          )}
-          <span className="text-5xl font-black" style={{ color: tier.color }}>
-            ${displayPrice}
-          </span>
-          <span className="text-gray-500 text-base mb-1.5">{billingPeriod}</span>
-        </div>
-        {foundingPrice && (
-          <p className="text-yellow-400 text-xs font-bold mb-2">Save ${(regularPrice - foundingPrice) * 12}/year for first 1000</p>
-        )}
-        <p className="text-gray-600 text-xs mb-6">Cancel anytime · Instant access</p>
-
-        <div className="space-y-2 mb-6 flex-1">
-          {tier.features.map((f, i) => (
-            <div key={i} className="flex items-start gap-2">
-              <Check size={12} className="flex-shrink-0 mt-0.5" style={{ color: tier.color }} />
-              <span className="text-gray-300 text-sm">{f}</span>
-            </div>
-          ))}
-          {tier.locked?.map((f, i) => (
-            <div key={i} className="flex items-start gap-2 opacity-35">
-              <Lock size={12} className="flex-shrink-0 mt-0.5 text-gray-600" />
-              <span className="text-gray-500 text-sm line-through">{f}</span>
-            </div>
-          ))}
-        </div>
-
-        <button
-           onClick={handleCheckout}
-           className="w-full py-4 rounded-xl font-black text-base transition-all text-white"
-           style={{ backgroundColor: tier.color, boxShadow: `0 4px 20px ${tier.color}40` }}
-         >
-           Get {tier.name} — ${displayPrice}/mo
-         </button>
-        <p className="text-center text-gray-600 text-xs mt-3">🔒 Secured by Stripe</p>
-      </div>
-    </div>
-  );
-}
-
-export default function Pricing() {
-  const { tier } = useTier();
-  const [loading, setLoading] = useState(null);
-  const [error, setError] = useState(null);
-  const [billingCycle, setBillingCycle] = useState("monthly");
-  const [newsletterEmail, setNewsletterEmail] = useState("");
-  const [newsletterStatus, setNewsletterStatus] = useState(null);
-  const [showFilter, setShowFilter] = useState("all"); // "all", "available", "locked"
-
-  // Show all items regardless of tier
-  let visibleItems = [...INDIVIDUAL_BUILDS, ...INDIVIDUAL_COURSES];
+  const handleAlaCarteCheckout = async (item) => {
+    if (window !== window.top) {
+      alert("Checkout only works from the published app. Please open the app directly.");
+      return;
+    }
+    const baseUrl = window.location.origin;
+    const response = await base44.functions.invoke("createCheckoutSession", {
+      title: item.name,
+      priceInCents: item.price * 100,
+      description: "Build plan or course — one-time purchase",
+      category: "one_time",
+      mode: "payment",
+      successUrl: `${baseUrl}/checkout?success=true&product=${encodeURIComponent(item.name)}`,
+      cancelUrl: `${baseUrl}/pricing`,
+    });
+    if (response.data?.url) window.location.href = response.data.url;
+  };
 
   return (
     <div className="min-h-screen bg-gray-950 text-white">
-      {/* Header */}
-      <div className="border-b border-gray-800 bg-gray-900/80 px-5 py-4 flex items-center justify-between gap-4">
+      {/* Urgency bar */}
+      <div className="bg-gradient-to-r from-red-900 to-orange-900 border-b border-red-800 px-4 py-2 flex flex-col sm:flex-row items-center justify-center gap-2 text-sm">
+        <div className="flex items-center gap-2">
+          <Flame size={13} className="text-orange-300 animate-pulse" />
+          <span className="text-orange-100 font-semibold">Founding rate expires in</span>
+        </div>
+        <span className="font-black text-white bg-black/40 px-3 py-0.5 rounded-lg font-mono tracking-widest">{countdown}</span>
+        <span className="text-orange-200 text-xs">— price increases permanently after 1,000 members</span>
+      </div>
+
+      {/* Nav */}
+      <div className="border-b border-gray-800 bg-gray-900/80 backdrop-blur px-6 py-4 flex items-center justify-between sticky top-0 z-40">
         <div className="flex items-center gap-4">
           <Link to="/" className="flex items-center gap-2 text-gray-400 hover:text-white text-sm transition-colors">
             <ArrowLeft size={14} /> Back
           </Link>
           <div className="w-px h-5 bg-gray-700" />
-          <h1 className="text-white font-black text-lg">ZARP Pricing</h1>
+          <div className="flex items-center gap-2">
+            <img src="https://media.base44.com/images/public/69ccefebfea78b23498c66a8/a90918e3c_ZARPlogo.png" alt="ZARP" className="h-7 w-7 object-contain" />
+            <h1 className="text-white font-black text-lg">ZARP Pricing</h1>
+          </div>
         </div>
-        <Link to="/referrals" className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-green-900/40 border border-green-700 text-green-300 hover:bg-green-900/60 transition-all text-xs font-bold">
-          <Gift size={14} /> Earn Credits
+        <Link to="/referrals" className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-green-900/40 border border-green-700 text-green-300 hover:bg-green-900/60 text-xs font-bold transition-all">
+          <Gift size={13} /> Earn Credits
         </Link>
       </div>
 
       {/* Hero */}
-      <div className="text-center px-5 py-12 max-w-4xl mx-auto">
-        <h2 className="text-4xl md:text-5xl font-black leading-tight mb-4">
-          Create with Passion<br />Build for Impact<br />
-          <span className="text-cyan-400">Forge Your Future</span><br />
-          Start Building Your IP Portfolio Today
-        </h2>
-        <p className="text-gray-400 text-lg max-w-2xl mx-auto leading-relaxed mb-8">
-          Three tiers. One platform. Pick the plan that fits your stage.
+      <div className="text-center px-5 pt-16 pb-12 max-w-3xl mx-auto">
+        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-yellow-900/40 border border-yellow-700 text-yellow-300 text-xs font-black mb-6 uppercase tracking-widest">
+          <Clock size={12} /> Founding Member Rate — First 1,000 Only
+        </div>
+        <h1 className="text-4xl md:text-5xl font-black leading-tight mb-4">
+          Unlock the World's Most Advanced<br />
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">EM Engineering Vault</span>
+        </h1>
+        <p className="text-gray-400 text-lg max-w-xl mx-auto">
+          Choose the tier that fits your stage. Upgrade anytime. Cancel anytime.
         </p>
+      </div>
 
-        {/* Billing Toggle */}
-        <div className="flex items-center justify-center gap-4 mb-10">
-          <button
-            onClick={() => setBillingCycle("monthly")}
-            className={`px-6 py-2 rounded-lg font-bold text-sm transition-all ${
-              billingCycle === "monthly"
-                ? "bg-cyan-600 text-white"
-                : "bg-gray-800 text-gray-400 hover:bg-gray-700"
-            }`}
-          >
-            Monthly
-          </button>
-          <button
-            onClick={() => setBillingCycle("annual")}
-            className={`px-6 py-2 rounded-lg font-bold text-sm transition-all flex items-center gap-2 ${
-              billingCycle === "annual"
-                ? "bg-green-600 text-white"
-                : "bg-gray-800 text-gray-400 hover:bg-gray-700"
-            }`}
-          >
-            Annual
-            <span className="text-xs bg-yellow-500/20 text-yellow-400 px-2 py-0.5 rounded">Save 2 months</span>
-          </button>
+      {/* Tier Cards */}
+      <div className="px-5 pb-16 max-w-5xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-stretch">
+          {TIERS.map(tier => (
+            <TierCard key={tier.id} tier={tier} onCheckout={handleMembershipCheckout} />
+          ))}
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
-          {TIERS.map(tier => <PlanCard key={tier.id} tier={tier} billingCycle={billingCycle} />)}
+        {/* Compare note */}
+        <p className="text-center text-gray-500 text-xs mt-6">
+          All plans include instant access · No setup fees · Upgrade/downgrade anytime
+        </p>
+      </div>
+
+      {/* Value comparison bar */}
+      <div className="border-y border-gray-800 bg-gray-900/40 px-6 py-10 mb-16">
+        <div className="max-w-4xl mx-auto">
+          <h2 className="text-xl font-black text-center mb-8">What's included at each tier</h2>
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b border-gray-800">
+                  <th className="text-left text-gray-500 text-xs font-bold uppercase py-3 pr-6 w-48">Feature</th>
+                  {TIERS.map(t => (
+                    <th key={t.id} className="text-center py-3 px-4 font-black" style={{ color: t.color }}>{t.name}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-800/50">
+                {[
+                  ["Build Plans", "15", "40+", "40+ + Restricted"],
+                  ["Courses", "15", "40+", "40+ + Priority"],
+                  ["AI Patent Tool", "✓", "✓", "✓"],
+                  ["FTO Analysis", "—", "✓", "✓"],
+                  ["Investor Package AI", "—", "✓", "✓"],
+                  ["Prior Art Archive", "50 entries", "200+ entries", "200+ entries"],
+                  ["EM Lab Simulators", "Basic", "Full", "Full"],
+                  ["À la carte discount", "20% off", "50% off", "60% off"],
+                  ["Restricted Systems", "—", "—", "✓"],
+                  ["Strategy Session", "—", "—", "Monthly 1-on-1"],
+                ].map(([label, starter, pro, elite], i) => (
+                  <tr key={i} className={i % 2 === 0 ? "bg-gray-900/20" : ""}>
+                    <td className="py-2.5 pr-6 text-gray-300 text-xs font-medium">{label}</td>
+                    <td className="py-2.5 px-4 text-center text-xs text-gray-400">{starter}</td>
+                    <td className="py-2.5 px-4 text-center text-xs text-purple-300 font-semibold">{pro}</td>
+                    <td className="py-2.5 px-4 text-center text-xs text-yellow-300">{elite}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
 
-      <div className="px-5 pb-12 max-w-7xl mx-auto">
-        {error && (
-          <div className="bg-red-950/60 border border-red-800 rounded-xl p-4 mb-6 text-red-300 text-sm text-center">{error}</div>
-        )}
+      <div className="px-5 pb-16 max-w-5xl mx-auto">
 
-        {/* Newsletter Section */}
+        {/* Newsletter */}
         <div className="mb-16 max-w-2xl mx-auto bg-gradient-to-r from-cyan-950/40 to-purple-950/40 border border-cyan-900/30 rounded-2xl p-8">
           <div className="text-center mb-6">
-            <Mail size={24} className="text-cyan-400 mx-auto mb-3" />
-            <h3 className="text-white font-black text-2xl mb-2">Stay Updated</h3>
-            <p className="text-gray-400 text-sm">Get insights on scalar EM research, new build plans, and exclusive offers straight to your inbox.</p>
+            <h3 className="text-white font-black text-xl mb-2">Not ready to subscribe?</h3>
+            <p className="text-gray-400 text-sm">Get a free build guide + weekly research drops in your inbox.</p>
           </div>
           <div className="flex flex-col sm:flex-row gap-3">
-            <input
-              type="email"
-              placeholder="your@email.com"
-              value={newsletterEmail}
-              onChange={(e) => setNewsletterEmail(e.target.value)}
-              className="flex-1 px-4 py-3 rounded-lg bg-gray-900 border border-gray-800 text-white placeholder-gray-600 text-sm focus:outline-none focus:border-cyan-500 transition-colors"
-            />
-            <button
-              onClick={async () => {
-                if (!newsletterEmail) return;
-                try {
-                  await base44.entities.NewsletterSubscriber.create({
-                    email: newsletterEmail,
-                    source: "pricing_page",
-                    status: "active"
-                  });
-                  setNewsletterStatus("success");
-                  setNewsletterEmail("");
-                  setTimeout(() => setNewsletterStatus(null), 3000);
-                } catch (err) {
-                  setNewsletterStatus("error");
-                  setTimeout(() => setNewsletterStatus(null), 3000);
-                }
-              }}
-              className="px-6 py-3 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white font-bold text-sm transition-all whitespace-nowrap"
-            >
-              {newsletterStatus === "success" ? "✓ Subscribed!" : "Subscribe"}
+            <input type="email" placeholder="your@email.com" value={newsletterEmail}
+              onChange={e => setNewsletterEmail(e.target.value)}
+              className="flex-1 px-4 py-3 rounded-lg bg-gray-900 border border-gray-800 text-white placeholder-gray-600 text-sm focus:outline-none focus:border-cyan-500" />
+            <button onClick={async () => {
+              if (!newsletterEmail) return;
+              await base44.entities.NewsletterSubscriber.create({ email: newsletterEmail, source: "pricing_page", status: "active" });
+              setNewsletterStatus("success"); setNewsletterEmail("");
+              setTimeout(() => setNewsletterStatus(null), 3000);
+            }} className="px-6 py-3 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white font-bold text-sm whitespace-nowrap transition-all">
+              {newsletterStatus === "success" ? "✓ Subscribed!" : "Get Free Guide"}
             </button>
           </div>
-          {newsletterStatus === "success" && (
-            <p className="text-green-400 text-xs mt-3 text-center">Thanks for subscribing! Check your email for confirmation.</p>
+        </div>
+
+        {/* À la carte — Build Plans */}
+        <div className="mb-8">
+          <button onClick={() => setShowAlaCarteBuilds(b => !b)}
+            className="w-full flex items-center justify-between p-5 bg-gray-900 border border-gray-800 rounded-2xl hover:bg-gray-800/50 transition-colors">
+            <div className="flex items-center gap-3">
+              <Wrench size={20} className="text-orange-400" />
+              <div className="text-left">
+                <p className="text-white font-black">À La Carte Build Plans</p>
+                <p className="text-gray-500 text-xs">Buy individual plans — includes BOM, steps, PDF, build video</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-3">
+              <span className="text-gray-500 text-xs">{INDIVIDUAL_BUILDS.length} plans</span>
+              {showAlaCarteBuilds ? <ChevronUp size={16} className="text-gray-500" /> : <ChevronDown size={16} className="text-gray-500" />}
+            </div>
+          </button>
+          {showAlaCarteBuilds && (
+            <div className="mt-3 space-y-2">
+              {INDIVIDUAL_BUILDS.map((item, i) => (
+                <AlaCarteItem key={i} item={item} onCheckout={handleAlaCarteCheckout} />
+              ))}
+            </div>
           )}
         </div>
 
-        {/* ── À LA CARTE SECTION ── */}
+        {/* À la carte — Courses */}
         <div className="mb-16">
-          <div className="flex items-center gap-3 mb-6">
-            <ShoppingCart size={24} className="text-yellow-400" />
-            <div>
-              <h3 className="text-white font-black text-2xl">Build Plans & Courses</h3>
-              <p className="text-gray-500 text-sm">Each build plan includes: BOM, parts list, supplier recommendations, PDF, step-by-step instructions, and build video</p>
+          <button onClick={() => setShowAlaCCarteCourses(b => !b)}
+            className="w-full flex items-center justify-between p-5 bg-gray-900 border border-gray-800 rounded-2xl hover:bg-gray-800/50 transition-colors">
+            <div className="flex items-center gap-3">
+              <BookOpen size={20} className="text-blue-400" />
+              <div className="text-left">
+                <p className="text-white font-black">À La Carte Courses</p>
+                <p className="text-gray-500 text-xs">Buy individual courses — lifetime access</p>
+              </div>
             </div>
-          </div>
-
-          {tier === "member" && (
-            <div className="mb-4 p-3 rounded-lg bg-green-900/30 border border-green-800 text-xs text-green-300">
-              <strong>Your tier:</strong> Member — 50% off all plans & courses
+            <div className="flex items-center gap-3">
+              <span className="text-gray-500 text-xs">{INDIVIDUAL_COURSES.length} courses</span>
+              {showAlaCCarteCourses ? <ChevronUp size={16} className="text-gray-500" /> : <ChevronDown size={16} className="text-gray-500" />}
+            </div>
+          </button>
+          {showAlaCCarteCourses && (
+            <div className="mt-3 space-y-2">
+              {INDIVIDUAL_COURSES.map((item, i) => (
+                <AlaCarteItem key={i} item={item} onCheckout={handleAlaCarteCheckout} />
+              ))}
             </div>
           )}
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 mb-8">
-            {visibleItems.map((item, i) => (
-              <ItemCard key={i} item={item} userTier={tier} />
-            ))}
-          </div>
         </div>
 
+        {/* FAQ */}
+        <div className="mb-16">
+          <h2 className="text-2xl font-black text-center mb-8">Questions Before You Join</h2>
+          <FaqAccordion />
+        </div>
 
-
-
+        {/* Final CTA */}
+        <div className="text-center bg-gradient-to-b from-gray-900 to-gray-950 border border-gray-800 rounded-2xl p-10">
+          <h2 className="text-3xl font-black mb-3">Ready to Build?</h2>
+          <p className="text-gray-400 mb-8 max-w-md mx-auto">Join 153 engineers and researchers already inside the vault. Start with Pro — the founding rate locks in forever.</p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            {TIERS.filter(t => t.popular).map(tier => (
+              <button key={tier.id} onClick={() => handleMembershipCheckout(tier)}
+                className="px-10 py-4 rounded-xl font-black text-lg text-white transition-all hover:opacity-90 shadow-lg"
+                style={{ backgroundColor: tier.color, boxShadow: `0 4px 24px ${tier.color}50` }}>
+                {tier.cta} — ${tier.price}/mo
+              </button>
+            ))}
+            <Link to="/free-vault" className="px-8 py-4 rounded-xl font-bold text-lg text-gray-300 bg-gray-800 hover:bg-gray-700 transition-all border border-gray-700">
+              Browse Free First
+            </Link>
+          </div>
+          <p className="text-gray-600 text-xs mt-5">🔒 Secured by Stripe · Cancel anytime · Instant access</p>
+        </div>
       </div>
-    </div>
-  );
-}
 
-function ShoppingCart({ size, className }) {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width={size}
-      height={size}
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className={className}
-    >
-      <circle cx="9" cy="21" r="1"></circle>
-      <circle cx="20" cy="21" r="1"></circle>
-      <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
-    </svg>
+      {/* Footer */}
+      <footer className="border-t border-gray-800 px-6 py-8 text-center text-gray-600 text-xs">
+        <p>© 2026 Zenith Apex LLC · ZARP Engineering Vault · Educational research platform</p>
+        <div className="flex justify-center gap-6 mt-3">
+          <Link to="/terms" className="hover:text-gray-400">Terms</Link>
+          <Link to="/refund-policy" className="hover:text-gray-400">Refund Policy</Link>
+          <Link to="/free-vault" className="hover:text-gray-400">Free Vault</Link>
+        </div>
+      </footer>
+    </div>
   );
 }
