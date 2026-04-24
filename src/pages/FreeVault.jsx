@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
+import ScalarWaveWatermark from "@/components/ScalarWaveWatermark";
 import { Zap, ChevronRight, Star, Download, Video, CheckCircle2 } from "lucide-react";
 
 const FREE_ITEMS = [
@@ -105,7 +106,8 @@ export default function FreeVault() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-950 text-white">
+    <div className="min-h-screen bg-gray-950 text-white relative">
+      <ScalarWaveWatermark />
       {/* Nav */}
       <div className="border-b border-gray-800 bg-gray-900/90 backdrop-blur px-5 py-4 flex items-center justify-between sticky top-0 z-40">
         <div className="flex items-center gap-3">

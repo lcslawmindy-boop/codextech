@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
+import ScalarWaveWatermark from "@/components/ScalarWaveWatermark";
 import {
   Lock, Check, Flame, Clock, ArrowRight, Star, ChevronDown, ChevronUp,
   Award, Zap, Shield, BookOpen, Wrench, TrendingUp, Eye, AlertTriangle, X
@@ -334,7 +335,8 @@ export default function PaywallPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-950 text-white">
+    <div className="min-h-screen bg-gray-950 text-white relative">
+      <ScalarWaveWatermark />
 
       {showExit && (
         <ExitBanner onDismiss={() => setShowExit(false)} onCheckout={handleCheckout} />

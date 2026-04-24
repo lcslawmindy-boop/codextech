@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
+import ScalarWaveWatermark from "@/components/ScalarWaveWatermark";
 import { Lock, ChevronRight, Star, Shield, BookOpen, Wrench, TrendingUp, CheckCircle2, ArrowRight, Flame, Zap } from "lucide-react";
 import LeadMagnetPopup, { useLeadMagnetTrigger } from "@/components/LeadMagnetPopup";
 
@@ -127,7 +128,8 @@ export default function ZarpLanding() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-950 text-white overflow-x-hidden">
+    <div className="min-h-screen bg-gray-950 text-white overflow-x-hidden relative">
+      <ScalarWaveWatermark />
       {showMagnet && !emailSubmitted && (
         <LeadMagnetPopup trigger={magnetTrigger} magnetId="meg_blueprint" onDismiss={dismissMagnet} />
       )}
