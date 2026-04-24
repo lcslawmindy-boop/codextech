@@ -599,15 +599,15 @@ export default function VaultHeroAnimation({ children }) {
       {!clicked && (
         <div className="absolute left-1/2 -translate-x-1/2 flex justify-center items-end gap-2 md:gap-4 px-2 pointer-events-none z-20" style={{ bottom: '-80px' }}>
           {[
-            { letter: 'B', meaning: 'Build', num: '1', color: '#ff006e', glow: '#ff1493' },
-            { letter: 'U', meaning: 'Understand', num: '2', color: '#fb5607', glow: '#ff6b35' },
-            { letter: 'I', meaning: 'IP', num: '3', color: '#ffbe0b', glow: '#ffd60a' },
-            { letter: 'L', meaning: 'Learn', num: '4', color: '#8338ec', glow: '#a371ff' },
-            { letter: 'D', meaning: 'Deploy', num: '5', color: '#3a86ff', glow: '#5dade2' },
-            { letter: 'C', meaning: 'Capital', num: '6', color: '#06ffa5', glow: '#1dd1a1' },
-            { letter: 'A', meaning: 'Access', num: '7', color: '#ff006e', glow: '#ff1493' },
-            { letter: 'T', meaning: 'Tools', num: '8', color: '#fb5607', glow: '#ff6b35' },
-            { letter: 'E', meaning: 'Execute', num: '9', color: '#ffbe0b', glow: '#ffd60a' },
+            { letter: 'C', meaning: 'Codify', num: '1', color: '#ff006e', glow: '#ff1493' },
+            { letter: 'O', meaning: 'Orchestrate', num: '2', color: '#fb5607', glow: '#ff6b35' },
+            { letter: 'D', meaning: 'Devices', num: '3', color: '#ffbe0b', glow: '#ffd60a' },
+            { letter: 'E', meaning: 'Engineering', num: '4', color: '#8338ec', glow: '#a371ff' },
+            { letter: 'X', meaning: 'eXecution', num: '5', color: '#3a86ff', glow: '#5dade2' },
+            { letter: 'T', meaning: 'Trading', num: '6', color: '#06ffa5', glow: '#1dd1a1' },
+            { letter: 'E', meaning: 'Energy', num: '7', color: '#ff006e', glow: '#ff1493' },
+            { letter: 'C', meaning: 'Capital', num: '8', color: '#fb5607', glow: '#ff6b35' },
+            { letter: 'H', meaning: 'Harmonic', num: '9', color: '#ffbe0b', glow: '#ffd60a' },
           ].map((item, i) => (
             <div key={i} className="flex flex-col items-center gap-6 md:gap-8" style={{ perspective: '1000px' }}>
               <div className="relative w-20 h-20 md:w-28 md:h-28 lg:w-36 lg:h-36 rounded-lg flex items-center justify-center font-black text-4xl md:text-5xl lg:text-6xl transition-all hover:scale-105 border-2 group cursor-pointer" style={{
