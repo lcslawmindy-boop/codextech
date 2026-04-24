@@ -599,15 +599,15 @@ export default function VaultHeroAnimation({ children }) {
       {!clicked && (
         <div className="absolute left-1/2 -translate-x-1/2 flex justify-center items-end gap-2 md:gap-4 px-2 pointer-events-none z-20" style={{ bottom: '-80px' }}>
           {[
-            { letter: 'C', meaning: 'Consciousness', num: '1', color: '#ff006e' },
-            { letter: 'O', meaning: 'Oscillation', num: '2', color: '#fb5607' },
-            { letter: 'D', meaning: 'Devices', num: '3', color: '#ffbe0b' },
-            { letter: 'E', meaning: 'Engineering', num: '4', color: '#8338ec' },
-            { letter: 'X', meaning: 'eXperimental', num: '5', color: '#3a86ff' },
-            { letter: 'T', meaning: 'Technology', num: '6', color: '#06ffa5' },
-            { letter: 'E', meaning: 'Extraction', num: '7', color: '#ff006e' },
-            { letter: 'C', meaning: 'Construct', num: '8', color: '#fb5607' },
-            { letter: 'H', meaning: 'Harmonic', num: '9', color: '#ffbe0b' },
+            { letter: 'C', meaning: 'Consciousness', num: '1', color: '#6b7280' },
+            { letter: 'O', meaning: 'Oscillation', num: '2', color: '#9ca3af' },
+            { letter: 'D', meaning: 'Devices', num: '3', color: '#6b7280' },
+            { letter: 'E', meaning: 'Engineering', num: '4', color: '#9ca3af' },
+            { letter: 'X', meaning: 'eXperimental', num: '5', color: '#6b7280' },
+            { letter: 'T', meaning: 'Technology', num: '6', color: '#9ca3af' },
+            { letter: 'E', meaning: 'Extraction', num: '7', color: '#6b7280' },
+            { letter: 'C', meaning: 'Construct', num: '8', color: '#9ca3af' },
+            { letter: 'H', meaning: 'Harmonic', num: '9', color: '#6b7280' },
           ].map((item, i) => (
             <div key={i} className="flex flex-col items-center gap-3 md:gap-4">
               <div className="relative w-20 h-20 md:w-28 md:h-28 lg:w-36 lg:h-36 rounded-lg flex items-center justify-center font-black text-4xl md:text-5xl lg:text-6xl transition-transform hover:scale-105 border-2" style={{
