@@ -132,7 +132,6 @@ export default function ZarpLanding() {
 
   return (
     <div className="min-h-screen bg-gray-950 text-white overflow-x-hidden relative">
-      <CodextechVaultBackground />
       <ScalarWaveWatermark />
       {showMagnet && !emailSubmitted && (
         <LeadMagnetPopup trigger={magnetTrigger} magnetId="meg_blueprint" onDismiss={dismissMagnet} />

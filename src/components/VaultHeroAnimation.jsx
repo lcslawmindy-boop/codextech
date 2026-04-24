@@ -193,8 +193,8 @@ export default function VaultHeroAnimation({ children }) {
         
         {/* Click Here Text */}
         {!clicked && (
-          <div className="absolute bottom-[-80px] left-1/2 transform -translate-x-1/2 whitespace-nowrap">
-            <div className="text-white text-2xl sm:text-3xl font-black uppercase tracking-widest drop-shadow-2xl" style={{ textShadow: "0 0 20px #FFFF00, 0 0 40px #FFFF00" }}>
+          <div className="absolute top-1/3 left-1/2 transform -translate-x-1/2 -translate-y-1/2 whitespace-nowrap">
+            <div className="text-white text-3xl sm:text-4xl font-black uppercase tracking-widest drop-shadow-2xl" style={{ textShadow: "0 0 20px #FFFF00, 0 0 40px #FFFF00, 0 0 60px #FFFF00" }}>
               ⚡ CLICK HERE ⚡
             </div>
           </div>
