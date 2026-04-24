@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { Lock, ChevronRight, Star, Shield, BookOpen, Wrench, TrendingUp, CheckCircle2, ArrowRight, Flame, Zap } from "lucide-react";
+import LeadMagnetPopup, { useLeadMagnetTrigger } from "@/components/LeadMagnetPopup";
 
 // ── REAL persistent countdown (48h from first visit) ─────────────────────────
 const DEADLINE_KEY = "zarp_founding_deadline";
@@ -83,6 +84,12 @@ export default function ZarpLanding() {
   const [email, setEmail] = useState("");
   const [emailSubmitted, setEmailSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const { show: showMagnet, trigger: magnetTrigger, dismiss: dismissMagnet } = useLeadMagnetTrigger({
+    timeDelay: 45000,
+    scrollPct: 70,
+    exitIntent: true,
+    storageKey: "zarp_lm_landing",
+  });
 
   const handleEmailCapture = async () => {
     if (!email || submitting) return;
@@ -96,6 +103,9 @@ export default function ZarpLanding() {
 
   return (
     <div className="min-h-screen bg-gray-950 text-white overflow-x-hidden">
+      {showMagnet && !emailSubmitted && (
+        <LeadMagnetPopup trigger={magnetTrigger} magnetId="meg_blueprint" onDismiss={dismissMagnet} />
+      )}
 
       {/* ── Urgency bar — REAL countdown ── */}
       <div className="bg-gradient-to-r from-red-950 to-orange-950 border-b border-red-900 px-4 py-2.5 flex flex-wrap items-center justify-center gap-2 text-sm">
