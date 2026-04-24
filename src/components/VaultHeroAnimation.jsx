@@ -191,18 +191,22 @@ export default function VaultHeroAnimation({ children }) {
           className="neon-logo w-96 sm:w-[500px] md:w-[600px] object-contain"
         />
         
-        {/* Click Here Text - Curved around dial */}
+        {/* Caution Text - Straight, not curved */}
         {!clicked && (
-          <svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 400 400" style={{ top: '-20px' }}>
-            <defs>
-              <path id="curve" d="M 50, 200 A 150, 150 0 0, 1 350, 200" fill="none" />
-            </defs>
-            <text style={{ textShadow: "0 0 20px #22c55e, 0 0 40px #22c55e, 0 0 60px #22c55e" }} className="font-black uppercase tracking-widest fill-green-400" fontSize="32" fontWeight="900">
-              <textPath href="#curve" startOffset="50%" textAnchor="middle" style={{ fontSize: '52px', fontWeight: 900, fill: '#22c55e' }}>
-                ⚠️ CAUTION ⚠️
-              </textPath>
-            </text>
-          </svg>
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+            <div style={{
+              fontSize: '72px',
+              fontWeight: 900,
+              color: '#22c55e',
+              textShadow: "0 0 30px #22c55e, 0 0 60px #22c55e, 0 0 90px #22c55e",
+              letterSpacing: '0.1em',
+              textAlign: 'center',
+              marginTop: '320px',
+              whiteSpace: 'nowrap'
+            }}>
+              ⚠️ CAUTION ⚠️
+            </div>
+          </div>
         )}
       </div>
 
