@@ -74,9 +74,10 @@ export default function VaultNDALanding() {
       await base44.entities.NDASignature.create({
         full_name: fullName,
         email,
-        organization,
-        agreed_at: new Date().toISOString(),
-        ip_address: "", // Would be populated server-side
+        company: organization,
+        signature_data: "", // Canvas signature would go here
+        accepted_terms: true,
+        signed_at: new Date().toISOString(),
       });
 
       // Send admin notification
