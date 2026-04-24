@@ -279,9 +279,33 @@ export default function VaultHeroAnimation({ children }) {
         ))}
 
         {/* Floating Background Elements — Icons floating around in the background */}
-        {Array.from({ length: 100 }).map((_, i) => {
-          const types = ['binary', 'device', 'equation', 'tool', 'periodic', 'medical', 'lab', 'sacred', 'tower', 'book', 'lightbulb', 'bubble', 'atom', 'molecule', 'wave', 'platonic', 'chakra', 'planet', 'shield', 'coil', 'cage', 'medbed', 'gold'];
+        {Array.from({ length: 120 }).map((_, i) => {
+          const types = ['binary', 'device', 'equation', 'tool', 'periodic', 'medical', 'lab', 'sacred', 'tower', 'book', 'lightbulb', 'bubble', 'atom', 'molecule', 'wave', 'platonic', 'chakra', 'planet', 'shield', 'coil', 'cage', 'medbed', 'gold', 'logo'];
           const type = types[i % types.length];
+          
+          // Logo URLs array
+          const logoUrls = [
+            'https://media.base44.com/images/public/69ccefebfea78b23498c66a8/09f064d29_8a413d0c1_logo.png',
+            'https://media.base44.com/images/public/69ccefebfea78b23498c66a8/4dd07a5e4_9e573794d_logo.png',
+            'https://media.base44.com/images/public/69ccefebfea78b23498c66a8/a8b37981b_Aurawell10.png',
+            'https://media.base44.com/images/public/69ccefebfea78b23498c66a8/49c0cb57a_2ndlogo.png',
+            'https://media.base44.com/images/public/69ccefebfea78b23498c66a8/c8c75ff99_AuraWellMedbedlogo.png',
+            'https://media.base44.com/images/public/69ccefebfea78b23498c66a8/c77d692a1_ZARPlogo.png',
+            'https://media.base44.com/images/public/69ccefebfea78b23498c66a8/fca8773e2_5fd2b4851_logo.png',
+            'https://media.base44.com/images/public/69ccefebfea78b23498c66a8/4362d6939_6a1d771a0_logo.png',
+            'https://media.base44.com/images/public/69ccefebfea78b23498c66a8/a7e53247c_7e6a64a71_logo.png',
+            'https://media.base44.com/images/public/69ccefebfea78b23498c66a8/11261fdcf_424bd39ad_logo.png',
+            'https://media.base44.com/images/public/69ccefebfea78b23498c66a8/788498485_996c3efc3_logo.png',
+            'https://media.base44.com/images/public/69ccefebfea78b23498c66a8/bc0bf94c4_86465e00f_logo.png',
+            'https://media.base44.com/images/public/69ccefebfea78b23498c66a8/1fd2db797_a1e6d0efb_logo.png',
+            'https://media.base44.com/images/public/69ccefebfea78b23498c66a8/424a6819b_aa5437c1c_logo.png',
+            'https://media.base44.com/images/public/69ccefebfea78b23498c66a8/57f065f9b_b5ca55b13_logo.png',
+            'https://media.base44.com/images/public/69ccefebfea78b23498c66a8/54b05bdaf_c1c7d1685_logo.png',
+            'https://media.base44.com/images/public/69ccefebfea78b23498c66a8/1e2b7d003_c1e1b3fb1_logo.png',
+            'https://media.base44.com/images/public/69ccefebfea78b23498c66a8/9d6cd954e_c8c3396d2_logo.png',
+            'https://media.base44.com/images/public/69ccefebfea78b23498c66a8/324f70d9f_d90d9dba8_logo.png',
+            'https://media.base44.com/images/public/69ccefebfea78b23498c66a8/a9014fe1e_dfa919090_logo.png',
+          ];
           const colors = ['#22c55e', '#ea580c'];
           let color = colors[i % 2];
           let glowColor = color === '#22c55e' ? '#16a34a' : '#dc2626';
@@ -363,6 +387,9 @@ export default function VaultHeroAnimation({ children }) {
             content = '■';
             color = '#fbbf24';
             glowColor = '#f59e0b';
+          } else if (type === 'logo') {
+            content = logoUrls[Math.floor(Math.random() * logoUrls.length)];
+            isEmoji = true;
           }
           
           const startX = Math.random() * window.innerWidth - window.innerWidth / 2;
@@ -377,33 +404,46 @@ export default function VaultHeroAnimation({ children }) {
                 '--ty-start': `${startY}px`,
                 left: '50%',
                 top: '50%',
-                marginLeft: `-${isEmoji ? 9 : 20}px`,
-                marginTop: `-${isEmoji ? 9 : 14}px`,
+                marginLeft: `${type === 'logo' ? -40 : (isEmoji ? -26 : -24)}px`,
+                marginTop: `${type === 'logo' ? -40 : (isEmoji ? -26 : -22)}px`,
                 animation: `floatAround ${12 + i % 8}s ease-in-out infinite`,
                 animationDelay: `${i * 0.3}s`,
-                opacity: 0.5,
+                opacity: 0.6,
               }}
             >
-              <div
-                style={{
-                  padding: isEmoji ? '24px 28px' : '18px 24px',
-                  borderRadius: isEmoji ? '50%' : '12px',
-                  border: `4px solid ${color}`,
-                  backgroundColor: `${color}15`,
-                  color: color,
-                  fontSize: isEmoji ? '52px' : '22px',
-                  fontWeight: 'bold',
-                  whiteSpace: 'nowrap',
-                  textShadow: `0 0 12px ${color}, 0 0 24px ${glowColor}`,
-                  boxShadow: `0 0 16px ${color}, inset 0 0 12px ${color}20`,
-                  fontFamily: isEmoji ? 'inherit' : 'monospace',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}
-              >
-                {content}
-              </div>
+              {type === 'logo' ? (
+                <img
+                  src={content}
+                  alt="logo"
+                  className="w-20 h-20 object-contain rounded-lg border border-cyan-400/30 backdrop-blur-sm"
+                  style={{
+                    boxShadow: '0 0 16px rgba(6,182,212,0.4)',
+                    opacity: 0.7,
+                  }}
+                  onError={(e) => { e.target.style.display = 'none'; }}
+                />
+              ) : (
+                <div
+                  style={{
+                    padding: isEmoji ? '24px 28px' : '18px 24px',
+                    borderRadius: isEmoji ? '50%' : '12px',
+                    border: `4px solid ${color}`,
+                    backgroundColor: `${color}15`,
+                    color: color,
+                    fontSize: isEmoji ? '52px' : '22px',
+                    fontWeight: 'bold',
+                    whiteSpace: 'nowrap',
+                    textShadow: `0 0 12px ${color}, 0 0 24px ${glowColor}`,
+                    boxShadow: `0 0 16px ${color}, inset 0 0 12px ${color}20`,
+                    fontFamily: isEmoji ? 'inherit' : 'monospace',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                >
+                  {content}
+                </div>
+              )}
             </div>
           );
         })}
