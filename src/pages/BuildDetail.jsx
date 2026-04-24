@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { ArrowLeft, Lock, ShoppingCart, Eye, FileText, ChevronDown, ChevronUp, Zap } from "lucide-react";
+import BuildKitUpsellPanel from "@/components/BuildKitUpsellPanel";
 
 // Mock build data — in production, fetch by ID
 const BUILDS_DATA = {
@@ -117,6 +118,22 @@ export default function BuildDetail() {
             </div>
           </div>
         </section>
+
+        {/* ── Kit Upsell ── */}
+        <BuildKitUpsellPanel
+          buildTitle={build.title}
+          kitPrice={287}
+          components={[
+            "Toroidal ferrite core (Fair-Rite)",
+            "Magnet wire AWG 14",
+            "N52 neodymium magnets",
+            "Power supply 12V 30A",
+            "Control circuit board",
+            "Enclosure & hardware",
+            "Mounting accessories",
+            "Schematic & manual",
+          ]}
+        />
 
         {/* ── What you get ── */}
         <section className="mb-12">
