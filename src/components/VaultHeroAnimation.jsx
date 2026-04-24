@@ -24,15 +24,20 @@ export default function VaultHeroAnimation({ children }) {
   return (
     <div className="relative w-full min-h-screen flex items-center justify-center overflow-hidden">
       <style>{`
-        @keyframes vaultDoorSwing {
-          0% {
-            transform: rotateY(0deg) translateZ(0);
-            opacity: 1;
+        @keyframes neonGlow {
+          0%, 100% {
+            filter: drop-shadow(0 0 10px #06b6d4) drop-shadow(0 0 20px #06b6d4) drop-shadow(0 0 40px #06b6d4);
+            transform: scale(1);
           }
-          100% {
-            transform: rotateY(-140deg) translateZ(-200px);
-            opacity: 0;
+          50% {
+            filter: drop-shadow(0 0 15px #06b6d4) drop-shadow(0 0 30px #06b6d4) drop-shadow(0 0 60px #06b6d4) drop-shadow(0 0 80px rgba(255,255,255,0.5));
+            transform: scale(1.02);
           }
+        }
+
+        @keyframes electricPulse {
+          0%, 100% { opacity: 0.8; }
+          50% { opacity: 1; }
         }
 
         @keyframes contentFadeIn {
@@ -80,29 +85,12 @@ export default function VaultHeroAnimation({ children }) {
           }
         }
 
-        @keyframes circuitGlow {
-          0%, 100% {
-            opacity: 0.1;
-          }
-          50% {
-            opacity: 0.4;
-          }
-        }
-
-        @keyframes vaultLighting {
-          0% {
-            text-shadow: 0 0 10px rgba(6, 182, 212, 0.3);
-          }
-          50% {
-            text-shadow: 0 0 30px rgba(6, 182, 212, 0.8), 0 0 60px rgba(34, 197, 94, 0.6);
-          }
-          100% {
-            text-shadow: 0 0 10px rgba(6, 182, 212, 0.3);
-          }
+        .neon-logo {
+          animation: neonGlow 2s ease-in-out infinite, electricPulse 1.5s ease-in-out infinite;
         }
 
         .vault-door-main {
-          animation: ${isOpen ? "vaultDoorSwing 1.5s ease-in-out forwards" : "none"};
+          animation: ${isOpen ? "neonGlow 0.8s ease-in-out forwards" : "none"};
           transform-style: preserve-3d;
           perspective: 1000px;
         }
@@ -118,16 +106,6 @@ export default function VaultHeroAnimation({ children }) {
 
         .gold-bar {
           animation: goldBarsSlide 5s ease-in forwards;
-        }
-
-        .circuit-pattern {
-          animation: circuitGlow 3s ease-in-out infinite;
-        }
-
-        .vault-text-lighting {
-          animation: vaultLighting 2s ease-in-out infinite;
-          font-weight: 900;
-          letter-spacing: 3px;
         }
       `}</style>
 
@@ -164,108 +142,22 @@ export default function VaultHeroAnimation({ children }) {
         ))}
       </div>
 
-      {/* Main vault door - LARGE - REALISTIC BANK VAULT */}
+      {/* Neon CODEXTECH Logo Display */}
       <div
         onClick={!isOpen && !clicked ? handleVaultClick : null}
-        className={`vault-door-main relative w-96 sm:w-[500px] md:w-[600px] h-[500px] sm:h-[600px] md:h-[700px] rounded-3xl border-12 shadow-2xl transition-all ${!isOpen && !clicked ? "cursor-pointer hover:scale-105" : ""}`}
-        style={{
-          borderWidth: "24px",
-          borderColor: "#2a2e34",
-          background: "linear-gradient(180deg, #404854 0%, #2a2e34 50%, #1a1d23 100%)",
-          boxShadow: isOpen ? "none" : "inset 0 0 80px rgba(0,0,0,0.9), inset 0 20px 40px rgba(255,255,255,0.08), inset 0 -20px 40px rgba(0,0,0,0.8), 0 60px 120px rgba(0,0,0,0.9), 0 0 80px rgba(42,46,52,0.8)",
-          transformStyle: "preserve-3d",
-          position: "relative",
-        }}
+        className={`vault-door-main relative transition-all ${!isOpen && !clicked ? "cursor-pointer hover:scale-110" : ""}`}
       >
-        {/* Vault handle - realistic steel */}
-        <div className="absolute -right-10 top-1/2 -translate-y-1/2 w-10 h-36 bg-gradient-to-b from-gray-600 to-gray-500 rounded-full shadow-2xl border-4 border-gray-700" style={{ boxShadow: "inset -2px 0 4px rgba(0,0,0,0.6), inset 2px 0 4px rgba(255,255,255,0.1), 0 10px 30px rgba(0,0,0,0.8)" }} />
+        <img
+          src="https://media.base44.com/images/public/69ccefebfea78b23498c66a8/5da1807d1_generated_image.png"
+          alt="C.O.D.E.X.T.E.C.H. Neon"
+          className="neon-logo w-96 sm:w-[500px] md:w-[600px] object-contain"
+        />
 
-        {/* Vault bolts - circular pattern - realistic STEEL */}
-        {[...Array(16)].map((_, i) => (
-          <div
-            key={i}
-            className="absolute w-7 h-7 bg-gradient-to-br from-gray-500 to-gray-800 rounded-full border-2 border-gray-900 shadow-lg"
-            style={{
-              top: `${6 + (i % 4) * 28}%`,
-              left: `${6 + Math.floor(i / 4) * 30}%`,
-              boxShadow: "inset 0 2px 3px rgba(255,255,255,0.15), inset 0 -2px 3px rgba(0,0,0,0.8), 0 4px 8px rgba(0,0,0,0.7)",
-            }}
-          />
-        ))}
-
-        {/* Main vault dial - MASSIVE combination lock */}
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div className="relative w-64 sm:w-80 h-64 sm:h-80">
-            {/* Outer dial ring - REALISTIC STEEL */}
-            <div className="absolute inset-0 rounded-full border-8 border-gray-700 shadow-2xl"
-              style={{
-                background: "radial-gradient(circle at 30% 30%, rgba(255,255,255,0.1), rgba(0,0,0,0.8))",
-                boxShadow: "inset 0 4px 12px rgba(0,0,0,0.8), inset 0 -4px 12px rgba(255,255,255,0.05), 0 6px 20px rgba(0,0,0,0.8)",
-              }}
-            />
-
-            {/* Middle ring - REALISTIC STEEL */}
-            <div className="absolute inset-6 rounded-full border-4 border-gray-800 opacity-80" style={{ boxShadow: "inset 0 2px 6px rgba(0,0,0,0.7)" }} />
-
-            {/* Inner circle - REALISTIC STEEL */}
-            <div className="absolute inset-16 rounded-full bg-gradient-to-br from-gray-800 to-gray-950 border-4 border-gray-900 flex items-center justify-center shadow-inner" style={{ boxShadow: "inset 0 8px 16px rgba(0,0,0,0.9), 0 4px 12px rgba(0,0,0,0.7)" }}>
-              {/* Center spindle with glow */}
-              <div className="w-10 h-10 bg-gradient-to-br from-yellow-300 via-yellow-400 to-yellow-600 rounded-full shadow-2xl" style={{ boxShadow: "inset -2px -2px 5px rgba(0,0,0,0.4), inset 2px 2px 5px rgba(255,255,255,0.4), 0 0 25px rgba(250,204,21,0.7)" }} />
-            </div>
-
-            {/* Dial numbers - larger - STEEL */}
-            {[...Array(12)].map((_, i) => (
-              <div
-                key={i}
-                className="absolute w-full h-full flex items-start justify-center"
-                style={{ transform: `rotate(${i * 30}deg)` }}
-              >
-                <span className="text-gray-400 font-black text-lg sm:text-xl mt-6 sm:mt-8 drop-shadow-lg" style={{ transform: `rotate(${-i * 30}deg)` }}>
-                  {(i === 0 ? 12 : i)}
-                </span>
-              </div>
-            ))}
-
-            {/* Tick mark at top - larger */}
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-2 h-6 bg-cyan-400 shadow-lg shadow-cyan-400/60" />
-          </div>
-
-          {/* Glowing C.O.D.E.X.T.E.C.H. text on vault - HUGE */}
-          <div className="absolute top-1/12 left-1/2 -translate-x-1/2 z-20 pointer-events-none flex-col gap-2 flex items-center">
-            <div className="vault-text-lighting text-gray-200 text-3xl sm:text-4xl md:text-5xl text-center px-8 font-black drop-shadow-xl" style={{ textShadow: "0 2px 8px rgba(0,0,0,0.6), 0 0 20px rgba(107,118,132,0.4)" }}>
-              C.O.D.E.X.T.E.C.H.
-            </div>
-            <span className="text-gray-400 text-xs sm:text-sm font-semibold tracking-wider">ENGINEERING VAULT</span>
-          </div>
-
-          {/* Click instruction */}
-          {!clicked && (
-            <div className="absolute bottom-12 left-1/2 -translate-x-1/2 text-cyan-400 text-sm sm:text-base font-bold animate-pulse pointer-events-none">
-              ↓ CLICK TO UNLOCK ↓
-            </div>
-          )}
-        </div>
-
-        {/* Corner accent lights - larger */}
-        {[...Array(4)].map((_, i) => (
-          <div
-            key={`light-${i}`}
-            className="absolute w-16 h-16 bg-gradient-to-br from-cyan-400 to-transparent rounded-full blur-2xl opacity-50"
-            style={{
-              top: i < 2 ? "12px" : "auto",
-              bottom: i >= 2 ? "12px" : "auto",
-              left: i % 2 === 0 ? "12px" : "auto",
-              right: i % 2 === 1 ? "12px" : "auto",
-            }}
-          />
-        ))}
       </div>
 
       {/* Redirect to NDA on vault open */}
       {isOpen && (
-        <script>
-          {typeof window !== 'undefined' && window.location.replace('/nda')}
-        </script>
+        typeof window !== 'undefined' && window.location.replace('/vault-nda')
       )}
 
       {/* Text overlay on vault door before opening */}
