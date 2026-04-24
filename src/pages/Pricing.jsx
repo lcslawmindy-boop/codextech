@@ -36,13 +36,13 @@ const TIERS = [
     cta: "Start Free",
     popular: false,
     features: [
-      "15 build plans per month access",
-      "10 courses from the archive",
-      "AI Patent Drafting Tool (basic)",
+      "15 build plans per month",
+      "Complete execution workflows (BOM, steps, schematics)",
+      "10 foundational courses",
+      "Basic AI patent framework",
       "Prior Art Archive — 50 entries",
-      "EM Lab simulator (basic)",
-      "20% off all à la carte purchases",
-      "Monthly reset — unused builds roll over",
+      "EM Lab simulator",
+      "20% off hardware kits",
       "Cancel anytime",
     ],
     locked: [
@@ -59,19 +59,20 @@ const TIERS = [
     price: 99,
     color: "#8b5cf6",
     badge: "UNLIMITED VAULT",
-    description: "Unlimited access to all 40+ systems + execution tools",
+    description: "Complete execution system: builds, workflows, frameworks",
     cta: "Go Pro",
     popular: true,
     features: [
-      "Unlimited build plans (40+ all included)",
-      "Unlimited courses (40+ all included)",
-      "Full AI suite: Patent, FTO, Claims, Investor Package",
-      "Prior Art Archive — 200+ entries",
-      "Video assembly guides for all builds",
-      "Verified supplier links & pricing",
-      "Full EM lab simulators & visualizations",
-      "Private engineering forum & community",
-      "50% off all à la carte purchases",
+      "40+ complete build execution workflows",
+      "BOM, schematics, step-by-step assembly for each",
+      "40+ structured courses with frameworks",
+      "Full AI execution toolkit: Patent, FTO, Investor Package",
+      "Prior Art Archive — 200+ documented systems",
+      "3–12 hour video assembly guides per build",
+      "Verified supplier links & real-time pricing",
+      "Private community & troubleshooting forum",
+      "Complete EM lab simulation environment",
+      "50% off hardware kits & components",
       "Cancel anytime",
     ],
     locked: [
@@ -381,11 +382,11 @@ export default function Pricing() {
           <Clock size={12} /> Founding Member Rate — First 1,000 Only
         </div>
         <h1 className="text-4xl md:text-5xl font-black leading-tight mb-4">
-          Research-Grade EM Engineering<br />
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">Documentation Platform</span>
+          Complete Execution System.<br />
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">Not Just Content.</span>
         </h1>
         <p className="text-gray-400 text-lg max-w-xl mx-auto mb-3">
-          Study peer-reviewed electromagnetic systems. Access full technical documentation, schematics, and prototype guides. Educational and research focus.
+          40+ peer-reviewed EM systems with complete execution frameworks: full BOMs, schematics, step-by-step assembly, sourcing, video guides, and AI tools. Everything you need to build, patent, and fund your research.
         </p>
         <p className="text-sm text-green-400 flex items-center justify-center gap-1">
           <Gift size={13} /> Refer a friend → earn $50 credit per referral
@@ -568,8 +569,8 @@ export default function Pricing() {
 
         {/* Final CTA */}
         <div className="text-center bg-gradient-to-b from-gray-900 to-gray-950 border border-gray-800 rounded-2xl p-10">
-          <h2 className="text-3xl font-black mb-3">Start Your Research.</h2>
-          <p className="text-gray-400 mb-8 max-w-md mx-auto">Join engineers and researchers studying peer-reviewed EM systems. Full technical documentation, BOMs, and community prototype data.</p>
+          <h2 className="text-3xl font-black mb-3">Join the Execution Community.</h2>
+          <p className="text-gray-400 mb-8 max-w-md mx-auto">Get access to the complete execution system: builds, workflows, frameworks, and tools. Everything you need to prototype, patent, and fund your research — not just documentation.</p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             {TIERS.filter(t => t.popular).map(tier => (
               <button key={tier.id} onClick={() => handleMembershipCheckout(tier)}
