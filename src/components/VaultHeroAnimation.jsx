@@ -676,36 +676,42 @@ export default function VaultHeroAnimation({ children }) {
       {!clicked && (
         <div className="absolute left-1/2 -translate-x-1/2 flex justify-center items-end gap-2 md:gap-4 px-2 pointer-events-none z-20" style={{ bottom: '-80px' }}>
           {[
-            { letter: 'C', meaning: 'Codify', num: '1', color: '#ff006e', glow: '#ff1493' },
-            { letter: 'O', meaning: 'Orchestrate', num: '2', color: '#fb5607', glow: '#ff6b35' },
-            { letter: 'D', meaning: 'Devices', num: '3', color: '#ffbe0b', glow: '#ffd60a' },
-            { letter: 'E', meaning: 'Engineering', num: '4', color: '#8338ec', glow: '#a371ff' },
-            { letter: 'X', meaning: 'eXecution', num: '5', color: '#3a86ff', glow: '#5dade2' },
-            { letter: 'T', meaning: 'Trading', num: '6', color: '#06ffa5', glow: '#1dd1a1' },
-            { letter: 'E', meaning: 'Energy', num: '7', color: '#ff006e', glow: '#ff1493' },
-            { letter: 'C', meaning: 'Capital', num: '8', color: '#fb5607', glow: '#ff6b35' },
-            { letter: 'H', meaning: 'Harmonic', num: '9', color: '#ffbe0b', glow: '#ffd60a' },
+            { letter: 'C', meaning: 'Codify', text: 'Research\nFrameworks', num: '1', color: '#ff006e', glow: '#ff1493' },
+            { letter: 'O', meaning: 'Orchestrate', text: 'System\nIntegration', num: '2', color: '#fb5607', glow: '#ff6b35' },
+            { letter: 'D', meaning: 'Devices', text: 'Build\nPlans', num: '3', color: '#ffbe0b', glow: '#ffd60a' },
+            { letter: 'E', meaning: 'Engineering', text: 'Technical\nGuides', num: '4', color: '#8338ec', glow: '#a371ff' },
+            { letter: 'X', meaning: 'eXecution', text: 'Assembly\nSteps', num: '5', color: '#3a86ff', glow: '#5dade2' },
+            { letter: 'T', meaning: 'Trading', text: 'Market\nAccess', num: '6', color: '#06ffa5', glow: '#1dd1a1' },
+            { letter: 'E', meaning: 'Energy', text: 'Power\nSystems', num: '7', color: '#ff006e', glow: '#ff1493' },
+            { letter: 'C', meaning: 'Capital', text: 'Investor\nTools', num: '8', color: '#fb5607', glow: '#ff6b35' },
+            { letter: 'H', meaning: 'Harmonic', text: 'Patent\nSuite', num: '9', color: '#ffbe0b', glow: '#ffd60a' },
           ].map((item, i) => (
-            <div key={i} className="flex flex-col items-center gap-6 md:gap-8" style={{ perspective: '1000px' }}>
-              <div className="relative w-20 h-20 md:w-28 md:h-28 lg:w-36 lg:h-36 rounded-lg flex items-center justify-center font-black text-4xl md:text-5xl lg:text-6xl transition-all hover:scale-105 border-2 group cursor-pointer" style={{
-                background: `linear-gradient(135deg, ${item.color}, ${item.glow})`,
+            <div key={i} className="flex flex-col items-center gap-3 md:gap-4" style={{ perspective: '1200px' }}>
+              <div className="relative w-20 h-20 md:w-28 md:h-28 lg:w-36 lg:h-36 rounded-lg flex items-center justify-center font-black text-4xl md:text-5xl lg:text-6xl transition-all hover:scale-110 border-2 group cursor-pointer" style={{
+                background: `linear-gradient(135deg, ${item.color}40, ${item.glow}30)`,
                 color: "#fff",
                 borderColor: item.glow,
-                boxShadow: `0 0 30px ${item.color}, 0 0 60px ${item.glow}, inset 0 0 20px rgba(255,255,255,0.3), 0 20px 40px rgba(0,0,0,0.6)`,
-                transform: "rotateX(15deg) rotateY(-15deg) translateZ(20px)",
+                borderOpacity: 0.5,
+                boxShadow: `0 0 20px ${item.color}60, 0 0 40px ${item.glow}40, inset 0 0 15px rgba(255,255,255,0.15)`,
+                transform: "rotateX(25deg) rotateY(-25deg) rotateZ(5deg) translateZ(30px)",
                 transformStyle: "preserve-3d",
+                backdropFilter: 'blur(8px)',
               }}>
                 {item.letter}
-                <span className="absolute top-1 right-2 text-[10px] md:text-[12px] lg:text-sm font-bold opacity-95">{item.num}</span>
-                <span className="absolute bottom-1 left-2 text-[9px] md:text-[11px] lg:text-xs font-bold opacity-75">EX</span>
-                <span className="absolute bottom-1 right-2 text-[8px] md:text-[10px] lg:text-xs font-bold opacity-60">M</span>
               </div>
-              <span className="text-sm md:text-base lg:text-lg font-black text-gray-100 whitespace-nowrap text-center px-2 bg-gray-950/60 rounded py-1" style={{
-                textShadow: `0 0 10px rgba(0,0,0,0.8)`,
-                letterSpacing: '0.5px'
-              }}>
-                {item.meaning}
-              </span>
+              <div className="flex flex-col items-center gap-2">
+                <span className="text-xs md:text-sm lg:text-base font-black text-gray-300 whitespace-pre-wrap text-center leading-tight" style={{
+                  textShadow: `0 0 8px rgba(0,0,0,0.9)`,
+                  letterSpacing: '0.3px'
+                }}>
+                  {item.text}
+                </span>
+                <span className="text-[10px] md:text-xs lg:text-sm font-bold text-gray-500 whitespace-nowrap" style={{
+                  textShadow: `0 0 6px rgba(0,0,0,0.8)`,
+                }}>
+                  {item.meaning}
+                </span>
+              </div>
             </div>
           ))}
         </div>
