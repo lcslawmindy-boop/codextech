@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { ArrowLeft, Lock, ShoppingCart, Eye, FileText, ChevronDown, ChevronUp, Zap } from "lucide-react";
 

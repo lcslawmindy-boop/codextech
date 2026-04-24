@@ -139,7 +139,6 @@ import ScalarVentureHome from './pages/ScalarVentureHome';
 import VaultBrowser from './pages/VaultBrowser';
 import BuildDetail from './pages/BuildDetail';
 import VaultPricing from './pages/VaultPricing';
-import InstitutionalLicensing from './pages/InstitutionalLicensing';
 import MemberVault from './pages/MemberVault';
 
 const AuthenticatedApp = () => {
