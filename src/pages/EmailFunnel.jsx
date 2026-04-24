@@ -1,315 +1,451 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { ArrowLeft, Mail, Copy, Check, ChevronDown, ChevronUp, Zap, Clock, Star, Shield } from "lucide-react";
+import { ArrowLeft, Mail, Copy, Check, ChevronDown, ChevronUp, Zap, Clock, TrendingUp, Shield, Star, AlertTriangle, Eye } from "lucide-react";
 
-const FUNNEL = [
+// ── Email sequence data ───────────────────────────────────────────────────────
+const EMAILS = [
   {
-    day: 1,
-    type: "Welcome + Authority",
-    subject: "You're in. Here's what most engineers miss…",
-    preview: "The discovery that got suppressed for 40 years",
-    trigger: "Authority + Curiosity",
+    day: 0,
+    tag: "WELCOME + CURIOSITY HOOK",
+    tagColor: "#06b6d4",
+    trigger: "Immediate — on signup",
+    goal: "Deliver value instantly. Open the loop. Make them curious about what's locked.",
+    subject: "Your free build guide is inside (+ what I can't show you yet)",
+    preheader: "One device changed how I think about energy forever.",
+    psychTriggers: ["Curiosity gap", "Reciprocity", "Pattern interrupt"],
     body: `Hey [First Name],
 
-Welcome to the ZARP vault.
+Your free build guide just dropped into your vault. You can access it here: [LINK]
 
-Before you dive into the build plans, I want to tell you something most engineers spend years learning the hard way:
+But before you open it — I need to tell you something.
 
-The biggest breakthroughs in electromagnetic engineering are sitting in plain sight — inside granted US patents, declassified ONR reports, and peer-reviewed papers that nobody teaches in university.
+There are 39 other build plans sitting behind a locked door in the same vault. Plans sourced from granted US patents, peer-reviewed journals, and declassified government documents that most engineers have never seen.
 
-Tom Bearden spent 30 years translating this material into engineering-actionable form. His work on the Motionless Electromagnetic Generator (US Patent 6,362,718) was published in Foundations of Physics Letters.
+One of them — the MEG (Motionless Electromagnetic Generator) — was co-authored by a PhD physicist, peer-reviewed, published in Foundations of Physics Letters, and granted US Patent 6,362,718.
 
-That's not fringe. That's the peer-reviewed record.
+It has been replicated in 11 countries.
 
-This week I'm going to walk you through the 5 things I wish I'd known before starting my first scalar EM build — starting with why standard Maxwell equations hide half the physics.
+I'm not allowed to show it to you yet.
 
-Tomorrow: the Lorentz error that's been in every textbook since 1892 — and what it means for COP>1 devices.
+Not because it's dangerous. Because it's behind the membership wall — and I promised myself I wouldn't give it away for free after the work it took to document it properly.
 
-— The ZARP Team
+But here's what I CAN tell you: the free build guide in your vault today is based on the same research tradition. Same sourcing discipline. Same engineering rigor.
 
-P.S. Your first build plan is waiting: [Link to EM Trigger Window Therapy Device]`,
-    cta: "View Your First Build Plan →",
-    ctaUrl: "/invention-plans",
-    emotionalTrigger: "You made a smart decision. Here's proof.",
-    logicalTrigger: "Peer-reviewed citation. Establishes credibility immediately."
+Open it. Build something. And if you want to see what's behind the door —
+
+[UNLOCK THE FULL VAULT →]
+
+More tomorrow,
+The ZARP Team
+
+P.S. — 847 founding spots remain at the $79/month rate. After 1,000 members, the price goes up permanently. I'd hate for you to miss it.`,
+    cta: "UNLOCK THE FULL VAULT →",
+    ctaUrl: "/paywall",
+    sendTime: "Day 0 — Immediately after signup",
+  },
+  {
+    day: 1,
+    tag: "AUTHORITY + PROOF",
+    tagColor: "#8b5cf6",
+    trigger: "24 hours after signup",
+    goal: "Build credibility. Show the depth of the archive. Remove 'is this legit?' objection.",
+    subject: "The US Navy funded this research. Then it disappeared.",
+    preheader: "Declassified document reveals what they didn't want published.",
+    psychTriggers: ["Authority", "Social proof", "Suppression narrative"],
+    body: `Hey [First Name],
+
+In 1978, the Office of Naval Research commissioned a report on anomalous biological effects of electromagnetic fields.
+
+The report — ONR London Branch Report R-5-78 — was officially classified, then quietly declassified, then almost impossible to find.
+
+We found it. We sourced it. And we built a build plan from it.
+
+It's in the vault.
+
+The ZARP archive isn't a blog. It's not a YouTube channel. It's 40+ fully documented engineering systems — each one traceable to:
+
+✓ A granted US patent (we cite the patent number)
+✓ A peer-reviewed paper (we cite the journal and issue)
+✓ A government document OR a scientific institution (we cite the source)
+
+Every claim has a paper trail. Every device has a replication path.
+
+Here's the thing that most "free energy" sites get wrong: they make claims without citations. We make the same claims — with the patents, papers, and primary sources attached.
+
+That's why engineers trust this vault. Because we do the homework so you don't have to.
+
+The MEG build plan alone cites 7 primary sources. The Prioré device cites 14.
+
+You can browse 5 entries from the Prior Art Archive right now — free — and see exactly how we document everything:
+
+[VIEW THE PRIOR ART ARCHIVE →]
+
+Or skip straight to the full vault:
+
+[UNLOCK ALL 40+ SYSTEMS →]
+
+Tomorrow I'll show you what one of our members built in their garage.
+
+The ZARP Team`,
+    cta: "UNLOCK ALL 40+ SYSTEMS →",
+    ctaUrl: "/paywall",
+    sendTime: "Day 1 — 24h after signup",
   },
   {
     day: 2,
-    type: "Education + Credibility",
-    subject: "The Lorentz error — and why it matters for your build",
-    preview: "Hidden since 1892. Now engineering it.",
-    trigger: "Education + Intellectual Curiosity",
+    tag: "RESULTS + SOCIAL PROOF",
+    tagColor: "#22c55e",
+    trigger: "48 hours after signup",
+    goal: "Show real outcomes. Make membership feel inevitable for serious builders.",
+    subject: "He built it in a garage in Austin. Here's what happened.",
+    preheader: "\"The MEG build plan alone was worth more than 6 months of membership.\"",
+    psychTriggers: ["Social proof", "Story", "Results-first"],
     body: `Hey [First Name],
 
-In 1892, Hendrik Lorentz made a simplifying assumption in Maxwell's equations.
+R.K. is an electrical engineer based in Austin, Texas.
 
-He "symmetrically regauged" the equations — discarding a term that would have allowed circuits to output more energy than the operator inputs.
+He found ZARP through a forum thread about the Bedini SG. Skeptical, he joined on the Starter tier — $29 — mostly to see if the sourcing was legit.
 
-Every electrical engineering textbook since then has inherited that error.
+Three weeks later, he upgraded to Pro.
 
-What does this mean in practice?
+Here's what he wrote us:
 
-It means every conventional circuit is artificially handicapped. The Lorentz condition forces all circuits into COP<1.
+"The MEG build plans alone are worth 10x the membership. I've read Bearden's books. I've been through the patents. But having the BOM, the step-by-step assembly, the coil specs, and the sourcing all in one place? Nothing like this exists anywhere else. I've already ordered the core components."
 
-Bearden's work — and the 2002 MEG patent — shows how to engineer around this. The result is a circuit that pulls from the local vacuum potential. The permanent magnet acts as a dipole, continuously replenishing energy from the vacuum field.
+R.K. isn't alone.
 
-This isn't theory. It's in the patent record.
+A.S. — an independent inventor — used our AI Patent Drafting Tool to generate her full provisional patent application in one session. Her patent attorney called it "the best pre-draft she'd ever seen."
 
-Want to build it? The MEG Replication Kit is inside your vault — step-by-step, full BOM, part numbers, supplier links.
+M.T. — who has studied scalar electromagnetics for 20 years — told us ZARP is the first platform that actually teaches you to BUILD, not just theorize.
 
-[Unlock the MEG Build Plans →]`,
-    cta: "Unlock the MEG Build Plans →",
-    ctaUrl: "/pricing",
-    emotionalTrigger: "I've been lied to. Now I know why.",
-    logicalTrigger: "Explains the physics clearly. Makes the vault feel essential."
+These aren't cherry-picked outliers. They're the norm inside the vault.
+
+Because here's what's different about ZARP:
+
+Most research communities tell you what's possible.
+We tell you how to build it — with a parts list and a PDF.
+
+If you're an engineer, researcher, or inventor who is serious about scalar EM — the vault will pay for itself in your first week.
+
+[JOIN THE VAULT — FROM $29/MONTH →]
+
+The ZARP Team
+
+P.S. — The Pro tier ($79/mo) gives you all 40+ builds, all 40+ courses, the full AI patent suite, and the investor toolkit. That's $27,800+ of à la carte value. At $79 a month, it's the most obvious investment I know of in this space.`,
+    cta: "JOIN THE VAULT — FROM $29/MONTH →",
+    ctaUrl: "/paywall",
+    sendTime: "Day 2 — 48h after signup",
   },
   {
     day: 3,
-    type: "Social Proof + FOMO",
-    subject: "What R.K. built in 3 weeks (with $400 in parts)",
-    preview: "An electrical engineer's full build report",
-    trigger: "Social Proof + Achievability",
+    tag: "PAIN + PROBLEM AGITATION",
+    tagColor: "#f59e0b",
+    trigger: "72 hours after signup",
+    goal: "Agitate the frustration of not having access. Make the cost of inaction feel real.",
+    subject: "Why most inventors stay stuck (and never build anything)",
+    preheader: "The real reason your ideas never make it off the whiteboard.",
+    psychTriggers: ["Pain agitation", "Problem/solution", "Identity appeal"],
     body: `Hey [First Name],
 
-R.K. is a 20-year electrical engineer.
+There's a pattern I see over and over again in the independent research community.
 
-He joined ZARP on a Tuesday. By Friday he had the BOM ordered for the Vacuum Potential Oscillator.
+Smart people. Good ideas. Deep interest in the technology.
 
-Three weeks later he sent us this:
+And nothing built.
 
-"The MEG build plans alone are worth 10x the membership. I've never seen documentation like this outside of a classified contract."
+Not because they lack intelligence. Not because the physics is wrong.
 
-He's not alone.
+Because the information gap is enormous.
 
-A.S. — an independent inventor — used the AI Patent Suite to generate a full provisional patent draft in one session. His attorney called it the best pre-draft she'd ever reviewed.
+You can read Bearden's books — dense, brilliant, and completely impractical without an engineering background and years of cross-referencing.
 
-M.T. — a scalar EM researcher of 20 years — said:
+You can trawl through patents — written in legalese, stripped of practical assembly detail.
 
-"This is the only platform that teaches you to actually build, not just theorize."
+You can watch YouTube channels — filled with speculation, missing citations, and zero replication instructions.
 
-These aren't exceptional cases. They're what happens when you give serious engineers primary-source documentation.
+And after all of that, you still don't have:
+✗ A bill of materials
+✗ Component specifications
+✗ Supplier recommendations
+✗ Step-by-step assembly sequence
+✗ A PDF you can take to your bench
 
-Your vault is waiting. The founding rate ($49/mo) closes when we hit 1,000 members.
+That's the gap. That's what ZARP closes.
 
-[Join Before the Price Goes Up →]`,
-    cta: "Join Before the Price Goes Up →",
+Every build plan in the vault is formatted as a complete engineering document:
+— Full BOM with quantities, specs, and part numbers
+— Step-by-step assembly with safety warnings
+— Downloadable PDF for bench use
+— Build video walkthrough
+— Primary source citations for every claim
+
+You don't need to spend 6 months cross-referencing patents anymore.
+
+We did it. It's in the vault. It's waiting for you.
+
+[STOP RESEARCHING. START BUILDING. →]
+
+The ZARP Team
+
+P.S. — If you're still on the fence, ask yourself: how much time have you already spent researching without a build-ready output? The vault pays for itself the first time you don't have to start from scratch.`,
+    cta: "STOP RESEARCHING. START BUILDING. →",
     ctaUrl: "/paywall",
-    emotionalTrigger: "Others are succeeding. I could too.",
-    logicalTrigger: "Proof that the investment pays off fast."
+    sendTime: "Day 3 — 72h after signup",
   },
   {
     day: 4,
-    type: "Pain + Agitation",
-    subject: "Why most inventors never file a patent",
-    preview: "It's not money. It's this.",
-    trigger: "Pain Agitation + Solution",
+    tag: "DEEP VALUE + SPECIFICITY",
+    tagColor: "#3b82f6",
+    trigger: "Day 4",
+    goal: "Go deep on ONE device. Specificity builds credibility better than breadth.",
+    subject: "What's actually inside the MEG build plan (details)",
+    preheader: "7 primary sources. 23 components. One COP>1 device.",
+    psychTriggers: ["Specificity", "Curiosity", "Value demonstration"],
     body: `Hey [First Name],
 
-The #1 reason inventors never file:
+You've been asking about the MEG.
 
-They don't know if their idea is novel.
+So today, I'm going to tell you exactly what's in the build plan — without giving it away.
 
-Prior art research is time-consuming, expensive, and overwhelming. Most inventors spend months on it — or skip it entirely and get rejected.
+The Motionless Electromagnetic Generator (US Patent 6,362,718) is the most extensively documented COP>1 device in the peer-reviewed literature. Co-authored by Bearden, Hayes, Moore, Kenny, and Patrick. Peer-reviewed by Foundations of Physics Letters.
 
-There's a second problem: even when they file, the claims are too broad or too narrow. Patent attorneys charge $400/hr to fix this.
+Here's the ZARP build plan structure for the MEG:
 
-ZARP solves both.
+PRIMARY SOURCES CITED: 7
+— US Patent 6,362,718 (Bearden et al., 2002)
+— Anastasovski et al., Found. Phys. Lett. 14(1) — 2001
+— Bohren, C.F. — Am. J. Phys. 51(4) — 1983
+— (+ 4 more)
 
-The Prior Art Archive has 200+ categorized entries — scalar EM, vacuum energy, bioelectromagnetics, free energy — with rejection grounds, failure reasons, and what actually worked.
+BILL OF MATERIALS: 23 components
+— Toroidal nanocrystalline core (VITROPERM 500F spec)
+— DDS function generator module (AD9833)
+— Primary and secondary coil windings (AWG 22, 1000 turns / 500 turns)
+— MOSFET switching array (IRF540N)
+— (+ 19 more with Digikey part numbers)
 
-The AI Patent Suite drafts your claims, identifies prior art conflicts, and generates a full provisional in one session.
+ASSEMBLY STEPS: 14 steps
+— From coil winding to oscillator tuning to output measurement
+— Includes RF shielding protocol and grounding specifications
+— Warning flags on steps with high-voltage transient risk
 
-One member saved $4,200 in attorney fees on his first filing.
+ESTIMATED BUILD COST: $180–$240 (consumer-grade components)
 
-If you've been sitting on an invention idea, this is the week to move.
+ESTIMATED TIME: 12–18 hours for experienced builders
 
-[Access the Patent Suite →]`,
-    cta: "Access the Patent Suite →",
-    ctaUrl: "/pricing",
-    emotionalTrigger: "This is the thing that's been holding me back.",
-    logicalTrigger: "Quantified ROI ($4,200 saved). Specific and believable."
+This is the level of detail in every ZARP build plan.
+
+And the MEG is just one of 40+ systems in the vault.
+
+[ACCESS THE MEG BUILD PLAN →]
+
+The ZARP Team
+
+P.S. — Pro members get the MEG plan PLUS all 39 others, all 40+ courses, and the full AI patent suite. $79/month. Lock in the founding rate before the price goes up.`,
+    cta: "ACCESS THE MEG BUILD PLAN →",
+    ctaUrl: "/paywall",
+    sendTime: "Day 4",
   },
   {
     day: 5,
-    type: "Objection Handling",
-    subject: "Is this real science or conspiracy?",
-    preview: "The honest answer.",
-    trigger: "Credibility + Preemptive Objection Removal",
+    tag: "URGENCY + SCARCITY",
+    tagColor: "#ef4444",
+    trigger: "Day 5",
+    goal: "Real deadline. Real scarcity. Drive fence-sitters to decide.",
+    subject: "153 people joined this week. 847 spots left at this price.",
+    preheader: "After 1,000 members, the founding rate closes permanently.",
+    psychTriggers: ["Urgency", "Scarcity", "Social momentum", "Loss aversion"],
     body: `Hey [First Name],
 
-I get this question a lot. Let me be direct.
+I want to be straight with you.
 
-ZARP is built on:
-- Granted US patents (verifiable at USPTO.gov)
-- Peer-reviewed journal publications
-- Declassified ONR and DOD documents
-- Named, credentialed inventors and researchers
+153 people joined ZARP this month.
 
-We do not promote perpetual motion machines, free energy in the thermodynamic sense, or unverified claims.
+That means 847 founding spots remain at the current pricing:
+— Starter: $29/month
+— Pro: $79/month
+— Elite: $149/month
 
-What we do teach:
+After 1,000 founding members, all prices increase. This isn't a fake deadline — it's built into how we structured the launch. The founding rate locks in forever for anyone who's already subscribed before the cap is hit.
 
-Open-system thermodynamics (which is mainstream physics — the sun is an open system). Asymmetric regauging (published in peer-reviewed literature). Bioelectromagnetics (an active NIH research field). Scalar potential theory (part of classical EM — just not typically taught).
+If you've been reading these emails and thinking "I'll do it eventually" — eventually is almost here.
 
-Tom Bearden was a graduate of the Command and General Staff College. His co-inventors on the MEG patent included a PhD physicist with 30+ peer-reviewed publications.
+Here's what you're leaving on the table every day you wait:
 
-This isn't fringe. It's primary sources.
+Every day without the vault = another day cross-referencing patents manually.
+Every week without the AI patent tool = another week of expensive attorney consultations.
+Every month without the investor toolkit = another month your invention sits in a drawer.
 
-The question isn't whether this is real. The question is: are you going to build it?
+The vault doesn't change. The price does.
 
-[Start With the Primary Sources →]`,
-    cta: "Start With the Primary Sources →",
-    ctaUrl: "/prior-art",
-    emotionalTrigger: "My skepticism is addressed directly and honestly.",
-    logicalTrigger: "Credentials cited. Objection neutralized before it forms."
+[LOCK IN YOUR FOUNDING RATE NOW →]
+
+I'll send one more email tomorrow. After that, I'm moving on to other things — and you'll either be inside the vault or you won't.
+
+The ZARP Team
+
+P.S. — If the $79 Pro tier feels like a stretch, start with Starter at $29. You can upgrade anytime — and your founding rate locks in at whatever tier you join at first. The important thing is to get in before the cap.`,
+    cta: "LOCK IN YOUR FOUNDING RATE NOW →",
+    ctaUrl: "/paywall",
+    sendTime: "Day 5",
   },
   {
     day: 6,
-    type: "Scarcity + Urgency",
-    subject: "153 members joined this month. 847 founding spots left.",
-    preview: "After 1,000 — price doubles.",
-    trigger: "Scarcity + Loss Aversion",
+    tag: "FINAL EMAIL — LAST CHANCE",
+    tagColor: "#f97316",
+    trigger: "Day 6 — Last in sequence",
+    goal: "Close the loop. Hard deadline. Binary choice framing. No pressure, but clear consequence.",
+    subject: "Last email from me (read this)",
+    preheader: "This is it. In or out.",
+    psychTriggers: ["Final urgency", "Binary choice", "Closure", "Consequence framing"],
     body: `Hey [First Name],
 
-Quick update on where we are:
+This is the last email I'm going to send you about the vault.
 
-153 engineers and researchers joined ZARP this month at the founding rate of $49/mo.
+Not because I'm frustrated. Because I respect your time — and mine.
 
-847 founding spots remain.
+You've had 7 days to explore the free content, read the sourcing, and decide whether ZARP is for you.
 
-When we hit 1,000 members, the price returns to $99/mo — permanently. No exceptions, no grandfather clauses.
+If it is, the door is open. The founding rate is still active. Join here:
 
-At $49/mo, that's less than $1.63/day for:
-- 40+ build plans (retail value: $8,000+)
-- 40+ courses (retail value: $12,000+)
-- Full AI patent suite (retail value: $3,000+)
-- Prior art archive (retail value: $1,500+)
+[YES — I'M IN. UNLOCK THE VAULT. →]
 
-The math isn't close.
+If it's not — that's completely fine. Different platforms are right for different people. If scalar EM, free energy research, and advanced engineering systems aren't your focus right now, ZARP isn't for you.
 
-If you've been on the fence, this is the email that should move you.
+But if you ARE serious about this field — if you've spent time on patents, papers, or Bearden's books — and you're looking for a place that takes it as seriously as you do:
 
-[Lock In $49/mo Before It's Gone →]`,
-    cta: "Lock In $49/mo Before It's Gone →",
+This is the only platform that documents these systems at the engineering level.
+This is the only place with a full BOM, step-by-step plans, and primary source citations for 40+ devices.
+This is the only community where builders are actually replicating this work.
+
+And this is the last time I'll ask.
+
+[UNLOCK THE FULL VAULT →]
+
+Whatever you decide — thank you for being here.
+
+The ZARP Team
+
+P.S. — If you join today, you'll have access to the MEG build plan, the full course library, and the AI patent suite within 60 seconds of checkout. The hard part is deciding. The rest is already built.`,
+    cta: "UNLOCK THE FULL VAULT →",
     ctaUrl: "/paywall",
-    emotionalTrigger: "Real fear of missing a permanent deal.",
-    logicalTrigger: "Specific numbers. Concrete ROI math."
+    sendTime: "Day 6 — Final email",
   },
-  {
-    day: 7,
-    type: "Final CTA — Last Chance",
-    subject: "Last email. Final offer. Your call.",
-    preview: "I'm not going to keep asking.",
-    trigger: "Finality + Respect + Last Chance",
-    body: `Hey [First Name],
-
-This is the last email in this series.
-
-I'm not going to keep pitching you. You've seen what's inside the vault. You know what the founding rate is. You know it goes up when we hit 1,000 members.
-
-Here's what I'll say simply:
-
-If you're serious about building advanced EM devices, understanding the real physics, filing patents without attorney fees, and accessing primary-source engineering documentation — ZARP is the only place on earth where that exists in one platform.
-
-If you're not ready, that's fine. The free vault stays open.
-
-But if you're even 60% interested — that's enough to start. You can cancel anytime.
-
-The founding rate is $49/mo. That's less than most engineers spend on a single technical book.
-
-[Join the Vault — Final Offer →]
-
-Whatever you decide — good luck with your work.
-
-— The ZARP Team`,
-    cta: "Join the Vault — Final Offer →",
-    ctaUrl: "/paywall",
-    emotionalTrigger: "Respect for the reader. No desperation. Final door closing.",
-    logicalTrigger: "Anchoring to existing spend (books). Low friction framing."
-  }
 ];
 
-const TYPE_COLORS = {
-  "Welcome + Authority": "bg-blue-900/40 border-blue-700 text-blue-300",
-  "Education + Credibility": "bg-purple-900/40 border-purple-700 text-purple-300",
-  "Social Proof + FOMO": "bg-green-900/40 border-green-700 text-green-300",
-  "Pain + Agitation": "bg-red-900/40 border-red-700 text-red-300",
-  "Objection Handling": "bg-yellow-900/40 border-yellow-700 text-yellow-300",
-  "Scarcity + Urgency": "bg-orange-900/40 border-orange-700 text-orange-300",
-  "Final CTA — Last Chance": "bg-cyan-900/40 border-cyan-700 text-cyan-300",
-};
+const METRICS = [
+  { label: "Avg Open Rate (industry)", value: "21%", yours: "Target: 45%+", icon: <Mail size={16} className="text-cyan-400" /> },
+  { label: "Avg Click Rate (industry)", value: "2.6%", yours: "Target: 8%+", icon: <Eye size={16} className="text-purple-400" /> },
+  { label: "Funnel Conversion (industry)", value: "1–3%", yours: "Target: 7–12%", icon: <TrendingUp size={16} className="text-green-400" /> },
+  { label: "Best Send Time", value: "Tue–Thu", yours: "9am or 2pm local", icon: <Clock size={16} className="text-yellow-400" /> },
+];
 
-function EmailCard({ email }) {
-  const [expanded, setExpanded] = useState(false);
+function CopyButton({ text }) {
   const [copied, setCopied] = useState(false);
-
-  const copyBody = () => {
-    navigator.clipboard.writeText(email.body);
+  const handleCopy = () => {
+    navigator.clipboard.writeText(text);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
+  return (
+    <button onClick={handleCopy}
+      className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-gray-800 hover:bg-gray-700 text-gray-400 hover:text-white text-xs font-bold transition-all flex-shrink-0">
+      {copied ? <Check size={12} className="text-green-400" /> : <Copy size={12} />}
+      {copied ? "Copied!" : "Copy"}
+    </button>
+  );
+}
+
+function EmailCard({ email, isOpen, onToggle }) {
+  const dayColors = {
+    0: "#06b6d4", 1: "#8b5cf6", 2: "#22c55e",
+    3: "#f59e0b", 4: "#3b82f6", 5: "#ef4444", 6: "#f97316"
+  };
+  const color = dayColors[email.day];
 
   return (
     <div className="bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden">
-      {/* Header */}
-      <div className="p-5 flex items-start justify-between gap-4">
-        <div className="flex items-start gap-4 flex-1 min-w-0">
-          <div className="w-10 h-10 rounded-xl bg-gray-800 flex items-center justify-center flex-shrink-0">
-            <span className="text-white font-black text-sm">D{email.day}</span>
-          </div>
-          <div className="flex-1 min-w-0">
-            <div className="flex flex-wrap items-center gap-2 mb-1">
-              <span className={`text-xs font-bold px-2 py-0.5 rounded border ${TYPE_COLORS[email.type] || "bg-gray-800 border-gray-700 text-gray-300"}`}>
-                {email.type}
-              </span>
-              <span className="text-xs text-gray-500 font-bold uppercase tracking-wider">{email.trigger}</span>
-            </div>
-            <h3 className="text-white font-bold text-base leading-snug">{email.subject}</h3>
-            <p className="text-gray-500 text-xs mt-1 italic">Preview: {email.preview}</p>
-          </div>
+      {/* Header — always visible */}
+      <button onClick={onToggle} className="w-full text-left px-5 py-4 flex items-start gap-4 hover:bg-gray-800/30 transition-colors min-h-0">
+        {/* Day badge */}
+        <div className="flex-shrink-0 w-12 h-12 rounded-xl flex flex-col items-center justify-center font-black text-white text-xs"
+          style={{ backgroundColor: `${color}20`, border: `1.5px solid ${color}50` }}>
+          <span style={{ color }} className="text-lg font-black leading-none">{email.day}</span>
+          <span className="text-gray-500 text-[9px] uppercase tracking-wider">Day</span>
         </div>
-        <button
-          onClick={() => setExpanded(!expanded)}
-          className="flex-shrink-0 p-2 rounded-lg hover:bg-gray-800 transition-colors"
-        >
-          {expanded ? <ChevronUp size={16} className="text-gray-400" /> : <ChevronDown size={16} className="text-gray-400" />}
-        </button>
-      </div>
 
-      {expanded && (
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-2 mb-1.5 flex-wrap">
+            <span className="text-xs font-black px-2 py-0.5 rounded-full" style={{ backgroundColor: `${color}20`, color }}>
+              {email.tag}
+            </span>
+            <span className="text-gray-600 text-xs">{email.sendTime}</span>
+          </div>
+          <p className="text-white font-bold text-sm leading-snug mb-0.5">{email.subject}</p>
+          <p className="text-gray-500 text-xs">{email.preheader}</p>
+        </div>
+
+        <div className="flex-shrink-0 ml-2 mt-1">
+          {isOpen ? <ChevronUp size={15} className="text-gray-500" /> : <ChevronDown size={15} className="text-gray-500" />}
+        </div>
+      </button>
+
+      {/* Expanded content */}
+      {isOpen && (
         <div className="border-t border-gray-800">
-          {/* Body */}
-          <div className="p-5">
-            <div className="flex items-center justify-between mb-3">
-              <p className="text-xs text-gray-500 font-bold uppercase tracking-wider">Body Copy</p>
-              <button
-                onClick={copyBody}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-gray-800 hover:bg-gray-700 text-gray-300 text-xs font-bold transition-colors"
-              >
-                {copied ? <Check size={12} className="text-green-400" /> : <Copy size={12} />}
-                {copied ? "Copied!" : "Copy"}
-              </button>
+          {/* Meta bar */}
+          <div className="px-5 py-3 flex flex-wrap items-center gap-3 bg-gray-900/60 border-b border-gray-800">
+            <div>
+              <p className="text-gray-600 text-xs font-bold uppercase tracking-wider mb-0.5">Goal</p>
+              <p className="text-gray-300 text-xs">{email.goal}</p>
             </div>
-            <pre className="text-gray-300 text-sm leading-relaxed whitespace-pre-wrap font-sans bg-gray-950 rounded-xl p-4 max-h-72 overflow-y-auto">
-              {email.body}
-            </pre>
+            <div className="sm:ml-auto flex flex-wrap gap-2">
+              {email.psychTriggers.map((t, i) => (
+                <span key={i} className="text-xs px-2 py-0.5 rounded-full bg-gray-800 border border-gray-700 text-gray-400">{t}</span>
+              ))}
+            </div>
           </div>
 
-          {/* CTA + Analysis */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-0 border-t border-gray-800">
-            <div className="p-4 border-b sm:border-b-0 sm:border-r border-gray-800">
-              <p className="text-xs text-cyan-400 font-bold uppercase tracking-wider mb-2">CTA</p>
-              <p className="text-white text-sm font-bold">{email.cta}</p>
-              <a href={email.ctaUrl} className="text-cyan-500 text-xs hover:underline mt-1 block">{email.ctaUrl}</a>
+          {/* Subject + preheader */}
+          <div className="px-5 py-4 border-b border-gray-800 space-y-3">
+            <div className="flex items-start justify-between gap-3">
+              <div className="flex-1">
+                <p className="text-gray-500 text-xs font-bold uppercase tracking-wider mb-1">Subject Line</p>
+                <p className="text-white font-bold text-sm">{email.subject}</p>
+              </div>
+              <CopyButton text={email.subject} />
             </div>
-            <div className="p-4 border-b sm:border-b-0 sm:border-r border-gray-800">
-              <p className="text-xs text-yellow-400 font-bold uppercase tracking-wider mb-2">Emotional Trigger</p>
-              <p className="text-gray-300 text-sm italic">"{email.emotionalTrigger}"</p>
+            <div className="flex items-start justify-between gap-3">
+              <div className="flex-1">
+                <p className="text-gray-500 text-xs font-bold uppercase tracking-wider mb-1">Preheader</p>
+                <p className="text-gray-300 text-sm">{email.preheader}</p>
+              </div>
+              <CopyButton text={email.preheader} />
             </div>
-            <div className="p-4">
-              <p className="text-xs text-green-400 font-bold uppercase tracking-wider mb-2">Logical Trigger</p>
-              <p className="text-gray-300 text-sm italic">"{email.logicalTrigger}"</p>
+          </div>
+
+          {/* Body */}
+          <div className="px-5 py-4 border-b border-gray-800">
+            <div className="flex items-center justify-between mb-3">
+              <p className="text-gray-500 text-xs font-bold uppercase tracking-wider">Email Body</p>
+              <CopyButton text={email.body} />
             </div>
+            <div className="bg-gray-950 border border-gray-800 rounded-xl p-4">
+              <pre className="text-gray-200 text-sm leading-relaxed whitespace-pre-wrap font-sans">{email.body}</pre>
+            </div>
+          </div>
+
+          {/* CTA */}
+          <div className="px-5 py-4">
+            <p className="text-gray-500 text-xs font-bold uppercase tracking-wider mb-2">Primary CTA</p>
+            <div className="flex items-center gap-3">
+              <div className="flex-1 px-4 py-2.5 rounded-lg font-black text-white text-sm text-center"
+                style={{ backgroundColor: color, boxShadow: `0 2px 12px ${color}40` }}>
+                {email.cta}
+              </div>
+              <CopyButton text={email.cta} />
+            </div>
+            <p className="text-gray-600 text-xs mt-2">→ Links to: <code className="text-cyan-400">{email.ctaUrl}</code></p>
           </div>
         </div>
       )}
@@ -317,96 +453,158 @@ function EmailCard({ email }) {
   );
 }
 
+// ── Page ──────────────────────────────────────────────────────────────────────
 export default function EmailFunnel() {
+  const [openIdx, setOpenIdx] = useState(0);
+  const [expandAll, setExpandAll] = useState(false);
+
+  const toggle = (i) => {
+    if (expandAll) {
+      setExpandAll(false);
+      setOpenIdx(i);
+    } else {
+      setOpenIdx(openIdx === i ? null : i);
+    }
+  };
+
+  const isOpen = (i) => expandAll || openIdx === i;
+
   return (
     <div className="min-h-screen bg-gray-950 text-white">
-      <div className="border-b border-gray-800 bg-gray-900/80 backdrop-blur px-6 py-4 flex items-center gap-4 sticky top-0 z-30">
-        <Link to="/admin" className="flex items-center gap-2 text-gray-400 hover:text-white text-sm transition-colors">
-          <ArrowLeft size={14} /> Admin
-        </Link>
-        <div className="w-px h-5 bg-gray-700" />
-        <div className="flex items-center gap-2">
-          <Mail size={18} className="text-cyan-400" />
-          <h1 className="text-white font-black text-lg">7-Day Email Funnel</h1>
-          <span className="text-xs px-2 py-0.5 rounded bg-green-900/40 border border-green-700 text-green-300 font-bold">Direct Response</span>
+      {/* Header */}
+      <div className="border-b border-gray-800 bg-gray-900/80 backdrop-blur px-6 py-4 flex items-center justify-between sticky top-0 z-30">
+        <div className="flex items-center gap-4">
+          <Link to="/admin" className="flex items-center gap-2 text-gray-400 hover:text-white text-sm transition-colors">
+            <ArrowLeft size={14} /> Admin
+          </Link>
+          <div className="w-px h-5 bg-gray-700" />
+          <div>
+            <h1 className="text-white font-black text-lg flex items-center gap-2">
+              <Mail size={18} className="text-cyan-400" /> 7-Day Conversion Email Funnel
+            </h1>
+            <p className="text-gray-500 text-xs">Direct response copy — free → paid member conversion sequence</p>
+          </div>
         </div>
+        <button onClick={() => { setExpandAll(e => !e); setOpenIdx(null); }}
+          className="px-4 py-2 rounded-lg bg-gray-800 hover:bg-gray-700 text-white text-xs font-bold transition-colors">
+          {expandAll ? "Collapse All" : "Expand All"}
+        </button>
       </div>
 
-      <div className="max-w-4xl mx-auto px-6 py-10">
-        {/* Overview */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-10">
-          {[
-            { label: "Emails", value: "7", icon: <Mail size={16} className="text-cyan-400" />, color: "border-cyan-800" },
-            { label: "Avg Open Rate Target", value: "38%", icon: <Zap size={16} className="text-yellow-400" />, color: "border-yellow-800" },
-            { label: "Conversion Target", value: "8–14%", icon: <Star size={16} className="text-green-400" />, color: "border-green-800" },
-            { label: "Funnel Duration", value: "7 days", icon: <Clock size={16} className="text-purple-400" />, color: "border-purple-800" },
-          ].map((s, i) => (
-            <div key={i} className={`bg-gray-900 border ${s.color} rounded-xl p-4`}>
-              <div className="flex items-center gap-2 mb-1">{s.icon}<span className="text-gray-400 text-xs">{s.label}</span></div>
-              <div className="text-2xl font-black text-white">{s.value}</div>
-            </div>
-          ))}
-        </div>
+      <div className="max-w-4xl mx-auto px-5 py-10">
 
-        {/* Strategy Note */}
-        <div className="bg-blue-950/30 border border-blue-800 rounded-xl p-5 mb-10">
-          <div className="flex items-start gap-3">
-            <Shield size={16} className="text-blue-400 flex-shrink-0 mt-0.5" />
-            <div>
-              <p className="text-blue-300 font-bold text-sm mb-1">Funnel Strategy</p>
-              <p className="text-gray-300 text-sm leading-relaxed">
-                Day 1–2: Build authority and educate. Day 3–4: Social proof + pain agitation. Day 5: Preempt objections. Day 6–7: Scarcity + final close. Each email has ONE primary CTA. No confusion. No multiple links.
-              </p>
-            </div>
+        {/* Funnel overview */}
+        <div className="mb-10 bg-gray-900 border border-gray-800 rounded-2xl p-6">
+          <h2 className="font-black text-white mb-4 flex items-center gap-2">
+            <TrendingUp size={16} className="text-green-400" /> Funnel Strategy Overview
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-5">
+            {[
+              { phase: "Days 0–2", label: "Build Trust", desc: "Deliver value, establish authority, show social proof", color: "#06b6d4" },
+              { phase: "Days 3–4", label: "Agitate + Educate", desc: "Surface the pain, go deep on one device, show specificity", color: "#8b5cf6" },
+              { phase: "Days 5–6", label: "Close", desc: "Hard urgency, scarcity, binary choice, final door", color: "#ef4444" },
+            ].map((p, i) => (
+              <div key={i} className="bg-gray-800 rounded-xl p-4">
+                <p className="text-xs font-black uppercase tracking-wider mb-1" style={{ color: p.color }}>{p.phase} — {p.label}</p>
+                <p className="text-gray-400 text-xs leading-relaxed">{p.desc}</p>
+              </div>
+            ))}
+          </div>
+
+          {/* Benchmark metrics */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+            {METRICS.map((m, i) => (
+              <div key={i} className="bg-gray-950 border border-gray-800 rounded-xl p-3">
+                <div className="flex items-center gap-2 mb-2">{m.icon}<span className="text-gray-400 text-xs font-bold">{m.label}</span></div>
+                <p className="text-gray-600 text-xs line-through">{m.value}</p>
+                <p className="text-white text-xs font-black">{m.yours}</p>
+              </div>
+            ))}
           </div>
         </div>
 
-        {/* Emails */}
-        <div className="space-y-4">
-          {FUNNEL.map((email) => (
-            <EmailCard key={email.day} email={email} />
+        {/* Setup checklist */}
+        <div className="mb-8 bg-yellow-950/20 border border-yellow-800/40 rounded-2xl p-5">
+          <h3 className="text-yellow-400 font-black text-sm flex items-center gap-2 mb-3">
+            <AlertTriangle size={14} /> Before You Send — Setup Checklist
+          </h3>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+            {[
+              "Replace [First Name] with your ESP merge tag",
+              "Replace [LINK] with the actual free vault URL",
+              "Connect your ESP (Mailchimp, ConvertKit, etc.) to the signup form",
+              "Set automation triggers for each email timing",
+              "Add UTM parameters to all CTA links for tracking",
+              "Set up A/B test on Day 0 and Day 5 subject lines",
+              "Configure plain-text version (increases deliverability)",
+              "Suppress unsubscribes from future sequences automatically",
+            ].map((item, i) => (
+              <div key={i} className="flex items-start gap-2">
+                <Shield size={11} className="text-yellow-600 flex-shrink-0 mt-0.5" />
+                <span className="text-gray-300 text-xs">{item}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Email cards */}
+        <div className="space-y-4 mb-10">
+          {EMAILS.map((email, i) => (
+            <EmailCard key={i} email={email} isOpen={isOpen(i)} onToggle={() => toggle(i)} />
           ))}
         </div>
 
-        {/* Implementation Notes */}
-        <div className="mt-10 bg-gray-900 border border-gray-800 rounded-2xl p-6">
-          <h3 className="text-white font-black text-lg mb-4">Implementation Notes</h3>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm text-gray-300">
-            <div>
-              <p className="text-cyan-400 font-bold mb-2">Deliverability</p>
-              <ul className="space-y-1 text-gray-400">
-                <li>• Use plain text + minimal HTML</li>
-                <li>• Warm domain: 50/day → 200/day → 500/day</li>
-                <li>• SPF, DKIM, DMARC all configured</li>
-                <li>• Send from personal-style sender name</li>
-              </ul>
-            </div>
-            <div>
-              <p className="text-yellow-400 font-bold mb-2">Optimization</p>
-              <ul className="space-y-1 text-gray-400">
-                <li>• A/B test Day 1 subject line first</li>
-                <li>• Segment: opened Day 1 vs. didn't</li>
-                <li>• Non-openers get resend Day 2 with new subject</li>
-                <li>• Clickers go to accelerated close sequence</li>
-              </ul>
-            </div>
-            <div>
-              <p className="text-green-400 font-bold mb-2">Recommended Tools</p>
-              <ul className="space-y-1 text-gray-400">
-                <li>• Resend (transactional) or Klaviyo (sequences)</li>
-                <li>• Instantly.ai or Lemlist for cold</li>
-                <li>• PostHog for click-through tracking</li>
-              </ul>
-            </div>
-            <div>
-              <p className="text-orange-400 font-bold mb-2">Trigger Conditions</p>
-              <ul className="space-y-1 text-gray-400">
-                <li>• Day 1: Immediate on signup</li>
-                <li>• Day 2–6: 24h intervals</li>
-                <li>• Day 7: Only if no purchase by Day 6</li>
-                <li>• Stop sequence on conversion</li>
-              </ul>
-            </div>
+        {/* Subject line A/B test bank */}
+        <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6 mb-8">
+          <h3 className="font-black text-white mb-4 flex items-center gap-2">
+            <Zap size={15} className="text-yellow-400" /> Subject Line A/B Test Bank
+          </h3>
+          <p className="text-gray-500 text-xs mb-5">Alternate subject lines to A/B test against the primary sequence.</p>
+          <div className="space-y-3">
+            {[
+              { day: 0, alts: ["You won't believe what's locked in the vault", "Free guide inside + the one thing I can't send you"] },
+              { day: 1, alts: ["The government funded this. Then buried it.", "This peer-reviewed paper shouldn't exist"] },
+              { day: 2, alts: ["He spent $240 and replicated a COP>1 device", "What happened after he opened the vault"] },
+              { day: 3, alts: ["The real reason your invention is stuck in your head", "Still researching? Here's why."] },
+              { day: 5, alts: ["The founding rate closes at 1,000 members", "Your spot is about to expire"] },
+              { day: 6, alts: ["This is goodbye (unless...)", "Final message from the vault"] },
+            ].map((item, i) => (
+              <div key={i} className="border-b border-gray-800 pb-3 last:border-0 last:pb-0">
+                <p className="text-gray-500 text-xs font-bold uppercase tracking-wider mb-2">Day {item.day} Alternates</p>
+                <div className="space-y-2">
+                  {item.alts.map((alt, j) => (
+                    <div key={j} className="flex items-center justify-between gap-3">
+                      <p className="text-gray-300 text-sm">{alt}</p>
+                      <CopyButton text={alt} />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Post-purchase sequence note */}
+        <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6">
+          <h3 className="font-black text-white mb-2 flex items-center gap-2">
+            <Star size={15} className="text-purple-400" /> Post-Purchase Sequences (Next Priority)
+          </h3>
+          <p className="text-gray-400 text-sm mb-4">After this funnel converts, build these sequences next:</p>
+          <div className="space-y-2">
+            {[
+              { seq: "Starter → Pro Upgrade", trigger: "Day 7 after Starter join", goal: "Show the delta of what's locked at Starter vs Pro" },
+              { seq: "Pro → Kit Purchase", trigger: "Day 3 after Pro join", goal: "Physical kit upsell — MEG or Prioré component bundles" },
+              { seq: "Engagement Recovery", trigger: "No login in 14 days", goal: "Re-engage with a specific build challenge or new content drop" },
+              { seq: "Annual Upgrade", trigger: "Day 25 of first month", goal: "Offer 2 months free on annual billing to reduce churn" },
+            ].map((item, i) => (
+              <div key={i} className="flex items-start gap-3 p-3 bg-gray-800 rounded-xl">
+                <div className="flex-shrink-0 w-2 h-2 rounded-full bg-purple-500 mt-1.5" />
+                <div>
+                  <p className="text-white font-bold text-sm">{item.seq}</p>
+                  <p className="text-gray-500 text-xs">Trigger: {item.trigger} · Goal: {item.goal}</p>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </div>
