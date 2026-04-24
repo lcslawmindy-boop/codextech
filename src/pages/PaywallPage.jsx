@@ -353,9 +353,9 @@ export default function PaywallPage() {
       {/* ── Nav ── */}
       <div className="border-b border-gray-800 bg-gray-900/80 backdrop-blur px-5 py-4 flex items-center justify-between sticky top-0 z-40">
         <Link to="/" className="flex items-center gap-2">
-          <img src="https://media.base44.com/images/public/69ccefebfea78b23498c66a8/a90918e3c_ZARPlogo.png" alt="ZARP" className="h-7 w-7 object-contain" />
-          <span className="font-black text-base">ZARP</span>
-          <span className="text-gray-600 text-xs hidden sm:inline">Engineering Vault</span>
+          <img src="https://media.base44.com/images/public/69ccefebfea78b23498c66a8/a90918e3c_ZARPlogo.png" alt="C.O.D.E.X" className="h-7 w-7 object-contain" />
+          <span className="font-black text-base">C.O.D.E.X</span>
+          <span className="text-gray-600 text-xs hidden sm:inline">The Engineering Platform</span>
         </Link>
         <div className="flex items-center gap-3">
           <Link to="/free-vault" className="text-gray-500 hover:text-gray-300 text-xs transition-colors">Browse Free First</Link>
@@ -376,14 +376,14 @@ export default function PaywallPage() {
 
         {/* Hero headline — "you're only seeing the preview" */}
         <h1 className="text-4xl sm:text-5xl font-black leading-tight mb-4">
-          You're Only<br />
-          Seeing the<br />
+          Full Vault<br />
+          Requires<br />
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-400 to-purple-400">
-            Preview.
+            Membership.
           </span>
         </h1>
         <p className="text-gray-300 text-lg max-w-2xl mx-auto mb-4 leading-relaxed">
-          Full courses and complete build systems unlock with membership.
+          C.O.D.E.X.T.E.C.H. membership unlocks 40+ complete build systems, 26 structured courses, execution frameworks, and AI tools.
         </p>
         <p className="text-gray-500 text-sm max-w-xl mx-auto mb-8">
           26 structured courses + complete build vault with BOMs, execution frameworks, and real engineering systems. Learn advanced concepts. Apply them immediately through guided builds.
@@ -528,7 +528,7 @@ export default function PaywallPage() {
 
       {/* Footer */}
       <footer className="border-t border-gray-800 px-6 py-8 text-center text-gray-700 text-xs">
-        <p>© 2026 Zenith Apex LLC · ZARP Engineering Vault · Educational & research purposes only</p>
+        <p>© 2026 Zenith Apex LLC · C.O.D.E.X.T.E.C.H. · Engineering execution platform</p>
         <div className="flex justify-center gap-6 mt-3">
           <Link to="/terms" className="hover:text-gray-400 transition-colors">Terms</Link>
           <Link to="/refund-policy" className="hover:text-gray-400 transition-colors">Refund Policy</Link>

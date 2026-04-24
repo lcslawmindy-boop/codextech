@@ -144,8 +144,8 @@ export default function ZarpLanding() {
       <nav className="border-b border-gray-800 bg-gray-900/90 backdrop-blur px-5 py-4 flex items-center justify-between sticky top-0 z-40">
         <div className="flex items-center gap-2">
           <img src="https://media.base44.com/images/public/69ccefebfea78b23498c66a8/a90918e3c_ZARPlogo.png" alt="ZARP" className="h-8 w-8 object-contain" />
-          <span className="font-black text-xl">ZARP</span>
-          <span className="text-gray-600 text-xs hidden sm:inline">Engineering Vault</span>
+          <span className="font-black text-xl">C.O.D.E.X</span>
+          <span className="text-gray-600 text-xs hidden sm:inline">The Engineering Platform</span>
         </div>
         <Link to="/pricing"
           className="px-5 py-2.5 rounded-lg bg-purple-600 hover:bg-purple-500 text-white text-sm font-black transition-colors">
@@ -160,18 +160,18 @@ export default function ZarpLanding() {
         </div>
 
         <h1 className="text-5xl sm:text-6xl md:text-7xl font-black leading-[1.05] mb-5">
-          Learn Advanced Systems.<br />
-          Build Real Prototypes.<br />
+          Learn. Build.<br />
+          Patent. Fund.<br />
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">
-            Structured. Applied. Proven.
+            Complete Execution Platform.
           </span>
         </h1>
 
         <p className="text-lg sm:text-xl text-gray-300 max-w-2xl mx-auto mb-3 leading-relaxed">
-          26 structured courses + full build vault with BOMs, execution frameworks, and real engineering systems. Learn concepts. Apply immediately.
+          40+ complete builds + 26 courses + AI patent tools + investor toolkit. Everything sourced from granted patents and peer-reviewed research.
         </p>
         <p className="text-gray-500 text-sm max-w-xl mx-auto mb-10">
-          Each course connects to guided build systems with complete execution paths. All sourced from granted patents and peer-reviewed research. Build timeline: 6–12 hours per system.
+          C.O.D.E.X.T.E.C.H. consolidates electromagnetic engineering research—courses, builds, documentation, execution frameworks, toolkits, and community—all in one membership platform.
         </p>
 
         {/* ── Email capture — stays on page after submit ── */}
@@ -339,7 +339,7 @@ export default function ZarpLanding() {
 
       {/* Footer */}
       <footer className="border-t border-gray-800 px-6 py-8 text-center text-gray-700 text-xs">
-        <p>© 2026 Zenith Apex LLC · ZARP Engineering Vault · Educational research platform · Not financial or medical advice</p>
+        <p>© 2026 Zenith Apex LLC · C.O.D.E.X.T.E.C.H. · Engineering execution platform · Educational & research purposes only</p>
         <div className="flex justify-center gap-6 mt-3">
           <Link to="/terms" className="hover:text-gray-400 transition-colors">Terms</Link>
           <Link to="/refund-policy" className="hover:text-gray-400 transition-colors">Refund Policy</Link>

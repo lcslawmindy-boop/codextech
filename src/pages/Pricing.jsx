@@ -382,11 +382,11 @@ export default function Pricing() {
           <Clock size={12} /> Founding Member Rate — First 1,000 Only
         </div>
         <h1 className="text-4xl md:text-5xl font-black leading-tight mb-4">
-          Complete Execution System.<br />
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">Not Just Content.</span>
+          The Complete Engineering<br />
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">Execution Platform.</span>
         </h1>
         <p className="text-gray-400 text-lg max-w-xl mx-auto mb-3">
-          40+ peer-reviewed EM systems with complete execution frameworks: full BOMs, schematics, step-by-step assembly, sourcing, video guides, and AI tools. Everything you need to build, patent, and fund your research.
+          C.O.D.E.X.T.E.C.H. provides complete execution frameworks: 40+ builds, 26 courses, BOMs, schematics, video guides, AI patent tools, FTO analysis, investor toolkit, and verified sourcing. Everything to build, patent, and fund.
         </p>
         <p className="text-sm text-green-400 flex items-center justify-center gap-1">
           <Gift size={13} /> Refer a friend → earn $50 credit per referral
@@ -589,7 +589,7 @@ export default function Pricing() {
 
       {/* Footer */}
       <footer className="border-t border-gray-800 px-6 py-8 text-center text-gray-600 text-xs">
-        <p>© 2026 Zenith Apex LLC · ZARP Engineering Vault · Educational research platform</p>
+        <p>© 2026 Zenith Apex LLC · C.O.D.E.X.T.E.C.H. · Engineering execution platform</p>
         <div className="flex justify-center gap-6 mt-3">
           <Link to="/terms" className="hover:text-gray-400">Terms</Link>
           <Link to="/refund-policy" className="hover:text-gray-400">Refund Policy</Link>

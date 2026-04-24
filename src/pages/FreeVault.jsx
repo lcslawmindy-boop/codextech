@@ -110,8 +110,8 @@ export default function FreeVault() {
       <div className="border-b border-gray-800 bg-gray-900/90 backdrop-blur px-5 py-4 flex items-center justify-between sticky top-0 z-40">
         <div className="flex items-center gap-3">
           <Link to="/" className="flex items-center gap-2">
-            <img src="https://media.base44.com/images/public/69ccefebfea78b23498c66a8/a90918e3c_ZARPlogo.png" alt="ZARP" className="h-7 w-7 object-contain" />
-            <span className="font-black text-lg">ZARP Vault</span>
+            <img src="https://media.base44.com/images/public/69ccefebfea78b23498c66a8/a90918e3c_ZARPlogo.png" alt="C.O.D.E.X" className="h-7 w-7 object-contain" />
+            <span className="font-black text-lg">C.O.D.E.X.T.E.C.H.</span>
           </Link>
           <span className="text-xs text-green-600 border border-green-800 px-2 py-0.5 rounded font-bold">100% FREE</span>
         </div>
@@ -127,12 +127,12 @@ export default function FreeVault() {
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-green-950/40 border border-green-800 text-green-300 text-xs font-bold mb-4">
             <CheckCircle2 size={13} /> 100% FREE — FULL BOM & SPECS FOR ALL BUILDS
           </div>
-          <h1 className="text-4xl font-black mb-3">Engineering Research Platform</h1>
+          <h1 className="text-4xl font-black mb-3">Free Engineering Preview</h1>
           <p className="text-gray-400 max-w-2xl mx-auto text-base leading-relaxed mb-4">
-            Browse 40+ peer-reviewed electromagnetic engineering designs. Every build includes complete BOMs, exact specifications, and step-by-step instructions — all free to explore.
+            Explore 3 complete build systems from C.O.D.E.X.T.E.C.H. with full BOMs and specifications. Membership unlocks 40+ systems, courses, and execution tools.
           </p>
           <p className="text-gray-500 text-sm max-w-xl mx-auto">
-            All designs sourced from granted patents and published research. Upgrade to Pro ($99/month) for PDF technical documentation, video assembly walkthroughs, and verified supplier sourcing.
+            All systems sourced from granted US patents and peer-reviewed research. Upgrade to Pro ($99/month) for full BOMs, PDFs, video guides, and verified supplier sourcing.
           </p>
         </div>
 
@@ -247,7 +247,7 @@ export default function FreeVault() {
       </div>
 
       <footer className="border-t border-gray-800 px-6 py-8 text-center text-gray-700 text-xs">
-        <p>© 2026 Zenith Apex LLC · ZARP Engineering Vault · Educational research platform</p>
+        <p>© 2026 Zenith Apex LLC · C.O.D.E.X.T.E.C.H. · Engineering execution platform</p>
         <div className="flex justify-center gap-6 mt-3">
           <Link to="/terms" className="hover:text-gray-400">Terms</Link>
           <Link to="/pricing" className="hover:text-gray-400">Pricing</Link>
