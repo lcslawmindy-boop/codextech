@@ -135,6 +135,12 @@ import UpsellEngine from './pages/UpsellEngine';
 import LeadMagnetSystem from './pages/LeadMagnetSystem';
 import ABTestingDashboard from './pages/ABTestingDashboard';
 import RevenueAudit from './pages/RevenueAudit';
+import ScalarVentureHome from './pages/ScalarVentureHome';
+import VaultBrowser from './pages/VaultBrowser';
+import BuildDetail from './pages/BuildDetail';
+import PaywallGate from './pages/PaywallGate';
+import VaultPricing from './pages/VaultPricing';
+import MemberVault from './pages/MemberVault';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -323,6 +329,14 @@ const AuthenticatedApp = () => {
             <Route path="/ab-testing" element={<ABTestingDashboard />} />
             <Route path="/revenue-audit" element={<RevenueAudit />} />
           </Route>
+
+          {/* Scalar Venture Vault Routes */}
+          <Route path="/venture" element={<ScalarVentureHome />} />
+          <Route path="/vault" element={<VaultBrowser />} />
+          <Route path="/build/:id" element={<BuildDetail />} />
+          <Route path="/paywall" element={<PaywallGate />} />
+          <Route path="/pricing-vault" element={<VaultPricing />} />
+          <Route path="/my-vault" element={<MemberVault />} />
 
           <Route path="*" element={<PageNotFound />} />
         </Route>
