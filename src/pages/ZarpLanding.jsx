@@ -160,44 +160,47 @@ export default function ZarpLanding() {
       </nav>
 
       {/* ── Hero — vault door animation ── */}
-      <section className="px-5 py-4 sm:py-8 text-center">
+      <section className="px-5 py-12 sm:py-16 text-center">
         <VaultHeroAnimation />
+      </section>
 
-        {/* ── Email capture — stays on page after submit ── */}
-        <div className="px-5 text-center">
-          <div className="max-w-lg mx-auto mb-5">
-            {emailSubmitted ? (
-              <div className="bg-green-950/40 border border-green-800 rounded-xl p-5 text-center">
-                <CheckCircle2 size={24} className="text-green-400 mx-auto mb-2" />
-                <p className="text-green-300 font-bold">Course preview on its way — check your inbox.</p>
-                <p className="text-gray-500 text-sm mt-1">Ready to unlock the full library?</p>
-                <Link to="/pricing" className="inline-flex items-center gap-2 mt-3 px-6 py-3 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-black transition-colors">
-                  See Membership Options <ArrowRight size={14} />
-                </Link>
-              </div>
-            ) : (
-              <div className="flex flex-col sm:flex-row gap-3">
-                <input
-                  type="email"
-                  placeholder="your@email.com"
-                  value={email}
-                  onChange={e => setEmail(e.target.value)}
-                  onKeyDown={e => e.key === "Enter" && handleEmailCapture()}
-                  className="flex-1 px-4 py-3.5 rounded-xl bg-gray-900 border border-gray-700 text-white placeholder-gray-600 text-sm focus:outline-none focus:border-cyan-500 transition-colors"
-                />
-                <button onClick={handleEmailCapture} disabled={submitting}
-                  className="px-6 py-3.5 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-black text-sm transition-all whitespace-nowrap disabled:opacity-60">
-                  {submitting ? "Sending..." : "Get Free Course Preview →"}
-                </button>
-              </div>
-            )}
-            {!emailSubmitted && <p className="text-gray-600 text-xs mt-2">One free course module. No spam. Unsubscribe anytime.</p>}
-          </div>
+      {/* ── Email capture — BIGGER, BELOW VAULT ── */}
+      <section className="px-5 py-16 text-center bg-gray-900/40 border-y border-gray-800">
+        <div className="max-w-2xl mx-auto">
+          <h2 className="text-3xl sm:text-4xl font-black mb-3 text-white">Get Free Course Preview</h2>
+          <p className="text-gray-300 text-lg mb-8">Access one complete course module + weekly system breakdowns.</p>
+          
+          {emailSubmitted ? (
+            <div className="bg-green-950/40 border border-green-800 rounded-2xl p-8 text-center">
+              <CheckCircle2 size={32} className="text-green-400 mx-auto mb-3" />
+              <p className="text-green-300 font-bold text-lg">Course preview on its way — check your inbox.</p>
+              <p className="text-gray-400 text-sm mt-2">Ready to unlock the full library?</p>
+              <Link to="/pricing" className="inline-flex items-center gap-2 mt-5 px-8 py-4 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-black text-base transition-colors">
+                See Membership Options <ArrowRight size={16} />
+              </Link>
+            </div>
+          ) : (
+            <div className="flex flex-col sm:flex-row gap-4 mb-4">
+              <input
+                type="email"
+                placeholder="your@email.com"
+                value={email}
+                onChange={e => setEmail(e.target.value)}
+                onKeyDown={e => e.key === "Enter" && handleEmailCapture()}
+                className="flex-1 px-6 py-4 rounded-xl bg-gray-800 border border-gray-600 text-white placeholder-gray-500 text-base focus:outline-none focus:border-cyan-500 transition-colors"
+              />
+              <button onClick={handleEmailCapture} disabled={submitting}
+                className="px-8 py-4 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-black text-base transition-all whitespace-nowrap disabled:opacity-60">
+                {submitting ? "Sending..." : "Get Free Preview →"}
+              </button>
+            </div>
+          )}
+          {!emailSubmitted && <p className="text-gray-500 text-sm">One free course module. No spam. Unsubscribe anytime.</p>}
 
-          {/* Secondary text CTA — low commitment */}
+          {/* Secondary text CTA */}
           {!emailSubmitted && (
-            <Link to="/free-vault" className="text-gray-500 hover:text-gray-300 text-sm transition-colors underline underline-offset-4">
-              View free course preview →
+            <Link to="/free-vault" className="inline-block text-gray-400 hover:text-gray-200 text-sm transition-colors underline underline-offset-4 mt-4">
+              Or browse the free vault first →
             </Link>
           )}
         </div>

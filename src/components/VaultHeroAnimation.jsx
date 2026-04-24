@@ -190,7 +190,15 @@ export default function VaultHeroAnimation({ children }) {
           alt="C.O.D.E.X.T.E.C.H. Neon"
           className="neon-logo w-96 sm:w-[500px] md:w-[600px] object-contain"
         />
-
+        
+        {/* Click Here Text */}
+        {!clicked && (
+          <div className="absolute bottom-[-80px] left-1/2 transform -translate-x-1/2 whitespace-nowrap">
+            <div className="text-white text-2xl sm:text-3xl font-black uppercase tracking-widest drop-shadow-2xl" style={{ textShadow: "0 0 20px #FFFF00, 0 0 40px #FFFF00" }}>
+              ⚡ CLICK HERE ⚡
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Redirect to NDA on vault open */}
