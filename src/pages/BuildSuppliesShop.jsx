@@ -6,6 +6,17 @@ import { base44 } from "@/api/base44Client";
 // Classified products — admin-only due to free energy / medical treatment claims
 const CLASSIFIED_IDS = ["meg-kit", "priore-bundle", "trz-components"];
 
+const PRODUCT_IMAGES = {
+  "meg-kit": "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/673215ad3_generated_image.png",
+  "trd1-kit": "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/f60938649_generated_image.png",
+  "scalar-lab": "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/ff9caefec_generated_image.png",
+  "priore-bundle": "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/f52d203fc_generated_image.png",
+  "tool-kit": "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/974ad47c1_generated_image.png",
+  "trz-components": "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/a088c3ac2_generated_image.png",
+  "gcom-parts": "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/be76fa8f9_generated_image.png",
+  "emf-shield": "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/37a67ff5a_generated_image.png",
+};
+
 const PRODUCTS = [
   {
     id: "meg-kit",
@@ -201,25 +212,44 @@ function ProductCard({ product, onBuy, buying }) {
   const savings = Math.round(product.price * 0.15);
 
   return (
-    <div className="bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden hover:border-gray-600 transition-all flex flex-col">
-      {/* Top accent */}
-      <div className="h-1 w-full" style={{ background: `linear-gradient(90deg, ${product.badgeColor || "#4b5563"}, transparent)` }} />
-
-      <div className="p-5 flex flex-col flex-1">
-        {/* Header */}
-        <div className="flex items-start justify-between gap-3 mb-3">
-          <div>
-            <span className="text-3xl">{product.icon}</span>
-          </div>
-          <div className="flex flex-col items-end gap-1">
+    <div className="bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden hover:border-gray-600 transition-all flex flex-col group">
+      {/* 3D Render Image */}
+      {PRODUCT_IMAGES[product.id] && (
+        <div className="relative h-44 overflow-hidden">
+          <img
+            src={PRODUCT_IMAGES[product.id]}
+            alt={product.name}
+            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-transparent to-transparent" />
+          <div className="absolute top-2 right-2 flex flex-col items-end gap-1">
             {product.badge && (
-              <span className="text-xs px-2 py-0.5 rounded-full font-bold" style={{ backgroundColor: product.badgeColor + "25", color: product.badgeColor }}>
+              <span className="text-xs px-2 py-0.5 rounded-full font-bold backdrop-blur-sm" style={{ backgroundColor: product.badgeColor + "cc", color: "#000" }}>
                 {product.badge}
               </span>
             )}
-            <span className="text-xs px-2 py-0.5 rounded-full bg-gray-800 text-gray-500 border border-gray-700">{product.category}</span>
+          </div>
+          <div className="absolute bottom-2 left-2">
+            <span className="text-xs px-2 py-0.5 rounded-full bg-black/60 text-gray-300 backdrop-blur-sm border border-gray-700">{product.category}</span>
           </div>
         </div>
+      )}
+
+      <div className="p-5 flex flex-col flex-1">
+        {/* Header — no icon needed since we have image */}
+        {!PRODUCT_IMAGES[product.id] && (
+          <div className="flex items-start justify-between gap-3 mb-3">
+            <div><span className="text-3xl">{product.icon}</span></div>
+            <div className="flex flex-col items-end gap-1">
+              {product.badge && (
+                <span className="text-xs px-2 py-0.5 rounded-full font-bold" style={{ backgroundColor: product.badgeColor + "25", color: product.badgeColor }}>
+                  {product.badge}
+                </span>
+              )}
+              <span className="text-xs px-2 py-0.5 rounded-full bg-gray-800 text-gray-500 border border-gray-700">{product.category}</span>
+            </div>
+          </div>
+        )}
 
         <h3 className="text-white font-black text-base leading-snug mb-1">{product.name}</h3>
         <p className="text-gray-500 text-xs mb-3">For: <span className="text-gray-400 font-medium">{product.device}</span></p>

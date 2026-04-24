@@ -133,6 +133,7 @@ import ViralScripts from './pages/ViralScripts';
 import RetentionDashboard from './pages/RetentionDashboard';
 import UpsellEngine from './pages/UpsellEngine';
 import LeadMagnetSystem from './pages/LeadMagnetSystem';
+import ABTestingDashboard from './pages/ABTestingDashboard';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -318,6 +319,7 @@ const AuthenticatedApp = () => {
             <Route path="/retention" element={<RetentionDashboard />} />
             <Route path="/upsell-engine" element={<UpsellEngine />} />
             <Route path="/lead-magnets" element={<LeadMagnetSystem />} />
+            <Route path="/ab-testing" element={<ABTestingDashboard />} />
           </Route>
 
           <Route path="*" element={<PageNotFound />} />
