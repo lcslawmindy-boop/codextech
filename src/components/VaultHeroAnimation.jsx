@@ -292,7 +292,7 @@ export default function VaultHeroAnimation({ children }) {
           if (type === 'binary') {
             content = Array.from({ length: 4 }).map(() => Math.random() > 0.5 ? '1' : '0').join('');
           } else if (type === 'device') {
-            const devices = ['MEG', 'VPO', 'TRZ', 'TRD-1', 'Scalar', 'Prioré'];
+            const devices = ['MEG', 'VPO', 'TRZ', 'TRD-1', 'Scalar', 'Prioré', 'G-Com', 'Woodpecker', 'Bedini', 'Anenergy', 'Moray', 'Searl', 'EM-Wave', 'CoilPulse', 'PhiField', 'VacuumPot', 'Tesla Coil', 'Schauberger', 'Whittaker', 'Morray Cell', 'Casimir', 'ZPE Tap'];
             content = devices[Math.floor(Math.random() * devices.length)];
           } else if (type === 'equation') {
             const equations = ['E=mc²', '∇²φ', 'F=qE', 'PV=nRT', 'λν=c', 'ω=2πf', 'α', 'β', 'ΔG=ΔH-TΔS'];
