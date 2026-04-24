@@ -374,33 +374,33 @@ export default function PaywallPage() {
           <Lock size={10} /> Members Only — Founding Rate Active
         </div>
 
-        {/* Hero headline A/B options — use the bold curiosity hook */}
+        {/* Hero headline — "you're only seeing the preview" */}
         <h1 className="text-4xl sm:text-5xl font-black leading-tight mb-4">
-          They Patented It.<br />
-          They Buried It.<br />
+          You're Only<br />
+          Seeing the<br />
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-400 to-purple-400">
-            We Built the Vault.
+            Preview.
           </span>
         </h1>
         <p className="text-gray-300 text-lg max-w-2xl mx-auto mb-4 leading-relaxed">
-          40+ advanced engineering systems sourced from granted US patents, peer-reviewed journals, and declassified government documents. Full build plans. Step-by-step. PDF. Video.
+          Full courses and complete build systems unlock with membership.
         </p>
         <p className="text-gray-500 text-sm max-w-xl mx-auto mb-8">
-          No other platform teaches you to replicate these devices. If you're serious about scalar EM, free energy, or bioelectromagnetics — this is the only place.
+          26 structured courses + complete build vault with BOMs, execution frameworks, and real engineering systems. Learn advanced concepts. Apply them immediately through guided builds.
         </p>
 
         {/* Anchor / value statement */}
         <div className="inline-flex items-center gap-3 px-5 py-3 rounded-2xl bg-yellow-950/30 border border-yellow-800/50 mb-10">
           <Award size={18} className="text-yellow-400 flex-shrink-0" />
           <span className="text-yellow-200 text-sm font-bold">
-            Total à la carte value: <span className="text-white text-base font-black">$27,800+</span> — available from <span className="text-yellow-400">$29/month</span>
+            Most users only see ~20% of the system. Builders go deeper.
           </span>
         </div>
       </div>
 
       {/* ── Value Stack ── */}
       <div className="px-5 pb-12 max-w-4xl mx-auto">
-        <p className="text-center text-gray-500 text-xs uppercase tracking-widest font-bold mb-5">What's inside the vault</p>
+        <p className="text-center text-gray-500 text-xs uppercase tracking-widest font-bold mb-5">What you unlock with membership</p>
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
           {VALUE_STACK.map((item, i) => (
             <div key={i} className="flex items-center gap-3 p-3.5 bg-gray-900 border border-gray-800 rounded-xl">
@@ -420,8 +420,8 @@ export default function PaywallPage() {
       {/* ── Tier Cards ── */}
       <div className="px-5 pb-4 max-w-5xl mx-auto">
         <div className="text-center mb-8">
-          <h2 className="text-2xl font-black mb-2">Choose Your Level of Access</h2>
-          <p className="text-gray-500 text-sm">Upgrade or cancel anytime · Instant access after checkout</p>
+          <h2 className="text-2xl font-black mb-2">Choose Your Builder Access</h2>
+          <p className="text-gray-500 text-sm">Full courses + complete builds unlock with Pro · Instant access after checkout</p>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 items-stretch">
           {TIERS.map(tier => (
@@ -496,9 +496,9 @@ export default function PaywallPage() {
             <Clock size={14} className="text-orange-400" />
             <span className="text-orange-300 font-bold text-sm font-mono">{countdown} remaining at founding rates</span>
           </div>
-          <h2 className="text-3xl font-black mb-2">Stop Wondering. Start Building.</h2>
+          <h2 className="text-3xl font-black mb-2">Join the Builder Community.</h2>
           <p className="text-gray-400 max-w-md mx-auto mb-8 text-sm">
-            The builds are real. The patents are real. The results are real. The only thing between you and the vault is this button.
+            Unlock full access to 26 structured courses + complete build systems. Learn. Apply. Build real prototypes.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-6">

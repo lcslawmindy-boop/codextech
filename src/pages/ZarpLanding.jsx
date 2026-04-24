@@ -160,18 +160,18 @@ export default function ZarpLanding() {
         </div>
 
         <h1 className="text-5xl sm:text-6xl md:text-7xl font-black leading-[1.05] mb-5">
-          Research-Grade Engineering<br />
-          Documentation for EM Systems.<br />
+          Learn Advanced Systems.<br />
+          Build Real Prototypes.<br />
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">
-            Study. Prototype. Iterate.
+            Structured. Applied. Proven.
           </span>
         </h1>
 
         <p className="text-lg sm:text-xl text-gray-300 max-w-2xl mx-auto mb-3 leading-relaxed">
-          40+ peer-reviewed engineering designs with complete BOMs, schematics, and component sourcing. All referenced from granted patents and published research.
+          26 structured courses + full build vault with BOMs, execution frameworks, and real engineering systems. Learn concepts. Apply immediately.
         </p>
         <p className="text-gray-500 text-sm max-w-xl mx-auto mb-10">
-          Historical designs from US Patents, Foundations of Physics Letters, and academic journals. Full technical documentation. Build timeline: 6–12 hours per project. Components sourced from standard suppliers (Digikey, Amazon, etc).
+          Each course connects to guided build systems with complete execution paths. All sourced from granted patents and peer-reviewed research. Build timeline: 6–12 hours per system.
         </p>
 
         {/* ── Email capture — stays on page after submit ── */}
@@ -179,8 +179,8 @@ export default function ZarpLanding() {
           {emailSubmitted ? (
             <div className="bg-green-950/40 border border-green-800 rounded-xl p-5 text-center">
               <CheckCircle2 size={24} className="text-green-400 mx-auto mb-2" />
-              <p className="text-green-300 font-bold">Free build guide on its way — check your inbox.</p>
-              <p className="text-gray-500 text-sm mt-1">Ready to unlock the full vault?</p>
+              <p className="text-green-300 font-bold">Course preview on its way — check your inbox.</p>
+              <p className="text-gray-500 text-sm mt-1">Ready to unlock the full library?</p>
               <Link to="/pricing" className="inline-flex items-center gap-2 mt-3 px-6 py-3 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-black transition-colors">
                 See Membership Options <ArrowRight size={14} />
               </Link>
@@ -197,26 +197,26 @@ export default function ZarpLanding() {
               />
               <button onClick={handleEmailCapture} disabled={submitting}
                 className="px-6 py-3.5 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-black text-sm transition-all whitespace-nowrap disabled:opacity-60">
-                {submitting ? "Sending..." : "Get Free Build Guide →"}
+                {submitting ? "Sending..." : "Get Free Course Preview →"}
               </button>
             </div>
           )}
-          {!emailSubmitted && <p className="text-gray-600 text-xs mt-2">One free build plan. No spam. Unsubscribe anytime.</p>}
+          {!emailSubmitted && <p className="text-gray-600 text-xs mt-2">One free course module. No spam. Unsubscribe anytime.</p>}
         </div>
 
         {/* Secondary text CTA — low commitment */}
         {!emailSubmitted && (
           <Link to="/free-vault" className="text-gray-500 hover:text-gray-300 text-sm transition-colors underline underline-offset-4">
-            Browse the free vault first →
+            View free course preview →
           </Link>
         )}
       </section>
 
-      {/* ── Vault preview — DESIRE engine. Show what's locked. ── */}
+      {/* ── Course preview — DESIRE engine. Show what's locked. ── */}
       <section className="px-5 pb-20 max-w-6xl mx-auto">
         <div className="text-center mb-8">
-          <h2 className="text-2xl font-black mb-2">What's Locked Inside</h2>
-          <p className="text-gray-500 text-sm">Every system below is fully documented — BOM, steps, PDF, build video. Unlocked with membership.</p>
+          <h2 className="text-2xl font-black mb-2">Learn the Systems Behind the Builds</h2>
+          <p className="text-gray-500 text-sm">26 structured courses break down complex concepts into clear, usable frameworks. Each connects to real build systems.</p>
         </div>
 
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-8">
@@ -242,9 +242,9 @@ export default function ZarpLanding() {
         <div className="text-center">
           <Link to="/pricing"
             className="inline-flex items-center gap-2 px-8 py-4 rounded-xl bg-gradient-to-r from-purple-600 to-blue-700 hover:from-purple-500 hover:to-blue-600 text-white font-black text-base transition-all shadow-lg shadow-purple-900/30">
-            Unlock All 40+ Systems <ChevronRight size={18} />
+            🔓 Unlock the Vault <ChevronRight size={18} />
           </Link>
-          <p className="text-gray-600 text-xs mt-3">From $29/month · Cancel anytime · Instant access</p>
+          <p className="text-gray-600 text-xs mt-3">From $99/month · Cancel anytime · Instant access</p>
         </div>
       </section>
 
@@ -319,18 +319,18 @@ export default function ZarpLanding() {
       {/* ── Final CTA section ── */}
       <section className="px-5 pb-20 max-w-3xl mx-auto text-center">
         <div className="bg-gradient-to-b from-gray-900 to-gray-950 border border-gray-800 rounded-2xl p-10">
-          <h2 className="text-3xl font-black mb-3">Stop Researching. Start Building.</h2>
+          <h2 className="text-3xl font-black mb-3">Most People Stay at the Surface Level.</h2>
           <p className="text-gray-400 mb-8 max-w-md mx-auto">
-            The builds are real. The patents are real. The only thing between you and the vault is this button.
+            Builders go deeper. Unlock 26 structured courses and full build systems with complete execution frameworks.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link to="/pricing"
               className="px-10 py-4 rounded-xl bg-gradient-to-r from-purple-600 to-blue-700 hover:from-purple-500 hover:to-blue-600 text-white font-black text-lg transition-all shadow-xl shadow-purple-900/30">
-              Unlock Full Vault — From $29/mo
+              🔓 Unlock Full Access
             </Link>
             <Link to="/free-vault"
               className="px-8 py-4 rounded-xl bg-gray-800 hover:bg-gray-700 text-gray-300 font-bold transition-all border border-gray-700">
-              Free Vault First
+              View Free Preview
             </Link>
           </div>
           <p className="text-gray-700 text-xs mt-5">🔒 Stripe · SSL · Cancel anytime · No contracts</p>

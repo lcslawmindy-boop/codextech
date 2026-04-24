@@ -368,7 +368,7 @@ export default function Pricing() {
           <div className="w-px h-5 bg-gray-700" />
           <div className="flex items-center gap-2">
             <img src="https://media.base44.com/images/public/69ccefebfea78b23498c66a8/a90918e3c_ZARPlogo.png" alt="ZARP" className="h-7 w-7 object-contain" />
-            <h1 className="text-white font-black text-lg">ZARP Pricing</h1>
+            <h1 className="text-white font-black text-lg">ZARP Membership</h1>
           </div>
         </div>
         <Link to="/referrals" className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-green-900/40 border border-green-700 text-green-300 hover:bg-green-900/60 text-xs font-bold transition-all">
@@ -456,8 +456,8 @@ export default function Pricing() {
         {/* Newsletter */}
         <div className="mb-16 max-w-2xl mx-auto bg-gradient-to-r from-cyan-950/40 to-purple-950/40 border border-cyan-900/30 rounded-2xl p-8">
           <div className="text-center mb-6">
-            <h3 className="text-white font-black text-xl mb-2">Not ready to subscribe?</h3>
-            <p className="text-gray-400 text-sm">Get a free build guide + weekly research drops in your inbox.</p>
+            <h3 className="text-white font-black text-xl mb-2">Want a Free Course Preview?</h3>
+              <p className="text-gray-400 text-sm">Get a free course module + weekly system breakdowns in your inbox.</p>
           </div>
           <div className="flex flex-col sm:flex-row gap-3">
             <input type="email" placeholder="your@email.com" value={newsletterEmail}
@@ -469,7 +469,7 @@ export default function Pricing() {
               setNewsletterStatus("success"); setNewsletterEmail("");
               setTimeout(() => setNewsletterStatus(null), 3000);
             }} className="px-6 py-3 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white font-bold text-sm whitespace-nowrap transition-all">
-              {newsletterStatus === "success" ? "✓ Subscribed!" : "Get Free Guide"}
+              {newsletterStatus === "success" ? "✓ Subscribed!" : "Get Free Course Preview"}
             </button>
           </div>
         </div>
