@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import ScalarWaveWatermark from "@/components/ScalarWaveWatermark";
+import CodextechVaultBackground from "@/components/CodextechVaultBackground";
 import {
   Lock, Check, Flame, Clock, ArrowRight, Star, ChevronDown, ChevronUp,
   Award, Zap, Shield, BookOpen, Wrench, TrendingUp, Eye, AlertTriangle, X
@@ -336,6 +337,7 @@ export default function PaywallPage() {
 
   return (
     <div className="min-h-screen bg-gray-950 text-white relative">
+      <CodextechVaultBackground className="fixed inset-0 pointer-events-none z-0 opacity-20" />
       <ScalarWaveWatermark />
 
       {showExit && (
