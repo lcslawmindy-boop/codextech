@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Lock } from "lucide-react";
+import InventionDetailsPanel from "./InventionDetailsPanel";
 
 const FLOATING_FORMULAS = [
   { text: "E=mc²", x: "5%", delay: 0 },
@@ -94,6 +95,7 @@ const INVENTORS = [
 export default function VaultHeroAnimation({ children }) {
   const [isOpen, setIsOpen] = useState(false);
   const [clicked, setClicked] = useState(false);
+  const [selectedType, setSelectedType] = useState(null);
 
   const handleVaultClick = () => {
     setClicked(true);
@@ -432,7 +434,10 @@ export default function VaultHeroAnimation({ children }) {
                   onError={(e) => { e.target.style.display = 'none'; }}
                 />
               ) : (
-                <div
+                <button
+                  onClick={() => setSelectedType(type)}
+                  className="hover:scale-110 active:scale-95 transition-transform cursor-pointer"
+                  title={`Click to view ${type} details`}
                   style={{
                     padding: isEmoji ? '24px 28px' : '18px 24px',
                     borderRadius: isEmoji ? '50%' : '12px',
@@ -448,10 +453,9 @@ export default function VaultHeroAnimation({ children }) {
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                  }}
-                >
+                  }}>
                   {content}
-                </div>
+                </button>
               )}
             </div>
           );
@@ -580,6 +584,9 @@ export default function VaultHeroAnimation({ children }) {
       {isOpen && (
         typeof window !== 'undefined' && window.location.replace('/vault-nda')
       )}
+
+      {/* Details Panel */}
+      <InventionDetailsPanel selectedType={selectedType} onClose={() => setSelectedType(null)} />
 
       {/* Text overlay on vault door before opening */}
       {!clicked && (
