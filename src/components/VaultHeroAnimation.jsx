@@ -609,12 +609,14 @@ export default function VaultHeroAnimation({ children }) {
             { letter: 'C', meaning: 'Construct', num: '8', color: '#9ca3af' },
             { letter: 'H', meaning: 'Harmonic', num: '9', color: '#6b7280' },
           ].map((item, i) => (
-            <div key={i} className="flex flex-col items-center gap-3 md:gap-4">
-              <div className="relative w-20 h-20 md:w-28 md:h-28 lg:w-36 lg:h-36 rounded-lg flex items-center justify-center font-black text-4xl md:text-5xl lg:text-6xl transition-transform hover:scale-105 border-2" style={{
+            <div key={i} className="flex flex-col items-center gap-3 md:gap-4" style={{ perspective: '1000px' }}>
+              <div className="relative w-20 h-20 md:w-28 md:h-28 lg:w-36 lg:h-36 rounded-lg flex items-center justify-center font-black text-4xl md:text-5xl lg:text-6xl transition-all hover:scale-105 border-2 group cursor-pointer" style={{
                 backgroundColor: item.color,
                 color: "#fff",
                 borderColor: "rgba(255,255,255,0.5)",
-                boxShadow: `0 0 40px ${item.color}, 0 0 80px ${item.color}a0, inset 0 0 20px rgba(255,255,255,0.4), 0 8px 16px rgba(0,0,0,0.4)`,
+                boxShadow: `0 0 40px ${item.color}, 0 0 80px ${item.color}a0, inset 0 0 20px rgba(255,255,255,0.4), 0 20px 40px rgba(0,0,0,0.6)`,
+                transform: "rotateX(15deg) rotateY(-15deg) translateZ(20px)",
+                transformStyle: "preserve-3d",
               }}>
                 {item.letter}
                 <span className="absolute top-1 right-2 text-[10px] md:text-[12px] lg:text-sm font-bold opacity-95">{item.num}</span>
