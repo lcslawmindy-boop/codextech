@@ -135,19 +135,16 @@ function CourseCard({ item }) {
           </>
         )}
 
-        <div className="mt-auto pt-4 border-t border-gray-800 space-y-2">
-          <p className="text-gray-600 text-xs">
-            <span className="text-gray-500 font-semibold">Source: </span>{item.source}
-          </p>
-          {/* ONE primary CTA — eliminates decision paralysis */}
+        <div className="mt-auto pt-4 border-t border-gray-800">
           <CheckoutButton item={item} label={`Enroll Now — ${item.price}`} />
-          {/* Secondary: subscription upsell as text link */}
-          <p className="text-center text-xs text-gray-600">
-            Or get all courses with{" "}
-            <Link to="/pricing" className="text-cyan-400 hover:text-cyan-300 underline underline-offset-2 transition-colors">
-              Pro membership — $79/mo →
+          <div className="flex items-center justify-between mt-3">
+            <p className="text-gray-700 text-xs">
+              <span className="text-gray-600">Source: </span>{item.source}
+            </p>
+            <Link to="/pricing" className="text-xs text-gray-500 hover:text-cyan-400 transition-colors whitespace-nowrap ml-3">
+              View with Pro →
             </Link>
-          </p>
+          </div>
         </div>
       </div>
     </div>
