@@ -33,6 +33,38 @@ const FLOATING_FORMULAS = [
   { text: "Θ = ∫ L dt", x: "22%", delay: 2.0 },
   { text: "∆E·∆t ≥ ℏ/4π", x: "57%", delay: 0.6 },
   { text: "A = ∫ B·dA", x: "78%", delay: 1.5 },
+  { text: "PV = nRT", x: "11%", delay: 0.4 },
+  { text: "ΔG = ΔH - TΔS", x: "34%", delay: 1.0 },
+  { text: "ε₀ = 8.854 × 10⁻¹² F/m", x: "44%", delay: 2.2 },
+  { text: "μ₀ = 4π × 10⁻⁷ H/m", x: "62%", delay: 0.7 },
+  { text: "α = 1/137 (fine structure)", x: "8%", delay: 1.9 },
+  { text: "h = 6.626 × 10⁻³⁴ Js", x: "73%", delay: 0.2 },
+  { text: "ℏ = h/2π", x: "19%", delay: 1.3 },
+  { text: "σ = e²/h (conductance)", x: "51%", delay: 0.9 },
+  { text: "∇·B = 0", x: "85%", delay: 1.5 },
+  { text: "∇×B = μ₀J + μ₀ε₀∂E/∂t", x: "29%", delay: 1.1 },
+  { text: "u = √(3kT/m)", x: "38%", delay: 2.1 },
+  { text: "β = 1/kT", x: "64%", delay: 0.4 },
+  { text: "n = N_A × ρ/M", x: "77%", delay: 1.7 },
+  { text: "T = 1/f", x: "12%", delay: 0.8 },
+  { text: "v = λf", x: "47%", delay: 1.4 },
+  { text: "I = P/V", x: "71%", delay: 0.3 },
+  { text: "R = ρL/A", x: "26%", delay: 2.0 },
+  { text: "KE = ½mv²", x: "54%", delay: 0.5 },
+  { text: "PE = mgh", x: "83%", delay: 1.2 },
+  { text: "W = Fd cos(θ)", x: "14%", delay: 1.8 },
+  { text: "p = mv (momentum)", x: "40%", delay: 0.6 },
+  { text: "a = F/m (acceleration)", x: "68%", delay: 1.6 },
+  { text: "K = ½I·ω²", x: "87%", delay: 0.9 },
+  { text: "A = πr²", x: "16%", delay: 2.3 },
+  { text: "V = ⁴⁄₃πr³", x: "59%", delay: 0.2 },
+  { text: "∂²Ψ/∂x² = -k²Ψ", x: "35%", delay: 1.4 },
+  { text: "⟨p⟩ = -iℏ∫ψ*∂ψ/∂x dx", x: "74%", delay: 0.7 },
+  { text: "E_n = -13.6/n² eV", x: "22%", delay: 1.9 },
+  { text: "L = √(l(l+1))ℏ", x: "63%", delay: 0.3 },
+  { text: "B·A (flux density)", x: "45%", delay: 1.3 },
+  { text: "Z_out = √(L/C)", x: "79%", delay: 0.8 },
+  { text: "f_0 = 1/(2π√LC)", x: "9%", delay: 1.6 },
 ];
 
 const INVENTORS = [
@@ -232,8 +264,8 @@ export default function VaultHeroAnimation({ children }) {
         ))}
 
         {/* Floating Background Elements — Icons floating around in the background */}
-        {Array.from({ length: 40 }).map((_, i) => {
-          const types = ['binary', 'device', 'equation', 'tool', 'periodic', 'medical', 'lab', 'sacred', 'tower', 'book', 'lightbulb', 'bubble'];
+        {Array.from({ length: 50 }).map((_, i) => {
+          const types = ['binary', 'device', 'equation', 'tool', 'periodic', 'medical', 'lab', 'sacred', 'tower', 'book', 'lightbulb', 'bubble', 'atom', 'molecule', 'wave'];
           const type = types[i % types.length];
           const colors = ['#22c55e', '#ea580c'];
           const color = colors[i % 2];
@@ -248,31 +280,31 @@ export default function VaultHeroAnimation({ children }) {
             const devices = ['MEG', 'VPO', 'TRZ', 'TRD-1', 'Scalar', 'Prioré'];
             content = devices[Math.floor(Math.random() * devices.length)];
           } else if (type === 'equation') {
-            const equations = ['E=mc²', '∇²φ', 'F=qE', 'P=VI', 'λν=c', 'ω=2πf'];
+            const equations = ['E=mc²', '∇²φ', 'F=qE', 'PV=nRT', 'λν=c', 'ω=2πf', 'α', 'β', 'ΔG=ΔH-TΔS'];
             content = equations[Math.floor(Math.random() * equations.length)];
           } else if (type === 'tool') {
             const tools = ['⚙️', '🔧', '🔩', '⚡', '🛠️', '🪛', '📏'];
             content = tools[Math.floor(Math.random() * tools.length)];
             isEmoji = true;
           } else if (type === 'periodic') {
-            const elements = ['Cu', 'Fe', 'Li', 'Au', 'Ag', 'Ni', 'Co', 'Zn', 'Pb'];
+            const elements = ['H', 'He', 'C', 'N', 'O', 'F', 'Cu', 'Fe', 'Li', 'Au', 'Ag', 'Ni', 'Co', 'Zn', 'Pb', 'Hg', 'U', 'Th'];
             content = elements[Math.floor(Math.random() * elements.length)];
           } else if (type === 'medical') {
             const medical = ['💉', '🧬', '💊', '🩺', '🔬'];
             content = medical[Math.floor(Math.random() * medical.length)];
             isEmoji = true;
           } else if (type === 'lab') {
-            const lab = ['🧪', '⚗️', '🧫', '📊'];
+            const lab = ['🧪', '⚗️', '🧫', '📊', '🔭'];
             content = lab[Math.floor(Math.random() * lab.length)];
             isEmoji = true;
           } else if (type === 'sacred') {
-            const sacred = ['π', '◯', '✡️', '☬', '∞'];
+            const sacred = ['π', '◯', '✡️', '☬', '∞', '⊙', '✦'];
             content = sacred[Math.floor(Math.random() * sacred.length)];
           } else if (type === 'tower') {
             content = '📡';
             isEmoji = true;
           } else if (type === 'book') {
-            const books = ['📚', '📖', '📕'];
+            const books = ['📚', '📖', '📕', '📗'];
             content = books[Math.floor(Math.random() * books.length)];
             isEmoji = true;
           } else if (type === 'lightbulb') {
@@ -280,6 +312,13 @@ export default function VaultHeroAnimation({ children }) {
             isEmoji = true;
           } else if (type === 'bubble') {
             content = '◉';
+          } else if (type === 'atom') {
+            content = '⊛';
+          } else if (type === 'molecule') {
+            const molecules = ['H₂O', 'CO₂', 'NaCl', 'H₂O₂'];
+            content = molecules[Math.floor(Math.random() * molecules.length)];
+          } else if (type === 'wave') {
+            content = '≈';
           }
           
           const startX = Math.random() * window.innerWidth - window.innerWidth / 2;
