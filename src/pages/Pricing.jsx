@@ -596,14 +596,14 @@ export default function Pricing() {
           <div className="px-8 py-6 border-b border-green-800/30 flex items-center gap-3">
             <span className="text-2xl">🤝</span>
             <div>
-              <h2 className="text-xl font-black text-white">Affiliate Program — Earn 30% Recurring</h2>
+              <h2 className="text-xl font-black text-white">Affiliate Program — Earn 20% Recurring</h2>
               <p className="text-green-400 text-sm font-semibold">Share your link. Earn every month they stay subscribed.</p>
             </div>
           </div>
           <div className="p-8">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
               {[
-                { icon: "💸", label: "Commission Rate", value: "30% recurring", sub: "Every billing cycle they stay" },
+                { icon: "💸", label: "Commission Rate", value: "20% recurring", sub: "Every billing cycle they stay" },
                 { icon: "🔗", label: "Cookie Duration", value: "90 days", sub: "Long attribution window" },
                 { icon: "💳", label: "Payout Threshold", value: "$50 minimum", sub: "Monthly payouts via Stripe" },
               ].map((item, i) => (
@@ -618,7 +618,7 @@ export default function Pricing() {
             <div className="bg-gray-900/60 border border-green-800/20 rounded-xl p-5 mb-6">
               <p className="text-white font-black mb-3">How it works</p>
               <div className="grid grid-cols-1 sm:grid-cols-4 gap-3">
-                {["Apply with your email below", "Get your unique referral link", "Share it anywhere — blog, YouTube, social", "Earn 30% every month they stay subscribed"].map((step, i) => (
+                {["Apply with your email below", "Get your unique referral link", "Share it anywhere — blog, YouTube, social", "Earn 20% every month they stay subscribed"].map((step, i) => (
                   <div key={i} className="flex gap-2">
                     <span className="w-5 h-5 rounded-full bg-green-700 text-white text-xs font-black flex items-center justify-center flex-shrink-0 mt-0.5">{i + 1}</span>
                     <p className="text-gray-300 text-sm">{step}</p>
