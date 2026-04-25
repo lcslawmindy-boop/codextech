@@ -239,7 +239,7 @@ function TierCard({ tier, onCheckout, billingAnnual, getPrice, getAnnualTotal })
           <span className="text-gray-500 mb-1.5">/mo</span>
         </div>
         {billingAnnual && (
-          <p className="text-green-400 text-xs font-bold mb-1">Billed ${annualTotal}/yr — 2 months free 🎉</p>
+          <p className="text-green-400 text-xs font-bold mb-1">Billed ${annualTotal}/yr — 3 months free 🎉</p>
         )}
         {!billingAnnual && isPro && <p className="text-purple-400 text-xs font-bold mb-1">Founding rate — saves $120/mo vs retail</p>}
         <p className="text-gray-700 text-xs mb-6">Cancel anytime · Instant access · Stripe</p>
@@ -317,8 +317,8 @@ export default function Pricing() {
   const [showAlaCCarteCourses, setShowAlaCCarteCourses] = useState(false);
   const [billingAnnual, setBillingAnnual] = useState(false);
 
-  const getPrice = (monthlyPrice) => billingAnnual ? Math.floor(monthlyPrice * 10 / 12) : monthlyPrice;
-  const getAnnualTotal = (monthlyPrice) => monthlyPrice * 10;
+  const getPrice = (monthlyPrice) => billingAnnual ? Math.floor(monthlyPrice * 9 / 12) : monthlyPrice;
+  const getAnnualTotal = (monthlyPrice) => monthlyPrice * 9;
 
   const handleMembershipCheckout = async (tier) => {
     if (window !== window.top) {
@@ -419,7 +419,7 @@ export default function Pricing() {
         </button>
         <div className="flex items-center gap-2">
           <span className={`text-sm font-bold ${billingAnnual ? "text-white" : "text-gray-500"}`}>Annual</span>
-          <span className="text-xs font-black px-2 py-0.5 rounded-full bg-green-900 text-green-300">2 MONTHS FREE</span>
+          <span className="text-xs font-black px-2 py-0.5 rounded-full bg-green-900 text-green-300">3 MONTHS FREE</span>
         </div>
       </div>
 
@@ -433,7 +433,7 @@ export default function Pricing() {
 
         {/* Compare note */}
         <p className="text-center text-gray-500 text-xs mt-6">
-          All plans include instant access · No setup fees · Upgrade/downgrade anytime
+          All plans include instant access · No setup fees · Upgrade/downgrade anytime · Annual billing = 3 months free
         </p>
       </div>
 
