@@ -46,7 +46,7 @@ const PLAN_ACCESS = {
     supplierLinks: true,
     aiPatentTool: "Full Suite",
     ftoAnalysis: true,
-    priorArt: "200+ entries",
+    priorArt: "100+ entries",
     privateForum: true,
     discount: "50% off kits",
     restrictedSystems: false,
