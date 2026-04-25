@@ -686,8 +686,8 @@ export default function VaultHeroAnimation({ children }) {
             { letter: 'C', meaning: 'Construct', num: '8', color: '#fb5607', glow: '#ff6b35' },
             { letter: 'H', meaning: 'Harness', num: '9', color: '#ffbe0b', glow: '#ffd60a' },
           ].map((item, i) => (
-            <div key={i} className="flex flex-col items-center gap-3 md:gap-5" style={{ perspective: '1000px' }}>
-              <div className="relative w-20 h-20 md:w-28 md:h-28 lg:w-36 lg:h-36 rounded-lg flex items-center justify-center font-black text-4xl md:text-5xl lg:text-6xl transition-all hover:scale-105 border-2 group cursor-pointer" style={{
+            <div key={i} className="flex flex-col items-center gap-2 md:gap-3" style={{ perspective: '1000px' }}>
+            <div className="relative w-8 h-8 sm:w-12 sm:h-12 md:w-20 md:h-20 lg:w-28 lg:h-28 rounded-lg flex items-center justify-center font-black text-lg sm:text-2xl md:text-4xl lg:text-5xl transition-all hover:scale-105 border-2 group cursor-pointer" style={{
                 background: `linear-gradient(135deg, ${item.color}35, ${item.glow}25)`,
                 color: "#fff",
                 borderColor: item.glow,
@@ -698,7 +698,7 @@ export default function VaultHeroAnimation({ children }) {
               }}>
                 {item.letter}
               </div>
-              <span className="text-xs md:text-sm lg:text-base font-black text-white whitespace-nowrap text-center px-2 py-0.5 rounded" style={{
+              <span className="text-xs sm:text-sm md:text-base lg:text-lg font-black text-white whitespace-nowrap text-center px-1 py-0.5 rounded" style={{
                 textShadow: `0 0 8px #000, 0 0 16px #000`,
                 letterSpacing: '0.5px',
                 backgroundColor: 'rgba(0,0,0,0.7)',
