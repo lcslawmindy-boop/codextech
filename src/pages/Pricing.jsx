@@ -190,10 +190,12 @@ function FaqAccordion() {
   );
 }
 
-function TierCard({ tier, onCheckout }) {
+function TierCard({ tier, onCheckout, billingAnnual, getPrice, getAnnualTotal }) {
   const isStarter = tier.id === "starter";
   const isPro = tier.id === "pro";
   const isElite = tier.id === "elite";
+  const displayPrice = getPrice(tier.price);
+  const annualTotal = getAnnualTotal(tier.price);
 
   return (
     <div className={`relative flex flex-col rounded-2xl overflow-hidden transition-all
@@ -230,13 +232,16 @@ function TierCard({ tier, onCheckout }) {
 
         {/* Price */}
         <div className="flex items-end gap-1 mb-1">
-          {tier.id === "pro" && (
+          {tier.id === "pro" && !billingAnnual && (
             <span className="text-gray-600 line-through text-base mb-1.5 mr-1">$199</span>
           )}
-          <span className={`font-black ${isPro ? "text-5xl" : "text-4xl"}`} style={{ color: tier.color }}>${tier.price}</span>
+          <span className={`font-black ${isPro ? "text-5xl" : "text-4xl"}`} style={{ color: tier.color }}>${displayPrice}</span>
           <span className="text-gray-500 mb-1.5">/mo</span>
         </div>
-        {isPro && <p className="text-purple-400 text-xs font-bold mb-1">Founding rate — saves $120/mo vs retail</p>}
+        {billingAnnual && (
+          <p className="text-green-400 text-xs font-bold mb-1">Billed ${annualTotal}/yr — 2 months free 🎉</p>
+        )}
+        {!billingAnnual && isPro && <p className="text-purple-400 text-xs font-bold mb-1">Founding rate — saves $120/mo vs retail</p>}
         <p className="text-gray-700 text-xs mb-6">Cancel anytime · Instant access · Stripe</p>
 
         {/* Features */}
@@ -260,7 +265,7 @@ function TierCard({ tier, onCheckout }) {
           <button onClick={() => onCheckout(tier)}
             className="w-full py-4 rounded-xl font-black text-lg text-white transition-all hover:opacity-90 active:scale-[0.98]"
             style={{ background: "linear-gradient(135deg, #7c3aed, #2563eb)", boxShadow: "0 6px 28px rgba(139,92,246,0.50)" }}>
-            {tier.cta} — ${tier.price}/mo →
+            {tier.cta} — ${displayPrice}/mo →
           </button>
         ) : isElite ? (
           <button onClick={() => onCheckout(tier)}
@@ -310,6 +315,10 @@ export default function Pricing() {
   const [newsletterStatus, setNewsletterStatus] = useState(null);
   const [showAlaCarteBuilds, setShowAlaCarteBuilds] = useState(false);
   const [showAlaCCarteCourses, setShowAlaCCarteCourses] = useState(false);
+  const [billingAnnual, setBillingAnnual] = useState(false);
+
+  const getPrice = (monthlyPrice) => billingAnnual ? Math.floor(monthlyPrice * 10 / 12) : monthlyPrice;
+  const getAnnualTotal = (monthlyPrice) => monthlyPrice * 10;
 
   const handleMembershipCheckout = async (tier) => {
     if (window !== window.top) {
@@ -317,16 +326,17 @@ export default function Pricing() {
       return;
     }
     const baseUrl = window.location.origin;
+    const effectivePrice = getPrice(tier.price);
     const response = await base44.functions.invoke("createCheckoutSession", {
-      title: `ZARP ${tier.name} Membership`,
-      priceInCents: tier.price * 100,
+      title: `ZARP ${tier.name} Membership${billingAnnual ? " (Annual)" : ""}`,
+      priceInCents: billingAnnual ? getAnnualTotal(tier.price) * 100 : tier.price * 100,
       description: tier.description,
       category: "membership",
-      mode: "subscription",
-      interval: "month",
+      mode: billingAnnual ? "payment" : "subscription",
+      interval: billingAnnual ? undefined : "month",
       successUrl: `${baseUrl}/checkout?success=true&product=${tier.id}`,
       cancelUrl: `${baseUrl}/pricing`,
-      customerEmail: null, // public app — no auth required
+      customerEmail: null,
     });
     if (response.data?.url) window.location.href = response.data.url;
   };
@@ -398,11 +408,26 @@ export default function Pricing() {
         </p>
       </div>
 
+      {/* Billing Toggle */}
+      <div className="flex justify-center items-center gap-4 mb-10">
+        <span className={`text-sm font-bold ${!billingAnnual ? "text-white" : "text-gray-500"}`}>Monthly</span>
+        <button
+          onClick={() => setBillingAnnual(b => !b)}
+          className={`relative w-14 h-7 rounded-full transition-colors ${billingAnnual ? "bg-green-500" : "bg-gray-700"}`}
+        >
+          <div className={`absolute top-1 w-5 h-5 rounded-full bg-white transition-transform ${billingAnnual ? "translate-x-8" : "translate-x-1"}`} />
+        </button>
+        <div className="flex items-center gap-2">
+          <span className={`text-sm font-bold ${billingAnnual ? "text-white" : "text-gray-500"}`}>Annual</span>
+          <span className="text-xs font-black px-2 py-0.5 rounded-full bg-green-900 text-green-300">2 MONTHS FREE</span>
+        </div>
+      </div>
+
       {/* Tier Cards */}
       <div className="px-5 pb-16 max-w-5xl mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-stretch">
           {TIERS.map(tier => (
-            <TierCard key={tier.id} tier={tier} onCheckout={handleMembershipCheckout} />
+            <TierCard key={tier.id} tier={tier} onCheckout={handleMembershipCheckout} billingAnnual={billingAnnual} getPrice={getPrice} getAnnualTotal={getAnnualTotal} />
           ))}
         </div>
 
@@ -563,6 +588,65 @@ export default function Pricing() {
                 </div>
               </div>
             ))}
+          </div>
+        </div>
+
+        {/* Affiliate Program */}
+        <div className="mb-16 bg-gradient-to-br from-green-950/50 to-emerald-950/30 border border-green-800/40 rounded-2xl overflow-hidden">
+          <div className="px-8 py-6 border-b border-green-800/30 flex items-center gap-3">
+            <span className="text-2xl">🤝</span>
+            <div>
+              <h2 className="text-xl font-black text-white">Affiliate Program — Earn 30% Recurring</h2>
+              <p className="text-green-400 text-sm font-semibold">Share your link. Earn every month they stay subscribed.</p>
+            </div>
+          </div>
+          <div className="p-8">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+              {[
+                { icon: "💸", label: "Commission Rate", value: "30% recurring", sub: "Every billing cycle they stay" },
+                { icon: "🔗", label: "Cookie Duration", value: "90 days", sub: "Long attribution window" },
+                { icon: "💳", label: "Payout Threshold", value: "$50 minimum", sub: "Monthly payouts via Stripe" },
+              ].map((item, i) => (
+                <div key={i} className="bg-gray-900/60 border border-green-800/20 rounded-xl p-5 text-center">
+                  <div className="text-3xl mb-2">{item.icon}</div>
+                  <p className="text-gray-400 text-xs mb-1">{item.label}</p>
+                  <p className="text-white font-black text-lg">{item.value}</p>
+                  <p className="text-gray-500 text-xs mt-1">{item.sub}</p>
+                </div>
+              ))}
+            </div>
+            <div className="bg-gray-900/60 border border-green-800/20 rounded-xl p-5 mb-6">
+              <p className="text-white font-black mb-3">How it works</p>
+              <div className="grid grid-cols-1 sm:grid-cols-4 gap-3">
+                {["Apply with your email below", "Get your unique referral link", "Share it anywhere — blog, YouTube, social", "Earn 30% every month they stay subscribed"].map((step, i) => (
+                  <div key={i} className="flex gap-2">
+                    <span className="w-5 h-5 rounded-full bg-green-700 text-white text-xs font-black flex items-center justify-center flex-shrink-0 mt-0.5">{i + 1}</span>
+                    <p className="text-gray-300 text-sm">{step}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className="flex flex-col sm:flex-row gap-3">
+              <input
+                type="email"
+                placeholder="your@email.com — apply to become an affiliate"
+                className="flex-1 px-4 py-3 rounded-lg bg-gray-900 border border-green-800/40 text-white placeholder-gray-600 text-sm focus:outline-none focus:border-green-500"
+                id="affiliate-email"
+              />
+              <button
+                onClick={async () => {
+                  const emailInput = document.getElementById("affiliate-email");
+                  if (!emailInput?.value) return;
+                  await base44.entities.NewsletterSubscriber.create({ email: emailInput.value, source: "affiliate_program", status: "active" });
+                  emailInput.value = "";
+                  alert("✅ Application received! We'll email you your affiliate link within 24 hours.");
+                }}
+                className="px-6 py-3 rounded-lg bg-green-600 hover:bg-green-500 text-white font-black text-sm whitespace-nowrap transition-all"
+              >
+                Apply to Affiliate Program →
+              </button>
+            </div>
+            <p className="text-gray-600 text-xs mt-3">No minimum audience required. Open to all members and non-members. Payouts via Stripe Connect.</p>
           </div>
         </div>
 
