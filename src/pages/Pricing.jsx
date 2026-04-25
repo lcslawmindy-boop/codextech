@@ -33,11 +33,11 @@ const TIERS = [
     price: 49,
     color: "#06b6d4",
     badge: "CONSUMPTION-BASED",
-    description: "Perfect for trying out. 15 builds/month.",
+    description: "Perfect for trying out. Access to 5 builds.",
     cta: "Start Free",
     popular: false,
     features: [
-      "15 build plans per month",
+      "5 build plans included",
       "Complete execution workflows (BOM, steps, schematics)",
       "10 foundational courses",
       "Basic AI patent framework",
@@ -60,11 +60,11 @@ const TIERS = [
     price: 99,
     color: "#8b5cf6",
     badge: "UNLIMITED VAULT",
-    description: "Complete execution system: builds, workflows, frameworks",
+    description: "Complete execution system: 10 builds, workflows, frameworks",
     cta: "Go Pro",
     popular: true,
     features: [
-      "40+ complete build execution workflows",
+      "10 complete build execution workflows",
       "BOM, schematics, step-by-step assembly for each",
       "40+ structured courses with frameworks",
       "Full AI execution toolkit: Patent, FTO, Investor Package",
@@ -86,10 +86,11 @@ const TIERS = [
     price: 149,
     color: "#f59e0b",
     badge: "CLASSIFIED + ADVISORY",
-    description: "Everything + restricted systems + 1-on-1 strategy",
+    description: "Everything + unlimited builds + restricted systems + 1-on-1 strategy",
     cta: "Go Elite",
     popular: false,
     features: [
+      "Unlimited build plans (40+)",
       "Everything in Pro",
       "Restricted / defense-adjacent technology systems",
       "1-on-1 monthly patent strategy session",
@@ -428,7 +429,7 @@ export default function Pricing() {
               </thead>
               <tbody className="divide-y divide-gray-800/50">
                 {[
-                  ["Build Plans Access", "15/month", "Unlimited (40+)", "Unlimited (40+)"],
+                  ["Build Plans Access", "5 builds", "10 builds", "Unlimited (40+)"],
                   ["Courses", "10 courses", "40+ courses", "40+ courses"],
                   ["PDF Downloads", "—", "✓ All builds", "✓ All builds"],
                   ["Video Assembly Guides", "—", "✓ All builds", "✓ All builds"],
