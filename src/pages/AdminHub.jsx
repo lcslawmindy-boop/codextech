@@ -11,6 +11,7 @@ const ADMIN_SECTIONS = [
     color: "#3b82f6",
     items: [
       { path: "/admin-beta", icon: <Users size={20} />, label: "Beta Applications", desc: "Review, approve & invite applicants", badge: "Members" },
+      { path: "/admin-member-access", icon: <Shield size={20} />, label: "Member Access Viewer", desc: "View what each membership tier & user has access to", badge: "Access" },
       { path: "/vdr-admin", icon: <Shield size={20} />, label: "VDR Admin", desc: "Manage investor data room sessions & access tokens", badge: "Investors" },
       { path: "/vdr-audit-log", icon: <BarChart2 size={20} />, label: "VDR Audit Log", desc: "Document engagement heatmap, time-on-page & due diligence heat scores", badge: "NEW" },
       { path: "/member-portal", icon: <Star size={20} />, label: "Member Portal", desc: "View member dashboard and access status", badge: null },

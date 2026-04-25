@@ -81,6 +81,7 @@ import CoursePlan from './pages/CoursePlan';
 import SocialMediaCommand from './pages/SocialMediaCommand';
 import SocialMediaAgent from './pages/SocialMediaAgent';
 import AdminHub from './pages/AdminHub';
+import AdminMemberAccess from './pages/AdminMemberAccess';
 import AdminGuard from './components/AdminGuard';
 import AdminTierAccess from './pages/AdminTierAccess';
 import BuildSuppliesShop from './pages/BuildSuppliesShop';
@@ -307,6 +308,7 @@ const AuthenticatedApp = () => {
           {/* Admin-only routes */}
           <Route element={<AdminGuard />}>
             <Route path="/admin" element={<AdminHub />} />
+            <Route path="/admin-member-access" element={<AdminMemberAccess />} />
             <Route path="/admin-contest" element={<AdminContest />} />
             <Route path="/admin-tier-access" element={<AdminTierAccess />} />
             <Route path="/admin-promo" element={<AdminPromoBlast />} />
