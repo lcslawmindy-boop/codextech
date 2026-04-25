@@ -66,7 +66,7 @@ const TIERS = [
     features: [
       "10 complete build execution workflows",
       "BOM, schematics, step-by-step assembly for each",
-      "40+ structured courses with frameworks",
+      "20 structured courses with frameworks",
       "Full AI execution toolkit: Patent, FTO, Investor Package",
       "Prior Art Archive — 200+ documented systems",
       "3–12 hour video assembly guides per build",
@@ -91,6 +91,7 @@ const TIERS = [
     popular: false,
     features: [
       "Unlimited build plans (40+)",
+      "Unlimited courses (40+)",
       "Everything in Pro",
       "Restricted / defense-adjacent technology systems",
       "1-on-1 monthly patent strategy session",
@@ -430,7 +431,7 @@ export default function Pricing() {
               <tbody className="divide-y divide-gray-800/50">
                 {[
                   ["Build Plans Access", "5 builds", "10 builds", "Unlimited (40+)"],
-                  ["Courses", "10 courses", "40+ courses", "40+ courses"],
+                  ["Courses", "10 courses", "20 courses", "Unlimited (40+)"],
                   ["PDF Downloads", "—", "✓ All builds", "✓ All builds"],
                   ["Video Assembly Guides", "—", "✓ All builds", "✓ All builds"],
                   ["Supplier Links & Pricing", "—", "✓ Verified", "✓ Verified"],
