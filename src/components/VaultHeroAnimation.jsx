@@ -282,7 +282,7 @@ export default function VaultHeroAnimation({ children }) {
       `}</style>
 
       {/* Floating formulas & elements */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+      <div className="absolute inset-0 overflow-hidden pointer-events-none" style={{ zIndex: 1 }}>
         {/* Mathematical formulas with glow */}
         {FLOATING_FORMULAS.map((elem, i) => (
           <div
@@ -674,7 +674,7 @@ export default function VaultHeroAnimation({ children }) {
 
       {/* CODEXTECH Acronym - Single line below vault */}
       {!clicked && (
-        <div className="absolute left-1/2 -translate-x-1/2 flex justify-center items-end gap-2 md:gap-4 px-2 pointer-events-none z-20" style={{ bottom: '-80px' }}>
+        <div className="absolute left-1/2 -translate-x-1/2 flex justify-center items-end gap-2 md:gap-4 px-2 pointer-events-none z-50" style={{ bottom: '-80px' }}>
           {[
             { letter: 'C', meaning: 'Complete', num: '1', color: '#ff006e', glow: '#ff1493' },
             { letter: 'O', meaning: 'Open', num: '2', color: '#fb5607', glow: '#ff6b35' },
