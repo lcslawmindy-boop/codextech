@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { ArrowLeft, Check, Lock, Gift, Flame, Clock, Star, ChevronDown, ChevronUp, Zap, Shield, BookOpen, Wrench, TrendingUp } from "lucide-react";
 import { base44 } from "@/api/base44Client";
-import CodextechVaultBackground from "@/components/CodextechVaultBackground";
 
 // ── Countdown (48h sticky deadline) ──────────────────────────────────────────
 const DEADLINE_KEY = "zarp_founding_deadline";
@@ -362,7 +361,6 @@ export default function Pricing() {
 
   return (
     <div className="min-h-screen bg-gray-950 text-white relative">
-      <CodextechVaultBackground className="fixed inset-0 pointer-events-none z-0 opacity-20" />
       <div className="relative z-10">
       {/* Urgency bar */}
       <div className="bg-gradient-to-r from-red-900 to-orange-900 border-b border-red-800 px-4 py-2 flex flex-col sm:flex-row items-center justify-center gap-2 text-sm">
