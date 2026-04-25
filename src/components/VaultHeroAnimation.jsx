@@ -566,7 +566,7 @@ export default function VaultHeroAnimation({ children }) {
       <div
         onClick={!isOpen && !clicked ? handleVaultClick : null}
         className={`vault-door-main relative transition-all ${!isOpen && !clicked ? "cursor-pointer hover:scale-110" : ""}`}
-        style={{ marginBottom: '120px' }}
+        style={{ marginBottom: '120px', position: 'relative', zIndex: 30 }}
       >
         <img
           src="https://media.base44.com/images/public/69ccefebfea78b23498c66a8/5da1807d1_generated_image.png"
@@ -674,7 +674,7 @@ export default function VaultHeroAnimation({ children }) {
 
       {/* CODEXTECH Acronym - Single line below vault */}
       {!clicked && (
-        <div className="absolute left-1/2 -translate-x-1/2 flex justify-center items-end gap-2 md:gap-4 px-2 pointer-events-none z-50" style={{ bottom: '-80px' }}>
+        <div className="absolute left-1/2 -translate-x-1/2 flex justify-center items-end gap-2 md:gap-4 px-2 pointer-events-none" style={{ bottom: '20px', zIndex: 100 }}>
           {[
             { letter: 'C', meaning: 'Complete', num: '1', color: '#ff006e', glow: '#ff1493' },
             { letter: 'O', meaning: 'Open', num: '2', color: '#fb5607', glow: '#ff6b35' },
@@ -698,9 +698,10 @@ export default function VaultHeroAnimation({ children }) {
               }}>
                 {item.letter}
               </div>
-              <span className="text-xs md:text-sm lg:text-base font-black text-gray-200 whitespace-nowrap text-center px-2" style={{
-                textShadow: `0 0 10px rgba(0,0,0,0.8)`,
-                letterSpacing: '0.5px'
+              <span className="text-xs md:text-sm lg:text-base font-black text-white whitespace-nowrap text-center px-2 py-0.5 rounded" style={{
+                textShadow: `0 0 8px #000, 0 0 16px #000`,
+                letterSpacing: '0.5px',
+                backgroundColor: 'rgba(0,0,0,0.7)',
               }}>
                 {item.meaning}
               </span>
