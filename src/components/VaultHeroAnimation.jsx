@@ -281,15 +281,19 @@ export default function VaultHeroAnimation({ children }) {
         }
 
         @keyframes electricBorder {
-          0%   { box-shadow: 0 0 6px #fff, 0 0 20px #fff, 0 0 40px var(--el-color), inset 0 0 10px rgba(255,255,255,0.05); }
-          25%  { box-shadow: 0 0 12px #fff, 0 0 30px #fff, 0 0 60px var(--el-glow), 0 0 80px var(--el-color), inset 0 0 20px rgba(255,255,255,0.1); }
-          50%  { box-shadow: 0 0 4px #fff, 0 0 16px #fff, 0 0 35px var(--el-color), inset 0 0 8px rgba(255,255,255,0.03); }
-          75%  { box-shadow: 0 0 18px #fff, 0 0 36px #fff, 0 0 70px var(--el-glow), 0 0 100px var(--el-color), inset 0 0 25px rgba(255,255,255,0.12); }
-          100% { box-shadow: 0 0 6px #fff, 0 0 20px #fff, 0 0 40px var(--el-color), inset 0 0 10px rgba(255,255,255,0.05); }
+          0%   { box-shadow: 0 0 4px #fff, 0 0 12px #fff, 0 0 30px var(--el-color), inset 0 0 8px rgba(255,255,255,0.04); border-color: #fff; }
+          15%  { box-shadow: 0 0 20px #fff, 0 0 50px #fff, 0 0 80px var(--el-glow), 0 0 120px var(--el-color), inset 0 0 30px rgba(255,255,255,0.2); border-color: #fff; }
+          16%  { box-shadow: 0 0 2px #fff, 0 0 6px #fff, 0 0 15px var(--el-color), inset 0 0 4px rgba(255,255,255,0.02); border-color: rgba(255,255,255,0.6); }
+          30%  { box-shadow: 0 0 16px #fff, 0 0 40px #fff, 0 0 70px var(--el-glow), 0 0 100px var(--el-color), inset 0 0 25px rgba(255,255,255,0.15); border-color: #fff; }
+          31%  { box-shadow: 0 0 3px #fff, 0 0 8px #fff, 0 0 20px var(--el-color); border-color: rgba(255,255,255,0.5); }
+          60%  { box-shadow: 0 0 8px #fff, 0 0 22px #fff, 0 0 45px var(--el-color), inset 0 0 12px rgba(255,255,255,0.06); border-color: #fff; }
+          80%  { box-shadow: 0 0 25px #fff, 0 0 60px #fff, 0 0 100px var(--el-glow), 0 0 140px var(--el-color), inset 0 0 35px rgba(255,255,255,0.22); border-color: #fff; }
+          81%  { box-shadow: 0 0 2px #fff, 0 0 5px #fff; border-color: rgba(255,255,255,0.4); }
+          100% { box-shadow: 0 0 4px #fff, 0 0 12px #fff, 0 0 30px var(--el-color), inset 0 0 8px rgba(255,255,255,0.04); border-color: #fff; }
         }
 
         .element-card {
-          animation: electricBorder 1.8s ease-in-out infinite;
+          animation: electricBorder 2.4s ease-in-out infinite;
         }
       `}</style>
 
@@ -574,11 +578,11 @@ export default function VaultHeroAnimation({ children }) {
         ))}
       </div>
 
-      {/* Neon CODEXTECH Logo Display */}
+      {/* Neon CODEXTECH Logo Display — always on top */}
       <div
         onClick={!isOpen && !clicked ? handleVaultClick : null}
         className={`vault-door-main transition-all ${!isOpen && !clicked ? "cursor-pointer hover:scale-110" : ""}`}
-        style={{ marginBottom: '20px', position: 'relative', zIndex: 50, marginTop: '40px' }}
+        style={{ marginBottom: '20px', position: 'relative', zIndex: 200, marginTop: '60px' }}
       >
         <img
           src="https://media.base44.com/images/public/69ccefebfea78b23498c66a8/5da1807d1_generated_image.png"
@@ -684,9 +688,9 @@ export default function VaultHeroAnimation({ children }) {
         </div>
       )}
 
-      {/* CODEXTECH Acronym - Periodic Table Style — OUTSIDE floating window, below hero */}
+      {/* CODEXTECH Acronym - Periodic Table Style — electric neon blocks */}
       {!clicked && (
-        <div className="w-full flex justify-center items-center gap-1 sm:gap-2 md:gap-3 px-2 mt-8 pb-6" style={{ zIndex: 100, position: 'relative', background: 'linear-gradient(to bottom, transparent, rgba(0,0,0,0.95) 20%)' }}>
+        <div className="w-full flex justify-center items-center gap-1 sm:gap-2 md:gap-3 px-2 mt-6 pb-8" style={{ zIndex: 200, position: 'relative' }}>
           {[
             { letter: 'C', meaning: 'Complete',  num: '1',  mass: '12.01', symbol: 'Cx', color: '#ff006e', glow: '#ff1493' },
             { letter: 'O', meaning: 'Open',       num: '2',  mass: '15.99', symbol: 'Op', color: '#fb5607', glow: '#ff6b35' },
@@ -700,39 +704,43 @@ export default function VaultHeroAnimation({ children }) {
           ].map((item, i) => (
             <div
               key={i}
-              className="relative flex flex-col items-center justify-between"
+              className="element-card relative flex flex-col items-center justify-between"
               style={{
-                width: 'clamp(34px, 9vw, 110px)',
-                height: 'clamp(40px, 11vw, 130px)',
-                background: `linear-gradient(145deg, #0a0a0f, #111118)`,
-                border: `2px solid ${item.color}`,
+                '--el-color': item.color,
+                '--el-glow': item.glow,
+                width: 'clamp(38px, 10vw, 120px)',
+                height: 'clamp(46px, 13vw, 145px)',
+                background: `linear-gradient(145deg, #050508, #0d0d14)`,
+                border: `2px solid #fff`,
                 borderRadius: '6px',
-                boxShadow: `0 0 18px ${item.color}80, 0 0 40px ${item.glow}40, inset 0 0 14px ${item.color}15, 0 8px 32px rgba(0,0,0,0.9)`,
-                padding: '3px 4px 4px 4px',
+                padding: 'clamp(3px,0.5vw,6px) clamp(3px,0.5vw,6px) clamp(4px,0.6vw,7px)',
                 cursor: 'default',
                 flexShrink: 0,
+                animationDelay: `${i * 0.2}s`,
               }}
             >
               {/* Atomic number top-left */}
               <span style={{
                 position: 'absolute', top: '3px', left: '4px',
-                fontSize: 'clamp(6px, 1.2vw, 13px)',
-                fontWeight: 900, color: item.color, fontFamily: 'monospace', lineHeight: 1,
+                fontSize: 'clamp(7px, 1.4vw, 14px)',
+                fontWeight: 900, color: '#fff', fontFamily: 'monospace', lineHeight: 1,
+                textShadow: `0 0 8px ${item.color}`,
               }}>{item.num}</span>
 
               {/* Symbol top-right */}
               <span style={{
                 position: 'absolute', top: '3px', right: '4px',
-                fontSize: 'clamp(5px, 1vw, 11px)',
-                fontWeight: 700, color: `${item.color}cc`, fontFamily: 'monospace', lineHeight: 1,
+                fontSize: 'clamp(6px, 1.1vw, 12px)',
+                fontWeight: 700, color: '#fff', fontFamily: 'monospace', lineHeight: 1,
+                textShadow: `0 0 6px ${item.color}`,
               }}>{item.symbol}</span>
 
               {/* Big letter center */}
               <span style={{
-                fontSize: 'clamp(14px, 4vw, 52px)',
+                fontSize: 'clamp(18px, 5vw, 64px)',
                 fontWeight: 900,
                 color: '#fff',
-                textShadow: `0 0 12px ${item.color}, 0 0 28px ${item.glow}`,
+                textShadow: `0 0 10px #fff, 0 0 20px ${item.color}, 0 0 40px ${item.glow}`,
                 lineHeight: 1,
                 marginTop: 'auto',
                 marginBottom: 'auto',
@@ -741,12 +749,13 @@ export default function VaultHeroAnimation({ children }) {
                 width: '100%',
               }}>{item.letter}</span>
 
-              {/* Element name bottom */}
+              {/* Element name bottom — white, bigger */}
               <span style={{
-                fontSize: 'clamp(5px, 1.1vw, 11px)',
-                fontWeight: 800,
-                color: item.color,
-                letterSpacing: '0.03em',
+                fontSize: 'clamp(6px, 1.4vw, 14px)',
+                fontWeight: 900,
+                color: '#fff',
+                textShadow: `0 0 8px ${item.color}`,
+                letterSpacing: '0.02em',
                 textAlign: 'center',
                 lineHeight: 1,
                 width: '100%',
@@ -756,8 +765,8 @@ export default function VaultHeroAnimation({ children }) {
               {/* Atomic mass bottom-right */}
               <span style={{
                 position: 'absolute', bottom: '3px', right: '4px',
-                fontSize: 'clamp(4px, 0.8vw, 9px)',
-                fontWeight: 600, color: `${item.color}99`, fontFamily: 'monospace', lineHeight: 1,
+                fontSize: 'clamp(5px, 0.9vw, 10px)',
+                fontWeight: 600, color: '#ffffffaa', fontFamily: 'monospace', lineHeight: 1,
               }}>{item.mass}</span>
             </div>
           ))}
