@@ -320,7 +320,7 @@ export default function VaultHeroAnimation({ children }) {
 
         {/* Floating Background Elements — Icons floating around in the background */}
         {Array.from({ length: 350 }).map((_, i) => {
-          const types = ['binary', 'device', 'equation', 'tool', 'periodic', 'medical', 'lab', 'sacred', 'tower', 'book', 'lightbulb', 'bubble', 'atom', 'molecule', 'wave', 'platonic', 'chakra', 'planet', 'shield', 'coil', 'cage', 'medbed', 'gold', 'logo', 'flag', 'rocket'];
+          const types = ['binary', 'device', 'equation', 'tool', 'periodic', 'medical', 'lab', 'sacred', 'tower', 'book', 'lightbulb', 'bubble', 'atom', 'molecule', 'wave', 'platonic', 'chakra', 'planet', 'shield', 'coil', 'cage', 'medbed', 'gold', 'logo', 'flag', 'rocket', 'physics', 'device2', 'sciemoji', 'mathsym', 'device3', 'nuclear', 'quantum', 'device4'];
           const type = types[i % types.length];
           
           // Logo URLs array
@@ -439,6 +439,45 @@ export default function VaultHeroAnimation({ children }) {
             const rockets = ['🚀', '🛸', '✈️', '🛩️'];
             content = rockets[Math.floor(Math.random() * rockets.length)];
             isEmoji = true;
+          } else if (type === 'physics') {
+            const physicsSyms = ['ℏ', 'Ψ', 'Ω', 'Σ', 'Δ', 'Λ', 'Φ', 'Γ', 'Π', 'Θ', 'ξ', 'η', 'μ', 'ε₀', 'μ₀', 'γ', 'ρ', 'σ', 'τ', 'φ', 'χ', 'ζ'];
+            content = physicsSyms[Math.floor(Math.random() * physicsSyms.length)];
+            color = '#00ffff';
+            glowColor = '#06b6d4';
+          } else if (type === 'device2') {
+            const devices2 = ['Rife Machine', 'Orgone Acc.', 'Lakhovsky MWO', 'Hendershot', 'Adams Motor', 'Newman Motor', 'Testatika', 'Gray Motor', 'Hubbard Coil', 'Stubblefield', 'N-Machine', 'Methernitha', 'Sweet VTA', 'Barker Tube', 'Colman-Seddon', 'Correa PAGD', 'Aspden Motor', 'Basiago STEC'];
+            content = devices2[Math.floor(Math.random() * devices2.length)];
+            color = '#a78bfa';
+            glowColor = '#7c3aed';
+          } else if (type === 'sciemoji') {
+            const sciEmojis = ['🔋', '🧲', '💫', '🌊', '⚛️', '🔌', '🖥️', '📡', '🔦', '💥', '🌡️', '🧮', '📐', '📏', '🔎', '🛰️', '🌐', '⚡', '🔬', '🧿'];
+            content = sciEmojis[Math.floor(Math.random() * sciEmojis.length)];
+            isEmoji = true;
+          } else if (type === 'mathsym') {
+            const mathSyms = ['∫∫dA', '∮B·dl', '∇·E', '∂²ψ/∂x²', '⟨E|H|E⟩', 'ℒ=T−V', 'δS=0', '∑Fᵢ=0', '∇×H=J', 'ds²=gμνdxᵘdxᵛ', 'Rμν−½gμνR', 'β=v/c', 'γ=1/√(1−β²)'];
+            content = mathSyms[Math.floor(Math.random() * mathSyms.length)];
+            color = '#34d399';
+            glowColor = '#10b981';
+          } else if (type === 'device3') {
+            const devices3 = ['Searl SEG', 'Otis Carr OTC-X1', 'T. Brown Electrogravitics', 'Dollard Magnifying Tx', 'Hutchison Effect', 'Paul Pantone GEET', 'Stanley Meyer WFC', 'John Keely Resonator', 'Viktor Schauberger Repulsine', 'Perendev Magnet Motor', 'Hamel Spinner', 'Joe Cell', 'Yull Brown Gas', 'Cold Fusion LENR'];
+            content = devices3[Math.floor(Math.random() * devices3.length)];
+            color = '#fb923c';
+            glowColor = '#ea580c';
+          } else if (type === 'nuclear') {
+            const nuclearSyms = ['²³⁵U', '²³⁸Pu', '⁴He', 'n⁰', 'β⁻', 'γ-ray', 'p⁺', 'e⁻', 'ν̄ₑ', 'D-T fusion', 'p-p chain', 'CNO cycle'];
+            content = nuclearSyms[Math.floor(Math.random() * nuclearSyms.length)];
+            color = '#f87171';
+            glowColor = '#dc2626';
+          } else if (type === 'quantum') {
+            const quantumTerms = ['|0⟩+|1⟩', 'Bell State', 'EPR Pair', 'Qubit', 'Entanglement', 'Superposition', 'Decoherence', 'Wave Collapse', 'Tunneling', 'Zero-Point', 'Casimir Force', 'Vacuum Fluctuation', 'Pilot Wave', 'Many Worlds'];
+            content = quantumTerms[Math.floor(Math.random() * quantumTerms.length)];
+            color = '#c084fc';
+            glowColor = '#9333ea';
+          } else if (type === 'device4') {
+            const devices4 = ['Bedini SG', 'Joule Thief', 'Magnetic Monopole', 'Dirac String', 'Torsion Field Gen.', 'Scalar Interferometer', 'Phase Conjugate Mirror', 'EM Vortex Gun', 'Bioresonance PEMF', 'Raman Laser Array', 'Plasma Globe', 'Tesla Bladeless Turbine', 'Inertial Propulsion', 'Gravity Shield'];
+            content = devices4[Math.floor(Math.random() * devices4.length)];
+            color = '#22d3ee';
+            glowColor = '#06b6d4';
           }
           
           const startX = Math.random() * window.innerWidth - window.innerWidth / 2;
