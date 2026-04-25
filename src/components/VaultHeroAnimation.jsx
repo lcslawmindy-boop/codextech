@@ -690,7 +690,7 @@ export default function VaultHeroAnimation({ children }) {
 
       {/* CODEXTECH Acronym - Periodic Table Style — electric neon blocks */}
       {!clicked && (
-        <div className="w-full flex justify-center items-center gap-1 sm:gap-2 md:gap-3 px-2 mt-6 pb-8" style={{ zIndex: 200, position: 'relative' }}>
+        <div className="w-full flex justify-center items-center gap-0.5 sm:gap-2 md:gap-3 px-1 mt-6 pb-8" style={{ zIndex: 200, position: 'relative' }}>
           {[
             { letter: 'C', meaning: 'Complete',  num: '1',  mass: '12.01', symbol: 'Cx', color: '#ff006e', glow: '#ff1493' },
             { letter: 'O', meaning: 'Open',       num: '2',  mass: '15.99', symbol: 'Op', color: '#fb5607', glow: '#ff6b35' },
@@ -708,12 +708,12 @@ export default function VaultHeroAnimation({ children }) {
               style={{
                 '--el-color': item.color,
                 '--el-glow': item.glow,
-                width: 'clamp(38px, 10vw, 120px)',
-                height: 'clamp(46px, 13vw, 145px)',
+                width: 'clamp(32px, 9.5vw, 120px)',
+                height: 'clamp(38px, 12.5vw, 145px)',
                 background: `linear-gradient(145deg, #050508, #0d0d14)`,
                 border: `2px solid #fff`,
-                borderRadius: '6px',
-                padding: 'clamp(3px,0.5vw,6px) clamp(3px,0.5vw,6px) clamp(4px,0.6vw,7px)',
+                borderRadius: '5px',
+                padding: 'clamp(2px,0.4vw,6px) clamp(2px,0.4vw,6px) clamp(3px,0.5vw,7px)',
                 cursor: 'default',
                 flexShrink: 0,
                 animationDelay: `${i * 0.2}s`,
@@ -737,7 +737,7 @@ export default function VaultHeroAnimation({ children }) {
 
               {/* Big letter center */}
               <span style={{
-                fontSize: 'clamp(18px, 5vw, 64px)',
+                fontSize: 'clamp(14px, 4.5vw, 64px)',
                 fontWeight: 900,
                 color: '#fff',
                 textShadow: `0 0 10px #fff, 0 0 20px ${item.color}, 0 0 40px ${item.glow}`,
@@ -751,7 +751,7 @@ export default function VaultHeroAnimation({ children }) {
 
               {/* Element name bottom — white, bigger */}
               <span style={{
-                fontSize: 'clamp(6px, 1.4vw, 14px)',
+                fontSize: 'clamp(5px, 1.3vw, 14px)',
                 fontWeight: 900,
                 color: '#fff',
                 textShadow: `0 0 8px ${item.color}`,
