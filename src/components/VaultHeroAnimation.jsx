@@ -672,39 +672,81 @@ export default function VaultHeroAnimation({ children }) {
         </div>
       )}
 
-      {/* CODEXTECH Acronym - Single line below vault */}
+      {/* CODEXTECH Acronym - Periodic Table Style — OUTSIDE floating window, below hero */}
       {!clicked && (
-        <div className="absolute left-1/2 -translate-x-1/2 flex justify-center items-end gap-2 md:gap-4 px-2 pointer-events-none" style={{ bottom: '20px', zIndex: 100 }}>
+        <div className="w-full flex justify-center items-center gap-1 sm:gap-2 md:gap-3 px-2 mt-8 pb-6" style={{ zIndex: 100, position: 'relative', background: 'linear-gradient(to bottom, transparent, rgba(0,0,0,0.95) 20%)' }}>
           {[
-            { letter: 'C', meaning: 'Complete', num: '1', color: '#ff006e', glow: '#ff1493' },
-            { letter: 'O', meaning: 'Open', num: '2', color: '#fb5607', glow: '#ff6b35' },
-            { letter: 'D', meaning: 'Design', num: '3', color: '#ffbe0b', glow: '#ffd60a' },
-            { letter: 'E', meaning: 'Execute', num: '4', color: '#8338ec', glow: '#a371ff' },
-            { letter: 'X', meaning: 'eXamine', num: '5', color: '#3a86ff', glow: '#5dade2' },
-            { letter: 'T', meaning: 'Test', num: '6', color: '#06ffa5', glow: '#1dd1a1' },
-            { letter: 'E', meaning: 'Engineer', num: '7', color: '#ff006e', glow: '#ff1493' },
-            { letter: 'C', meaning: 'Construct', num: '8', color: '#fb5607', glow: '#ff6b35' },
-            { letter: 'H', meaning: 'Harness', num: '9', color: '#ffbe0b', glow: '#ffd60a' },
+            { letter: 'C', meaning: 'Complete',  num: '1',  mass: '12.01', symbol: 'Cx', color: '#ff006e', glow: '#ff1493' },
+            { letter: 'O', meaning: 'Open',       num: '2',  mass: '15.99', symbol: 'Op', color: '#fb5607', glow: '#ff6b35' },
+            { letter: 'D', meaning: 'Design',     num: '3',  mass: '28.08', symbol: 'Ds', color: '#ffbe0b', glow: '#ffd60a' },
+            { letter: 'E', meaning: 'Execute',    num: '4',  mass: '9.012', symbol: 'Ex', color: '#8338ec', glow: '#a371ff' },
+            { letter: 'X', meaning: 'eXamine',    num: '5',  mass: '10.81', symbol: 'Xm', color: '#3a86ff', glow: '#5dade2' },
+            { letter: 'T', meaning: 'Test',       num: '6',  mass: '14.00', symbol: 'Ts', color: '#06ffa5', glow: '#1dd1a1' },
+            { letter: 'E', meaning: 'Engineer',   num: '7',  mass: '4.003', symbol: 'En', color: '#ff006e', glow: '#ff1493' },
+            { letter: 'C', meaning: 'Construct',  num: '8',  mass: '20.18', symbol: 'Co', color: '#fb5607', glow: '#ff6b35' },
+            { letter: 'H', meaning: 'Harness',    num: '9',  mass: '1.008', symbol: 'Hz', color: '#ffbe0b', glow: '#ffd60a' },
           ].map((item, i) => (
-            <div key={i} className="flex flex-col items-center gap-2 md:gap-3" style={{ perspective: '1000px' }}>
-            <div className="relative w-8 h-8 sm:w-12 sm:h-12 md:w-20 md:h-20 lg:w-28 lg:h-28 rounded-lg flex items-center justify-center font-black text-lg sm:text-2xl md:text-4xl lg:text-5xl transition-all hover:scale-105 border-2 group cursor-pointer" style={{
-                background: `linear-gradient(135deg, ${item.color}35, ${item.glow}25)`,
-                color: "#fff",
-                borderColor: item.glow,
-                boxShadow: `0 0 30px ${item.color}, 0 0 60px ${item.glow}, inset 0 0 20px rgba(255,255,255,0.15), 0 20px 40px rgba(0,0,0,0.6)`,
-                transform: "rotateX(15deg) rotateY(-15deg) translateZ(20px)",
-                transformStyle: "preserve-3d",
-                backdropFilter: 'blur(4px)',
-              }}>
-                {item.letter}
-              </div>
-              <span className="text-xs sm:text-sm md:text-base lg:text-lg font-black text-white whitespace-nowrap text-center px-1 py-0.5 rounded" style={{
-                textShadow: `0 0 8px #000, 0 0 16px #000`,
-                letterSpacing: '0.5px',
-                backgroundColor: 'rgba(0,0,0,0.7)',
-              }}>
-                {item.meaning}
-              </span>
+            <div
+              key={i}
+              className="relative flex flex-col items-center justify-between"
+              style={{
+                width: 'clamp(34px, 9vw, 110px)',
+                height: 'clamp(40px, 11vw, 130px)',
+                background: `linear-gradient(145deg, #0a0a0f, #111118)`,
+                border: `2px solid ${item.color}`,
+                borderRadius: '6px',
+                boxShadow: `0 0 18px ${item.color}80, 0 0 40px ${item.glow}40, inset 0 0 14px ${item.color}15, 0 8px 32px rgba(0,0,0,0.9)`,
+                padding: '3px 4px 4px 4px',
+                cursor: 'default',
+                flexShrink: 0,
+              }}
+            >
+              {/* Atomic number top-left */}
+              <span style={{
+                position: 'absolute', top: '3px', left: '4px',
+                fontSize: 'clamp(6px, 1.2vw, 13px)',
+                fontWeight: 900, color: item.color, fontFamily: 'monospace', lineHeight: 1,
+              }}>{item.num}</span>
+
+              {/* Symbol top-right */}
+              <span style={{
+                position: 'absolute', top: '3px', right: '4px',
+                fontSize: 'clamp(5px, 1vw, 11px)',
+                fontWeight: 700, color: `${item.color}cc`, fontFamily: 'monospace', lineHeight: 1,
+              }}>{item.symbol}</span>
+
+              {/* Big letter center */}
+              <span style={{
+                fontSize: 'clamp(14px, 4vw, 52px)',
+                fontWeight: 900,
+                color: '#fff',
+                textShadow: `0 0 12px ${item.color}, 0 0 28px ${item.glow}`,
+                lineHeight: 1,
+                marginTop: 'auto',
+                marginBottom: 'auto',
+                display: 'block',
+                textAlign: 'center',
+                width: '100%',
+              }}>{item.letter}</span>
+
+              {/* Element name bottom */}
+              <span style={{
+                fontSize: 'clamp(5px, 1.1vw, 11px)',
+                fontWeight: 800,
+                color: item.color,
+                letterSpacing: '0.03em',
+                textAlign: 'center',
+                lineHeight: 1,
+                width: '100%',
+                display: 'block',
+              }}>{item.meaning}</span>
+
+              {/* Atomic mass bottom-right */}
+              <span style={{
+                position: 'absolute', bottom: '3px', right: '4px',
+                fontSize: 'clamp(4px, 0.8vw, 9px)',
+                fontWeight: 600, color: `${item.color}99`, fontFamily: 'monospace', lineHeight: 1,
+              }}>{item.mass}</span>
             </div>
           ))}
         </div>
