@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { base44 } from "@/api/base44Client";
-import { Download, CheckCircle2, AlertCircle } from "lucide-react";
+import { Download, CheckCircle2, AlertCircle, LogIn } from "lucide-react";
 
 const NDA_TEXT = `CONFIDENTIALITY & NON-DISCLOSURE AGREEMENT
 
@@ -59,6 +59,31 @@ export default function VaultNDALanding() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
+  // Returning member login
+  const [returningEmail, setReturningEmail] = useState("");
+  const [returningLoading, setReturningLoading] = useState(false);
+  const [returningError, setReturningError] = useState(null);
+
+  const handleReturningLogin = async (e) => {
+    e.preventDefault();
+    if (!returningEmail) return;
+    setReturningLoading(true);
+    setReturningError(null);
+    try {
+      const sigs = await base44.entities.NDASignature.filter({ email: returningEmail.toLowerCase().trim() });
+      if (sigs && sigs.length > 0) {
+        localStorage.setItem("nda_member_email", returningEmail.toLowerCase().trim());
+        localStorage.setItem("bearden_nda_accepted", JSON.stringify({ accepted: true, version: "1.0" }));
+        window.location.href = "/pricing";
+      } else {
+        setReturningError("No NDA signature found for that email. Please sign below.");
+      }
+    } catch (err) {
+      setReturningError("Error checking signature. Please try again.");
+    }
+    setReturningLoading(false);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!fullName || !email || !agreed) {
@@ -94,6 +119,7 @@ export default function VaultNDALanding() {
         console.warn("Notification send failed (non-blocking):", notificationErr);
       }
 
+      localStorage.setItem("nda_member_email", email.toLowerCase().trim());
       setSubmitted(true);
       setLoading(false);
     } catch (err) {
@@ -159,7 +185,30 @@ export default function VaultNDALanding() {
 
           {/* Signature Panel */}
           <div className="lg:col-span-1">
-            <div className="sticky top-24 bg-gradient-to-b from-gray-900 to-gray-950 border-2 border-cyan-600 rounded-2xl p-6 shadow-xl shadow-cyan-500/20">
+            {/* Returning Member Login */}
+          <div className="sticky top-24 space-y-4">
+          <div className="bg-gray-900 border border-cyan-800/50 rounded-2xl p-5">
+            <div className="flex items-center gap-2 mb-3">
+              <LogIn size={16} className="text-cyan-400" />
+              <p className="text-white font-black text-sm">Already signed? Log in</p>
+            </div>
+            <form onSubmit={handleReturningLogin} className="flex flex-col gap-3">
+              <input
+                type="email"
+                placeholder="Enter your email"
+                value={returningEmail}
+                onChange={e => setReturningEmail(e.target.value)}
+                className="w-full px-4 py-2.5 rounded-lg bg-gray-800 border border-gray-700 text-white placeholder-gray-600 text-sm focus:outline-none focus:border-cyan-500"
+              />
+              {returningError && <p className="text-red-400 text-xs">{returningError}</p>}
+              <button type="submit" disabled={returningLoading}
+                className="w-full py-2.5 rounded-lg bg-cyan-700 hover:bg-cyan-600 text-white font-bold text-sm transition-colors disabled:opacity-50">
+                {returningLoading ? "Checking..." : "Access Vault →"}
+              </button>
+            </form>
+          </div>
+
+          <div className="bg-gradient-to-b from-gray-900 to-gray-950 border-2 border-cyan-600 rounded-2xl p-6 shadow-xl shadow-cyan-500/20">
               {submitted ? (
                 <div className="text-center py-8">
                   <div className="w-16 h-16 rounded-full bg-green-500/20 flex items-center justify-center mx-auto mb-4">
@@ -258,6 +307,7 @@ export default function VaultNDALanding() {
                 </form>
               )}
             </div>
+          </div>
           </div>
         </div>
       </div>
