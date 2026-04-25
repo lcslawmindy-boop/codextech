@@ -103,7 +103,7 @@ export default function VaultHeroAnimation({ children }) {
   };
 
   return (
-    <div className="relative w-full min-h-screen flex items-center justify-center overflow-hidden">
+    <div className="relative w-full flex flex-col items-center justify-start overflow-x-hidden" style={{ minHeight: '100vh' }}>
       <style>{`
         @keyframes neonGlow {
           0%, 100% {
@@ -279,10 +279,22 @@ export default function VaultHeroAnimation({ children }) {
         .gold-bar {
           animation: goldBarsSlide 5s ease-in forwards;
         }
+
+        @keyframes electricBorder {
+          0%   { box-shadow: 0 0 6px #fff, 0 0 20px #fff, 0 0 40px var(--el-color), inset 0 0 10px rgba(255,255,255,0.05); }
+          25%  { box-shadow: 0 0 12px #fff, 0 0 30px #fff, 0 0 60px var(--el-glow), 0 0 80px var(--el-color), inset 0 0 20px rgba(255,255,255,0.1); }
+          50%  { box-shadow: 0 0 4px #fff, 0 0 16px #fff, 0 0 35px var(--el-color), inset 0 0 8px rgba(255,255,255,0.03); }
+          75%  { box-shadow: 0 0 18px #fff, 0 0 36px #fff, 0 0 70px var(--el-glow), 0 0 100px var(--el-color), inset 0 0 25px rgba(255,255,255,0.12); }
+          100% { box-shadow: 0 0 6px #fff, 0 0 20px #fff, 0 0 40px var(--el-color), inset 0 0 10px rgba(255,255,255,0.05); }
+        }
+
+        .element-card {
+          animation: electricBorder 1.8s ease-in-out infinite;
+        }
       `}</style>
 
-      {/* Floating formulas & elements */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none" style={{ zIndex: 1 }}>
+      {/* Floating formulas & elements — background layer, strictly behind vault */}
+      <div className="absolute overflow-hidden pointer-events-none" style={{ zIndex: 1, top: 0, left: 0, right: 0, height: '100vh' }}>
         {/* Mathematical formulas with glow */}
         {FLOATING_FORMULAS.map((elem, i) => (
           <div
@@ -565,8 +577,8 @@ export default function VaultHeroAnimation({ children }) {
       {/* Neon CODEXTECH Logo Display */}
       <div
         onClick={!isOpen && !clicked ? handleVaultClick : null}
-        className={`vault-door-main relative transition-all ${!isOpen && !clicked ? "cursor-pointer hover:scale-110" : ""}`}
-        style={{ marginBottom: '120px', position: 'relative', zIndex: 30 }}
+        className={`vault-door-main transition-all ${!isOpen && !clicked ? "cursor-pointer hover:scale-110" : ""}`}
+        style={{ marginBottom: '20px', position: 'relative', zIndex: 50, marginTop: '40px' }}
       >
         <img
           src="https://media.base44.com/images/public/69ccefebfea78b23498c66a8/5da1807d1_generated_image.png"
