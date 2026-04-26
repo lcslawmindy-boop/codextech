@@ -921,53 +921,296 @@ async function generateMasterPDF(allInventions) {
       y += 4;
     }
 
-    // ── STEP-BY-STEP INSTRUCTIONS ─────────────────────────────────────
+    // ── STEP-BY-STEP ASSEMBLY MANUAL ─────────────────────────────────
     if (data.steps?.length > 0) {
-      checkPage(22);
-      section(`STEP-BY-STEP BUILD INSTRUCTIONS  (${data.steps.length} steps)`);
+      // Each step gets its own dedicated page with color diagram
+      for (let si = 0; si < data.steps.length; si++) {
+        const step = data.steps[si];
 
-      data.steps.forEach((step, si) => {
-        checkPage(30);
+        newPage();
+        addRunningHeader(`${inv.title.slice(0, 30)} — Assembly Manual`);
 
-        // Step header bar
-        doc.setFillColor(...C.gray20);
-        doc.rect(margin - 2, y - 4, contentW + 4, 12, "F");
+        // ── STEP HEADER (full-width black bar) ──────────────────────
+        doc.setFillColor(...C.black);
+        doc.rect(0, y - 6, W, 16, "F");
 
-        // Step number circle (white)
-        doc.setFillColor(...C.white);
-        doc.circle(margin + 5, y + 2, 4.5, "F");
-        doc.setFont("helvetica", "bold"); doc.setFontSize(8);
+        // Step number badge
+        doc.setFillColor(255, 255, 255);
+        doc.roundedRect(margin, y - 4, 18, 12, 2, 2, "F");
+        doc.setFont("helvetica", "bold");
+        doc.setFontSize(9);
         doc.setTextColor(...C.black);
-        doc.text(String(si + 1), margin + 5, y + 4, { align: "center" });
+        doc.text(`${si + 1}/${data.steps.length}`, margin + 9, y + 4.5, { align: "center" });
 
-        // Step title
-        doc.setFontSize(9.5); doc.setTextColor(...C.white);
-        doc.text(`Step ${si + 1}: ${step.title}`, margin + 12, y + 3.5);
-        y += 14;
+        doc.setFontSize(11);
+        doc.setTextColor(255, 255, 255);
+        const stepTitleLines = doc.splitTextToSize(`Step ${si + 1}: ${step.title}`, contentW - 28);
+        doc.text(stepTitleLines[0] || "", margin + 22, y + 4.5);
+        y += 16;
 
-        // Detail text
-        doc.setFont("helvetica", "normal"); doc.setFontSize(8.5);
-        doc.setTextColor(...C.gray20);
-        const dLines2 = doc.splitTextToSize(step.detail || "", contentW - 6);
-        dLines2.forEach(ln => { checkPage(7); doc.text(ln, margin + 3, y); y += 5.2; });
+        // ── TWO-COLUMN LAYOUT: diagram (left) + info (right) ────────
+        const leftW = 82;
+        const rightW = contentW - leftW - 6;
+        const rightX = margin + leftW + 6;
+        const colStartY = y;
+
+        // ── COLOR DIAGRAM (left column) ─────────────────────────────
+        // Generate a canvas-based color schematic for this step
+        const diagH = 72;
+        const diagCanvas = document.createElement("canvas");
+        diagCanvas.width = 400;
+        diagCanvas.height = 350;
+        const ctx = diagCanvas.getContext("2d");
+
+        // Step-type color palette for diagrams
+        const stepColors = {
+          wiring:      { bg: "#0f172a", accent: "#38bdf8", secondary: "#7dd3fc", highlight: "#e0f2fe" },
+          assembly:    { bg: "#0a2218", accent: "#34d399", secondary: "#6ee7b7", highlight: "#d1fae5" },
+          testing:     { bg: "#1e1060", accent: "#a78bfa", secondary: "#c4b5fd", highlight: "#ede9fe" },
+          calibration: { bg: "#1a1000", accent: "#fbbf24", secondary: "#fcd34d", highlight: "#fef3c7" },
+          safety:      { bg: "#1c0606", accent: "#f87171", secondary: "#fca5a5", highlight: "#fee2e2" },
+          preparation: { bg: "#0f172a", accent: "#94a3b8", secondary: "#cbd5e1", highlight: "#f1f5f9" },
+        };
+        const typeKey = (step.type || "assembly");
+        const pal = stepColors[typeKey] || stepColors.assembly;
+
+        // Background gradient
+        const grad = ctx.createLinearGradient(0, 0, 400, 350);
+        grad.addColorStop(0, pal.bg);
+        grad.addColorStop(1, "#000000");
+        ctx.fillStyle = grad;
+        ctx.fillRect(0, 0, 400, 350);
+
+        // Draw contextual diagram based on step type / step index
+        const cx2 = 200, cy2 = 175;
+
+        if (typeKey === "wiring" || typeKey === "assembly") {
+          // Circuit/assembly schematic
+          // Main component box
+          ctx.strokeStyle = pal.accent;
+          ctx.lineWidth = 3;
+          ctx.strokeRect(130, 110, 140, 90);
+          ctx.fillStyle = pal.accent + "22";
+          ctx.fillRect(130, 110, 140, 90);
+          // Component label
+          ctx.fillStyle = pal.accent;
+          ctx.font = "bold 14px monospace";
+          ctx.textAlign = "center";
+          ctx.fillText("COMPONENT", cx2, cy2);
+          ctx.fillText(`STEP ${si + 1}`, cx2, cy2 + 18);
+          // Wire lines
+          ctx.strokeStyle = pal.secondary;
+          ctx.lineWidth = 2;
+          ctx.setLineDash([6, 4]);
+          [[130, 155, 40, 155], [270, 155, 360, 155], [200, 110, 200, 40], [200, 200, 200, 290]].forEach(([x1, y1, x2, y2]) => {
+            ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke();
+          });
+          ctx.setLineDash([]);
+          // Connection dots
+          [[40, 155], [360, 155], [200, 40], [200, 290]].forEach(([cx, cy]) => {
+            ctx.beginPath(); ctx.arc(cx, cy, 8, 0, Math.PI * 2);
+            ctx.fillStyle = pal.secondary; ctx.fill();
+            ctx.strokeStyle = pal.highlight; ctx.lineWidth = 2; ctx.stroke();
+          });
+          // Measurement arrows
+          ctx.fillStyle = pal.accent;
+          ctx.font = "11px sans-serif";
+          ctx.textAlign = "left";
+          ctx.fillText("⊕ +V", 45, 150);
+          ctx.fillText("⊖ GND", 365, 150);
+          ctx.textAlign = "center";
+          ctx.fillText("OUT", 200, 30);
+          ctx.fillText("IN", 200, 310);
+
+        } else if (typeKey === "calibration" || typeKey === "testing") {
+          // Oscilloscope / measurement display
+          ctx.strokeStyle = pal.accent + "44";
+          ctx.lineWidth = 1;
+          for (let gx = 0; gx <= 320; gx += 40) { ctx.beginPath(); ctx.moveTo(40 + gx, 60); ctx.lineTo(40 + gx, 280); ctx.stroke(); }
+          for (let gy = 0; gy <= 220; gy += 44) { ctx.beginPath(); ctx.moveTo(40, 60 + gy); ctx.lineTo(360, 60 + gy); ctx.stroke(); }
+          ctx.strokeStyle = pal.accent;
+          ctx.lineWidth = 2.5;
+          ctx.beginPath();
+          for (let px = 0; px <= 320; px++) {
+            const wave = 60 + Math.sin((px / 320) * Math.PI * 4 + si * 0.8) * 70 + Math.sin((px / 320) * Math.PI * 12) * 20;
+            px === 0 ? ctx.moveTo(40 + px, 170 + wave * 0.35) : ctx.lineTo(40 + px, 170 + wave * 0.35);
+          }
+          ctx.stroke();
+          ctx.fillStyle = pal.accent;
+          ctx.font = "bold 12px monospace";
+          ctx.textAlign = "left";
+          ctx.fillText(`CH1  ${(2.3 + si * 0.1).toFixed(1)}V  ${(10 + si * 2)}kHz`, 50, 52);
+          ctx.fillStyle = pal.secondary;
+          ctx.fillText(`✓ MEASURE AT STEP ${si + 1}`, 50, 296);
+
+        } else if (typeKey === "safety") {
+          // Warning diagram
+          ctx.strokeStyle = pal.accent;
+          ctx.lineWidth = 4;
+          ctx.beginPath(); ctx.moveTo(200, 60); ctx.lineTo(340, 300); ctx.lineTo(60, 300); ctx.closePath(); ctx.stroke();
+          ctx.fillStyle = pal.accent + "22"; ctx.fill();
+          ctx.fillStyle = pal.accent;
+          ctx.font = "bold 64px sans-serif"; ctx.textAlign = "center";
+          ctx.fillText("⚠", 200, 240);
+          ctx.font = "bold 14px sans-serif";
+          ctx.fillText("SAFETY CRITICAL", 200, 310);
+
+        } else {
+          // Preparation / default — checklist style
+          const items = (step.materials || []).slice(0, 5);
+          ctx.fillStyle = pal.secondary;
+          ctx.font = "bold 13px sans-serif"; ctx.textAlign = "left";
+          ctx.fillText("REQUIRED MATERIALS:", 40, 70);
+          items.forEach((m, mi) => {
+            const name = typeof m === "object" ? m.name : String(m);
+            const yPos = 100 + mi * 40;
+            ctx.strokeStyle = pal.accent; ctx.lineWidth = 2;
+            ctx.strokeRect(40, yPos - 14, 16, 16);
+            ctx.fillStyle = pal.accent; ctx.font = "11px sans-serif";
+            ctx.fillText(`▶  ${name.slice(0, 38)}`, 65, yPos - 2);
+          });
+          ctx.fillStyle = pal.accent;
+          ctx.font = "bold 11px monospace"; ctx.textAlign = "right";
+          ctx.fillText(`STEP ${si + 1} / ${data.steps.length}`, 370, 320);
+        }
+
+        // Step type label pill
+        ctx.fillStyle = pal.accent + "33";
+        ctx.beginPath(); ctx.roundRect(14, 14, 100, 22, 11); ctx.fill();
+        ctx.fillStyle = pal.accent;
+        ctx.font = "bold 11px monospace"; ctx.textAlign = "center";
+        ctx.fillText((step.type || "ASSEMBLY").toUpperCase(), 64, 29);
+
+        // Convert canvas to image and add to PDF
+        try {
+          const diagImg = diagCanvas.toDataURL("image/jpeg", 0.90);
+          doc.addImage(diagImg, "JPEG", margin, y, leftW, diagH, undefined, "FAST");
+          // Border around diagram
+          doc.setDrawColor(...C.gray85);
+          doc.setLineWidth(0.4);
+          doc.rect(margin, y, leftW, diagH, "D");
+          // Caption
+          doc.setFontSize(6.5);
+          doc.setFont("helvetica", "italic");
+          doc.setTextColor(...C.gray60);
+          doc.text(`Fig. ${si + 1}: ${(step.type || "Assembly").charAt(0).toUpperCase() + (step.type || "Assembly").slice(1)} diagram`, margin + leftW / 2, y + diagH + 4, { align: "center" });
+        } catch { /* skip */ }
+
+        // ── RIGHT COLUMN: detail text ────────────────────────────────
+        let ry = colStartY;
+
+        // Instructions label
+        doc.setFontSize(7.5);
+        doc.setFont("helvetica", "bold");
+        doc.setTextColor(...C.gray40);
+        doc.text("INSTRUCTIONS", rightX, ry);
+        ry += 6;
+
+        doc.setFont("helvetica", "normal");
+        doc.setFontSize(8.5);
+        doc.setTextColor(...C.gray10);
+        const detailLines = doc.splitTextToSize(step.detail || "", rightW);
+        // Fill right column up to bottom of diagram area
+        const maxRightY = colStartY + diagH + 8;
+        detailLines.forEach(ln => {
+          if (ry < maxRightY) { doc.text(ln, rightX, ry); ry += 5; }
+        });
+
+        // ── BELOW BOTH COLUMNS: overflow detail + materials + tools + warning ──
+        y = Math.max(y + diagH + 10, ry + 4);
+
+        // Overflow detail lines that didn't fit in right column
+        const overflowLines = detailLines.slice(Math.floor((maxRightY - colStartY) / 5));
+        if (overflowLines.length > 0) {
+          doc.setFont("helvetica", "normal"); doc.setFontSize(8.5); doc.setTextColor(...C.gray10);
+          overflowLines.forEach(ln => { checkPage(7); doc.text(ln, margin, y); y += 5; });
+          y += 3;
+        }
+
+        // Materials checklist
+        const mats = step.materials || [];
+        if (mats.length > 0) {
+          checkPage(12 + mats.length * 7);
+          const halfW = (contentW - 6) / 2;
+          // Left: materials
+          doc.setFillColor(...C.gray95);
+          doc.rect(margin - 2, y - 3, halfW + 2, 8, "F");
+          doc.setFont("helvetica", "bold"); doc.setFontSize(7.5); doc.setTextColor(...C.black);
+          doc.text("MATERIALS REQUIRED", margin, y + 2); y += 10;
+
+          mats.forEach(m => {
+            checkPage(7);
+            const name = typeof m === "object" ? m.name : String(m);
+            const cost = typeof m === "object" && m.cost ? m.cost : null;
+            const where = typeof m === "object" && m.where ? m.where : null;
+            // Checkbox
+            doc.setDrawColor(...C.gray40); doc.setLineWidth(0.4);
+            doc.rect(margin, y - 3.5, 4, 4, "D");
+            doc.setFont("helvetica", "normal"); doc.setFontSize(7.5); doc.setTextColor(...C.gray20);
+            doc.text(name.slice(0, 45), margin + 6, y);
+            if (cost) { doc.setTextColor(...C.gray40); doc.text(cost, margin + halfW - 8, y, { align: "right" }); }
+            if (where) { doc.setFontSize(6.5); doc.setTextColor(...C.gray60); doc.text(where.slice(0, 30), margin + halfW + 2, y); }
+            y += 7;
+          });
+        }
+
+        // Tools
+        const tools = step.tools || [];
+        if (tools.length > 0) {
+          checkPage(10 + Math.ceil(tools.length / 3) * 7);
+          y += 2;
+          doc.setFillColor(...C.gray20);
+          doc.rect(margin - 2, y - 3, contentW + 4, 7, "F");
+          doc.setFont("helvetica", "bold"); doc.setFontSize(7.5); doc.setTextColor(...C.white);
+          doc.text("TOOLS:  " + tools.join("  ·  "), margin + 1, y + 1.5);
+          y += 10;
+        }
+
+        // Checkpoint
+        if (step.checkpoint) {
+          checkPage(14);
+          doc.setFillColor(240, 255, 240);
+          doc.setDrawColor(100, 180, 100);
+          doc.setLineWidth(0.4);
+          const cpLines = doc.splitTextToSize("✓  CHECKPOINT: " + step.checkpoint, contentW - 8);
+          const cpH = cpLines.length * 5.5 + 8;
+          doc.rect(margin, y, contentW, cpH, "FD");
+          doc.setFont("helvetica", "bold"); doc.setFontSize(8); doc.setTextColor(30, 100, 30);
+          cpLines.forEach((ln, li) => { doc.text(ln, margin + 4, y + 6 + li * 5.5); });
+          y += cpH + 4;
+        }
 
         // Warning box
         if (step.warning) {
-          checkPage(20);
-          y += 3;
-          doc.setFillColor(...C.gray95);
-          doc.setDrawColor(...C.gray60);
-          doc.setLineWidth(0.4);
-          const wLines2 = doc.splitTextToSize("⚠  " + step.warning, contentW - 8);
-          const boxH = wLines2.length * 5 + 8;
-          doc.rect(margin, y, contentW, boxH, "FD");
-          doc.setFont("helvetica", "bold"); doc.setFontSize(8);
-          doc.setTextColor(...C.black);
-          wLines2.forEach((ln, wi) => { doc.text(ln, margin + 4, y + 6 + wi * 5); });
-          y += boxH + 4;
+          checkPage(16);
+          y += 2;
+          doc.setFillColor(255, 248, 230);
+          doc.setDrawColor(200, 120, 0);
+          doc.setLineWidth(0.5);
+          const warnLines = doc.splitTextToSize("⚠  WARNING: " + step.warning, contentW - 8);
+          const warnH = warnLines.length * 5.5 + 8;
+          doc.rect(margin, y, contentW, warnH, "FD");
+          doc.setFont("helvetica", "bold"); doc.setFontSize(8); doc.setTextColor(160, 80, 0);
+          warnLines.forEach((ln, li) => { doc.text(ln, margin + 4, y + 6 + li * 5.5); });
+          y += warnH + 4;
         }
-        y += 6;
-      });
+
+        // Duration badge bottom-right
+        if (step.duration) {
+          checkPage(8);
+          doc.setFontSize(7.5);
+          doc.setFont("helvetica", "bold");
+          doc.setTextColor(...C.gray60);
+          doc.text(`⏱  Est. time: ${step.duration}`, W - margin, y, { align: "right" });
+          y += 8;
+        }
+
+        // Bottom divider
+        y += 3;
+        doc.setDrawColor(...C.gray85);
+        doc.setLineWidth(0.3);
+        doc.line(margin, y, W - margin, y);
+      }
     }
 
     // ── NOTES & FIRMWARE ─────────────────────────────────────────────
