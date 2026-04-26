@@ -388,7 +388,7 @@ export default function InventionLibrary() {
           <div className="w-px h-5 bg-gray-700" />
           <div>
             <h1 className="text-white font-black text-base tracking-tight">⚗️ Invention Build Library</h1>
-            <p className="text-gray-500 text-xs">{inventions.length} inventions · Build videos · Professional PDF specs</p>
+            <p className="text-gray-500 text-xs">{inventions.filter(i => !["Biofield Frequency Exposure Chamber (Research Device)"].includes(i.title)).length} inventions · Build videos · Professional PDF specs</p>
           </div>
         </div>
         <div className="flex items-center gap-3">

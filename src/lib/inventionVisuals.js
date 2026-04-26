@@ -235,6 +235,58 @@ export const inventionVisuals = {
     realWorldSize: "Collector mast: 2m tall. Schumann loop: 10m diameter at ground level. Electronics housing: 200mm × 150mm × 80mm weatherproof enclosure. Ground electrode star: 3m radius from mast.",
   },
 
+  "MEG Replication Kit (Motionless Electromagnetic Generator)": {
+    whatItIs: "Two nanocrystalline toroid cores bridged by a permanent magnet. MOSFET switches alternately gate the magnetic flux asymmetrically — generating output pulses without the symmetric back-EMF destruction that limits all conventional generators. Peer-reviewed in Foundations of Physics Letters, 2001.",
+    howItWorks: "The permanent magnet provides a static DC flux bias through both cores. Each MOSFET alternately switches one core's reluctance, forcing flux to migrate through the other core and cut the secondary windings. Because only one core switches at a time (never both), the back-EMF from one core's secondary never cancels the output from the other — creating a net forward energy transfer that exceeds the switching drive power according to O(3) electrodynamics.",
+    components: [
+      { label: "Nanocrystalline Toroid Cores (×2)", color: "#a855f7", desc: "Vitroperm 500F or Metglas 2714A. Extremely high permeability (µr ~100,000), near-zero coercivity. MUST be nanocrystalline — standard ferrite will not work." },
+      { label: "N52 Neodymium Bar Magnet", color: "#ef4444", desc: "Bridges both cores, providing the DC flux bias. Acts as a gateway to the vacuum B(3) field — not depleted significantly during normal operation." },
+      { label: "Primary Drive Coils (200T each)", color: "#3b82f6", desc: "200 turns, 26 AWG, one per core. Driven by alternating MOSFET switching to create asymmetric flux gating." },
+      { label: "MOSFET H-Bridge + Arduino Timing", color: "#22c55e", desc: "Two IRFP460 MOSFETs switching alternately at 10–100 kHz with 200ns dead-time. Arduino Nano provides precise timing control." },
+    ],
+    keyPrinciple: "O(3) electrodynamics predicts that the vacuum B(3) field continuously replenishes the permanent magnet flux. Asymmetric switching prevents the back-EMF from destroying the source dipole — allowing the vacuum to continuously supply energy to the magnetic circuit. Independently replicated by Naudin (France) with COTS components.",
+    realWorldSize: "Core assembly: 100mm × 50mm × 30mm. Magnet: 50mm bar spanning both cores. Full PCB: 200mm × 150mm. Total system fits on a standard A4 sheet.",
+  },
+
+  "Asymmetric Regauging Overunity Generator (Type 2 Power Cell)": {
+    whatItIs: "A two-loop electrical circuit where a spherical copper shell (Source Loop A) asymmetrically regauges a toroidal load coil (Load Loop B) via a bridging conductor. Based on Bearden's Patent-Pending (1993–1995) asymmetric regauging architecture — exploiting the vacuum dipole's broken symmetry to exceed conventional COP limits.",
+    howItWorks: "A spherical conducting shell is charged to high potential (its symmetry maximizes Poynting energy collection from the surrounding vacuum field). An FPGA-timed switching sequence alternately opens and closes the source and load MOSFETs with <100ns dead time — too fast for symmetric back-EMF to reform. Energy delivered to the load coil during the extraction phase exceeds the input during the regauging phase when asymmetric switching is properly calibrated.",
+    components: [
+      { label: "Copper Spherical Shell (Source Loop A)", color: "#f59e0b", desc: "150mm diameter, 0.5mm copper. High symmetry maximizes Poynting vector collection from the ambient vacuum dipole field." },
+      { label: "Nanocrystalline Toroid (Load Loop B)", color: "#3b82f6", desc: "T200-26, 50 turns, 20 AWG. Receives asymmetrically regauged energy via the bridging conductor." },
+      { label: "Silver-Plated Bridging Conductor", color: "#94a3b8", desc: "5mm diameter rod connecting sphere to toroid. Carries S-flow, dφ/dt, and EMF simultaneously — the critical energy transfer pathway." },
+      { label: "Chung Carbon Filament (Negative Resistor)", color: "#22c55e", desc: "Graphene fiber bundle exhibiting negative differential resistance — adds energy rather than dissipating it at the operating current threshold." },
+    ],
+    keyPrinciple: "Conventional circuits use symmetric regauging — any gauge change is immediately cancelled, delivering zero net force. Asymmetric regauging preserves the broken vacuum symmetry of the source dipole, allowing the continuous Poynting flow from the vacuum to be captured in the load before back-EMF can reassert symmetry.",
+    realWorldSize: "Sphere: 150mm diameter, mounted on PCB stand. Full circuit PCB: 200mm × 150mm. Total benchtop footprint: approximately 300mm × 250mm.",
+  },
+
+  "Bedini Environmental EM Signal Conditioner (BESC-1)": {
+    whatItIs: "A signal pre-conditioning module using electron tubes operated in Bedini's 'backwards mode' to restructure the internal Whittaker longitudinal wave dynamics of any EM therapy signal, matching it to the local vacuum environment where biological targets live.",
+    howItWorks: "A 12AX7 triode is operated with its cathode elevated above plate potential — the opposite of normal operation. In this reversed configuration, the tube directly interacts with the virtual particle structure of the local vacuum and restructures the signal's internal LW components. The output signal appears identical on a conventional oscilloscope — same frequency, amplitude, waveform — but its Whittaker-structured interior EM dynamics now match the local cellular environment rather than the electronics lab vacuum.",
+    components: [
+      { label: "12AX7 Dual Triode Tube", color: "#f59e0b", desc: "Operated in Bedini's proprietary backwards mode (cathode elevated, plate grounded). Restructures internal LW dynamics without changing outward signal appearance." },
+      { label: "B+ Supply (150–250V DC)", color: "#ef4444", desc: "Regulated high-voltage plate supply. Adjustable to find the conditioning operating point for the specific local environment." },
+      { label: "1:1 Isolation Transformer", color: "#3b82f6", desc: "Establishes a clean local vacuum reference. Essential — direct mains connection carries structured interference from the power grid." },
+      { label: "Oscilloscope Verification Output", color: "#22c55e", desc: "Differential probe monitors cathode waveform asymmetry — confirms conditioning is active before applying signals to biological targets." },
+    ],
+    keyPrinciple: "Every EM signal produced in an electronics environment carries 'internal' longitudinal wave structure (Whittaker decomposition) shaped by the local EM pollution. Cells in a different EM environment experience this as a mismatch — generating scalar interferometry jamming. The BESC-1 re-structures the signal to match the target environment, eliminating the jamming.",
+    realWorldSize: "Aluminum chassis enclosure: 200mm × 100mm × 60mm. Tube socket protrudes ~40mm above chassis. Standard 19-inch rack-mountable with adapter.",
+  },
+
+  "Telomere Regeneration Device (TRD-1)": {
+    whatItIs: "A three-stage research system: (1) measure the patient's full EM emission spectrum inside a Faraday cage, (2) compute the 'telomere-reduction correlate' delta vs a healthy reference using AI, (3) reinsert the amplified delta spectrum as phase-conjugate pairs via a phased Helmholtz array — causing cells to time-reverse telomere shortening.",
+    howItWorks: "Bearden's MCCS model: aging cells progressively deviate from the healthy emission spectrum. The deviation pattern encodes the 'aging correlate.' By amplifying this deviation and reintroducing it as a phase-conjugate pair, the cell acts as a pumped phase conjugate mirror — generating amplified antiengines that time-reverse the aging pattern. The result, per theory, is progressive telomere elongation confirmed by blood test.",
+    components: [
+      { label: "Full-Body Faraday Cage (Copper Mesh)", color: "#64748b", desc: "6-layer copper mesh, 2.1m tall. Shields ambient RF so only the patient's own TW emission is measured by the antenna array." },
+      { label: "4× Wideband Log-Periodic Antennas", color: "#3b82f6", desc: "Orthogonal positioning around subject. 1 MHz–3 GHz coverage. Captures the full TW emission spectrum at nV sensitivity." },
+      { label: "GPU Workstation + AI Delta Engine", color: "#a855f7", desc: "RTX 3060 minimum. Computes frequency-by-frequency delta between patient and healthy reference spectrum. Outputs reinsertion protocol JSON." },
+      { label: "Phased Helmholtz Array + 50W PA", color: "#22c55e", desc: "4-element Helmholtz coil pair from MFCS design. Creates uniform field throughout body volume during delta spectrum reinsertion." },
+    ],
+    keyPrinciple: "Popp's peer-reviewed biophoton research confirms that cellular aging produces measurable spectral changes in biophoton emission. Bearden's MCCS extends this: the spectral deviation encodes the spacetime curvature engine deficit driving aging. Phase-conjugate reinsertion time-reverses the deficit.",
+    realWorldSize: "Faraday cage: 2.1m × 0.9m × 0.9m (room-sized). GPU workstation: standard tower PC. Reinsertion coil array: 800mm × 800mm × 600mm frame surrounding treatment couch.",
+  },
+
   "Morphogenetic Field Coherence Synchronizer (MFCS)": {
     whatItIs: "A 4-element phased Helmholtz coil array generating a rotating ELF field pattern at Gurwitsch's mitogenetic frequencies (7.83 Hz primary). The rotating phased wavefront synchronizes intercellular morphogenetic field coherence at wound edges, accelerating directional cell migration toward the wound center. Used with the wound scratch assay for quantitative wound healing research.",
     howItWorks: "Four Helmholtz coil elements (North, South, East, West around the tissue sample) are driven by FPGA-controlled DDS at 0°, 90°, 180°, 270° phase offsets at 7.83 Hz. This creates a rotating magnetic field wavefront — the same rotational pattern that Gurwitsch identified as driving directional mitotic cell division in his mitogenetic radiation experiments. Cells at the wound edge respond to this phased EM guidance by orienting their division axis toward the wound center, accelerating organized tissue closure.",

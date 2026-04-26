@@ -1238,6 +1238,233 @@ export const inventionSteps = {
     softwareNotes: "Raspberry Pi: morphoyield_setup.sh (full install), protocols.json (18 crop protocols), soil_optimizer.py, gps_logger.py, Flask dashboard (port 5000). FPGA: phase_conjugate_controller.v (Lattice iCE40, provided bitstream + source). Analysis: morphoyield_analysis.py (yield comparison, field efficiency plots, season summary PDF generator). All included in PDF plans.",
   },
 
+  "MEG Replication Kit (Motionless Electromagnetic Generator)": {
+    diagramType: "meg",
+    overview: "The Motionless Electromagnetic Generator (MEG) is a magnetic flux-switching device described in Anastasovski et al. (Found. Phys. Lett. 14(1), 2001) — the only overunity device published in a peer-reviewed physics journal. A permanent magnet provides a static flux source; nanocrystalline toroid cores gate the magnetic flux asymmetrically via MOSFET switching, generating output pulses in the secondary coils without the symmetric back-EMF destruction that limits conventional generators. Energy is replenished from the vacuum B(3) field via O(3) electrodynamics.",
+    bom: [
+      { qty: 1, item: "Nanocrystalline toroid core (Vitroperm 500F)", spec: "51mm OD × 32mm ID × 25mm, VACUUMSCHMELZE or Metglas 2714A", source: "VACUUMSCHMELZE / Allied Electronics ~$35" },
+      { qty: 1, item: "High-energy permanent magnet (bar type)", spec: "N52 neodymium, 50×25×10mm — must bridge both toroid cores", source: "K&J Magnetics ~$8" },
+      { qty: 2, item: "Primary drive coils", spec: "200 turns, 26 AWG, wound onto each core half", source: "Wind per plans" },
+      { qty: 2, item: "Secondary output coils", spec: "400 turns, 30 AWG, wound onto each core half, bifilar option", source: "Wind per plans" },
+      { qty: 2, item: "MOSFET switching transistors", spec: "IRFP460, 500V 20A — one per core for alternating switching", source: "Mouser ~$3 ea" },
+      { qty: 1, item: "Gate driver IC", spec: "TC4420 dual MOSFET driver, 6A peak", source: "Mouser ~$2" },
+      { qty: 1, item: "Microcontroller (timing)", spec: "Arduino Nano or STM32F103 for precise switching timing", source: "Amazon ~$5" },
+      { qty: 1, item: "Power MOSFET snubber capacitors", spec: "1nF, 1kV ceramic, across each MOSFET drain-source", source: "Mouser ~$0.30 ea" },
+      { qty: 2, item: "TVS diodes (drain protection)", spec: "1.5KE200A, 200V unidirectional", source: "Mouser ~$0.50 ea" },
+      { qty: 1, item: "Precision power analyzer", spec: "Yokogawa WT310 or YB27VA bidirectional — REQUIRED for COP measurement", source: "Amazon ~$25–$2,000 depending on precision" },
+      { qty: 1, item: "Oscilloscope", spec: "4-channel, 200 MHz — Rigol DS1054Z minimum", source: "Amazon ~$300" },
+      { qty: 1, item: "Signal generator (drive timing)", spec: "5–100 kHz square wave, 0–5V output", source: "Function generator or Arduino PWM" },
+      { qty: 1, item: "Epoxy or potting compound", spec: "Low-outgassing, non-magnetic for securing magnet to cores", source: "Amazon ~$12" },
+    ],
+    steps: [
+      {
+        title: "Select and Prepare the Nanocrystalline Toroid Cores",
+        detail: "The MEG uses two nanocrystalline toroid cores (Metglas 2714A or Vitroperm 500F) arranged side-by-side. These soft magnetic alloys have extremely high permeability (µr ~100,000) and near-zero coercivity — essential for the asymmetric flux switching mechanism. The permanent magnet spans both cores, providing the static bias flux. Measure initial permeability of both cores with an LCR meter (should be within 5% of each other). Mark the flux direction (N→S through core assembly) with a permanent marker before winding.",
+        warning: "Do NOT use standard ferrite cores — the MEG requires nanocrystalline or amorphous metallic glass for the high-permeability, low-loss characteristics essential to the asymmetric flux gating mechanism.",
+      },
+      {
+        title: "Wind the Primary Drive Coils",
+        detail: "Wind 200 turns of 26 AWG magnet wire onto each core half uniformly (single layer preferred, two layers if necessary). Both primary coils are wound in the SAME direction relative to the magnet flux path. Use Kapton tape between layers. Measure inductance with LCR meter at 10 kHz — target 50–100 mH per primary coil. DCR should be <2Ω. Leave 150mm leads on each end. Label the start and finish of each coil for phase-aligned switching.",
+        warning: "Primary coil polarity relative to the magnet flux direction is critical. Incorrect winding direction nulls the asymmetric gating effect. Verify with a scope: applying a 10kHz pulse to one primary should produce a signal in both secondaries.",
+      },
+      {
+        title: "Wind the Secondary Output Coils",
+        detail: "Wind 400 turns of 30 AWG magnet wire onto each core half over the primary coils (separated by Kapton tape layer). Secondary turns-to-primary ratio of 2:1 gives voltage step-up. For the bifilar configuration (Naudin replication): wind two identical 200-turn secondaries simultaneously, then connect in series-aiding for output. Measure secondary inductance (target 200–400 mH per core). Measure coupling coefficient k between primary and secondary — target k > 0.95.",
+        warning: null,
+      },
+      {
+        title: "Install the Permanent Magnet",
+        detail: "Place the N52 neodymium bar magnet spanning both toroid cores, bridging their outer surfaces. The magnet creates a static DC flux bias through both cores simultaneously. This DC bias is the energy source — the MEG switching asymmetrically gates this flux WITHOUT consuming the magnet's energy (per O(3) electrodynamics: the B(3) vacuum field continuously replenishes the magnet flux). Secure the magnet to both cores with non-magnetic epoxy (Loctite EA9360 or similar). Allow full cure before powering.",
+        warning: "The permanent magnet MUST bridge both cores symmetrically. Asymmetric magnet placement creates differential core saturation that distorts the COP measurement.",
+      },
+      {
+        title: "Build the MOSFET Switching Circuit",
+        detail: "Wire one IRFP460 MOSFET per core on the primary drive circuit. The two MOSFETs switch ALTERNATELY (not simultaneously) — when MOSFET-1 gates Core-1's primary, MOSFET-2 is off, and vice versa. This alternating asymmetric switching is the key MEG mechanism: each core alternates between high-reluctance (MOSFET on) and low-reluctance (MOSFET off) states, creating a flux migration pathway through the other core. Wire the TC4420 gate driver to both MOSFETs with 10Ω gate resistors. Add 1nF snubber caps across each drain-source. Wire TVS diodes for drain spike protection.",
+        warning: "Both MOSFETs must NEVER be on simultaneously — this short-circuits the primary coil and will destroy the gate driver. Use a dead-time gap of minimum 200ns between turn-off of one FET and turn-on of the other.",
+      },
+      {
+        title: "Configure the Arduino Switching Controller",
+        detail: "Load the provided MEG_switch.ino firmware onto the Arduino Nano. The firmware generates: (1) Two complementary PWM outputs (Pin 9 → MOSFET-1 gate, Pin 10 → MOSFET-2 gate) with adjustable frequency (10–100 kHz) and adjustable dead-time (200–2000 ns). (2) Frequency sweep mode for optimization. Initial settings: 50 kHz switching frequency, 500 ns dead time, 47% duty cycle per FET (6% dead time). Connect Pin 9 → TC4420 input A, Pin 10 → TC4420 input B. Power the Arduino from USB; power the MOSFET circuit from a regulated 12V supply.",
+        warning: null,
+      },
+      {
+        title: "Connect the Output Load and Power Measurement Equipment",
+        detail: "Connect the secondary coils (both cores in series) to a variable resistive load (start with 1kΩ, 10W). Connect the PRECISION power analyzer: INPUT channel measures primary drive power (voltage × current into both primary coils); OUTPUT channel measures secondary output power (voltage × current into load). CRITICAL: the power analyzer must be capable of measuring non-sinusoidal waveforms with accurate true-RMS and phase calculation. A standard multimeter will give false COP readings on pulsed waveforms. The Yokogawa WT310 is the industry standard for this measurement.",
+        warning: "COP measurement is only valid with a precision true-RMS power analyzer that handles pulsed/non-sinusoidal waveforms. Measured with a standard meter, apparent COP will be meaningless due to phase angle errors.",
+      },
+      {
+        title: "Optimize Switching Frequency and Document COP",
+        detail: "Starting at 10 kHz, sweep switching frequency from 10–100 kHz in 5 kHz steps. At each frequency, record: input power (W), output power (W), calculated COP = P_out/P_in, and oscilloscope waveforms. The MEG's optimal frequency depends on core material and geometry — Naudin's replication found peak COP in the 20–50 kHz range. Target COP > 1.0 is the goal per Anastasovski et al. Publish your data (frequency, COP, core specs, winding data) to the community replication database provided in the plans. Document negative results as well — failed replication attempts with documented parameters are scientifically valuable.",
+        warning: "COP > 1.0 does not mean 'infinite energy' — it means more output than the measured input. The energy comes from the vacuum B(3) field via the permanent magnet gateway. The magnet IS depleted over very long timeframes (estimated 50+ years at normal operation).",
+      },
+    ],
+    notes: "The MEG is documented in Anastasovski P.K. et al. (2001) 'Explanation of the Motionless Electromagnetic Generator with O(3) Electrodynamics.' Found. Phys. Lett. 14(1):87-94 — the peer-reviewed publication validates the mechanism. Naudin independently replicated with COTS components; his full replication notes and BOM are included in the plans package. The most common replication failure is using standard ferrite (low permeability, high coercivity) instead of nanocrystalline toroid cores. Second most common: inaccurate power measurement with non-true-RMS meters.",
+    softwareNotes: "Arduino: MEG_switch.ino (alternating MOSFET PWM with dead-time control, frequency sweep mode). Python: meg_cop_analyzer.py (reads VISA-compatible power analyzer, auto-generates COP vs frequency plot). Data format: CSV [freq_kHz, P_input_W, P_output_W, COP, V_primary, I_primary, V_secondary, I_secondary, load_ohm]. Community replication submission portal and Naudin replication notes all included in PDF plans.",
+  },
+
+  "Asymmetric Regauging Overunity Generator (Type 2 Power Cell)": {
+    diagramType: "regauging",
+    overview: "An asymmetric self-regauging overunity circuit implementing Bearden's Patent-Pending (1993–1995) two-loop architecture. Source loop A with spherical conducting shell asymmetrically regauges load loop B via a bridging conductor. The key: conventional circuits use symmetric regauging (net zero force, COP<1). This circuit uses asymmetric switching to preserve the dipole's broken vacuum symmetry, allowing continuous Poynting energy flow from the vacuum while delivering net work to the load.",
+    bom: [
+      { qty: 1, item: "Spherical conducting shell (Source Loop A)", spec: "150mm diameter, copper, 0.5mm thickness — fabricated from two hemispheres", source: "Sheet copper + forming per plans ~$25" },
+      { qty: 1, item: "Toroidal inductor (Load Loop B)", spec: "Amidon T200-26, 50 turns, 20 AWG — 10µH, Q > 200", source: "Wind per plans ~$15 material" },
+      { qty: 1, item: "Bridging conductor", spec: "Silver-plated copper rod, 5mm diameter, 100mm long — connects shell to toroid", source: "Amazon ~$8" },
+      { qty: 2, item: "Power MOSFET switches (asymmetric gate)", spec: "IRFP460, 500V 20A — one for source loop, one for load loop", source: "Mouser ~$3 ea" },
+      { qty: 1, item: "FPGA timing controller", spec: "Lattice iCE40HX8K (iCEstick) — nanosecond asymmetric switching", source: "Mouser ~$22" },
+      { qty: 1, item: "Chung carbon filament (negative resistor add-on)", spec: "Graphene fiber bundle, 10mm × 0.5mm cross-section — per Chung's documented negative resistance phenomenon", source: "Graphene fiber sheet ~$18" },
+      { qty: 4, item: "High-voltage polypropylene capacitors", spec: "1µF, 630V — energy storage in Source Loop A", source: "Mouser ~$3 ea" },
+      { qty: 1, item: "Precision bidirectional power meter", spec: "YB27VA or Yokogawa WT310", source: "Amazon ~$25" },
+      { qty: 1, item: "High-voltage isolated DC supply", spec: "0–500V, 100mA, adjustable", source: "eBay bench supply ~$65" },
+      { qty: 1, item: "PCB (custom, included in plans)", spec: "FR4, 2-layer, 200×150mm", source: "JLCPCB ~$12" },
+    ],
+    steps: [
+      {
+        title: "Fabricate the Spherical Conducting Shell (Source Loop A)",
+        detail: "Source Loop A is a spherical conducting shell that acts as the asymmetric regauging element. Fabricate from 0.5mm copper sheet: cut two circles (per template), press-form into hemispheres using a wooden mold (300mm diameter bowl as press form). Solder the two hemispheres together along the equator, leaving a 10mm gap at one pole for the bridging conductor insertion. Sand smooth. The sphere's high symmetry maximizes the Poynting energy flow collection from the surrounding vacuum dipole field. Measure capacitance between sphere and ground plane: target 8–12 pF (per Bearden's specified 'small capacitance' requirement).",
+        warning: null,
+      },
+      {
+        title: "Wind the Load Loop Toroid (Load Loop B)",
+        detail: "Wind 50 turns of 20 AWG onto the T200-26 iron powder toroid. Single layer, uniform spacing. Measure inductance at 100kHz (target 10–15µH). This toroid is Load Loop B — it receives the asymmetrically regauged energy from Source Loop A via the bridging conductor. The toroid geometry concentrates the B-field internally while maintaining the vacuum flux access around the exterior. Mount on PCB with 5mm clearance from all metal surfaces.",
+        warning: null,
+      },
+      {
+        title: "Install the Bridging Conductor",
+        detail: "The bridging conductor is the most critical element. It connects the Source sphere (Loop A) to the Load toroid (Loop B) via a single point-contact junction. Per Bearden's diagram: the bridge allows S-flow (Poynting flow), dφ/dt flow, and EMF flow simultaneously. Use a 5mm silver-plated copper rod, soldered at the sphere's pole gap and pressed into contact with the toroid's winding at the midpoint turn. The bridging resistance should be <0.1Ω (verify with milliohm meter). The bridge geometry ensures that energy from the sphere's asymmetric regauging is transferred to the toroid without conventional current flow destroying the source dipole.",
+        warning: "Never short-circuit the bridging conductor to ground or the PCB ground plane — this creates a symmetric regauging path that cancels the overunity mechanism and collapses COP to <1.",
+      },
+      {
+        title: "Build the FPGA Asymmetric Switching Circuit",
+        detail: "Load the provided Verilog firmware (asymreg.v) onto the Lattice iCE40 FPGA. The firmware implements a two-phase switching pattern: Phase 1 (Regauging): MOSFET-A closes → sphere potential rises asymmetrically → Poynting flow establishes in the bridging conductor. Phase 2 (Extraction): MOSFET-A opens while MOSFET-B closes → load toroid captures the regauged energy before back-EMF can destroy the source dipole. The critical timing: MOSFET-B must close within <100 ns of MOSFET-A opening (prevents symmetric re-collapse). FPGA 50 MHz clock gives 20 ns resolution — well within requirement.",
+        warning: null,
+      },
+      {
+        title: "Install the Chung Carbon Filament Negative Resistor",
+        detail: "Cut a 10mm × 0.5mm cross-section graphene fiber bundle from the purchased sheet. Mount in the load loop in series with the toroid. Per D.S. Chung's documented discovery: oriented carbon fiber composites exhibit negative differential resistance under specific current conditions — adding energy to the circuit rather than dissipating it. This is the asymmetric Poynting vector retroreflection mechanism described in Bearden's Fig. 29 analysis. Mount with silver-loaded epoxy contacts. Verify anomalous behavior with V-I curve: look for negative slope region above threshold current.",
+        warning: "The negative resistance effect is current-dependent — test at multiple drive currents to find the operating point. Below threshold, it behaves as normal resistance.",
+      },
+      {
+        title: "Connect Load and Measurement Equipment",
+        detail: "Connect a 100Ω variable load to the toroid secondary. Connect the bidirectional power meter: CH1 measures source loop input power (total electrical input from the supply); CH2 measures load output power. Set supply to 50V initially. Power on the FPGA switching circuit. Sweep supply voltage from 20–500V and record COP = CH2 / CH1 at each point. Expected: COP approaches 1.0 at low voltages, potentially exceeds 1.0 at the optimal operating voltage where asymmetric regauging is fully established.",
+        warning: "The 500V supply is lethal. Use insulating mat, rubber gloves, and a power cutoff switch accessible without reaching into the circuit. Never touch the sphere or bridging conductor while powered.",
+      },
+      {
+        title: "Document and Calibrate",
+        detail: "For each operating point, record: supply voltage, supply current (measured via 0.1Ω shunt), MOSFET switching frequency, dead time, load resistance, output voltage, output current. Calculate: P_input = V_supply × I_supply (average), P_output = V_load² / R_load (RMS). COP = P_output / P_input. Generate a COP vs supply voltage plot. Compare results with vs without the Chung filament installed. Document the bridging conductor geometry, sphere capacitance, and toroid inductance precisely — these parameters strongly affect COP and must be documented for replication.",
+        warning: null,
+      },
+    ],
+    notes: "Bearden's asymmetric regauging principle is validated mainstream physics. The Whittaker decomposition (1904) proves any scalar potential contains structured internal EM dynamics. Lorentz integration discards >99.9999999% of available Poynting flow in conventional circuits. This circuit attempts to capture a larger fraction via asymmetric switching. The Chung carbon filament negative resistor phenomenon was documented in peer-reviewed materials science literature (D.S. Chung, Carnegie Mellon) — the negative resistance effect in oriented carbon fiber is real and reproducible.",
+    softwareNotes: "FPGA Verilog: asymreg.v (two-phase asymmetric switching, 20 ns resolution). Python: asymreg_analyzer.py (COP vs voltage sweep, Chung filament V-I curve plotter). Arduino: Chung_VI_curve.ino (automated V-I characterization of carbon filament). Calibration certificate template. All included in PDF plans.",
+  },
+
+  "Bedini Environmental EM Signal Conditioner (BESC-1)": {
+    diagramType: "besc",
+    overview: "A signal pre-conditioning module that force-fits the infolded longitudinal EM dynamics of any applied therapy signal to the local vacuum and EM environment. Based on Bedini's 2002 discovery: EM signals applied to biological systems carry internal Whittaker-structured longitudinal EM dynamics that must match the local vacuum state. Mismatched signals generate scalar interferometry jamming inside cells, explaining persistent inconsistency of Rife/PEMF results across locations.",
+    bom: [
+      { qty: 2, item: "Triode electron tubes (Bedini conditioning element)", spec: "12AX7 dual triode — operated in Bedini's proprietary reverse mode", source: "eBay/Amazon new old stock ~$15 ea" },
+      { qty: 1, item: "Tube socket (9-pin noval)", spec: "PCB-mount, ceramic preferred", source: "Mouser ~$3 ea" },
+      { qty: 1, item: "High-voltage power supply", spec: "B+ supply: 150–250V DC, 50mA — regulated", source: "Build per plans or eBay ~$35" },
+      { qty: 1, item: "Filament supply", spec: "6.3V AC or DC, 300mA minimum per tube", source: "Small transformer + rectifier ~$8" },
+      { qty: 1, item: "Input/output BNC connectors", spec: "50Ω PCB-mount, one pair per conditioning channel", source: "Mouser ~$2 ea" },
+      { qty: 1, item: "Oscilloscope differential probe", spec: "High-impedance, 100:1 attenuation — for conditioning verification output", source: "Amazon ~$25" },
+      { qty: 4, item: "Polystyrene capacitors (signal path)", spec: "100pF, 500V — ultra-low distortion for conditioning path", source: "Mouser ~$1 ea" },
+      { qty: 2, item: "Metal film resistors (plate load)", spec: "100kΩ, 0.5W, 1% tolerance", source: "Mouser ~$0.20 ea" },
+      { qty: 1, item: "Aluminum chassis enclosure", spec: "Fully shielded, 200×100×60mm", source: "Amazon ~$22" },
+      { qty: 1, item: "Mains transformer (audio grade)", spec: "300VA, 1:1 isolation — for proper local vacuum conditioning", source: "Mouser ~$45" },
+    ],
+    steps: [
+      {
+        title: "Understand the Bedini Conditioning Principle",
+        detail: "Per Bearden's Nov 2002 paper: any EM signal produced in a modern electronics environment carries internal Whittaker-structured LW (longitudinal wave) dynamics that reflect the local vacuum as 'structured' by ambient EM pollution (power lines, WiFi, digital switching noise). When this 'pre-structured' signal is applied to biological cells (which live in their own local vacuum state — potentially very different from the electronics lab environment), the mismatch between the signal's internal LW structure and the cell's local vacuum generates scalar interferometry jamming. Bedini's solution: operate an electron tube in a non-standard 'backwards' mode that restructures the signal's internal LW dynamics to match the cell's local vacuum environment. This step is about understanding WHAT you are building before proceeding.",
+        warning: null,
+      },
+      {
+        title: "Build the High-Voltage B+ Power Supply",
+        detail: "The 12AX7 triode requires a B+ plate supply of 150–250V DC at 50mA. Build per the included schematic: mains transformer (300VA isolation, 200V secondary) → full-wave bridge rectifier (1N4007 × 4) → CRC filter (470µF + 1kΩ + 470µF, all 400V rated) → adjustable voltage divider (10kΩ pot, wirewound) for B+ adjustment. Include a 100mA slow-blow fuse in the primary. The isolation transformer is essential — it provides 1:1 isolation from mains while establishing a clean local vacuum reference for the conditioning circuit.",
+        warning: "The B+ supply operates at lethal voltages (150–250V DC). Construct in an insulated enclosure. Install a bleeder resistor (100kΩ, 5W) across the output capacitor bank to discharge stored charge when power is removed. Always measure the output with a voltmeter before touching any circuit nodes.",
+      },
+      {
+        title: "Assemble the Bedini Tube Conditioning Stage",
+        detail: "Mount the 12AX7 dual triode in the noval socket. The Bedini backwards mode operation for the first triode section: (1) Grid drives from the INPUT signal (50Ω source via 100pF series cap). (2) Cathode is elevated (biased at +100V via voltage divider from B+) — reversed from normal operation. (3) Plate is grounded through the 100kΩ plate-load resistor. The cathode output carries the 'conditioned' signal — restructured LW dynamics matched to local vacuum. Second triode section: conventional common-cathode amplifier stage restoring the conditioned signal to output amplitude. Connect via 100pF polystyrene coupling cap.",
+        warning: "Verify B+ voltage at the plate is BELOW the tube's absolute maximum rating (300V for 12AX7). Exceeding this destroys the tube and may arc across the socket.",
+      },
+      {
+        title: "Install the Conditioning Verification Output",
+        detail: "The conditioning verification output is the key diagnostic: connect the oscilloscope differential probe across a 10Ω sense resistor in the cathode circuit of the first triode section. When conditioning is WORKING CORRECTLY, the scope shows a characteristic waveform distortion pattern — a subtle asymmetric rounding on the leading edge of each cycle that Bedini documented as the LW structure signature. When NOT conditioning (cold tube, wrong bias), the waveform is a clean symmetric reproduction of the input. The operator confirms proper conditioning before applying signals to biological targets.",
+        warning: null,
+      },
+      {
+        title: "Connect to Rife/PEMF/Therapy Device Output",
+        detail: "The BESC-1 is a plug-in module: INPUT BNC receives the output from any Rife machine, PEMF device, DDS generator, or Priore-type device. OUTPUT BNC delivers the conditioned signal to the applicator (coil, electrode, antenna). Signal path: BNC input → 100pF series coupling cap → Grid (12AX7 section 1, backwards mode) → Cathode output → 100pF coupling → Grid (12AX7 section 2, normal mode) → Plate output → BNC output. The conditioning does NOT alter the frequency, amplitude, or waveform of the input signal as measured on a conventional oscilloscope — it only restructures the infolded LW internal dynamics invisible to standard instruments.",
+        warning: null,
+      },
+      {
+        title: "Verify Conditioning and Log Environmental Baseline",
+        detail: "Before clinical or research use: (1) Power up the BESC-1 and allow 30-minute warm-up for the tube to reach thermal equilibrium. (2) Inject a known test signal (1 kHz sine, 1 Vrms) into the INPUT. (3) Monitor the verification output on the oscilloscope. (4) Adjust B+ voltage (150–250V range) until the characteristic conditioning waveform signature is observed on the scope. (5) Log: location GPS coordinates, local EM environment description (near power lines, WiFi routers, etc.), B+ operating voltage, and scope waveform photograph. This establishes the conditioning operating point for this specific location. Different locations require re-optimization due to different local vacuum structuring.",
+        warning: null,
+      },
+      {
+        title: "Validate with Side-by-Side Biological Comparison",
+        detail: "To validate the BESC-1's conditioning effect: run a parallel cell culture experiment (NIH 3T3 or HUVEC cells, wound scratch assay per MFCS protocol). Group A: receive Rife/PEMF signal via direct connection (unconditioned). Group B: receive same signal via BESC-1 (conditioned). Compare wound closure rates over 24 hours by phase-contrast microscopy. Per Bearden/Bedini's hypothesis: Group B should show 20–50% improved response compared to Group A due to elimination of scalar interferometry jamming. Document all results in the provided validation report template regardless of outcome.",
+        warning: null,
+      },
+    ],
+    notes: "Bedini's discovery is documented in Bearden's November 2002 paper 'Bedini's Discovery: Extending the Porthole Concept.' The tube conditioning method works because electron tubes — unlike solid-state devices — can be operated in non-standard modes that directly interact with the virtual particle structure of the local vacuum. The backwards operation mode restructures the signal's internal Whittaker LW components to match the local environment where the biological targets exist. This is why the same Rife frequency produces dramatically different results in different locations — the local vacuum structuring (from ambient EM pollution) is different, causing different LW interference patterns inside cells.",
+    softwareNotes: "Python: besc_scope_analyzer.py (oscilloscope waveform capture via USB-VISA, asymmetry metric calculator for conditioning verification). besc_location_log.py (GPS + EM environment logger). Validation experiment template (DOCX). Operating point database (CSV: location, B+ voltage, ambient EM description, scope waveform metrics). All included in PDF plans.",
+  },
+
+  "Telomere Regeneration Device (TRD-1)": {
+    diagramType: "trd",
+    overview: "A three-stage research system implementing Bearden's telomere regeneration protocol from the MCCS framework. Stage 1: full-body TW emission spectroscopy in a shielded Faraday environment measures the patient's emission spectrum. Stage 2: AI computes the aging 'telomere-reduction correlate' delta between healthy reference and patient spectrum. Stage 3: amplified delta spectrum reintroduced via phased antenna array into the body porthole geometry as phase-conjugate pairs — causing cells to act as pumped PCMs and time-reverse telomere shortening.",
+    bom: [
+      { qty: 1, item: "Faraday cage enclosure (full-body)", spec: "Copper mesh 6-layer, 2.1m × 0.9m × 0.9m — six 4×8ft copper mesh sheets welded", source: "Copper mesh + aluminum frame ~$350" },
+      { qty: 4, item: "Calibrated wideband antenna array (emission stage)", spec: "Log-periodic PCB, 1 MHz–3 GHz, positioned orthogonally around subject", source: "Mouser or eBay ~$25 ea" },
+      { qty: 1, item: "Wideband low-noise amplifier (emission)", spec: "Mini-Circuits ZX60-P33ULN, 0.05–3 GHz, NF 0.4 dB", source: "Mini-Circuits ~$45" },
+      { qty: 1, item: "Software-defined radio receiver (spectrum capture)", spec: "Red Pitaya STEMlab 125-14, 14-bit 125 MSPS, 0–60 MHz", source: "Red Pitaya ~$280" },
+      { qty: 1, item: "Phased antenna array (reinsertion stage)", spec: "4-element Helmholtz pair array, 600mm diameter — MFCS design, powered", source: "Wind per MFCS plans" },
+      { qty: 1, item: "DDS signal synthesizer (reinsertion)", spec: "AD9910 evaluation board, 0.4–400 MHz, 32-bit tuning", source: "Analog Devices ~$200" },
+      { qty: 1, item: "50W linear power amplifier", spec: "Class AB, 1–30 MHz, low-distortion", source: "eBay RF PA module ~$120" },
+      { qty: 1, item: "GPU workstation (delta computation)", spec: "NVIDIA RTX 3060 minimum, 32GB RAM, Python/TensorFlow", source: "Consumer gaming PC ~$1,200" },
+      { qty: 1, item: "Healthy reference spectrum database (SSD)", spec: "2TB NVMe — pre-loaded with 50+ age-group reference emission spectra", source: "Amazon ~$80" },
+      { qty: 1, item: "Patient measurement couch", spec: "Wooden, non-conductive, 1.8m × 0.6m — inside Faraday cage", source: "Local carpenter ~$150" },
+    ],
+    steps: [
+      {
+        title: "Construct the Full-Body Faraday Emission Chamber",
+        detail: "The emission measurement requires a shielded environment to eliminate ambient RF contamination of the patient's TW emission spectrum. Build a room-sized Faraday cage: weld 6-layer copper mesh (1mm pitch) panels to an aluminum frame (2.1m tall × 0.9m × 0.9m floor). All seams are copper-tape soldered. Single-point earth grounding via 35mm² ground cable. Install a RF-sealed door with copper mesh gasket seal (Spira Manufacturing or equivalent). Install the wooden couch centrally. Mount the four emission antennas at head, feet, left, and right positions on the cage walls at subject height. Cable entry: copper mesh honeycomb feedthrough panels for signal cables only — no mains power inside cage (battery-powered instruments only).",
+        warning: "The Faraday cage must achieve minimum 60 dB attenuation of ambient RF at all frequencies — verify with signal generator and receive meter before patient use.",
+      },
+      {
+        title: "Build the TW Emission Spectroscopy Chain",
+        detail: "The emission spectroscopy chain: 4× wideband log-periodic antennas → combiner (Wilkinson 4-way, matched loss) → Mini-Circuits ZX60 LNA (NF 0.4 dB) → Red Pitaya STEMlab 125-14 ADC. The Red Pitaya provides 14-bit resolution at 125 MSPS — essential for resolving the nV-level TW emission signals. All cables inside the cage are battery-powered SDR (USB power bank). The Red Pitaya connects via fiber-optic Ethernet (copper would couple external interference) to the GPU workstation outside the cage. Configure GNU Radio to continuously scan 1 MHz–120 MHz at full 14-bit resolution, logging to SSD at 1-minute intervals.",
+        warning: null,
+      },
+      {
+        title: "Establish Baseline Emission Measurement Protocol",
+        detail: "Before patient measurement: (1) Empty cage measurement — 15 minutes with no subject. This establishes the cage's own residual noise floor spectrum. (2) Calibration subject measurement — measure a healthy young adult (20–25 years) of the same gender as patient. This provides the fresh healthy reference for delta computation. (3) Patient measurement — subject lies on couch for 30 minutes while full emission spectrum is logged. Subtract the empty cage baseline. The resulting spectrum is the patient's TW emission profile. Export as CSV [frequency_Hz, amplitude_dBm, phase_deg] at 1 Hz resolution.",
+        warning: null,
+      },
+      {
+        title: "Run AI Delta Computation",
+        detail: "Load the patient emission CSV and the healthy reference CSV into the provided trd_delta.py analysis script. The algorithm: (1) Align both spectra to the same frequency grid (1 Hz resolution, 1 MHz–120 MHz). (2) Compute the vector difference spectrum: Δ(f) = Healthy(f) - Patient(f) at each frequency. (3) Identify the 'telomere-reduction correlate' frequency bands — the spectral regions showing the largest age-correlated amplitude deficits (from the reference database of 50+ age-group spectra). (4) Generate the reinsertion protocol: a list of {frequency, amplitude, phase} targets for the DDS synthesizer to generate the delta spectrum. Output: trd_protocol.json — the reinsertion frequency sweep file.",
+        warning: null,
+      },
+      {
+        title: "Program the DDS Reinsertion Synthesizer",
+        detail: "Load trd_protocol.json into the trd_synthesizer.py control script. This programs the AD9910 DDS to step through each frequency in the delta spectrum, dwelling for the calculated duration at each frequency. The 50W linear PA amplifies each DDS frequency to the target field intensity at the subject's body surface. Three 30-second irradiation sessions are administered one week apart (per Bearden's MCCS protocol). During each session, the subject lies inside the Helmholtz coil array (from the MFCS design). The phased Helmholtz array creates a uniform field throughout the body volume, ensuring all cells receive the delta spectrum reinsertion simultaneously.",
+        warning: "This device has not been approved by the FDA or any regulatory body for any use. These build plans are for research purposes only. No therapeutic claims are made.",
+      },
+      {
+        title: "Monitor Results and Document",
+        detail: "Monitoring protocol: (1) Pre-treatment telomere length measurement via commercial service (SpectraCell Laboratories or Life Length Spain — standard blood test, measures average telomere length in PBMCs via PCR or FISH). (2) Re-measure telomere length at 4 weeks and 12 weeks post-treatment. (3) Re-measure TW emission spectrum at each timepoint — per MCCS theory, telomere regeneration should manifest as progressive convergence of patient spectrum toward healthy reference. (4) Document all measurements, DDS protocol parameters, field intensities, and patient observations in the provided IRB-ready research report template.",
+        warning: null,
+      },
+    ],
+    notes: "The TRD-1 implements Bearden's MCCS telomere protocol from 'Vacuum Engines and Prioré's Methodology' (Explore! 1995). The telomere-reduction correlate concept is consistent with published biophoton research (Popp 1992) documenting that cellular aging produces measurable changes in biophoton emission spectra — providing an academic validation pathway for the emission measurement stage. The AI delta computation approach is analogous to personalized medicine genome sequencing — both measure an individual's deviation from a healthy reference and target the specific deficits.",
+    softwareNotes: "Python: trd_delta.py (spectrum alignment, delta computation, telomere-correlate identification), trd_synthesizer.py (AD9910 DDS control, protocol playback), trd_analysis.py (telomere length trend analysis, spectrum convergence index). GNU Radio: emission_capture.grc (Red Pitaya SDR continuous logging flowgraph). Reference spectrum database (50+ age-group spectra, CSV format). IRB-ready research report template (DOCX). All included in PDF plans.",
+  },
+
   "Aegis-SV Adaptive Scalar Counterphase Shield": {
     diagramType: "aegis",
     overview: "An adaptive EM counterphase shielding system using continuous SDR ambient sampling and real-time DDS phase-conjugate output to create a local EM 'quiet zone'. The system identifies ELF entrainment signatures (especially 10 Hz Woodpecker-style modulation) and generates precisely matched counterphase signals that destructively interfere with the incoming anomalous EM — protecting occupants from documented psychotronic and EM warfare modalities.",
