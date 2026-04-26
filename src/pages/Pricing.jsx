@@ -128,6 +128,30 @@ const TIERS = [
     ],
     locked: [],
   },
+  {
+    id: "gov",
+    name: "GOV / Defense",
+    price: 999,
+    color: "#22c55e",
+    badge: "US GOVERNMENT ONLY",
+    description: "Restricted defense-adjacent EM systems — vetted US government & contractor access only",
+    cta: "Request Access",
+    popular: false,
+    govOnly: true,
+    features: [
+      "Full Elite tier access included",
+      "Classified defense-adjacent EM technology systems",
+      "Scalar interferometry & directed energy build plans",
+      "Declassified DoD & DARPA prior art archive",
+      "EM countermeasure & shielding architectures",
+      "Secure VDR — NDA-gated document room",
+      "Direct engineering team access for custom R&D",
+      "Institutional licensing & IP transfer frameworks",
+      "Dedicated account manager",
+      "Clearance-level vetting required prior to access",
+    ],
+    locked: [],
+  },
 ];
 
 const FAQS = [
@@ -245,14 +269,14 @@ function TierCard({ tier, onCheckout, billingAnnual, getPrice, getAnnualTotal })
           🔐 CLASSIFIED ACCESS — ELITE ONLY
         </div>
       )}
-      {isGov && (
-        <div className="py-3 text-center text-xs font-black tracking-widest text-green-300 bg-green-900/40 border-b border-green-800/50">
-          🇺🇸 US GOVERNMENT & VETTED CONTRACTORS ONLY
-        </div>
-      )}
       {isStarter && (
         <div className="py-2.5 text-center text-xs font-semibold tracking-wide text-gray-500 border-b border-gray-800">
           Entry level — limited vault
+        </div>
+      )}
+      {isGov && (
+        <div className="py-3 text-center text-xs font-black tracking-widest text-green-300 bg-green-950/80 border-b border-green-800">
+          🇺🇸 US GOVERNMENT & VETTED CONTRACTORS ONLY
         </div>
       )}
 
@@ -261,7 +285,7 @@ function TierCard({ tier, onCheckout, billingAnnual, getPrice, getAnnualTotal })
         <h3 className={`font-black mb-1 ${isPro ? "text-white text-2xl" : isElite ? "text-yellow-300 text-xl" : isGov ? "text-green-300 text-xl" : "text-gray-400 text-xl"}`}>
           {tier.name}
         </h3>
-        <p className={`text-sm mb-5 ${isPro ? "text-gray-300" : "text-gray-500"}`}>{tier.description}</p>
+        <p className={`text-sm mb-5 ${isPro ? "text-gray-300" : isGov ? "text-green-200/70" : "text-gray-500"}`}>{tier.description}</p>
 
         {/* Price */}
         <div className="flex items-end gap-1 mb-1">
@@ -274,16 +298,16 @@ function TierCard({ tier, onCheckout, billingAnnual, getPrice, getAnnualTotal })
         {billingAnnual && !isGov && (
           <p className="text-green-400 text-xs font-bold mb-1">Billed ${annualTotal}/yr — 3 months free 🎉</p>
         )}
+        {isGov && <p className="text-green-400 text-xs font-bold mb-1">Annual contracts available — contact for pricing</p>}
         {!billingAnnual && isPro && <p className="text-purple-400 text-xs font-bold mb-1">Founding rate — saves $120/mo vs retail</p>}
-        {isGov && <p className="text-green-400 text-xs font-bold mb-1">Annual invoicing available · Purchase orders accepted</p>}
-        <p className="text-gray-700 text-xs mb-6">{isGov ? "Vetting required · ITAR compliant · Secure delivery" : "Cancel anytime · Instant access · Stripe"}</p>
+        <p className="text-gray-700 text-xs mb-6">{isGov ? "Vetting required · NDA enforced · Secure access" : "Cancel anytime · Instant access · Stripe"}</p>
 
         {/* Features */}
         <div className="space-y-2.5 mb-6 flex-1">
           {tier.features.map((f, i) => (
             <div key={i} className="flex items-start gap-2.5">
               <Check size={13} className="flex-shrink-0 mt-0.5" style={{ color: isPro ? "#a78bfa" : tier.color }} />
-              <span className={`text-sm ${isPro ? "text-gray-200 font-medium" : isElite ? "text-gray-300" : "text-gray-500"}`}>{f}</span>
+              <span className={`text-sm ${isPro ? "text-gray-200 font-medium" : isElite ? "text-gray-300" : isGov ? "text-green-100/80" : "text-gray-500"}`}>{f}</span>
             </div>
           ))}
           {tier.locked?.map((f, i) => (
@@ -308,10 +332,10 @@ function TierCard({ tier, onCheckout, billingAnnual, getPrice, getAnnualTotal })
             {tier.cta}
           </button>
         ) : isGov ? (
-          <a href="mailto:gov@codextech.com?subject=Gov/Defense Access Request"
-            className="w-full py-3.5 rounded-xl font-black text-sm text-gray-900 transition-all hover:opacity-90 active:scale-[0.98] text-center block"
+          <a href="mailto:gov@codextech.io?subject=GOV%2FDefense%20Tier%20Access%20Request"
+            className="w-full py-3.5 rounded-xl font-black text-sm text-black text-center block transition-all hover:opacity-90"
             style={{ backgroundColor: "#22c55e" }}>
-            🇺🇸 {tier.cta}
+            🇺🇸 Request Vetting & Access
           </a>
         ) : (
           <button onClick={() => onCheckout(tier)}
@@ -323,7 +347,7 @@ function TierCard({ tier, onCheckout, billingAnnual, getPrice, getAnnualTotal })
         {isPro && <p className="text-center text-purple-400/60 text-xs mt-2">🔒 Stripe · SSL · Cancel anytime</p>}
         {isElite && <p className="text-center text-gray-600 text-xs mt-2">Optional upgrade from Pro at any time</p>}
         {isStarter && <p className="text-center text-gray-700 text-xs mt-2">Upgrade to Pro anytime — same price locked</p>}
-        {isGov && <p className="text-center text-green-700 text-xs mt-2">Identity & clearance verification required</p>}
+        {isGov && <p className="text-center text-green-900 text-xs mt-2">Identity & clearance verification required</p>}
       </div>
     </div>
   );
@@ -479,45 +503,44 @@ export default function Pricing() {
 
       {/* Value comparison bar */}
       <div className="border-y border-gray-800 bg-gray-900/40 px-6 py-10 mb-16">
-        <div className="max-w-5xl mx-auto">
+        <div className="max-w-4xl mx-auto">
           <h2 className="text-xl font-black text-center mb-8">What's included at each tier</h2>
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b border-gray-800">
-                  <th className="text-left text-gray-500 text-xs font-bold uppercase py-3 pr-6 w-44">Feature</th>
+                  <th className="text-left text-gray-500 text-xs font-bold uppercase py-3 pr-6 w-48">Feature</th>
                   {TIERS.map(t => (
-                    <th key={t.id} className={`text-center py-3 px-3 font-black ${t.popular ? "bg-purple-950/40 rounded-t-lg" : ""}`} style={{ color: t.color }}>
-                      {t.name}{t.popular ? " ⚡" : ""}{t.govOnly ? " 🇺🇸" : ""}
-                    </th>
+                    <th key={t.id} className={`text-center py-3 px-4 font-black ${t.popular ? "bg-purple-950/40 rounded-t-lg" : ""}`} style={{ color: t.color }}>
+                {t.name}{t.popular ? " ⚡" : ""}
+              </th>
                   ))}
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-800/50">
                 {[
-                  ["Build Plans Access", "5 builds", "10 builds", "Unlimited (40+)", "Unlimited (40+)"],
+                  ["Build Plans Access", "5 builds", "10 builds", "Unlimited (40+)", "Unlimited + Classified"],
                   ["Courses", "10 courses", "20 courses", "Unlimited (40+)", "Unlimited (40+)"],
                   ["PDF Downloads", "—", "10 builds", "✓ All builds", "✓ All builds"],
                   ["Video Assembly Guides", "—", "✓ All builds", "✓ All builds", "✓ All builds"],
                   ["Supplier Links & Pricing", "—", "✓ Verified", "✓ Verified", "✓ Verified"],
                   ["AI Patent Tool", "Basic", "Full Suite", "Full Suite", "Full Suite"],
                   ["FTO Analysis", "—", "✓", "✓", "✓"],
-                  ["Prior Art Archive", "50 entries", "100+ entries", "200+ entries", "200+ entries"],
+                  ["Prior Art Archive", "50 entries", "100+ entries", "200+ entries", "DoD/DARPA Declassified"],
                   ["Private Forum", "—", "✓", "✓", "✓"],
                   ["À la carte discount", "20% off", "50% off", "60% off", "60% off"],
-                  ["Restricted Systems", "—", "—", "✓", "✓"],
+                  ["Restricted Systems", "—", "—", "✓", "✓ + Defense-Classified"],
                   ["Monthly Strategy Session", "—", "—", "✓", "✓"],
-                  ["Defense-Adjacent Systems", "—", "—", "—", "✓ Full Access"],
-                  ["Classified Tech Documentation", "—", "—", "—", "✓ Secure Portal"],
-                  ["ITAR-Compliant Delivery", "—", "—", "—", "✓"],
-                  ["Dedicated Engineering Line", "—", "—", "—", "✓"],
+                  ["Defense-Adjacent Tech Systems", "—", "—", "—", "✓"],
+                  ["Dedicated Account Manager", "—", "—", "—", "✓"],
+                  ["Secure VDR Access", "—", "—", "—", "✓"],
                 ].map(([label, starter, pro, elite, gov], i) => (
                   <tr key={i} className={i % 2 === 0 ? "bg-gray-900/20" : ""}>
-                    <td className="py-2.5 pr-4 text-gray-300 text-xs font-medium">{label}</td>
-                    <td className="py-2.5 px-3 text-center text-xs text-gray-400">{starter}</td>
-                    <td className="py-2.5 px-3 text-center text-xs text-purple-300 font-semibold">{pro}</td>
-                    <td className="py-2.5 px-3 text-center text-xs text-yellow-300">{elite}</td>
-                    <td className="py-2.5 px-3 text-center text-xs text-green-300 font-semibold">{gov}</td>
+                    <td className="py-2.5 pr-6 text-gray-300 text-xs font-medium">{label}</td>
+                    <td className="py-2.5 px-4 text-center text-xs text-gray-400">{starter}</td>
+                    <td className="py-2.5 px-4 text-center text-xs text-purple-300 font-semibold">{pro}</td>
+                    <td className="py-2.5 px-4 text-center text-xs text-yellow-300">{elite}</td>
+                    <td className="py-2.5 px-4 text-center text-xs text-green-300 font-semibold">{gov}</td>
                   </tr>
                 ))}
               </tbody>
