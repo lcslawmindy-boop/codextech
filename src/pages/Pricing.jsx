@@ -104,32 +104,6 @@ const TIERS = [
   },
   {
     id: "gov",
-    name: "Gov / Defense",
-    price: 999,
-    color: "#22c55e",
-    badge: "US GOVERNMENT ONLY",
-    description: "Full classified systems access for vetted US government & defense contractors",
-    cta: "Request Access",
-    popular: false,
-    govOnly: true,
-    features: [
-      "All Elite tier features included",
-      "Full access to defense-adjacent & classified tech systems",
-      "Directed Energy Weapons subsystems documentation",
-      "EMP/HEMP hardening engineering blueprints",
-      "Scalar EM weapons-grade interferometer systems",
-      "Bioelectromagnetic non-lethal systems documentation",
-      "Advanced propulsion & electrogravitics research",
-      "ITAR-compliant document handling protocol",
-      "Dedicated secure portal & encrypted document delivery",
-      "Direct line to engineering team",
-      "Custom NDA & institutional licensing agreement",
-      "Priority vetting & onboarding (48-hr SLA)",
-    ],
-    locked: [],
-  },
-  {
-    id: "gov",
     name: "GOV / Defense",
     price: 999,
     color: "#22c55e",
@@ -509,12 +483,11 @@ export default function Pricing() {
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b border-gray-800">
-                  <th className="text-left text-gray-500 text-xs font-bold uppercase py-3 pr-6 w-48">Feature</th>
-                  {TIERS.map(t => (
-                    <th key={t.id} className={`text-center py-3 px-4 font-black ${t.popular ? "bg-purple-950/40 rounded-t-lg" : ""}`} style={{ color: t.color }}>
-                {t.name}{t.popular ? " ⚡" : ""}
-              </th>
-                  ))}
+                  <th className="text-left text-gray-500 text-xs font-bold uppercase py-3 pr-6 w-44">Feature</th>
+                  <th className="text-center py-3 px-3 font-black" style={{ color: "#06b6d4" }}>Starter</th>
+                  <th className="text-center py-3 px-3 font-black bg-purple-950/40 rounded-t-lg" style={{ color: "#8b5cf6" }}>Pro ⚡</th>
+                  <th className="text-center py-3 px-3 font-black" style={{ color: "#f59e0b" }}>Elite</th>
+                  <th className="text-center py-3 px-3 font-black" style={{ color: "#22c55e" }}>GOV / Defense 🇺🇸</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-800/50">
