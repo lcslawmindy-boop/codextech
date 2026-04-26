@@ -50,7 +50,7 @@ const TIERS = [
       "Video assembly guides",
       "Supplier sourcing links",
       "Investor & capital toolkit",
-      "Elite restricted systems",
+      "Elite expanded vault (25 builds)",
     ],
   },
   {
@@ -85,12 +85,12 @@ const TIERS = [
     price: 149,
     color: "#f59e0b",
     badge: "FULL VAULT — ADVISORY",
-    description: "Everything in Pro + full civilian vault access + 1-on-1 patent strategy",
+    description: "Everything in Pro + expanded civilian vault + 1-on-1 patent strategy",
     cta: "Go Elite",
     popular: false,
     features: [
-      "Unlimited build plans (40+) — full civilian vault",
-      "Unlimited courses (40+)",
+      "25 build plans — expanded civilian vault",
+      "30 structured courses",
       "Everything in Pro included",
       "Advanced EM research systems (non-restricted)",
       "MEG, VPO, Scalar Interferometer, Anenergy Pump & more",
@@ -498,8 +498,8 @@ export default function Pricing() {
               </thead>
               <tbody className="divide-y divide-gray-800/50">
                 {[
-                  ["Build Plans Access", "5 builds", "10 builds", "Unlimited (40+)", "Unlimited + Classified"],
-                  ["Courses", "10 courses", "20 courses", "Unlimited (40+)", "Unlimited (40+)"],
+                  ["Build Plans Access", "5 builds", "10 builds", "25 builds", "Unlimited + Classified"],
+                  ["Courses", "10 courses", "20 courses", "30 courses", "Unlimited (40+)"],
                   ["PDF Downloads", "—", "10 builds", "✓ All builds", "✓ All builds"],
                   ["Video Assembly Guides", "—", "✓ All builds", "✓ All builds", "✓ All builds"],
                   ["Supplier Links & Pricing", "—", "✓ Verified", "✓ Verified", "✓ Verified"],
