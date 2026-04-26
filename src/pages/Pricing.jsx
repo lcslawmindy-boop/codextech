@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { ArrowLeft, Check, Lock, Gift, Flame, Clock, Star, ChevronDown, ChevronUp, Zap, Shield, BookOpen, Wrench, TrendingUp } from "lucide-react";
+import { ArrowLeft, Check, Lock, Gift, Flame, Clock, Star, ChevronDown, ChevronUp, Zap, Shield, BookOpen, Wrench, TrendingUp, ShieldAlert } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 
 // ── Countdown (48h sticky deadline) ──────────────────────────────────────────
@@ -102,6 +102,32 @@ const TIERS = [
     ],
     locked: [],
   },
+  {
+    id: "gov",
+    name: "Gov / Defense",
+    price: 999,
+    color: "#22c55e",
+    badge: "US GOVERNMENT ONLY",
+    description: "Full classified systems access for vetted US government & defense contractors",
+    cta: "Request Access",
+    popular: false,
+    govOnly: true,
+    features: [
+      "All Elite tier features included",
+      "Full access to defense-adjacent & classified tech systems",
+      "Directed Energy Weapons subsystems documentation",
+      "EMP/HEMP hardening engineering blueprints",
+      "Scalar EM weapons-grade interferometer systems",
+      "Bioelectromagnetic non-lethal systems documentation",
+      "Advanced propulsion & electrogravitics research",
+      "ITAR-compliant document handling protocol",
+      "Dedicated secure portal & encrypted document delivery",
+      "Direct line to engineering team",
+      "Custom NDA & institutional licensing agreement",
+      "Priority vetting & onboarding (48-hr SLA)",
+    ],
+    locked: [],
+  },
 ];
 
 const FAQS = [
@@ -193,7 +219,8 @@ function TierCard({ tier, onCheckout, billingAnnual, getPrice, getAnnualTotal })
   const isStarter = tier.id === "starter";
   const isPro = tier.id === "pro";
   const isElite = tier.id === "elite";
-  const displayPrice = getPrice(tier.price);
+  const isGov = tier.id === "gov";
+  const displayPrice = isGov ? tier.price : getPrice(tier.price);
   const annualTotal = getAnnualTotal(tier.price);
 
   return (
@@ -202,6 +229,8 @@ function TierCard({ tier, onCheckout, billingAnnual, getPrice, getAnnualTotal })
         ? "border-2 border-purple-500 shadow-2xl shadow-purple-900/40 scale-[1.03] z-10"
         : isElite
         ? "border border-yellow-800/60 bg-gradient-to-b from-gray-900 to-gray-950"
+        : isGov
+        ? "border-2 border-green-700 bg-gradient-to-b from-green-950/30 to-gray-950 shadow-xl shadow-green-900/20"
         : "border border-gray-800 opacity-90"
       } bg-gray-900`}>
 
@@ -216,6 +245,11 @@ function TierCard({ tier, onCheckout, billingAnnual, getPrice, getAnnualTotal })
           🔐 CLASSIFIED ACCESS — ELITE ONLY
         </div>
       )}
+      {isGov && (
+        <div className="py-3 text-center text-xs font-black tracking-widest text-green-300 bg-green-900/40 border-b border-green-800/50">
+          🇺🇸 US GOVERNMENT & VETTED CONTRACTORS ONLY
+        </div>
+      )}
       {isStarter && (
         <div className="py-2.5 text-center text-xs font-semibold tracking-wide text-gray-500 border-b border-gray-800">
           Entry level — limited vault
@@ -224,7 +258,7 @@ function TierCard({ tier, onCheckout, billingAnnual, getPrice, getAnnualTotal })
 
       <div className={`flex flex-col flex-1 ${isPro ? "p-7" : "p-6"}`}>
         {/* Name */}
-        <h3 className={`font-black mb-1 ${isPro ? "text-white text-2xl" : isElite ? "text-yellow-300 text-xl" : "text-gray-400 text-xl"}`}>
+        <h3 className={`font-black mb-1 ${isPro ? "text-white text-2xl" : isElite ? "text-yellow-300 text-xl" : isGov ? "text-green-300 text-xl" : "text-gray-400 text-xl"}`}>
           {tier.name}
         </h3>
         <p className={`text-sm mb-5 ${isPro ? "text-gray-300" : "text-gray-500"}`}>{tier.description}</p>
@@ -237,11 +271,12 @@ function TierCard({ tier, onCheckout, billingAnnual, getPrice, getAnnualTotal })
           <span className={`font-black ${isPro ? "text-5xl" : "text-4xl"}`} style={{ color: tier.color }}>${displayPrice}</span>
           <span className="text-gray-500 mb-1.5">/mo</span>
         </div>
-        {billingAnnual && (
+        {billingAnnual && !isGov && (
           <p className="text-green-400 text-xs font-bold mb-1">Billed ${annualTotal}/yr — 3 months free 🎉</p>
         )}
         {!billingAnnual && isPro && <p className="text-purple-400 text-xs font-bold mb-1">Founding rate — saves $120/mo vs retail</p>}
-        <p className="text-gray-700 text-xs mb-6">Cancel anytime · Instant access · Stripe</p>
+        {isGov && <p className="text-green-400 text-xs font-bold mb-1">Annual invoicing available · Purchase orders accepted</p>}
+        <p className="text-gray-700 text-xs mb-6">{isGov ? "Vetting required · ITAR compliant · Secure delivery" : "Cancel anytime · Instant access · Stripe"}</p>
 
         {/* Features */}
         <div className="space-y-2.5 mb-6 flex-1">
@@ -272,6 +307,12 @@ function TierCard({ tier, onCheckout, billingAnnual, getPrice, getAnnualTotal })
             style={{ backgroundColor: "#f59e0b" }}>
             {tier.cta}
           </button>
+        ) : isGov ? (
+          <a href="mailto:gov@codextech.com?subject=Gov/Defense Access Request"
+            className="w-full py-3.5 rounded-xl font-black text-sm text-gray-900 transition-all hover:opacity-90 active:scale-[0.98] text-center block"
+            style={{ backgroundColor: "#22c55e" }}>
+            🇺🇸 {tier.cta}
+          </a>
         ) : (
           <button onClick={() => onCheckout(tier)}
             className="w-full py-3 rounded-xl font-semibold text-sm text-gray-400 border border-gray-700 hover:bg-gray-800 transition-all">
@@ -282,6 +323,7 @@ function TierCard({ tier, onCheckout, billingAnnual, getPrice, getAnnualTotal })
         {isPro && <p className="text-center text-purple-400/60 text-xs mt-2">🔒 Stripe · SSL · Cancel anytime</p>}
         {isElite && <p className="text-center text-gray-600 text-xs mt-2">Optional upgrade from Pro at any time</p>}
         {isStarter && <p className="text-center text-gray-700 text-xs mt-2">Upgrade to Pro anytime — same price locked</p>}
+        {isGov && <p className="text-center text-green-700 text-xs mt-2">Identity & clearance verification required</p>}
       </div>
     </div>
   );
@@ -422,8 +464,8 @@ export default function Pricing() {
       </div>
 
       {/* Tier Cards */}
-      <div className="px-5 pb-16 max-w-5xl mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-stretch">
+      <div className="px-5 pb-16 max-w-6xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch">
           {TIERS.map(tier => (
             <TierCard key={tier.id} tier={tier} onCheckout={handleMembershipCheckout} billingAnnual={billingAnnual} getPrice={getPrice} getAnnualTotal={getAnnualTotal} />
           ))}
@@ -437,40 +479,45 @@ export default function Pricing() {
 
       {/* Value comparison bar */}
       <div className="border-y border-gray-800 bg-gray-900/40 px-6 py-10 mb-16">
-        <div className="max-w-4xl mx-auto">
+        <div className="max-w-5xl mx-auto">
           <h2 className="text-xl font-black text-center mb-8">What's included at each tier</h2>
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b border-gray-800">
-                  <th className="text-left text-gray-500 text-xs font-bold uppercase py-3 pr-6 w-48">Feature</th>
+                  <th className="text-left text-gray-500 text-xs font-bold uppercase py-3 pr-6 w-44">Feature</th>
                   {TIERS.map(t => (
-                    <th key={t.id} className={`text-center py-3 px-4 font-black ${t.popular ? "bg-purple-950/40 rounded-t-lg" : ""}`} style={{ color: t.color }}>
-                {t.name}{t.popular ? " ⚡" : ""}
-              </th>
+                    <th key={t.id} className={`text-center py-3 px-3 font-black ${t.popular ? "bg-purple-950/40 rounded-t-lg" : ""}`} style={{ color: t.color }}>
+                      {t.name}{t.popular ? " ⚡" : ""}{t.govOnly ? " 🇺🇸" : ""}
+                    </th>
                   ))}
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-800/50">
                 {[
-                  ["Build Plans Access", "5 builds", "10 builds", "Unlimited (40+)"],
-                  ["Courses", "10 courses", "20 courses", "Unlimited (40+)"],
-                  ["PDF Downloads", "—", "10 builds", "✓ All builds"],
-                  ["Video Assembly Guides", "—", "✓ All builds", "✓ All builds"],
-                  ["Supplier Links & Pricing", "—", "✓ Verified", "✓ Verified"],
-                  ["AI Patent Tool", "Basic", "Full Suite", "Full Suite"],
-                  ["FTO Analysis", "—", "✓", "✓"],
-                  ["Prior Art Archive", "50 entries", "100+ entries", "200+ entries"],
-                  ["Private Forum", "—", "✓", "✓"],
-                  ["À la carte discount", "20% off", "50% off", "60% off"],
-                  ["Restricted Systems", "—", "—", "✓"],
-                  ["Monthly Strategy Session", "—", "—", "✓"],
-                ].map(([label, starter, pro, elite], i) => (
+                  ["Build Plans Access", "5 builds", "10 builds", "Unlimited (40+)", "Unlimited (40+)"],
+                  ["Courses", "10 courses", "20 courses", "Unlimited (40+)", "Unlimited (40+)"],
+                  ["PDF Downloads", "—", "10 builds", "✓ All builds", "✓ All builds"],
+                  ["Video Assembly Guides", "—", "✓ All builds", "✓ All builds", "✓ All builds"],
+                  ["Supplier Links & Pricing", "—", "✓ Verified", "✓ Verified", "✓ Verified"],
+                  ["AI Patent Tool", "Basic", "Full Suite", "Full Suite", "Full Suite"],
+                  ["FTO Analysis", "—", "✓", "✓", "✓"],
+                  ["Prior Art Archive", "50 entries", "100+ entries", "200+ entries", "200+ entries"],
+                  ["Private Forum", "—", "✓", "✓", "✓"],
+                  ["À la carte discount", "20% off", "50% off", "60% off", "60% off"],
+                  ["Restricted Systems", "—", "—", "✓", "✓"],
+                  ["Monthly Strategy Session", "—", "—", "✓", "✓"],
+                  ["Defense-Adjacent Systems", "—", "—", "—", "✓ Full Access"],
+                  ["Classified Tech Documentation", "—", "—", "—", "✓ Secure Portal"],
+                  ["ITAR-Compliant Delivery", "—", "—", "—", "✓"],
+                  ["Dedicated Engineering Line", "—", "—", "—", "✓"],
+                ].map(([label, starter, pro, elite, gov], i) => (
                   <tr key={i} className={i % 2 === 0 ? "bg-gray-900/20" : ""}>
-                    <td className="py-2.5 pr-6 text-gray-300 text-xs font-medium">{label}</td>
-                    <td className="py-2.5 px-4 text-center text-xs text-gray-400">{starter}</td>
-                    <td className="py-2.5 px-4 text-center text-xs text-purple-300 font-semibold">{pro}</td>
-                    <td className="py-2.5 px-4 text-center text-xs text-yellow-300">{elite}</td>
+                    <td className="py-2.5 pr-4 text-gray-300 text-xs font-medium">{label}</td>
+                    <td className="py-2.5 px-3 text-center text-xs text-gray-400">{starter}</td>
+                    <td className="py-2.5 px-3 text-center text-xs text-purple-300 font-semibold">{pro}</td>
+                    <td className="py-2.5 px-3 text-center text-xs text-yellow-300">{elite}</td>
+                    <td className="py-2.5 px-3 text-center text-xs text-green-300 font-semibold">{gov}</td>
                   </tr>
                 ))}
               </tbody>
