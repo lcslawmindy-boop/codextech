@@ -142,21 +142,22 @@ const FAQS = [
   { q: "Is there a free trial?", a: "The Free Vault gives you access to 1 full build plan and 5 prior art entries with no payment required. That's enough to validate the quality before committing." },
 ];
 
+// restricted: "elite" = Elite & GOV only | "gov" = GOV/Defense only | undefined = all civilians
 const INDIVIDUAL_BUILDS = [
   { name: "Vacuum Potential Oscillator (VPO) Circuit Kit", price: 189, icon: "🔧" },
   { name: "Open-System Magnetic Generator (Prototype Plans)", price: 179, icon: "⚙️" },
-  { name: "Woodpecker Grid Standing Wave Detector", price: 249, icon: "📻" },
+  { name: "Woodpecker Grid Standing Wave Detector", price: 249, icon: "📻", restricted: "gov" },
   { name: "Phi-River Gradient Sensor", price: 349, icon: "🌊" },
   { name: "Anenergy Pump Demonstration Circuit", price: 297, icon: "🔋" },
-  { name: "Scalar Energy Bottle Interferometer", price: 449, icon: "🎯" },
+  { name: "Scalar Energy Bottle Interferometer", price: 449, icon: "🎯", restricted: "gov" },
   { name: "Quantum Potential EMI Detector", price: 497, icon: "📡" },
-  { name: "EM Trigger Window Therapy Device", price: 599, icon: "💊" },
+  { name: "EM Trigger Window Therapy Device", price: 599, icon: "💊", restricted: "elite" },
   { name: "Bedini Environmental EM Signal Conditioner", price: 697, icon: "🎛️" },
   { name: "Morphogenetic Field Coherence Monitor", price: 799, icon: "🌿" },
-  { name: "Whittaker Wave Phase Conjugate Mirror System", price: 849, icon: "🔭" },
-  { name: "Prioré-Type Multichannel EM Therapy System", price: 697, icon: "🏥" },
-  { name: "MEG Replication Kit", price: 847, icon: "🔮" },
-  { name: "Asymmetric Regauging Overunity Generator", price: 897, icon: "⚡" },
+  { name: "Whittaker Wave Phase Conjugate Mirror System", price: 849, icon: "🔭", restricted: "gov" },
+  { name: "Prioré-Type Multichannel EM Therapy System", price: 697, icon: "🏥", restricted: "elite" },
+  { name: "MEG Replication Kit", price: 847, icon: "🔮", restricted: "elite" },
+  { name: "Asymmetric Regauging Overunity Generator", price: 897, icon: "⚡", restricted: "gov" },
   { name: "MorphoYield TRZ-Agri Array", price: 697, icon: "🌾" },
 ];
 
@@ -334,21 +335,58 @@ function TierCard({ tier, onCheckout, billingAnnual, getPrice, getAnnualTotal })
 }
 
 function AlaCarteItem({ item, onCheckout }) {
+  const isGovOnly = item.restricted === "gov";
+  const isEliteOnly = item.restricted === "elite";
+  const isRestricted = isGovOnly || isEliteOnly;
+
   return (
-    <div className="bg-gray-900 border border-gray-800 rounded-xl p-4 flex items-center justify-between gap-3 hover:border-gray-600 transition-colors">
+    <div className={`rounded-xl p-4 flex items-center justify-between gap-3 transition-colors border ${
+      isGovOnly
+        ? "bg-green-950/20 border-green-900/50 hover:border-green-800"
+        : isEliteOnly
+        ? "bg-yellow-950/20 border-yellow-900/50 hover:border-yellow-800"
+        : "bg-gray-900 border-gray-800 hover:border-gray-600"
+    }`}>
       <div className="flex items-center gap-3 min-w-0">
         <span className="text-xl flex-shrink-0">{item.icon}</span>
         <div className="min-w-0">
-          <p className="text-white text-sm font-semibold truncate">{item.name}</p>
-          <p className="text-gray-500 text-xs">One-time purchase</p>
+          <div className="flex items-center gap-2 flex-wrap">
+            <p className={`text-sm font-semibold truncate ${isRestricted ? "text-gray-400" : "text-white"}`}>{item.name}</p>
+            {isGovOnly && (
+              <span className="text-xs px-2 py-0.5 rounded-full bg-green-900/60 border border-green-700 text-green-300 font-bold whitespace-nowrap flex items-center gap-1">
+                <Lock size={9} /> GOV / Defense Only
+              </span>
+            )}
+            {isEliteOnly && (
+              <span className="text-xs px-2 py-0.5 rounded-full bg-yellow-900/60 border border-yellow-700 text-yellow-300 font-bold whitespace-nowrap flex items-center gap-1">
+                <Lock size={9} /> Elite+ Only
+              </span>
+            )}
+          </div>
+          <p className="text-gray-500 text-xs">
+            {isGovOnly ? "Available to vetted U.S. government & defense accounts" : isEliteOnly ? "Available on Elite or GOV/Defense membership" : "One-time purchase"}
+          </p>
         </div>
       </div>
       <div className="flex items-center gap-3 flex-shrink-0">
-        <span className="text-white font-black">${item.price}</span>
-        <button onClick={() => onCheckout(item)}
-          className="px-3 py-1.5 rounded-lg bg-gray-800 hover:bg-gray-700 text-white text-xs font-bold transition-colors">
-          Buy
-        </button>
+        <span className={`font-black ${isRestricted ? "text-gray-500" : "text-white"}`}>${item.price}</span>
+        {isRestricted ? (
+          <a
+            href={isGovOnly ? "mailto:gov@codextech.io?subject=GOV+Defense+Build+Plan+Inquiry" : "/pricing#elite"}
+            className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-colors ${
+              isGovOnly
+                ? "bg-green-900/40 border border-green-700 text-green-300 hover:bg-green-900/60"
+                : "bg-yellow-900/40 border border-yellow-700 text-yellow-300 hover:bg-yellow-900/60"
+            }`}
+          >
+            {isGovOnly ? "🇺🇸 Contact" : "Upgrade"}
+          </a>
+        ) : (
+          <button onClick={() => onCheckout(item)}
+            className="px-3 py-1.5 rounded-lg bg-gray-800 hover:bg-gray-700 text-white text-xs font-bold transition-colors">
+            Buy
+          </button>
+        )}
       </div>
     </div>
   );
