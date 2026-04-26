@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
-import { ArrowLeft, Download, ChevronDown, ChevronUp, AlertTriangle, CheckCircle2, Package, Loader2, FileText, Lock, ShoppingCart, Lightbulb, Eye, Film, Shield, RotateCcw } from "lucide-react";
+import { ArrowLeft, Download, ChevronDown, ChevronUp, AlertTriangle, CheckCircle2, Package, Loader2, FileText, Lock, ShoppingCart, Lightbulb, Eye, Film, Shield, RotateCcw, BookOpen } from "lucide-react";
 import { useTier } from "../hooks/useTier";
 import { useTrial } from "@/lib/TrialContext";
 import { isClassifiedInvention, tierHasGovAccess } from "../lib/tiers";
@@ -486,6 +486,293 @@ function generatePDF(invention, data) {
   doc.save(`Bearden_Plans_${filename}.pdf`);
 }
 
+function generateMasterPDF(allInventions) {
+  const doc = new jsPDF({ orientation: "portrait", unit: "mm", format: "a4" });
+  const W = 210;
+  const margin = 18;
+  const contentW = W - margin * 2;
+  let y = 0;
+  let pageCount = 0;
+
+  const wrapText = (text, maxW, fontSize) => {
+    const words = String(text || "").split(" ");
+    const lines = [];
+    let line = "";
+    const charW = fontSize * 0.45;
+    const maxChars = Math.floor(maxW / charW);
+    words.forEach(word => {
+      if ((line + word).length > maxChars) {
+        if (line) lines.push(line.trim());
+        line = word + " ";
+      } else {
+        line += word + " ";
+      }
+    });
+    if (line.trim()) lines.push(line.trim());
+    return lines;
+  };
+
+  const newPage = () => {
+    if (pageCount > 0) doc.addPage();
+    pageCount++;
+    doc.setFillColor(15, 23, 42);
+    doc.rect(0, 0, W, 297, "F");
+    y = 20;
+  };
+
+  const checkPage = (needed = 20) => {
+    if (y + needed > 278) newPage();
+  };
+
+  const section = (title, color = [148, 163, 184]) => {
+    checkPage(18);
+    doc.setFillColor(30, 41, 59);
+    doc.rect(margin - 2, y - 5, contentW + 4, 10, "F");
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(10);
+    doc.setTextColor(...color);
+    doc.text(title, margin, y + 1);
+    y += 12;
+  };
+
+  const body = (text, color = [148, 163, 184], fs = 8.5) => {
+    if (!text) return;
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(fs);
+    doc.setTextColor(...color);
+    const lines = wrapText(text, contentW, fs);
+    lines.forEach(ln => { checkPage(7); doc.text(ln, margin, y); y += 5.5; });
+    y += 2;
+  };
+
+  const addFooterToAllPages = (total) => {
+    for (let p = 1; p <= total; p++) {
+      doc.setPage(p);
+      doc.setFillColor(20, 20, 20);
+      doc.rect(0, 287, W, 10, "F");
+      doc.setFontSize(6.5);
+      doc.setFont("helvetica", "normal");
+      doc.setTextColor(80, 80, 80);
+      doc.text("C.O.D.E.X.T.E.C.H. — MASTER BUILD PLANS COMPENDIUM — ADMIN CONFIDENTIAL — NDA Applies — Do Not Distribute", margin, 293);
+      doc.text(`${p} / ${total}`, W - margin, 293, { align: "right" });
+    }
+  };
+
+  // ── MASTER COVER PAGE ──────────────────────────────────────────────────────
+  pageCount++;
+  doc.setFillColor(0, 0, 0);
+  doc.rect(0, 0, W, 297, "F");
+  doc.setFillColor(239, 68, 68);
+  doc.rect(0, 0, W, 4, "F");
+  doc.rect(0, 293, W, 4, "F");
+
+  doc.setFontSize(9);
+  doc.setFont("helvetica", "bold");
+  doc.setTextColor(100, 116, 139);
+  doc.text("C.O.D.E.X.T.E.C.H. ZENITH APEX RESEARCH PLATFORM", margin, 22);
+  doc.text("RESTRICTED — ADMIN ONLY — NDA ENFORCED", margin, 29);
+
+  doc.setFontSize(28);
+  doc.setFont("helvetica", "bold");
+  doc.setTextColor(255, 255, 255);
+  doc.text("MASTER BUILD PLANS", margin, 58);
+  doc.text("COMPENDIUM", margin, 72);
+
+  doc.setFontSize(12);
+  doc.setFont("helvetica", "italic");
+  doc.setTextColor(100, 116, 139);
+  doc.text("Complete Engineering Documentation for All Invention Build Plans", margin, 84);
+
+  doc.setFontSize(9);
+  doc.setFont("helvetica", "normal");
+  doc.setTextColor(71, 85, 105);
+  const invWithData = allInventions.filter(inv => inventionSteps[inv.title]);
+  doc.text(`${allInventions.length} total inventions  ·  ${invWithData.length} with full build plans  ·  Generated ${new Date().toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}`, margin, 96);
+
+  // Stats box
+  doc.setFillColor(20, 20, 20);
+  doc.rect(margin, 108, contentW, 40, "F");
+  doc.setFontSize(8);
+  doc.setFont("helvetica", "bold");
+  doc.setTextColor(239, 68, 68);
+  doc.text("DOCUMENT CLASSIFICATION", margin + 4, 118);
+  doc.setFont("helvetica", "normal");
+  doc.setTextColor(148, 163, 184);
+  doc.text("This document contains the complete engineering specifications, bills of materials, step-by-step build", margin + 4, 125);
+  doc.text("instructions, software notes, and technical references for all invention build plans in the C.O.D.E.X.T.E.C.H.", margin + 4, 131);
+  doc.text("platform. Distribution is strictly limited to authorized administrators. NDA applies in all jurisdictions.", margin + 4, 137);
+  doc.text("Unauthorized disclosure is subject to liquidated damages of $2,500,000 per incident.", margin + 4, 143);
+
+  // TOC
+  y = 160;
+  doc.setFontSize(9);
+  doc.setFont("helvetica", "bold");
+  doc.setTextColor(255, 255, 255);
+  doc.text("TABLE OF CONTENTS", margin, y); y += 8;
+
+  allInventions.forEach((inv, idx) => {
+    if (y > 278) return; // cap TOC on cover
+    const hasData = !!inventionSteps[inv.title];
+    doc.setFontSize(8);
+    doc.setFont("helvetica", hasData ? "normal" : "italic");
+    doc.setTextColor(hasData ? 203 : 100, hasData ? 213 : 116, hasData ? 225 : 139);
+    const label = `${idx + 1}. ${inv.title}${hasData ? "" : " (overview only)"}`;
+    const truncated = label.length > 75 ? label.slice(0, 72) + "…" : label;
+    doc.text(truncated, margin, y);
+    y += 5;
+  });
+
+  // ── GLOBAL DISCLAIMER ─────────────────────────────────────────────────────
+  newPage();
+  doc.setFontSize(14);
+  doc.setFont("helvetica", "bold");
+  doc.setTextColor(251, 191, 36);
+  doc.text("RESEARCH & EDUCATIONAL USE DISCLAIMER", margin, y); y += 10;
+
+  const disclaimerText = "ALL DEVICES, PLANS, AND SPECIFICATIONS IN THIS COMPENDIUM ARE PROVIDED FOR RESEARCH AND EDUCATIONAL PURPOSES ONLY. No device described herein has been approved by the FDA, FCC, EPA, FTC, or any regulatory authority for medical, therapeutic, commercial, or consumer use. Do not use any device from these plans for diagnosis, treatment, cure, or prevention of any disease or medical condition. All claims regarding energy output, biological effects, or field phenomena are theoretical or experimental in nature and have not been independently verified by a regulatory body. Replicate at your own risk. Always consult a licensed professional before any experimental application. C.O.D.E.X.T.E.C.H. and Zenith Apex LLC assume no liability for use or misuse of these plans. All build plans are derived from publicly available patents, peer-reviewed scientific publications, and declassified government documents — sources are cited individually in each build plan section.";
+  body(disclaimerText, [251, 191, 36], 9);
+
+  y += 6;
+  body("Primary Sources: Bearden T.E. (2002) Energy from the Vacuum, Cheniere Press. | Anastasovski P.K. et al. (2001) Found. Phys. Lett. 14(1). | U.S. Patent 6,362,718 (MEG). | Bateman J.B. (1978) ONR London Branch Report R-5-78. | Bohren C.F. (1983) Am. J. Phys. 51(4). | Kaznacheyev V.P. (1974–1982) Soviet cytopathogenic UV photon research. | Gray E.V. (1975) U.S. Patent 3,890,548. | Bearden T.E. (1991) Gravitobiology. | Aharonov Y. & Bohm D. (1959) Phys. Rev. 115(3). | Popp F.A. (1992) Biophotons, Kluwer Academic. | Rycroft M.J. et al. (2008) J. Atmos. Solar-Terrestrial Phys. 70(7). | Gurwitsch A.G. (1923) Arch. Entwicklungsmech. 100. | Waddington C.H. (1940) Organizers and Genes. Cambridge.", [148, 163, 184], 8);
+
+  // ── EACH INVENTION ────────────────────────────────────────────────────────
+  allInventions.forEach((inv, invIdx) => {
+    const data = inventionSteps[inv.title];
+
+    // Divider page for each invention
+    newPage();
+    doc.setFillColor(20, 20, 20);
+    doc.rect(0, 0, W, 297, "F");
+    doc.setFillColor(239, 68, 68);
+    doc.rect(0, 0, W, 3, "F");
+
+    doc.setFontSize(9);
+    doc.setFont("helvetica", "bold");
+    doc.setTextColor(100, 116, 139);
+    doc.text(`INVENTION ${invIdx + 1} OF ${allInventions.length}`, margin, 28);
+
+    doc.setFontSize(20);
+    doc.setTextColor(255, 255, 255);
+    const titleLines = wrapText(inv.title, contentW, 20);
+    titleLines.forEach((ln, i) => doc.text(ln, margin, 42 + i * 10));
+
+    const afterTitleY = 42 + titleLines.length * 10 + 4;
+    doc.setFontSize(10);
+    doc.setFont("helvetica", "italic");
+    doc.setTextColor(100, 116, 139);
+    const taglines = wrapText(`"${inv.tagline || ""}"`, contentW, 10);
+    taglines.forEach((ln, i) => doc.text(ln, margin, afterTitleY + i * 6));
+
+    let metaY = afterTitleY + taglines.length * 6 + 10;
+    [["PRICE", inv.price], ["AUDIENCE", inv.audience], ["SOURCE", inv.source]].forEach(([lbl, val]) => {
+      if (!val || metaY > 250) return;
+      doc.setFontSize(7.5);
+      doc.setFont("helvetica", "bold");
+      doc.setTextColor(71, 85, 105);
+      doc.text(lbl + ":", margin, metaY);
+      doc.setFont("helvetica", "normal");
+      doc.setTextColor(148, 163, 184);
+      const vLines = wrapText(val, contentW - 20, 7.5);
+      doc.text(vLines[0] || "", margin + 20, metaY);
+      metaY += 7;
+    });
+
+    if (!data) {
+      doc.setFontSize(9);
+      doc.setFont("helvetica", "italic");
+      doc.setTextColor(71, 85, 105);
+      doc.text("Full build plans in development — overview below.", margin, metaY + 10);
+      newPage();
+      section("DESCRIPTION", [148, 163, 184]);
+      body(inv.description, [203, 213, 225]);
+      if (inv.problem) { section("THE PROBLEM", [239, 68, 68]); body(inv.problem, [203, 213, 225]); }
+      if (inv.beardenSolution) { section("SOLUTION", [59, 130, 246]); body(inv.beardenSolution, [203, 213, 225]); }
+      if (inv.market) { section("MARKET OPPORTUNITY", [245, 158, 11]); body(inv.market, [203, 213, 225]); }
+      return;
+    }
+
+    // Full build plan
+    newPage();
+    section("TECHNICAL OVERVIEW", [34, 197, 94]);
+    body(data.overview, [203, 213, 225]);
+    if (inv.problem) { section("THE PROBLEM", [239, 68, 68]); body(inv.problem, [203, 213, 225]); }
+    if (inv.beardenSolution) { section("BEARDEN'S SOLUTION", [59, 130, 246]); body(inv.beardenSolution, [203, 213, 225]); }
+    if (inv.market) { section("MARKET OPPORTUNITY", [245, 158, 11]); body(inv.market, [203, 213, 225]); }
+    if (inv.feasibility) { section("FEASIBILITY", [168, 85, 247]); body(inv.feasibility, [203, 213, 225]); }
+
+    // BOM
+    if (data.bom?.length > 0) {
+      checkPage(25);
+      section("BILL OF MATERIALS", [6, 182, 212]);
+      const colX = [margin, margin + 10, margin + 78, margin + 130];
+      doc.setFillColor(30, 41, 59);
+      doc.rect(margin - 2, y - 5, contentW + 4, 9, "F");
+      ["Qty", "Item", "Specification", "Source"].forEach((h, i) => {
+        doc.setFont("helvetica", "bold"); doc.setFontSize(7.5);
+        doc.setTextColor(100, 116, 139);
+        doc.text(h, colX[i], y);
+      });
+      y += 6;
+      data.bom.forEach((row, idx) => {
+        checkPage(8);
+        if (idx % 2 === 0) { doc.setFillColor(22, 33, 48); doc.rect(margin - 2, y - 3, contentW + 4, 8, "F"); }
+        doc.setFont("helvetica", "bold"); doc.setFontSize(7.5); doc.setTextColor(34, 211, 238);
+        doc.text(String(row.qty), colX[0], y + 1);
+        doc.setFont("helvetica", "normal"); doc.setTextColor(203, 213, 225);
+        doc.text(wrapText(row.item, 66, 7.5)[0] || "", colX[1], y + 1);
+        doc.setTextColor(148, 163, 184);
+        doc.text(wrapText(row.spec, 50, 7.5)[0] || "", colX[2], y + 1);
+        doc.setTextColor(100, 116, 139);
+        doc.text(wrapText(row.source, 40, 7.5)[0] || "", colX[3], y + 1);
+        y += 8;
+      });
+      y += 4;
+    }
+
+    // Steps
+    if (data.steps?.length > 0) {
+      checkPage(20);
+      section("STEP-BY-STEP BUILD INSTRUCTIONS", [255, 255, 255]);
+      data.steps.forEach((step, si) => {
+        checkPage(28);
+        doc.setFillColor(30, 41, 59);
+        doc.rect(margin - 2, y - 4, contentW + 4, 11, "F");
+        doc.setFillColor(239, 68, 68);
+        doc.circle(margin + 4.5, y + 1.5, 4, "F");
+        doc.setFont("helvetica", "bold"); doc.setFontSize(7.5); doc.setTextColor(255, 255, 255);
+        doc.text(String(si + 1), margin + 4.5, y + 3, { align: "center" });
+        doc.setFontSize(9.5); doc.text(`Step ${si + 1}: ${step.title}`, margin + 11, y + 2);
+        y += 12;
+        doc.setFont("helvetica", "normal"); doc.setFontSize(8.5); doc.setTextColor(203, 213, 225);
+        const dLines = wrapText(step.detail, contentW - 4, 8.5);
+        dLines.forEach(ln => { checkPage(7); doc.text(ln, margin + 2, y); y += 5.5; });
+        if (step.warning) {
+          checkPage(18);
+          y += 2;
+          doc.setFillColor(40, 20, 0);
+          doc.rect(margin, y, contentW, 1, "F"); y += 3;
+          doc.setFont("helvetica", "bold"); doc.setFontSize(7.5); doc.setTextColor(251, 191, 36);
+          doc.text("⚠ WARNING:", margin + 2, y);
+          doc.setFont("helvetica", "normal"); doc.setTextColor(253, 224, 71);
+          const wLines = wrapText(step.warning, contentW - 4, 7.5);
+          wLines.forEach(ln => { checkPage(7); doc.text(ln, margin + 2, y + 5); y += 5; });
+          y += 5;
+        }
+        y += 6;
+      });
+    }
+
+    // Notes
+    if (data.notes) { section("TECHNICAL NOTES", [148, 163, 184]); body(data.notes, [203, 213, 225]); }
+    if (data.softwareNotes) { section("SOFTWARE & FIRMWARE", [34, 197, 94]); body(data.softwareNotes, [203, 213, 225]); }
+    section("SOURCE CITATIONS", [245, 158, 11]);
+    body(inv.source, [203, 213, 225]);
+  });
+
+  addFooterToAllPages(doc.getNumberOfPages());
+  doc.save(`ZenithApex_MASTER_Build_Plans_Compendium_${new Date().toISOString().slice(0, 10)}.pdf`);
+}
+
 function SpecsLockedGate({ invention }) {
   return (
     <div className="flex-1 flex items-center justify-center p-12">
@@ -619,6 +906,7 @@ export default function InventionPlans() {
   const [showBom, setShowBom] = useState(true);
   const [showSteps, setShowSteps] = useState(true);
   const [generating, setGenerating] = useState(false);
+  const [generatingMaster, setGeneratingMaster] = useState(false);
   const [bomChecked, setBomChecked] = useState({});
   const [hasPurchased, setHasPurchased] = useState(false);
   const [checkingPurchase, setCheckingPurchase] = useState(true);
@@ -721,6 +1009,22 @@ export default function InventionPlans() {
           <span className="text-xs text-gray-500 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-gray-900 border border-gray-800">
             <Package size={12} /> {inventions.length} inventions
           </span>
+          {isAdmin && (
+            <button
+              onClick={async () => {
+                setGeneratingMaster(true);
+                await new Promise(r => setTimeout(r, 80));
+                const allInvs = businessItems.filter(i => i.category === "Invention");
+                generateMasterPDF(allInvs);
+                setGeneratingMaster(false);
+              }}
+              disabled={generatingMaster}
+              className="flex items-center gap-2 px-4 py-2 rounded-lg bg-emerald-700 hover:bg-emerald-600 disabled:opacity-50 text-white text-sm font-semibold transition-all"
+            >
+              {generatingMaster ? <Loader2 size={14} className="animate-spin" /> : <BookOpen size={14} />}
+              {generatingMaster ? "Building Master PDF…" : "📚 Master PDF (All Plans)"}
+            </button>
+          )}
           <button
             onClick={() => setShowBuildVideo(true)}
             disabled={!selected || !canViewSelected}
