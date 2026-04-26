@@ -107,8 +107,8 @@ const TIERS = [
     name: "GOV / Defense",
     price: 999,
     color: "#22c55e",
-    badge: "US GOVERNMENT ONLY",
-    description: "Restricted defense-adjacent EM systems — vetted US government & contractor access only",
+    badge: "U.S. GOVERNMENT ONLY",
+    description: "Restricted defense-adjacent EM systems — vetted U.S. government & contractor access only",
     cta: "Request Access",
     popular: false,
     govOnly: true,
@@ -250,7 +250,7 @@ function TierCard({ tier, onCheckout, billingAnnual, getPrice, getAnnualTotal })
       )}
       {isGov && (
         <div className="py-3 text-center text-xs font-black tracking-widest text-green-300 bg-green-950/80 border-b border-green-800">
-          🇺🇸 US GOVERNMENT & VETTED CONTRACTORS ONLY
+          🇺🇸 U.S. GOVERNMENT & VETTED CONTRACTORS ONLY
         </div>
       )}
 
