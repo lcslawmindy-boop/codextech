@@ -8,7 +8,6 @@ import Invention3DCardSmall from "../components/Invention3DCardSmall";
 import InventionBuildVideo from "../components/InventionBuildVideo";
 import { base44 } from "@/api/base44Client";
 
-const ADMIN_ONLY_TITLES = ["Biofield Frequency Exposure Chamber (Research Device)"];
 
 
 const inventions = businessItems.filter(i => i.category === "Invention");
@@ -347,8 +346,10 @@ export default function InventionLibrary() {
       .finally(() => setCheckingPurchase(false));
   }, []);
 
+  const HIDDEN_TITLES = ["Biofield Frequency Exposure Chamber (Research Device)"];
+
   const filtered = inventions.filter(inv => {
-    if (ADMIN_ONLY_TITLES.includes(inv.title) && !isAdmin) return false;
+    if (HIDDEN_TITLES.includes(inv.title)) return false;
     return inv.title.toLowerCase().includes(search.toLowerCase()) ||
       inv.tagline?.toLowerCase().includes(search.toLowerCase());
   });
