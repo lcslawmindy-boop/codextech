@@ -90,7 +90,7 @@ const TIERS = [
     popular: false,
     features: [
       "25 build plans — expanded civilian vault",
-      "30 structured courses",
+      "26 structured courses",
       "Everything in Pro included",
       "Advanced EM research systems (non-restricted)",
       "MEG, VPO, Scalar Interferometer, Anenergy Pump & more",
@@ -499,7 +499,7 @@ export default function Pricing() {
               <tbody className="divide-y divide-gray-800/50">
                 {[
                   ["Build Plans Access", "5 builds", "10 builds", "25 builds", "Unlimited + Classified"],
-                  ["Courses", "10 courses", "20 courses", "30 courses", "Unlimited (40+)"],
+                  ["Courses", "10 courses", "20 courses", "26 courses", "Unlimited (40+)"],
                   ["PDF Downloads", "—", "10 builds", "✓ All builds", "✓ All builds"],
                   ["Video Assembly Guides", "—", "✓ All builds", "✓ All builds", "✓ All builds"],
                   ["Supplier Links & Pricing", "—", "✓ Verified", "✓ Verified", "✓ Verified"],
