@@ -501,7 +501,7 @@ export default function Pricing() {
                   ["Build Plans Access", "5 builds", "10 builds", "25 builds", "Unlimited + Classified"],
                   ["Courses", "10 courses", "20 courses", "26 courses", "Unlimited (40+)"],
                   ["PDF Downloads", "—", "10 builds", "✓ All builds", "✓ All builds"],
-                  ["Video Assembly Guides", "—", "✓ All builds", "✓ All builds", "✓ All builds"],
+                  ["Video Assembly Guides", "—", "✓ 10 builds", "✓ 26 builds", "✓ All builds"],
                   ["Supplier Links & Pricing", "—", "✓ Verified", "✓ Verified", "✓ Verified"],
                   ["AI Patent Tool", "Basic", "Full Suite", "Full Suite", "Full Suite"],
                   ["FTO Analysis", "—", "✓", "✓", "✓"],
