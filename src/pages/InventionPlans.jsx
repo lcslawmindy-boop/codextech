@@ -486,7 +486,27 @@ function generatePDF(invention, data) {
   doc.save(`Bearden_Plans_${filename}.pdf`);
 }
 
-function generateMasterPDF(allInventions) {
+// Helper: load a remote image as base64 via canvas (CORS-safe for CDN images)
+async function loadImageAsBase64(url) {
+  return new Promise((resolve) => {
+    const img = new Image();
+    img.crossOrigin = "anonymous";
+    img.onload = () => {
+      try {
+        const canvas = document.createElement("canvas");
+        canvas.width = img.naturalWidth;
+        canvas.height = img.naturalHeight;
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0);
+        resolve(canvas.toDataURL("image/jpeg", 0.85));
+      } catch { resolve(null); }
+    };
+    img.onerror = () => resolve(null);
+    img.src = url;
+  });
+}
+
+async function generateMasterPDF(allInventions) {
   const doc = new jsPDF({ orientation: "portrait", unit: "mm", format: "a4" });
   const W = 210;
   const margin = 18;
@@ -494,283 +514,492 @@ function generateMasterPDF(allInventions) {
   let y = 0;
   let pageCount = 0;
 
-  const wrapText = (text, maxW, fontSize) => {
-    const words = String(text || "").split(" ");
-    const lines = [];
-    let line = "";
-    const charW = fontSize * 0.45;
-    const maxChars = Math.floor(maxW / charW);
-    words.forEach(word => {
-      if ((line + word).length > maxChars) {
-        if (line) lines.push(line.trim());
-        line = word + " ";
-      } else {
-        line += word + " ";
-      }
-    });
-    if (line.trim()) lines.push(line.trim());
-    return lines;
+  // ── Pure B&W palette ──────────────────────────────────────────────────────
+  const C = {
+    black:    [0, 0, 0],
+    white:    [255, 255, 255],
+    gray95:   [242, 242, 242],
+    gray85:   [216, 216, 216],
+    gray60:   [153, 153, 153],
+    gray40:   [102, 102, 102],
+    gray20:   [51, 51, 51],
+    gray10:   [26, 26, 26],
   };
 
-  const newPage = () => {
+  const wrapText = (text, maxW, fontSize) => {
+    if (!text) return [];
+    return doc.splitTextToSize(String(text), maxW);
+  };
+
+  const newPage = (bgWhite = true) => {
     if (pageCount > 0) doc.addPage();
     pageCount++;
-    doc.setFillColor(15, 23, 42);
-    doc.rect(0, 0, W, 297, "F");
-    y = 20;
+    if (bgWhite) {
+      doc.setFillColor(...C.white);
+      doc.rect(0, 0, W, 297, "F");
+    }
+    y = 22;
   };
 
   const checkPage = (needed = 20) => {
     if (y + needed > 278) newPage();
   };
 
-  const section = (title, color = [148, 163, 184]) => {
-    checkPage(18);
-    doc.setFillColor(30, 41, 59);
-    doc.rect(margin - 2, y - 5, contentW + 4, 10, "F");
+  // Running header for content pages
+  const addRunningHeader = (leftText) => {
+    doc.setFillColor(...C.black);
+    doc.rect(0, 0, W, 10, "F");
+    doc.setFontSize(6.5);
     doc.setFont("helvetica", "bold");
-    doc.setFontSize(10);
-    doc.setTextColor(...color);
-    doc.text(title, margin, y + 1);
-    y += 12;
-  };
-
-  const body = (text, color = [148, 163, 184], fs = 8.5) => {
-    if (!text) return;
+    doc.setTextColor(...C.white);
+    doc.text("C.O.D.E.X.T.E.C.H. — MASTER BUILD PLANS COMPENDIUM — ADMIN CONFIDENTIAL", margin, 6.5);
     doc.setFont("helvetica", "normal");
-    doc.setFontSize(fs);
-    doc.setTextColor(...color);
-    const lines = wrapText(text, contentW, fs);
-    lines.forEach(ln => { checkPage(7); doc.text(ln, margin, y); y += 5.5; });
-    y += 2;
+    doc.text(leftText, W - margin, 6.5, { align: "right" });
   };
 
   const addFooterToAllPages = (total) => {
     for (let p = 1; p <= total; p++) {
       doc.setPage(p);
-      doc.setFillColor(20, 20, 20);
-      doc.rect(0, 287, W, 10, "F");
-      doc.setFontSize(6.5);
+      doc.setDrawColor(...C.gray60);
+      doc.setLineWidth(0.3);
+      doc.line(margin, 286, W - margin, 286);
+      doc.setFontSize(7);
       doc.setFont("helvetica", "normal");
-      doc.setTextColor(80, 80, 80);
-      doc.text("C.O.D.E.X.T.E.C.H. — MASTER BUILD PLANS COMPENDIUM — ADMIN CONFIDENTIAL — NDA Applies — Do Not Distribute", margin, 293);
-      doc.text(`${p} / ${total}`, W - margin, 293, { align: "right" });
+      doc.setTextColor(...C.gray40);
+      doc.text("FOR RESEARCH & EDUCATIONAL USE ONLY — NDA APPLIES — DO NOT DISTRIBUTE", margin, 290);
+      doc.text(`Page ${p} of ${total}`, W - margin, 290, { align: "right" });
     }
   };
 
-  // ── MASTER COVER PAGE ──────────────────────────────────────────────────────
+  // Section heading — black bar white text
+  const section = (title) => {
+    checkPage(16);
+    doc.setFillColor(...C.black);
+    doc.rect(margin - 2, y - 4, contentW + 4, 10, "F");
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(9);
+    doc.setTextColor(...C.white);
+    doc.text(title, margin + 1, y + 2.5);
+    y += 12;
+  };
+
+  // Sub-heading — gray bar dark text
+  const subSection = (title) => {
+    checkPage(12);
+    doc.setFillColor(...C.gray85);
+    doc.rect(margin - 2, y - 3, contentW + 4, 8, "F");
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(8.5);
+    doc.setTextColor(...C.gray10);
+    doc.text(title, margin + 1, y + 2);
+    y += 10;
+  };
+
+  const body = (text, fs = 8.5, indent = 0) => {
+    if (!text) return;
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(fs);
+    doc.setTextColor(...C.gray20);
+    const lines = wrapText(text, contentW - indent, fs);
+    lines.forEach(ln => { checkPage(7); doc.text(ln, margin + indent, y); y += fs * 0.42; });
+    y += 3;
+  };
+
+  const label = (lbl, val, indent = 0) => {
+    if (!val) return;
+    checkPage(8);
+    doc.setFontSize(8);
+    doc.setFont("helvetica", "bold");
+    doc.setTextColor(...C.gray40);
+    doc.text(lbl, margin + indent, y);
+    doc.setFont("helvetica", "normal");
+    doc.setTextColor(...C.gray20);
+    const lines = wrapText(val, contentW - 40 - indent, 8);
+    doc.text(lines[0] || "", margin + indent + 38, y);
+    y += 7;
+    if (lines.length > 1) {
+      lines.slice(1).forEach(l => { checkPage(6); doc.text(l, margin + indent + 38, y); y += 5.5; });
+    }
+  };
+
+  // ── PRE-LOAD ALL IMAGES ──────────────────────────────────────────────────
+  const imageCache = {};
+  await Promise.all(
+    allInventions.map(async (inv) => {
+      const url = itemImages[inv.title];
+      if (url) imageCache[inv.title] = await loadImageAsBase64(url);
+    })
+  );
+
+  // ══════════════════════════════════════════════════════════════════════════
+  // COVER PAGE
+  // ══════════════════════════════════════════════════════════════════════════
   pageCount++;
-  doc.setFillColor(0, 0, 0);
+  doc.setFillColor(...C.black);
   doc.rect(0, 0, W, 297, "F");
-  doc.setFillColor(239, 68, 68);
-  doc.rect(0, 0, W, 4, "F");
-  doc.rect(0, 293, W, 4, "F");
 
-  doc.setFontSize(9);
-  doc.setFont("helvetica", "bold");
-  doc.setTextColor(100, 116, 139);
-  doc.text("C.O.D.E.X.T.E.C.H. ZENITH APEX RESEARCH PLATFORM", margin, 22);
-  doc.text("RESTRICTED — ADMIN ONLY — NDA ENFORCED", margin, 29);
+  // White accent stripe top
+  doc.setFillColor(...C.white);
+  doc.rect(0, 0, W, 2, "F");
 
-  doc.setFontSize(28);
-  doc.setFont("helvetica", "bold");
-  doc.setTextColor(255, 255, 255);
-  doc.text("MASTER BUILD PLANS", margin, 58);
-  doc.text("COMPENDIUM", margin, 72);
+  // Side rule accent
+  doc.setFillColor(...C.gray40);
+  doc.rect(margin - 5, 28, 2, 200, "F");
 
-  doc.setFontSize(12);
-  doc.setFont("helvetica", "italic");
-  doc.setTextColor(100, 116, 139);
-  doc.text("Complete Engineering Documentation for All Invention Build Plans", margin, 84);
-
-  doc.setFontSize(9);
-  doc.setFont("helvetica", "normal");
-  doc.setTextColor(71, 85, 105);
-  const invWithData = allInventions.filter(inv => inventionSteps[inv.title]);
-  doc.text(`${allInventions.length} total inventions  ·  ${invWithData.length} with full build plans  ·  Generated ${new Date().toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}`, margin, 96);
-
-  // Stats box
-  doc.setFillColor(20, 20, 20);
-  doc.rect(margin, 108, contentW, 40, "F");
   doc.setFontSize(8);
   doc.setFont("helvetica", "bold");
-  doc.setTextColor(239, 68, 68);
-  doc.text("DOCUMENT CLASSIFICATION", margin + 4, 118);
-  doc.setFont("helvetica", "normal");
-  doc.setTextColor(148, 163, 184);
-  doc.text("This document contains the complete engineering specifications, bills of materials, step-by-step build", margin + 4, 125);
-  doc.text("instructions, software notes, and technical references for all invention build plans in the C.O.D.E.X.T.E.C.H.", margin + 4, 131);
-  doc.text("platform. Distribution is strictly limited to authorized administrators. NDA applies in all jurisdictions.", margin + 4, 137);
-  doc.text("Unauthorized disclosure is subject to liquidated damages of $2,500,000 per incident.", margin + 4, 143);
+  doc.setTextColor(...C.gray60);
+  doc.text("C.O.D.E.X.T.E.C.H.", margin, 22);
+  doc.text("ZENITH APEX RESEARCH PLATFORM", margin, 28);
 
-  // TOC
-  y = 160;
+  doc.setFontSize(36);
+  doc.setFont("helvetica", "bold");
+  doc.setTextColor(...C.white);
+  doc.text("MASTER", margin, 60);
+  doc.text("BUILD PLANS", margin, 78);
+  doc.text("COMPENDIUM", margin, 96);
+
+  // White rule
+  doc.setFillColor(...C.white);
+  doc.rect(margin, 103, contentW * 0.6, 1, "F");
+
+  doc.setFontSize(11);
+  doc.setFont("helvetica", "italic");
+  doc.setTextColor(...C.gray60);
+  doc.text("Complete Engineering Documentation — All Invention Build Plans", margin, 112);
+
+  const invWithData = allInventions.filter(inv => inventionSteps[inv.title]);
+  doc.setFontSize(8.5);
+  doc.setFont("helvetica", "normal");
+  doc.setTextColor(...C.gray40);
+  doc.text(`${allInventions.length} inventions  ·  ${invWithData.length} with full specifications  ·  ${new Date().toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}`, margin, 122);
+
+  // Classification box
+  doc.setFillColor(30, 30, 30);
+  doc.rect(margin, 134, contentW, 32, "F");
+  doc.setDrawColor(...C.gray40);
+  doc.setLineWidth(0.5);
+  doc.rect(margin, 134, contentW, 32, "D");
   doc.setFontSize(9);
   doc.setFont("helvetica", "bold");
-  doc.setTextColor(255, 255, 255);
-  doc.text("TABLE OF CONTENTS", margin, y); y += 8;
+  doc.setTextColor(...C.white);
+  doc.text("CLASSIFICATION: ADMIN CONFIDENTIAL", margin + 5, 144);
+  doc.setFont("helvetica", "normal");
+  doc.setFontSize(7.5);
+  doc.setTextColor(...C.gray60);
+  const classText = "Distribution restricted to authorized platform administrators. NDA applies in all jurisdictions. Unauthorized disclosure is subject to liquidated damages of $2,500,000 per incident per the platform terms of service.";
+  const classLines = doc.splitTextToSize(classText, contentW - 10);
+  classLines.forEach((l, i) => doc.text(l, margin + 5, 150 + i * 5));
+
+  // TOC
+  y = 175;
+  doc.setFontSize(9);
+  doc.setFont("helvetica", "bold");
+  doc.setTextColor(...C.gray60);
+  doc.text("CONTENTS", margin, y); y += 8;
 
   allInventions.forEach((inv, idx) => {
-    if (y > 278) return; // cap TOC on cover
+    if (y > 282) return;
     const hasData = !!inventionSteps[inv.title];
-    doc.setFontSize(8);
+    doc.setFontSize(7.5);
     doc.setFont("helvetica", hasData ? "normal" : "italic");
-    doc.setTextColor(hasData ? 203 : 100, hasData ? 213 : 116, hasData ? 225 : 139);
-    const label = `${idx + 1}. ${inv.title}${hasData ? "" : " (overview only)"}`;
-    const truncated = label.length > 75 ? label.slice(0, 72) + "…" : label;
-    doc.text(truncated, margin, y);
+    doc.setTextColor(hasData ? 180 : 80, hasData ? 180 : 80, hasData ? 180 : 80);
+    const num = String(idx + 1).padStart(2, "0");
+    const label2 = `${num}  ${inv.title}${!hasData ? "  (overview only)" : ""}`;
+    const trunc = label2.length > 78 ? label2.slice(0, 75) + "…" : label2;
+    doc.text(trunc, margin, y);
+    // Dot leader
+    const textW = doc.getTextWidth(trunc);
+    if (textW < contentW - 14) {
+      const dotsX = margin + textW + 2;
+      const dotsW = W - margin - 8 - dotsX;
+      if (dotsW > 0) {
+        doc.setTextColor(50, 50, 50);
+        doc.text(".".repeat(Math.floor(dotsW / 1.5)), dotsX, y);
+      }
+    }
     y += 5;
   });
 
-  // ── GLOBAL DISCLAIMER ─────────────────────────────────────────────────────
+  // Bottom stripe
+  doc.setFillColor(20, 20, 20);
+  doc.rect(0, 283, W, 14, "F");
+  doc.setFontSize(7);
+  doc.setFont("helvetica", "normal");
+  doc.setTextColor(...C.gray40);
+  doc.text("FOR RESEARCH & EDUCATIONAL USE ONLY  ·  NDA APPLIES  ·  DO NOT DISTRIBUTE", W / 2, 291, { align: "center" });
+
+  // ══════════════════════════════════════════════════════════════════════════
+  // DISCLAIMER PAGE
+  // ══════════════════════════════════════════════════════════════════════════
   newPage();
-  doc.setFontSize(14);
+  addRunningHeader("Disclaimer");
+
+  doc.setFillColor(...C.gray95);
+  doc.rect(margin - 2, y - 4, contentW + 4, 14, "F");
+  doc.setDrawColor(...C.black);
+  doc.setLineWidth(0.8);
+  doc.line(margin - 2, y - 4, margin - 2, y + 10);
+  doc.setFontSize(11);
   doc.setFont("helvetica", "bold");
-  doc.setTextColor(251, 191, 36);
-  doc.text("RESEARCH & EDUCATIONAL USE DISCLAIMER", margin, y); y += 10;
+  doc.setTextColor(...C.black);
+  doc.text("RESEARCH & EDUCATIONAL USE DISCLAIMER", margin + 3, y + 5);
+  y += 20;
 
-  const disclaimerText = "ALL DEVICES, PLANS, AND SPECIFICATIONS IN THIS COMPENDIUM ARE PROVIDED FOR RESEARCH AND EDUCATIONAL PURPOSES ONLY. No device described herein has been approved by the FDA, FCC, EPA, FTC, or any regulatory authority for medical, therapeutic, commercial, or consumer use. Do not use any device from these plans for diagnosis, treatment, cure, or prevention of any disease or medical condition. All claims regarding energy output, biological effects, or field phenomena are theoretical or experimental in nature and have not been independently verified by a regulatory body. Replicate at your own risk. Always consult a licensed professional before any experimental application. C.O.D.E.X.T.E.C.H. and Zenith Apex LLC assume no liability for use or misuse of these plans. All build plans are derived from publicly available patents, peer-reviewed scientific publications, and declassified government documents — sources are cited individually in each build plan section.";
-  body(disclaimerText, [251, 191, 36], 9);
-
+  const disclaimerText = "ALL DEVICES, PLANS, AND SPECIFICATIONS IN THIS COMPENDIUM ARE PROVIDED FOR RESEARCH AND EDUCATIONAL PURPOSES ONLY. No device described herein has been approved by the FDA, FCC, EPA, FTC, or any regulatory authority for medical, therapeutic, commercial, or consumer use. Do not use any device from these plans for diagnosis, treatment, cure, or prevention of any disease or medical condition. All claims regarding energy output, biological effects, or field phenomena are theoretical or experimental in nature and have not been independently verified by a regulatory body. Replicate at your own risk. Always consult a licensed professional before any experimental application. C.O.D.E.X.T.E.C.H. and Zenith Apex LLC assume no liability for use or misuse of these plans. All build plans are derived from publicly available patents, peer-reviewed scientific publications, and declassified government documents.";
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(8.5);
+  doc.setTextColor(...C.black);
+  const dlLines = doc.splitTextToSize(disclaimerText, contentW);
+  dlLines.forEach(ln => { checkPage(7); doc.text(ln, margin, y); y += 5.5; });
   y += 6;
-  body("Primary Sources: Bearden T.E. (2002) Energy from the Vacuum, Cheniere Press. | Anastasovski P.K. et al. (2001) Found. Phys. Lett. 14(1). | U.S. Patent 6,362,718 (MEG). | Bateman J.B. (1978) ONR London Branch Report R-5-78. | Bohren C.F. (1983) Am. J. Phys. 51(4). | Kaznacheyev V.P. (1974–1982) Soviet cytopathogenic UV photon research. | Gray E.V. (1975) U.S. Patent 3,890,548. | Bearden T.E. (1991) Gravitobiology. | Aharonov Y. & Bohm D. (1959) Phys. Rev. 115(3). | Popp F.A. (1992) Biophotons, Kluwer Academic. | Rycroft M.J. et al. (2008) J. Atmos. Solar-Terrestrial Phys. 70(7). | Gurwitsch A.G. (1923) Arch. Entwicklungsmech. 100. | Waddington C.H. (1940) Organizers and Genes. Cambridge.", [148, 163, 184], 8);
 
-  // ── EACH INVENTION ────────────────────────────────────────────────────────
-  allInventions.forEach((inv, invIdx) => {
+  subSection("PRIMARY REFERENCES & CITATIONS");
+  body("Bearden T.E. (2002) Energy from the Vacuum, Cheniere Press. | Anastasovski P.K. et al. (2001) Found. Phys. Lett. 14(1):87-94. | U.S. Patent 6,362,718 — MEG (2002). | Bateman J.B. (1978) ONR London Branch Report R-5-78, unclassified. | Bohren C.F. (1983) Am. J. Phys. 51(4):323-327. | Kaznacheyev V.P. et al. (1974–1982) Cytopathogenic UV photon research, Soviet scientific literature. | Gray E.V. (1975) U.S. Patent 3,890,548. | Bearden T.E. (1991) Gravitobiology, Tesla Book Company. | Aharonov Y. & Bohm D. (1959) Phys. Rev. 115(3):485. | Popp F.A. (1992) Biophotons, Kluwer Academic. | Rycroft M.J. et al. (2008) J. Atmos. Solar-Terrestrial Phys. 70(7). | Gurwitsch A.G. (1923) Arch. Entwicklungsmech. 100. | Waddington C.H. (1940) Organizers and Genes, Cambridge University Press.", 8);
+
+  // ══════════════════════════════════════════════════════════════════════════
+  // EACH INVENTION
+  // ══════════════════════════════════════════════════════════════════════════
+  for (let invIdx = 0; invIdx < allInventions.length; invIdx++) {
+    const inv = allInventions[invIdx];
     const data = inventionSteps[inv.title];
+    const imgData = imageCache[inv.title];
 
-    // Divider page for each invention
-    newPage();
-    doc.setFillColor(20, 20, 20);
-    doc.rect(0, 0, W, 297, "F");
-    doc.setFillColor(239, 68, 68);
-    doc.rect(0, 0, W, 3, "F");
+    // ── INVENTION DIVIDER / TITLE PAGE ──────────────────────────────────
+    newPage(false);
+    // Half-black header band
+    doc.setFillColor(...C.black);
+    doc.rect(0, 0, W, 120, "F");
+    doc.setFillColor(...C.white);
+    doc.rect(0, 120, W, 177, "F");
 
-    doc.setFontSize(9);
-    doc.setFont("helvetica", "bold");
-    doc.setTextColor(100, 116, 139);
-    doc.text(`INVENTION ${invIdx + 1} OF ${allInventions.length}`, margin, 28);
-
-    doc.setFontSize(20);
-    doc.setTextColor(255, 255, 255);
-    const titleLines = wrapText(inv.title, contentW, 20);
-    titleLines.forEach((ln, i) => doc.text(ln, margin, 42 + i * 10));
-
-    const afterTitleY = 42 + titleLines.length * 10 + 4;
+    // Index tab
+    doc.setFillColor(...C.white);
+    doc.rect(W - 22, 0, 22, 30, "F");
     doc.setFontSize(10);
-    doc.setFont("helvetica", "italic");
-    doc.setTextColor(100, 116, 139);
-    const taglines = wrapText(`"${inv.tagline || ""}"`, contentW, 10);
-    taglines.forEach((ln, i) => doc.text(ln, margin, afterTitleY + i * 6));
+    doc.setFont("helvetica", "bold");
+    doc.setTextColor(...C.black);
+    doc.text(String(invIdx + 1).padStart(2, "0"), W - 11, 18, { align: "center" });
 
-    let metaY = afterTitleY + taglines.length * 6 + 10;
-    [["PRICE", inv.price], ["AUDIENCE", inv.audience], ["SOURCE", inv.source]].forEach(([lbl, val]) => {
-      if (!val || metaY > 250) return;
-      doc.setFontSize(7.5);
-      doc.setFont("helvetica", "bold");
-      doc.setTextColor(71, 85, 105);
-      doc.text(lbl + ":", margin, metaY);
-      doc.setFont("helvetica", "normal");
-      doc.setTextColor(148, 163, 184);
-      const vLines = wrapText(val, contentW - 20, 7.5);
-      doc.text(vLines[0] || "", margin + 20, metaY);
-      metaY += 7;
-    });
-
-    if (!data) {
-      doc.setFontSize(9);
-      doc.setFont("helvetica", "italic");
-      doc.setTextColor(71, 85, 105);
-      doc.text("Full build plans in development — overview below.", margin, metaY + 10);
-      newPage();
-      section("DESCRIPTION", [148, 163, 184]);
-      body(inv.description, [203, 213, 225]);
-      if (inv.problem) { section("THE PROBLEM", [239, 68, 68]); body(inv.problem, [203, 213, 225]); }
-      if (inv.beardenSolution) { section("SOLUTION", [59, 130, 246]); body(inv.beardenSolution, [203, 213, 225]); }
-      if (inv.market) { section("MARKET OPPORTUNITY", [245, 158, 11]); body(inv.market, [203, 213, 225]); }
-      return;
+    // Color photo — right side of header band
+    if (imgData) {
+      try {
+        doc.addImage(imgData, "JPEG", W - margin - 68, 8, 64, 96, undefined, "FAST");
+        // Fade overlay on photo
+        doc.setFillColor(0, 0, 0);
+        doc.setGState(new doc.GState({ opacity: 0.25 }));
+        doc.rect(W - margin - 68, 8, 64, 96, "F");
+        doc.setGState(new doc.GState({ opacity: 1.0 }));
+      } catch { /* skip if image fails */ }
     }
 
-    // Full build plan
-    newPage();
-    section("TECHNICAL OVERVIEW", [34, 197, 94]);
-    body(data.overview, [203, 213, 225]);
-    if (inv.problem) { section("THE PROBLEM", [239, 68, 68]); body(inv.problem, [203, 213, 225]); }
-    if (inv.beardenSolution) { section("BEARDEN'S SOLUTION", [59, 130, 246]); body(inv.beardenSolution, [203, 213, 225]); }
-    if (inv.market) { section("MARKET OPPORTUNITY", [245, 158, 11]); body(inv.market, [203, 213, 225]); }
-    if (inv.feasibility) { section("FEASIBILITY", [168, 85, 247]); body(inv.feasibility, [203, 213, 225]); }
+    // Title on header band
+    doc.setFontSize(7.5);
+    doc.setFont("helvetica", "bold");
+    doc.setTextColor(...C.gray60);
+    doc.text(`INVENTION ${invIdx + 1} OF ${allInventions.length}`, margin, 18);
 
-    // BOM
+    doc.setFontSize(18);
+    doc.setFont("helvetica", "bold");
+    doc.setTextColor(...C.white);
+    const titleLines2 = doc.splitTextToSize(inv.title, contentW - 72);
+    titleLines2.slice(0, 3).forEach((ln, i) => doc.text(ln, margin, 32 + i * 10));
+
+    const afterTitle2 = 32 + Math.min(3, titleLines2.length) * 10 + 3;
+    if (inv.tagline) {
+      doc.setFontSize(9);
+      doc.setFont("helvetica", "italic");
+      doc.setTextColor(...C.gray60);
+      const tagL = doc.splitTextToSize(`"${inv.tagline}"`, contentW - 72);
+      tagL.slice(0, 2).forEach((ln, i) => doc.text(ln, margin, afterTitle2 + i * 6));
+    }
+
+    // Meta below black band
+    y = 128;
+    doc.setDrawColor(...C.gray85);
+    doc.setLineWidth(0.3);
+    doc.line(margin, y, W - margin, y);
+    y += 6;
+
+    if (inv.icon) {
+      doc.setFontSize(22);
+      doc.text(inv.icon, margin, y + 2);
+    }
+    const metaX = margin + (inv.icon ? 14 : 0);
+
+    [[" PRICE", inv.price], ["AUDIENCE", inv.audience]].forEach(([lbl, val]) => {
+      if (!val) return;
+      doc.setFontSize(7.5);
+      doc.setFont("helvetica", "bold");
+      doc.setTextColor(...C.gray40);
+      doc.text(lbl + ":", metaX, y);
+      doc.setFont("helvetica", "normal");
+      doc.setTextColor(...C.gray20);
+      doc.text(String(val).slice(0, 100), metaX + 24, y);
+      y += 7;
+    });
+
+    if (inv.description) {
+      y += 4;
+      doc.setFontSize(8.5);
+      doc.setFont("helvetica", "normal");
+      doc.setTextColor(...C.gray20);
+      const dLines = doc.splitTextToSize(inv.description, contentW);
+      dLines.slice(0, 6).forEach(ln => { doc.text(ln, margin, y); y += 5.5; });
+    }
+
+    if (inv.source) {
+      y += 3;
+      doc.setFontSize(7);
+      doc.setFont("helvetica", "italic");
+      doc.setTextColor(...C.gray60);
+      const srcLines = doc.splitTextToSize("Source: " + inv.source, contentW);
+      srcLines.slice(0, 3).forEach(ln => { doc.text(ln, margin, y); y += 4.5; });
+    }
+
+    if (!data) {
+      // Overview-only page
+      newPage();
+      addRunningHeader(inv.title.slice(0, 40));
+      if (inv.problem) { subSection("THE PROBLEM"); body(inv.problem); }
+      if (inv.beardenSolution) { subSection("SOLUTION FRAMEWORK"); body(inv.beardenSolution); }
+      if (inv.market) { subSection("MARKET OPPORTUNITY"); body(inv.market); }
+      continue;
+    }
+
+    // ── FULL BUILD PLAN PAGES ──────────────────────────────────────────
+    newPage();
+    addRunningHeader(inv.title.slice(0, 40));
+
+    // Photo banner at top of first content page (full-width color strip)
+    if (imgData) {
+      try {
+        doc.addImage(imgData, "JPEG", margin, y, contentW, 44, undefined, "FAST");
+        y += 48;
+      } catch { y += 2; }
+    }
+
+    section("TECHNICAL OVERVIEW");
+    body(data.overview);
+    if (inv.problem) { subSection("THE PROBLEM"); body(inv.problem); }
+    if (inv.beardenSolution) { subSection("BEARDEN'S SOLUTION"); body(inv.beardenSolution); }
+    if (inv.market) { subSection("MARKET OPPORTUNITY"); body(inv.market); }
+    if (inv.feasibility) { subSection("FEASIBILITY NOTES"); body(inv.feasibility); }
+
+    // ── BILL OF MATERIALS ─────────────────────────────────────────────
     if (data.bom?.length > 0) {
-      checkPage(25);
-      section("BILL OF MATERIALS", [6, 182, 212]);
-      const colX = [margin, margin + 10, margin + 78, margin + 130];
-      doc.setFillColor(30, 41, 59);
-      doc.rect(margin - 2, y - 5, contentW + 4, 9, "F");
-      ["Qty", "Item", "Specification", "Source"].forEach((h, i) => {
-        doc.setFont("helvetica", "bold"); doc.setFontSize(7.5);
-        doc.setTextColor(100, 116, 139);
-        doc.text(h, colX[i], y);
+      checkPage(28);
+      section(`BILL OF MATERIALS  (${data.bom.length} items)`);
+
+      // Table header
+      const colX2 = [margin, margin + 10, margin + 72, margin + 128];
+      doc.setFillColor(...C.gray20);
+      doc.rect(margin - 2, y - 4, contentW + 4, 9, "F");
+      ["QTY", "ITEM", "SPECIFICATION", "SOURCE / COST"].forEach((h, i) => {
+        doc.setFont("helvetica", "bold"); doc.setFontSize(7);
+        doc.setTextColor(...C.white);
+        doc.text(h, colX2[i], y + 1.5);
       });
-      y += 6;
+      y += 8;
+
       data.bom.forEach((row, idx) => {
-        checkPage(8);
-        if (idx % 2 === 0) { doc.setFillColor(22, 33, 48); doc.rect(margin - 2, y - 3, contentW + 4, 8, "F"); }
-        doc.setFont("helvetica", "bold"); doc.setFontSize(7.5); doc.setTextColor(34, 211, 238);
-        doc.text(String(row.qty), colX[0], y + 1);
-        doc.setFont("helvetica", "normal"); doc.setTextColor(203, 213, 225);
-        doc.text(wrapText(row.item, 66, 7.5)[0] || "", colX[1], y + 1);
-        doc.setTextColor(148, 163, 184);
-        doc.text(wrapText(row.spec, 50, 7.5)[0] || "", colX[2], y + 1);
-        doc.setTextColor(100, 116, 139);
-        doc.text(wrapText(row.source, 40, 7.5)[0] || "", colX[3], y + 1);
-        y += 8;
+        checkPage(9);
+        if (idx % 2 === 0) {
+          doc.setFillColor(...C.gray95);
+          doc.rect(margin - 2, y - 3, contentW + 4, 8.5, "F");
+        }
+        doc.setFont("helvetica", "bold"); doc.setFontSize(7.5); doc.setTextColor(...C.black);
+        doc.text(String(row.qty), colX2[0], y + 1.5);
+        doc.setFont("helvetica", "normal"); doc.setTextColor(...C.gray10);
+        doc.text(doc.splitTextToSize(row.item || "", 60)[0] || "", colX2[1], y + 1.5);
+        doc.setTextColor(...C.gray40);
+        doc.text(doc.splitTextToSize(row.spec || "", 54)[0] || "", colX2[2], y + 1.5);
+        doc.setTextColor(...C.gray60);
+        doc.text(doc.splitTextToSize(row.source || "", 40)[0] || "", colX2[3], y + 1.5);
+        y += 8.5;
       });
       y += 4;
     }
 
-    // Steps
+    // ── STEP-BY-STEP INSTRUCTIONS ─────────────────────────────────────
     if (data.steps?.length > 0) {
-      checkPage(20);
-      section("STEP-BY-STEP BUILD INSTRUCTIONS", [255, 255, 255]);
+      checkPage(22);
+      section(`STEP-BY-STEP BUILD INSTRUCTIONS  (${data.steps.length} steps)`);
+
       data.steps.forEach((step, si) => {
-        checkPage(28);
-        doc.setFillColor(30, 41, 59);
-        doc.rect(margin - 2, y - 4, contentW + 4, 11, "F");
-        doc.setFillColor(239, 68, 68);
-        doc.circle(margin + 4.5, y + 1.5, 4, "F");
-        doc.setFont("helvetica", "bold"); doc.setFontSize(7.5); doc.setTextColor(255, 255, 255);
-        doc.text(String(si + 1), margin + 4.5, y + 3, { align: "center" });
-        doc.setFontSize(9.5); doc.text(`Step ${si + 1}: ${step.title}`, margin + 11, y + 2);
-        y += 12;
-        doc.setFont("helvetica", "normal"); doc.setFontSize(8.5); doc.setTextColor(203, 213, 225);
-        const dLines = wrapText(step.detail, contentW - 4, 8.5);
-        dLines.forEach(ln => { checkPage(7); doc.text(ln, margin + 2, y); y += 5.5; });
+        checkPage(30);
+
+        // Step header bar
+        doc.setFillColor(...C.gray20);
+        doc.rect(margin - 2, y - 4, contentW + 4, 12, "F");
+
+        // Step number circle (white)
+        doc.setFillColor(...C.white);
+        doc.circle(margin + 5, y + 2, 4.5, "F");
+        doc.setFont("helvetica", "bold"); doc.setFontSize(8);
+        doc.setTextColor(...C.black);
+        doc.text(String(si + 1), margin + 5, y + 4, { align: "center" });
+
+        // Step title
+        doc.setFontSize(9.5); doc.setTextColor(...C.white);
+        doc.text(`Step ${si + 1}: ${step.title}`, margin + 12, y + 3.5);
+        y += 14;
+
+        // Detail text
+        doc.setFont("helvetica", "normal"); doc.setFontSize(8.5);
+        doc.setTextColor(...C.gray20);
+        const dLines2 = doc.splitTextToSize(step.detail || "", contentW - 6);
+        dLines2.forEach(ln => { checkPage(7); doc.text(ln, margin + 3, y); y += 5.2; });
+
+        // Warning box
         if (step.warning) {
-          checkPage(18);
-          y += 2;
-          doc.setFillColor(40, 20, 0);
-          doc.rect(margin, y, contentW, 1, "F"); y += 3;
-          doc.setFont("helvetica", "bold"); doc.setFontSize(7.5); doc.setTextColor(251, 191, 36);
-          doc.text("⚠ WARNING:", margin + 2, y);
-          doc.setFont("helvetica", "normal"); doc.setTextColor(253, 224, 71);
-          const wLines = wrapText(step.warning, contentW - 4, 7.5);
-          wLines.forEach(ln => { checkPage(7); doc.text(ln, margin + 2, y + 5); y += 5; });
-          y += 5;
+          checkPage(20);
+          y += 3;
+          doc.setFillColor(...C.gray95);
+          doc.setDrawColor(...C.gray60);
+          doc.setLineWidth(0.4);
+          const wLines2 = doc.splitTextToSize("⚠  " + step.warning, contentW - 8);
+          const boxH = wLines2.length * 5 + 8;
+          doc.rect(margin, y, contentW, boxH, "FD");
+          doc.setFont("helvetica", "bold"); doc.setFontSize(8);
+          doc.setTextColor(...C.black);
+          wLines2.forEach((ln, wi) => { doc.text(ln, margin + 4, y + 6 + wi * 5); });
+          y += boxH + 4;
         }
         y += 6;
       });
     }
 
-    // Notes
-    if (data.notes) { section("TECHNICAL NOTES", [148, 163, 184]); body(data.notes, [203, 213, 225]); }
-    if (data.softwareNotes) { section("SOFTWARE & FIRMWARE", [34, 197, 94]); body(data.softwareNotes, [203, 213, 225]); }
-    section("SOURCE CITATIONS", [245, 158, 11]);
-    body(inv.source, [203, 213, 225]);
-  });
+    // ── NOTES & FIRMWARE ─────────────────────────────────────────────
+    if (data.notes) {
+      checkPage(18);
+      section("TECHNICAL NOTES");
+      body(data.notes);
+    }
+    if (data.softwareNotes) {
+      checkPage(14);
+      subSection("SOFTWARE & FIRMWARE NOTES");
+      body(data.softwareNotes);
+    }
+
+    // ── SOURCE CITATIONS ─────────────────────────────────────────────
+    if (inv.source) {
+      checkPage(12);
+      subSection("SOURCE CITATIONS");
+      body(inv.source, 7.5);
+    }
+
+    // Closing rule
+    checkPage(8);
+    y += 3;
+    doc.setDrawColor(...C.gray85);
+    doc.setLineWidth(0.3);
+    doc.line(margin, y, W - margin, y);
+    y += 5;
+  }
 
   addFooterToAllPages(doc.getNumberOfPages());
-  doc.save(`ZenithApex_MASTER_Build_Plans_Compendium_${new Date().toISOString().slice(0, 10)}.pdf`);
+  doc.save(`ZenithApex_MASTER_Build_Plans_${new Date().toISOString().slice(0, 10)}.pdf`);
 }
 
 function SpecsLockedGate({ invention }) {
@@ -1015,7 +1244,7 @@ export default function InventionPlans() {
                 setGeneratingMaster(true);
                 await new Promise(r => setTimeout(r, 80));
                 const allInvs = businessItems.filter(i => i.category === "Invention");
-                generateMasterPDF(allInvs);
+                await generateMasterPDF(allInvs);
                 setGeneratingMaster(false);
               }}
               disabled={generatingMaster}
