@@ -1,0 +1,39 @@
+{
+  "name": "SensorReading",
+  "type": "object",
+  "properties": {
+    "experiment_id": {
+      "type": "string",
+      "description": "ID of the parent experiment"
+    },
+    "timestamp": {
+      "type": "string",
+      "description": "ISO timestamp of the reading"
+    },
+    "value": {
+      "type": "number",
+      "description": "Sensor reading value"
+    },
+    "unit": {
+      "type": "string",
+      "description": "Unit of measurement"
+    },
+    "channel": {
+      "type": "string",
+      "description": "Sensor channel label (e.g., PMT-A, PMT-B, CH1)"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Optional notes for this reading"
+    },
+    "step_label": {
+      "type": "string",
+      "description": "Which build step this reading was taken at"
+    }
+  },
+  "required": [
+    "experiment_id",
+    "timestamp",
+    "value"
+  ]
+}

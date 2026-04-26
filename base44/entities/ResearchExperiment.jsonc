@@ -1,0 +1,80 @@
+{
+  "name": "ResearchExperiment",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string",
+      "description": "Experiment title"
+    },
+    "invention_name": {
+      "type": "string",
+      "description": "Name of the invention build plan this experiment is based on"
+    },
+    "hypothesis": {
+      "type": "string",
+      "description": "Experiment hypothesis or research question"
+    },
+    "methodology": {
+      "type": "string",
+      "description": "Experimental methodology and setup notes"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "planned",
+        "active",
+        "completed",
+        "paused"
+      ],
+      "default": "planned",
+      "description": "Current experiment status"
+    },
+    "started_at": {
+      "type": "string",
+      "description": "ISO timestamp when experiment was started"
+    },
+    "completed_at": {
+      "type": "string",
+      "description": "ISO timestamp when experiment was completed"
+    },
+    "sensor_type": {
+      "type": "string",
+      "enum": [
+        "photon_count",
+        "spectrum",
+        "voltage",
+        "current",
+        "frequency",
+        "field_strength",
+        "temperature",
+        "pressure",
+        "custom"
+      ],
+      "description": "Primary sensor/measurement type"
+    },
+    "sensor_unit": {
+      "type": "string",
+      "description": "Unit of measurement (e.g., counts/sec, mV, Hz, mT)"
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Research tags"
+    },
+    "conclusion": {
+      "type": "string",
+      "description": "Experiment conclusion and findings"
+    },
+    "peer_review_ready": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether experiment is ready for peer review"
+    }
+  },
+  "required": [
+    "title",
+    "invention_name"
+  ]
+}

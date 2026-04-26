@@ -146,6 +146,7 @@ import VaultBrowser from './pages/VaultBrowser';
 import BuildDetail from './pages/BuildDetail';
 import VaultPricing from './pages/VaultPricing';
 import MemberVault from './pages/MemberVault';
+import ResearchLab from './pages/ResearchLab';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -347,6 +348,7 @@ const AuthenticatedApp = () => {
           <Route path="/pricing-vault" element={<VaultPricing />} />
           <Route path="/institutional-licensing" element={<InstitutionalLicensing />} />
           <Route path="/my-vault" element={<MemberVault />} />
+          <Route path="/research-lab" element={<ResearchLab />} />
 
           <Route path="*" element={<PageNotFound />} />
         </Route>
