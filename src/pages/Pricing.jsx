@@ -369,7 +369,7 @@ function AlaCarteItem({ item, onCheckout }) {
         </div>
       </div>
       <div className="flex items-center gap-3 flex-shrink-0">
-        <span className={`font-black ${isRestricted ? "text-gray-500" : "text-white"}`}>${item.price}</span>
+        {!isRestricted && <span className="font-black text-white">${item.price}</span>}
         {isRestricted ? (
           <a
             href={isGovOnly ? "mailto:gov@codextech.io?subject=GOV+Defense+Build+Plan+Inquiry" : "/pricing#elite"}
