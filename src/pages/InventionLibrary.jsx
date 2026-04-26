@@ -8,6 +8,8 @@ import Invention3DCardSmall from "../components/Invention3DCardSmall";
 import InventionBuildVideo from "../components/InventionBuildVideo";
 import { base44 } from "@/api/base44Client";
 
+const CLASSIFIED_TITLES = ["Biofield Frequency Exposure Chamber (Research Device)"];
+
 const inventions = businessItems.filter(i => i.category === "Invention");
 
 // ─── Professional B&W PDF Generator ────────────────────────────────────────
@@ -405,6 +407,31 @@ export default function InventionLibrary() {
             const colors = ["#3b82f6","#22c55e","#a855f7","#f59e0b","#ef4444","#06b6d4","#ec4899","#84cc16","#f97316","#8b5cf6","#14b8a6","#fb923c"];
             const color = inv.color || colors[i % colors.length];
             const isPdfLoading = generatingPdf === inv.title;
+            const isClassified = CLASSIFIED_TITLES.includes(inv.title);
+
+            if (isClassified) {
+              return (
+                <div key={i} className="bg-gray-900 border-2 border-red-900/60 rounded-2xl overflow-hidden flex flex-col relative select-none">
+                  {/* Blurred content */}
+                  <div className="blur-sm pointer-events-none">
+                    <div className="w-full h-40 bg-gradient-to-br from-gray-800 to-gray-700 border-b border-gray-700" />
+                    <div className="p-4">
+                      <div className="h-4 bg-gray-700 rounded w-3/4 mb-2" />
+                      <div className="h-3 bg-gray-800 rounded w-full mb-1" />
+                      <div className="h-3 bg-gray-800 rounded w-5/6" />
+                    </div>
+                  </div>
+                  {/* Classified overlay */}
+                  <div className="absolute inset-0 flex flex-col items-center justify-center bg-gray-950/80 rounded-2xl px-6 text-center">
+                    <div className="w-14 h-14 rounded-full bg-red-950/60 border-2 border-red-700 flex items-center justify-center mb-3 text-2xl">🔐</div>
+                    <p className="text-red-400 font-black text-xs uppercase tracking-widest mb-1">Classified</p>
+                    <p className="text-white font-bold text-sm mb-1">{inv.title}</p>
+                    <p className="text-gray-500 text-xs leading-snug">This device involves restricted bioelectromagnetic research. Access restricted to authorized accounts.</p>
+                    <p className="text-gray-700 text-xs mt-3">Contact gov@codextech.io for access</p>
+                  </div>
+                </div>
+              );
+            }
 
             return (
               <div key={i} className="bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden flex flex-col"
