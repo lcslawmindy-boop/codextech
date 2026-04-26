@@ -135,7 +135,7 @@ const TIERS = [
 ];
 
 const FAQS = [
-  { q: "Is this real engineering or pseudoscience?", a: "Every build plan cites granted US patents, peer-reviewed journals, and declassified government documents. The MEG (US Patent 6,362,718) was co-authored by a PhD physicist and published in Foundations of Physics Letters." },
+  { q: "Is this real engineering or pseudoscience?", a: "Every build plan cites granted U.S. patents, peer-reviewed journals, and declassified government documents. The MEG (U.S. Patent 6,362,718) was co-authored by a PhD physicist and published in Foundations of Physics Letters." },
   { q: "Can I really build these devices?", a: "Yes. Every plan includes a full BOM with exact part numbers, specifications, and supplier links. Simpler devices use off-the-shelf Digikey / Amazon components. Advanced systems require standard machining or coil winding." },
   { q: "What if I want to cancel?", a: "Cancel any time from your account settings. No contracts, no fees. Most members tell us the MEG build plan alone was worth more than 6 months of the Starter tier." },
   { q: "Can I upgrade or downgrade?", a: "Yes — upgrades take effect immediately and you're only charged the prorated difference. Downgrades take effect at the next billing cycle." },
@@ -174,7 +174,7 @@ const INDIVIDUAL_COURSES = [
 const BUILD_BUNDLES = [
   {
     name: "Electromagnetic Systems Starter Bundle",
-    description: "Historical EM research documented in US patents & peer-reviewed journals",
+    description: "Historical EM research documented in U.S. patents & peer-reviewed journals",
     builds: ["MEG Replication Kit", "Vacuum Potential Oscillator", "Anenergy Pump Circuit"],
     regularPrice: 2543,
     bundlePrice: 1999,
