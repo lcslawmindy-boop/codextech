@@ -716,19 +716,20 @@ export default function InventionPlans() {
           </button>
           <button
             onClick={() => {
-              if (!isAdmin) {
-                alert("PDF downloads are restricted to administrators only. Please contact support.");
+              const canDownload = isAdmin || tier === "elite";
+              if (!canDownload) {
+                alert("PDF downloads are available on the Elite plan and above. Upgrade to unlock.");
                 return;
               }
               if (isTrial && !isAdmin) { alert("Downloads are not available during the 24-hour trial. Upgrade to a paid plan."); return; }
               handleDownload();
             }}
-            disabled={!data || generating || !isAdmin}
-            title={!isAdmin ? "Admin only" : "Download"}
+            disabled={!data || generating || (!isAdmin && tier !== "elite")}
+            title={(!isAdmin && tier !== "elite") ? "Elite plan required" : "Download PDF"}
             className="flex items-center gap-2 px-4 py-2 rounded-lg bg-red-700 hover:bg-red-600 disabled:opacity-50 disabled:cursor-not-allowed text-white text-sm font-semibold transition-all"
           >
             {generating ? <Loader2 size={14} className="animate-spin" /> : <Download size={14} />}
-            {generating ? "Generating PDF…" : isAdmin ? "Download Plans PDF" : "PDF (Admin Only)"}
+            {generating ? "Generating PDF…" : (isAdmin || tier === "elite") ? "Download Plans PDF" : "Elite — PDF Download"}
           </button>
         </div>
       </div>
