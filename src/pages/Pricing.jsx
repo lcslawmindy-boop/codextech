@@ -84,15 +84,17 @@ const TIERS = [
     name: "Elite",
     price: 149,
     color: "#f59e0b",
-    badge: "CLASSIFIED + ADVISORY",
-    description: "Everything + unlimited builds + restricted systems + 1-on-1 strategy",
+    badge: "FULL VAULT — ADVISORY",
+    description: "Everything in Pro + full civilian vault access + 1-on-1 patent strategy",
     cta: "Go Elite",
     popular: false,
     features: [
-      "Unlimited build plans (40+)",
+      "Unlimited build plans (40+) — full civilian vault",
       "Unlimited courses (40+)",
-      "Everything in Pro",
-      "Restricted / defense-adjacent technology systems",
+      "Everything in Pro included",
+      "Advanced EM research systems (non-restricted)",
+      "MEG, VPO, Scalar Interferometer, Anenergy Pump & more",
+      "Prior Art Archive — 200+ documented systems",
       "1-on-1 monthly patent strategy session",
       "Institutional licensing prioritized",
       "Early access to new build plans",
@@ -100,7 +102,11 @@ const TIERS = [
       "Co-inventor matching priority queue",
       "60% off all à la carte purchases",
     ],
-    locked: [],
+    locked: [
+      "Directed energy & defense-classified systems (GOV only)",
+      "Declassified DoD/DARPA archive (GOV only)",
+      "Secure NDA-gated defense document room (GOV only)",
+    ],
   },
   {
     id: "gov",
@@ -240,7 +246,7 @@ function TierCard({ tier, onCheckout, billingAnnual, getPrice, getAnnualTotal })
       )}
       {isElite && (
         <div className="py-3 text-center text-xs font-black tracking-widest text-yellow-300 bg-yellow-900/40 border-b border-yellow-800/50">
-          🔐 CLASSIFIED ACCESS — ELITE ONLY
+          🔐 FULL VAULT ACCESS — CIVILIAN TIER
         </div>
       )}
       {isStarter && (
