@@ -22,6 +22,7 @@ const ADMIN_SECTIONS = [
     color: "#f59e0b",
     items: [
       { path: "/admin-downloads", icon: <Download size={20} />, label: "Download Center", desc: "Generate & manage branded PDFs, build plans, investor docs", badge: "Admin" },
+      { path: "/admin-pdf-access", icon: <Download size={20} />, label: "PDF Access Manager", desc: "Grant individual Elite/GOV accounts PDF download access", badge: "🔐" },
       { path: "/admin-videos", icon: <Video size={20} />, label: "Build Videos", desc: "Manage saved invention build video guides", badge: "Admin" },
     ]
   },

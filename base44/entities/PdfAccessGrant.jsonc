@@ -1,0 +1,35 @@
+{
+  "name": "PdfAccessGrant",
+  "type": "object",
+  "properties": {
+    "email": {
+      "type": "string",
+      "description": "Email address of the user granted PDF download access"
+    },
+    "tier": {
+      "type": "string",
+      "enum": [
+        "elite",
+        "gov"
+      ],
+      "description": "Membership tier the user is on"
+    },
+    "granted_by": {
+      "type": "string",
+      "description": "Admin email who granted access"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Optional admin notes"
+    },
+    "active": {
+      "type": "boolean",
+      "default": true,
+      "description": "Whether this grant is currently active"
+    }
+  },
+  "required": [
+    "email",
+    "tier"
+  ]
+}

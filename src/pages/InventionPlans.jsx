@@ -613,6 +613,7 @@ export default function InventionPlans() {
   const { tier } = useTier();
   const { isTrial } = useTrial();
   const [isAdmin, setIsAdmin] = useState(false);
+  const [hasPdfGrant, setHasPdfGrant] = useState(false);
   const [selected, setSelected] = useState(inventions[0]);
   const [showBuildVideo, setShowBuildVideo] = useState(false);
   const [showBom, setShowBom] = useState(true);
@@ -623,7 +624,20 @@ export default function InventionPlans() {
   const [checkingPurchase, setCheckingPurchase] = useState(true);
 
   useEffect(() => {
-    base44.auth.me().then(u => setIsAdmin(u?.role === 'admin')).catch(() => {});
+    base44.auth.me().then(async (u) => {
+      if (!u) return;
+      const admin = u.role === 'admin';
+      setIsAdmin(admin);
+      if (!admin) {
+        // Check if this user has been granted PDF access by admin
+        try {
+          const grants = await base44.entities.PdfAccessGrant.filter({ email: u.email.toLowerCase(), active: true });
+          setHasPdfGrant(grants && grants.length > 0);
+        } catch {
+          setHasPdfGrant(false);
+        }
+      }
+    }).catch(() => {});
   }, []);
 
   useEffect(() => {
@@ -716,20 +730,20 @@ export default function InventionPlans() {
           </button>
           <button
             onClick={() => {
-              const canDownload = isAdmin || tier === "elite";
+              const canDownload = isAdmin || hasPdfGrant;
               if (!canDownload) {
-                alert("PDF downloads are available on the Elite plan and above. Upgrade to unlock.");
+                alert("PDF downloads require admin approval. Contact support to request access.");
                 return;
               }
               if (isTrial && !isAdmin) { alert("Downloads are not available during the 24-hour trial. Upgrade to a paid plan."); return; }
               handleDownload();
             }}
-            disabled={!data || generating || (!isAdmin && tier !== "elite")}
-            title={(!isAdmin && tier !== "elite") ? "Elite plan required" : "Download PDF"}
+            disabled={!data || generating || (!isAdmin && !hasPdfGrant)}
+            title={(!isAdmin && !hasPdfGrant) ? "Admin approval required" : "Download PDF"}
             className="flex items-center gap-2 px-4 py-2 rounded-lg bg-red-700 hover:bg-red-600 disabled:opacity-50 disabled:cursor-not-allowed text-white text-sm font-semibold transition-all"
           >
             {generating ? <Loader2 size={14} className="animate-spin" /> : <Download size={14} />}
-            {generating ? "Generating PDF…" : (isAdmin || tier === "elite") ? "Download Plans PDF" : "Elite — PDF Download"}
+            {generating ? "Generating PDF…" : (isAdmin || hasPdfGrant) ? "Download Plans PDF" : "PDF (Access Required)"}
           </button>
         </div>
       </div>
