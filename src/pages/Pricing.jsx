@@ -364,7 +364,7 @@ function AlaCarteItem({ item, onCheckout }) {
             )}
           </div>
           <p className="text-gray-500 text-xs">
-            {isGovOnly ? "Available to vetted U.S. government & defense accounts" : isEliteOnly ? "Available on Elite or GOV/Defense membership" : "One-time purchase"}
+            {isGovOnly ? "Available to vetted U.S. Government & Defense accounts" : isEliteOnly ? "Available on Elite or GOV/Defense membership" : "One-time purchase"}
           </p>
         </div>
       </div>
