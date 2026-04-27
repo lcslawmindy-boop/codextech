@@ -4,9 +4,9 @@ import { base44 } from "@/api/base44Client";
 import ScalarWaveWatermark from "@/components/ScalarWaveWatermark";
 import CodextechVaultBackground from "@/components/CodextechVaultBackground";
 import {
-  Lock, Check, Flame, Clock, ArrowRight, Star, ChevronDown, ChevronUp,
+  Lock, Check, Flame, Clock, Star, ChevronDown, ChevronUp,
   Award, Zap, Shield, BookOpen, Wrench, TrendingUp, Eye, AlertTriangle, X,
-  Package, Loader2
+  Loader2
 } from "lucide-react";
 
 // ── Sticky 48h countdown ──────────────────────────────────────────────────────
@@ -92,8 +92,8 @@ const TIERS = [
     anchor: null,
     color: "#f59e0b",
     badge: "🔧 FOR HANDS-ON BUILDERS",
-    headline: "50% off all build plans & hardware kits",
-    description: "50% off 40+ build plans · 50% off hardware kits · BOM access",
+    headline: "50% off all build plans & full BOM access",
+    description: "50% off 40+ build plans · Full BOM access · Assembly guides",
     cta: "Get Builds Access",
     ctaSub: "Cancel anytime",
     popular: false,
@@ -104,6 +104,7 @@ const TIERS = [
       "Step-by-step assembly guides",
       "Build tracker & milestone tools",
       "Private engineering community forum",
+
     ],
     locked: ["Full course library", "AI patent suite"],
   },
@@ -115,7 +116,7 @@ const TIERS = [
     color: "#8b5cf6",
     badge: "⚡ BEST VALUE — COURSES + BUILDS",
     headline: "All courses + 50% off builds & kits + full AI suite",
-    description: "All 40+ courses · 50% off all builds & kits · Every AI tool included",
+    description: "All 40+ courses · 50% off all builds · Every AI tool included",
     cta: "Get All Access — $150/mo",
     ctaSub: "Best value · Cancel anytime",
     popular: false,
@@ -141,7 +142,7 @@ const TIERS = [
     color: "#10b981",
     badge: "🏆 PREMIUM — INCLUDES PDF DOWNLOADS",
     headline: "Everything in All Access + PDF downloads for every build plan",
-    description: "All courses · 50% off builds · Full AI suite · PDF downloads",
+    description: "All courses · 50% off builds · Full AI suite · PDF downloads of all build plans",
     cta: "Get All Access + PDF — $199/mo",
     ctaSub: "Full access · Cancel anytime",
     popular: true,
@@ -347,6 +348,7 @@ function OneTimeAccessCard({ onCheckout, loading }) {
                 "Prior Art Archive — 200+ entries",
                 "EM lab simulators & tools",
                 "Investor toolkit & VDR access",
+
               ].map((f, i) => (
                 <div key={i} className="flex items-center gap-2 text-sm text-gray-200">
                   <Check size={12} className="text-yellow-400 flex-shrink-0" />
@@ -566,24 +568,7 @@ export default function PaywallPage() {
         </div>
       </div>
 
-      {/* ── Kit Bundle CTA ── */}
-      <div className="px-5 pb-10 max-w-4xl mx-auto">
-        <Link to="/kit-bundles"
-          className="flex flex-col sm:flex-row items-center justify-between gap-4 bg-gray-900 border border-orange-900/50 hover:border-orange-700 rounded-2xl p-6 transition-all group">
-          <div className="flex items-center gap-4">
-            <div className="w-12 h-12 rounded-xl bg-orange-950/50 border border-orange-800 flex items-center justify-center flex-shrink-0">
-              <Package size={22} className="text-orange-400" />
-            </div>
-            <div>
-              <p className="text-white font-black text-base">Want the physical hardware too?</p>
-              <p className="text-gray-400 text-sm">Get a pre-sourced parts kit + membership bundled — save up to $187 vs buying separately.</p>
-            </div>
-          </div>
-          <div className="flex items-center gap-2 text-orange-400 font-bold text-sm whitespace-nowrap group-hover:gap-3 transition-all">
-            View Kit Bundles <ArrowRight size={16} />
-          </div>
-        </Link>
-      </div>
+
 
       {/* ── Social proof ── */}
       <div className="px-5 pb-14 max-w-4xl mx-auto">
