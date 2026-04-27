@@ -5,7 +5,8 @@ import ScalarWaveWatermark from "@/components/ScalarWaveWatermark";
 import CodextechVaultBackground from "@/components/CodextechVaultBackground";
 import {
   Lock, Check, Flame, Clock, ArrowRight, Star, ChevronDown, ChevronUp,
-  Award, Zap, Shield, BookOpen, Wrench, TrendingUp, Eye, AlertTriangle, X
+  Award, Zap, Shield, BookOpen, Wrench, TrendingUp, Eye, AlertTriangle, X,
+  Package, Loader2
 } from "lucide-react";
 
 // ── Sticky 48h countdown ──────────────────────────────────────────────────────
@@ -297,11 +298,64 @@ function ExitBanner({ onDismiss, onCheckout }) {
   );
 }
 
+// ── $97 One-Time Vault Access Card ───────────────────────────────────────────
+function OneTimeAccessCard({ onCheckout, loading }) {
+  return (
+    <div className="relative bg-gradient-to-br from-gray-900 to-gray-950 border-2 border-yellow-500 rounded-2xl overflow-hidden shadow-2xl shadow-yellow-900/30 max-w-2xl mx-auto mb-10">
+      <div className="py-2.5 text-center text-xs font-black text-black bg-yellow-500 tracking-widest">
+        ⚡ FASTEST PATH IN — ONE-TIME, NO SUBSCRIPTION
+      </div>
+      <div className="p-7">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5">
+          <div className="flex-1">
+            <h3 className="text-white font-black text-2xl mb-1">Vault Access Pass</h3>
+            <p className="text-yellow-300 text-sm font-bold mb-3">Pay once · Access for 90 days · No recurring charge</p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-4">
+              {[
+                "All 40+ build plans (BOM, steps, PDF)",
+                "All 40+ courses from the archive",
+                "Full AI patent suite",
+                "Prior Art Archive — 200+ entries",
+                "EM lab simulators & tools",
+                "Investor toolkit & VDR access",
+              ].map((f, i) => (
+                <div key={i} className="flex items-center gap-2 text-sm text-gray-200">
+                  <Check size={12} className="text-yellow-400 flex-shrink-0" />
+                  {f}
+                </div>
+              ))}
+            </div>
+            <p className="text-gray-600 text-xs">No subscription. No auto-renew. One payment, 90 days access.</p>
+          </div>
+          <div className="flex flex-col items-center gap-3 flex-shrink-0">
+            <div className="text-center">
+              <div className="text-gray-500 line-through text-base">$237 equivalent</div>
+              <div className="text-6xl font-black text-yellow-400">$97</div>
+              <div className="text-gray-400 text-sm">one-time</div>
+            </div>
+            <button
+              onClick={() => onCheckout("one_time")}
+              disabled={loading}
+              className="w-full sm:w-auto px-8 py-4 rounded-xl font-black text-base text-black transition-all hover:opacity-90 active:scale-[0.98] disabled:opacity-60 flex items-center justify-center gap-2 whitespace-nowrap"
+              style={{ backgroundColor: "#eab308", boxShadow: "0 4px 24px rgba(234,179,8,0.4)" }}
+            >
+              {loading ? <Loader2 size={16} className="animate-spin" /> : <Zap size={16} />}
+              {loading ? "Loading…" : "Get Access — $97 →"}
+            </button>
+            <p className="text-gray-600 text-xs text-center">🔒 Stripe · SSL · Instant access</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // ── Main ──────────────────────────────────────────────────────────────────────
 export default function PaywallPage() {
   const { str: countdown } = useCountdown();
   const [showExit, setShowExit] = useState(false);
   const [exitShown, setExitShown] = useState(false);
+  const [oneTimeLoading, setOneTimeLoading] = useState(false);
 
   // Exit intent on mouse leave
   useEffect(() => {
@@ -321,6 +375,25 @@ export default function PaywallPage() {
       return;
     }
     const baseUrl = window.location.origin;
+
+    // One-time $97 vault pass
+    if (tier === "one_time") {
+      setOneTimeLoading(true);
+      const response = await base44.functions.invoke("createCheckoutSession", {
+        title: "ZARP 90-Day Vault Access Pass",
+        priceInCents: 9700,
+        description: "Full vault access for 90 days — all 40+ builds, courses, AI tools, and investor toolkit. No subscription.",
+        category: "vault_pass",
+        mode: "payment",
+        successUrl: `${baseUrl}/checkout?success=true&product=vault_pass`,
+        cancelUrl: `${baseUrl}/paywall`,
+        customerEmail: null,
+      });
+      if (response.data?.url) window.location.href = response.data.url;
+      setOneTimeLoading(false);
+      return;
+    }
+
     const response = await base44.functions.invoke("createCheckoutSession", {
       title: `ZARP ${tier.name} Membership`,
       priceInCents: tier.price * 100,
@@ -402,6 +475,16 @@ export default function PaywallPage() {
         </div>
       </div>
 
+      {/* ── $97 One-Time Card ── */}
+      <div className="px-5 pb-2 max-w-5xl mx-auto">
+        <OneTimeAccessCard onCheckout={handleCheckout} loading={oneTimeLoading} />
+        <div className="flex items-center gap-4 mb-10">
+          <div className="flex-1 h-px bg-gray-800" />
+          <span className="text-gray-600 text-xs font-bold uppercase tracking-widest">or choose a monthly plan below</span>
+          <div className="flex-1 h-px bg-gray-800" />
+        </div>
+      </div>
+
       {/* ── Value Stack ── */}
       <div className="px-5 pb-12 max-w-4xl mx-auto">
         <p className="text-center text-gray-500 text-xs uppercase tracking-widest font-bold mb-5">What you unlock with membership</p>
@@ -452,6 +535,25 @@ export default function PaywallPage() {
             <span className="text-gray-400 text-xs">153 people viewing this page right now</span>
           </div>
         </div>
+      </div>
+
+      {/* ── Kit Bundle CTA ── */}
+      <div className="px-5 pb-10 max-w-4xl mx-auto">
+        <Link to="/kit-bundles"
+          className="flex flex-col sm:flex-row items-center justify-between gap-4 bg-gray-900 border border-orange-900/50 hover:border-orange-700 rounded-2xl p-6 transition-all group">
+          <div className="flex items-center gap-4">
+            <div className="w-12 h-12 rounded-xl bg-orange-950/50 border border-orange-800 flex items-center justify-center flex-shrink-0">
+              <Package size={22} className="text-orange-400" />
+            </div>
+            <div>
+              <p className="text-white font-black text-base">Want the physical hardware too?</p>
+              <p className="text-gray-400 text-sm">Get a pre-sourced parts kit + membership bundled — save up to $187 vs buying separately.</p>
+            </div>
+          </div>
+          <div className="flex items-center gap-2 text-orange-400 font-bold text-sm whitespace-nowrap group-hover:gap-3 transition-all">
+            View Kit Bundles <ArrowRight size={16} />
+          </div>
+        </Link>
       </div>
 
       {/* ── Social proof ── */}
