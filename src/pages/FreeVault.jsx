@@ -134,7 +134,7 @@ export default function FreeVault() {
             Explore 3 complete build systems from C.O.D.E.X.T.E.C.H. with full BOMs and specifications. Membership unlocks 40+ systems, courses, and execution tools.
           </p>
           <p className="text-gray-500 text-sm max-w-xl mx-auto">
-            All systems sourced from granted US patents and peer-reviewed research. Upgrade to Pro ($99/month) for full BOMs, PDFs, video guides, and verified supplier sourcing.
+            All systems sourced from granted US patents and peer-reviewed research. Upgrade to Pro ($199/month) for all 40+ builds, PDFs, video guides, and verified supplier sourcing.
           </p>
         </div>
 
@@ -200,8 +200,8 @@ export default function FreeVault() {
         {/* What's in Pro */}
         <div className="bg-gradient-to-b from-cyan-950/30 to-blue-950/30 border border-cyan-800/40 rounded-2xl p-8 mb-16">
           <h2 className="text-2xl font-black mb-6 flex items-center gap-2">
-            <Video size={20} className="text-cyan-400" /> Upgrade to Pro ($99/month)
-          </h2>
+             <Video size={20} className="text-cyan-400" /> Upgrade to Pro ($199/month)
+           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
             {[
               { icon: "📄", title: "PDF Downloads", desc: "40–80 page technical documents for every build" },
@@ -221,7 +221,7 @@ export default function FreeVault() {
               className="inline-flex items-center gap-2 px-8 py-3 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-bold transition-all">
               See All Pro Features <ChevronRight size={16} />
             </Link>
-            <p className="text-gray-600 text-xs mt-3">From $99/month · Cancel anytime · 30-day money-back guarantee</p>
+            <p className="text-gray-600 text-xs mt-3">$199/month annual billing · Cancel anytime · 30-day money-back guarantee</p>
           </div>
         </div>
 
