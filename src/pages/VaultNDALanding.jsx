@@ -155,7 +155,7 @@ export default function VaultNDALanding() {
               alt="C.O.D.E.X.T.E.C.H."
               className="h-10 w-10 object-contain"
             />
-            <span className="font-black text-lg">C.O.D.E.X.T.E.C.H. — NDA</span>
+            <span className="font-black text-lg">C.O.D.E.X.T.E.C.H. Research Platform</span>
           </div>
           <button
             onClick={handleDownloadPDF}
@@ -166,8 +166,24 @@ export default function VaultNDALanding() {
         </div>
       </div>
 
+      {/* Hero banner */}
+      <div className="border-b border-gray-800 bg-gradient-to-r from-cyan-950/30 to-blue-950/30 px-6 py-8">
+        <div className="max-w-6xl mx-auto">
+          <div className="flex items-center gap-3 mb-3">
+            <div className="w-3 h-3 rounded-full bg-cyan-400 animate-pulse" />
+            <span className="text-cyan-400 text-xs font-black uppercase tracking-wider">Advanced Electromagnetic Research Platform</span>
+          </div>
+          <h1 className="text-3xl sm:text-4xl font-black text-white mb-2">
+            Access Primary-Source Research on Advanced EM Systems
+          </h1>
+          <p className="text-gray-300 max-w-2xl">
+            The only comprehensive platform combining 40+ documented engineering systems, 200+ prior art entries, peer-reviewed publications, and declassified government research in one secure vault.
+          </p>
+        </div>
+      </div>
+
       <div className="max-w-6xl mx-auto px-6 py-12">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* NDA Document */}
           <div className="lg:col-span-2">
             <div
@@ -231,9 +247,12 @@ export default function VaultNDALanding() {
                 </div>
               ) : (
                 <form onSubmit={handleSubmit} className="space-y-4">
-                  <h3 className="text-lg font-black text-white mb-4">
-                    Electronic Signature
+                  <h3 className="text-lg font-black text-white mb-2">
+                    Research Access Request
                   </h3>
+                  <p className="text-xs text-gray-400 mb-4">
+                    Sign below to access the research platform. For research, education, and personal prototype development only.
+                  </p>
 
                   <div>
                     <label className="block text-xs font-bold text-gray-400 mb-2">
@@ -282,8 +301,8 @@ export default function VaultNDALanding() {
                       className="w-5 h-5 mt-1 cursor-pointer"
                     />
                     <span className="text-xs text-gray-300">
-                      I have read and agree to this NDA and understand that my use of C.O.D.E.X.T.E.C.H. is restricted to personal research and educational purposes.
-                    </span>
+                       I agree to use this research platform for educational and research purposes only. I understand the confidentiality restrictions and will not distribute proprietary content commercially.
+                     </span>
                   </label>
 
                   {error && (
