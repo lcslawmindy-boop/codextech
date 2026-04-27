@@ -339,7 +339,7 @@ function OneTimeAccessCard({ onCheckout, loading }) {
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5">
           <div className="flex-1">
             <h3 className="text-white font-black text-2xl mb-1">Vault Access Pass</h3>
-            <p className="text-yellow-300 text-sm font-bold mb-3">Pay once · Access for 45 days · No recurring charge</p>
+            <p className="text-yellow-300 text-sm font-bold mb-3">Pay once · Access for 30 days · No recurring charge</p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-4">
               {[
                 "3 build plans (BOM & assembly steps)",
@@ -412,7 +412,7 @@ export default function PaywallPage() {
       const response = await base44.functions.invoke("createCheckoutSession", {
         title: "ZARP 90-Day Vault Access Pass",
         priceInCents: 9700,
-        description: "45-day access — 3 build plans, 10 courses, AI tools, and investor toolkit. No subscription.",
+        description: "30-day access — 3 build plans, 10 courses, AI tools, and investor toolkit. No subscription.",
         category: "vault_pass",
         mode: "payment",
         successUrl: `${baseUrl}/checkout?success=true&product=vault_pass`,
