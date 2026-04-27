@@ -32,8 +32,8 @@ const MEMBERSHIP = {
   description: "Access 15 hand-picked courses and 5 complete build plans, with 2 new builds added each month.",
   cta: "Join Now — $99/mo",
   features: [
-    { icon: <Wrench size={15} />, text: "5 complete build plans — full BOM, schematics, assembly steps" },
-    { icon: <Package size={15} />, text: "2 new build plans added every month — fresh access, no extra cost" },
+    { icon: <Wrench size={15} />, text: "3 complete build plans — full BOM, schematics, assembly steps" },
+    { icon: <Package size={15} />, text: "1 new build plan added every month — fresh access, no extra cost" },
     { icon: <ExternalLink size={15} />, text: "Verified sourcing links — Digikey, Mouser, Amazon, specialist suppliers" },
     { icon: <Play size={15} />, text: "Step-by-step build videos — 3–12 hours per device" },
     { icon: <Eye size={15} />, text: "View all plans in-app — online access, no PDF downloads" },
@@ -47,7 +47,7 @@ const MEMBERSHIP = {
     "PDF download of build plans (view-only in app)",
     "Defense-restricted / GOV-only systems",
     "All 40+ courses (limited to 15 curated courses)",
-    "All 40+ build plans (limited to 5, rotated monthly)",
+    "All 40+ build plans (limited to 3, rotated monthly)",
   ],
 };
 
