@@ -17,8 +17,7 @@ import { jsPDF } from "jspdf";
 import ResearchDisclaimer from "../components/ResearchDisclaimer";
 import AttributionFooter from "../components/AttributionFooter";
 import { itemImages } from "../lib/itemImages";
-import BuildKitUpsellPanel from "../components/BuildKitUpsellPanel";
-import ComponentKitMarketplace from "../components/ComponentKitMarketplace";
+
 
 // Legacy admin-only gate (free energy / medical claims — still admin-only)
 const ADMIN_ONLY_KEYWORDS = ["motionless electromagnetic generator", "prioré-type multichannel"];
@@ -1719,20 +1718,7 @@ export default function InventionPlans() {
                     </div>
                   )}
 
-                  {/* Component Kit Marketplace — direct purchase from plan page */}
-                  {canViewSelected && (
-                    <ComponentKitMarketplace
-                      inventionTitle={selected.title}
-                      inventionIcon={selected.icon}
-                    />
-                  )}
-
-                  {/* Kit upsell — fires after user has seen the full build */}
-                  <BuildKitUpsellPanel
-                    buildTitle={selected.title}
-                    kitPrice={287}
-                    components={data?.bom?.slice(0, 5).map(b => `${b.qty}x ${b.item}`) || []}
-                  />
+                  
                 </>
               ) : (
                 <div className="bg-gray-900 border border-gray-800 rounded-2xl p-8 text-center">

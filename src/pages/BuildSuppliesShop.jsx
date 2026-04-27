@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { ArrowLeft, ShoppingCart, Zap, Shield, Wrench, Star, ExternalLink, Loader2, AlertCircle, Lock } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 
@@ -301,14 +301,24 @@ function ProductCard({ product, onBuy, buying }) {
 }
 
 export default function BuildSuppliesShop() {
+  const navigate = useNavigate();
   const [isAdmin, setIsAdmin] = useState(false);
+  const [adminChecked, setAdminChecked] = useState(false);
   const [category, setCategory] = useState("All");
   const [buying, setBuying] = useState(null);
   const [error, setError] = useState("");
 
   useEffect(() => {
-    base44.auth.me().then(u => setIsAdmin(u?.role === 'admin')).catch(() => {});
+    base44.auth.me()
+      .then(u => { setIsAdmin(u?.role === 'admin'); setAdminChecked(true); })
+      .catch(() => { setAdminChecked(true); });
   }, []);
+
+  if (!adminChecked) return null;
+  if (!isAdmin) {
+    navigate("/admin");
+    return null;
+  }
 
   const isInIframe = window.self !== window.top;
 

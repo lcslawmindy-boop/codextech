@@ -265,7 +265,7 @@ const AuthenticatedApp = () => {
           <Route path="/course-plan" element={<CoursePlan />} />
           <Route path="/social-command" element={<SocialMediaCommand />} />
           <Route path="/social-agent" element={<SocialMediaAgent />} />
-          <Route path="/build-supplies-shop" element={<BuildSuppliesShop />} />
+          
           <Route path="/troubleshooting" element={<TroubleshootingGuides />} />
           <Route path="/beginner-manual" element={<BeginnerManual />} />
           <Route path="/glossary" element={<Glossary />} />
@@ -327,6 +327,7 @@ const AuthenticatedApp = () => {
             <Route path="/marketing" element={<MarketingPlan />} />
             <Route path="/build-tracker" element={<InventionBuildTracker />} />
             <Route path="/trz-patent" element={<TRZPatent />} />
+            <Route path="/build-supplies-shop" element={<BuildSuppliesShop />} />
             <Route path="/admin-shop-orders" element={<AdminShopOrders />} />
             <Route path="/admin-inventor-reviews" element={<AdminInventorReviews />} />
             <Route path="/admin-pdf-access" element={<AdminPdfAccess />} />
