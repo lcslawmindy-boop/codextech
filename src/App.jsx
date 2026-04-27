@@ -149,6 +149,7 @@ import VaultPricing from './pages/VaultPricing';
 import MemberVault from './pages/MemberVault';
 import ResearchLab from './pages/ResearchLab';
 import KitBundle from './pages/KitBundle';
+import MyLibrary from './pages/MyLibrary';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -359,6 +360,7 @@ const AuthenticatedApp = () => {
           <Route path="/my-vault" element={<MemberVault />} />
           <Route path="/research-lab" element={<ResearchLab />} />
           <Route path="/kit-bundles" element={<KitBundle />} />
+          <Route path="/my-library" element={<MyLibrary />} />
 
           <Route path="*" element={<PageNotFound />} />
         </Route>

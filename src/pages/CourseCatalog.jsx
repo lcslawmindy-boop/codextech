@@ -2,7 +2,8 @@ import { useState } from "react";
 import { itemImages } from "../lib/itemImages";
 import { courseSlugMap } from "../lib/coursePlans";
 import { Link, useLocation } from "react-router-dom";
-import { BookOpen, Play, ChevronDown, ChevronUp, Star, Users, CheckCircle2, Loader2, AlertCircle } from "lucide-react";
+import { BookOpen, Play, ChevronDown, ChevronUp, Star, Users, CheckCircle2, Loader2, AlertCircle, Heart } from "lucide-react";
+import FavoriteButton from "@/components/FavoriteButton";
 import { useTier } from "../hooks/useTier";
 import { tierCanAccessCourse } from "../lib/tiers";
 import TierGate from "../components/TierGate";
@@ -100,7 +101,10 @@ function CourseCard({ item }) {
       <div className="p-6 flex flex-col flex-1">
         <div className="flex items-start justify-between gap-3 mb-3">
           <span className="text-3xl">{item.icon}</span>
-          <span className="text-green-400 font-bold text-lg whitespace-nowrap">{item.price}</span>
+          <div className="flex items-center gap-2">
+            <FavoriteButton item={{ id: `course-${item.title}`, title: item.title, type: "course", color: item.color, icon: item.icon, price: item.price, tagline: item.tagline }} />
+            <span className="text-green-400 font-bold text-lg whitespace-nowrap">{item.price}</span>
+          </div>
         </div>
 
         <h3 className="text-white font-bold text-xl leading-snug mb-1">{item.title}</h3>
@@ -161,7 +165,10 @@ function PdfCard({ item }) {
       <div className="flex-1 min-w-0">
         <div className="flex items-start justify-between gap-2 mb-1">
           <h3 className="text-white font-bold text-base leading-snug">{item.title}</h3>
-          <span className="text-green-400 font-bold text-sm whitespace-nowrap">{item.price}</span>
+          <div className="flex items-center gap-2 flex-shrink-0">
+            <FavoriteButton item={{ id: `pdf-${item.title}`, title: item.title, type: "course", color: item.color, icon: item.icon, price: item.price, tagline: item.tagline }} />
+            <span className="text-green-400 font-bold text-sm whitespace-nowrap">{item.price}</span>
+          </div>
         </div>
         <p className="text-xs italic mb-2" style={{ color: item.color }}>"{item.tagline}"</p>
         <p className="text-gray-400 text-sm leading-relaxed mb-3">{item.description}</p>
@@ -213,6 +220,9 @@ export default function CourseCatalog() {
         <div className="flex items-center gap-3 text-xs">
           <Link to="/prior-art" className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-purple-900/30 border border-purple-800 text-purple-300 hover:bg-purple-800/40 transition-colors font-semibold">
             🗄️ Research Archive
+          </Link>
+          <Link to="/my-library" className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-pink-900/30 border border-pink-700 text-pink-300 hover:bg-pink-800/40 transition-colors font-semibold">
+            ♥ My Library
           </Link>
           <Link to="/my-learning" className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-purple-900/30 border border-purple-700 text-purple-300 hover:bg-purple-800/40 transition-colors font-semibold">
             🎓 My Learning
