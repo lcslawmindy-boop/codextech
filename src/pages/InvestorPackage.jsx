@@ -460,6 +460,16 @@ export default function InvestorPackage() {
       </div>
 
       <div className="flex-1 overflow-y-auto p-5 max-w-7xl mx-auto w-full">
+        {/* Stripe Buy Button */}
+        <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6 mb-6 text-center">
+          <p className="text-white font-bold text-sm mb-4">Purchase Due Diligence Package Access</p>
+          <script async src="https://js.stripe.com/v3/buy-button.js"></script>
+          <stripe-buy-button
+            buy-button-id="buy_btn_1TQesVPcO4Y4Nnx7Fnab6Gfn"
+            publishable-key="pk_test_51THLZ8PcO4Y4Nnx7BinRkkiPVLFZyyey8UwCwUxpz1QBEIm9JTcRrP8MVjjNZUmiCTX9hA1zElPxKRbkWN46gn9i00IVjZlDzc"
+          ></stripe-buy-button>
+        </div>
+
         {/* PDF Download Banner */}
         <div className="bg-gray-900 border-2 border-blue-700 rounded-2xl p-6 mb-6">
           <div className="flex items-center gap-2 mb-1">
