@@ -300,7 +300,7 @@ function TierCard({ tier, onCheckout }) {
 
 // ── Exit intent banner ────────────────────────────────────────────────────────
 function ExitBanner({ onDismiss, onCheckout }) {
-  const proTier = TIERS.find(t => t.id === "pro");
+  const allAccessTier = TIERS.find(t => t.id === "all_access");
   return (
     <div className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4">
       <div className="bg-gray-900 border-2 border-purple-600 rounded-2xl max-w-md w-full p-8 shadow-2xl relative">
@@ -311,12 +311,12 @@ function ExitBanner({ onDismiss, onCheckout }) {
           <div className="text-4xl mb-3">⚡</div>
           <h3 className="text-white font-black text-xl mb-2">Wait — One Last Thing</h3>
           <p className="text-gray-400 text-sm mb-5 leading-relaxed">
-            The MEG Replication Kit alone retails for $847. A Pro membership gives you that <em className="text-white">plus</em> 39 other build plans for $79/month. Most members recoup the cost in the first week.
+            The MEG Replication Kit alone retails for $847. All Access gives you that <em className="text-white">plus</em> 39 other build plans + all 40 courses for $150/month. Most members recoup the cost in the first week.
           </p>
-          <button onClick={() => { onDismiss(); onCheckout(proTier); }}
+          <button onClick={() => { onDismiss(); onCheckout(allAccessTier); }}
             className="w-full py-4 rounded-xl font-black text-white text-base mb-3 transition-all hover:opacity-90"
-            style={{ backgroundColor: proTier.color, boxShadow: `0 4px 20px ${proTier.color}50` }}>
-            {proTier.cta} — ${proTier.price}/mo
+            style={{ backgroundColor: allAccessTier.color, boxShadow: `0 4px 20px ${allAccessTier.color}50` }}>
+            {allAccessTier.cta}
           </button>
           <button onClick={onDismiss} className="text-gray-600 text-xs hover:text-gray-400 transition-colors">
             No thanks, I'll pass on this
@@ -539,7 +539,7 @@ export default function PaywallPage() {
           <h2 className="text-2xl font-black mb-2">Choose Your Builder Access</h2>
           <p className="text-gray-500 text-sm">Full courses + complete builds unlock with Pro · Instant access after checkout</p>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 items-stretch">
+        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5 items-stretch">
           {TIERS.map(tier => (
             <TierCard key={tier.id} tier={tier} onCheckout={handleCheckout} />
           ))}
@@ -641,7 +641,7 @@ export default function PaywallPage() {
               <button key={tier.id} onClick={() => handleCheckout(tier)}
                 className={`px-6 rounded-xl font-black text-white transition-all hover:opacity-90 active:scale-[0.98] ${tier.popular ? "py-5 text-base sm:px-8" : "py-4 text-sm"}`}
                 style={{ backgroundColor: tier.color, boxShadow: `0 4px 24px ${tier.color}40` }}>
-                {tier.name} — ${tier.price}/mo{tier.id === "all_access" ? " ↓50% builds" : ""}
+                {tier.name} — ${tier.price}/mo
               </button>
             ))}
           </div>
