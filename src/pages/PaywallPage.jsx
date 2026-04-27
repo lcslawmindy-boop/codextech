@@ -134,7 +134,33 @@ const TIERS = [
     ],
     locked: ["PDF downloads of build plans"],
   },
-
+  {
+    id: "all_access_pdf",
+    name: "All Access + PDF",
+    price: 199,
+    anchor: 350,
+    color: "#10b981",
+    badge: "🏆 PREMIUM — INCLUDES PDF DOWNLOADS",
+    headline: "Everything in All Access + 5 PDF build plan downloads",
+    description: "All courses · 50% off builds · Full AI suite · 5 PDF downloads",
+    cta: "Get All Access + PDF — $199/mo",
+    ctaSub: "Full access · Cancel anytime",
+    popular: true,
+    features: [
+      "Everything in All Access",
+      "5 PDF build plan downloads (your choice)",
+      "All 40+ courses — full unlimited curriculum access",
+      "50% off all 40+ build plans (BOM, schematics, assembly steps)",
+      "Full AI suite: Patent Drafting, FTO Analysis, Claims Generator, Patent Intelligence",
+      "AI Patent Attorney Chat & IP Portfolio Health Dashboard",
+      "200+ Prior Art Research Archive",
+      "Full EM lab simulators & visualizations",
+      "Investor CRM, pitch decks & VDR access",
+      "Private engineering community (priority access)",
+      "Early access to new courses & build plans",
+    ],
+    locked: [],
+  },
 ];
 
 const VALUE_STACK = [
@@ -514,7 +540,7 @@ export default function PaywallPage() {
           <h2 className="text-2xl font-black mb-2">Choose Your Builder Access</h2>
           <p className="text-gray-500 text-sm">Full courses + complete builds unlock with Pro · Instant access after checkout</p>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 items-stretch">
+        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5 items-stretch">
           {TIERS.map(tier => (
             <TierCard key={tier.id} tier={tier} onCheckout={handleCheckout} />
           ))}
