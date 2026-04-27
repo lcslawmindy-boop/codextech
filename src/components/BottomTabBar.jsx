@@ -12,7 +12,7 @@ const TABS = [
     label: "Builds",
     path: "/invention-plans",
     icon: Wrench,
-    match: (p) => ["/invention-plans", "/inventor-forge", "/download-center", "/scalar-lab", "/lab"].includes(p),
+    match: (p) => ["/invention-plans", "/inventor-forge", "/build-supplies-shop", "/download-center", "/scalar-lab", "/lab"].includes(p),
   },
   {
     label: "Upgrade",
