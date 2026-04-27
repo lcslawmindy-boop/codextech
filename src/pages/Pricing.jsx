@@ -29,15 +29,14 @@ const MEMBERSHIP = {
   name: "Full Access Membership",
   price: 99,
   color: "#8b5cf6",
-  description: "Access 10 courses and 5 complete build plans, with 1 new course or build plan added each month.",
+  description: "26 courses, 3 build plans, plus 1 new plan every month.",
   cta: "Join Now — $99/mo",
   features: [
-    { icon: <Wrench size={15} />, text: "5 complete build plans — full BOM, schematics, assembly steps" },
-    { icon: <Package size={15} />, text: "1 new course or build plan added every month — your choice" },
+    { icon: <Wrench size={15} />, text: "3 complete build plans — full BOM, schematics, assembly steps" },
+    { icon: <Package size={15} />, text: "1 new build plan added every month" },
     { icon: <ExternalLink size={15} />, text: "Verified sourcing links — Digikey, Mouser, Amazon, specialist suppliers" },
     { icon: <Play size={15} />, text: "Step-by-step build videos — 3–12 hours per device" },
-    { icon: <Eye size={15} />, text: "View all plans in-app — online access, no PDF downloads" },
-    { icon: <BookOpen size={15} />, text: "10 structured courses from the archive" },
+    { icon: <BookOpen size={15} />, text: "26 structured courses from the archive" },
     { icon: <Check size={15} />, text: "Prior Art Archive — 200+ documented systems" },
     { icon: <Check size={15} />, text: "EM Lab simulator & scalar wave tools" },
     { icon: <Check size={15} />, text: "Private community & troubleshooting forum" },
@@ -46,8 +45,6 @@ const MEMBERSHIP = {
   notIncluded: [
     "PDF download of build plans (view-only in app)",
     "Defense-restricted / GOV-only systems",
-    "All 40+ courses (limited to 10, rotated monthly)",
-    "All 40+ build plans (limited to 5, rotated monthly)",
   ],
 };
 
@@ -143,7 +140,7 @@ export default function Pricing() {
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-cyan-400">Everything Included.</span>
         </h1>
         <p className="text-gray-400 text-lg max-w-xl mx-auto">
-          All 40+ build plans, full BOMs, verified sourcing links, build videos, and complete course library — view everything in-app for $99/month.
+          26 courses, 3 complete build plans, plus 1 new plan every month — full BOMs, sourcing links, and videos, all in-app for $99/month.
         </p>
       </div>
 
@@ -160,8 +157,8 @@ export default function Pricing() {
         <div className="relative rounded-2xl overflow-hidden border-2 border-purple-500 shadow-2xl shadow-purple-900/40">
           {/* Top badge */}
           <div className="py-3 text-center text-xs font-black tracking-widest text-white bg-purple-600">
-            ⚡ FULL ACCESS — ALL BUILDS — ALL VIDEOS — ALL COURSES
-          </div>
+             26 COURSES + 3 BUILDS + 1 NEW MONTHLY
+           </div>
 
           <div className="p-8 bg-gray-900">
             <h3 className="text-white font-black text-2xl mb-1">{MEMBERSHIP.name}</h3>
@@ -218,13 +215,13 @@ export default function Pricing() {
       {/* What you get — visual breakdown */}
       <div className="border-y border-gray-800 bg-gray-900/40 px-6 py-14">
         <div className="max-w-4xl mx-auto">
-          <h2 className="text-2xl font-black text-center mb-10">26 courses & build plans — instant access</h2>
+          <h2 className="text-2xl font-black text-center mb-10">26 courses + 3 build plans + 1 new plan monthly</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
             {[
-              { icon: "🎓", title: "26 Courses & Build Plans", desc: "Full structured curriculum from scalar EM fundamentals to patent strategy, plus step-by-step assembly instructions for every device", color: "#22c55e" },
-               { icon: "📦", title: "Full BOM & Sourcing", desc: "Exact part numbers, quantities, specs — plus verified supplier links to Digikey, Mouser, Amazon, and specialists", color: "#06b6d4" },
-               { icon: "🎬", title: "Build Videos", desc: "3–12 hour step-by-step assembly videos for every device. Watch on any device, any time.", color: "#a855f7" },
-               { icon: "⚙️", title: "Complete Documentation", desc: "Schematics, BOM, assembly guides, and technical notes for hands-on building and experimentation", color: "#f97316" },
+              { icon: "🎓", title: "26 Courses", desc: "Full structured curriculum from scalar EM fundamentals to patent strategy and investor frameworks", color: "#22c55e" },
+               { icon: "🔧", title: "3 Build Plans + Monthly New Additions", desc: "Start with 3 complete build plans, plus 1 new plan added every month to stay current", color: "#f97316" },
+               { icon: "📦", title: "Full BOM & Sourcing", desc: "Exact part numbers, specs, and verified supplier links for every component", color: "#06b6d4" },
+               { icon: "🎬", title: "Build Videos & Documentation", desc: "Step-by-step videos and technical schematics for hands-on assembly", color: "#a855f7" },
             ].map((item, i) => (
               <div key={i} className="bg-gray-900 border border-gray-800 rounded-2xl p-5 text-center"
                 style={{ borderTopColor: item.color, borderTopWidth: 3 }}>
