@@ -7,6 +7,7 @@ import { Lock, ChevronRight, Star, Shield, BookOpen, Wrench, TrendingUp, CheckCi
 import LeadMagnetPopup, { useLeadMagnetTrigger } from "@/components/LeadMagnetPopup";
 import VaultHeroAnimation from "@/components/VaultHeroAnimation";
 import CodextechAcronym from "@/components/CodextechAcronym";
+import ScalarPrimerLeadCapture from "@/components/ScalarPrimerLeadCapture";
 
 // ── REAL persistent countdown (48h from first visit) ─────────────────────────
 const DEADLINE_KEY = "zarp_founding_deadline";
@@ -206,6 +207,45 @@ export default function ZarpLanding() {
       </section>
 
 
+
+      {/* ── Scalar EM Primer Lead Magnet ── */}
+      <section className="px-5 py-16 bg-gray-950 border-t border-gray-800">
+        <div className="max-w-5xl mx-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
+            {/* Left: value copy */}
+            <div>
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-purple-950/60 border border-purple-800 text-purple-300 text-xs font-bold mb-5 uppercase tracking-widest">
+                🔬 Free Research Briefing
+              </div>
+              <h2 className="text-3xl sm:text-4xl font-black text-white leading-tight mb-4">
+                28 pages of the physics they<br />
+                <span className="text-cyan-400">didn't want published.</span>
+              </h2>
+              <p className="text-gray-400 text-base leading-relaxed mb-6">
+                The Scalar EM Primer covers the ONR-validated Prioré device, the peer-reviewed MEG, and 5 entry-level builds you can start this week — all sourced from declassified government documents and primary research papers.
+              </p>
+              <div className="space-y-3">
+                {[
+                  "ONR London Branch Report R-5-78 — the electromagnetic cancer cure the Navy verified",
+                  "MEG analysis — US Patent 6,362,718, Foundations of Physics Letters, 12 replications",
+                  "Aharonov-Bohm effect — the quantum proof that scalar fields are physically real",
+                  "5 buildable projects under $200 with sourcing guidance",
+                ].map((item, i) => (
+                  <div key={i} className="flex items-start gap-2.5 text-sm text-gray-300">
+                    <span className="text-cyan-500 font-bold flex-shrink-0 mt-0.5">→</span>
+                    {item}
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Right: lead capture form */}
+            <div>
+              <ScalarPrimerLeadCapture />
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* ── EMF Impact Pitch Deck CTA ── */}
       <section className="px-5 py-14 bg-gradient-to-b from-gray-950 to-red-950/20 border-t border-gray-800">
