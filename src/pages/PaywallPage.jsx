@@ -566,7 +566,7 @@ export default function PaywallPage() {
             <div className="px-5 py-3 border-b border-gray-800 flex items-center gap-2 bg-blue-950/30">
               <BookOpen size={14} className="text-blue-400" />
               <span className="text-white font-black text-sm">Courses — À La Carte</span>
-              <span className="ml-auto text-xs text-blue-400 font-bold">$197–$397 each</span>
+              <span className="ml-auto text-xs px-2 py-0.5 rounded-full bg-blue-900 border border-blue-600 text-blue-300 font-black">50% OFF with Courses Plan</span>
             </div>
             <div className="divide-y divide-gray-800">
               {[
@@ -583,13 +583,13 @@ export default function PaywallPage() {
                   <span className="text-gray-300 text-sm">{c.name}</span>
                   <div className="flex items-center gap-3 flex-shrink-0">
                     <span className="text-gray-600 line-through text-xs">${c.retail}</span>
-                    <span className="text-purple-400 font-black text-sm">${Math.round(c.retail * 0.5)}</span>
-                    <span className="text-xs px-1.5 py-0.5 rounded bg-purple-900/50 border border-purple-700 text-purple-300 font-bold">50% OFF</span>
+                    <span className="text-blue-400 font-black text-sm">${Math.round(c.retail * 0.5)}</span>
+                    <span className="text-xs px-1.5 py-0.5 rounded bg-blue-900/50 border border-blue-700 text-blue-300 font-bold">50% OFF</span>
                   </div>
                 </div>
               ))}
               <div className="px-5 py-3 bg-gray-800/40">
-                <p className="text-gray-500 text-xs">+ 32 more courses · All included with <span className="text-purple-400 font-bold">All Access</span> at 50% off</p>
+                <p className="text-gray-500 text-xs">+ 32 more courses · All included with <span className="text-blue-400 font-bold">Courses Plan</span> at 50% off à la carte</p>
               </div>
             </div>
           </div>
