@@ -218,13 +218,13 @@ export default function Pricing() {
       {/* What you get — visual breakdown */}
       <div className="border-y border-gray-800 bg-gray-900/40 px-6 py-14">
         <div className="max-w-4xl mx-auto">
-          <h2 className="text-2xl font-black text-center mb-10">What's inside your membership</h2>
+          <h2 className="text-2xl font-black text-center mb-10">26 courses & build plans — instant access</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
             {[
-              { icon: "🔧", title: "40+ Build Plans", desc: "Every device in the vault — MEG, VPO, Prioré, TRD-1, Anenergy Pump, Scalar Interferometer, and more", color: "#f97316" },
-              { icon: "📦", title: "Full BOM & Sourcing", desc: "Exact part numbers, quantities, specs — plus verified supplier links to Digikey, Mouser, Amazon, and specialists", color: "#06b6d4" },
-              { icon: "🎬", title: "Build Videos", desc: "3–12 hour step-by-step assembly videos for every device. Watch on any device, any time.", color: "#a855f7" },
-              { icon: "🎓", title: "26 Courses", desc: "Structured modules from scalar EM fundamentals to patent strategy, prior art research, and investor pitch frameworks", color: "#22c55e" },
+              { icon: "🎓", title: "26 Courses & Build Plans", desc: "Full structured curriculum from scalar EM fundamentals to patent strategy, plus step-by-step assembly instructions for every device", color: "#22c55e" },
+               { icon: "📦", title: "Full BOM & Sourcing", desc: "Exact part numbers, quantities, specs — plus verified supplier links to Digikey, Mouser, Amazon, and specialists", color: "#06b6d4" },
+               { icon: "🎬", title: "Build Videos", desc: "3–12 hour step-by-step assembly videos for every device. Watch on any device, any time.", color: "#a855f7" },
+               { icon: "⚙️", title: "Complete Documentation", desc: "Schematics, BOM, assembly guides, and technical notes for hands-on building and experimentation", color: "#f97316" },
             ].map((item, i) => (
               <div key={i} className="bg-gray-900 border border-gray-800 rounded-2xl p-5 text-center"
                 style={{ borderTopColor: item.color, borderTopWidth: 3 }}>
