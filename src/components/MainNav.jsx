@@ -2,41 +2,37 @@ import { Link } from "react-router-dom";
 
 const NAV_GROUPS = [
   {
-    label: "Inventions",
-    color: "#f59e0b",
+    label: "Learn",
+    color: "#06b6d4",
     links: [
-      { emoji: "📐", label: "Build Plans", path: "/invention-plans" },
-      { emoji: "📚", label: "Library", path: "/invention-library" },
-      { emoji: "🛒", label: "Build Supplies", path: "/build-supplies-shop" },
-    ],
-  },
-  {
-    label: "Patents & IP",
-    color: "#6366f1",
-    links: [
-      { emoji: "📄", label: "Patent Drafting", path: "/patent-drafting-wizard" },
-      { emoji: "🛡️", label: "FTO Analysis", path: "/fto-analysis" },
-      { emoji: "⚖️", label: "Patent Attorney", path: "/patent-attorney-chat" },
-      { emoji: "🗄️", label: "Prior Art", path: "/prior-art" },
-    ],
-  },
-  {
-    label: "Learning",
-    color: "#f97316",
-    links: [
-      { emoji: "📚", label: "Courses", path: "/courses" },
-      { emoji: "🧪", label: "EM Lab", path: "/scalar-lab" },
-      { emoji: "⬇️", label: "Downloads", path: "/download-center" },
+      { emoji: "🎓", label: "Courses", path: "/courses" },
+      { emoji: "📖", label: "My Learning", path: "/my-learning" },
       { emoji: "📖", label: "Glossary", path: "/glossary" },
     ],
   },
   {
-    label: "Tools",
-    color: "#06b6d4",
+    label: "Research",
+    color: "#a855f7",
     links: [
-      { emoji: "🧬", label: "Forge", path: "/inventor-forge" },
+      { emoji: "🗄️", label: "Archive", path: "/prior-art" },
+      { emoji: "🧪", label: "EM Lab", path: "/scalar-lab" },
+      { emoji: "🔬", label: "Research Lab", path: "/research-lab" },
+    ],
+  },
+  {
+    label: "Community",
+    color: "#22c55e",
+    links: [
+      { emoji: "💬", label: "Forum", path: "/community" },
+      { emoji: "🏆", label: "Contest", path: "/contest" },
+    ],
+  },
+  {
+    label: "Tools",
+    color: "#f59e0b",
+    links: [
+      { emoji: "📄", label: "Patent AI", path: "/patent-drafting-wizard" },
       { emoji: "⚗️", label: "R&D Lab", path: "/rd-sandbox" },
-      { emoji: "💰", label: "Investor Portal", path: "/investor-portal" },
       { emoji: "🧠", label: "AI Research", path: "/ai-research" },
     ],
   },
@@ -86,7 +82,6 @@ export default function MainNav({ isAdmin }) {
           <div className="flex gap-0">
             {[
               { emoji: "🏠", label: "Home", path: "/" },
-              { emoji: "🔓", label: "Free Vault", path: "/free-vault" },
               { emoji: "💳", label: "Pricing", path: "/pricing" },
               { emoji: "📊", label: "Dashboard", path: "/member-dashboard" },
               { emoji: "👤", label: "Account", path: "/account" },

@@ -2,7 +2,7 @@ import { useState } from "react";
 import { itemImages } from "../lib/itemImages";
 import { courseSlugMap } from "../lib/coursePlans";
 import { Link, useLocation } from "react-router-dom";
-import { ArrowLeft, BookOpen, Play, Download, ChevronDown, ChevronUp, Star, Users, CheckCircle2, Loader2, AlertCircle } from "lucide-react";
+import { BookOpen, Play, ChevronDown, ChevronUp, Star, Users, CheckCircle2, Loader2, AlertCircle } from "lucide-react";
 import { useTier } from "../hooks/useTier";
 import { tierCanAccessCourse } from "../lib/tiers";
 import TierGate from "../components/TierGate";
@@ -199,25 +199,22 @@ export default function CourseCatalog() {
   return (
     <div className="w-screen min-h-screen bg-gray-950 flex flex-col">
       {/* Header */}
-      <div className="px-6 py-4 border-b border-gray-800 flex items-center justify-between">
+      <div className="px-6 py-5 border-b border-gray-800 flex items-center justify-between bg-gray-900/50">
         <div className="flex items-center gap-4">
-          <Link to="/business" className="flex items-center gap-2 text-gray-400 hover:text-white text-sm transition-colors">
-            <ArrowLeft size={15} /> Back
+          <Link to="/" className="flex-shrink-0">
+            <img src="https://media.base44.com/images/public/69ccefebfea78b23498c66a8/afb5ad292_CODEXTECHLOGO.png" alt="C.O.D.E.X.T.E.C.H." className="h-9 w-9 object-contain" />
           </Link>
           <div className="w-px h-5 bg-gray-700" />
           <div>
-            <h1 className="text-white font-bold text-lg tracking-tight">Courses & Digital Products</h1>
-            <p className="text-gray-500 text-xs">Structured learning & research documents from the Bearden archive</p>
+            <h1 className="text-white font-bold text-lg tracking-tight">Courses & Research Documents</h1>
+            <p className="text-gray-500 text-xs">Primary-source curriculum from the Bearden archive · {courses.length} courses · {pdfs.length} PDF books</p>
           </div>
         </div>
         <div className="flex items-center gap-3 text-xs">
-          <span className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-blue-900/30 border border-blue-800 text-blue-300">
-            <Play size={11} /> {courses.length} Courses
-          </span>
-          <span className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-yellow-900/30 border border-yellow-800 text-yellow-300">
-            <BookOpen size={11} /> {pdfs.length} PDF Books
-          </span>
-          <Link to="/my-learning" className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-purple-900/30 border border-purple-700 text-purple-300 hover:bg-purple-800/40 transition-colors text-xs font-semibold">
+          <Link to="/prior-art" className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-purple-900/30 border border-purple-800 text-purple-300 hover:bg-purple-800/40 transition-colors font-semibold">
+            🗄️ Research Archive
+          </Link>
+          <Link to="/my-learning" className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-purple-900/30 border border-purple-700 text-purple-300 hover:bg-purple-800/40 transition-colors font-semibold">
             🎓 My Learning
           </Link>
         </div>
