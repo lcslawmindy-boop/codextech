@@ -83,7 +83,7 @@ const TIERS = [
       "Private engineering community forum",
       "My Learning dashboard & progress tracking",
     ],
-    locked: ["Build plans & BOMs", "50% off hardware kits"],
+    locked: ["Build plans & BOMs"],
   },
   {
     id: "builds",
@@ -99,7 +99,6 @@ const TIERS = [
     popular: false,
     features: [
       "50% off all 40+ build plans (BOM, schematics, assembly steps)",
-      "50% off all physical hardware kits",
       "Full Bill of Materials for every device",
       "Verified supplier sourcing links",
       "Step-by-step assembly guides",
@@ -123,7 +122,6 @@ const TIERS = [
     features: [
       "All 40+ courses — full unlimited curriculum access",
       "50% off all 40+ build plans (BOM, schematics, assembly steps)",
-      "50% off all physical hardware kits",
       "Full AI suite: Patent Drafting, FTO Analysis, Claims Generator, Patent Intelligence",
       "AI Patent Attorney Chat & IP Portfolio Health Dashboard",
       "200+ Prior Art Research Archive",
