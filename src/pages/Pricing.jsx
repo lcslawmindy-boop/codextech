@@ -29,15 +29,16 @@ const MEMBERSHIP = {
   name: "Full Access Membership",
   price: 99,
   color: "#8b5cf6",
-  description: "Access 15 hand-picked courses and 5 complete build plans, with 2 new builds added each month.",
+  description: "Access 3 courses and 2 complete build plans, with 1 new build and 1 new course added each month.",
   cta: "Join Now — $99/mo",
   features: [
-    { icon: <Wrench size={15} />, text: "3 complete build plans — full BOM, schematics, assembly steps" },
+    { icon: <Wrench size={15} />, text: "2 complete build plans — full BOM, schematics, assembly steps" },
     { icon: <Package size={15} />, text: "1 new build plan added every month — fresh access, no extra cost" },
     { icon: <ExternalLink size={15} />, text: "Verified sourcing links — Digikey, Mouser, Amazon, specialist suppliers" },
     { icon: <Play size={15} />, text: "Step-by-step build videos — 3–12 hours per device" },
     { icon: <Eye size={15} />, text: "View all plans in-app — online access, no PDF downloads" },
-    { icon: <BookOpen size={15} />, text: "15 structured courses from the archive" },
+    { icon: <BookOpen size={15} />, text: "3 structured courses from the archive" },
+    { icon: <Check size={15} />, text: "1 new course added every month" },
     { icon: <Check size={15} />, text: "Prior Art Archive — 200+ documented systems" },
     { icon: <Check size={15} />, text: "EM Lab simulator & scalar wave tools" },
     { icon: <Check size={15} />, text: "Private community & troubleshooting forum" },
@@ -46,8 +47,8 @@ const MEMBERSHIP = {
   notIncluded: [
     "PDF download of build plans (view-only in app)",
     "Defense-restricted / GOV-only systems",
-    "All 40+ courses (limited to 15 curated courses)",
-    "All 40+ build plans (limited to 3, rotated monthly)",
+    "All 40+ courses (limited to 3, rotated monthly)",
+    "All 40+ build plans (limited to 2, rotated monthly)",
   ],
 };
 
