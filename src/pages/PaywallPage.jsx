@@ -342,8 +342,8 @@ function OneTimeAccessCard({ onCheckout, loading }) {
             <p className="text-yellow-300 text-sm font-bold mb-3">Pay once · Access for 45 days · No recurring charge</p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-4">
               {[
-                "5 build plans (BOM & assembly steps)",
-                "All 40+ courses from the archive",
+                "3 build plans (BOM & assembly steps)",
+                "10 courses from the archive",
                 "Full AI patent suite",
                 "Prior Art Archive — 200+ entries",
                 "EM lab simulators & tools",
@@ -412,7 +412,7 @@ export default function PaywallPage() {
       const response = await base44.functions.invoke("createCheckoutSession", {
         title: "ZARP 90-Day Vault Access Pass",
         priceInCents: 9700,
-        description: "45-day access — 5 build plans, all courses, AI tools, and investor toolkit. No subscription.",
+        description: "45-day access — 3 build plans, 10 courses, AI tools, and investor toolkit. No subscription.",
         category: "vault_pass",
         mode: "payment",
         successUrl: `${baseUrl}/checkout?success=true&product=vault_pass`,
