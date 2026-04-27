@@ -4,7 +4,7 @@ import { base44 } from "@/api/base44Client";
 import ScalarWaveWatermark from "@/components/ScalarWaveWatermark";
 import CodextechVaultBackground from "@/components/CodextechVaultBackground";
 import {
-  Lock, Check, Flame, Clock, Star, ChevronDown, ChevronUp,
+  Lock, Check, Flame, Clock, ArrowRight, Star, ChevronDown, ChevronUp,
   Award, Zap, Shield, BookOpen, Wrench, TrendingUp, Eye, AlertTriangle, X,
   Loader2
 } from "lucide-react";
@@ -115,7 +115,7 @@ const TIERS = [
     anchor: 298,
     color: "#8b5cf6",
     badge: "⚡ BEST VALUE — COURSES + BUILDS",
-    headline: "All courses + 50% off builds & kits + full AI suite",
+    headline: "All courses + 50% off builds + full AI suite",
     description: "All 40+ courses · 50% off all builds · Every AI tool included",
     cta: "Get All Access — $150/mo",
     ctaSub: "Best value · Cancel anytime",
@@ -142,7 +142,7 @@ const TIERS = [
     color: "#10b981",
     badge: "🏆 PREMIUM — INCLUDES PDF DOWNLOADS",
     headline: "Everything in All Access + PDF downloads for every build plan",
-    description: "All courses · 50% off builds · Full AI suite · PDF downloads of all build plans",
+    description: "All courses · 50% off builds · Full AI suite · PDF downloads",
     cta: "Get All Access + PDF — $199/mo",
     ctaSub: "Full access · Cancel anytime",
     popular: true,
@@ -312,7 +312,7 @@ function ExitBanner({ onDismiss, onCheckout }) {
           <div className="text-4xl mb-3">⚡</div>
           <h3 className="text-white font-black text-xl mb-2">Wait — One Last Thing</h3>
           <p className="text-gray-400 text-sm mb-5 leading-relaxed">
-            The MEG Replication Kit alone retails for $847. All Access gives you that <em className="text-white">plus</em> 39 other build plans + all 40 courses for $150/month. Most members recoup the cost in the first week.
+            All Access gives you 40+ complete build plans + all 40 courses + the full AI suite for $150/month. Most members recoup the cost in the first week.
           </p>
           <button onClick={() => { onDismiss(); onCheckout(allAccessTier); }}
             className="w-full py-4 rounded-xl font-black text-white text-base mb-3 transition-all hover:opacity-90"
@@ -348,7 +348,6 @@ function OneTimeAccessCard({ onCheckout, loading }) {
                 "Prior Art Archive — 200+ entries",
                 "EM lab simulators & tools",
                 "Investor toolkit & VDR access",
-
               ].map((f, i) => (
                 <div key={i} className="flex items-center gap-2 text-sm text-gray-200">
                   <Check size={12} className="text-yellow-400 flex-shrink-0" />
