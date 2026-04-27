@@ -38,7 +38,7 @@ Deno.serve(async (req) => {
 
       // Fetch the signed PDF from DocuSign
       const accountId = Deno.env.get('DOCUSIGN_ACCOUNT_ID');
-      const baseUrl = Deno.env.get('DOCUSIGN_BASE_URL') || 'https://na4.docusign.net';
+      const baseUrl = 'https://na4.docusign.net';
       const integrationKey = Deno.env.get('DOCUSIGN_INTEGRATION_KEY');
       const userId = Deno.env.get('DOCUSIGN_USER_ID');
       const privateKeyPem = Deno.env.get('DOCUSIGN_PRIVATE_KEY');
@@ -49,7 +49,7 @@ Deno.serve(async (req) => {
         try {
           // Get access token
           const now = Math.floor(Date.now() / 1000);
-          const oauthBase = Deno.env.get('DOCUSIGN_BASE_URL') || 'https://account.docusign.com';
+          const oauthBase = 'https://account.docusign.com';
           const header = { alg: 'RS256', typ: 'JWT' };
           const payload = {
             iss: integrationKey,
