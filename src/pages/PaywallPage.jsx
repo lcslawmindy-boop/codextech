@@ -535,7 +535,7 @@ export default function PaywallPage() {
       </div>
 
       {/* ── Tier Cards ── */}
-      <div className="px-5 pb-4 max-w-5xl mx-auto">
+      <div id="tier-cards" className="px-5 pb-4 max-w-5xl mx-auto">
         <div className="text-center mb-8">
           <h2 className="text-2xl font-black mb-2">Choose Your Builder Access</h2>
           <p className="text-gray-500 text-sm">Full courses + complete builds unlock with Pro · Instant access after checkout</p>
@@ -548,6 +548,94 @@ export default function PaywallPage() {
         <p className="text-center text-gray-700 text-xs mt-5">
           🔒 Secured by Stripe · SSL encrypted · Cancel from account settings anytime
         </p>
+      </div>
+
+      {/* ── À La Carte with All Access Discount ── */}
+      <div className="px-5 pb-12 max-w-5xl mx-auto">
+        <div className="text-center mb-6">
+          <h2 className="text-2xl font-black mb-1">À La Carte Pricing</h2>
+          <p className="text-gray-500 text-sm mb-3">Buy individually — or get <span className="text-purple-400 font-black">50% off everything</span> with All Access membership</p>
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-purple-950/50 border border-purple-700 text-purple-300 text-xs font-bold">
+            <Zap size={11} className="text-purple-400" /> All Access members save 50% on every course & build plan
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {/* Courses */}
+          <div className="bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden">
+            <div className="px-5 py-3 border-b border-gray-800 flex items-center gap-2 bg-blue-950/30">
+              <BookOpen size={14} className="text-blue-400" />
+              <span className="text-white font-black text-sm">Courses — À La Carte</span>
+              <span className="ml-auto text-xs text-blue-400 font-bold">$197–$397 each</span>
+            </div>
+            <div className="divide-y divide-gray-800">
+              {[
+                { name: "Scalar EM Foundations", retail: 197 },
+                { name: "MEG Device Engineering", retail: 247 },
+                { name: "Bioelectromagnetic Medicine", retail: 297 },
+                { name: "Advanced Patent Strategy", retail: 247 },
+                { name: "Tesla Technology Deep Dive", retail: 197 },
+                { name: "Vacuum Energy Systems", retail: 297 },
+                { name: "Scalar Wave Communications", retail: 247 },
+                { name: "IP Commercialization", retail: 247 },
+              ].map((c, i) => (
+                <div key={i} className="flex items-center justify-between px-5 py-3">
+                  <span className="text-gray-300 text-sm">{c.name}</span>
+                  <div className="flex items-center gap-3 flex-shrink-0">
+                    <span className="text-gray-600 line-through text-xs">${c.retail}</span>
+                    <span className="text-purple-400 font-black text-sm">${Math.round(c.retail * 0.5)}</span>
+                    <span className="text-xs px-1.5 py-0.5 rounded bg-purple-900/50 border border-purple-700 text-purple-300 font-bold">50% OFF</span>
+                  </div>
+                </div>
+              ))}
+              <div className="px-5 py-3 bg-gray-800/40">
+                <p className="text-gray-500 text-xs">+ 32 more courses · All included with <span className="text-purple-400 font-bold">All Access</span> at 50% off</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Build Plans */}
+          <div className="bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden">
+            <div className="px-5 py-3 border-b border-gray-800 flex items-center gap-2 bg-orange-950/30">
+              <Wrench size={14} className="text-orange-400" />
+              <span className="text-white font-black text-sm">Build Plans — À La Carte</span>
+              <span className="ml-auto text-xs text-orange-400 font-bold">$97–$297 each</span>
+            </div>
+            <div className="divide-y divide-gray-800">
+              {[
+                { name: "MEG Replication (US Pat. 6,362,718)", retail: 297 },
+                { name: "TRD-1 Telomere Research Device", retail: 197 },
+                { name: "Prioré EM Device", retail: 247 },
+                { name: "TRZ Reactor Assembly", retail: 247 },
+                { name: "Scalar Wave Interferometer", retail: 197 },
+                { name: "G-Com Scalar Communicator", retail: 197 },
+                { name: "Aegis-SV EMF Shield", retail: 147 },
+                { name: "KRCIC Biophysics Chamber", retail: 247 },
+              ].map((b, i) => (
+                <div key={i} className="flex items-center justify-between px-5 py-3">
+                  <span className="text-gray-300 text-sm">{b.name}</span>
+                  <div className="flex items-center gap-3 flex-shrink-0">
+                    <span className="text-gray-600 line-through text-xs">${b.retail}</span>
+                    <span className="text-orange-400 font-black text-sm">${Math.round(b.retail * 0.5)}</span>
+                    <span className="text-xs px-1.5 py-0.5 rounded bg-orange-900/50 border border-orange-700 text-orange-300 font-bold">50% OFF</span>
+                  </div>
+                </div>
+              ))}
+              <div className="px-5 py-3 bg-gray-800/40">
+                <p className="text-gray-500 text-xs">+ 32 more build plans · All included with <span className="text-orange-400 font-bold">All Access</span> at 50% off</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="mt-6 text-center">
+          <p className="text-gray-600 text-xs mb-4">À la carte prices shown above · All Access members pay <span className="text-purple-400 font-bold">half price on every item</span></p>
+          <button onClick={() => document.querySelector('#tier-cards')?.scrollIntoView({ behavior: 'smooth' })}
+            className="px-8 py-3 rounded-xl font-black text-white text-sm transition-all hover:opacity-90"
+            style={{ backgroundColor: "#8b5cf6", boxShadow: "0 4px 20px rgba(139,92,246,0.4)" }}>
+            Get All Access — 50% Off Everything →
+          </button>
+        </div>
       </div>
 
       {/* ── Scarcity nudge ── */}
