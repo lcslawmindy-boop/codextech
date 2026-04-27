@@ -27,16 +27,15 @@ function useCountdown() {
 const MEMBERSHIP = {
   id: "member",
   name: "Full Access Membership",
-  price: 99,
+  price: 199,
   color: "#8b5cf6",
-  description: "26 courses, 3 build plans, plus 1 new plan every month.",
-  cta: "Join Now — $99/mo",
+  description: "All courses and all build plans, forever.",
+  cta: "Join Now — $199/mo",
   features: [
-    { icon: <Wrench size={15} />, text: "3 complete build plans — full BOM, schematics, assembly steps" },
-    { icon: <Package size={15} />, text: "1 new build plan added every month" },
+    { icon: <Wrench size={15} />, text: "40+ complete build plans — full BOM, schematics, assembly steps" },
     { icon: <ExternalLink size={15} />, text: "Verified sourcing links — Digikey, Mouser, Amazon, specialist suppliers" },
     { icon: <Play size={15} />, text: "Step-by-step build videos — 3–12 hours per device" },
-    { icon: <BookOpen size={15} />, text: "26 structured courses from the archive" },
+    { icon: <BookOpen size={15} />, text: "40+ structured courses from the archive" },
     { icon: <Check size={15} />, text: "Prior Art Archive — 200+ documented systems" },
     { icon: <Check size={15} />, text: "EM Lab simulator & scalar wave tools" },
     { icon: <Check size={15} />, text: "Private community & troubleshooting forum" },
@@ -44,7 +43,6 @@ const MEMBERSHIP = {
   ],
   notIncluded: [
     "PDF download of build plans (view-only in app)",
-    "Defense-restricted / GOV-only systems",
   ],
 };
 
@@ -140,7 +138,7 @@ export default function Pricing() {
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-cyan-400">Everything Included.</span>
         </h1>
         <p className="text-gray-400 text-lg max-w-xl mx-auto">
-          26 courses, 3 complete build plans, plus 1 new plan every month — full BOMs, sourcing links, and videos, all in-app for $99/month.
+          All 40+ courses and all 40+ build plans — complete BOMs, sourcing links, build videos, and everything in the vault for $199/month.
         </p>
       </div>
 
@@ -157,7 +155,7 @@ export default function Pricing() {
         <div className="relative rounded-2xl overflow-hidden border-2 border-purple-500 shadow-2xl shadow-purple-900/40">
           {/* Top badge */}
           <div className="py-3 text-center text-xs font-black tracking-widest text-white bg-purple-600">
-             26 COURSES + 3 BUILDS + 1 NEW MONTHLY
+             ALL 40+ COURSES — ALL 40+ BUILD PLANS
            </div>
 
           <div className="p-8 bg-gray-900">
@@ -215,11 +213,11 @@ export default function Pricing() {
       {/* What you get — visual breakdown */}
       <div className="border-y border-gray-800 bg-gray-900/40 px-6 py-14">
         <div className="max-w-4xl mx-auto">
-          <h2 className="text-2xl font-black text-center mb-10">26 courses + 3 build plans + 1 new plan monthly</h2>
+          <h2 className="text-2xl font-black text-center mb-10">All 40+ courses + all 40+ build plans</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
             {[
-              { icon: "🎓", title: "26 Courses", desc: "Full structured curriculum from scalar EM fundamentals to patent strategy and investor frameworks", color: "#22c55e" },
-               { icon: "🔧", title: "3 Build Plans + Monthly New Additions", desc: "Start with 3 complete build plans, plus 1 new plan added every month to stay current", color: "#f97316" },
+              { icon: "🎓", title: "40+ Courses", desc: "Full structured curriculum from scalar EM fundamentals to patent strategy and investor frameworks", color: "#22c55e" },
+               { icon: "🔧", title: "40+ Build Plans", desc: "Every complete build plan in the vault with full BOM, schematics, and assembly guides", color: "#f97316" },
                { icon: "📦", title: "Full BOM & Sourcing", desc: "Exact part numbers, specs, and verified supplier links for every component", color: "#06b6d4" },
                { icon: "🎬", title: "Build Videos & Documentation", desc: "Step-by-step videos and technical schematics for hands-on assembly", color: "#a855f7" },
             ].map((item, i) => (
