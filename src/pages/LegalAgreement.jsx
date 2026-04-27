@@ -1,7 +1,6 @@
 import { useState } from "react";
-import { Shield, Lock, Eye, AlertTriangle, CheckCircle2, ShieldCheck, Fingerprint, ChevronRight } from "lucide-react";
+import { Shield, Lock, Eye, AlertTriangle, CheckCircle2, ShieldCheck, Fingerprint, ChevronRight, Send, Mail, Loader2 } from "lucide-react";
 import { base44 } from "@/api/base44Client";
-import { startTrialPass } from "@/hooks/useTrialPass";
 
 const AGREEMENT_VERSION = "1.0";
 const EFFECTIVE_DATE = "April 1, 2026";
@@ -53,12 +52,12 @@ const SECTIONS = [
   {
     num: "05",
     title: "Intellectual Property",
-    content: "All platform-original content, including organizational frameworks, analytical commentary, concept graphs, business models, and AI-generated synthesis, is the exclusive intellectual property of the Disclosing Party. Access grants no license, ownership right, or interest in any Confidential Information. The underlying research of Lt. Col. Thomas E. Bearden is used under scholarly fair use principles for archival and analytical purposes.",
+    content: "All platform-original content, including organizational frameworks, analytical commentary, concept graphs, business models, and AI-generated synthesis, is the exclusive intellectual property of the Disclosing Party. Access grants no license, ownership right, or interest in any Confidential Information.",
   },
   {
     num: "06",
     title: "Monitoring & Enforcement",
-    content: "The Disclosing Party reserves the right to monitor access patterns, audit usage logs, and employ technical measures to detect unauthorized copying, scraping, or data exfiltration. Access timestamps, user agent strings, and behavioral fingerprints may be recorded for security purposes. Access may be terminated at any time without notice upon suspected violation.",
+    content: "The Disclosing Party reserves the right to monitor access patterns, audit usage logs, and employ technical measures to detect unauthorized copying, scraping, or data exfiltration.",
   },
   {
     num: "07",
@@ -69,12 +68,12 @@ const SECTIONS = [
   {
     num: "08",
     title: "Term & Survival",
-    content: "This Agreement is effective upon first access to the platform and remains in effect indefinitely. The confidentiality obligations survive any termination of access. This Agreement shall be governed by the laws of the United States of America.",
+    content: "This Agreement is effective upon first access to the platform and remains in effect indefinitely. Governed by the laws of the United States of America.",
   },
   {
     num: "09",
     title: "Entire Agreement",
-    content: "This Agreement constitutes the entire understanding between the parties regarding confidentiality and supersedes all prior discussions. By proceeding, the Recipient represents that they have read, understood, and agree to be legally bound by all terms. Electronic acceptance constitutes a valid and binding signature under the Electronic Signatures in Global and National Commerce Act (E-SIGN).",
+    content: "Electronic acceptance via DocuSign constitutes a valid and binding signature under the Electronic Signatures in Global and National Commerce Act (E-SIGN).",
   },
 ];
 
@@ -85,18 +84,13 @@ function SectionBlock({ s }) {
         <span className="text-cyan-500 font-mono text-xs font-bold mt-0.5 flex-shrink-0 w-6">{s.num}</span>
         <div className="flex-1 min-w-0">
           <h3 className="text-white font-semibold text-sm mb-2">{s.title}</h3>
-
           {s.alert && (
             <div className="mb-3 flex items-start gap-2 bg-red-950/40 border border-red-700/50 rounded-lg px-3 py-2">
               <AlertTriangle size={12} className="text-red-400 flex-shrink-0 mt-0.5" />
               <p className="text-red-300 text-xs font-semibold">No content from this platform shall be:</p>
             </div>
           )}
-
-          {s.content && (
-            <p className="text-slate-400 text-xs leading-relaxed">{s.content}</p>
-          )}
-
+          {s.content && <p className="text-slate-400 text-xs leading-relaxed">{s.content}</p>}
           {s.bullets && (
             <ul className="space-y-1.5">
               {s.bullets.map((b, i) => (
@@ -107,11 +101,7 @@ function SectionBlock({ s }) {
               ))}
             </ul>
           )}
-
-          {s.footer && (
-            <p className="mt-3 text-red-400 text-xs font-semibold">{s.footer}</p>
-          )}
-
+          {s.footer && <p className="mt-3 text-red-400 text-xs font-semibold">{s.footer}</p>}
           {s.damages && (
             <div className="grid grid-cols-2 gap-3">
               <div className="bg-slate-800/60 border border-slate-600/40 rounded-xl p-4 text-center">
@@ -131,25 +121,57 @@ function SectionBlock({ s }) {
 }
 
 export default function LegalAgreement() {
-  const [checked1, setChecked1] = useState(false);
-  const [checked2, setChecked2] = useState(false);
-  const [checked3, setChecked3] = useState(false);
+  const [step, setStep] = useState("review"); // review | form | sent | error
+  const [fullName, setFullName] = useState("");
+  const [email, setEmail] = useState("");
+  const [company, setCompany] = useState("");
+  const [agreed, setAgreed] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
 
-  const allChecked = checked1 && checked2 && checked3;
-  const checkedCount = [checked1, checked2, checked3].filter(Boolean).length;
+  const handleSendToDocuSign = async () => {
+    if (!fullName || !email || !agreed) return;
+    setLoading(true);
+    setErrorMsg("");
+    try {
+      const res = await base44.functions.invoke("sendNdaDocusign", {
+        full_name: fullName,
+        email,
+        company,
+      });
+      if (res?.data?.success) {
+        // Store email so we can check when they come back
+        localStorage.setItem("nda_member_email", email);
+        setStep("sent");
+      } else {
+        setErrorMsg(res?.data?.error || "Failed to send NDA. Please try again.");
+        setStep("error");
+      }
+    } catch (err) {
+      console.error(err);
+      setErrorMsg("Network error. Please try again.");
+      setStep("error");
+    }
+    setLoading(false);
+  };
 
-  const handleAccept = () => {
-    if (!allChecked) return;
-    const record = {
-      accepted: true,
-      version: AGREEMENT_VERSION,
-      timestamp: new Date().toISOString(),
-      userAgent: navigator.userAgent,
-    };
-    localStorage.setItem("bearden_nda_accepted", JSON.stringify(record));
-    // Start 24-hour trial pass
-    startTrialPass();
-    window.location.href = "/";
+  // Check if they've already signed (returning user)
+  const handleCheckSigned = async () => {
+    if (!email) return;
+    setLoading(true);
+    try {
+      const sigs = await base44.entities.NDASignature.filter({ email: email.toLowerCase(), accepted_terms: true });
+      if (sigs && sigs.length > 0) {
+        localStorage.setItem("nda_member_email", email);
+        localStorage.setItem("bearden_nda_accepted", JSON.stringify({ accepted: true, version: "1.0" }));
+        window.location.href = "/";
+      } else {
+        setErrorMsg("No completed signature found for this email. Please check your DocuSign inbox.");
+      }
+    } catch {
+      setErrorMsg("Error checking signature status.");
+    }
+    setLoading(false);
   };
 
   return (
@@ -157,9 +179,7 @@ export default function LegalAgreement() {
       className="fixed inset-0 overflow-y-auto"
       style={{ backgroundColor: "#0F172A", fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', system-ui, sans-serif" }}
     >
-      {/* Subtle grid background */}
-      <div
-        className="fixed inset-0 pointer-events-none"
+      <div className="fixed inset-0 pointer-events-none"
         style={{
           backgroundImage: "linear-gradient(rgba(14,165,233,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(14,165,233,0.03) 1px, transparent 1px)",
           backgroundSize: "40px 40px",
@@ -175,96 +195,65 @@ export default function LegalAgreement() {
               <div className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
               <span className="text-cyan-400 text-xs font-mono font-bold tracking-widest uppercase">Secure Connection Established</span>
             </div>
-            <div className="text-slate-500 text-xs font-mono">TLS 1.3 · AES-256 · ZARP-NDA-{AGREEMENT_VERSION}</div>
+            <div className="text-slate-500 text-xs font-mono">TLS 1.3 · DocuSign · ZARP-NDA-{AGREEMENT_VERSION}</div>
           </div>
 
           {/* Header card */}
-          <div
-            className="rounded-2xl border mb-6 overflow-hidden"
-            style={{ background: "linear-gradient(135deg, #1E293B 0%, #162032 100%)", borderColor: "#334155" }}
-          >
-            {/* Accent top stripe */}
+          <div className="rounded-2xl border mb-6 overflow-hidden" style={{ background: "linear-gradient(135deg, #1E293B 0%, #162032 100%)", borderColor: "#334155" }}>
             <div style={{ background: "linear-gradient(90deg, #0EA5E9, #10B981)", height: 3 }} />
-
             <div className="px-8 py-7 flex items-start gap-6">
-              {/* Icon cluster */}
               <div className="flex-shrink-0">
-                <div
-                  className="w-16 h-16 rounded-2xl flex items-center justify-center"
-                  style={{ background: "linear-gradient(135deg, rgba(14,165,233,0.15), rgba(16,185,129,0.1))", border: "1px solid rgba(14,165,233,0.3)" }}
-                >
+                <div className="w-16 h-16 rounded-2xl flex items-center justify-center"
+                  style={{ background: "linear-gradient(135deg, rgba(14,165,233,0.15), rgba(16,185,129,0.1))", border: "1px solid rgba(14,165,233,0.3)" }}>
                   <ShieldCheck size={28} className="text-cyan-400" />
                 </div>
               </div>
-
               <div className="flex-1">
                 <div className="flex items-center gap-3 mb-1 flex-wrap">
-                  <span
-                    className="text-xs font-mono font-bold px-2 py-0.5 rounded tracking-widest"
-                    style={{ background: "rgba(14,165,233,0.1)", color: "#0EA5E9", border: "1px solid rgba(14,165,233,0.2)" }}
-                  >
+                  <span className="text-xs font-mono font-bold px-2 py-0.5 rounded tracking-widest"
+                    style={{ background: "rgba(14,165,233,0.1)", color: "#0EA5E9", border: "1px solid rgba(14,165,233,0.2)" }}>
                     RESTRICTED ACCESS
                   </span>
                   <span className="text-slate-500 text-xs font-mono">v{AGREEMENT_VERSION} · {EFFECTIVE_DATE}</span>
                 </div>
-                <h1 className="text-white font-bold text-2xl leading-tight mb-1">
-                  Non-Disclosure Agreement
-                </h1>
-                <p className="text-slate-400 text-sm">
-                  Zenith Apex Research Platform · Confidentiality & Access Control Agreement
-                </p>
+                <h1 className="text-white font-bold text-2xl leading-tight mb-1">Non-Disclosure Agreement</h1>
+                <p className="text-slate-400 text-sm">Zenith Apex Research Platform · Signed via DocuSign</p>
               </div>
-
               <div className="flex-shrink-0 text-right hidden md:block">
                 <Fingerprint size={20} className="text-slate-600 mb-1 ml-auto" />
-                <p className="text-slate-600 text-xs font-mono">Identity<br/>Verification</p>
+                <p className="text-slate-600 text-xs font-mono">DocuSign<br/>eSignature</p>
               </div>
             </div>
-
-            {/* Warning strip */}
-            <div
-              className="px-8 py-3 flex items-center gap-3"
-              style={{ background: "rgba(239,68,68,0.08)", borderTop: "1px solid rgba(239,68,68,0.2)" }}
-            >
+            <div className="px-8 py-3 flex items-center gap-3" style={{ background: "rgba(239,68,68,0.08)", borderTop: "1px solid rgba(239,68,68,0.2)" }}>
               <AlertTriangle size={14} className="text-red-400 flex-shrink-0" />
               <p className="text-red-300 text-xs leading-relaxed">
-                <strong className="text-red-200">LEGAL NOTICE:</strong> This platform contains proprietary research and classified theoretical frameworks. Unauthorized disclosure, reproduction, or AI ingestion of any content constitutes a violation of this agreement and applicable federal law.
+                <strong className="text-red-200">LEGAL NOTICE:</strong> This NDA is sent for binding electronic signature via DocuSign. Unauthorized disclosure, reproduction, or AI ingestion of any content constitutes a federal law violation.
               </p>
             </div>
           </div>
 
-          {/* Main content — 2 column layout */}
+          {/* Main 2-col layout */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
 
-            {/* Left: Agreement text (2/3) */}
-            <div
-              className="lg:col-span-2 rounded-2xl border overflow-hidden"
-              style={{ background: "#1E293B", borderColor: "#334155" }}
-            >
-              <div
-                className="px-6 py-3 flex items-center justify-between"
-                style={{ borderBottom: "1px solid #334155", background: "#162032" }}
-              >
+            {/* Left: Agreement text */}
+            <div className="lg:col-span-2 rounded-2xl border overflow-hidden" style={{ background: "#1E293B", borderColor: "#334155" }}>
+              <div className="px-6 py-3 flex items-center justify-between" style={{ borderBottom: "1px solid #334155", background: "#162032" }}>
                 <div className="flex items-center gap-2">
                   <Eye size={13} className="text-cyan-500" />
-                  <span className="text-white text-xs font-semibold">Agreement Terms</span>
+                  <span className="text-white text-xs font-semibold">Agreement Terms — Review Before Signing</span>
                 </div>
                 <span className="text-slate-500 text-xs font-mono">9 sections</span>
               </div>
-
               <div className="px-6 py-5 space-y-5 overflow-y-auto" style={{ maxHeight: "55vh" }}>
                 {SECTIONS.map(s => <SectionBlock key={s.num} s={s} />)}
               </div>
             </div>
 
-            {/* Right: Progress + Acknowledgements (1/3) */}
+            {/* Right: Sign via DocuSign panel */}
             <div className="flex flex-col gap-4">
 
-              {/* Access level card */}
-              <div
-                className="rounded-2xl border p-5"
-                style={{ background: "#1E293B", borderColor: "#334155" }}
-              >
+              {/* Access level */}
+              <div className="rounded-2xl border p-5" style={{ background: "#1E293B", borderColor: "#334155" }}>
                 <p className="text-slate-400 text-xs font-semibold uppercase tracking-widest mb-4">Access Level</p>
                 <div className="space-y-2">
                   {[
@@ -276,10 +265,7 @@ export default function LegalAgreement() {
                     <div key={i} className="flex items-center justify-between">
                       <span className="text-slate-300 text-xs">{item.label}</span>
                       <div className="flex items-center gap-1.5">
-                        <div
-                          className="w-1.5 h-1.5 rounded-full"
-                          style={{ background: item.active ? item.color : "#334155" }}
-                        />
+                        <div className="w-1.5 h-1.5 rounded-full" style={{ background: item.active ? item.color : "#334155" }} />
                         <span className="text-xs font-mono" style={{ color: item.active ? item.color : "#475569" }}>
                           {item.active ? "GRANTED" : "RESTRICTED"}
                         </span>
@@ -289,89 +275,101 @@ export default function LegalAgreement() {
                 </div>
               </div>
 
-              {/* Acceptance progress */}
-              <div
-                className="rounded-2xl border p-5"
-                style={{ background: "#1E293B", borderColor: "#334155" }}
-              >
-                <div className="flex items-center justify-between mb-3">
-                  <p className="text-slate-400 text-xs font-semibold uppercase tracking-widest">Authorization</p>
-                  <span className="text-cyan-400 font-mono text-xs font-bold">{checkedCount}/3</span>
-                </div>
+              {/* Sign form */}
+              {(step === "review" || step === "form" || step === "error") && (
+                <div className="rounded-2xl border p-5 space-y-4" style={{ background: "#1E293B", borderColor: "#334155" }}>
+                  <p className="text-white font-bold text-sm">Sign via DocuSign</p>
+                  <p className="text-slate-400 text-xs leading-relaxed">
+                    Enter your details below. We'll send the NDA to your email via DocuSign for legally binding signature. Once signed, vault access is granted automatically.
+                  </p>
 
-                {/* Progress bar */}
-                <div className="h-1.5 bg-slate-700 rounded-full mb-5 overflow-hidden">
-                  <div
-                    className="h-full rounded-full transition-all duration-500"
+                  <input type="text" placeholder="Full Name *" value={fullName} onChange={e => setFullName(e.target.value)}
+                    className="w-full px-3 py-2.5 rounded-lg text-sm text-white placeholder-gray-500 focus:outline-none focus:border-cyan-500"
+                    style={{ background: "#0F172A", border: "1px solid #334155" }} />
+
+                  <input type="email" placeholder="Email Address *" value={email} onChange={e => setEmail(e.target.value)}
+                    className="w-full px-3 py-2.5 rounded-lg text-sm text-white placeholder-gray-500 focus:outline-none focus:border-cyan-500"
+                    style={{ background: "#0F172A", border: "1px solid #334155" }} />
+
+                  <input type="text" placeholder="Company / Organization (optional)" value={company} onChange={e => setCompany(e.target.value)}
+                    className="w-full px-3 py-2.5 rounded-lg text-sm text-white placeholder-gray-500 focus:outline-none focus:border-cyan-500"
+                    style={{ background: "#0F172A", border: "1px solid #334155" }} />
+
+                  <label className="flex items-start gap-3 cursor-pointer">
+                    <div onClick={() => setAgreed(a => !a)}
+                      className="w-5 h-5 rounded flex-shrink-0 flex items-center justify-center mt-0.5 transition-all"
+                      style={{
+                        background: agreed ? "linear-gradient(135deg, #0EA5E9, #10B981)" : "transparent",
+                        border: agreed ? "none" : "1px solid #475569",
+                      }}>
+                      {agreed && <CheckCircle2 size={13} className="text-white" />}
+                    </div>
+                    <span className="text-slate-300 text-xs leading-relaxed">I have read this NDA and agree to sign it electronically via DocuSign *</span>
+                  </label>
+
+                  {errorMsg && (
+                    <div className="flex items-start gap-2 bg-red-950/30 border border-red-800 rounded-lg px-3 py-2">
+                      <AlertTriangle size={12} className="text-red-400 flex-shrink-0 mt-0.5" />
+                      <p className="text-red-300 text-xs">{errorMsg}</p>
+                    </div>
+                  )}
+
+                  <button
+                    onClick={handleSendToDocuSign}
+                    disabled={!fullName || !email || !agreed || loading}
+                    className="w-full py-3.5 rounded-xl font-bold text-sm transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
                     style={{
-                      width: `${(checkedCount / 3) * 100}%`,
-                      background: allChecked ? "linear-gradient(90deg, #0EA5E9, #10B981)" : "linear-gradient(90deg, #0EA5E9, #06B6D4)"
-                    }}
-                  />
+                      background: fullName && email && agreed ? "linear-gradient(135deg, #0EA5E9, #10B981)" : "#1E293B",
+                      color: fullName && email && agreed ? "#fff" : "#475569",
+                      border: fullName && email && agreed ? "none" : "1px solid #334155",
+                    }}>
+                    {loading ? <Loader2 size={15} className="animate-spin" /> : <Send size={14} />}
+                    {loading ? "Sending to DocuSign…" : "Send NDA to My Email →"}
+                  </button>
+
+                  <p className="text-slate-600 text-xs text-center">You'll receive a DocuSign email. Sign it to unlock vault access.</p>
                 </div>
+              )}
 
-                <div className="space-y-3">
-                  {[
-                    { checked: checked1, setChecked: setChecked1, text: "I have read and fully understand this NDA and agree to be legally bound by its terms." },
-                    { checked: checked2, setChecked: setChecked2, text: "I will NOT copy, share, or input any content into any AI system for training or analysis." },
-                    { checked: checked3, setChecked: setChecked3, text: "I understand violations may result in liquidated damages up to $250,000 per incident." },
-                  ].map(({ checked, setChecked, text }, i) => (
-                    <label key={i} className="flex items-start gap-3 cursor-pointer group">
-                      <div
-                        onClick={() => setChecked(c => !c)}
-                        className="w-5 h-5 rounded flex-shrink-0 flex items-center justify-center mt-0.5 transition-all"
-                        style={{
-                          background: checked ? "linear-gradient(135deg, #0EA5E9, #10B981)" : "transparent",
-                          border: checked ? "none" : "1px solid #475569",
-                        }}
-                      >
-                        {checked && <CheckCircle2 size={13} className="text-white" />}
-                      </div>
-                      <span className="text-slate-300 text-xs leading-relaxed">{text}</span>
-                    </label>
-                  ))}
+              {/* Success — sent state */}
+              {step === "sent" && (
+                <div className="rounded-2xl border p-6 space-y-4" style={{ background: "#0a2218", borderColor: "#166534" }}>
+                  <div className="flex items-center gap-3 mb-2">
+                    <Mail size={22} className="text-green-400" />
+                    <p className="text-green-300 font-black text-base">NDA Sent via DocuSign</p>
+                  </div>
+                  <p className="text-slate-300 text-sm leading-relaxed">
+                    Check your inbox at <strong className="text-white">{email}</strong> for the DocuSign signature request. Sign the NDA to unlock vault access.
+                  </p>
+                  <p className="text-slate-500 text-xs">After signing, come back here and click the button below to verify.</p>
+
+                  <div className="pt-2 space-y-2">
+                    <input type="email" placeholder="Enter your email to verify" value={email} onChange={e => setEmail(e.target.value)}
+                      className="w-full px-3 py-2.5 rounded-lg text-sm text-white placeholder-gray-500 focus:outline-none focus:border-cyan-500"
+                      style={{ background: "#0F172A", border: "1px solid #334155" }} />
+                    <button onClick={handleCheckSigned} disabled={loading}
+                      className="w-full py-3 rounded-xl font-bold text-sm text-white flex items-center justify-center gap-2 transition-all hover:opacity-90 disabled:opacity-50"
+                      style={{ background: "linear-gradient(135deg, #0EA5E9, #10B981)" }}>
+                      {loading ? <Loader2 size={14} className="animate-spin" /> : <CheckCircle2 size={14} />}
+                      I've Signed — Enter Vault
+                    </button>
+                  </div>
                 </div>
-              </div>
+              )}
 
-              {/* Accept button */}
-              <button
-                onClick={handleAccept}
-                disabled={!allChecked}
-                className="w-full py-4 rounded-2xl font-bold text-sm transition-all flex items-center justify-center gap-2"
-                style={{
-                  background: allChecked
-                    ? "linear-gradient(135deg, #0EA5E9, #10B981)"
-                    : "#1E293B",
-                  color: allChecked ? "#fff" : "#475569",
-                  border: allChecked ? "none" : "1px solid #334155",
-                  boxShadow: allChecked ? "0 4px 24px rgba(14,165,233,0.3)" : "none",
-                  cursor: allChecked ? "pointer" : "not-allowed",
-                }}
-              >
-                <Lock size={15} />
-                {allChecked ? "Authorize Access — Enter Platform" : "Complete all acknowledgements"}
-              </button>
-
-              <p className="text-slate-600 text-xs text-center leading-relaxed px-2">
-                Your acceptance is timestamped and recorded. By proceeding you confirm you are at least 18 years old and have authority to enter this agreement.
-              </p>
-
-              <button
-                onClick={() => base44.auth.redirectToLogin(window.location.href)}
-                className="text-slate-500 hover:text-cyan-400 text-xs text-center transition-colors flex items-center justify-center gap-1.5"
-              >
+              {/* Admin login */}
+              <button onClick={() => base44.auth.redirectToLogin(window.location.href)}
+                className="text-slate-500 hover:text-cyan-400 text-xs text-center transition-colors flex items-center justify-center gap-1.5">
                 <Fingerprint size={12} />
-                Admin biometric sign-in
+                Admin sign-in
               </button>
             </div>
           </div>
 
-          {/* Footer */}
           <div className="flex items-center justify-between text-slate-600 text-xs font-mono pb-4">
-            <span>ZARP-NDA-v{AGREEMENT_VERSION} · E-SIGN Act Compliant · Governed by U.S. Federal Law</span>
+            <span>ZARP-NDA-v{AGREEMENT_VERSION} · E-SIGN Act · DocuSign Certified · U.S. Federal Law</span>
             <span>{EFFECTIVE_DATE}</span>
           </div>
-
         </div>
       </div>
     </div>

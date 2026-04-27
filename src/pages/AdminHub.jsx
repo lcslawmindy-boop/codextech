@@ -23,6 +23,7 @@ const ADMIN_SECTIONS = [
     items: [
       { path: "/admin-downloads", icon: <Download size={20} />, label: "Download Center", desc: "Generate & manage branded PDFs, build plans, investor docs", badge: "Admin" },
       { path: "/admin-pdf-access", icon: <Download size={20} />, label: "PDF Access Manager", desc: "Grant individual Elite/GOV accounts PDF download access", badge: "🔐" },
+      { path: "/admin-nda-signatures", icon: <FileText size={20} />, label: "NDA Signatures (DocuSign)", desc: "View all signed NDAs, status, and download signed PDF copies", badge: "DocuSign" },
       { path: "/admin-videos", icon: <Video size={20} />, label: "Build Videos", desc: "Manage saved invention build video guides", badge: "Admin" },
     ]
   },
