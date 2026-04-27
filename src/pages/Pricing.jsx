@@ -84,9 +84,8 @@ export default function Pricing() {
   const [billingAnnual, setBillingAnnual] = useState(false);
 
   const monthlyPrice = MEMBERSHIP.price;
-  const annualMonthlyPrice = Math.floor(monthlyPrice * 9 / 12); // 3 months free
-  const annualTotal = monthlyPrice * 9;
-  const displayPrice = billingAnnual ? annualMonthlyPrice : monthlyPrice;
+  const annualTotal = monthlyPrice * 12; // Annual upfront only
+  const displayPrice = monthlyPrice; // Always show $99
 
   const handleCheckout = async () => {
     if (window !== window.top) {
@@ -95,12 +94,11 @@ export default function Pricing() {
     }
     const baseUrl = window.location.origin;
     const response = await base44.functions.invoke("createCheckoutSession", {
-      title: `C.O.D.E.X.T.E.C.H. Full Access Membership${billingAnnual ? " (Annual)" : ""}`,
-      priceInCents: billingAnnual ? annualTotal * 100 : monthlyPrice * 100,
+      title: "C.O.D.E.X.T.E.C.H. Full Access Membership (Annual)",
+      priceInCents: annualTotal * 100,
       description: MEMBERSHIP.description,
       category: "membership",
-      mode: billingAnnual ? "payment" : "subscription",
-      interval: billingAnnual ? undefined : "month",
+      mode: "payment",
       successUrl: `${baseUrl}/checkout?success=true&product=member`,
       cancelUrl: `${baseUrl}/pricing`,
       customerEmail: null,
@@ -149,18 +147,11 @@ export default function Pricing() {
         </p>
       </div>
 
-      {/* Billing Toggle */}
-      <div className="flex justify-center items-center gap-4 mb-10">
-        <span className={`text-sm font-bold ${!billingAnnual ? "text-white" : "text-gray-500"}`}>Monthly</span>
-        <button
-          onClick={() => setBillingAnnual(b => !b)}
-          className={`relative w-14 h-7 rounded-full transition-colors ${billingAnnual ? "bg-green-500" : "bg-gray-700"}`}
-        >
-          <div className={`absolute top-1 w-5 h-5 rounded-full bg-white transition-transform ${billingAnnual ? "translate-x-8" : "translate-x-1"}`} />
-        </button>
-        <div className="flex items-center gap-2">
-          <span className={`text-sm font-bold ${billingAnnual ? "text-white" : "text-gray-500"}`}>Annual</span>
-          <span className="text-xs font-black px-2 py-0.5 rounded-full bg-green-900 text-green-300">3 MONTHS FREE</span>
+      {/* Annual Only Notice */}
+      <div className="flex justify-center mb-10">
+        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-yellow-900/40 border border-yellow-700">
+          <span className="text-yellow-300 text-sm font-bold">Annual Billing Only</span>
+          <span className="text-yellow-400 text-xs">Pay once per year</span>
         </div>
       </div>
 
@@ -178,17 +169,11 @@ export default function Pricing() {
 
             {/* Price */}
             <div className="flex items-end gap-1 mb-1">
-              {!billingAnnual && <span className="text-gray-600 line-through text-base mb-1.5 mr-1">$149</span>}
               <span className="font-black text-6xl text-purple-400">${displayPrice}</span>
               <span className="text-gray-500 mb-2 text-lg">/mo</span>
             </div>
-            {billingAnnual && (
-              <p className="text-green-400 text-sm font-bold mb-1">Billed ${annualTotal}/yr — 3 months free 🎉</p>
-            )}
-            {!billingAnnual && (
-              <p className="text-purple-400 text-xs font-bold mb-1">Founding rate — saves $50/mo vs retail</p>
-            )}
-            <p className="text-gray-600 text-xs mb-8">Cancel anytime · Instant access · Secured by Stripe</p>
+            <p className="text-green-400 text-sm font-bold mb-1">Billed ${annualTotal} annually</p>
+            <p className="text-gray-600 text-xs mb-8">Annual commitment · Instant access · Secured by Stripe</p>
 
             {/* CTA */}
             <button
@@ -292,9 +277,9 @@ export default function Pricing() {
             className="px-12 py-4 rounded-xl font-black text-xl text-white transition-all hover:opacity-90 shadow-lg"
             style={{ background: "linear-gradient(135deg, #7c3aed, #2563eb)", boxShadow: "0 4px 24px rgba(139,92,246,0.4)" }}
           >
-            Join Now — ${displayPrice}/mo →
+            Join Now — ${annualTotal}/year →
           </button>
-          <p className="text-gray-600 text-xs mt-4">🔒 Secured by Stripe · Cancel anytime · Instant access</p>
+          <p className="text-gray-600 text-xs mt-4">🔒 Secured by Stripe · Annual billing · Instant access</p>
         </div>
       </div>
 
