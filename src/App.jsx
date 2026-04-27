@@ -151,6 +151,7 @@ import ResearchLab from './pages/ResearchLab';
 import KitBundle from './pages/KitBundle';
 import MyLibrary from './pages/MyLibrary';
 import HydromagnetopropulsionCourse from './pages/HydromagnetopropulsionCourse';
+import AlaCarteMenu from './pages/AlaCarteMenu';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -363,6 +364,7 @@ const AuthenticatedApp = () => {
           <Route path="/kit-bundles" element={<KitBundle />} />
           <Route path="/my-library" element={<MyLibrary />} />
           <Route path="/hydromagnetopropulsion-course" element={<HydromagnetopropulsionCourse />} />
+          <Route path="/alacarte" element={<AlaCarteMenu />} />
 
           <Route path="*" element={<PageNotFound />} />
         </Route>
