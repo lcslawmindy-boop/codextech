@@ -180,6 +180,7 @@ const AuthenticatedApp = () => {
         <Route path="/" element={<ZarpLanding />} />
         <Route path="/free-vault" element={<FreeVault />} />
         <Route path="/build-supplies-shop" element={<BuildSuppliesShop />} />
+        <Route path="/emf-impact" element={<EMFImpact />} />
         <Route path="/pricing" element={<Pricing />} />
         <Route path="/paywall" element={<PaywallPage />} />
         <Route path="*" element={<LegalAgreement />} />
@@ -194,6 +195,7 @@ const AuthenticatedApp = () => {
         <Route path="/" element={<ZarpLanding />} />
         <Route path="/free-vault" element={<FreeVault />} />
         <Route path="/build-supplies-shop" element={<BuildSuppliesShop />} />
+        <Route path="/emf-impact" element={<EMFImpact />} />
         <Route path="/paywall" element={<PaywallPage />} />
         <Route path="/trial-onboarding" element={<TrialOnboarding />} />
         <Route path="/beta-apply" element={<BetaApply />} />

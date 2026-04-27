@@ -207,6 +207,46 @@ export default function ZarpLanding() {
 
 
 
+      {/* ── EMF Impact Pitch Deck CTA ── */}
+      <section className="px-5 py-14 bg-gradient-to-b from-gray-950 to-red-950/20 border-t border-gray-800">
+        <div className="max-w-5xl mx-auto">
+          <div className="text-center mb-8">
+            <span className="text-xs px-3 py-1.5 rounded-full bg-red-950/60 border border-red-800 text-red-300 font-bold uppercase tracking-widest">
+              Free Public Research — No Login Required
+            </span>
+            <h2 className="text-3xl sm:text-4xl font-black text-white mt-4 mb-2">The EMF Crisis & The Path Forward</h2>
+            <p className="text-gray-400 text-sm max-w-2xl mx-auto leading-relaxed">
+              An interactive pitch deck documenting EMF bioweapon science, organ-level damage mechanisms, scalar healing technology, and two possible 2050 futures. Based on declassified government research and peer-reviewed literature.
+            </p>
+          </div>
+
+          {/* Preview cards */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+            {[
+              { icon: "🧠", title: "Brain & DNA Damage", desc: "ELF entrainment, double-strand breaks, telomere shortening — the organ-by-organ breakdown", color: "#ef4444" },
+              { icon: "💚", title: "Scalar Healing", desc: "Prioré multichannel EM, phase conjugation, trigger window therapy — documented reversal mechanisms", color: "#22c55e" },
+              { icon: "☠️", title: "Dark Timeline 2050", desc: "No transition: lifespan 52 yrs, fertility −80%, cognitive collapse, civilizational breakdown", color: "#f97316" },
+              { icon: "🌍", title: "Light Timeline 2050", desc: "Scalar energy transition: lifespan 150+, disease −90%, free energy for all, Earth healed", color: "#a855f7" },
+            ].map((card, i) => (
+              <div key={i} className="bg-gray-900 border border-gray-800 rounded-xl p-4" style={{ borderLeftColor: card.color, borderLeftWidth: 3 }}>
+                <span className="text-2xl block mb-2">{card.icon}</span>
+                <p className="text-white font-bold text-sm mb-1" style={{ color: card.color }}>{card.title}</p>
+                <p className="text-gray-500 text-xs leading-relaxed">{card.desc}</p>
+              </div>
+            ))}
+          </div>
+
+          <div className="text-center">
+            <Link to="/emf-impact"
+              className="inline-flex items-center gap-3 px-10 py-4 rounded-xl text-white font-black text-base transition-all hover:opacity-90"
+              style={{ background: "linear-gradient(135deg, #dc2626, #7c3aed)" }}>
+              ⚡ View Full EMF Impact Pitch Deck — Free
+            </Link>
+            <p className="text-gray-600 text-xs mt-3">Interactive 3D visualization · Organ damage atlas · Dual 2050 timeline scenarios · No account required</p>
+          </div>
+        </div>
+      </section>
+
       {/* ── Public ZARP Research Diagram ── */}
       <section className="px-5 py-14 bg-gray-950 border-t border-gray-800">
         <div className="max-w-5xl mx-auto">
