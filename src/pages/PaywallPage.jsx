@@ -312,7 +312,7 @@ function ExitBanner({ onDismiss, onCheckout }) {
           <div className="text-4xl mb-3">⚡</div>
           <h3 className="text-white font-black text-xl mb-2">Wait — One Last Thing</h3>
           <p className="text-gray-400 text-sm mb-5 leading-relaxed">
-            All Access gives you 40+ complete build plans + all 40 courses + the full AI suite for $150/month. Most members recoup the cost in the first week.
+            All Access gives you complete build plans + courses + the full AI suite for $150/month. Most members recoup the cost in the first week.
           </p>
           <button onClick={() => { onDismiss(); onCheckout(allAccessTier); }}
             className="w-full py-4 rounded-xl font-black text-white text-base mb-3 transition-all hover:opacity-90"
@@ -490,10 +490,10 @@ export default function PaywallPage() {
           </span>
         </h1>
         <p className="text-gray-300 text-lg max-w-2xl mx-auto mb-4 leading-relaxed">
-          C.O.D.E.X.T.E.C.H. membership unlocks 40+ complete build systems, 26 structured courses, execution frameworks, and AI tools.
+          C.O.D.E.X.T.E.C.H. membership unlocks complete build systems, structured courses, execution frameworks, and AI tools.
         </p>
         <p className="text-gray-500 text-sm max-w-xl mx-auto mb-8">
-          26 structured courses + complete build vault with BOMs, execution frameworks, and real engineering systems. Learn advanced concepts. Apply them immediately through guided builds.
+          Structured courses + complete build vault with BOMs, execution frameworks, and real engineering systems. Learn advanced concepts. Apply them immediately through guided builds.
         </p>
 
         {/* Anchor / value statement */}
@@ -538,7 +538,7 @@ export default function PaywallPage() {
       <div id="tier-cards" className="px-5 pb-4 max-w-5xl mx-auto">
         <div className="text-center mb-8">
           <h2 className="text-2xl font-black mb-2">Choose Your Builder Access</h2>
-          <p className="text-gray-500 text-sm">Full courses + complete builds unlock with Pro · Instant access after checkout</p>
+          <p className="text-gray-500 text-sm">Courses + complete builds unlock with Pro · Instant access after checkout</p>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5 items-stretch">
           {TIERS.map(tier => (
@@ -556,7 +556,7 @@ export default function PaywallPage() {
           <h2 className="text-2xl font-black mb-1">À La Carte Pricing</h2>
           <p className="text-gray-500 text-sm mb-3">Buy individually — or get <span className="text-purple-400 font-black">50% off everything</span> with All Access membership</p>
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-purple-950/50 border border-purple-700 text-purple-300 text-xs font-bold">
-            <Zap size={11} className="text-purple-400" /> All Access members save 50% on every course & build plan
+            <Zap size={11} className="text-purple-400" /> Members save 50% on every course & build plan
           </div>
         </div>
 
@@ -589,7 +589,7 @@ export default function PaywallPage() {
                 </div>
               ))}
               <div className="px-5 py-3 bg-gray-800/40">
-                <p className="text-gray-500 text-xs">+ 32 more courses · All included with <span className="text-blue-400 font-bold">Courses Plan</span> at 50% off à la carte</p>
+                <p className="text-gray-500 text-xs">+ More courses · All included with <span className="text-blue-400 font-bold">Courses Plan</span> at 50% off à la carte</p>
               </div>
             </div>
           </div>
@@ -622,18 +622,18 @@ export default function PaywallPage() {
                 </div>
               ))}
               <div className="px-5 py-3 bg-gray-800/40">
-                <p className="text-gray-500 text-xs">+ 32 more build plans · All included with <span className="text-orange-400 font-bold">All Access</span> at 50% off</p>
+                <p className="text-gray-500 text-xs">+ More build plans · All included with <span className="text-orange-400 font-bold">All Access</span> at 50% off</p>
               </div>
             </div>
           </div>
         </div>
 
         <div className="mt-6 text-center">
-          <p className="text-gray-600 text-xs mb-4">À la carte prices shown above · All Access members pay <span className="text-purple-400 font-bold">half price on every item</span></p>
+          <p className="text-gray-600 text-xs mb-4">À la carte prices shown above · Membership members pay <span className="text-purple-400 font-bold">half price on every item</span></p>
           <button onClick={() => document.querySelector('#tier-cards')?.scrollIntoView({ behavior: 'smooth' })}
             className="px-8 py-3 rounded-xl font-black text-white text-sm transition-all hover:opacity-90"
             style={{ backgroundColor: "#8b5cf6", boxShadow: "0 4px 20px rgba(139,92,246,0.4)" }}>
-            Get All Access — 50% Off Everything →
+            Get Membership — 50% Off Everything →
           </button>
         </div>
       </div>
