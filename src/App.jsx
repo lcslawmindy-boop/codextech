@@ -150,6 +150,7 @@ import MemberVault from './pages/MemberVault';
 import ResearchLab from './pages/ResearchLab';
 import KitBundle from './pages/KitBundle';
 import MyLibrary from './pages/MyLibrary';
+import HydromagnetopropulsionCourse from './pages/HydromagnetopropulsionCourse';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -361,6 +362,7 @@ const AuthenticatedApp = () => {
           <Route path="/research-lab" element={<ResearchLab />} />
           <Route path="/kit-bundles" element={<KitBundle />} />
           <Route path="/my-library" element={<MyLibrary />} />
+          <Route path="/hydromagnetopropulsion-course" element={<HydromagnetopropulsionCourse />} />
 
           <Route path="*" element={<PageNotFound />} />
         </Route>
