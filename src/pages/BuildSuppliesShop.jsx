@@ -1,15 +1,21 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { ArrowLeft, Wrench, ExternalLink, ChevronDown, ChevronUp, Search, X } from "lucide-react";
+import { ArrowLeft, Wrench, ExternalLink, ChevronDown, ChevronUp, Search, X, ShoppingCart, Loader2 } from "lucide-react";
+import { base44 } from "@/api/base44Client";
 
+// Stripe product IDs mapped to each kit (from Stripe catalog)
+// Prices below are the BASE cost (what you'd source yourself).
+// We charge 10% markup via a dynamic Stripe checkout.
 const PRODUCTS = [
   {
     id: "meg-kit",
-    name: "MEG Replication — Parts Reference",
+    name: "MEG Replication Parts Kit",
     device: "Motionless Electromagnetic Generator",
     category: "Device Components",
     icon: "⚡",
     description: "Complete sourcing reference for replicating the MEG device (US Patent 6,362,718). All parts available from standard electronics distributors.",
+    stripeProductId: "prod_UKE3yIddCPw1IV",
+    baseCostCents: 26100, // ~$261 base → $287 with 10% markup
     bom: [
       { qty: 2, item: "Toroidal Ferrite Core", spec: "Vitroperm 500F or Metglas 2714A, nanocrystalline, µr ~100,000", source: "Digikey / Mouser", estCost: "$18–$32 ea" },
       { qty: 4, item: "N52 Neodymium Bar Magnet", spec: "50mm × 10mm × 5mm, N52 grade", source: "K&J Magnetics / Amazon", estCost: "$4–$8 ea" },
@@ -23,11 +29,13 @@ const PRODUCTS = [
   },
   {
     id: "trd1-kit",
-    name: "TRD-1 Telomere Device — Parts Reference",
+    name: "TRD-1 Telomere Device Build Kit",
     device: "Telomere Regeneration Device",
     category: "Device Components",
     icon: "🧬",
     description: "Sourcing guide for the TRD-1 frequency generator protocol. Standard lab components available from common suppliers.",
+    stripeProductId: "prod_UKE30JbzDTTrPL",
+    baseCostCents: 17600,
     bom: [
       { qty: 1, item: "Bifilar Scalar Coil (wound)", spec: "200T, 28 AWG, counter-wound pair on 51mm toroid", source: "Custom wind — see build plan", estCost: "$15–$25 materials" },
       { qty: 1, item: "DDS Function Generator", spec: "AD9833 or similar, 1Hz–12.5MHz, SPI programmable", source: "Amazon / Digikey", estCost: "$8–$25" },
@@ -39,11 +47,13 @@ const PRODUCTS = [
   },
   {
     id: "scalar-lab",
-    name: "Scalar EM Lab Bench — Parts Reference",
+    name: "Scalar EM Lab Starter Kit",
     device: "General Scalar EM Research",
     category: "Lab Tools",
     icon: "🔬",
     description: "Essential bench setup components for any scalar EM researcher. All standard electronics lab equipment.",
+    stripeProductId: "prod_UKE33DR5C4nFUQ",
+    baseCostCents: 15200,
     bom: [
       { qty: 1, item: "DDS Function Generator", spec: "0.01Hz–10MHz, 3.3/5V output, USB serial control", source: "Amazon / Aliexpress", estCost: "$25–$60" },
       { qty: 2, item: "Oscilloscope Probe ×10", spec: "BNC connector, 100MHz, 1M/10M switchable", source: "Amazon / Tequipment", estCost: "$12–$25 ea" },
@@ -55,11 +65,13 @@ const PRODUCTS = [
   },
   {
     id: "priore-bundle",
-    name: "Prioré System — Parts Reference",
+    name: "Prioré Device Component Bundle",
     device: "Prioré EM Treatment System",
     category: "Device Components",
     icon: "🏥",
     description: "Sourcing reference for beginning Prioré system study, based on the ONR-validated device (Bateman, 1978).",
+    stripeProductId: "prod_UKE3JFoRjrxfmV",
+    baseCostCents: 31700,
     bom: [
       { qty: 1, item: "Helmholtz Coil Set", spec: "300mm diameter pair, 150mm spacing, 100T each, 22 AWG", source: "Custom wind / Teachspin", estCost: "$40–$80 materials" },
       { qty: 1, item: "RF Oscillator Module", spec: "27.12 MHz ISM band, crystal controlled, ±50ppm", source: "Mouser / custom PCB", estCost: "$15–$30" },
@@ -71,11 +83,13 @@ const PRODUCTS = [
   },
   {
     id: "tool-kit",
-    name: "EM Assembly Tools — Reference List",
+    name: "Advanced EM Assembly Tool Kit",
     device: "All Device Builds",
     category: "Lab Tools",
     icon: "🔧",
     description: "Recommended tools for EM device construction. These are the tools referenced throughout the build plans.",
+    stripeProductId: "prod_UKE3q8UcyKRmQr",
+    baseCostCents: 11500,
     bom: [
       { qty: 1, item: "Soldering Station", spec: "Temperature-controlled, 60W, 200–480°C range", source: "Amazon (Hakko FX-888D equiv)", estCost: "$50–$110" },
       { qty: 1, item: "Solder + Flux Pen", spec: "60/40 rosin core 0.8mm solder + no-clean flux pen", source: "Amazon / Digikey", estCost: "$12–$20" },
@@ -87,11 +101,13 @@ const PRODUCTS = [
   },
   {
     id: "gcom-parts",
-    name: "G-Com Scalar Communicator — Parts Reference",
+    name: "G-Com Scalar Communicator Parts",
     device: "Gravitational Communications Device",
     category: "Device Components",
     icon: "📡",
     description: "Component sourcing guide for the G-Com device. Antenna coils must be wound and matched as a pair.",
+    stripeProductId: "prod_UKE3oTJQiZkiLN",
+    baseCostCents: 22100,
     bom: [
       { qty: 2, item: "Scalar Bifilar Antenna Coil", spec: "Matched pair, 100T each, counter-wound on 51mm toroid", source: "Custom wind — see build plan", estCost: "$15–$25 materials ea" },
       { qty: 1, item: "Phase Conjugate Mirror Assembly", spec: "BaTiO₃ crystal + pump optics — see PCM build plan", source: "International Crystal / custom", estCost: "$80–$150" },
@@ -103,11 +119,13 @@ const PRODUCTS = [
   },
   {
     id: "trz-components",
-    name: "TRZ Reactor — Parts Reference",
+    name: "TRZ Reactor Starter Components",
     device: "Time-Reversal Zone Reactor",
     category: "Device Components",
     icon: "⚛️",
     description: "Highest-precision sourcing reference in the lineup. Barium titanate crystals require individual testing and matching.",
+    stripeProductId: "prod_UKE3B4V51CoHb4",
+    baseCostCents: 35400,
     bom: [
       { qty: 4, item: "Barium Titanate Crystal", spec: "Optical grade, BaTiO₃, matched set ±2% Vπ", source: "International Crystal / MTI Corp", estCost: "$35–$80 ea" },
       { qty: 1, item: "Phase Conjugate Pump Module", spec: "532nm DPSS laser, 50mW, TEM00 mode", source: "Coherent / Roithner", estCost: "$120–$250" },
@@ -119,11 +137,13 @@ const PRODUCTS = [
   },
   {
     id: "emf-shield",
-    name: "EMF Shielding Materials — Reference List",
+    name: "EMF Protection & Shielding Kit",
     device: "Personal EMF Protection",
     category: "Protection",
     icon: "🛡️",
     description: "Personal protection and lab shielding materials. All available from standard suppliers.",
+    stripeProductId: "prod_UKE376qkPg2sg6",
+    baseCostCents: 8100,
     bom: [
       { qty: 1, item: "Mu-Metal Shielding Sheet", spec: "12×12\", 0.010\" thick, annealed, >20,000 µr", source: "MuShield / Amazon", estCost: "$25–$50" },
       { qty: 1, item: "Copper Foil Tape", spec: "2\" × 15ft, conductive adhesive, 2 mil copper", source: "Amazon / Digi-Key", estCost: "$8–$15" },
@@ -135,6 +155,11 @@ const PRODUCTS = [
 ];
 
 const CATEGORIES = ["All", "Device Components", "Lab Tools", "Protection"];
+
+// Calculate 10% markup price in dollars
+function markupPrice(baseCents) {
+  return ((baseCents * 1.1) / 100).toFixed(2);
+}
 
 function BomTable({ bom }) {
   return (
@@ -167,10 +192,40 @@ function BomTable({ bom }) {
 
 function ProductCard({ product }) {
   const [expanded, setExpanded] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  const kitPrice = markupPrice(product.baseCostCents);
+
+  const handleBuyKit = async () => {
+    if (window !== window.top) {
+      alert("Checkout only works from the published app. Please open the app directly.");
+      return;
+    }
+    setLoading(true);
+    try {
+      const baseUrl = window.location.origin;
+      const response = await base44.functions.invoke("createCheckoutSession", {
+        title: product.name,
+        priceInCents: Math.round(product.baseCostCents * 1.1),
+        description: `Pre-sourced component kit for ${product.device} — verified parts, ready to order. Includes 10% sourcing & handling fee.`,
+        category: "kit",
+        mode: "payment",
+        successUrl: `${baseUrl}/checkout?success=true&product=${encodeURIComponent(product.name)}`,
+        cancelUrl: window.location.href,
+        customerEmail: null,
+      });
+      if (response.data?.url) window.location.href = response.data.url;
+    } catch (err) {
+      alert("Checkout failed. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden hover:border-gray-600 transition-all">
       <div className="p-5">
+        {/* Header row */}
         <div className="flex items-start justify-between gap-3 mb-3">
           <div className="flex items-center gap-3">
             <span className="text-3xl">{product.icon}</span>
@@ -180,9 +235,21 @@ function ProductCard({ product }) {
               <p className="text-gray-500 text-xs">For: <span className="text-gray-400">{product.device}</span></p>
             </div>
           </div>
-          <span className="text-xs px-2 py-1 rounded-lg bg-blue-950/60 border border-blue-800 text-blue-300 font-bold whitespace-nowrap flex-shrink-0">
-            {product.bom.length} parts
-          </span>
+          <div className="flex flex-col items-end gap-2 flex-shrink-0">
+            <span className="text-xs px-2 py-1 rounded-lg bg-blue-950/60 border border-blue-800 text-blue-300 font-bold whitespace-nowrap">
+              {product.bom.length} parts
+            </span>
+            {/* Buy Now button */}
+            <button
+              onClick={handleBuyKit}
+              disabled={loading}
+              className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-orange-600 hover:bg-orange-500 disabled:opacity-60 text-white text-xs font-black transition-all whitespace-nowrap"
+            >
+              {loading ? <Loader2 size={11} className="animate-spin" /> : <ShoppingCart size={11} />}
+              {loading ? "..." : `Buy Kit — $${kitPrice}`}
+            </button>
+            <p className="text-gray-600 text-xs">Sourced & shipped · 10% fee</p>
+          </div>
         </div>
 
         <p className="text-gray-400 text-xs leading-relaxed mb-3">{product.description}</p>
@@ -198,9 +265,24 @@ function ProductCard({ product }) {
         {expanded && <BomTable bom={product.bom} />}
 
         {expanded && (
-          <div className="mt-3 flex items-center gap-2 text-xs text-gray-600">
-            <ExternalLink size={10} />
-            <span>Search part numbers on <a href="https://www.digikey.com" target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:underline">Digikey</a>, <a href="https://www.mouser.com" target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:underline">Mouser</a>, or <a href="https://www.amazon.com" target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:underline">Amazon</a></span>
+          <div className="mt-3 flex items-center justify-between gap-2">
+            <div className="flex items-center gap-2 text-xs text-gray-600">
+              <ExternalLink size={10} />
+              <span>
+                Source yourself on{" "}
+                <a href="https://www.digikey.com" target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:underline">Digikey</a>,{" "}
+                <a href="https://www.mouser.com" target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:underline">Mouser</a>, or{" "}
+                <a href="https://www.amazon.com" target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:underline">Amazon</a>
+              </span>
+            </div>
+            <button
+              onClick={handleBuyKit}
+              disabled={loading}
+              className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-orange-600 hover:bg-orange-500 disabled:opacity-60 text-white text-xs font-black transition-all whitespace-nowrap"
+            >
+              {loading ? <Loader2 size={11} className="animate-spin" /> : <ShoppingCart size={11} />}
+              Buy Kit — ${kitPrice}
+            </button>
           </div>
         )}
       </div>
@@ -229,9 +311,9 @@ export default function BuildSuppliesShop() {
           <div className="w-px h-5 bg-gray-700" />
           <div>
             <h1 className="text-white font-bold text-base flex items-center gap-2">
-              <Wrench size={15} className="text-yellow-400" /> Build Supplies — BOM & Sourcing Guide
+              <Wrench size={15} className="text-yellow-400" /> Build Supplies & Component Kits
             </h1>
-            <p className="text-gray-500 text-xs">Member reference — find and source all components for every device build</p>
+            <p className="text-gray-500 text-xs">Source parts yourself from the BOM, or buy a pre-sourced kit (10% handling fee)</p>
           </div>
         </div>
         <Link to="/invention-plans" className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-gray-800 border border-gray-700 text-gray-300 text-xs font-bold hover:bg-gray-700 transition-all">
@@ -242,15 +324,16 @@ export default function BuildSuppliesShop() {
       {/* Hero */}
       <div className="border-b border-gray-800 bg-gradient-to-b from-gray-900 to-gray-950 px-6 py-8 text-center">
         <h2 className="text-2xl md:text-3xl font-black text-white mb-2">
-          Source Every Part Yourself.
+          Every Part. Every Device.
         </h2>
         <p className="text-gray-400 text-sm max-w-xl mx-auto leading-relaxed">
-          Complete bill of materials for each device build — exact part numbers, specifications, recommended suppliers, and estimated costs. No middleman.
+          Full bill of materials for each device — exact specs, recommended suppliers, and estimated costs.
+          Source it yourself, or buy a pre-sourced kit shipped to your door.
         </p>
         <div className="flex flex-wrap items-center justify-center gap-4 mt-4 text-xs text-gray-500">
           <span>🔬 {PRODUCTS.reduce((acc, p) => acc + p.bom.length, 0)}+ component references</span>
           <span>🏪 Digikey · Mouser · Amazon · specialty suppliers</span>
-          <span>💰 Estimated costs included</span>
+          <span>📦 Pre-sourced kits available with 10% handling fee</span>
         </div>
       </div>
 
@@ -276,7 +359,7 @@ export default function BuildSuppliesShop() {
           />
           {search && <button onClick={() => setSearch("")} className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500"><X size={11} /></button>}
         </div>
-        <span className="text-gray-600 text-xs">{filtered.length} devices</span>
+        <span className="text-gray-600 text-xs">{filtered.length} kits</span>
       </div>
 
       {/* Product grid */}
@@ -288,9 +371,12 @@ export default function BuildSuppliesShop() {
           <div className="text-center py-16 text-gray-600">No results for "{search}"</div>
         )}
 
-        <div className="mt-8 border-t border-gray-800 pt-6 text-center">
+        <div className="mt-8 border-t border-gray-800 pt-6 text-center space-y-1">
           <p className="text-gray-600 text-xs">
-            All part numbers and prices are estimates. Verify availability and pricing directly with suppliers. <Link to="/invention-plans" className="text-yellow-400 hover:underline">View full build plans →</Link>
+            All part numbers and prices are estimates. Verify availability directly with suppliers.
+          </p>
+          <p className="text-gray-600 text-xs">
+            Pre-sourced kit prices include a 10% sourcing & handling fee. <Link to="/invention-plans" className="text-yellow-400 hover:underline">View full build plans →</Link>
           </p>
         </div>
       </div>
