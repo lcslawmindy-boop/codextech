@@ -1714,31 +1714,7 @@ export default function InventionPlans() {
                     </div>
                   )}
 
-                  {/* PDF Download Upsell + Buy Now */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
-                    <div className="bg-gradient-to-r from-blue-950/60 to-cyan-950/60 border border-cyan-700/50 rounded-2xl p-6">
-                      <div className="mb-4">
-                        <p className="text-cyan-400 font-bold text-sm uppercase tracking-wider">Download Complete PDF</p>
-                        <p className="text-gray-400 text-sm mt-1">Portable reference with all specs, BOM & build steps</p>
-                      </div>
-                      <span className="text-2xl font-black text-cyan-300">+$49</span>
-                      <button onClick={() => window.location.href = '/checkout'}
-                        className="w-full py-3 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white font-black text-sm transition-all mt-3">
-                        <Download size={14} className="inline mr-2" /> Get PDF for $49
-                      </button>
-                    </div>
-                    <div className="bg-gradient-to-r from-green-950/60 to-emerald-950/60 border border-green-700/50 rounded-2xl p-6">
-                      <div className="mb-4">
-                        <p className="text-green-400 font-bold text-sm uppercase tracking-wider">Full Build Plan Access</p>
-                        <p className="text-gray-400 text-sm mt-1">Instant access to all build plans, videos & BOM</p>
-                      </div>
-                      <span className="text-2xl font-black text-green-300">$99</span>
-                      <button onClick={() => window.location.href = '/checkout'}
-                        className="w-full py-3 rounded-lg bg-green-600 hover:bg-green-500 text-white font-black text-sm transition-all mt-3">
-                        <ShoppingCart size={14} className="inline mr-2" /> Buy Now
-                      </button>
-                    </div>
-                  </div>
+
 
                 </>
               ) : (
