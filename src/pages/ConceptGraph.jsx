@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import SearchPanel from "../components/SearchPanel";
 import ConceptNetworkGraph from "../components/ConceptNetworkGraph";
@@ -11,13 +11,18 @@ import BusinessItemsGraph from "../components/BusinessItemsGraph";
 import { groupColors, nodes } from "../lib/beardenData";
 import NewsletterSignup from "../components/NewsletterSignup";
 import MainNav from "../components/MainNav";
+import VaultBottomNav from "../components/VaultBottomNav";
 import { base44 } from "@/api/base44Client";
-import { useState as useAdminState, useEffect as useAdminEffect } from 'react';
+import { Lock } from "lucide-react";
 
 export default function ConceptGraph() {
-  const [isAdmin, setIsAdmin] = useAdminState(false);
-  useAdminEffect(() => {
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [ndaAccepted, setNdaAccepted] = useState(false);
+  
+  useEffect(() => {
     base44.auth.me().then(u => setIsAdmin(u?.role === 'admin')).catch(() => {});
+    const accepted = localStorage.getItem("bearden_nda_accepted");
+    if (accepted) setNdaAccepted(true);
   }, []);
   const [selectedNode, setSelectedNode] = useState(null);
   const [selectedLink, setSelectedLink] = useState(null);
@@ -45,8 +50,28 @@ export default function ConceptGraph() {
     }
   };
 
+  if (!ndaAccepted && !isAdmin) {
+    return (
+      <div className="w-screen h-screen bg-gray-950 flex flex-col items-center justify-center overflow-hidden">
+        <div className="max-w-md text-center">
+          <div className="w-20 h-20 rounded-2xl bg-gray-800 border border-gray-700 flex items-center justify-center text-4xl mx-auto mb-6">
+            🔒
+          </div>
+          <h2 className="text-white font-black text-2xl mb-2">NDA Required</h2>
+          <p className="text-gray-400 text-sm leading-relaxed mb-6">
+            You must accept the confidentiality agreement before accessing the research vault.
+          </p>
+          <button onClick={() => window.location.href = "/legal"}
+            className="flex items-center justify-center gap-2 w-full py-3 rounded-xl font-black text-white text-sm bg-cyan-600 hover:bg-cyan-500 transition-all">
+            <Lock size={15} /> Review & Accept NDA
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="w-screen h-screen bg-gray-950 flex flex-col overflow-hidden">
+    <div className="w-screen h-screen bg-gray-950 flex flex-col overflow-hidden pb-20">
       {/* Header */}
       {/* Bearden Attribution Banner */}
       <div className="bg-gray-900/80 border-b border-yellow-900/40 px-6 py-1.5 flex items-center gap-3 flex-shrink-0">
@@ -241,6 +266,7 @@ export default function ConceptGraph() {
           </>
         )}
       </div>
+      <VaultBottomNav />
     </div>
   );
 }
