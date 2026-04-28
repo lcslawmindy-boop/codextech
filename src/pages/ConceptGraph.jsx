@@ -28,8 +28,11 @@ export default function ConceptGraph() {
 
   useEffect(() => {
     if (!ndaAccepted || isAdmin) return;
+    const hasSeenPitch = localStorage.getItem("pitch_deck_prompted");
+    if (hasSeenPitch) return;
     const timer = setTimeout(() => {
       setShowPitchPrompt(true);
+      localStorage.setItem("pitch_deck_prompted", "true");
     }, 5 * 60 * 1000); // 5 minutes
     return () => clearTimeout(timer);
   }, [ndaAccepted, isAdmin]);
