@@ -38,23 +38,21 @@ export default function CopyProtection() {
         e.ctrlKey && e.shiftKey && e.key === "C",
         e.key === "F12",
         e.key === "PrintScreen",
-        // Block copy for trial users
-        trial && isCopy,
+        // Block copy for all users (protect build plans & research)
+        isCopy,
       ];
       if (blocked.some(Boolean)) {
         e.preventDefault();
         e.stopPropagation();
-        if (trial && isCopy) alert(TRIAL_ALERT);
         return false;
       }
     };
 
     // Block clipboard copy for trial users
     const blockCopy = (e) => {
-      if (!isTrialActive()) return;
+      // Block copy/paste for all users to protect build plans & research
       e.preventDefault();
       e.stopPropagation();
-      alert(TRIAL_ALERT);
     };
 
     const blockDrag = (e) => e.preventDefault();
@@ -82,27 +80,10 @@ export default function CopyProtection() {
     document.addEventListener("cut", blockCopy, true);
     window.addEventListener("beforeprint", blockPrint);
 
-    // CSS-level protection injected into <head>
+    // CSS-level protection: block all selection and copying (protect build plans & research)
     const style = document.createElement("style");
     style.id = "copy-protection-style";
-    // Trial users: full selection lock. Regular users: allow readable content selection.
-    style.textContent = trial ? `
-      * {
-        -webkit-user-select: none !important;
-        -moz-user-select: none !important;
-        -ms-user-select: none !important;
-        user-select: none !important;
-        -webkit-touch-callout: none !important;
-      }
-      input, textarea {
-        -webkit-user-select: text !important;
-        -moz-user-select: text !important;
-        user-select: text !important;
-      }
-      @media print {
-        body { display: none !important; }
-      }
-    ` : `
+    style.textContent = `
       * {
         -webkit-user-select: none !important;
         -moz-user-select: none !important;

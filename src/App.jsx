@@ -125,6 +125,7 @@ import Welcome from './pages/Welcome';
 import TrialOnboarding from './pages/TrialOnboarding';
 import PostPurchaseOnboarding from './pages/PostPurchaseOnboarding';
 import PostNDAOnboarding from './pages/PostNDAOnboarding';
+import BuildPlansMarketplace from './pages/BuildPlansMarketplace';
 import MemberDashboard from './pages/MemberDashboard';
 import PublicPreview from './pages/PublicPreview';
 import AcquisitionPitchDeck from './pages/AcquisitionPitchDeck';
@@ -314,6 +315,7 @@ const AuthenticatedApp = () => {
           <Route path="/trial-onboarding" element={<TrialOnboarding />} />
           <Route path="/checkout" element={<PostPurchaseOnboarding />} />
           <Route path="/nda-onboarding" element={<PostNDAOnboarding />} />
+          <Route path="/build-plans" element={<BuildPlansMarketplace />} />
           <Route path="/preview" element={<PublicPreview />} />
           <Route path="/acquire" element={<AcquisitionPitchDeck />} />
           <Route path="/referrals" element={<ReferralDashboard />} />

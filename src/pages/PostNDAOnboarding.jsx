@@ -19,7 +19,7 @@ const FEATURES = [
     desc: "Complete BOMs, schematics, supplier links for MEG, scalar transmitter, Prioré device, and more",
     icon: <Hammer size={32} />,
     color: "from-orange-600 to-orange-700",
-    link: "/alacarte",
+    link: "/build-plans",
     tag: "Engineering",
   },
   {
