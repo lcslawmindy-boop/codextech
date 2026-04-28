@@ -220,7 +220,7 @@ export default function ReferralDashboard() {
               <div className="w-8 h-8 rounded-full bg-cyan-600 flex items-center justify-center flex-shrink-0 text-white font-bold text-sm">3</div>
               <div>
                 <p className="text-white font-bold text-sm">You Earn Cash Commission</p>
-                <p className="text-gray-500 text-xs mt-1">Earn $10 (Builder), $25 (Researcher), or $50 (Pro) paid out directly to you.</p>
+                <p className="text-gray-500 text-xs mt-1">Earn 20% commission on every membership sale — paid out directly to you.</p>
               </div>
             </div>
           </div>
