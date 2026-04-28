@@ -4,15 +4,17 @@ import { ArrowLeft, RefreshCw, Save, CheckCircle, AlertCircle, ExternalLink, Sea
 import { base44 } from "@/api/base44Client";
 import { businessItems } from "@/lib/businessItems";
 
-// Items that have a stripeProductId — these can be synced
-const CATALOG = businessItems.filter(i => i.stripeProductId).map(i => ({
-  title: i.title,
-  category: i.category,
-  tagline: i.tagline,
-  description: i.description,
-  price: i.price,
-  stripeProductId: i.stripeProductId,
-}));
+// All courses and invention/build plans (with or without Stripe product ID)
+const CATALOG = businessItems
+  .filter(i => i.category === "Course" || i.category === "Invention")
+  .map(i => ({
+    title: i.title,
+    category: i.category,
+    tagline: i.tagline,
+    description: i.description,
+    price: i.price,
+    stripeProductId: i.stripeProductId || null,
+  }));
 
 
 
@@ -136,11 +138,28 @@ export default function AdminStripeCatalog() {
             {catalogWithStripe.filter(i => !search || i.title.toLowerCase().includes(search.toLowerCase())).map(item => {
               const pid = item.stripeProductId;
               const edit = edits[pid] || {};
+
+              // No Stripe product ID at all — just show as info row
+              if (!pid) return (
+                <div key={item.title} className="p-4 rounded-xl bg-gray-900 border border-gray-800 opacity-60">
+                  <div className="flex items-center justify-between gap-3">
+                    <div>
+                      <span className="text-xs text-cyan-400 font-bold uppercase tracking-wider">{item.category}</span>
+                      <p className="text-white font-bold text-sm mt-0.5">{item.title}</p>
+                      <p className="text-gray-500 text-xs mt-0.5">No Stripe product linked</p>
+                    </div>
+                    <span className="text-gray-500 font-bold text-sm whitespace-nowrap">{item.price}</span>
+                  </div>
+                </div>
+              );
+
+              // Has Stripe ID but not found in account
               if (!item.stripeData) return (
                 <div key={pid} className="p-4 rounded-xl bg-gray-900 border border-yellow-900/30">
                   <div className="flex items-center gap-3">
                     <AlertCircle size={14} className="text-yellow-400 flex-shrink-0" />
                     <div>
+                      <span className="text-xs text-cyan-400 font-bold uppercase tracking-wider">{item.category}</span>
                       <p className="text-white font-bold text-sm">{item.title}</p>
                       <p className="text-yellow-400 text-xs">Product ID <code className="bg-gray-800 px-1 rounded">{pid}</code> not found in your Stripe account.</p>
                     </div>
