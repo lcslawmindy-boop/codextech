@@ -14,12 +14,7 @@ const CATALOG = businessItems.filter(i => i.stripeProductId).map(i => ({
   stripeProductId: i.stripeProductId,
 }));
 
-// Membership tiers to include as reference (no auto-sync, prices managed via Stripe dashboard)
-const MEMBERSHIPS = [
-  { title: "Starter — Vault Access", price: "$47 one-time", description: "One-time access to 5 build plans and 4 courses. Includes the core scalar EM curriculum and beginner build documentation. No subscription required.", stripeProductId: null },
-  { title: "Researcher — Monthly Membership", price: "$97/month", description: "Full access to all 40+ build plans, all 40+ courses, AI patent drafting tools, prior art archive, and research lab simulator. Recurring monthly subscription. Cancel anytime.", stripeProductId: null },
-  { title: "Pro — Full Platform", price: "$247/month", description: "Everything in Researcher plus investor package, co-inventor matching, IP marketplace access, and priority support. Recurring monthly subscription.", stripeProductId: null },
-];
+
 
 export default function AdminStripeCatalog() {
   const [stripeProducts, setStripeProducts] = useState([]);
@@ -125,22 +120,7 @@ export default function AdminStripeCatalog() {
           />
         </div>
 
-        {/* Membership reference */}
-        <div className="mb-8 p-5 rounded-2xl bg-gray-900/60 border border-purple-900/30">
-          <h2 className="text-purple-400 font-black text-sm uppercase tracking-wider mb-3">Membership Tier Descriptions (Reference)</h2>
-          <p className="text-gray-500 text-xs mb-4">These are your suggested descriptions. Add them directly in the <a href="https://dashboard.stripe.com/products" target="_blank" className="text-cyan-400 hover:underline">Stripe Dashboard</a> for subscription products.</p>
-          <div className="space-y-3">
-            {MEMBERSHIPS.map((m, i) => (
-              <div key={i} className="bg-gray-950 border border-gray-800 rounded-xl p-4">
-                <div className="flex items-center justify-between mb-1">
-                  <span className="text-white font-bold text-sm">{m.title}</span>
-                  <span className="text-purple-400 font-black text-sm">{m.price}</span>
-                </div>
-                <p className="text-gray-400 text-xs leading-relaxed">{m.description}</p>
-              </div>
-            ))}
-          </div>
-        </div>
+
 
         {/* Stripe Products */}
         {loading ? (
