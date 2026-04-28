@@ -1261,9 +1261,9 @@ function SpecsLockedGate({ invention }) {
           To view technical specifications, bill of materials, and build instructions for this invention, you need a membership or purchase this plan individually.
         </p>
         <div className="space-y-2 mb-6">
-          <button onClick={() => window.location.href = '/pricing'}
+          <button onClick={() => window.location.href = '/vault'}
             className="flex items-center justify-center gap-2 w-full py-3 rounded-xl font-black text-white text-sm bg-indigo-700 hover:bg-indigo-600 transition-all">
-            View Membership Plans
+            View Database
           </button>
         </div>
       </div>
@@ -1332,9 +1332,9 @@ function MembershipGate({ invention }) {
             </div>
           ))}
         </div>
-        <Link to="/pricing"
+        <Link to="/vault"
          className="flex items-center justify-center gap-2 w-full py-3 rounded-xl font-black text-white text-sm bg-indigo-700 hover:bg-indigo-600 transition-all mb-3">
-         View Membership Plans
+         View Database
         </Link>
         <p className="text-gray-600 text-xs">Already a member? <Link to="/account" className="text-indigo-400 hover:underline">Check your account</Link></p>
       </div>
@@ -1604,10 +1604,10 @@ export default function InventionPlans() {
                 <p className="text-gray-400 text-sm leading-relaxed mb-6">
                   Your trial pass includes access to the first invention build plan only. Upgrade to a paid plan to unlock all {inventions.length} invention build plans with full step-by-step instructions and downloadable PDFs.
                 </p>
-                <Link to="/pricing"
-                  className="flex items-center justify-center gap-2 w-full py-3 rounded-xl font-black text-white text-sm transition-all"
-                  style={{ background: "linear-gradient(135deg, #0EA5E9, #10B981)" }}>
-                  Upgrade for Full Access — from $47
+                <Link to="/vault"
+                   className="flex items-center justify-center gap-2 w-full py-3 rounded-xl font-black text-white text-sm transition-all"
+                   style={{ background: "linear-gradient(135deg, #0EA5E9, #10B981)" }}>
+                   Access the Database
                 </Link>
               </div>
             </div>
