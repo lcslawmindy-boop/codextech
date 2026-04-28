@@ -13,91 +13,72 @@ export default function CodextechAkashicBackground() {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
+    // Icon symbols for floating spheres
+    const icons = ["⚡", "🛰️", "🚀", "💡", "🔬", "⚙️", "🧬", "📡", "🔭", "⛓️"];
+    
     // Floating elements
     const elements = [];
-    const elementCount = 40;
+    const elementCount = 30;
 
     class FloatingElement {
       constructor() {
         this.x = Math.random() * canvas.width;
         this.y = Math.random() * canvas.height;
-        this.vx = (Math.random() - 0.5) * 0.5;
-        this.vy = (Math.random() - 0.5) * 0.5;
-        this.type = ["equation", "paper", "circuit", "device"][Math.floor(Math.random() * 4)];
-        this.opacity = Math.random() * 0.3 + 0.1;
-        this.size = Math.random() * 40 + 20;
+        this.vx = (Math.random() - 0.5) * 0.4;
+        this.vy = (Math.random() - 0.5) * 0.4;
+        this.radius = Math.random() * 25 + 20;
+        this.color = Math.random() > 0.5 ? "#FF8C00" : "#00FF41"; // Neon orange or neon green
+        this.icon = icons[Math.floor(Math.random() * icons.length)];
+        this.opacity = Math.random() * 0.25 + 0.15;
         this.rotation = Math.random() * Math.PI * 2;
-        this.rotationSpeed = (Math.random() - 0.5) * 0.02;
+        this.rotationSpeed = (Math.random() - 0.5) * 0.03;
+        this.pulsePhase = Math.random() * Math.PI * 2;
       }
 
       update() {
         this.x += this.vx;
         this.y += this.vy;
         this.rotation += this.rotationSpeed;
+        this.pulsePhase += 0.02;
 
-        if (this.x < -50) this.x = canvas.width + 50;
-        if (this.x > canvas.width + 50) this.x = -50;
-        if (this.y < -50) this.y = canvas.height + 50;
-        if (this.y > canvas.height + 50) this.y = -50;
+        if (this.x < -100) this.x = canvas.width + 100;
+        if (this.x > canvas.width + 100) this.x = -100;
+        if (this.y < -100) this.y = canvas.height + 100;
+        if (this.y > canvas.height + 100) this.y = -100;
       }
 
       draw() {
         ctx.save();
         ctx.globalAlpha = this.opacity;
         ctx.translate(this.x, this.y);
+
+        // Neon glow effect
+        const glowAlpha = (Math.sin(this.pulsePhase) * 0.3 + 0.5) * this.opacity;
+        ctx.shadowColor = this.color;
+        ctx.shadowBlur = 20 + Math.sin(this.pulsePhase) * 8;
+        ctx.shadowOffsetX = 0;
+        ctx.shadowOffsetY = 0;
+
+        // Draw sphere
+        ctx.fillStyle = this.color;
+        ctx.beginPath();
+        ctx.arc(0, 0, this.radius, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Inner glow
+        ctx.strokeStyle = this.color;
+        ctx.lineWidth = 2;
+        ctx.globalAlpha = glowAlpha * 0.6;
+        ctx.stroke();
+
+        // Draw icon
+        ctx.globalAlpha = 1;
+        ctx.font = `${Math.floor(this.radius * 1.2)}px Arial`;
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillStyle = "#0F172A";
         ctx.rotate(this.rotation);
-
-        const color = "#0F172A";
-
-        if (this.type === "equation") {
-          ctx.font = "14px monospace";
-          ctx.fillStyle = color;
-          ctx.textAlign = "center";
-          ctx.fillText("∫ ∇·E = ρ/ε₀", 0, 0);
-        } else if (this.type === "paper") {
-          ctx.fillStyle = color;
-          ctx.fillRect(-this.size / 2, -this.size / 1.4, this.size, this.size * 1.4);
-          ctx.strokeStyle = color;
-          ctx.lineWidth = 1;
-          ctx.strokeRect(-this.size / 2, -this.size / 1.4, this.size, this.size * 1.4);
-          // Paper lines
-          for (let i = 0; i < 3; i++) {
-            ctx.beginPath();
-            ctx.moveTo(-this.size / 2 + 4, -this.size / 1.4 + 8 + i * 8);
-            ctx.lineTo(this.size / 2 - 4, -this.size / 1.4 + 8 + i * 8);
-            ctx.stroke();
-          }
-        } else if (this.type === "circuit") {
-          // Circuit board pattern
-          ctx.strokeStyle = color;
-          ctx.lineWidth = 1.5;
-          for (let i = 0; i < 3; i++) {
-            for (let j = 0; j < 3; j++) {
-              const offset = 12;
-              ctx.beginPath();
-              ctx.arc(-this.size / 2 + offset + i * offset, -this.size / 2 + offset + j * offset, 2, 0, Math.PI * 2);
-              ctx.stroke();
-              if (i < 2) {
-                ctx.beginPath();
-                ctx.moveTo(-this.size / 2 + offset + i * offset, -this.size / 2 + offset + j * offset);
-                ctx.lineTo(-this.size / 2 + offset + (i + 1) * offset, -this.size / 2 + offset + j * offset);
-                ctx.stroke();
-              }
-            }
-          }
-        } else if (this.type === "device") {
-          // Waveform device
-          ctx.strokeStyle = color;
-          ctx.lineWidth = 1.5;
-          ctx.beginPath();
-          ctx.moveTo(-this.size / 2, 0);
-          for (let i = 0; i <= 10; i++) {
-            const x = -this.size / 2 + (i / 10) * this.size;
-            const y = Math.sin((i / 10) * Math.PI * 4) * (this.size / 4);
-            ctx.lineTo(x, y);
-          }
-          ctx.stroke();
-        }
+        ctx.fillText(this.icon, 0, 0);
 
         ctx.restore();
       }
@@ -111,8 +92,8 @@ export default function CodextechAkashicBackground() {
     // Draw circuit grid background
     const drawGrid = () => {
       const gridSize = 60;
-      ctx.strokeStyle = "rgba(15, 23, 42, 0.08)";
-      ctx.lineWidth = 1;
+      ctx.strokeStyle = "rgba(15, 23, 42, 0.05)";
+      ctx.lineWidth = 0.8;
 
       for (let x = 0; x < canvas.width; x += gridSize) {
         ctx.beginPath();
@@ -129,11 +110,11 @@ export default function CodextechAkashicBackground() {
       }
 
       // Grid intersections
-      ctx.fillStyle = "rgba(15, 23, 42, 0.12)";
+      ctx.fillStyle = "rgba(15, 23, 42, 0.08)";
       for (let x = 0; x < canvas.width; x += gridSize) {
         for (let y = 0; y < canvas.height; y += gridSize) {
           ctx.beginPath();
-          ctx.arc(x, y, 1.5, 0, Math.PI * 2);
+          ctx.arc(x, y, 1, 0, Math.PI * 2);
           ctx.fill();
         }
       }
