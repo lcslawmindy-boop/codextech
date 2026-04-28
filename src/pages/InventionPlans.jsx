@@ -1738,6 +1738,16 @@ export default function InventionPlans() {
 
               {data ? (
                 <>
+                  {/* Blur overlay if not purchased */}
+                  {!hasPurchased && isMembershipRequired(selected.title) && !canViewSelected && (
+                    <div className="absolute inset-0 top-96 bg-black/40 backdrop-blur-sm flex items-center justify-center rounded-2xl z-10 pointer-events-none">
+                      <div className="text-center">
+                        <p className="text-white font-black text-sm mb-2">Full Specifications Hidden</p>
+                        <p className="text-gray-300 text-xs">Purchase the build plan to view BOM, assembly steps, and technical details</p>
+                      </div>
+                    </div>
+                  )}
+
                   {/* Overview */}
                   <div className="bg-gray-900 border border-gray-800 rounded-2xl p-5 mb-4">
                     <p className="text-cyan-400 font-bold text-xs uppercase tracking-wider mb-2">Technical Overview</p>
@@ -1746,7 +1756,7 @@ export default function InventionPlans() {
 
                   {/* BOM */}
                   {data.bom?.length > 0 && (
-                    <div className="bg-gray-900 border border-gray-800 rounded-2xl p-5 mb-4">
+                    <div className={`bg-gray-900 border border-gray-800 rounded-2xl p-5 mb-4 ${!hasPurchased && isMembershipRequired(selected.title) && !canViewSelected ? 'blur-sm opacity-50 pointer-events-none' : ''}`}>
                       <button onClick={() => setShowBom(b => !b)}
                         className="flex items-center justify-between w-full mb-3">
                         <p className="text-yellow-400 font-bold text-xs uppercase tracking-wider">
@@ -1767,7 +1777,7 @@ export default function InventionPlans() {
 
                   {/* Steps */}
                   {data.steps?.length > 0 && (
-                    <div className="bg-gray-900 border border-gray-800 rounded-2xl p-5 mb-4">
+                    <div className={`bg-gray-900 border border-gray-800 rounded-2xl p-5 mb-4 ${!hasPurchased && isMembershipRequired(selected.title) && !canViewSelected ? 'blur-sm opacity-50 pointer-events-none' : ''}`}>
                       <button onClick={() => setShowSteps(s => !s)}
                         className="flex items-center justify-between w-full mb-4">
                         <p className="text-green-400 font-bold text-xs uppercase tracking-wider">Assembly Steps ({data.steps.length})</p>
@@ -1783,7 +1793,7 @@ export default function InventionPlans() {
 
                   {/* Notes */}
                   {data.notes && (
-                    <div className="bg-gray-900 border border-gray-800 rounded-2xl p-5 mb-4">
+                    <div className={`bg-gray-900 border border-gray-800 rounded-2xl p-5 mb-4 ${!hasPurchased && isMembershipRequired(selected.title) && !canViewSelected ? 'blur-sm opacity-50 pointer-events-none' : ''}`}>
                       <p className="text-purple-400 font-bold text-xs uppercase tracking-wider mb-2">Technical Notes</p>
                       <p className="text-gray-400 text-sm leading-relaxed">{data.notes}</p>
                     </div>
