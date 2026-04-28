@@ -42,7 +42,7 @@ export default function Landing() {
               className="flex flex-col items-center gap-3 p-6 rounded-2xl border-2 border-cyan-600 bg-cyan-950/20 hover:bg-cyan-950/40 transition-all">
               <Lock size={24} className="text-cyan-300" />
               <span className="font-black text-sm">Membership</span>
-              <p className="text-xs text-gray-400">$197/month • Full access</p>
+              <p className="text-xs text-gray-400">$49/month • 3 + 3 included</p>
               <ArrowRight size={14} className="text-cyan-400 mt-2" />
             </Link>
 
@@ -127,7 +127,7 @@ export default function Landing() {
               <Link to="/alacarte" className="text-cyan-400 hover:text-cyan-300 text-xs font-black">Buy $50 →</Link>
             </div>
           </div>
-          <p className="text-center text-gray-500 text-xs mt-6">New course + new build plan drops every 2 weeks</p>
+          <p className="text-center text-gray-500 text-xs mt-6">Membership includes first 3 courses + 3 build plans, then 1 of each added monthly</p>
         </div>
       </section>
 
@@ -153,30 +153,30 @@ export default function Landing() {
 
             <div className="bg-cyan-950/30 border-2 border-cyan-600 rounded-2xl p-8 relative">
               <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 bg-cyan-600 rounded-full text-xs font-black">
-                MOST POPULAR
+                BEST VALUE
               </div>
               <h3 className="text-lg font-black mb-2">Membership</h3>
-              <p className="text-gray-400 text-sm mb-6">Full research access</p>
-              <div className="text-3xl font-black mb-6">$197<span className="text-sm">/mo</span></div>
+              <p className="text-gray-400 text-sm mb-6">Unlimited content + drops</p>
+              <div className="text-3xl font-black mb-6">$49<span className="text-sm">/mo</span></div>
               <ul className="space-y-2 text-sm text-gray-300 mb-6">
-                <li>✓ Everything in Free</li>
-                <li>✓ Full patent analysis</li>
-                <li>✓ 21+ build plans</li>
-                <li>✓ All 8 courses</li>
-                <li>✓ Monthly updates</li>
+                <li>✓ 3 courses + 3 build plans</li>
+                <li>✓ 1 new course monthly</li>
+                <li>✓ 1 new build plan monthly</li>
+                <li>✓ Full content library access</li>
+                <li>✓ Cancel anytime</li>
               </ul>
               <Link to="/research-membership" className="w-full py-2 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white font-bold text-sm transition-colors text-center block">
-                Get Membership
+                Join Now
               </Link>
             </div>
 
             <div className="bg-gray-900 border border-gray-700 rounded-2xl p-8">
               <h3 className="text-lg font-black mb-2">À La Carte</h3>
               <p className="text-gray-500 text-sm mb-6">Buy what you need</p>
-              <div className="text-3xl font-black mb-6">$50</div>
+              <div className="text-3xl font-black mb-6">$49</div>
               <ul className="space-y-2 text-sm text-gray-400 mb-6">
-                <li>✓ Any course: $50</li>
-                <li>✓ Any build plan: $50</li>
+                <li>✓ Any course: $49</li>
+                <li>✓ Any build plan: $49</li>
                 <li>✓ One-time payment</li>
                 <li>✓ Lifetime access</li>
               </ul>
