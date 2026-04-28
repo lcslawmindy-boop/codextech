@@ -10,6 +10,7 @@ import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 // Add page imports here
 import ZarpLanding from './pages/ZarpLanding';
 import Landing from './pages/Landing';
+import AlaCarteShop from './pages/AlaCarteShop';
 import VaultNDALanding from './pages/VaultNDALanding';
 import CodextechLanding from './pages/CodextechLanding';
 import FreeVault from './pages/FreeVault';
@@ -366,7 +367,7 @@ const AuthenticatedApp = () => {
           <Route path="/kit-bundles" element={<KitBundle />} />
           <Route path="/my-library" element={<MyLibrary />} />
           <Route path="/hydromagnetopropulsion-course" element={<HydromagnetopropulsionCourse />} />
-          <Route path="/alacarte" element={<AlaCarteMenu />} />
+          <Route path="/alacarte" element={<AlaCarteShop />} />
           <Route path="/research-brief" element={<ResearchBriefLanding />} />
           <Route path="/technical-brief-pack" element={<TechnicalBriefPack />} />
           <Route path="/research-membership" element={<ResearchMembership />} />

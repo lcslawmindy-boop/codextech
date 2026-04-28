@@ -149,17 +149,17 @@ export default function Landing() {
             </div>
 
             <div className="bg-gray-900 border border-gray-700 rounded-2xl p-8">
-              <h3 className="text-lg font-black mb-2">Individual Plans</h3>
-              <p className="text-gray-500 text-sm mb-6">Buy as you go</p>
-              <div className="text-3xl font-black mb-6">$49–99</div>
+              <h3 className="text-lg font-black mb-2">À La Carte</h3>
+              <p className="text-gray-500 text-sm mb-6">Buy individual items</p>
+              <div className="text-3xl font-black mb-6">$29–79</div>
               <ul className="space-y-2 text-sm text-gray-400 mb-6">
-                <li>✓ One build plan</li>
-                <li>✓ BOM & schematics</li>
-                <li>✓ Step-by-step guide</li>
-                <li>✓ Downloadable PDF</li>
+                <li>✓ Courses: $29 each</li>
+                <li>✓ Build Plans: $49–79</li>
+                <li>✓ One-time payment</li>
+                <li>✓ Lifetime access</li>
               </ul>
-              <Link to="/invention-plans" className="w-full py-2 rounded-lg bg-gray-800 hover:bg-gray-700 text-white font-bold text-sm transition-colors text-center block">
-                Browse Plans
+              <Link to="/alacarte" className="w-full py-2 rounded-lg bg-gray-800 hover:bg-gray-700 text-white font-bold text-sm transition-colors text-center block">
+                Browse Catalog
               </Link>
             </div>
           </div>
