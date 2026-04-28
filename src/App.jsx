@@ -166,6 +166,9 @@ import EngineeringSystemsBundle from './pages/EngineeringSystemsBundle';
 import ResearchMethodology from './pages/ResearchMethodology';
 import ResearchPlatformHome from './pages/ResearchPlatformHome';
 import SaaSPricing from './pages/SaaSPricing';
+import ResearchDatabase from './pages/ResearchDatabase';
+import ResearchBrief from './pages/ResearchBrief';
+import InstitutionalMethodology from './pages/InstitutionalMethodology';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -369,6 +372,9 @@ const AuthenticatedApp = () => {
           <Route path="/research-methodology" element={<ResearchMethodology />} />
           <Route path="/research-platform" element={<ResearchPlatformHome />} />
           <Route path="/pricing" element={<SaaSPricing />} />
+          <Route path="/research-database" element={<ResearchDatabase />} />
+          <Route path="/research-brief-landing" element={<ResearchBrief />} />
+          <Route path="/institutional-methodology" element={<InstitutionalMethodology />} />
 
           <Route path="*" element={<PageNotFound />} />
         </Route>
