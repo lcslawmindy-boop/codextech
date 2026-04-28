@@ -7,8 +7,11 @@ Deno.serve(async (req) => {
     const body = await req.json();
     const { title, priceInCents, description, category, mode, interval, successUrl, cancelUrl, priceId, productName, customerEmail } = body;
 
-    if (!title || !priceInCents || !successUrl || !cancelUrl) {
-      return Response.json({ error: 'Missing required fields: title, priceInCents, successUrl, cancelUrl' }, { status: 400 });
+    if (!successUrl || !cancelUrl) {
+      return Response.json({ error: 'Missing required fields: successUrl, cancelUrl' }, { status: 400 });
+    }
+    if (!priceId && (!title || !priceInCents)) {
+      return Response.json({ error: 'Missing required fields: either priceId, or title + priceInCents' }, { status: 400 });
     }
 
     const isSubscription = mode === "subscription";
