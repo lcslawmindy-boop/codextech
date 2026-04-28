@@ -183,7 +183,7 @@ const AuthenticatedApp = () => {
   if (!ndaAccepted) {
     return (
       <Routes>
-        <Route path="/" element={<ZarpLanding />} />
+        <Route path="/" element={<VaultNDALanding />} />
         <Route path="/free-vault" element={<FreeVault />} />
         <Route path="/build-supplies-shop" element={<BuildSuppliesShop />} />
         <Route path="/emf-impact" element={<EMFImpact />} />
@@ -199,7 +199,7 @@ const AuthenticatedApp = () => {
   if (!hasPaid) {
     return (
       <Routes>
-        <Route path="/" element={<ZarpLanding />} />
+        <Route path="/" element={<VaultNDALanding />} />
         <Route path="/free-vault" element={<FreeVault />} />
         <Route path="/build-supplies-shop" element={<BuildSuppliesShop />} />
         <Route path="/emf-impact" element={<EMFImpact />} />
@@ -208,7 +208,7 @@ const AuthenticatedApp = () => {
         <Route path="/trial-onboarding" element={<TrialOnboarding />} />
         <Route path="/beta-apply" element={<BetaApply />} />
         <Route path="/pricing" element={<Pricing />} />
-        <Route path="*" element={isTrial ? <TrialOnboarding /> : <ZarpLanding />} />
+        <Route path="*" element={isTrial ? <TrialOnboarding /> : <VaultNDALanding />} />
       </Routes>
     );
   }
@@ -220,8 +220,8 @@ const AuthenticatedApp = () => {
       {isTrial && <TrialBanner />}
       <Routes>
         <Route element={<MobileLayout />}>
-          <Route path="/" element={<ZarpLanding />} />
-          <Route path="/vault-nda" element={<VaultNDALanding />} />
+          <Route path="/" element={<VaultNDALanding />} />
+          <Route path="/zarp-landing" element={<ZarpLanding />} />
           <Route path="/vault" element={<ConceptGraph />} />
           <Route path="/free-vault" element={<FreeVault />} />
           <Route path="/member-dashboard" element={<MemberDashboard />} />
