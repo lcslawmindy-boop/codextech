@@ -164,6 +164,7 @@ import ResearchDisclaimer from './pages/ResearchDisclaimer';
 import VaultHeroPage from './pages/VaultHeroPage';
 import EngineeringSystemsBundle from './pages/EngineeringSystemsBundle';
 import ResearchMethodology from './pages/ResearchMethodology';
+import ResearchPlatformHome from './pages/ResearchPlatformHome';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -365,6 +366,7 @@ const AuthenticatedApp = () => {
           <Route path="/vault" element={<VaultHeroPage />} />
           <Route path="/engineering-systems-bundle" element={<EngineeringSystemsBundle />} />
           <Route path="/research-methodology" element={<ResearchMethodology />} />
+          <Route path="/research-platform" element={<ResearchPlatformHome />} />
 
           <Route path="*" element={<PageNotFound />} />
         </Route>
