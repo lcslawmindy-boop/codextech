@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { ArrowLeft, Copy, Gift, Users, TrendingUp, Mail, Share2, ExternalLink, Loader2 } from "lucide-react";
+import { ArrowLeft, Copy, DollarSign, Users, TrendingUp, Mail, Share2, Loader2 } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 
 export default function ReferralDashboard() {
@@ -34,7 +34,7 @@ export default function ReferralDashboard() {
         });
         setReferrals(referralList || []);
 
-        // Calculate total credits
+        // Calculate total affiliate earnings
         const completed = (referralList || []).filter(r => r.status === 'completed');
         const credits = completed.reduce((sum, ref) => sum + (ref.store_credit_amount || 0), 0);
         setTotalCredits(credits);
@@ -97,9 +97,9 @@ export default function ReferralDashboard() {
           <div className="w-px h-6 bg-gray-700" />
           <div>
             <h1 className="text-white font-black text-lg flex items-center gap-2">
-              <Gift size={20} className="text-green-400" /> Referral Program
+              <DollarSign size={20} className="text-green-400" /> Affiliate Program
             </h1>
-            <p className="text-gray-500 text-xs mt-1">Earn store credit for each membership signup</p>
+            <p className="text-gray-500 text-xs mt-1">Earn cash commissions for each membership signup</p>
           </div>
         </div>
       </div>
@@ -110,8 +110,8 @@ export default function ReferralDashboard() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
           <div className="p-6 rounded-2xl bg-gray-900/60 border border-gray-800">
             <div className="flex items-center gap-3 mb-2">
-              <Gift size={20} className="text-green-400" />
-              <p className="text-gray-400 text-sm">Total Store Credit</p>
+              <DollarSign size={20} className="text-green-400" />
+              <p className="text-gray-400 text-sm">Total Commissions Earned</p>
             </div>
             <p className="text-4xl font-black text-green-400">${totalCredits}</p>
           </div>
@@ -125,7 +125,7 @@ export default function ReferralDashboard() {
           <div className="p-6 rounded-2xl bg-gray-900/60 border border-gray-800">
             <div className="flex items-center gap-3 mb-2">
               <TrendingUp size={20} className="text-purple-400" />
-              <p className="text-gray-400 text-sm">Avg. Credit per Ref</p>
+              <p className="text-gray-400 text-sm">Avg. Commission per Ref</p>
             </div>
             <p className="text-4xl font-black text-purple-400">
               ${completedReferrals.length > 0 ? Math.round(totalCredits / completedReferrals.length) : 0}
@@ -135,8 +135,8 @@ export default function ReferralDashboard() {
 
         {/* Referral Link Section */}
         <div className="mb-12 p-8 rounded-2xl bg-gradient-to-br from-cyan-950/40 to-purple-950/40 border border-cyan-900/50">
-          <h2 className="text-white font-black text-xl mb-2">Your Invite Link</h2>
-          <p className="text-gray-400 text-sm mb-6">Share this link with friends. You earn store credit when they join.</p>
+          <h2 className="text-white font-black text-xl mb-2">Your Affiliate Link</h2>
+          <p className="text-gray-400 text-sm mb-6">Share this link. You earn a cash commission every time someone purchases a membership.</p>
           
           <div className="flex gap-3 mb-6">
             <div className="flex-1 px-4 py-3 rounded-lg bg-gray-800 border border-gray-700 text-gray-300 text-sm truncate">
@@ -173,8 +173,8 @@ export default function ReferralDashboard() {
           {completedReferrals.length === 0 ? (
             <div className="text-center py-12 rounded-2xl bg-gray-900/60 border border-gray-800 border-dashed">
               <Users size={32} className="mx-auto text-gray-700 mb-3" />
-              <p className="text-gray-500">No successful referrals yet</p>
-              <p className="text-gray-600 text-sm mt-2">Share your link and earn store credit!</p>
+              <p className="text-gray-500">No commissions earned yet</p>
+              <p className="text-gray-600 text-sm mt-2">Share your affiliate link and start earning!</p>
             </div>
           ) : (
             <div className="space-y-3">
@@ -187,7 +187,7 @@ export default function ReferralDashboard() {
                     </p>
                   </div>
                   <div className="text-right">
-                    <p className="text-green-400 font-black">${ref.store_credit_amount}</p>
+                    <p className="text-green-400 font-black">+${ref.store_credit_amount} commission</p>
                     <p className="text-gray-500 text-xs">
                       {ref.completed_date && new Date(ref.completed_date).toLocaleDateString()}
                     </p>
@@ -205,22 +205,22 @@ export default function ReferralDashboard() {
             <div className="flex gap-4">
               <div className="w-8 h-8 rounded-full bg-cyan-600 flex items-center justify-center flex-shrink-0 text-white font-bold text-sm">1</div>
               <div>
-                <p className="text-white font-bold text-sm">Share Your Link</p>
-                <p className="text-gray-500 text-xs mt-1">Copy your unique referral link and share it with friends.</p>
+                <p className="text-white font-bold text-sm">Share Your Affiliate Link</p>
+                <p className="text-gray-500 text-xs mt-1">Copy your unique affiliate link and share it with your audience.</p>
               </div>
             </div>
             <div className="flex gap-4">
               <div className="w-8 h-8 rounded-full bg-cyan-600 flex items-center justify-center flex-shrink-0 text-white font-bold text-sm">2</div>
               <div>
-                <p className="text-white font-bold text-sm">They Sign Up</p>
-                <p className="text-gray-500 text-xs mt-1">Your friend clicks your link and purchases a membership.</p>
+                <p className="text-white font-bold text-sm">They Purchase a Membership</p>
+                <p className="text-gray-500 text-xs mt-1">Your referral clicks your link and buys any ZARP membership plan.</p>
               </div>
             </div>
             <div className="flex gap-4">
               <div className="w-8 h-8 rounded-full bg-cyan-600 flex items-center justify-center flex-shrink-0 text-white font-bold text-sm">3</div>
               <div>
-                <p className="text-white font-bold text-sm">You Earn Credit</p>
-                <p className="text-gray-500 text-xs mt-1">Earn $10 (Builder), $25 (Researcher), or $50 (Pro) in store credit.</p>
+                <p className="text-white font-bold text-sm">You Earn Cash Commission</p>
+                <p className="text-gray-500 text-xs mt-1">Earn $10 (Builder), $25 (Researcher), or $50 (Pro) paid out directly to you.</p>
               </div>
             </div>
           </div>
