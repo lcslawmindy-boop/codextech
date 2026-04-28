@@ -66,24 +66,20 @@ export default function ConceptGraph() {
       <div className="w-screen h-screen bg-gray-950 flex flex-col items-center justify-center overflow-hidden">
         <div className="max-w-md text-center">
           <div className="w-20 h-20 rounded-2xl bg-gray-800 border border-gray-700 flex items-center justify-center text-4xl mx-auto mb-6">
-            📚
+            🔐
           </div>
-          <h2 className="text-white font-black text-2xl mb-2">Access Institutional Research Intelligence</h2>
+          <h2 className="text-white font-black text-2xl mb-2">Research Access</h2>
           <p className="text-gray-400 text-sm leading-relaxed mb-6">
-            Membership required. Access the complete primary-source research archive: 40+ patents analyzed, 200+ peer-reviewed publications, declassified government reports, and verified engineering frameworks.
+            Sign the confidentiality agreement to access the institutional research archive.
           </p>
           <div className="space-y-3">
-            <Link to="/research-membership"
+            <Link to="/vault-nda"
               className="flex items-center justify-center gap-2 w-full py-3 rounded-xl font-black text-white text-sm bg-cyan-600 hover:bg-cyan-500 transition-all">
-              View Membership Plans
+              Sign & Access
             </Link>
-            <Link to="/alacarte"
+            <Link to="/"
               className="flex items-center justify-center gap-2 w-full py-3 rounded-xl font-black text-white text-sm bg-gray-700 hover:bg-gray-600 transition-all">
-              Browse À La Carte Courses
-            </Link>
-            <Link to="/invention-plans"
-              className="flex items-center justify-center gap-2 w-full py-3 rounded-xl font-black text-white text-sm bg-gray-700 hover:bg-gray-600 transition-all">
-              View Build Guides
+              Back to Home
             </Link>
           </div>
         </div>
