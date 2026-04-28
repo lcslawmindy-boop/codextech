@@ -1,228 +1,362 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { CheckCircle2, ArrowRight, Lock } from "lucide-react";
-
-const BUNDLE_CONTENTS = [
-  { title: "Complete Research Network", desc: "40+ documented electromagnetic systems mapped to primary sources", icon: "🧬" },
-  { title: "Engineering Specifications", desc: "Bill of materials, schematics, component sourcing for each system", icon: "📐" },
-  { title: "Patent & Prior Art Archive", desc: "200+ patents analyzed, suppressed technologies documented with risk assessment", icon: "⚖️" },
-  { title: "Build Validation Framework", desc: "Step-by-step protocols for prototype assembly and measurement", icon: "✓" },
-  { title: "Technical Course Library", desc: "40+ structured modules covering scalar EM, vacuum energy, bioelectromagnetics", icon: "📚" },
-  { title: "IP Protection Toolkit", desc: "Provisional patent drafting, claims analysis, FTO evaluation—AI-assisted", icon: "🔐" },
-  { title: "Component Sourcing Network", desc: "Verified suppliers, bulk pricing, pre-tested component kits", icon: "🔗" },
-  { title: "Institutional Licensing Access", desc: "Government, defense contractor, and academic institutional pathways", icon: "🏛️" },
-];
-
-const WHO_FITS = [
-  "Hardware engineers building experimental systems for personal research",
-  "Research institutions vetting suppressed or controversial EM technologies",
-  "Patent attorneys filing novel electromagnetic and free energy applications",
-  "Independent inventors protecting and licensing their own designs",
-  "Teams exploring scalar electromagnetics and bioelectromagnetic applications",
-];
-
-const PRICING_TIERS = [
-  {
-    name: "Individual Researcher",
-    price: "$2,400",
-    period: "one-time",
-    features: [
-      "Full research network access (40+ systems)",
-      "40+ technical courses",
-      "AI patent drafting tool",
-      "Prior art archive (200+ entries)",
-      "Community access",
-    ],
-  },
-  {
-    name: "Institutional License",
-    price: "Custom",
-    period: "contact",
-    features: [
-      "Everything in Individual",
-      "Team seat licenses (up to 10)",
-      "Monthly strategy sessions",
-      "Custom research modules",
-      "Dedicated support",
-      "Data export rights",
-    ],
-  },
-];
+import { ArrowRight, CheckCircle2, AlertCircle, Lock } from "lucide-react";
 
 export default function EngineeringSystemsBundle() {
-  const [selectedTier, setSelectedTier] = useState(0);
+  const [showPaymentWarning, setShowPaymentWarning] = useState(false);
+
+  const handleCheckout = () => {
+    if (window.self !== window.top) {
+      setShowPaymentWarning(true);
+    } else {
+      window.location.href = "https://buy.stripe.com/engineering-bundle";
+    }
+  };
 
   return (
-    <div className="min-h-screen bg-gray-950 text-white">
-      {/* Header */}
-      <div className="border-b border-gray-800 bg-gray-900/80 px-6 py-6 sticky top-0 z-40">
+    <div className="min-h-screen bg-white text-gray-900">
+      {/* Nav */}
+      <nav className="border-b border-gray-200 px-6 py-4 sticky top-0 bg-white z-40">
         <div className="max-w-6xl mx-auto flex items-center justify-between">
-          <div>
-            <h1 className="text-2xl font-black mb-1">Engineering Systems Bundle</h1>
-            <p className="text-gray-400 text-sm">Research framework for serious builders</p>
+          <div className="flex items-center gap-2">
+            <div className="w-8 h-8 rounded-lg bg-gray-900 flex items-center justify-center text-white font-black text-xs">RP</div>
+            <span className="font-bold text-sm">Research Platform</span>
           </div>
-          <Link to="/vault" className="text-gray-400 hover:text-white text-sm transition-colors">
-            ← Back to Vault
-          </Link>
+          <div className="flex items-center gap-4">
+            <Link to="/pricing" className="text-sm text-gray-600 hover:text-gray-900">Pricing</Link>
+            <Link to="/research-platform" className="text-sm text-gray-600 hover:text-gray-900">Home</Link>
+          </div>
         </div>
-      </div>
+      </nav>
 
-      <div className="max-w-5xl mx-auto px-6 py-16 space-y-20">
-        {/* Hero Problem/Solution */}
-        <section>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-            {/* Problem */}
-            <div>
-              <h2 className="text-lg font-black text-white mb-4">The Problem</h2>
-              <div className="space-y-4 text-gray-300 leading-relaxed">
-                <p>
-                  Knowledge about advanced electromagnetic and scalar energy systems exists—but it's scattered across 40+ separate patents, declassified reports, peer-reviewed papers, and suppressed archives.
-                </p>
-                <p>
-                  Building a working prototype requires reassembling fragments from incompatible sources, vetting technical accuracy, understanding patent landscapes, and sourcing components with no integrated supply chain.
-                </p>
-                <p className="text-yellow-300 font-semibold">
-                  This process wastes 6-12 months and $5,000+ in trial research before a serious builder can even validate a hypothesis.
+      {/* Payment Warning Modal */}
+      {showPaymentWarning && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 px-4">
+          <div className="bg-white rounded-lg shadow-lg max-w-md w-full p-6">
+            <h3 className="font-black text-lg mb-3">Checkout Works on Published App</h3>
+            <p className="text-gray-600 text-sm mb-6">
+              Stripe checkout only functions when accessed from a published version of this platform. For testing, please visit the published app.
+            </p>
+            <button
+              onClick={() => setShowPaymentWarning(false)}
+              className="w-full py-2 px-4 rounded-lg bg-gray-900 text-white font-bold transition-colors hover:bg-gray-800"
+            >
+              OK
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Hero */}
+      <section className="px-6 py-20 border-b border-gray-200">
+        <div className="max-w-3xl mx-auto">
+          <div className="mb-6">
+            <span className="inline-block text-xs font-black uppercase tracking-widest text-gray-600 px-3 py-1.5 bg-gray-100 rounded-full mb-4">
+              For Serious Builders
+            </span>
+            <h1 className="text-5xl font-black text-gray-900 leading-[1.1] mb-4">
+              Engineering Systems Bundle
+            </h1>
+            <p className="text-xl text-gray-600 leading-relaxed">
+              A structured research and engineering framework derived from primary-source analysis. Everything you need to understand, build, and validate advanced electromagnetic systems.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 border border-gray-200 rounded-lg p-8 mb-8">
+            <div className="mb-4">
+              <span className="text-sm font-bold text-gray-600 uppercase tracking-widest">Investment</span>
+              <p className="text-5xl font-black text-gray-900 mt-2">$997</p>
+              <p className="text-sm text-gray-600 mt-1">One-time purchase. Lifetime access.</p>
+            </div>
+            <button
+              onClick={handleCheckout}
+              className="w-full py-4 px-6 rounded-lg bg-gray-900 text-white font-black text-lg transition-all hover:bg-gray-800 flex items-center justify-center gap-2"
+            >
+              Get Bundle Now <ArrowRight size={18} />
+            </button>
+            <p className="text-xs text-gray-500 text-center mt-4">
+              30-day money-back guarantee. No questions asked.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* The Problem */}
+      <section className="px-6 py-16 border-b border-gray-200">
+        <div className="max-w-3xl mx-auto">
+          <h2 className="text-3xl font-black text-gray-900 mb-8">The Problem</h2>
+          <div className="space-y-6">
+            <div className="flex gap-4">
+              <AlertCircle size={24} className="text-gray-900 flex-shrink-0" />
+              <div>
+                <h3 className="font-bold text-lg text-gray-900 mb-2">Research is fragmented</h3>
+                <p className="text-gray-600">
+                  Patents are scattered across USPTO. Publications live in different journals. Government reports are archived separately. Building a system requires assembling pieces from 10+ sources.
                 </p>
               </div>
             </div>
-
-            {/* Solution */}
-            <div>
-              <h2 className="text-lg font-black text-white mb-4">The Solution</h2>
-              <div className="space-y-4 text-gray-300 leading-relaxed">
-                <p>
-                  A unified engineering framework built directly from primary-source documentation. Every system mapped. Every component sourced. Every patent analyzed.
+            <div className="flex gap-4">
+              <AlertCircle size={24} className="text-gray-900 flex-shrink-0" />
+              <div>
+                <h3 className="font-bold text-lg text-gray-900 mb-2">Engineering specs are incomplete</h3>
+                <p className="text-gray-600">
+                  Patent claims don't include build procedures. Academic papers omit practical measurements. Government reports don't show component interactions. You're left reverse-engineering from fragments.
                 </p>
-                <p>
-                  Start with the complete picture. Validate in weeks, not months. File your own patents. License your designs. Build institutional partnerships.
-                </p>
-                <p className="text-cyan-300 font-semibold">
-                  Go from fragmented knowledge to working prototype in 12 weeks.
+              </div>
+            </div>
+            <div className="flex gap-4">
+              <AlertCircle size={24} className="text-gray-900 flex-shrink-0" />
+              <div>
+                <h3 className="font-bold text-lg text-gray-900 mb-2">No framework for validation</h3>
+                <p className="text-gray-600">
+                  How do you know if your prototype is working correctly? What measurements matter? Which metrics prove operational feasibility? You're building without institutional standards.
                 </p>
               </div>
             </div>
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* What's Included */}
-        <section>
-          <h2 className="text-3xl font-black mb-12">What You Get</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {BUNDLE_CONTENTS.map((item, i) => (
-              <div key={i} className="bg-gray-900 border border-gray-800 rounded-xl p-6 hover:border-cyan-600/50 transition-colors">
-                <div className="flex items-start gap-4">
-                  <span className="text-3xl flex-shrink-0">{item.icon}</span>
-                  <div className="flex-1">
-                    <h3 className="font-bold text-white mb-1">{item.title}</h3>
-                    <p className="text-sm text-gray-400">{item.desc}</p>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* Who This Is For */}
-        <section>
-          <h2 className="text-3xl font-black mb-8">Who This Is For</h2>
-          <div className="bg-gradient-to-br from-gray-900 to-gray-800 border border-gray-700 rounded-2xl p-8">
-            <p className="text-gray-300 mb-6 leading-relaxed">
-              This is <strong>not</strong> an introduction to electromagnetic theory. It's a framework for people who already understand the physics and want to move from theory to hardware.
-            </p>
-            <ul className="space-y-3">
-              {WHO_FITS.map((item, i) => (
-                <li key={i} className="flex items-start gap-3">
-                  <CheckCircle2 size={18} className="text-cyan-400 flex-shrink-0 mt-1" />
-                  <span className="text-gray-300">{item}</span>
-                </li>
-              ))}
-            </ul>
-            <p className="text-gray-500 text-sm mt-8 italic">
-              If you're looking for hype or unproven claims, this isn't for you. We source from patents, peer-reviewed publications, and documented historical research.
-            </p>
-          </div>
-        </section>
-
-        {/* Pricing */}
-        <section>
-          <h2 className="text-3xl font-black mb-12">Pricing</h2>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            {PRICING_TIERS.map((tier, i) => (
-              <div
-                key={i}
-                className={`border rounded-2xl p-8 transition-all ${
-                  i === 0
-                    ? "bg-gradient-to-br from-cyan-900/20 to-blue-900/20 border-cyan-600/50"
-                    : "bg-gray-900 border-gray-700"
-                }`}
-              >
-                <h3 className="text-xl font-black mb-2">{tier.name}</h3>
-                <div className="mb-6">
-                  <span className="text-4xl font-black text-cyan-400">{tier.price}</span>
-                  <span className="text-gray-400 text-sm ml-2">{tier.period}</span>
-                </div>
-                <ul className="space-y-3 mb-8">
-                  {tier.features.map((feature, fi) => (
-                    <li key={fi} className="flex items-start gap-2 text-sm text-gray-300">
-                      <CheckCircle2 size={16} className="text-green-500 flex-shrink-0 mt-0.5" />
-                      {feature}
-                    </li>
-                  ))}
-                </ul>
-                {i === 0 ? (
-                  <Link
-                    to="/checkout"
-                    className="flex items-center justify-center gap-2 w-full py-3 rounded-xl font-bold text-white bg-cyan-600 hover:bg-cyan-500 transition-colors"
-                  >
-                    Get Access <ArrowRight size={14} />
-                  </Link>
-                ) : (
-                  <button className="flex items-center justify-center gap-2 w-full py-3 rounded-xl font-bold text-white bg-gray-800 hover:bg-gray-700 transition-colors">
-                    Contact Us <ArrowRight size={14} />
-                  </button>
-                )}
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* Credibility */}
-        <section className="bg-gray-900 border border-gray-800 rounded-2xl p-8 md:p-12">
-          <h2 className="text-2xl font-black mb-6">Why This Framework Holds Weight</h2>
-          <ul className="space-y-4 text-gray-300 text-sm leading-relaxed">
-            <li>
-              <strong className="text-white">Sourced from primary documents:</strong> Every claim traces back to specific USPTO patents, peer-reviewed publications, or declassified government reports with full citations.
-            </li>
-            <li>
-              <strong className="text-white">Built for legal compliance:</strong> All content respects intellectual property rights and regulatory frameworks. We don't make medical claims or sell devices.
-            </li>
-            <li>
-              <strong className="text-white">Designed by engineers, for engineers:</strong> No speculation. No unvalidated theories. Just documented systems that have been built, tested, and analyzed by qualified researchers.
-            </li>
-            <li>
-              <strong className="text-white">Institutional credibility:</strong> Used by research teams, patent attorneys, and technology scouts from defense contractors and academic institutions.
-            </li>
-          </ul>
-        </section>
-
-        {/* CTA */}
-        <section className="text-center py-12">
-          <h2 className="text-3xl font-black mb-4">Ready to Move Forward</h2>
-          <p className="text-gray-400 mb-8 max-w-2xl mx-auto">
-            Access the complete research framework. Validate your design. Protect your IP. Build your prototype.
+      {/* The Solution */}
+      <section className="px-6 py-16 border-b border-gray-200 bg-gray-50">
+        <div className="max-w-3xl mx-auto">
+          <h2 className="text-3xl font-black text-gray-900 mb-8">The Solution</h2>
+          <p className="text-lg text-gray-600 leading-relaxed mb-8">
+            One unified system. Everything sourced from primary documents. Everything organized for builders.
           </p>
-          <Link
-            to="/checkout"
-            className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl font-black text-white bg-gradient-to-r from-cyan-600 to-blue-700 hover:from-cyan-500 hover:to-blue-600 transition-all shadow-lg"
+
+          <div className="space-y-8">
+            <div className="border-l-4 border-gray-900 pl-6">
+              <h3 className="font-black text-xl text-gray-900 mb-3">Complete System Documentation</h3>
+              <p className="text-gray-600 mb-4">
+                Not just patents. Not just papers. A unified technical framework for each major electromagnetic system:
+              </p>
+              <ul className="space-y-2 text-sm text-gray-600">
+                <li>✓ Patent prosecution history with claims analysis</li>
+                <li>✓ Peer-reviewed validation (where it exists)</li>
+                <li>✓ Government technical reports and declassified archives</li>
+                <li>✓ Integrated engineering specifications</li>
+              </ul>
+            </div>
+
+            <div className="border-l-4 border-gray-900 pl-6">
+              <h3 className="font-black text-xl text-gray-900 mb-3">Build-Ready Specifications</h3>
+              <p className="text-gray-600 mb-4">
+                Schematics, bills of materials, component sourcing, measurement protocols, validation frameworks.
+              </p>
+              <ul className="space-y-2 text-sm text-gray-600">
+                <li>✓ Detailed wiring schematics (CAD-ready)</li>
+                <li>✓ Component bills of materials with supplier options</li>
+                <li>✓ Step-by-step assembly procedures</li>
+                <li>✓ Measurement and validation protocols</li>
+              </ul>
+            </div>
+
+            <div className="border-l-4 border-gray-900 pl-6">
+              <h3 className="font-black text-xl text-gray-900 mb-3">Engineering Frameworks</h3>
+              <p className="text-gray-600 mb-4">
+                Methods for testing, validation, and troubleshooting grounded in institutional research standards.
+              </p>
+              <ul className="space-y-2 text-sm text-gray-600">
+                <li>✓ FTO (Freedom-to-Operate) assessment for each system</li>
+                <li>✓ Patent landscape analysis (prior art, design-arounds)</li>
+                <li>✓ Risk assessment and mitigation strategies</li>
+                <li>✓ Regulatory compliance frameworks</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* What's Included */}
+      <section className="px-6 py-16 border-b border-gray-200">
+        <div className="max-w-3xl mx-auto">
+          <h2 className="text-3xl font-black text-gray-900 mb-12">What You Get</h2>
+
+          <div className="space-y-8">
+            <div className="border border-gray-200 rounded-lg p-8">
+              <h3 className="font-black text-xl text-gray-900 mb-4 flex items-center gap-2">
+                <span className="w-8 h-8 rounded-full bg-gray-900 text-white flex items-center justify-center text-sm font-black">1</span>
+                Complete Patent Analysis Suite (6 systems)
+              </h3>
+              <p className="text-gray-600 text-sm leading-relaxed mb-4">
+                Six major electromagnetic systems, fully documented. Each includes: patent prosecution history, claims breakdown, prior art assessment, design-around strategies, and freedom-to-operate analysis.
+              </p>
+              <ul className="space-y-2 text-sm text-gray-600">
+                <li>✓ MEG (Motionless Electromagnetic Generator) — Complete patent genealogy</li>
+                <li>✓ Anenergy System — Phi-field engineering framework</li>
+                <li>✓ Prioré Device — Therapeutic EM field generation</li>
+                <li>✓ Scalar EM Transducer — Wave propagation and measurement</li>
+                <li>✓ Time-Reversal Zone Reactor — Patent landscape</li>
+                <li>✓ TRZ Cold Fusion — Integrated analysis</li>
+              </ul>
+            </div>
+
+            <div className="border border-gray-200 rounded-lg p-8">
+              <h3 className="font-black text-xl text-gray-900 mb-4 flex items-center gap-2">
+                <span className="w-8 h-8 rounded-full bg-gray-900 text-white flex items-center justify-center text-sm font-black">2</span>
+                Engineering Build Plans (6 systems)
+              </h3>
+              <p className="text-gray-600 text-sm leading-relaxed mb-4">
+                Complete build documentation derived from verified sources. Every system includes detailed specifications, component selection, assembly procedures, and measurement validation protocols.
+              </p>
+              <ul className="space-y-2 text-sm text-gray-600">
+                <li>✓ Detailed schematics (CAD-ready formats)</li>
+                <li>✓ Bills of materials with component specifications</li>
+                <li>✓ Supplier sourcing options and cost estimates</li>
+                <li>✓ Step-by-step assembly instructions</li>
+                <li>✓ Measurement protocols and expected results</li>
+                <li>✓ Troubleshooting and validation frameworks</li>
+              </ul>
+            </div>
+
+            <div className="border border-gray-200 rounded-lg p-8">
+              <h3 className="font-black text-xl text-gray-900 mb-4 flex items-center gap-2">
+                <span className="w-8 h-8 rounded-full bg-gray-900 text-white flex items-center justify-center text-sm font-black">3</span>
+                Research Modules (8 modules, 80+ hours)
+              </h3>
+              <p className="text-gray-600 text-sm leading-relaxed mb-4">
+                Structured analysis of core electromagnetic theory. Each module bridges patent claims to engineering implementation. No speculation—all grounded in primary sources.
+              </p>
+              <ul className="space-y-2 text-sm text-gray-600">
+                <li>✓ Module 1: Classical EM Theory vs. Bearden Extensions</li>
+                <li>✓ Module 2: Regauging and Energy Extraction</li>
+                <li>✓ Module 3: Scalar Potential and Field Interactions</li>
+                <li>✓ Module 4: Resonance and Efficiency</li>
+                <li>✓ Module 5: Measurement and Validation</li>
+                <li>✓ Module 6: Patent Strategy and IP Protection</li>
+                <li>✓ Module 7: Regulatory Landscape</li>
+                <li>✓ Module 8: Advanced System Integration</li>
+              </ul>
+            </div>
+
+            <div className="border border-gray-200 rounded-lg p-8">
+              <h3 className="font-black text-xl text-gray-900 mb-4 flex items-center gap-2">
+                <span className="w-8 h-8 rounded-full bg-gray-900 text-white flex items-center justify-center text-sm font-black">4</span>
+                Tools & Reference Materials
+              </h3>
+              <p className="text-gray-600 text-sm leading-relaxed mb-4">
+                Practical resources for builders. Templates, frameworks, and reference documents.
+              </p>
+              <ul className="space-y-2 text-sm text-gray-600">
+                <li>✓ Component specification templates</li>
+                <li>✓ Measurement log templates</li>
+                <li>✓ FTO assessment framework</li>
+                <li>✓ Patent claim analysis worksheets</li>
+                <li>✓ Supplier comparison matrices</li>
+                <li>✓ Troubleshooting decision trees</li>
+                <li>✓ Validation protocol checklists</li>
+              </ul>
+            </div>
+
+            <div className="border border-gray-200 rounded-lg p-8">
+              <h3 className="font-black text-xl text-gray-900 mb-4 flex items-center gap-2">
+                <span className="w-8 h-8 rounded-full bg-gray-900 text-white flex items-center justify-center text-sm font-black">5</span>
+                Lifetime Access + Updates
+              </h3>
+              <p className="text-gray-600 text-sm leading-relaxed">
+                One purchase. Forever access. Quarterly updates as new patents are filed, research is published, and engineering frameworks are refined.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Who It's For */}
+      <section className="px-6 py-16 border-b border-gray-200 bg-gray-50">
+        <div className="max-w-3xl mx-auto">
+          <h2 className="text-3xl font-black text-gray-900 mb-8">Who This Is For</h2>
+
+          <div className="space-y-6">
+            <div className="flex gap-4 border border-gray-200 rounded-lg p-6 bg-white">
+              <CheckCircle2 size={24} className="text-gray-900 flex-shrink-0" />
+              <div>
+                <h3 className="font-bold text-lg text-gray-900 mb-2">Hardware engineers</h3>
+                <p className="text-gray-600">Building advanced electromagnetic systems and need complete, verified technical specifications grounded in primary sources.</p>
+              </div>
+            </div>
+
+            <div className="flex gap-4 border border-gray-200 rounded-lg p-6 bg-white">
+              <CheckCircle2 size={24} className="text-gray-900 flex-shrink-0" />
+              <div>
+                <h3 className="font-bold text-lg text-gray-900 mb-2">Research teams</h3>
+                <p className="text-gray-600">Validating theoretical frameworks with practical engineering. Need institutional-grade documentation and peer-reviewed validation.</p>
+              </div>
+            </div>
+
+            <div className="flex gap-4 border border-gray-200 rounded-lg p-6 bg-white">
+              <CheckCircle2 size={24} className="text-gray-900 flex-shrink-0" />
+              <div>
+                <h3 className="font-bold text-lg text-gray-900 mb-2">Patent attorneys</h3>
+                <p className="text-gray-600">Evaluating or building IP strategies in advanced electromagnetics. Need complete patent landscapes and FTO assessments.</p>
+              </div>
+            </div>
+
+            <div className="flex gap-4 border border-gray-200 rounded-lg p-6 bg-white">
+              <CheckCircle2 size={24} className="text-gray-900 flex-shrink-0" />
+              <div>
+                <h3 className="font-bold text-lg text-gray-900 mb-2">Serious builders</h3>
+                <p className="text-gray-600">Not hobbyists. People building working prototypes and validating against institutional standards. This is a $997 commitment for a reason.</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="mt-8 p-6 border-l-4 border-gray-900 bg-gray-100">
+            <p className="text-gray-600 text-sm">
+              <strong>Not for:</strong> Casual learners, people looking for cheap courses, or skeptics. This bundle requires hands-on engineering ability and serious intent. If you're not ready to build, save your $997.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Why This Bundle */}
+      <section className="px-6 py-16 border-b border-gray-200">
+        <div className="max-w-3xl mx-auto">
+          <h2 className="text-3xl font-black text-gray-900 mb-8">Why This Bundle Exists</h2>
+          <div className="prose prose-lg max-w-none text-gray-600">
+            <p>
+              Building advanced electromagnetic systems requires more than patents or academic papers. It requires understanding how they interconnect—how patent claims translate to engineering specs, how theoretical frameworks apply to real measurement, how IP landscapes affect your building process.
+            </p>
+            <p className="mt-6">
+              This bundle aggregates 6+ years of primary-source research into one unified system. Everything is sourced from verified documents. Everything is organized for builders. Everything is designed for people who actually want to construct working prototypes, not just read about theory.
+            </p>
+            <p className="mt-6">
+              The $997 price reflects the work involved: patent analysis, engineering specification, source verification, and institutional framework development. It's not a course. It's a professional resource for serious builders.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section className="px-6 py-16 bg-gray-900 text-white">
+        <div className="max-w-3xl mx-auto text-center">
+          <h2 className="text-4xl font-black mb-4">Ready to Build?</h2>
+          <p className="text-lg text-gray-300 mb-8 max-w-2xl mx-auto">
+            Everything you need to understand, design, and validate advanced electromagnetic systems. Sourced from primary research. Built for builders.
+          </p>
+          <button
+            onClick={handleCheckout}
+            className="inline-flex items-center justify-center gap-2 px-12 py-4 rounded-lg bg-white text-gray-900 font-black text-lg transition-all hover:bg-gray-100"
           >
-            Get Instant Access <ArrowRight size={16} />
-          </Link>
-          <p className="text-gray-600 text-xs mt-6">
-            Access granted immediately upon checkout. No installation required. Start researching today.
+            Purchase Bundle — $997 <ArrowRight size={18} />
+          </button>
+          <p className="text-gray-400 text-sm mt-6">
+            30-day money-back guarantee. Lifetime access. Quarterly updates.
           </p>
-        </section>
-      </div>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="px-6 py-12 bg-gray-50 border-t border-gray-200">
+        <div className="max-w-3xl mx-auto text-center text-sm text-gray-600">
+          <p className="mb-4">
+            Questions? Email <a href="mailto:support@zenithapex.com" className="text-gray-900 font-bold hover:underline">support@zenithapex.com</a>
+          </p>
+          <p>
+            Research Platform © 2026. Primary sources only. For serious builders.
+          </p>
+        </div>
+      </footer>
     </div>
   );
 }
