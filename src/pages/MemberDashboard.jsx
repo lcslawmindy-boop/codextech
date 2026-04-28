@@ -88,7 +88,7 @@ export default function MemberDashboard() {
         <div className="flex items-center gap-3">
           <Link to="/account" className="text-gray-400 hover:text-white text-sm transition-colors">Account</Link>
           {tier !== "elite" && (
-            <Link to="/pricing"
+            <Link to="/paywall"
               className="px-4 py-2 rounded-lg text-white text-sm font-black transition-all hover:opacity-90"
               style={{ backgroundColor: meta.hex }}>
               Upgrade
