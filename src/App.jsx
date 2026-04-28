@@ -172,6 +172,7 @@ import InstitutionalMethodology from './pages/InstitutionalMethodology';
 import CodextechHome from './pages/CodextechHome';
 import CodextechPricing from './pages/CodextechPricing';
 import CodextechDatabase from './pages/CodextechDatabase';
+import TikTokAnalytics from './pages/TikTokAnalytics';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -381,6 +382,7 @@ const AuthenticatedApp = () => {
           <Route path="/codextech" element={<CodextechHome />} />
           <Route path="/codextech-pricing" element={<CodextechPricing />} />
           <Route path="/codextech-database" element={<CodextechDatabase />} />
+          <Route path="/tiktok-analytics" element={<TikTokAnalytics />} />
 
           <Route path="*" element={<PageNotFound />} />
         </Route>
