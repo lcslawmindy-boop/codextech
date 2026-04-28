@@ -231,7 +231,6 @@ const AuthenticatedApp = () => {
         <Route element={<MobileLayout />}>
           <Route path="/" element={<CodextechLanding />} />
           <Route path="/zarp-landing" element={<ZarpLanding />} />
-          <Route path="/vault" element={<ConceptGraph />} />
           <Route path="/free-vault" element={<FreeVault />} />
           <Route path="/member-dashboard" element={<MemberDashboard />} />
           <Route path="/orders" element={<OrderTracking />} />
@@ -276,7 +275,6 @@ const AuthenticatedApp = () => {
           <Route path="/download-center" element={<DownloadCenter />} />
           <Route path="/invention-timeline" element={<InventionTimeline />} />
           <Route path="/pricing" element={<Pricing />} />
-          <Route path="/investor-portal" element={<InvestorPortal />} />
           <Route path="/account" element={<AccountSettings />} />
           <Route path="/beta-apply" element={<BetaApply />} />
           <Route path="/member-portal" element={<MemberPortal />} />
@@ -368,7 +366,7 @@ const AuthenticatedApp = () => {
 
           {/* Scalar Venture Vault Routes */}
           <Route path="/venture" element={<ScalarVentureHome />} />
-          <Route path="/vault" element={<VaultBrowser />} />
+          <Route path="/vault-browser" element={<VaultBrowser />} />
           <Route path="/build/:id" element={<BuildDetail />} />
           <Route path="/pricing-vault" element={<VaultPricing />} />
           <Route path="/institutional-licensing" element={<InstitutionalLicensing />} />

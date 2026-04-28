@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { base44 } from "@/api/base44Client";
+import { useState } from "react";
 import { Download, CheckCircle2, AlertCircle, LogIn } from "lucide-react";
 
 const NDA_TEXT = `CONFIDENTIALITY & NON-DISCLOSURE AGREEMENT
