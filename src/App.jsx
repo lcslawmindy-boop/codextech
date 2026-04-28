@@ -62,7 +62,7 @@ import AdminDownloadCenter from './pages/AdminDownloadCenter';
 import InventionLibrary from './pages/InventionLibrary';
 import DownloadCenter from './pages/DownloadCenter';
 import InventionTimeline from './pages/InventionTimeline';
-import Pricing from './pages/Pricing';
+
 import AccountSettings from './pages/AccountSettings';
 import BetaApply from './pages/BetaApply';
 import AdminBeta from './pages/AdminBeta';
@@ -254,7 +254,7 @@ const AuthenticatedApp = () => {
           <Route path="/invention-library" element={<InventionLibrary />} />
           <Route path="/download-center" element={<DownloadCenter />} />
           <Route path="/invention-timeline" element={<InventionTimeline />} />
-          <Route path="/pricing" element={<Pricing />} />
+
           <Route path="/account" element={<AccountSettings />} />
           <Route path="/beta-apply" element={<BetaApply />} />
           <Route path="/member-portal" element={<MemberPortal />} />
