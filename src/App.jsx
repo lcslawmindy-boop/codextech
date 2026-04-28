@@ -142,6 +142,7 @@ import CreateCommunityPost from './pages/CreateCommunityPost';
 import ABTestingDashboard from './pages/ABTestingDashboard';
 import RevenueAudit from './pages/RevenueAudit';
 import AdminNdaSignatures from './pages/AdminNdaSignatures';
+import AdminStripeCatalog from './pages/AdminStripeCatalog';
 import ScalarVentureHome from './pages/ScalarVentureHome';
 import VaultBrowser from './pages/VaultBrowser';
 import BuildDetail from './pages/BuildDetail';
@@ -342,6 +343,7 @@ const AuthenticatedApp = () => {
             <Route path="/admin-inventor-reviews" element={<AdminInventorReviews />} />
             <Route path="/admin-pdf-access" element={<AdminPdfAccess />} />
             <Route path="/admin-nda-signatures" element={<AdminNdaSignatures />} />
+            <Route path="/admin-stripe-catalog" element={<AdminStripeCatalog />} />
             <Route path="/email-funnel" element={<EmailFunnel />} />
             <Route path="/product-ladder" element={<ProductLadder />} />
             <Route path="/viral-scripts" element={<ViralScripts />} />
