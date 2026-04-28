@@ -117,9 +117,9 @@ export default function FreeVault() {
           </Link>
           <span className="text-xs text-green-600 border border-green-800 px-2 py-0.5 rounded font-bold">100% FREE</span>
         </div>
-        <Link to="/pricing"
+        <Link to="/vault"
           className="px-4 py-2 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white text-sm font-bold transition-colors flex items-center gap-1.5">
-          <Video size={13} /> Get Video Assembly
+          <Video size={13} /> Access the Database
         </Link>
       </div>
 
@@ -173,9 +173,9 @@ export default function FreeVault() {
                         className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-cyan-700 hover:bg-cyan-600 text-white font-bold transition-colors">
                         View Full BOM & Specs <ChevronRight size={16} />
                       </Link>
-                      <Link to="/pricing"
+                      <Link to="/vault"
                         className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gray-800 hover:bg-gray-700 text-gray-200 font-bold transition-colors border border-gray-700">
-                        <Video size={16} /> Get Video Guide
+                        <Video size={16} /> Access Database
                       </Link>
                     </div>
                   </div>
@@ -217,9 +217,9 @@ export default function FreeVault() {
             ))}
           </div>
           <div className="text-center">
-            <Link to="/pricing"
+            <Link to="/vault"
               className="inline-flex items-center gap-2 px-8 py-3 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-bold transition-all">
-              See All Pro Features <ChevronRight size={16} />
+              Access the Database <ChevronRight size={16} />
             </Link>
             <p className="text-gray-600 text-xs mt-3">$199/month annual billing · Cancel anytime · 30-day money-back guarantee</p>
           </div>
@@ -252,7 +252,7 @@ export default function FreeVault() {
         <p>© 2026 Zenith Apex LLC · C.O.D.E.X.T.E.C.H. · Engineering execution platform</p>
         <div className="flex justify-center gap-6 mt-3">
           <Link to="/terms" className="hover:text-gray-400">Terms</Link>
-          <Link to="/pricing" className="hover:text-gray-400">Pricing</Link>
+          <Link to="/vault" className="hover:text-gray-400">Database</Link>
           <Link to="/" className="hover:text-gray-400">Home</Link>
         </div>
       </footer>
