@@ -169,6 +169,9 @@ import SaaSPricing from './pages/SaaSPricing';
 import ResearchDatabase from './pages/ResearchDatabase';
 import ResearchBrief from './pages/ResearchBrief';
 import InstitutionalMethodology from './pages/InstitutionalMethodology';
+import CodextechHome from './pages/CodextechHome';
+import CodextechPricing from './pages/CodextechPricing';
+import CodextechDatabase from './pages/CodextechDatabase';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -375,6 +378,9 @@ const AuthenticatedApp = () => {
           <Route path="/research-database" element={<ResearchDatabase />} />
           <Route path="/research-brief-landing" element={<ResearchBrief />} />
           <Route path="/institutional-methodology" element={<InstitutionalMethodology />} />
+          <Route path="/codextech" element={<CodextechHome />} />
+          <Route path="/codextech-pricing" element={<CodextechPricing />} />
+          <Route path="/codextech-database" element={<CodextechDatabase />} />
 
           <Route path="*" element={<PageNotFound />} />
         </Route>
