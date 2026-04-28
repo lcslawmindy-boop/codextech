@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { ArrowRight, Download, Mail } from "lucide-react";
+import { base44 } from "@/api/base44Client";
 
 export default function ResearchBrief() {
   const [email, setEmail] = useState("");
