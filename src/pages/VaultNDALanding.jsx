@@ -2,53 +2,153 @@ import { useState } from "react";
 import { base44 } from "@/api/base44Client";
 import { Download, CheckCircle2, AlertCircle, LogIn } from "lucide-react";
 
-const NDA_TEXT = `CONFIDENTIALITY & NON-DISCLOSURE AGREEMENT
+const NDA_TEXT = `CONFIDENTIALITY, NON-DISCLOSURE, AND ASSUMPTION OF RISK AGREEMENT
 
-This Confidentiality & Non-Disclosure Agreement ("Agreement") is entered into as of the date of electronic signature below, by and between Zenith Apex LLC, operating as C.O.D.E.X.T.E.C.H. ("Disclosing Party"), and the Individual or Entity accessing this platform ("Receiving Party").
+EFFECTIVE DATE: As of the date of electronic signature below
 
-WHEREAS, the Disclosing Party possesses certain confidential information, proprietary research, engineering systems, and intellectual property related to advanced electromagnetic engineering, renewable energy systems, and related technologies;
+PARTIES:
+Operator of this platform, C.O.D.E.X.T.E.C.H. Research Archive ("Platform Operator"), and the Individual or Entity accessing this platform ("User").
 
-WHEREAS, the Receiving Party wishes to gain access to such confidential information for research, educational, and evaluation purposes only;
+═══════════════════════════════════════════════════════════════════════════════
 
-NOW, THEREFORE, in consideration of mutual covenants and agreements, the parties agree as follows:
+1. RESEARCH AND EDUCATIONAL PURPOSE ONLY
 
-1. CONFIDENTIAL INFORMATION
-Confidential Information includes, but is not limited to:
-- Engineering schematics, build plans, and technical specifications
-- Course materials and educational frameworks
-- Proprietary analysis methodologies
-- Investor relations documentation
-- Business strategies and market analysis
-- Any information marked as "Confidential" or proprietary in nature
+This platform provides access to historical scientific research, patent documents, published academic literature, and theoretical analysis frameworks for research and educational purposes only. 
 
-2. PERMITTED USES
-Receiving Party may use Confidential Information solely for:
-- Personal research and educational purposes
-- Evaluation of membership value
-- Private prototype construction for personal use
-- Not for commercial distribution without written consent
+User acknowledges and agrees that:
+- All content is presented for scholarly review and theoretical understanding
+- No claims are made regarding operational feasibility, safety, efficacy, or legal status of any system
+- Content is derived from public sources: USPTO patents, peer-reviewed journals, government technical reports, and published academic literature
+- No content constitutes legal, financial, medical, engineering, or investment advice
 
-3. OBLIGATIONS
-Receiving Party agrees to:
-- Maintain all Confidential Information in strict confidence
-- Not disclose to third parties without prior written consent
-- Not reverse-engineer or reproduce proprietary systems for commercial sale
-- Return all materials upon request or termination
-- Use industry-standard security measures for digital materials
+═══════════════════════════════════════════════════════════════════════════════
 
-4. TERM
-This Agreement shall remain in effect for a period of three (3) years from the date of last disclosure, or indefinitely for trade secrets, as applicable under law.
+2. PRIMARY SOURCE CITATIONS & TRANSPARENCY
 
-5. NO LICENSE GRANTED
-Access to Confidential Information does not grant any license, ownership, or patent rights to Receiving Party.
+All research content on this platform is sourced from public, verifiable documents:
+- U.S. Patents (USPTO.gov) — specific patent numbers provided
+- Peer-reviewed journals (IEEE, Nature, Physics Letters, arXiv)
+- Government technical reports (DARPA, Department of Energy, declassified archives)
+- Published academic textbooks and conference proceedings
+- Government databases (OSTI.gov, NASA Technical Reports Server)
 
-6. DISCLAIMER
-The Disclosing Party makes no warranty regarding the accuracy or completeness of Confidential Information. Use is at Receiving Party's own risk.
+The Platform Operator makes no original claims. All material is attribution-based and citable to primary sources.
 
-7. GOVERNING LAW
-This Agreement shall be governed by the laws of the State of California.
+═══════════════════════════════════════════════════════════════════════════════
 
-By electronically signing below, you acknowledge that you have read, understood, and agree to be bound by all terms and conditions of this Agreement.`;
+3. COMPLETE LIABILITY DISCLAIMER
+
+PLATFORM OPERATOR MAKES NO WARRANTY AND ASSUMES NO LIABILITY FOR:
+
+a) Safety: All engineering systems, theoretical devices, and technical specifications are presented for historical and theoretical analysis only. Attempting to construct, operate, or test any device carries risk of:
+   - Physical injury or death
+   - Electrical hazards (high voltage, electromagnetic fields)
+   - Property damage
+   - Radiation exposure
+   - Chemical hazards
+   Platform Operator assumes no liability for injury, death, or property damage resulting from any user action.
+
+b) Legality: User is solely responsible for ensuring any use of this content complies with:
+   - Federal, state, and local laws
+   - FCC regulations (electromagnetic emissions)
+   - EPA regulations (hazardous materials)
+   - OSHA workplace safety standards
+   - Patent law and intellectual property restrictions
+   - Any other applicable regulations
+   Platform Operator assumes no liability for legal consequences of user actions.
+
+c) Accuracy: While all content is sourced from verifiable public documents, Platform Operator makes no warranty regarding:
+   - Accuracy or completeness of the information
+   - Fitness for any particular purpose
+   - Non-infringement of third-party intellectual property rights
+   - Freedom from technical errors or omissions
+
+d) Medical/Health Claims: This platform makes no medical, therapeutic, or health-related claims. Any devices or theories discussed are NOT medical devices and have NOT been cleared by the FDA. User assumes all liability for any health-related use or interpretation.
+
+e) Financial/Investment Claims: This platform provides NO financial, investment, or business advice. Platform Operator assumes no liability for financial losses resulting from any decision made based on platform content.
+
+═══════════════════════════════════════════════════════════════════════════════
+
+4. ASSUMPTION OF RISK
+
+User acknowledges and assumes:
+- All risks associated with accessing, reviewing, and using this platform's content
+- All risks of any experimentation, construction, testing, or implementation
+- All responsibility for compliance with applicable laws and regulations
+- All liability for any actions taken based on platform content
+
+═══════════════════════════════════════════════════════════════════════════════
+
+5. INDEMNIFICATION
+
+User agrees to indemnify, defend, and hold harmless Platform Operator from and against any and all claims, damages, losses, liabilities, costs, and expenses (including attorneys' fees) arising from:
+- User's access or use of the platform
+- User's violation of this Agreement
+- User's violation of applicable laws
+- User's infringement of third-party intellectual property rights
+- Any injury, death, or property damage resulting from user actions
+- Any legal action brought against Platform Operator arising from user actions
+
+═══════════════════════════════════════════════════════════════════════════════
+
+6. CONFIDENTIALITY & PROPRIETARY INFORMATION
+
+User agrees to:
+- Maintain all platform content in confidence
+- Not republish, redistribute, or commercialize proprietary analysis frameworks without consent
+- Not reverse-engineer proprietary tools or systems for commercial sale
+- Respect intellectual property rights of all cited sources
+
+═══════════════════════════════════════════════════════════════════════════════
+
+7. PERMITTED USES
+
+Authorized uses include:
+- Personal research and academic study
+- Non-commercial educational purposes
+- Private prototype construction for personal experimentation (user bears all risk)
+- Citation and reference in academic or professional contexts with proper attribution
+
+Prohibited uses include:
+- Commercial sale without explicit written consent
+- Republication without attribution
+- False claims of Platform Operator endorsement
+- Any use that violates applicable law
+
+═══════════════════════════════════════════════════════════════════════════════
+
+8. NO PROFESSIONAL ADVICE
+
+Platform Operator is not a licensed engineer, attorney, or medical professional. Content is provided by independent researchers and is for educational purposes only. User should consult qualified professionals before making any decisions related to safety, legality, or health.
+
+═══════════════════════════════════════════════════════════════════════════════
+
+9. GOVERNING LAW & DISPUTE RESOLUTION
+
+- This Agreement is governed by the laws of the State of California
+- User waives any right to jury trial
+- Any disputes shall be resolved through binding arbitration
+- Platform Operator is not incorporated; User consents to jurisdiction over individual operator
+
+═══════════════════════════════════════════════════════════════════════════════
+
+10. SEVERABILITY
+
+If any provision of this Agreement is found invalid or unenforceable, remaining provisions shall remain in full force and effect.
+
+═══════════════════════════════════════════════════════════════════════════════
+
+ACKNOWLEDGMENT:
+
+By electronically signing below, User acknowledges that:
+✓ User has read and understands this entire Agreement
+✓ User understands the research-only nature of all content
+✓ User assumes all risks of platform use
+✓ User waives any claims against Platform Operator
+✓ User indemnifies Platform Operator from any liability
+✓ User is solely responsible for legal compliance
+✓ User understands no warranties are made regarding safety, accuracy, or fitness
+✓ User accepts full liability for any actions taken based on platform content`;
 
 export default function VaultNDALanding() {
   const [fullName, setFullName] = useState("");
