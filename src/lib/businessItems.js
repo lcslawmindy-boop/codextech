@@ -228,6 +228,8 @@ export const businessItems = [
     title: "Anenergy Pump Demonstration Circuit",
     tagline: "Physical demonstration of phi-field extraction — the Moray mechanism in a kit",
     price: "$297",
+    restricted: true,
+    restrictionReason: "Bearden Part 4 anenergy pump (1983) — patent landscape review required before sales"
     audience: "Free energy researchers, electrical engineers, advanced hobbyists, university labs",
     description: "Tabletop demonstration circuit implementing Bearden's Part 4 anenergy pump: shielded toroidal coil geometry where gradient-phi inside = 0 while phi > phi-zero is maintained by oscillated phi-application. Includes pulse controller, phi-differential measurement points, and Moray-type oscillation cycle documentation.",
     modules: [],
@@ -243,6 +245,8 @@ export const businessItems = [
     title: "Scalar Energy Bottle Interferometer (Research Prototype)",
     tagline: "Two-transmitter zero-vector interference zone — tabletop energy capture demonstration",
     price: "$649",
+    restricted: true,
+    restrictionReason: "Bearden Part 4 energy bottle figures (1983) — patent analysis pending"
     audience: "Defense R&D labs, scalar EM researchers, advanced physics experimenters",
     description: "Two-transmitter scalar EM system creating a controlled Energy Bottle interference zone with E=0, B=0 output from each transmitter. Includes scalar pulse timing circuit for range determination (scalar pulse arrives instantaneously; Hertz pulse delayed by range = c*Δt), and dual-detector panel showing conventional spectrum analyzer vs scalar detector differential.",
     modules: [],
@@ -288,6 +292,8 @@ export const businessItems = [
     title: "Open-System Magnetic Generator (Prototype Plans)",
     tagline: "Engineering plans based on Kromrey/Gray/Searl design principles",
     price: "$179",
+    restricted: true,
+    restrictionReason: "Edwin Gray US Patent #3,890,548 & Searl generator — patent risk assessment pending"
     audience: "Advanced DIY engineers, free energy researchers",
     description: "Detailed engineering drawings for a rotating electromagnetic open-system generator inspired by Kromrey G-field generator, Edwin Gray's pulsed capacitor discharge engine, and Searl effect design.",
     modules: [],
@@ -519,6 +525,8 @@ export const businessItems = [
     title: "Prioré-Type Multichannel EM Therapy System",
     tagline: "A modern DDS implementation of the Prioré multichannel modulation architecture",
     price: "$697",
+    restricted: true,
+    restrictionReason: "Bearden Fig. 10 Prioré device (1988 Excalibur); French Patent 1,342,772 (1962) — patent status verification needed"
     audience: "Biomedical engineers, alternative medicine clinics, longevity investors, cancer research labs",
     description: "Modern solid-state implementation of Bearden's Fig. 10 Prioré device architecture using DDS (direct digital synthesis) signal generators, FPGA modulation chain, and programmable hyperspatial layer outputs (S'/S''/S'''). Research version outputs programmable multichannel modulated EM fields for biological research. Clinical version adds shielded applicator coils and treatment protocol software.",
     modules: [],
@@ -780,6 +788,8 @@ export const businessItems = [
     title: "MEG Replication Kit (Motionless Electromagnetic Generator)",
     tagline: "Build the peer-reviewed, independently replicated COP>1 device from Foundations of Physics Letters 2001",
     price: "$847",
+    restricted: true,
+    restrictionReason: "Anastasovski et al. Foundations of Physics Letters (2001) — patent landscape & IP rights review required"
     audience: "Electrical engineers, free energy researchers, advanced DIY inventors, university physics labs, defense R&D",
     description: "Complete engineering plans for replicating the Motionless Electromagnetic Generator (MEG) as described in Anastasovski et al. (Found. Phys. Lett. 14(1), 2001) and independently replicated by Naudin. Includes: core permanent magnet specifications, primary/secondary coil winding ratios, switching protocol and timing, measurement methodology for validating COP>1, common replication pitfalls, and the theoretical framework in O(3) electrodynamics explaining why the vacuum B(3) field continuously replenishes the permanent magnet energy without depleting it.",
     modules: [],
@@ -896,6 +906,8 @@ export const businessItems = [
     title: "Asymmetric Regauging Overunity Generator (Type 2 Power Cell)",
     tagline: "COP>1 electrical generator based on the Bearden asymmetric regauging patent-pending circuit",
     price: "$897",
+    restricted: true,
+    restrictionReason: "Bearden patent-pending overunity circuit (1993–1995) — patent clearance required before commercialization"
     audience: "Free energy engineers, electrical engineers, advanced DIY inventors, defense R&D, clean energy investors",
     description: "Engineering implementation of Bearden's asymmetric self-regauging overunity circuit (Patent Pending, documented 1993-1995). Two-loop architecture: Source loop A with spherical conducting shell asymmetrically regauges load loop B via a bridging conductor, using S-flow, dφ/dt flow, and EMF flow. Assumptions: capacitances of A and B very small; charge B large, power-free switching. Plans include Chung carbon filament negative resistor add-on for enhanced asymmetric extraction, full BOM, winding specifications, and switching protocol.",
     modules: [],
@@ -911,6 +923,8 @@ export const businessItems = [
     title: "Telomere Regeneration Device (TRD-1)",
     tagline: "AI-assisted scalar EM porthole therapy system targeting the aging correlate for telomere restoration",
     price: "$2397",
+    restricted: true,
+    restrictionReason: "Bearden MCCS framework (Explore! 1995) — medical device classification & FDA pathway required"
     audience: "Longevity biotech investors, regenerative medicine labs, advanced cancer research institutes, billionaire longevity funds",
     description: "A modern implementation of Bearden's telomere regeneration protocol derived from the MCCS framework. Three-stage system: (1) Emission Spectroscopy Stage — measures the body's full TW emission spectrum in a zero-reference shielded environment; (2) Delta Computation Stage — AI computes the aging 'telomere-reduction correlate' delta between healthy reference and patient spectrum; (3) Porthole Reinsertion Stage — amplified delta spectrum reintroduced via phased antenna array into body porthole geometry, adding phase conjugate replicas. Three 30-second irradiation sessions, one week apart, protocol.",
     modules: [],
@@ -926,6 +940,8 @@ export const businessItems = [
     title: "Portable Porthole Disease Treatment System (PPDTS)",
     tagline: "Suitcase-sized scalar EM disease reversal system for mass casualty and pandemic response — 95% survival rate projected",
     price: "$1697",
+    restricted: true,
+    restrictionReason: "Bearden Explore! 1999 (medical/mass casualty claims) — regulatory pathway & liability assessment required"
     audience: "Emergency medicine, pandemic preparedness agencies, FEMA, military medical corps, longevity clinics",
     description: "Implementation of Bearden's mass casualty treatment concept from the 1999 Explore! paper. Portable unit (fits large suitcase, laptop-controlled) implements the 'delta spectrum' reinsertion protocol: measures patient baseline TW emission, computes disease delta vs healthy reference database, introduces amplified disease antiengine via wire antenna blanket (patient lies between two antenna blankets), irradiates 30 seconds, moves to next patient. Assembly-line capable: one right after another. 1st generation projects 70% survival from previously fatal mass casualty scenarios.",
     modules: [],
@@ -941,6 +957,8 @@ export const businessItems = [
     title: "Time-Reversal Zone Cold Fusion Reactor (TRZ-CFR)",
     tagline: "Tabletop nuclear energy via deuterium-palladium TR-zone electrolysis — anomalous LW emission explained and engineered",
     price: "$1297",
+    restricted: true,
+    restrictionReason: "Patterson Power Cell geometry (Figure 29, Explore! 1995) — patent & nuclear regulatory review required"
     audience: "Cold fusion researchers, nuclear physics labs, energy independence entrepreneurs, defense advanced energy programs",
     description: "Research prototype implementing Bearden's TRZ (Time-Reversal Zone) framework applied to cold fusion electrolysis. Palladium-clad microsphere cathode (Patterson Power Cell geometry) in heavy water electrolytic cell, with specialized LW emission detection array (GM tube + scintillation detector pair with cross-correlation firmware). Includes time-density charging monitoring protocol, delta spectrum logging, and anomalous radiation correlate analysis. Designed to systematically reproduce and measure China Lake anomalies (73 sigma above background).",
     modules: [],
@@ -1042,6 +1060,8 @@ export const businessItems = [
     title: "T-Polarized EM Wave Transducer (Time-Domain EM Engineering System)",
     tagline: "The first commercial implementation of the Bearden two-stage transduction chain — transverse to longitudinal to time-density wave",
     price: "$1197",
+    restricted: true,
+    restrictionReason: "Bearden Figure 2 (Explore! 1999) — patent landscape review for phase conjugate mirror applications needed"
     audience: "Scalar EM researchers, defense R&D labs, consciousness technology startups, bioelectromagnetics experimenters",
     description: "Research prototype implementing Bearden's Figure 2 two-stage EM wave transduction chain: Stage 1 converts transverse EM to longitudinal surge wave via phase conjugate mirror pairing; Stage 2 converts longitudinal to time-density wave (oscillating rate of time). Includes standard spectrum analyzer alongside specialized scalar detector to demonstrate the anomalous invisibility of transduced waves to conventional instruments. Applications: scalar communications, psychoenergetics research, biofield therapeutic research.",
     modules: [],
@@ -1141,6 +1161,8 @@ export const businessItems = [
     title: "Bedini Environmental EM Signal Conditioner (BESC-1)",
     tagline: "Pre-condition your Rife, PEMF, or Priore-type therapy signals to match the local vacuum environment",
     price: "$897",
+    restricted: true,
+    restrictionReason: "Bedini proprietary tube conditioning method (Nov 2002) — patent status & IP licensing required"
     audience: "Bioelectromagnetics labs, Rife therapy clinics, Priore-type device operators, longevity biotech, cloning research facilities",
     description: "A signal pre-conditioning module that force-fits the infolded longitudinal EM dynamics of any applied therapy signal to the local vacuum and EM environment. Based on Bedini's 2002 discovery using electron tube circuitry operated in Bedini's proprietary reverse mode. Includes an oscilloscope-based conditioning verification output so the operator can confirm proper environmental matching is achieved before applying signals to biological targets. Plug-in compatible with standard Rife, PEMF, and DDS therapy outputs.",
     modules: [],
@@ -1171,6 +1193,8 @@ export const businessItems = [
     title: "Cloning Efficiency Enhancement System (CEES)",
     tagline: "Apply Bedini-conditioned signals to somatic nucleus transfer procedures — targeting the root cause of cloning failure",
     price: "$2397",
+    restricted: true,
+    restrictionReason: "Cloning technology (mammalian SCNT) — regulatory, ethical & IP landscape review required before commercialization"
     audience: "Cloning research institutes, reproductive biology labs, agricultural biotech, livestock cloning operations, conservation cloning programs",
     description: "A complete research system applying Bedini's environmental EM conditioning to somatic cell nuclear transfer (SCNT) cloning procedures. Three-stage process: (1) Map local vacuum EM environment in the operating facility; (2) Measure infolded EM fingerprint of donor somatic nucleus and host egg cell; (3) Apply Bedini-conditioned bridging signals to reduce EM environment mismatch during nuclear transfer. Designed to systematically test Bearden/Bedini's hypothesis that infolded EM mismatch is the primary driver of worldwide cloning inefficiency.",
     modules: [],
