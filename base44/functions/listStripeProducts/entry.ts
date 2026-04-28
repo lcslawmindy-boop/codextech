@@ -11,7 +11,22 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Admin only' }, { status: 403 });
     }
 
-    const products = await stripe.products.list({ limit: 100, active: true });
+    const [products, prices] = await Promise.all([
+      stripe.products.list({ limit: 100, active: true }),
+      stripe.prices.list({ limit: 100, active: true }),
+    ]);
+
+    // Map prices to their product
+    const pricesByProduct = {};
+    for (const price of prices.data) {
+      if (!pricesByProduct[price.product]) pricesByProduct[price.product] = [];
+      pricesByProduct[price.product].push({
+        id: price.id,
+        unit_amount: price.unit_amount,
+        currency: price.currency,
+        recurring: price.recurring ? price.recurring.interval : null,
+      });
+    }
 
     return Response.json({
       products: products.data.map(p => ({
@@ -20,6 +35,7 @@ Deno.serve(async (req) => {
         description: p.description || '',
         active: p.active,
         created: p.created,
+        prices: pricesByProduct[p.id] || [],
       }))
     });
   } catch (error) {

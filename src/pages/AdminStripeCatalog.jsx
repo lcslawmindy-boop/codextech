@@ -155,7 +155,18 @@ export default function AdminStripeCatalog() {
                       <h3 className="text-white font-black text-sm mt-0.5">{item.stripeData.name}</h3>
                       <p className="text-gray-600 text-xs font-mono mt-0.5">{pid}</p>
                     </div>
-                    <span className="text-green-400 font-black text-sm whitespace-nowrap">{item.price}</span>
+                    <div className="text-right">
+                      <span className="text-green-400 font-black text-sm whitespace-nowrap">{item.price}</span>
+                      {item.stripeData?.prices?.length > 0 && (
+                        <div className="text-gray-500 text-xs mt-0.5">
+                          {item.stripeData.prices.map(pr => (
+                            <span key={pr.id} className="block">
+                              ${(pr.unit_amount / 100).toFixed(2)}{pr.recurring ? `/${pr.recurring}` : " one-time"}
+                            </span>
+                          ))}
+                        </div>
+                      )}
+                    </div>
                   </div>
 
                   <div className="mb-3">
@@ -203,6 +214,15 @@ export default function AdminStripeCatalog() {
                           <h3 className="text-white font-black text-sm">{p.name}</h3>
                           <p className="text-gray-600 text-xs font-mono mt-0.5">{p.id}</p>
                         </div>
+                        {p.prices?.length > 0 && (
+                          <div className="text-right">
+                            {p.prices.map(pr => (
+                              <span key={pr.id} className="block text-green-400 font-black text-sm">
+                                ${(pr.unit_amount / 100).toFixed(2)}{pr.recurring ? `/${pr.recurring}` : " one-time"}
+                              </span>
+                            ))}
+                          </div>
+                        )}
                       </div>
                       <div className="mb-3">
                         <label className="block text-xs text-gray-500 mb-1">Description</label>
