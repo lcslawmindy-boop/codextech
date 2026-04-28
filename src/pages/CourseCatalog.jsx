@@ -113,7 +113,7 @@ function CourseCard({ item }) {
         <div className="flex items-center gap-4 text-xs text-gray-500 mb-4">
           <span className="flex items-center gap-1"><Users size={11} /> {item.audience.split(",")[0]}</span>
           {item.modules.length > 0 && (
-            <span className="flex items-center gap-1"><Play size={11} /> {item.modules.length} modules</span>
+            <span className="flex items-center gap-1"><Play size={11} /> {item.modules.length} sections</span>
           )}
           <span className="flex items-center gap-1"><Star size={11} className="text-yellow-500" /> Instant access</span>
         </div>
@@ -127,7 +127,7 @@ function CourseCard({ item }) {
               className="flex items-center gap-1.5 text-xs text-gray-400 hover:text-gray-200 transition-colors mb-3"
             >
               {expanded ? <ChevronUp size={13} /> : <ChevronDown size={13} />}
-              {expanded ? "Hide" : "View"} curriculum ({item.modules.length} modules)
+              {expanded ? "Hide" : "View"} framework ({item.modules.length} sections)
             </button>
             {expanded && (
               <ol className="list-decimal list-inside space-y-1.5 mb-4 border-l-2 border-gray-700 ml-2 pl-4">
@@ -140,7 +140,7 @@ function CourseCard({ item }) {
         )}
 
         <div className="mt-auto pt-4 border-t border-gray-800">
-          <CheckoutButton item={item} label={`Enroll Now — ${item.price}`} />
+          <CheckoutButton item={item} label={`Access Module — ${item.price}`} />
           <div className="flex items-center justify-between mt-3">
             <p className="text-gray-700 text-xs">
               <span className="text-gray-600">Source: </span>{item.source}
@@ -213,8 +213,8 @@ export default function CourseCatalog() {
           </Link>
           <div className="w-px h-5 bg-gray-700" />
           <div>
-            <h1 className="text-white font-bold text-lg tracking-tight">Courses & Research Documents</h1>
-            <p className="text-gray-500 text-xs">Primary-source curriculum from the Bearden archive · {courses.length} courses · {pdfs.length} PDF books</p>
+            <h1 className="text-white font-bold text-lg tracking-tight">Research Modules & Documents</h1>
+            <p className="text-gray-500 text-xs">Structured analysis framework · {courses.length} research modules · {pdfs.length} technical documents</p>
           </div>
         </div>
         <div className="flex items-center gap-3 text-xs">
@@ -235,10 +235,11 @@ export default function CourseCatalog() {
       <div className="flex-1 overflow-y-auto px-6 py-8 max-w-7xl mx-auto w-full">
         {!isSuccess && (
           <div className="mb-10 text-center max-w-3xl mx-auto">
-            <h2 className="text-3xl font-bold text-white mb-3">Master Bearden's Scalar EM Framework</h2>
+            <h2 className="text-3xl font-bold text-white mb-3">Research Modules: Structured Analysis Framework</h2>
             <p className="text-gray-400 leading-relaxed">
-              Every course and document is built directly from primary source material — original Bearden papers (1982–2002),
-              Soviet research declassified citations, and the full annotated archive. No speculation. All source-documented.
+              Each research module provides: Research Objective → Source Material → System Breakdown → Engineering Interpretation → 
+              Build Implications → Limitations/Unknowns. Built directly from primary sources — original Bearden papers (1982–2002),
+              peer-reviewed literature, and declassified technical archives. No speculation. All source-documented.
             </p>
           </div>
         )}
@@ -247,7 +248,7 @@ export default function CourseCatalog() {
         <section className="mb-14">
           <div className="flex items-center gap-3 mb-6">
             <Play size={16} className="text-blue-400" />
-            <h2 className="text-white font-bold text-xl">Video Courses</h2>
+            <h2 className="text-white font-bold text-xl">Research Modules</h2>
             <span className="text-xs text-gray-500 px-2 py-0.5 rounded-full bg-gray-800">{courses.length} available</span>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">

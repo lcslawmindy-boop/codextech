@@ -1,9 +1,10 @@
-// Detailed lesson plans for each course — keyed by course title slug
-// Each module has 3–5 lessons with description + duration estimate
+// Research module framework — structured technical analysis
+// Each section follows: Research Objective → Source Material → System Breakdown → 
+// Engineering Interpretation → Build Implications → Limitations/Unknowns
 
 export const coursePlans = {
   "the-4-vectors": {
-    title: "The 4 Vectors: Bearden's Foundation of Physical Reality",
+    title: "The 4-Vector Framework: Foundational Electromagnetic Analysis",
     stripeProductId: "prod_UK6duAtEI5PhM5",
     price: "$147",
     icon: "📐",
@@ -61,7 +62,7 @@ export const coursePlans = {
   },
 
   "scalar-longitudinal-wave-engineering": {
-    title: "Scalar Longitudinal Wave Engineering: Theory to Device",
+    title: "Scalar Longitudinal Wave Systems: Technical Framework",
     stripeProductId: "prod_UK6dMpBcrEfAEZ",
     price: "$247",
     icon: "📡",
@@ -126,7 +127,7 @@ export const coursePlans = {
   },
 
   "anenergy-phi-field": {
-    title: "Anenergy: Engineering the Phi-Field for Free Energy Extraction",
+    title: "Anenergy Systems: Scalar Potential Energy Extraction Framework",
     stripeProductId: "prod_UK6d3qvfMq12d7",
     price: "$197",
     icon: "⚡",
@@ -189,7 +190,7 @@ export const coursePlans = {
   },
 
   "gravitobiology": {
-    title: "Gravitobiology: The Soviet Secret Science of EM Life Control",
+    title: "Gravitobiological Systems Analysis: Theory and Framework",
     stripeProductId: "prod_UK6dViE3GxDCpu",
     price: "$397",
     icon: "🧫",
@@ -290,7 +291,7 @@ export const coursePlans = {
   },
 
   "bioelectromagnetics-kindling": {
-    title: "Bioelectromagnetics & the Kindling Effect",
+    title: "Bioelectromagnetic Systems: Kindling and Energy Analysis",
     stripeProductId: "prod_UK6dOVTKfVuo3j",
     price: "$297",
     icon: "🧬",
@@ -363,7 +364,7 @@ export const coursePlans = {
   },
 
   "priore-machine": {
-    title: "The Priore Machine: Science, Politics, and the Suppression of an Electromagnetic Cancer Cure",
+    title: "Prioré System Analysis: Technical Reconstruction and Assessment",
     stripeProductId: "prod_UK6dOmbdthIa0u",
     price: "$297",
     icon: "🦠",
@@ -436,7 +437,7 @@ export const coursePlans = {
   },
 
   "bedini-environmental-em-conditioning": {
-    title: "Bedini Environmental EM Conditioning: The Missing Ingredient in Rife, Priore & Cloning",
+    title: "Environmental EM Conditioning Framework: Integration Analysis",
     stripeProductId: "prod_UK6d8QLNRiVVT6",
     price: "$347",
     icon: "🧬",
@@ -508,7 +509,7 @@ export const coursePlans = {
   },
 
   "waddington-valleys-infolded-em": {
-    title: "Waddington Valleys & Infolded EM: The Complete Epigenetic Reprogramming Physics",
+    title: "Epigenetic Landscape Model: EM Integration Analysis",
     stripeProductId: "prod_UK6dtsfzCXNs0t",
     price: "$297",
     icon: "🌿",
