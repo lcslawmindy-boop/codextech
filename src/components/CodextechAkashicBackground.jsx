@@ -14,7 +14,7 @@ export default function CodextechAkashicBackground() {
     canvas.height = window.innerHeight;
 
     // Icon symbols for floating spheres
-    const icons = ["⚡", "🛰️", "🚀", "💡", "💡", "💡", "🔬", "⚙️", "🧬", "📡", "🔭", "⛓️", "🌟"];
+    const icons = ["⚡", "🛰️", "🚀", "💡", "💡", "💡", "💡", "🔬", "⚙️", "🧬", "📡", "🔭", "⛓️", "🌟", "⚗️", "🔋", "💎", "🧲", "📊", "🔮"];
     
     // Floating elements
     const elements = [];
@@ -102,8 +102,20 @@ export default function CodextechAkashicBackground() {
           ctx.arc(0, -r * 0.3, r * 0.15, 0, Math.PI * 2);
           ctx.fill();
         } else if (iconType === "💡") {
-          // Lightbulb - bright yellow
-          ctx.fillStyle = "#FFFF00";
+          // Lightbulb - animated glowing with color shift
+          const lightGlow = Math.sin(this.pulsePhase * 2) * 0.5 + 0.5;
+          const glowColors = ["#FFFF00", "#FF6B6B", "#4ECDC4", "#FFD93D"];
+          const glowColor = glowColors[Math.floor((this.pulsePhase / Math.PI) % glowColors.length)];
+          
+          // Glow halo
+          ctx.fillStyle = glowColor;
+          ctx.globalAlpha = lightGlow * 0.3;
+          ctx.beginPath();
+          ctx.arc(0, -r * 0.2, r * 0.5, 0, Math.PI * 2);
+          ctx.fill();
+          
+          ctx.globalAlpha = 1;
+          ctx.fillStyle = glowColor;
           ctx.beginPath();
           ctx.arc(0, -r * 0.2, r * 0.35, 0, Math.PI * 2);
           ctx.fill();
@@ -210,6 +222,86 @@ export default function CodextechAkashicBackground() {
           ctx.strokeStyle = "#FFA500";
           ctx.lineWidth = 1.5;
           ctx.stroke();
+        } else if (iconType === "⚗️") {
+          // Flask - purple/red
+          ctx.fillStyle = "#FF6B6B";
+          ctx.beginPath();
+          ctx.moveTo(-r * 0.3, -r * 0.5);
+          ctx.lineTo(-r * 0.3, r * 0.2);
+          ctx.bezierCurveTo(-r * 0.3, r * 0.5, r * 0.3, r * 0.5, r * 0.3, r * 0.2);
+          ctx.lineTo(r * 0.3, -r * 0.5);
+          ctx.closePath();
+          ctx.fill();
+          ctx.strokeStyle = "#FF4444";
+          ctx.lineWidth = 1.5;
+          ctx.stroke();
+          // Liquid inside
+          ctx.fillStyle = "#FF88AA";
+          ctx.beginPath();
+          ctx.moveTo(-r * 0.25, r * 0.05);
+          ctx.bezierCurveTo(-r * 0.25, r * 0.4, r * 0.25, r * 0.4, r * 0.25, r * 0.05);
+          ctx.lineTo(-r * 0.25, r * 0.05);
+          ctx.fill();
+        } else if (iconType === "🔋") {
+          // Battery - lime green
+          ctx.fillStyle = "#7FFF00";
+          ctx.fillRect(-r * 0.25, -r * 0.5, r * 0.5, r * 0.8);
+          ctx.fillStyle = "#32CD32";
+          ctx.fillRect(-r * 0.15, r * 0.35, r * 0.3, r * 0.2);
+          ctx.strokeStyle = "#00AA00";
+          ctx.lineWidth = 1.5;
+          ctx.strokeRect(-r * 0.25, -r * 0.5, r * 0.5, r * 0.8);
+        } else if (iconType === "💎") {
+          // Crystal/Diamond - cyan
+          ctx.fillStyle = "#00D9FF";
+          ctx.beginPath();
+          ctx.moveTo(0, -r * 0.7);
+          ctx.lineTo(r * 0.4, -r * 0.2);
+          ctx.lineTo(r * 0.4, r * 0.4);
+          ctx.lineTo(0, r * 0.7);
+          ctx.lineTo(-r * 0.4, r * 0.4);
+          ctx.lineTo(-r * 0.4, -r * 0.2);
+          ctx.closePath();
+          ctx.fill();
+          ctx.strokeStyle = "#0099FF";
+          ctx.lineWidth = 1.5;
+          ctx.stroke();
+        } else if (iconType === "🧲") {
+          // Magnet - red/blue split
+          ctx.fillStyle = "#FF4444";
+          ctx.fillRect(-r * 0.4, -r * 0.5, r * 0.35, r);
+          ctx.fillStyle = "#4444FF";
+          ctx.fillRect(r * 0.05, -r * 0.5, r * 0.35, r);
+          ctx.strokeStyle = "#222";
+          ctx.lineWidth = 1.5;
+          ctx.strokeRect(-r * 0.4, -r * 0.5, r * 0.75, r);
+        } else if (iconType === "📊") {
+          // Chart - multicolor bars
+          ctx.fillStyle = "#FF6B6B";
+          ctx.fillRect(-r * 0.35, -r * 0.2, r * 0.2, r * 0.5);
+          ctx.fillStyle = "#4ECDC4";
+          ctx.fillRect(-r * 0.1, -r * 0.4, r * 0.2, r * 0.7);
+          ctx.fillStyle = "#FFD93D";
+          ctx.fillRect(r * 0.15, -r * 0.3, r * 0.2, r * 0.6);
+          ctx.strokeStyle = "#333";
+          ctx.lineWidth = 1;
+          ctx.strokeRect(-r * 0.4, -r * 0.5, r * 0.8, r);
+        } else if (iconType === "🔮") {
+          // Crystal Ball - purple glow
+          ctx.fillStyle = "#9D4EDD";
+          ctx.beginPath();
+          ctx.arc(0, 0, r * 0.5, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.strokeStyle = "#C77DFF";
+          ctx.lineWidth = 2;
+          ctx.stroke();
+          // Inner glow
+          ctx.fillStyle = "#E0AAFF";
+          ctx.globalAlpha = 0.5;
+          ctx.beginPath();
+          ctx.arc(0, -r * 0.1, r * 0.25, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.globalAlpha = 1;
         }
 
         ctx.restore();
