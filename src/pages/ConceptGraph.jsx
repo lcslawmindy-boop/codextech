@@ -13,17 +13,26 @@ import NewsletterSignup from "../components/NewsletterSignup";
 import MainNav from "../components/MainNav";
 import VaultBottomNav from "../components/VaultBottomNav";
 import { base44 } from "@/api/base44Client";
-import { Lock } from "lucide-react";
+import { Lock, X } from "lucide-react";
 
 export default function ConceptGraph() {
   const [isAdmin, setIsAdmin] = useState(false);
   const [ndaAccepted, setNdaAccepted] = useState(false);
+  const [showPitchPrompt, setShowPitchPrompt] = useState(false);
   
   useEffect(() => {
     base44.auth.me().then(u => setIsAdmin(u?.role === 'admin')).catch(() => {});
     const accepted = localStorage.getItem("bearden_nda_accepted");
     if (accepted) setNdaAccepted(true);
   }, []);
+
+  useEffect(() => {
+    if (!ndaAccepted || isAdmin) return;
+    const timer = setTimeout(() => {
+      setShowPitchPrompt(true);
+    }, 5 * 60 * 1000); // 5 minutes
+    return () => clearTimeout(timer);
+  }, [ndaAccepted, isAdmin]);
   const [selectedNode, setSelectedNode] = useState(null);
   const [selectedLink, setSelectedLink] = useState(null);
   const [showSearch, setShowSearch] = useState(false);
@@ -277,6 +286,38 @@ export default function ConceptGraph() {
         )}
       </div>
       <VaultBottomNav />
+
+      {/* 5-minute pitch deck prompt */}
+      {showPitchPrompt && (
+        <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 px-4">
+          <div className="bg-gray-900 border border-cyan-700/60 rounded-2xl shadow-2xl max-w-md w-full p-6">
+            <div className="flex items-start justify-between mb-4">
+              <h2 className="text-white font-black text-lg">Watch the Overview</h2>
+              <button onClick={() => setShowPitchPrompt(false)} className="text-gray-400 hover:text-white">
+                <X size={20} />
+              </button>
+            </div>
+            <p className="text-gray-400 text-sm mb-6">
+              Get a rapid overview of the research platform, technology roadmap, and institutional licensing options in our pitch deck slideshow.
+            </p>
+            <div className="space-y-3">
+              <Link
+                to="/vision-fund-pitch"
+                onClick={() => setShowPitchPrompt(false)}
+                className="flex items-center justify-center w-full py-3 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white font-bold text-sm transition-colors"
+              >
+                Watch Pitch Deck →
+              </Link>
+              <button
+                onClick={() => setShowPitchPrompt(false)}
+                className="flex items-center justify-center w-full py-2 rounded-lg bg-gray-800 hover:bg-gray-700 text-gray-300 font-semibold text-sm transition-colors"
+              >
+                Keep Exploring
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
