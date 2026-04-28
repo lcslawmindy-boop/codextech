@@ -166,10 +166,9 @@ import VaultHeroPage from './pages/VaultHeroPage';
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
   const { accepted: ndaAccepted, loading: ndaLoading } = useNdaGate();
-  const { paid: hasPaid, isTrial, loading: paymentLoading } = usePaymentGate();
 
   // Show loading spinner while checking app public settings or auth
-  if (isLoadingPublicSettings || isLoadingAuth || ndaLoading || paymentLoading) {
+  if (isLoadingPublicSettings || isLoadingAuth || ndaLoading) {
     return (
       <div className="fixed inset-0 flex items-center justify-center">
         <div className="w-8 h-8 border-4 border-slate-200 border-t-slate-800 rounded-full animate-spin"></div>
@@ -204,29 +203,10 @@ const AuthenticatedApp = () => {
     );
   }
 
-  // Redirect to trial onboarding or pricing if not paid
-  if (!hasPaid) {
-    return (
-      <Routes>
-        <Route path="/" element={<VaultNDALanding />} />
-        <Route path="/free-vault" element={<FreeVault />} />
-        <Route path="/build-supplies-shop" element={<BuildSuppliesShop />} />
-        <Route path="/emf-impact" element={<EMFImpact />} />
-        <Route path="/vault" element={<ConceptGraph />} />
-        <Route path="/paywall" element={<PaywallPage />} />
-        <Route path="/trial-onboarding" element={<TrialOnboarding />} />
-        <Route path="/beta-apply" element={<BetaApply />} />
-        <Route path="/pricing" element={<Pricing />} />
-        <Route path="*" element={isTrial ? <TrialOnboarding /> : <VaultNDALanding />} />
-      </Routes>
-    );
-  }
-
   // Render the main app
   return (
-    <TrialContext.Provider value={{ isTrial }}>
+    <TrialContext.Provider value={{ isTrial: false }}>
       <CopyProtection />
-      {isTrial && <TrialBanner />}
       <Routes>
         <Route element={<MobileLayout />}>
           <Route path="/" element={<ConceptGraph />} />
