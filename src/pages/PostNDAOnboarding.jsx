@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { ArrowRight, Zap, BookOpen, Hammer, Network, Scroll, FileText, Sparkles, Layers, Video } from "lucide-react";
+import { ArrowRight, Zap, BookOpen, Hammer, Network, Scroll, FileText, Sparkles, Layers, Video, Zap as ZapIcon } from "lucide-react";
 import { motion } from "framer-motion";
 
 const FEATURES = [
@@ -87,9 +87,64 @@ const STAT_CARDS = [
 
 export default function PostNDAOnboarding() {
   const [hoveredCard, setHoveredCard] = useState(null);
+  const [countdown, setCountdown] = useState(10);
+  const [showAI, setShowAI] = useState(true);
+
+  useEffect(() => {
+    if (!showAI || countdown <= 0) return;
+    const timer = setTimeout(() => setCountdown(countdown - 1), 1000);
+    return () => clearTimeout(timer);
+  }, [countdown, showAI]);
+
+  useEffect(() => {
+    if (countdown === 0) {
+      window.location.href = "/courses";
+    }
+  }, [countdown]);
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-950 via-gray-900 to-gray-950 text-white overflow-hidden">
+      {/* ── AI Assistant Welcome ── */}
+      {showAI && (
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -20 }}
+          className="bg-gradient-to-r from-cyan-950/60 to-blue-950/60 border-b border-cyan-600/30 px-6 py-6"
+        >
+          <div className="max-w-7xl mx-auto">
+            <div className="flex items-start gap-4">
+              <div className="flex-shrink-0">
+                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center">
+                  <ZapIcon size={20} className="text-white" />
+                </div>
+              </div>
+              <div className="flex-1">
+                <h2 className="text-lg font-black text-cyan-300 mb-2">Welcome to Your Research Vault</h2>
+                <p className="text-gray-300 mb-4 leading-relaxed">
+                  Your NDA has been accepted. I'm your AI research assistant. I recommend starting with our <span className="font-bold">Course Library</span> under <span className="font-bold">Invention Build Plans</span>—it has 40+ structured courses on scalar EM, vacuum energy, patent strategy, and device engineering.
+                </p>
+                <div className="flex items-center gap-4">
+                  <button
+                    onClick={() => (window.location.href = "/courses")}
+                    className="px-4 py-2 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white font-bold text-sm transition-colors"
+                  >
+                    Go to Courses →
+                  </button>
+                  <button
+                    onClick={() => setShowAI(false)}
+                    className="px-4 py-2 rounded-lg bg-gray-800 hover:bg-gray-700 text-gray-300 font-bold text-sm transition-colors"
+                  >
+                    Dismiss
+                  </button>
+                  <span className="text-xs text-gray-500 font-mono">Redirecting in {countdown}s</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </motion.div>
+      )}
+
       {/* ── Header ── */}
       <div className="border-b border-gray-800 bg-gray-900/80 backdrop-blur px-6 py-6 sticky top-0 z-40">
         <div className="max-w-7xl mx-auto">
