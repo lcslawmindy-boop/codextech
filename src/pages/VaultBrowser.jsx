@@ -1,6 +1,8 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useCallback } from "react";
 import { Link } from "react-router-dom";
-import { ArrowLeft, Lock, Search, Filter, Zap } from "lucide-react";
+import { ArrowLeft, Search, Zap } from "lucide-react";
+import { usePullToRefresh } from "@/hooks/usePullToRefresh";
+import PullToRefreshIndicator from "@/components/PullToRefreshIndicator";
 
 const BUILDS = [
   { id: 1, title: "MEG Replication Device", category: "Energy", cost: "$287", desc: "US Patent 6,362,718. Complete replication with 23-part BOM.", emoji: "⚡", locked: true },
@@ -19,6 +21,13 @@ export default function VaultBrowser() {
   const [search, setSearch] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("All");
 
+  // Pull-to-refresh resets filters
+  const handleRefresh = useCallback(async () => {
+    setSearch("");
+    setCategoryFilter("All");
+  }, []);
+  const { containerRef, pullY, refreshing } = usePullToRefresh(handleRefresh);
+
   const filtered = useMemo(() => {
     return BUILDS.filter(b => {
       const matchesSearch = b.title.toLowerCase().includes(search.toLowerCase()) || b.desc.toLowerCase().includes(search.toLowerCase());
@@ -28,7 +37,8 @@ export default function VaultBrowser() {
   }, [search, categoryFilter]);
 
   return (
-    <div className="min-h-screen bg-gray-950 text-white">
+    <div className="min-h-screen bg-gray-950 text-white relative" ref={containerRef}>
+      <PullToRefreshIndicator pullY={pullY} refreshing={refreshing} />
       {/* ── Header ── */}
       <div className="border-b border-gray-800 bg-gray-900/80 px-6 py-4 sticky top-0 z-20">
         <div className="flex items-center gap-4 mb-6">

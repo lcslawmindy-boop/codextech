@@ -1,7 +1,7 @@
 import { Outlet, useLocation } from "react-router-dom";
 import BottomTabBar from "./BottomTabBar";
-import { useEffect } from "react";
 import { useTrial } from "@/lib/TrialContext";
+import { AnimatePresence, motion } from "framer-motion";
 
 // Pages that should NOT show the bottom tab bar
 const HIDDEN_TAB_ROUTES = ["/legal", "/checkout", "/paywall", "/pricing", "/free-vault", "/"];
@@ -11,6 +11,12 @@ const IMMERSIVE_ROUTES = [
   "/scalar-wave-sim", "/scalar-sim", "/scalar-lab", "/scalar-potential",
   "/lab", "/simulator", "/patent-tool", "/patent-wizard", "/inventor-forge",
 ];
+
+const slideVariants = {
+  initial: { x: "100%", opacity: 0 },
+  animate: { x: 0, opacity: 1, transition: { type: "tween", duration: 0.22, ease: "easeOut" } },
+  exit:    { x: "-30%", opacity: 0, transition: { type: "tween", duration: 0.18, ease: "easeIn" } },
+};
 
 export default function MobileLayout() {
   const { pathname } = useLocation();
@@ -30,7 +36,18 @@ export default function MobileLayout() {
       }}
     >
       <div className="flex-1 relative overflow-hidden">
-        <Outlet />
+        <AnimatePresence mode="wait" initial={false}>
+          <motion.div
+            key={pathname}
+            variants={slideVariants}
+            initial="initial"
+            animate="animate"
+            exit="exit"
+            className="absolute inset-0 overflow-y-auto"
+          >
+            <Outlet />
+          </motion.div>
+        </AnimatePresence>
       </div>
       {!hideTab && <BottomTabBar />}
     </div>

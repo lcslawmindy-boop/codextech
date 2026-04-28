@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { User, LogOut, Trash2, Shield, Bell, ChevronRight, AlertTriangle, Loader2, Package, Zap, RefreshCw } from "lucide-react";
+import { User, LogOut, Trash2, Shield, ChevronRight, AlertTriangle, Loader2, Package, Zap, RefreshCw } from "lucide-react";
 import { Link } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import PageHeader from "../components/PageHeader";
@@ -9,6 +9,9 @@ export default function AccountSettings() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [restoring, setRestoring] = useState(false);
+  const [deleteConfirm, setDeleteConfirm] = useState(false);
+  const [deleteInput, setDeleteInput] = useState("");
+  const [deleting, setDeleting] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -17,6 +20,26 @@ export default function AccountSettings() {
 
   const handleLogout = () => {
     base44.auth.logout("/");
+  };
+
+  const handleDeleteAccount = async () => {
+    if (deleteInput !== "DELETE") return;
+    setDeleting(true);
+    try {
+      // Sign out — actual account deletion must be handled via support
+      // per App Store guidelines we must provide a way to request deletion
+      await base44.integrations.Core.SendEmail({
+        to: "support@zenithapex.com",
+        subject: `Account Deletion Request — ${user?.email}`,
+        body: `User ${user?.full_name} (${user?.email}) has requested account deletion from the app.`,
+      });
+      alert("Your deletion request has been submitted. You will receive confirmation within 48 hours.");
+      base44.auth.logout("/");
+    } catch (e) {
+      alert("Error submitting request: " + e.message);
+    }
+    setDeleting(false);
+    setDeleteConfirm(false);
   };
 
   const handleRestoreAccess = async () => {
@@ -131,7 +154,56 @@ export default function AccountSettings() {
             <ChevronRight size={15} className="text-gray-600" />
           </button>
 
+          <button
+            onClick={() => setDeleteConfirm(true)}
+            className="w-full flex items-center gap-3 px-5 py-4 hover:bg-red-950/30 transition-colors text-left"
+            style={{ minHeight: 56 }}
+          >
+            <Trash2 size={18} className="text-red-500 flex-shrink-0" />
+            <div className="flex-1">
+              <p className="text-red-400 text-sm font-semibold">Delete Account</p>
+              <p className="text-gray-500 text-xs">Request permanent account deletion</p>
+            </div>
+          </button>
         </div>
+
+        {/* Delete confirmation dialog */}
+        {deleteConfirm && (
+          <div className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4">
+            <div className="bg-gray-900 border border-red-900 rounded-2xl p-6 max-w-sm w-full shadow-2xl">
+              <div className="flex items-center gap-3 mb-4">
+                <AlertTriangle size={20} className="text-red-400 flex-shrink-0" />
+                <h3 className="text-white font-black text-base">Delete Account</h3>
+              </div>
+              <p className="text-gray-400 text-sm leading-relaxed mb-4">
+                This will submit a deletion request for your account and all associated data. This action cannot be undone.
+              </p>
+              <p className="text-gray-500 text-xs mb-2">Type <span className="text-red-400 font-mono font-bold">DELETE</span> to confirm:</p>
+              <input
+                value={deleteInput}
+                onChange={e => setDeleteInput(e.target.value)}
+                placeholder="DELETE"
+                className="w-full px-4 py-3 rounded-lg bg-gray-800 border border-gray-700 text-white text-sm font-mono focus:outline-none focus:border-red-600 mb-4"
+              />
+              <div className="flex gap-3">
+                <button
+                  onClick={() => { setDeleteConfirm(false); setDeleteInput(""); }}
+                  className="flex-1 py-3 rounded-lg bg-gray-800 hover:bg-gray-700 text-white text-sm font-bold transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleDeleteAccount}
+                  disabled={deleteInput !== "DELETE" || deleting}
+                  className="flex-1 py-3 rounded-lg bg-red-700 hover:bg-red-600 disabled:opacity-40 text-white text-sm font-bold transition-colors flex items-center justify-center gap-2"
+                >
+                  {deleting ? <Loader2 size={14} className="animate-spin" /> : <Trash2 size={14} />}
+                  {deleting ? "Submitting…" : "Delete"}
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* App Info */}
         <div className="text-center text-gray-700 text-xs pb-4 space-y-1">

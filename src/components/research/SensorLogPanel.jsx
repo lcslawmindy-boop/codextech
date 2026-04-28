@@ -1,8 +1,10 @@
-import { useState, useEffect } from "react";
-import { Plus, Trash2, RefreshCw } from "lucide-react";
+import { useState, useEffect, useCallback } from "react";
+import { Plus, Trash2 } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from "recharts";
 import { format } from "date-fns";
+import { usePullToRefresh } from "@/hooks/usePullToRefresh";
+import PullToRefreshIndicator from "@/components/PullToRefreshIndicator";
 
 const CHANNELS = ["CH1", "CH2", "PMT-A", "PMT-B", "Main", "Control", "Reference"];
 const CHANNEL_COLORS = {
@@ -16,7 +18,7 @@ export default function SensorLogPanel({ experiment }) {
   const [form, setForm] = useState({ value: "", channel: "CH1", notes: "", step_label: "" });
   const [saving, setSaving] = useState(false);
 
-  const load = async () => {
+  const load = useCallback(async () => {
     setLoading(true);
     const data = await base44.entities.SensorReading.filter(
       { experiment_id: experiment.id },
@@ -25,14 +27,17 @@ export default function SensorLogPanel({ experiment }) {
     );
     setReadings(data || []);
     setLoading(false);
-  };
+  }, [experiment.id]);
 
-  useEffect(() => { load(); }, [experiment.id]);
+  useEffect(() => { load(); }, [load]);
+
+  const { containerRef, pullY, refreshing } = usePullToRefresh(load);
 
   const handleAdd = async () => {
     if (!form.value) return;
-    setSaving(true);
-    await base44.entities.SensorReading.create({
+    // Optimistic insert
+    const optimisticReading = {
+      id: `opt-${Date.now()}`,
       experiment_id: experiment.id,
       timestamp: new Date().toISOString(),
       value: parseFloat(form.value),
@@ -40,15 +45,39 @@ export default function SensorLogPanel({ experiment }) {
       channel: form.channel,
       notes: form.notes,
       step_label: form.step_label,
-    });
+      _optimistic: true,
+    };
+    setReadings(r => [...r, optimisticReading]);
     setForm({ value: "", channel: form.channel, notes: "", step_label: form.step_label });
-    await load();
+    setSaving(true);
+    try {
+      const created = await base44.entities.SensorReading.create({
+        experiment_id: experiment.id,
+        timestamp: optimisticReading.timestamp,
+        value: optimisticReading.value,
+        unit: optimisticReading.unit,
+        channel: optimisticReading.channel,
+        notes: optimisticReading.notes,
+        step_label: optimisticReading.step_label,
+      });
+      // Replace optimistic entry with real one
+      setReadings(r => r.map(x => x.id === optimisticReading.id ? created : x));
+    } catch {
+      // Rollback on failure
+      setReadings(r => r.filter(x => x.id !== optimisticReading.id));
+    }
     setSaving(false);
   };
 
   const handleDelete = async (id) => {
-    await base44.entities.SensorReading.delete(id);
+    // Optimistic remove
     setReadings(r => r.filter(x => x.id !== id));
+    try {
+      await base44.entities.SensorReading.delete(id);
+    } catch {
+      // Rollback — re-fetch on failure
+      load();
+    }
   };
 
   // Build chart data — group by timestamp bucketed per minute
@@ -74,7 +103,8 @@ export default function SensorLogPanel({ experiment }) {
   }).filter(Boolean);
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 relative" ref={containerRef}>
+      <PullToRefreshIndicator pullY={pullY} refreshing={refreshing} />
       {/* Log input */}
       <div className="bg-gray-900 border border-gray-800 rounded-2xl p-4">
         <p className="text-cyan-400 font-bold text-xs uppercase tracking-wider mb-3">Log New Reading</p>
@@ -111,7 +141,7 @@ export default function SensorLogPanel({ experiment }) {
             <Plus size={13} /> {saving ? "Logging…" : "Log Reading"}
           </button>
           <button onClick={load} className="flex items-center gap-2 px-3 py-2 rounded-lg bg-gray-800 hover:bg-gray-700 text-gray-400 text-sm transition-colors">
-            <RefreshCw size={13} /> Refresh
+            Refresh
           </button>
           <span className="ml-auto text-xs text-gray-600 self-center">{readings.length} readings · {experiment.sensor_unit || "—"}</span>
         </div>

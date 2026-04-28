@@ -52,6 +52,7 @@ html[data-theme="steel"] {
 }
 
 @layer base {
+  /* ── Dark mode (default — high-tech dark aesthetic) ── */
   :root {
     --background: 222 47% 11%;
     --foreground: 0 0% 98%;
@@ -85,6 +86,44 @@ html[data-theme="steel"] {
     --sidebar-accent-foreground: 215 20% 75%;
     --sidebar-border: 222 28% 22%;
     --sidebar-ring: 199 89% 48%;
+  }
+
+  /* ── Light mode — retains high-tech feel with light surfaces ── */
+  @media (prefers-color-scheme: light) {
+    :root {
+      --background: 220 20% 97%;
+      --foreground: 222 47% 8%;
+      --card: 0 0% 100%;
+      --card-foreground: 222 47% 8%;
+      --popover: 0 0% 100%;
+      --popover-foreground: 222 47% 8%;
+      --primary: 222 47% 11%;
+      --primary-foreground: 0 0% 98%;
+      --secondary: 220 14% 90%;
+      --secondary-foreground: 222 47% 11%;
+      --muted: 220 14% 90%;
+      --muted-foreground: 215 16% 47%;
+      --accent: 199 89% 42%;
+      --accent-foreground: 0 0% 98%;
+      --destructive: 0 72% 51%;
+      --destructive-foreground: 0 0% 98%;
+      --border: 220 13% 84%;
+      --input: 220 13% 84%;
+      --ring: 199 89% 42%;
+      --chart-1: 220 70% 50%;
+      --chart-2: 160 60% 40%;
+      --chart-3: 30 80% 52%;
+      --chart-4: 280 65% 56%;
+      --chart-5: 340 75% 52%;
+      --sidebar-background: 220 18% 93%;
+      --sidebar-foreground: 222 20% 32%;
+      --sidebar-primary: 199 89% 42%;
+      --sidebar-primary-foreground: 0 0% 100%;
+      --sidebar-accent: 220 14% 87%;
+      --sidebar-accent-foreground: 222 20% 32%;
+      --sidebar-border: 220 13% 84%;
+      --sidebar-ring: 199 89% 42%;
+    }
   }
 }
 
