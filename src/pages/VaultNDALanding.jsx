@@ -74,7 +74,7 @@ export default function VaultNDALanding() {
       if (sigs && sigs.length > 0) {
         localStorage.setItem("nda_member_email", returningEmail.toLowerCase().trim());
         localStorage.setItem("bearden_nda_accepted", JSON.stringify({ accepted: true, version: "1.0" }));
-        window.location.href = "/pricing";
+        window.location.href = "/nda-onboarding";
       } else {
         setReturningError("No NDA signature found for that email. Please sign below.");
       }
@@ -110,6 +110,10 @@ export default function VaultNDALanding() {
 
       localStorage.setItem("nda_member_email", email.toLowerCase().trim());
       setSubmitted(true);
+      // Redirect to feature showcase instead of pricing
+      setTimeout(() => {
+        window.location.href = "/nda-onboarding";
+      }, 2000);
       setLoading(false);
     } catch (err) {
       console.error("Error processing NDA:", err);
