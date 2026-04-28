@@ -72,11 +72,11 @@ export default function ResearchMembership() {
 
             <div className="space-y-3 mb-8">
               {[
-                "40+ patent analyses (prosecution history, design implications)",
-                "8 research modules (80+ hours structured content)",
-                "Engineering system documentation (MEG, Scalar, Anenergy, Priore, etc.)",
-                "Monthly research updates (new patents, emerging literature)",
-                "Member-only research email briefs"
+                "40+ patent analyses (prosecution history, design analysis)",
+                "8 research modules (80+ hours structured analysis based on primary sources)",
+                "Engineering frameworks documentation (based on published theoretical models)",
+                "Monthly research updates (patent filings, literature tracking)",
+                "Member-only research briefs and institutional updates"
               ].map((feature, i) => (
                 <div key={i} className="flex gap-3">
                   <CheckCircle2 size={16} className="text-cyan-400 flex-shrink-0 mt-0.5" />
@@ -111,10 +111,10 @@ export default function ResearchMembership() {
               {[
                 "Everything in Researcher tier",
                 "Team access (up to 5 seats)",
-                "Quarterly live Q&A sessions with institutional researchers",
-                "Direct support: technical questions & troubleshooting",
-                "First access to Advanced Engineering Bundle (pre-release)",
-                "Institution logo on member page (optional)"
+                "Quarterly live Q&A with institutional researchers and engineers",
+                "Direct support: research questions and technical discussion",
+                "First access to Advanced Engineering Bundle",
+                "Institution affiliation (optional display)"
               ].map((feature, i) => (
                 <div key={i} className="flex gap-3">
                   <CheckCircle2 size={16} className="text-cyan-300 flex-shrink-0 mt-0.5" />
@@ -181,8 +181,8 @@ export default function ResearchMembership() {
                 desc: "Used by research teams in 6+ countries. This is the documentation framework serious teams rely on."
               },
               {
-                title: "Primary Source Only",
-                desc: "Every analysis traces to Maxwell, Bearden, peer-reviewed literature, and declassified archives. No speculation."
+                title: "Primary Source Documentation",
+                desc: "All analysis cites Maxwell's original work, T.E. Bearden's published research, peer-reviewed literature, and technical archives."
               },
               {
                 title: "Actionable Framework",

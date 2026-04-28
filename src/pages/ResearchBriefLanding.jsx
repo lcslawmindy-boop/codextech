@@ -52,6 +52,7 @@ export default function ResearchBriefLanding() {
 
         <h1 className="text-5xl sm:text-6xl font-black leading-[1.1] mb-6">
           The 4-Vector Conflation That Cost Physics 140 Years
+          <span className="text-sm text-gray-500 font-normal block mt-2">(Based on T.E. Bearden's theoretical analysis)</span>
         </h1>
 
         <p className="text-xl text-gray-300 max-w-2xl leading-relaxed mb-8">
@@ -62,11 +63,11 @@ export default function ResearchBriefLanding() {
           <h3 className="text-white font-bold text-lg mb-4">What's Inside This Research Brief</h3>
           <ul className="space-y-3">
             {[
-              "Historical analysis: Maxwell → Heaviside → Gibbs reduction (and what was lost)",
-              "The mathematical conflation: why the 4-vector notation hides scalar potential",
-              "Engineering implications: how this limitation has shaped 140 years of tech",
-              "Primary source citations: direct references to Maxwell's quaternion formulation",
-              "Forward path: what becomes possible when scalar potential is restored to design"
+              "Historical analysis: Maxwell (1865) → Heaviside (1884) → Gibbs (1888) — what was removed and why",
+              "The mathematical conflation: 4-vector notation limitations (based on Bearden analysis)",
+              "Theoretical engineering implications: scalar potential in device architecture",
+              "Primary source citations: Maxwell's original quaternion formulation + peer-reviewed literature",
+              "Research frameworks: theoretical paths forward (not confirmed working devices)"
             ].map((item, i) => (
               <li key={i} className="flex gap-3">
                 <CheckCircle2 size={16} className="text-cyan-400 flex-shrink-0 mt-0.5" />
@@ -207,16 +208,26 @@ export default function ResearchBriefLanding() {
         </div>
       </section>
 
-      {/* Footer CTA */}
-      <section className="px-6 py-12 border-t border-gray-800 bg-gray-900/40">
+      {/* Disclaimer */}
+      <section className="px-6 py-8 border-t border-gray-800 bg-yellow-950/20 border-b border-yellow-900/40">
         <div className="max-w-4xl mx-auto text-center">
-          <p className="text-gray-400 text-sm mb-4">
-            After the research brief, you'll have access to our full institutional research sequence + special offers for members only.
-          </p>
-          <p className="text-gray-600 text-xs">
-            This brief is limited distribution. Designed for serious researchers and technical teams only.
+          <p className="text-yellow-300 text-xs font-bold uppercase mb-2">Research Framework Disclosure</p>
+          <p className="text-gray-400 text-xs">
+            This analysis is based on published research by T.E. Bearden, Maxwell's original formulations, and peer-reviewed literature. The theoretical frameworks presented are not confirmed as producing operational devices. No claims are made about energy generation, medical applications, or commercial viability. Content is for research and educational purposes only.
           </p>
         </div>
+      </section>
+
+      {/* Footer CTA */}
+      <section className="px-6 py-12 border-t border-gray-800 bg-gray-900/40">
+      <div className="max-w-4xl mx-auto text-center">
+        <p className="text-gray-400 text-sm mb-4">
+          After the research brief, you'll have access to our full institutional research sequence + special offers for members only.
+        </p>
+        <p className="text-gray-600 text-xs">
+          This brief is limited distribution. Designed for serious researchers and technical teams only.
+        </p>
+      </div>
       </section>
     </div>
   );

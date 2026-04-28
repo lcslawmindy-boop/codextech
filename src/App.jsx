@@ -160,6 +160,7 @@ import ResearchBriefLanding from './pages/ResearchBriefLanding';
 import TechnicalBriefPack from './pages/TechnicalBriefPack';
 import ResearchMembership from './pages/ResearchMembership';
 import AdvancedEngineeringBundle from './pages/AdvancedEngineeringBundle';
+import ResearchDisclaimer from './pages/ResearchDisclaimer';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -380,6 +381,7 @@ const AuthenticatedApp = () => {
           <Route path="/technical-brief-pack" element={<TechnicalBriefPack />} />
           <Route path="/research-membership" element={<ResearchMembership />} />
           <Route path="/advanced-engineering-bundle" element={<AdvancedEngineeringBundle />} />
+          <Route path="/research-disclaimer" element={<ResearchDisclaimer />} />
 
           <Route path="*" element={<PageNotFound />} />
         </Route>

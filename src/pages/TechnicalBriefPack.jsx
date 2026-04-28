@@ -81,19 +81,19 @@ export default function TechnicalBriefPack() {
               {[
                 {
                   title: "MEG System Architecture (40 pages)",
-                  desc: "Complete component topology, BOM, assembly sequence, measurement framework"
+                  desc: "Theoretical system design based on Bearden architecture analysis. Engineering framework for prototype development."
                 },
                 {
                   title: "Scalar Transmitter Design (35 pages)",
-                  desc: "Shielded geometry specifications, winding patterns, high-voltage circuit, detection methods"
+                  desc: "Experimental topology specifications derived from scalar EM theory. Not claimed as confirmed working device."
                 },
                 {
                   title: "Measurement Protocol Suite (25 pages)",
-                  desc: "How institutional teams detect and quantify scalar potential fields with standard lab equipment"
+                  desc: "Proposed measurement approaches for theoretical scalar potential research in laboratory settings."
                 },
                 {
                   title: "Anenergy Pump Preliminary (15 pages)",
-                  desc: "Bonus: Theoretical framework and architectural analysis (foundations only)"
+                  desc: "Theoretical framework based on Bearden's phi-field model. Foundations and design considerations only."
                 }
               ].map((item, i) => (
                 <div key={i} className="bg-gray-900/40 border border-gray-800 rounded-lg p-4">
@@ -136,6 +136,10 @@ export default function TechnicalBriefPack() {
                 ✓ 50% discount code for Research Membership<br/>
                 ✓ Early access to Advanced Engineering Bundle
               </p>
+            </div>
+
+            <div className="mt-6 pt-6 border-t border-gray-700">
+              <p className="text-gray-600 text-xs"><strong>Disclaimer:</strong> These are theoretical engineering frameworks based on published research by T.E. Bearden and related peer-reviewed literature. Documentation is for experimental research purposes. No warranties about functionality or results.</p>
             </div>
           </div>
         </div>

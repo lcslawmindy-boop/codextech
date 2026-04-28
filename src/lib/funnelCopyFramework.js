@@ -239,10 +239,10 @@ export const funnelCopy = {
   // AUTHORITY POSITIONING (Cross-All-Offers)
   authorityFramework: {
     credibility: [
-      "Sources: Maxwell (1865), Bearden (1982-2019), 200+ peer-reviewed publications",
-      "Patent Database: 40+ granted patents analyzed (prosecution history included)",
-      "Declassified Documents: Soviet research, DARPA reports, technical archives",
-      "No Secondary Interpretation: direct citations, original texts referenced"
+      "Primary Sources: Maxwell (1865), T.E. Bearden published research (1982-2019), peer-reviewed publications",
+      "Patent Analysis: 40+ granted patents analyzed for technical content (not operational claims)",
+      "Technical Archives: Published declassified documents, university research, technical literature",
+      "Attribution Standard: All key claims traced to original sources with full citations"
     ],
 
     institutionalProof: [
@@ -253,10 +253,10 @@ export const funnelCopy = {
     ],
 
     expertApproach: [
-      "Our team has 60+ combined years in advanced electromagnetics research",
-      "Every analysis reviewed by 2+ independent experts before publication",
-      "Measurement protocols tested in 12+ institutional labs",
-      "Documentation updated monthly with emerging research"
+      "Content based on decades of published research and academic work",
+      "All material sourced from published works (Bearden, Maxwell, peer-reviewed literature)",
+      "Documentation maintains academic standards for citations and attribution",
+      "Explicit disclaimers: frameworks are theoretical, no warranties on functionality"
     ]
   },
 

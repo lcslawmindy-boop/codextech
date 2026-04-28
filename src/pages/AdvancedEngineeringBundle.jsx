@@ -72,11 +72,11 @@ export default function AdvancedEngineeringBundle() {
 
             {[
               {
-                title: "3 Complete Build System Designs",
+                title: "3 Experimental System Frameworks",
                 items: [
-                  "MEG (Motionless Electromagnetic Generator): complete component topology, sourcing links, assembly procedures, measurement validation protocols",
-                  "Scalar Transmitter: shielded geometry design, winding patterns, high-voltage drive circuit, detection methods",
-                  "Anenergy Pump: toroidal architecture, coil specifications, charge trapping mechanics, measurement approaches"
+                  "MEG (Motionless Electromagnetic Generator): theoretical topology based on Bearden research. Assembly framework for experimental prototyping.",
+                  "Scalar Transmitter: experimental geometry specifications derived from scalar EM theory. Design framework for research purposes.",
+                  "Anenergy Pump: theoretical toroidal architecture framework based on published models. For experimental research only."
                 ]
               },
               {
@@ -200,9 +200,12 @@ export default function AdvancedEngineeringBundle() {
               <div className="flex gap-3">
                 <AlertCircle size={16} className="text-red-400 flex-shrink-0 mt-0.5" />
                 <div>
-                  <p className="text-red-300 font-bold text-xs mb-1">Safety Critical</p>
+                  <p className="text-red-300 font-bold text-xs mb-1">Research Use Only</p>
+                  <p className="text-gray-300 text-xs mb-2">
+                    These are theoretical engineering frameworks based on published research (Bearden, Maxwell, peer-reviewed literature). No warranties are made about functionality, safety, or results.
+                  </p>
                   <p className="text-gray-300 text-xs">
-                    These systems involve high voltage and specialized equipment. Comprehensive safety training and peer review are mandatory before any experimental work.
+                    <strong>Safety:</strong> High-voltage systems require proper training, institutional oversight, and comprehensive safety protocols. Do not attempt construction without expert guidance.
                   </p>
                 </div>
               </div>
