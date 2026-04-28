@@ -3,21 +3,22 @@ import { Link } from "react-router-dom";
 import { ArrowLeft, Loader2, ShoppingCart } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import MembershipUpsellBanner from "../components/MembershipUpsellBanner";
+import ContentDropSchedule from "../components/ContentDropSchedule";
 
 const ALACARTE_ITEMS = [
-  // Courses ($29 each)
-  { id: "course-1", type: "course", title: "Regauging and Energy Extraction", price: "$29", priceInCents: 2900, desc: "Core electromagnetic theory", category: "Course" },
-  { id: "course-2", type: "course", title: "Scalar Potential Fundamentals", price: "$29", priceInCents: 2900, desc: "Understanding scalar fields", category: "Course" },
-  { id: "course-3", type: "course", title: "Phase-Conjugate Wavefront Engineering", price: "$29", priceInCents: 2900, desc: "Advanced resonance theory", category: "Course" },
-  { id: "course-4", type: "course", title: "Patent Strategy & IP Protection", price: "$29", priceInCents: 2900, desc: "Filing and claiming strategy", category: "Course" },
-  { id: "course-5", type: "course", title: "Measurement & Validation Protocols", price: "$29", priceInCents: 2900, desc: "Testing methodologies", category: "Course" },
+  // Courses ($50 each)
+  { id: "course-1", type: "course", title: "Regauging and Energy Extraction", price: "$50", priceInCents: 5000, desc: "Core electromagnetic theory & energy access", category: "Course", popular: true },
+  { id: "course-2", type: "course", title: "Scalar Potential as Information Carrier", price: "$50", priceInCents: 5000, desc: "How fields transmit energy independently", category: "Course", popular: true },
+  { id: "course-3", type: "course", title: "Phase-Conjugate Wavefront Reversal", price: "$50", priceInCents: 5000, desc: "Time-reversal and focused energy", category: "Course", popular: false },
+  { id: "course-4", type: "course", title: "Patent Strategy & IP Protection", price: "$50", priceInCents: 5000, desc: "Filing claims, FTO analysis, design-arounds", category: "Course", popular: true },
+  { id: "course-5", type: "course", title: "Measurement & Validation Protocols", price: "$50", priceInCents: 5000, desc: "Testing frameworks for prototypes", category: "Course", popular: false },
 
-  // Build Plans ($49–79)
-  { id: "build-1", type: "build", title: "MEG Replication Kit", price: "$79", priceInCents: 7900, desc: "Complete BOM + schematics", category: "Build Plan" },
-  { id: "build-2", type: "build", title: "Scalar EM Transducer", price: "$49", priceInCents: 4900, desc: "Step-by-step assembly", category: "Build Plan" },
-  { id: "build-3", type: "build", title: "Prioré Device System", price: "$79", priceInCents: 7900, desc: "Advanced therapeutic field", category: "Build Plan" },
-  { id: "build-4", type: "build", title: "Time-Reversal Zone Reactor", price: "$59", priceInCents: 5900, desc: "Cold fusion framework", category: "Build Plan" },
-  { id: "build-5", type: "build", title: "Anenergy Pump Circuit", price: "$49", priceInCents: 4900, desc: "Free energy extraction", category: "Build Plan" },
+  // Build Plans ($50 each)
+  { id: "build-1", type: "build", title: "Motionless Electromagnetic Generator (MEG)", price: "$50", priceInCents: 5000, desc: "Complete BOM, schematics, assembly steps", category: "Build Plan", popular: true },
+  { id: "build-2", type: "build", title: "Prioré-Type Multichannel EM System", price: "$50", priceInCents: 5000, desc: "Therapeutic field generation framework", category: "Build Plan", popular: true },
+  { id: "build-3", type: "build", title: "Time-Reversal Zone Reactor", price: "$50", priceInCents: 5000, desc: "Cold fusion and energy experiments", category: "Build Plan", popular: false },
+  { id: "build-4", type: "build", title: "Anenergy Pump Circuit", price: "$50", priceInCents: 5000, desc: "Free energy extraction system", category: "Build Plan", popular: true },
+  { id: "build-5", type: "build", title: "Scalar EM Lab Fundamentals Kit", price: "$50", priceInCents: 5000, desc: "Beginner-friendly measurement setup", category: "Build Plan", popular: false },
 ];
 
 function CheckoutButton({ item }) {
@@ -97,7 +98,7 @@ export default function AlaCarteShop() {
               filter === "course" ? "bg-cyan-600 text-white" : "bg-gray-800 text-gray-400 hover:text-white"
             }`}
           >
-            Courses (5)
+            Courses — $50 (5)
           </button>
           <button
             onClick={() => setFilter("build")}
@@ -105,21 +106,29 @@ export default function AlaCarteShop() {
               filter === "build" ? "bg-cyan-600 text-white" : "bg-gray-800 text-gray-400 hover:text-white"
             }`}
           >
-            Build Plans (5)
+            Build Plans — $50 (5)
           </button>
         </div>
+      </div>
+
+      {/* Drop Schedule */}
+      <div className="px-6 max-w-6xl mx-auto">
+        <ContentDropSchedule />
       </div>
 
       {/* Grid */}
       <div className="px-6 py-12 max-w-6xl mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filtered.map((item) => (
-            <div key={item.id} className="bg-gray-900 border border-gray-800 rounded-2xl p-6 flex flex-col">
-              <div className="text-xs font-black text-gray-500 uppercase tracking-widest mb-2">
-                {item.category}
+            <div key={item.id} className={`border rounded-2xl p-6 flex flex-col transition-all ${item.popular ? "bg-cyan-950/30 border-cyan-700" : "bg-gray-900 border-gray-800"}`}>
+              <div className="flex items-center justify-between mb-2">
+                <div className="text-xs font-black text-gray-500 uppercase tracking-widest">
+                  {item.category}
+                </div>
+                {item.popular && <span className="text-xs font-black text-cyan-400 px-2 py-1 bg-cyan-950/50 rounded">⭐ Most Popular</span>}
               </div>
               <h3 className="text-white font-black text-lg mb-2 leading-tight flex-1">{item.title}</h3>
-              <p className="text-gray-500 text-xs mb-4">{item.desc}</p>
+              <p className="text-gray-400 text-xs mb-4">{item.desc}</p>
               <div className="border-t border-gray-700 pt-4">
                 <div className="text-2xl font-black text-cyan-400 mb-4">{item.price}</div>
                 <CheckoutButton item={item} />
@@ -129,16 +138,25 @@ export default function AlaCarteShop() {
         </div>
       </div>
 
-      {/* Footer */}
-      <div className="border-t border-gray-800 bg-gray-900/50 px-6 py-8">
-        <div className="max-w-6xl mx-auto text-center">
-          <p className="text-gray-500 text-sm mb-4">
-            Want it all? Join the membership and get unlimited access to all courses and build plans, plus 1 new item every 2 weeks.
-          </p>
-          <Link to="/research-membership"
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white font-black text-sm transition-colors">
-            View Membership Plans
-          </Link>
+      {/* Footer with Membership Credit Info */}
+      <div className="border-t border-gray-800 bg-gray-900/50 px-6 py-12">
+        <div className="max-w-6xl mx-auto space-y-8">
+          <div className="text-center">
+            <p className="text-gray-500 text-sm mb-4">
+              Want it all? Join the membership and get unlimited access to all 10+ courses and 10+ build plans, plus 1 new item every 2 weeks.
+            </p>
+            <Link to="/research-membership"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white font-black text-sm transition-colors">
+              View Membership Plans
+            </Link>
+          </div>
+
+          <div className="bg-blue-950/30 border border-blue-700/50 rounded-xl p-5 text-center">
+            <p className="text-blue-300 text-xs font-black uppercase tracking-widest mb-2">💳 Membership Credits</p>
+            <p className="text-gray-300 text-sm">
+              Already bought à la carte items? Each $50 purchase counts as 1 month credit toward membership. Buy 1 course + 1 build plan, then join membership and you get 2 months free.
+            </p>
+          </div>
         </div>
       </div>
     </div>

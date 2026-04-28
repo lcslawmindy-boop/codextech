@@ -109,6 +109,28 @@ export default function Landing() {
         </div>
       </section>
 
+      {/* Top Content */}
+      <section className="px-6 py-16 border-b border-gray-800 bg-gray-900/40">
+        <div className="max-w-4xl mx-auto">
+          <h2 className="text-3xl font-black mb-12 text-center">Most Popular Items</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="bg-gray-900 border border-cyan-700/50 rounded-xl p-5">
+              <p className="text-cyan-400 font-black text-xs uppercase tracking-widest mb-2">⭐ Top Course</p>
+              <h3 className="text-white font-black text-lg mb-1">Regauging and Energy Extraction</h3>
+              <p className="text-gray-400 text-xs mb-4">Core electromagnetic theory & energy access</p>
+              <Link to="/alacarte" className="text-cyan-400 hover:text-cyan-300 text-xs font-black">Buy $50 →</Link>
+            </div>
+            <div className="bg-gray-900 border border-cyan-700/50 rounded-xl p-5">
+              <p className="text-cyan-400 font-black text-xs uppercase tracking-widest mb-2">⭐ Top Build Plan</p>
+              <h3 className="text-white font-black text-lg mb-1">Motionless Electromagnetic Generator</h3>
+              <p className="text-gray-400 text-xs mb-4">Complete BOM, schematics, assembly steps</p>
+              <Link to="/alacarte" className="text-cyan-400 hover:text-cyan-300 text-xs font-black">Buy $50 →</Link>
+            </div>
+          </div>
+          <p className="text-center text-gray-500 text-xs mt-6">New course + new build plan drops every 2 weeks</p>
+        </div>
+      </section>
+
       {/* Pricing */}
       <section id="pricing" className="px-6 py-16 border-b border-gray-800">
         <div className="max-w-4xl mx-auto">
@@ -150,11 +172,11 @@ export default function Landing() {
 
             <div className="bg-gray-900 border border-gray-700 rounded-2xl p-8">
               <h3 className="text-lg font-black mb-2">À La Carte</h3>
-              <p className="text-gray-500 text-sm mb-6">Buy individual items</p>
-              <div className="text-3xl font-black mb-6">$29–79</div>
+              <p className="text-gray-500 text-sm mb-6">Buy what you need</p>
+              <div className="text-3xl font-black mb-6">$50</div>
               <ul className="space-y-2 text-sm text-gray-400 mb-6">
-                <li>✓ Courses: $29 each</li>
-                <li>✓ Build Plans: $49–79</li>
+                <li>✓ Any course: $50</li>
+                <li>✓ Any build plan: $50</li>
                 <li>✓ One-time payment</li>
                 <li>✓ Lifetime access</li>
               </ul>
