@@ -229,7 +229,7 @@ const AuthenticatedApp = () => {
       {isTrial && <TrialBanner />}
       <Routes>
         <Route element={<MobileLayout />}>
-          <Route path="/" element={<CodextechLanding />} />
+          <Route path="/" element={<ZenithApex />} />
           <Route path="/zarp-landing" element={<ZarpLanding />} />
           <Route path="/free-vault" element={<FreeVault />} />
           <Route path="/member-dashboard" element={<MemberDashboard />} />
