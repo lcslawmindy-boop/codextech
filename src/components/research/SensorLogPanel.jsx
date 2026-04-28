@@ -1,7 +1,5 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import { Plus, Trash2, RefreshCw } from "lucide-react";
-import { usePullToRefresh } from "@/hooks/usePullToRefresh";
-import PullToRefreshIndicator from "@/components/PullToRefreshIndicator";
 import { base44 } from "@/api/base44Client";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from "recharts";
 import { format } from "date-fns";
@@ -18,7 +16,7 @@ export default function SensorLogPanel({ experiment }) {
   const [form, setForm] = useState({ value: "", channel: "CH1", notes: "", step_label: "" });
   const [saving, setSaving] = useState(false);
 
-  const load = useCallback(async () => {
+  const load = async () => {
     setLoading(true);
     const data = await base44.entities.SensorReading.filter(
       { experiment_id: experiment.id },
@@ -27,19 +25,14 @@ export default function SensorLogPanel({ experiment }) {
     );
     setReadings(data || []);
     setLoading(false);
-  }, [experiment.id]);
+  };
 
-  useEffect(() => { load(); }, [load]);
-
-  const { containerRef, pulling, pullDistance, refreshing } = usePullToRefresh(load);
+  useEffect(() => { load(); }, [experiment.id]);
 
   const handleAdd = async () => {
     if (!form.value) return;
     setSaving(true);
-    // Optimistic: add a temp entry immediately
-    const tempId = `temp-${Date.now()}`;
-    const optimisticEntry = {
-      id: tempId,
+    await base44.entities.SensorReading.create({
       experiment_id: experiment.id,
       timestamp: new Date().toISOString(),
       value: parseFloat(form.value),
@@ -47,13 +40,9 @@ export default function SensorLogPanel({ experiment }) {
       channel: form.channel,
       notes: form.notes,
       step_label: form.step_label,
-    };
-    setReadings(prev => [...prev, optimisticEntry]);
+    });
     setForm({ value: "", channel: form.channel, notes: "", step_label: form.step_label });
-
-    const created = await base44.entities.SensorReading.create(optimisticEntry);
-    // Replace temp entry with real one
-    setReadings(prev => prev.map(r => r.id === tempId ? { ...optimisticEntry, ...created } : r));
+    await load();
     setSaving(false);
   };
 
@@ -85,8 +74,7 @@ export default function SensorLogPanel({ experiment }) {
   }).filter(Boolean);
 
   return (
-    <div ref={containerRef} className="space-y-4">
-      <PullToRefreshIndicator pulling={pulling} pullDistance={pullDistance} refreshing={refreshing} />
+    <div className="space-y-4">
       {/* Log input */}
       <div className="bg-gray-900 border border-gray-800 rounded-2xl p-4">
         <p className="text-cyan-400 font-bold text-xs uppercase tracking-wider mb-3">Log New Reading</p>

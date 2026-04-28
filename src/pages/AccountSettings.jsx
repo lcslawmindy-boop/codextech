@@ -9,9 +9,6 @@ export default function AccountSettings() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [restoring, setRestoring] = useState(false);
-  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
-  const [deleteConfirmText, setDeleteConfirmText] = useState("");
-  const [deleting, setDeleting] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -20,14 +17,6 @@ export default function AccountSettings() {
 
   const handleLogout = () => {
     base44.auth.logout("/");
-  };
-
-  const handleDeleteAccount = async () => {
-    if (deleteConfirmText !== "DELETE") return;
-    setDeleting(true);
-    // Log out — actual account deletion requires backend/admin action
-    // This satisfies App Store requirement for a visible delete flow
-    await base44.auth.logout("/");
   };
 
   const handleRestoreAccess = async () => {
@@ -142,58 +131,7 @@ export default function AccountSettings() {
             <ChevronRight size={15} className="text-gray-600" />
           </button>
 
-          <button
-            onClick={() => setShowDeleteConfirm(true)}
-            className="w-full flex items-center gap-3 px-5 py-4 hover:bg-red-950/30 transition-colors text-left"
-            style={{ minHeight: 56 }}
-          >
-            <Trash2 size={18} className="text-red-500 flex-shrink-0" />
-            <div className="flex-1">
-              <p className="text-red-400 text-sm font-semibold">Delete Account</p>
-              <p className="text-gray-600 text-xs">Permanently remove your account and data</p>
-            </div>
-            <ChevronRight size={15} className="text-gray-700" />
-          </button>
         </div>
-
-        {/* Delete Account Confirmation Modal */}
-        {showDeleteConfirm && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 px-4">
-            <div className="bg-gray-900 border border-red-800 rounded-2xl p-6 max-w-sm w-full shadow-2xl">
-              <div className="flex items-center gap-3 mb-4">
-                <AlertTriangle size={22} className="text-red-400 flex-shrink-0" />
-                <h2 className="text-white font-black text-lg">Delete Account</h2>
-              </div>
-              <p className="text-gray-400 text-sm leading-relaxed mb-4">
-                This will permanently delete your account and all associated data. This action <span className="text-red-400 font-bold">cannot be undone</span>.
-              </p>
-              <p className="text-gray-500 text-xs mb-2">Type <span className="text-red-400 font-mono font-bold">DELETE</span> to confirm:</p>
-              <input
-                type="text"
-                value={deleteConfirmText}
-                onChange={e => setDeleteConfirmText(e.target.value)}
-                placeholder="DELETE"
-                className="w-full px-4 py-3 rounded-xl bg-gray-800 border border-gray-700 text-white font-mono text-sm focus:outline-none focus:border-red-500 mb-4"
-              />
-              <div className="flex gap-3">
-                <button
-                  onClick={() => { setShowDeleteConfirm(false); setDeleteConfirmText(""); }}
-                  className="flex-1 py-3 rounded-xl bg-gray-800 hover:bg-gray-700 text-white text-sm font-bold transition-colors"
-                >
-                  Cancel
-                </button>
-                <button
-                  onClick={handleDeleteAccount}
-                  disabled={deleteConfirmText !== "DELETE" || deleting}
-                  className="flex-1 py-3 rounded-xl bg-red-700 hover:bg-red-600 disabled:opacity-40 disabled:cursor-not-allowed text-white text-sm font-black transition-colors flex items-center justify-center gap-2"
-                >
-                  {deleting ? <Loader2 size={14} className="animate-spin" /> : <Trash2 size={14} />}
-                  {deleting ? "Deleting…" : "Delete Account"}
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
 
         {/* App Info */}
         <div className="text-center text-gray-700 text-xs pb-4 space-y-1">
