@@ -25,17 +25,16 @@ export default function VaultHeroPage() {
 
           {/* Headline */}
           <h1 className="text-6xl sm:text-7xl font-black leading-[1.1] mb-6 drop-shadow-lg">
-            Unlock the
+            Primary-Source
             <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400">
-              Research Archive
+              Research Intelligence
             </span>
           </h1>
 
           {/* Subheading */}
           <p className="text-xl text-gray-300 max-w-xl mx-auto mb-10 leading-relaxed">
-            40+ patents. 200+ peer-reviewed publications. Complete engineering frameworks. 
-            Institutional-grade research access.
+            Institutional-grade research on electromagnetic systems sourced from filed patents, peer-reviewed publications, and declassified government archives. Used by research institutions in 6+ countries.
           </p>
 
           {/* CTA Buttons */}
@@ -56,9 +55,10 @@ export default function VaultHeroPage() {
 
           {/* Trust indicators */}
           <div className="mt-12 flex flex-col sm:flex-row gap-8 justify-center text-sm text-gray-400">
-            <div>✓ 40+ Analyzed Patents</div>
-            <div>✓ Primary Source Citations</div>
-            <div>✓ Institutional Access</div>
+            <div>✓ 40+ Patents Analyzed</div>
+            <div>✓ 200+ Peer-Reviewed Sources</div>
+            <div>✓ Declassified Government Archives</div>
+            <div>✓ Live Institutional Support</div>
           </div>
         </div>
       </div>

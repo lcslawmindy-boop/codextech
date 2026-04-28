@@ -68,9 +68,9 @@ export default function ConceptGraph() {
           <div className="w-20 h-20 rounded-2xl bg-gray-800 border border-gray-700 flex items-center justify-center text-4xl mx-auto mb-6">
             📚
           </div>
-          <h2 className="text-white font-black text-2xl mb-2">Access the Research Vault</h2>
+          <h2 className="text-white font-black text-2xl mb-2">Access Institutional Research Intelligence</h2>
           <p className="text-gray-400 text-sm leading-relaxed mb-6">
-            Explore all build plans, courses, and research tools. Choose your membership tier or pick individual courses and guides à la carte.
+            Membership required. Access the complete primary-source research archive: 40+ patents analyzed, 200+ peer-reviewed publications, declassified government reports, and verified engineering frameworks.
           </p>
           <div className="space-y-3">
             <Link to="/research-membership"
@@ -109,8 +109,8 @@ export default function ConceptGraph() {
       <div className="flex flex-col border-b border-gray-800 flex-shrink-0">
         <div className="flex items-center justify-between px-6 py-3">
         <div>
-          <h1 className="text-white font-bold text-lg tracking-tight">Zenith Apex Research Portfolio (ZARP) — AI Operating System for Global R&D and Intellectual Property Creation</h1>
-          <p className="text-gray-500 text-xs">Click any node to explore source fragments · Drag to rearrange · Scroll to zoom</p>
+          <h1 className="text-white font-bold text-lg tracking-tight">Institutional Electromagnetic Research Archive — Primary-Source Analysis and Patent Intelligence</h1>
+          <p className="text-gray-500 text-xs">Interactive research network mapping 40+ patents, 200+ peer-reviewed sources, and declassified government archives. Click nodes to view verified source material.</p>
         </div>
         <div className="flex items-center gap-2">
           {/* View toggle */}

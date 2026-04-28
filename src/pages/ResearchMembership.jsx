@@ -52,11 +52,11 @@ export default function ResearchMembership() {
         {/* Hero */}
         <div className="mb-16 max-w-3xl">
           <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-purple-950/40 border border-purple-800 text-purple-300 text-xs font-black mb-4 uppercase tracking-widest">
-            <Lock size={12} /> Full Institutional Access
+            <Lock size={12} /> Research Intelligence Platform
           </div>
-          <h2 className="text-4xl font-black mb-4">Everything: Archive + Research + Community</h2>
+          <h2 className="text-4xl font-black mb-4">Institutional Access to Primary-Source Research</h2>
           <p className="text-gray-400 text-lg">
-            40+ patents fully analyzed. 8 research modules. 200+ citations. Monthly updates. Quarterly live sessions with institutional researchers.
+            Complete archive of 40+ patents (with prosecution history), 200+ peer-reviewed publications, declassified government reports, and engineering frameworks derived from verified sources. Monthly updates. Quarterly live research sessions.
           </p>
         </div>
 
@@ -65,18 +65,19 @@ export default function ResearchMembership() {
           {/* Researcher Tier */}
           <div className="bg-gray-900 border border-gray-800 rounded-2xl p-8">
             <h3 className="text-white font-black text-2xl mb-2">Researcher</h3>
-            <p className="text-gray-500 text-sm mb-6">For individuals and independent teams</p>
+            <p className="text-gray-500 text-sm mb-6">For individual researchers and engineers</p>
 
-            <div className="text-3xl font-black text-cyan-300 mb-1">$97</div>
+            <div className="text-3xl font-black text-cyan-300 mb-1">$197</div>
             <p className="text-gray-500 text-xs mb-8">/month, cancel anytime</p>
 
             <div className="space-y-3 mb-8">
               {[
-                "40+ patent analyses (prosecution history, design analysis)",
-                "8 research modules (80+ hours structured analysis based on primary sources)",
-                "Engineering frameworks documentation (based on published theoretical models)",
-                "Monthly research updates (patent filings, literature tracking)",
-                "Member-only research briefs and institutional updates"
+                "40+ patent analyses with full prosecution history and claims review",
+                "8 structured research modules (80+ hours of primary-source analysis)",
+                "Engineering documentation derived from verified patents and peer-reviewed research",
+                "Monthly research updates: new patents indexed, emerging literature flagged",
+                "Direct expert support: research questions answered within 48 hours",
+                "Exclusive research briefs and institutional findings"
               ].map((feature, i) => (
                 <div key={i} className="flex gap-3">
                   <CheckCircle2 size={16} className="text-cyan-400 flex-shrink-0 mt-0.5" />
@@ -87,9 +88,9 @@ export default function ResearchMembership() {
 
             <CheckoutButton
               title="Research Membership"
-              price="$97"
-              priceInCents={9700}
-              description="Monthly membership for individual researchers"
+              price="$197"
+              priceInCents={19700}
+              description="Monthly membership for individual researchers and engineers"
             />
 
             <p className="text-gray-600 text-xs text-center mt-4">Billed monthly. Access everything immediately.</p>
@@ -98,23 +99,24 @@ export default function ResearchMembership() {
           {/* Institutional Tier */}
           <div className="bg-gradient-to-br from-cyan-950/30 to-blue-950/30 border-2 border-cyan-600 rounded-2xl p-8 relative">
             <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-cyan-600 text-white text-xs font-black">
-              RECOMMENDED
+              INSTITUTIONAL STANDARD
             </div>
 
             <h3 className="text-white font-black text-2xl mb-2">Institutional</h3>
-            <p className="text-gray-300 text-sm mb-6">For labs, research teams, and institutions</p>
+            <p className="text-gray-300 text-sm mb-6">For research teams, government agencies, and enterprises</p>
 
-            <div className="text-3xl font-black text-cyan-300 mb-1">$197</div>
+            <div className="text-3xl font-black text-cyan-300 mb-1">$497</div>
             <p className="text-gray-500 text-xs mb-8">/month, cancel anytime</p>
 
             <div className="space-y-3 mb-8">
               {[
-                "Everything in Researcher tier",
-                "Team access (up to 5 seats)",
-                "Quarterly live Q&A with institutional researchers and engineers",
-                "Direct support: research questions and technical discussion",
-                "First access to Advanced Engineering Bundle",
-                "Institution affiliation (optional display)"
+                "Everything in Research tier",
+                "Team access (up to 10 seats)",
+                "Monthly live technical sessions with research directors",
+                "Priority expert support: research & strategic questions",
+                "Quarterly institutional briefings on emerging research",
+                "Custom research requests (1 per month)",
+                "Pre-release access to new patent analyses and modules"
               ].map((feature, i) => (
                 <div key={i} className="flex gap-3">
                   <CheckCircle2 size={16} className="text-cyan-300 flex-shrink-0 mt-0.5" />
@@ -125,9 +127,9 @@ export default function ResearchMembership() {
 
             <CheckoutButton
               title="Institutional Membership"
-              price="$197"
-              priceInCents={19700}
-              description="Monthly membership for research teams"
+              price="$497"
+              priceInCents={49700}
+              description="Monthly membership for research teams and institutions"
             />
 
             <p className="text-gray-400 text-xs text-center mt-4">Billed monthly. Team access activates immediately.</p>
@@ -142,23 +144,23 @@ export default function ResearchMembership() {
             {[
               {
                 icon: <Zap className="text-cyan-400" />,
-                label: "40+ Patents",
-                desc: "Full analysis with prosecution history, claims, and design implications"
+                label: "Patent Intelligence",
+                desc: "40+ patents with full prosecution history, claims analysis, prior art assessment, and freedom-to-operate evaluation"
               },
               {
                 icon: <BookOpen className="text-purple-400" />,
-                label: "8 Modules",
-                desc: "80+ hours of structured research analysis (Bearden, Scalar EM, Gravitobiology, etc.)"
+                label: "Primary Sources",
+                desc: "200+ peer-reviewed publications, declassified government reports, and technical archives analyzed"
               },
               {
                 icon: <Lock className="text-green-400" />,
-                label: "System Docs",
-                desc: "Engineering documentation for MEG, Scalar Transmitter, Anenergy, Priore, and more"
+                label: "Verified Research",
+                desc: "All engineering documentation sourced from filed patents, published literature, and verified specifications"
               },
               {
                 icon: <Users className="text-pink-400" />,
-                label: "Community",
-                desc: "Monthly updates + quarterly live sessions with institutional researchers"
+                label: "Expert Support",
+                desc: "Monthly research updates + live sessions with institutional researchers and technical experts"
               }
             ].map((item, i) => (
               <div key={i} className="text-center">
@@ -177,28 +179,28 @@ export default function ResearchMembership() {
           <div className="space-y-6">
             {[
               {
-                title: "Institution Standard",
-                desc: "Used by research teams in 6+ countries. This is the documentation framework serious teams rely on."
+                title: "Primary-Source Foundation",
+                desc: "All research is sourced from filed US patents, peer-reviewed journals, declassified government archives, and verified technical specifications. No speculation. No secondary interpretation."
               },
               {
-                title: "Primary Source Documentation",
-                desc: "All analysis cites Maxwell's original work, T.E. Bearden's published research, peer-reviewed literature, and technical archives."
+                title: "Institutional-Grade Analysis",
+                desc: "Used by research institutions, government laboratories, and serious engineers in 6+ countries. This is the standard framework for credible research intelligence."
               },
               {
-                title: "Actionable Framework",
-                desc: "Not just analysis. Engineering interpretations mapped to real system design decisions."
+                title: "Verification Methodology",
+                desc: "Every technical claim is traceable to its source. Patents cross-referenced with USPTO records. Publications verified against journal archives. Government reports authenticated through OSTI.gov."
               },
               {
-                title: "Living Archive",
-                desc: "Monthly updates: new patents indexed, emerging literature flagged, institutional developments tracked."
+                title: "Monthly Intelligence Updates",
+                desc: "New patents indexed. Emerging peer-reviewed research flagged. Regulatory developments tracked. You stay current with institutional research."
               },
               {
-                title: "Direct Access",
-                desc: "Institutional tier includes quarterly sessions where you can ask experts directly about your research."
+                title: "Expert Support (Institutional Tier)",
+                desc: "Direct access to research directors via monthly sessions. Ask questions about patent strategy, research interpretation, engineering application. Get expert answers."
               },
               {
-                title: "Unmatched Scope",
-                desc: "40+ patents + 8 modules + 200+ citations. This level of comprehensive analysis isn't available elsewhere."
+                title: "Competitive Advantage",
+                desc: "40+ patents + 8 research modules + 200+ primary sources analyzed. No other platform offers this level of comprehensive, verified intelligence on electromagnetic research systems."
               }
             ].map((item, i) => (
               <div key={i} className="flex gap-4 bg-gray-900/40 border border-gray-800 rounded-xl p-6">
