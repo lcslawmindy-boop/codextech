@@ -138,7 +138,7 @@ import RetentionDashboard from './pages/RetentionDashboard';
 import UpsellEngine from './pages/UpsellEngine';
 import LeadMagnetSystem from './pages/LeadMagnetSystem';
 import CommunityForum from './pages/CommunityForum';
-import NewCommunityPost from './pages/NewCommunityPost';
+import CreateCommunityPost from './pages/CreateCommunityPost';
 import ABTestingDashboard from './pages/ABTestingDashboard';
 import RevenueAudit from './pages/RevenueAudit';
 import AdminNdaSignatures from './pages/AdminNdaSignatures';
@@ -316,7 +316,7 @@ const AuthenticatedApp = () => {
           <Route path="/contest" element={<ContestPage />} />
           <Route path="/paywall" element={<PaywallPage />} />
           <Route path="/community" element={<CommunityForum />} />
-          <Route path="/community/new" element={<NewCommunityPost />} />
+          <Route path="/community/new" element={<CreateCommunityPost />} />
 
           {/* Admin-only routes */}
           <Route element={<AdminGuard />}>

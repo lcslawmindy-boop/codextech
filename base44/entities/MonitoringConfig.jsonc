@@ -52,6 +52,11 @@
     },
     "last_scan": {
       "type": "string"
+    },
+    "description": {
+      "type": "string",
+      "description": "Optional notes about this monitoring configuration",
+      "maxLength": 1000
     }
   },
   "required": [

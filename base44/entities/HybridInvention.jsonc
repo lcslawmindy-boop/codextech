@@ -73,6 +73,11 @@
         "commercializing"
       ],
       "default": "draft"
+    },
+    "description": {
+      "type": "string",
+      "description": "Optional summary of this hybrid invention concept",
+      "maxLength": 1000
     }
   },
   "required": [

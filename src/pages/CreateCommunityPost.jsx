@@ -11,7 +11,7 @@ const INVENTIONS = [
   "TRD-1 Telomere Device",
 ];
 
-export default function NewCommunityPost() {
+export default function CreateCommunityPost() {
   const navigate = useNavigate();
   const [currentUser, setCurrentUser] = useState(null);
   const [loading, setLoading] = useState(false);

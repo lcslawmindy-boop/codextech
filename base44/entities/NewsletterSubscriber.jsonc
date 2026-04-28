@@ -18,6 +18,11 @@
         "unsubscribed"
       ],
       "default": "active"
+    },
+    "description": {
+      "type": "string",
+      "description": "Optional notes about this subscriber",
+      "maxLength": 1000
     }
   },
   "required": [

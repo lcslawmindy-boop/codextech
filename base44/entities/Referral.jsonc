@@ -40,6 +40,11 @@
     },
     "completed_date": {
       "type": "string"
+    },
+    "description": {
+      "type": "string",
+      "description": "Optional notes about this referral",
+      "maxLength": 1000
     }
   },
   "required": [

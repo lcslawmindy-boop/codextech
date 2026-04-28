@@ -71,6 +71,11 @@
       "type": "boolean",
       "default": false,
       "description": "Whether experiment is ready for peer review"
+    },
+    "description": {
+      "type": "string",
+      "description": "Optional overview or notes about this research experiment",
+      "maxLength": 1000
     }
   },
   "required": [

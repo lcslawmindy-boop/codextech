@@ -43,6 +43,11 @@
     },
     "last_scan": {
       "type": "string"
+    },
+    "description": {
+      "type": "string",
+      "description": "Optional notes about this opportunity subscription",
+      "maxLength": 1000
     }
   },
   "required": [

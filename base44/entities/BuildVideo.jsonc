@@ -19,6 +19,11 @@
     },
     "step_count": {
       "type": "integer"
+    },
+    "description": {
+      "type": "string",
+      "description": "Optional description of this build video",
+      "maxLength": 1000
     }
   },
   "required": [

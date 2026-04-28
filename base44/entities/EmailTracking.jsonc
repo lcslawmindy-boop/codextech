@@ -68,6 +68,11 @@
         "engaged"
       ],
       "default": "sent"
+    },
+    "description": {
+      "type": "string",
+      "description": "Optional notes about this tracked email",
+      "maxLength": 1000
     }
   },
   "required": [

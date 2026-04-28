@@ -34,6 +34,11 @@
     "signed_at": {
       "type": "string",
       "description": "Timestamp of signature"
+    },
+    "description": {
+      "type": "string",
+      "description": "Optional notes about this NDA signature record",
+      "maxLength": 1000
     }
   },
   "required": [

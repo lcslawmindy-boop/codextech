@@ -44,6 +44,11 @@
     "completion_percent": {
       "type": "integer",
       "default": 0
+    },
+    "description": {
+      "type": "string",
+      "description": "Optional notes about this onboarding progress record",
+      "maxLength": 1000
     }
   },
   "required": [

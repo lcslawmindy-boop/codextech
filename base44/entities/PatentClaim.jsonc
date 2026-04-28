@@ -134,6 +134,11 @@
     },
     "created_date": {
       "type": "string"
+    },
+    "description": {
+      "type": "string",
+      "description": "Optional notes about this patent claim set",
+      "maxLength": 1000
     }
   },
   "required": [
