@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { ArrowLeft, RefreshCw, Save, CheckCircle, AlertCircle, ExternalLink, Search } from "lucide-react";
+import { ArrowLeft, RefreshCw, Save, CheckCircle, AlertCircle, ExternalLink, Search, ShoppingCart, Copy } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import { businessItems } from "@/lib/businessItems";
 
@@ -61,6 +61,25 @@ export default function AdminStripeCatalog() {
       setErrors(err => ({ ...err, [productId]: e.message }));
     }
     setSaving(s => ({ ...s, [productId]: false }));
+  };
+
+  const [checkingOut, setCheckingOut] = useState({});
+
+  const handleBuyNow = async (priceId, productName) => {
+    setCheckingOut(s => ({ ...s, [priceId]: true }));
+    try {
+      const res = await base44.functions.invoke("createCheckoutSession", {
+        priceId,
+        title: productName,
+        priceInCents: 0,
+        successUrl: window.location.href,
+        cancelUrl: window.location.href,
+      });
+      window.open(res.data.url, "_blank");
+    } catch (e) {
+      alert("Checkout error: " + e.message);
+    }
+    setCheckingOut(s => ({ ...s, [priceId]: false }));
   };
 
   const applyFromCatalog = (productId, item) => {
@@ -199,7 +218,7 @@ export default function AdminStripeCatalog() {
                     />
                   </div>
 
-                  <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-3 flex-wrap">
                     <button
                       onClick={() => applyFromCatalog(pid, item)}
                       className="px-3 py-1.5 rounded-lg bg-gray-800 hover:bg-gray-700 text-gray-300 text-xs font-bold transition-colors"
@@ -213,6 +232,16 @@ export default function AdminStripeCatalog() {
                     >
                       <Save size={12} /> {saving[pid] ? "Saving…" : "Save to Stripe"}
                     </button>
+                    {item.stripeData?.prices?.map(pr => (
+                      <button
+                        key={pr.id}
+                        onClick={() => handleBuyNow(pr.id, item.stripeData.name)}
+                        disabled={checkingOut[pr.id]}
+                        className="flex items-center gap-1.5 px-4 py-1.5 rounded-lg bg-green-700 hover:bg-green-600 text-white text-xs font-black transition-colors disabled:opacity-50"
+                      >
+                        <ShoppingCart size={12} /> {checkingOut[pr.id] ? "Opening…" : `Buy Now — $${(pr.unit_amount / 100).toFixed(2)}`}
+                      </button>
+                    ))}
                     {saved[pid] && <span className="flex items-center gap-1 text-green-400 text-xs"><CheckCircle size={12} /> Saved</span>}
                     {errors[pid] && <span className="text-red-400 text-xs">{errors[pid]}</span>}
                   </div>
