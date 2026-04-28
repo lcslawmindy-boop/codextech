@@ -10,6 +10,7 @@ import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 // Add page imports here
 import ZarpLanding from './pages/ZarpLanding';
 import VaultNDALanding from './pages/VaultNDALanding';
+import CodextechLanding from './pages/CodextechLanding';
 import FreeVault from './pages/FreeVault';
 import OrderTracking from './pages/OrderTracking';
 import ConceptGraph from './pages/ConceptGraph';
@@ -220,7 +221,7 @@ const AuthenticatedApp = () => {
       {isTrial && <TrialBanner />}
       <Routes>
         <Route element={<MobileLayout />}>
-          <Route path="/" element={<VaultNDALanding />} />
+          <Route path="/" element={<CodextechLanding />} />
           <Route path="/zarp-landing" element={<ZarpLanding />} />
           <Route path="/vault" element={<ConceptGraph />} />
           <Route path="/free-vault" element={<FreeVault />} />
