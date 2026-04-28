@@ -1,11 +1,15 @@
 import { Link } from "react-router-dom";
 import { ArrowRight, Database, Zap, BookOpen, Lock } from "lucide-react";
+import CodextechAkashicBackground from "../components/CodextechAkashicBackground";
 
 export default function CodextechHome() {
   return (
-    <div className="min-h-screen bg-white text-gray-900">
+    <div className="min-h-screen bg-white text-gray-900 relative">
+      {/* Akashic Background */}
+      <CodextechAkashicBackground />
+
       {/* Navigation */}
-      <nav className="border-b border-gray-200 px-6 py-4 sticky top-0 bg-white z-40">
+      <nav className="border-b border-gray-200 px-6 py-4 sticky top-0 bg-white z-40 relative">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-lg bg-gray-900 flex items-center justify-center text-white font-black text-xs">CX</div>
@@ -24,7 +28,7 @@ export default function CodextechHome() {
       </nav>
 
       {/* HERO */}
-      <section className="px-6 py-20 border-b border-gray-200">
+      <section className="px-6 py-20 border-b border-gray-200 relative z-10">
         <div className="max-w-5xl mx-auto">
           <div className="mb-6">
             <span className="text-xs font-black uppercase tracking-widest text-gray-600 px-3 py-1.5 bg-gray-100 rounded-full inline-block">
@@ -51,7 +55,7 @@ export default function CodextechHome() {
       </section>
 
       {/* AUTHORITY STRIP */}
-      <section className="px-6 py-8 bg-gray-50 border-b border-gray-200">
+      <section className="px-6 py-8 bg-gray-50 border-b border-gray-200 relative z-10">
         <div className="max-w-7xl mx-auto flex items-center justify-center gap-8 flex-wrap text-center text-sm font-bold text-gray-700">
           <span>✓ Patent Literature (USPTO)</span>
           <span>✓ Peer-Reviewed Journals</span>
@@ -61,7 +65,7 @@ export default function CodextechHome() {
       </section>
 
       {/* WHAT THIS IS */}
-      <section className="px-6 py-16 border-b border-gray-200 bg-white">
+      <section className="px-6 py-16 border-b border-gray-200 bg-white relative z-10">
         <div className="max-w-3xl mx-auto">
           <h2 className="text-2xl font-black text-gray-900 mb-6">What C.O.D.E.X.T.E.C.H. Is</h2>
           <div className="space-y-4 text-lg text-gray-600 leading-relaxed">
@@ -79,7 +83,7 @@ export default function CodextechHome() {
       </section>
 
       {/* PLATFORM PILLARS */}
-      <section id="pillars" className="px-6 py-20 border-b border-gray-200 bg-gray-50">
+      <section id="pillars" className="px-6 py-20 border-b border-gray-200 bg-gray-50 relative z-10">
         <div className="max-w-6xl mx-auto">
           <h2 className="text-3xl font-black text-gray-900 mb-16">Platform Pillars</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -116,7 +120,7 @@ export default function CodextechHome() {
       </section>
 
       {/* WHO IT'S FOR */}
-      <section className="px-6 py-16 border-b border-gray-200">
+      <section className="px-6 py-16 border-b border-gray-200 relative z-10">
         <div className="max-w-3xl mx-auto">
           <h2 className="text-3xl font-black text-gray-900 mb-8">Who It's For</h2>
           <p className="text-lg text-gray-600 mb-6 leading-relaxed">Built for:</p>
@@ -139,7 +143,7 @@ export default function CodextechHome() {
       </section>
 
       {/* FINAL CTA */}
-      <section className="px-6 py-20 bg-gray-900 text-white">
+      <section className="px-6 py-20 bg-gray-900 text-white relative z-10">
         <div className="max-w-3xl mx-auto text-center">
           <p className="text-2xl font-black mb-4">Stop collecting scattered documents.</p>
           <p className="text-2xl font-black mb-12">Start using a structured research system.</p>
@@ -151,7 +155,7 @@ export default function CodextechHome() {
       </section>
 
       {/* FOOTER */}
-      <footer className="px-6 py-12 bg-gray-50 border-t border-gray-200 text-center text-sm text-gray-600">
+      <footer className="px-6 py-12 bg-gray-50 border-t border-gray-200 text-center text-sm text-gray-600 relative z-10">
         <p>C.O.D.E.X.T.E.C.H. © 2026. Private research infrastructure for serious builders.</p>
       </footer>
     </div>
