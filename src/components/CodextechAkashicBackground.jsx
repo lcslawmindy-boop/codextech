@@ -14,7 +14,7 @@ export default function CodextechAkashicBackground() {
     canvas.height = window.innerHeight;
 
     // Icon symbols for floating spheres
-    const icons = ["⚡", "🛰️", "🚀", "💡", "🔬", "⚙️", "🧬", "📡", "🔭", "⛓️"];
+    const icons = ["⚡", "🛰️", "🚀", "💡", "💡", "💡", "🔬", "⚙️", "🧬", "📡", "🔭", "⛓️", "🌟"];
     
     // Floating elements
     const elements = [];
