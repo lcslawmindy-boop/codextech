@@ -15,10 +15,9 @@ const KITS = [
 ];
 
 const QUICK_LINKS = [
-  { label: "Build Plans", href: "/invention-plans", icon: <Wrench size={16} />, color: "text-orange-400", desc: "40+ systems" },
-  { label: "Courses", href: "/courses", icon: <BookOpen size={16} />, color: "text-blue-400", desc: "40+ courses" },
+  { label: "Build Plans", href: "/invention-plans", icon: <Wrench size={16} />, color: "text-orange-400", desc: "10+ systems" },
+  { label: "Courses", href: "/courses", icon: <BookOpen size={16} />, color: "text-blue-400", desc: "20+ courses" },
   { label: "AI Patent Tool", href: "/patent-tool", icon: <Shield size={16} />, color: "text-green-400", desc: "Draft in minutes" },
-  { label: "Investor Package", href: "/investor-package", icon: <TrendingUp size={16} />, color: "text-purple-400", desc: "Full capital kit" },
   { label: "Prior Art Archive", href: "/prior-art", icon: <Star size={16} />, color: "text-yellow-400", desc: "200+ entries" },
   { label: "Lab Simulator", href: "/scalar-lab", icon: <Zap size={16} />, color: "text-cyan-400", desc: "No hardware needed" },
 ];
@@ -67,7 +66,7 @@ export default function MemberDashboard() {
 
       {tier !== "elite" && (
         <UpgradeBar
-          message={tier === "starter" || tier === "member" ? "Pro unlocks 25 more systems + full AI suite — $79/month" : "Elite unlocks restricted systems + monthly strategy call — $149/month"}
+          message={tier === "starter" || tier === "member" ? "Pro unlocks full course library + advanced AI tools — $79/month" : "Elite unlocks advanced systems + monthly strategy call — $149/month"}
           ctaLabel="Upgrade"
           ctaHref="/paywall"
         />
@@ -107,13 +106,13 @@ export default function MemberDashboard() {
             <div>
               <div className="font-black text-white mb-1">
                 {tier === "starter" || tier === "member"
-                  ? "Upgrade to Pro — Unlock 25 More Systems + Full AI Suite"
-                  : "Upgrade to Elite — Restricted Systems + Monthly 1-on-1"}
+                    ? "Upgrade to Pro — Unlock Full Course Library + Advanced AI Tools"
+                    : "Upgrade to Elite — Advanced Systems + Monthly Strategy Call"}
               </div>
               <p className="text-gray-400 text-sm">
                 {tier === "starter" || tier === "member"
-                  ? "Pro unlocks all 40+ builds, all 40+ courses, the full AI patent + investor suite. $79/month."
-                  : "Elite unlocks defense-adjacent systems and a monthly strategy session. $149/month."}
+                  ? "Pro unlocks 10+ builds, 20+ courses, and the full AI patent suite. $79/month."
+                  : "Elite unlocks advanced systems and a monthly strategy session. $149/month."}
               </p>
             </div>
             <Link to="/pricing"
