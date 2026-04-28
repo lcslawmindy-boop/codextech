@@ -27,10 +27,10 @@ function useCountdown() {
 const MEMBERSHIP = {
   id: "member",
   name: "Full Access Membership",
-  price: 199,
+  price: 99,
   color: "#8b5cf6",
   description: "All courses and all build plans, forever.",
-  cta: "Join Now — $199/mo",
+  cta: "Join Now — $99/mo",
   features: [
     { icon: <Wrench size={15} />, text: "40+ complete build plans — full BOM, schematics, assembly steps" },
     { icon: <ExternalLink size={15} />, text: "Verified sourcing links — Digikey, Mouser, Amazon, specialist suppliers" },
@@ -138,7 +138,7 @@ export default function Pricing() {
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-cyan-400">Everything Included.</span>
         </h1>
         <p className="text-gray-400 text-lg max-w-xl mx-auto">
-          All 40+ courses and all 40+ build plans — complete BOMs, sourcing links, build videos, and everything in the vault for $199/month.
+          All 40+ courses and all 40+ build plans — complete BOMs, sourcing links, build videos, and everything in the vault.
         </p>
       </div>
 
