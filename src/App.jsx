@@ -156,6 +156,10 @@ import KitBundle from './pages/KitBundle';
 import MyLibrary from './pages/MyLibrary';
 import HydromagnetopropulsionCourse from './pages/HydromagnetopropulsionCourse';
 import AlaCarteMenu from './pages/AlaCarteMenu';
+import ResearchBriefLanding from './pages/ResearchBriefLanding';
+import TechnicalBriefPack from './pages/TechnicalBriefPack';
+import ResearchMembership from './pages/ResearchMembership';
+import AdvancedEngineeringBundle from './pages/AdvancedEngineeringBundle';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -372,6 +376,10 @@ const AuthenticatedApp = () => {
           <Route path="/my-library" element={<MyLibrary />} />
           <Route path="/hydromagnetopropulsion-course" element={<HydromagnetopropulsionCourse />} />
           <Route path="/alacarte" element={<AlaCarteMenu />} />
+          <Route path="/research-brief" element={<ResearchBriefLanding />} />
+          <Route path="/technical-brief-pack" element={<TechnicalBriefPack />} />
+          <Route path="/research-membership" element={<ResearchMembership />} />
+          <Route path="/advanced-engineering-bundle" element={<AdvancedEngineeringBundle />} />
 
           <Route path="*" element={<PageNotFound />} />
         </Route>
