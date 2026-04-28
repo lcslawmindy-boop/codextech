@@ -52,7 +52,17 @@ const DEFENSE_RESTRICTED = [
 
 const isDefenseRestricted = (title) => DEFENSE_RESTRICTED.some(d => d.toLowerCase() === title?.toLowerCase());
 
-const inventions = businessItems.filter(i => i.category === "Invention" && !isDefenseRestricted(i.title));
+// Patented inventions (owned by others, not for sale)
+const PATENTED_NOT_FOR_SALE = [
+  "Motionless Electromagnetic Generator (MEG) — Advanced Phase",
+  "Asymmetric Regauging Overunity Generator",
+  "Telomere Regeneration Device (TRD-1)",
+  "Prioré-Type Multichannel EM System",
+];
+
+const isPatentedNotForSale = (title) => PATENTED_NOT_FOR_SALE.some(p => p.toLowerCase() === title?.toLowerCase());
+
+const inventions = businessItems.filter(i => i.category === "Invention" && !isDefenseRestricted(i.title) && !isPatentedNotForSale(i.title));
 
 function VisualExplainer({ visual }) {
   if (!visual) return null;
@@ -1363,6 +1373,27 @@ function ClassifiedGate() {
   );
 }
 
+function NotForSaleGate({ invention }) {
+  return (
+    <div className="flex-1 flex items-center justify-center p-12">
+      <div className="max-w-md text-center">
+        <div className="w-20 h-20 rounded-2xl bg-gray-800 border-2 border-gray-700 flex items-center justify-center text-4xl mx-auto mb-6">
+          ⚖️
+        </div>
+        <div className="flex items-center justify-center gap-2 mb-3">
+          <Shield size={16} className="text-gray-400" />
+          <span className="text-gray-400 font-bold text-sm uppercase tracking-wider">Patented — Not for Sale</span>
+        </div>
+        <h2 className="text-white font-black text-xl mb-3">{invention?.title}</h2>
+        <p className="text-gray-400 text-sm leading-relaxed mb-6">
+          This invention is patented and protected under intellectual property law. Complete build plans are not available for public purchase or distribution.
+        </p>
+        <p className="text-gray-500 text-xs">For licensing inquiries, contact support@zenithapex.com</p>
+      </div>
+    </div>
+  );
+}
+
 export default function InventionPlans() {
   const { tier } = useTier();
   const { isTrial } = useTrial();
@@ -1553,6 +1584,7 @@ export default function InventionPlans() {
             const isAdminLocked = adminOnly && !isAdmin;
             const isGovLocked = govClassified && !isAdmin && !tierHasGovAccess(tier);
             const memberLocked = isMembershipRequired(inv.title) && !isAdmin;
+            const patentedNotForSale = isPatentedNotForSale(inv.title);
             // Trial users can only view the first invention (index 0)
             const trialLocked = isTrial && !isAdmin && i > 0;
             return (
@@ -1573,6 +1605,7 @@ export default function InventionPlans() {
                    {trialLocked ? <span className="text-cyan-700">⏱ Trial — upgrade to unlock</span> :
                     isAdminLocked ? <span className="text-red-900">🔐 Admin Only</span> :
                     isGovLocked ? <span className="text-red-400">🏛 Gov/Defense Only</span> :
+                    patentedNotForSale ? <span className="text-gray-500">⚖️ Not for Sale</span> :
                     memberLocked ? <span className="text-indigo-500">🔒 Membership or Purchase</span> :
                     <span className="text-gray-600">{inv.price}</span>}
                    {isDefenseRestricted(inv.title) && <span className="ml-1 px-1.5 py-0.5 rounded text-xs bg-red-900/40 border border-red-800 text-red-400">Defense Only</span>}
@@ -1626,6 +1659,8 @@ export default function InventionPlans() {
                 <p className="text-gray-600 text-xs mt-4">Contact support@zenithapex.com for access inquiries.</p>
               </div>
             </div>
+          ) : (isPatentedNotForSale(selected.title)) ? (
+            <NotForSaleGate invention={selected} />
           ) : (isClassifiedInvention(selected.title) && !isAdmin && !tierHasGovAccess(tier)) ? (
             <GovClassifiedGate inventionTitle={selected.title} />
           ) : !canViewSelected ? (
