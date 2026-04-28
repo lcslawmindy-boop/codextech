@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { ArrowRight, Zap, BookOpen, Hammer, Network, Scroll, FileText, Sparkles, Layers, Video } from "lucide-react";
+import { ArrowRight, Zap, BookOpen, Hammer, Network, Scroll, FileText, Sparkles, Layers, Video, X } from "lucide-react";
 import { motion } from "framer-motion";
 
 const FEATURES = [
@@ -87,9 +87,66 @@ const STAT_CARDS = [
 
 export default function PostNDAOnboarding() {
   const [hoveredCard, setHoveredCard] = useState(null);
+  const [showAIWelcome, setShowAIWelcome] = useState(true);
+  const [countdown, setCountdown] = useState(10);
+
+  useEffect(() => {
+    if (!showAIWelcome) return;
+    const timer = setInterval(() => {
+      setCountdown(prev => {
+        if (prev <= 1) {
+          window.location.href = "/courses";
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+    return () => clearInterval(timer);
+  }, [showAIWelcome]);
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-950 via-gray-900 to-gray-950 text-white overflow-hidden">
+      {/* ── AI Welcome Banner ── */}
+      {showAIWelcome && (
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -20 }}
+          className="bg-gradient-to-r from-cyan-900/60 to-blue-900/60 border-b border-cyan-700/50 px-6 py-6"
+        >
+          <div className="max-w-7xl mx-auto flex items-start justify-between gap-6">
+            <div className="flex items-start gap-4 flex-1">
+              <div className="w-12 h-12 rounded-lg bg-cyan-500/20 flex items-center justify-center flex-shrink-0 mt-1">
+                <span className="text-xl">🤖</span>
+              </div>
+              <div className="flex-1">
+                <h2 className="text-xl font-black text-white mb-2">Welcome to Your Research Vault</h2>
+                <p className="text-gray-300 text-sm leading-relaxed mb-4">
+                  Your NDA has been verified. You now have full access to 40+ build plans, 200+ courses, and the Bearden Research Network. Start with our Course Library to understand the theoretical framework, then explore the interconnected research nodes.
+                </p>
+                <div className="flex items-center gap-4">
+                  <Link
+                    to="/courses"
+                    className="inline-flex items-center gap-2 px-5 py-2 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white font-bold text-sm transition-colors"
+                  >
+                    Go to Courses <ArrowRight size={14} />
+                  </Link>
+                  <span className="text-xs font-bold text-cyan-300">
+                    Auto-redirecting in {countdown}s
+                  </span>
+                </div>
+              </div>
+            </div>
+            <button
+              onClick={() => setShowAIWelcome(false)}
+              className="text-gray-400 hover:text-white transition-colors flex-shrink-0 mt-1"
+            >
+              <X size={18} />
+            </button>
+          </div>
+        </motion.div>
+      )}
+
       {/* ── Header ── */}
       <div className="border-b border-gray-800 bg-gray-900/80 backdrop-blur px-6 py-6 sticky top-0 z-40">
         <div className="max-w-7xl mx-auto">
