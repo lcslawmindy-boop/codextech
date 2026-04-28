@@ -395,10 +395,10 @@ export default function VaultNDALanding() {
                     <p>Admin has been notified of your access request.</p>
                   </div>
                   <a
-                    href="/pricing"
+                    href="/vault"
                     className="block w-full py-3 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-black transition-colors"
                   >
-                    Explore Membership
+                    Explore Database
                   </a>
                 </div>
               ) : (
