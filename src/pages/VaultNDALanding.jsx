@@ -108,17 +108,6 @@ export default function VaultNDALanding() {
       
       console.log("NDA signature created:", result);
 
-      // Send admin notification
-      try {
-        await base44.functions.invoke("sendNDANotification", {
-          full_name: fullName,
-          email,
-          organization,
-        });
-      } catch (notificationErr) {
-        console.warn("Notification send failed (non-blocking):", notificationErr);
-      }
-
       localStorage.setItem("nda_member_email", email.toLowerCase().trim());
       setSubmitted(true);
       setLoading(false);
@@ -248,10 +237,10 @@ export default function VaultNDALanding() {
               ) : (
                 <form onSubmit={handleSubmit} className="space-y-4">
                   <h3 className="text-lg font-black text-white mb-2">
-                    Research Access Request
+                    Agree & Access
                   </h3>
                   <p className="text-xs text-gray-400 mb-4">
-                    Sign below to access the research platform. For research, education, and personal prototype development only.
+                    Accept the NDA to access the vault. For research, education, and personal prototype development only.
                   </p>
 
                   <div>
