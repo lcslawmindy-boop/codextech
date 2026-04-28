@@ -155,9 +155,7 @@ export default function PostNDAOnboarding() {
               <div className="w-3 h-3 rounded-full bg-green-400 animate-pulse" />
               <span className="text-green-400 text-xs font-black uppercase tracking-widest">NDA Verified</span>
             </div>
-            <Link to="/pricing" className="text-xs font-bold text-gray-400 hover:text-white transition-colors">
-              Skip to Pricing →
-            </Link>
+
           </div>
           <h1 className="text-4xl font-black mb-2">Your Research Vault is Open</h1>
           <p className="text-gray-400 max-w-2xl">
@@ -188,7 +186,7 @@ export default function PostNDAOnboarding() {
       {/* ── Feature Grid ── */}
       <section className="max-w-7xl mx-auto px-6 pb-20">
         <h2 className="text-3xl font-black mb-2">Everything You Can Access</h2>
-        <p className="text-gray-400 mb-12">Click any to explore. Pricing unlocks advanced features and video assembly guides.</p>
+        <p className="text-gray-400 mb-12">Click any to explore all available research tools and resources.</p>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {FEATURES.map((feature, i) => (
@@ -232,69 +230,22 @@ export default function PostNDAOnboarding() {
         </div>
       </section>
 
-      {/* ── Comparison Table ── */}
-      <section className="max-w-7xl mx-auto px-6 py-16 border-y border-gray-800">
-        <h2 className="text-3xl font-black mb-2">Free vs. Premium Access</h2>
-        <p className="text-gray-400 mb-8">All tools are visible and explorable. Premium membership adds video assembly, live sourcing, and advanced AI features.</p>
 
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="border-b border-gray-700">
-                <th className="text-left py-3 px-4 font-black">Feature</th>
-                <th className="text-center py-3 px-4 font-black">Browse Free</th>
-                <th className="text-center py-3 px-4 font-black">Premium Unlock</th>
-              </tr>
-            </thead>
-            <tbody>
-              {[
-                { feature: "40+ Build Plans (BOMs & Schematics)", free: "✓", premium: "✓ + Video Assembly" },
-                { feature: "200+ Course Modules", free: "✓ Titles & Descriptions", premium: "✓ Full Video Content" },
-                { feature: "Bearden Research Graph", free: "✓ Browse & Search", premium: "✓ Advanced Analytics" },
-                { feature: "Patent Drafting AI", free: "✓ Preview", premium: "✓ Generate & File" },
-                { feature: "Prior Art Database", free: "✓ Search", premium: "✓ Download PDFs" },
-                { feature: "Build Videos", free: "✗", premium: "✓ Step-by-Step Assembly" },
-                { feature: "Component Sourcing", free: "✗", premium: "✓ Verified Suppliers" },
-                { feature: "Invention Forge (Hybrid Merge)", free: "✓ Concept", premium: "✓ Full Patent Draft" },
-              ].map((row, i) => (
-                <tr key={i} className="border-b border-gray-800 hover:bg-gray-800/30 transition-colors">
-                  <td className="py-3 px-4 font-bold text-white">{row.feature}</td>
-                  <td className="py-3 px-4 text-center text-green-400 font-bold">{row.free}</td>
-                  <td className="py-3 px-4 text-center text-cyan-400 font-bold">{row.premium}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </section>
 
-      {/* ── CTA Section ── */}
+      {/* ── Continue Exploring ── */}
       <section className="max-w-4xl mx-auto px-6 py-20 text-center">
-        <h2 className="text-3xl font-black mb-4">Ready to Unlock Full Access?</h2>
+        <h2 className="text-3xl font-black mb-4">Start Your Research</h2>
         <p className="text-gray-400 mb-10 max-w-2xl mx-auto">
-          Explore the platform free. Upgrade when you're ready for video assembly, component sourcing, and advanced AI patent generation.
+          Explore the complete research vault with courses, build plans, patent tools, and the Bearden Research Network.
         </p>
 
-        <div className="flex flex-col sm:flex-row gap-4 justify-center mb-6">
-          <motion.a
-            href="/vault"
-            whileHover={{ scale: 1.05 }}
-            className="px-10 py-4 rounded-xl bg-gray-800 hover:bg-gray-700 border border-gray-700 hover:border-gray-600 text-white font-black transition-all"
-          >
-            Continue Exploring Free
-          </motion.a>
-          <motion.a
-            href="/pricing"
-            whileHover={{ scale: 1.05 }}
-            className="px-10 py-4 rounded-xl bg-gradient-to-r from-cyan-600 to-blue-700 hover:from-cyan-500 hover:to-blue-600 text-white font-black shadow-lg shadow-cyan-900/50 transition-all flex items-center justify-center gap-2"
-          >
-            <Zap size={18} /> View Premium Plans
-          </motion.a>
-        </div>
-
-        <p className="text-gray-600 text-xs">
-          No commitments. Cancel anytime. All research tools remain free to explore.
-        </p>
+        <motion.a
+          href="/vault"
+          whileHover={{ scale: 1.05 }}
+          className="inline-flex items-center justify-center gap-2 px-10 py-4 rounded-xl bg-gradient-to-r from-cyan-600 to-blue-700 hover:from-cyan-500 hover:to-blue-600 text-white font-black shadow-lg shadow-cyan-900/50 transition-all"
+        >
+          <Zap size={18} /> Explore the Research Vault
+        </motion.a>
       </section>
 
       {/* ── Footer ── */}
