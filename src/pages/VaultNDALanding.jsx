@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
-import { Download, CheckCircle2, AlertCircle, LogIn } from "lucide-react";
+import { Download, CheckCircle2, AlertCircle, LogIn, X } from "lucide-react";
 
 const NDA_TEXT = `CONFIDENTIALITY, NON-DISCLOSURE, AND ASSUMPTION OF RISK AGREEMENT
 
@@ -158,6 +158,14 @@ export default function VaultNDALanding() {
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [showNDAModal, setShowNDAModal] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowNDAModal(true);
+    }, 5000);
+    return () => clearTimeout(timer);
+  }, []);
 
   // Returning member login
   const [returningEmail, setReturningEmail] = useState("");
@@ -239,6 +247,61 @@ export default function VaultNDALanding() {
 
   return (
     <div className="min-h-screen bg-gray-950 text-white">
+      {/* NDA Modal */}
+      {showNDAModal && (
+        <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 px-4">
+          <div className="bg-gray-900 border border-cyan-700/60 rounded-2xl shadow-2xl max-w-2xl w-full max-h-[80vh] overflow-y-auto">
+            <div className="sticky top-0 bg-gray-900 border-b border-gray-800 px-6 py-4 flex items-center justify-between">
+              <div>
+                <h2 className="text-white font-black text-lg">Important: Confidentiality Agreement</h2>
+                <p className="text-gray-400 text-xs mt-1">Please review before proceeding</p>
+              </div>
+              <button
+                onClick={() => setShowNDAModal(false)}
+                className="text-gray-400 hover:text-white transition-colors"
+              >
+                <X size={20} />
+              </button>
+            </div>
+
+            <div className="px-6 py-4">
+              <div className="prose prose-invert prose-sm max-w-none mb-6">
+                <p className="text-gray-400 text-sm leading-relaxed">
+                  By accessing this research platform, you agree to maintain strict confidentiality of all content. This platform provides access to historical scientific research and patent documents for educational purposes only. 
+                </p>
+                <p className="text-gray-400 text-sm leading-relaxed mt-3">
+                  You acknowledge that:
+                </p>
+                <ul className="text-gray-400 text-sm space-y-1 ml-4">
+                  <li>All content is for research and educational use only</li>
+                  <li>No claims are made regarding operational feasibility or safety</li>
+                  <li>You assume all risks associated with platform use</li>
+                  <li>You will comply with all applicable laws</li>
+                </ul>
+              </div>
+
+              <div className="flex gap-3 pt-4 border-t border-gray-800">
+                <button
+                  onClick={() => setShowNDAModal(false)}
+                  className="flex-1 py-3 rounded-lg border border-gray-700 text-gray-300 hover:bg-gray-800 font-bold text-sm transition-colors"
+                >
+                  Dismiss
+                </button>
+                <button
+                  onClick={() => {
+                    setShowNDAModal(false);
+                    setAgreed(true);
+                  }}
+                  className="flex-1 py-3 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white font-bold text-sm transition-colors"
+                >
+                  I Agree & Continue
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Header */}
       <div className="border-b border-gray-800 bg-gray-900/80 backdrop-blur px-6 py-4 sticky top-0 z-40">
         <div className="max-w-6xl mx-auto flex items-center justify-between">
