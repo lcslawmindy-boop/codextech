@@ -1265,10 +1265,6 @@ function SpecsLockedGate({ invention }) {
             className="flex items-center justify-center gap-2 w-full py-3 rounded-xl font-black text-white text-sm bg-indigo-700 hover:bg-indigo-600 transition-all">
             View Membership Plans
           </button>
-          <button onClick={() => window.location.href = '/pricing'}
-            className="flex items-center justify-center gap-2 w-full py-3 rounded-xl font-black text-sm border border-indigo-700 text-indigo-400 hover:bg-indigo-900/20 transition-all">
-            <ShoppingCart size={15} /> Buy This Plan — $49
-          </button>
         </div>
       </div>
     </div>
@@ -1718,7 +1714,21 @@ export default function InventionPlans() {
                     </div>
                   )}
 
-                  
+                  {/* PDF Download Upsell */}
+                  <div className="bg-gradient-to-r from-blue-950/60 to-cyan-950/60 border border-cyan-700/50 rounded-2xl p-6 mb-4">
+                    <div className="flex items-start justify-between mb-4">
+                      <div>
+                        <p className="text-cyan-400 font-bold text-sm uppercase tracking-wider">Download Complete PDF</p>
+                        <p className="text-gray-400 text-sm mt-1">Portable reference with all specs, BOM & build steps</p>
+                      </div>
+                      <span className="text-2xl font-black text-cyan-300">+$49</span>
+                    </div>
+                    <button onClick={() => window.location.href = '/pricing'}
+                      className="w-full py-3 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white font-black text-sm transition-all">
+                      <Download size={14} className="inline mr-2" /> Get PDF for $49
+                    </button>
+                  </div>
+
                 </>
               ) : (
                 <div className="bg-gray-900 border border-gray-800 rounded-2xl p-8 text-center">
