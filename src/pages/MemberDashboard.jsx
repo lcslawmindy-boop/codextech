@@ -1,9 +1,11 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { useTier } from "@/hooks/useTier";
 import { Zap, BookOpen, Wrench, TrendingUp, Star, ArrowRight, Lock, Shield, ChevronRight, Award, Package, CheckCircle2 } from "lucide-react";
 import UpgradeBar from "@/components/UpgradeBar";
+import { usePullToRefresh } from "@/hooks/usePullToRefresh";
+import PullToRefreshIndicator from "@/components/PullToRefreshIndicator";
 
 // ── Kit upsells ───────────────────────────────────────────────────────────────
 const KITS = [
@@ -41,9 +43,14 @@ export default function MemberDashboard() {
   const [user, setUser] = useState(null);
   const meta = TIER_META[tier] || TIER_META.free;
 
-  useEffect(() => {
-    base44.auth.me().then(u => setUser(u)).catch(() => {});
+  const fetchUser = useCallback(async () => {
+    const u = await base44.auth.me().catch(() => null);
+    setUser(u);
   }, []);
+
+  useEffect(() => { fetchUser(); }, [fetchUser]);
+
+  const { containerRef, pulling, pullDistance, refreshing } = usePullToRefresh(fetchUser);
 
   if (loading) {
     return (
@@ -54,7 +61,8 @@ export default function MemberDashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-950 text-white">
+    <div ref={containerRef} className="min-h-screen bg-gray-950 text-white overflow-y-auto">
+      <PullToRefreshIndicator pulling={pulling} pullDistance={pullDistance} refreshing={refreshing} />
 
       {tier !== "elite" && (
         <UpgradeBar

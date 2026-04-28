@@ -1,6 +1,8 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { ArrowLeft, Lock, Search, Filter, Zap } from "lucide-react";
+import { usePullToRefresh } from "@/hooks/usePullToRefresh";
+import PullToRefreshIndicator from "@/components/PullToRefreshIndicator";
 
 const BUILDS = [
   { id: 1, title: "MEG Replication Device", category: "Energy", cost: "$287", desc: "US Patent 6,362,718. Complete replication with 23-part BOM.", emoji: "⚡", locked: true },
@@ -18,6 +20,13 @@ const CATEGORIES = ["All", "Energy", "Communications", "Bio-Signal", "Instrument
 export default function VaultBrowser() {
   const [search, setSearch] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("All");
+  const [refreshKey, setRefreshKey] = useState(0);
+
+  const onRefresh = useCallback(async () => {
+    setRefreshKey(k => k + 1); // forces re-filter; in a real app would re-fetch from API
+  }, []);
+
+  const { containerRef, pulling, pullDistance, refreshing } = usePullToRefresh(onRefresh);
 
   const filtered = useMemo(() => {
     return BUILDS.filter(b => {
@@ -28,7 +37,8 @@ export default function VaultBrowser() {
   }, [search, categoryFilter]);
 
   return (
-    <div className="min-h-screen bg-gray-950 text-white">
+    <div ref={containerRef} className="min-h-screen bg-gray-950 text-white overflow-y-auto">
+      <PullToRefreshIndicator pulling={pulling} pullDistance={pullDistance} refreshing={refreshing} />
       {/* ── Header ── */}
       <div className="border-b border-gray-800 bg-gray-900/80 px-6 py-4 sticky top-0 z-20">
         <div className="flex items-center gap-4 mb-6">
