@@ -28,11 +28,10 @@ export default function ConceptGraph() {
 
   useEffect(() => {
     if (!ndaAccepted || isAdmin) return;
-    const hasSeenPitch = localStorage.getItem("pitch_deck_prompted");
-    if (hasSeenPitch) return;
+    const hasWatchedPitch = localStorage.getItem("pitch_deck_watched");
+    if (hasWatchedPitch) return;
     const timer = setTimeout(() => {
       setShowPitchPrompt(true);
-      localStorage.setItem("pitch_deck_prompted", "true");
     }, 5 * 60 * 1000); // 5 minutes
     return () => clearTimeout(timer);
   }, [ndaAccepted, isAdmin]);
@@ -306,7 +305,10 @@ export default function ConceptGraph() {
             <div className="space-y-3">
               <Link
                 to="/vision-fund-pitch"
-                onClick={() => setShowPitchPrompt(false)}
+                onClick={() => {
+                  setShowPitchPrompt(false);
+                  localStorage.setItem("pitch_deck_watched", "true");
+                }}
                 className="flex items-center justify-center w-full py-3 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white font-bold text-sm transition-colors"
               >
                 Watch Pitch Deck →
