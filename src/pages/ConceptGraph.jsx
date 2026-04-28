@@ -7,6 +7,7 @@ import TimelineView from "../components/TimelineView";
 import ClusterSummaryPanel from "../components/ClusterSummaryPanel";
 import TopConceptsPanel from "../components/TopConceptsPanel";
 import BusinessConceptGraph from "../components/BusinessConceptGraph";
+import BusinessItemsGraph from "../components/BusinessItemsGraph";
 import { groupColors, nodes } from "../lib/beardenData";
 import NewsletterSignup from "../components/NewsletterSignup";
 import MainNav from "../components/MainNav";
@@ -92,6 +93,14 @@ export default function ConceptGraph() {
             >
               Business
             </button>
+            <button
+              onClick={() => setView("knowledge-graph")}
+              className={`px-3 py-1 rounded text-xs font-medium transition-colors ${
+                view === "knowledge-graph" ? "bg-gray-600 text-white" : "text-gray-400 hover:text-gray-200"
+              }`}
+            >
+              Knowledge Graph
+            </button>
           </div>
           {view === "graph" && (
             <button
@@ -156,7 +165,9 @@ export default function ConceptGraph() {
           <img src="https://media.base44.com/images/public/69ccefebfea78b23498c66a8/a90918e3c_ZARPlogo.png" alt="ZARP" className="w-screen h-screen object-contain" />
         </div>
 
-        {view === "business" ? (
+        {view === "knowledge-graph" ? (
+          <BusinessItemsGraph />
+        ) : view === "business" ? (
           <BusinessConceptGraph />
         ) : view === "timeline" ? (
           <TimelineView
