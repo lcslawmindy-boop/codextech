@@ -1408,6 +1408,7 @@ export default function InventionPlans() {
   const [bomChecked, setBomChecked] = useState({});
   const [hasPurchased, setHasPurchased] = useState(false);
   const [checkingPurchase, setCheckingPurchase] = useState(true);
+  const [checkoutLoading, setCheckoutLoading] = useState(false);
 
   useEffect(() => {
     base44.auth.me().then(async (u) => {
@@ -1465,6 +1466,35 @@ export default function InventionPlans() {
     await new Promise(r => setTimeout(r, 50));
     generatePDF(selected, data);
     setGenerating(false);
+  };
+
+  const handleBuyNow = async () => {
+    if (!selected || checkoutLoading) return;
+    
+    // Block checkout in iframe
+    if (window.self !== window.top) {
+      alert("Checkout works best on the published app. Please visit the full website to complete your purchase.");
+      return;
+    }
+
+    setCheckoutLoading(true);
+    try {
+      const priceInCents = parseInt(selected.price?.replace(/[^\d]/g, "")) * 100 || 9999; // Default $99.99
+      const res = await base44.functions.invoke("createCheckoutSession", {
+        title: selected.title,
+        priceInCents,
+        description: selected.tagline || selected.description,
+        category: "Invention"
+      });
+
+      if (res.data?.url) {
+        window.location.href = res.data.url;
+      }
+    } catch (err) {
+      console.error("Checkout error:", err);
+      alert("Checkout failed. Please try again.");
+    }
+    setCheckoutLoading(false);
   };
 
   const selectedIndex = inventions.findIndex(i => i.title === selected?.title);
@@ -1692,6 +1722,16 @@ export default function InventionPlans() {
                   </div>
                 </div>
                 <p className="text-gray-300 text-sm leading-relaxed mt-3">{selected.description}</p>
+                {!isPatentedNotForSale(selected.title) && (
+                  <button
+                    onClick={handleBuyNow}
+                    disabled={checkoutLoading}
+                    className="mt-4 flex items-center justify-center gap-2 w-full py-3 rounded-xl bg-green-700 hover:bg-green-600 disabled:opacity-50 text-white font-black text-sm transition-all"
+                  >
+                    {checkoutLoading ? <Loader2 size={14} className="animate-spin" /> : <ShoppingCart size={14} />}
+                    {checkoutLoading ? "Processing..." : `Buy Now — ${selected.price || "$99.99"}`}
+                  </button>
+                )}
               </div>
 
               <VisualExplainer visual={visual} />
