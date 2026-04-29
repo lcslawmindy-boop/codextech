@@ -682,7 +682,7 @@ Deno.serve(async (req) => {
     const { inventions, title } = await req.json();
     if (!inventions?.length) return Response.json({ error: "No inventions provided" }, { status: 400 });
 
-    console.log(`Generating brochure PDF for ${inventions.length} inventions, user: ${user.email}`);
+    console.log(`Generating brochure PDF for ${inventions.length} inventions`);
 
     const doc = new jsPDF({ orientation: "landscape", unit: "mm", format: "a4" });
     const generatedAt = new Date().toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
