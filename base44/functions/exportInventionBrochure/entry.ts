@@ -1,4 +1,3 @@
-import { createClientFromRequest } from 'npm:@base44/sdk@0.8.23';
 import { jsPDF } from 'npm:jspdf@4.0.0';
 
 // ─── Brand colors ──────────────────────────────────────────────────────────
@@ -680,10 +679,6 @@ function closingPage(doc, inventions, pageNum, totalPages) {
 // ─── Main handler ──────────────────────────────────────────────────────────
 Deno.serve(async (req) => {
   try {
-    const base44 = createClientFromRequest(req);
-    const user = await base44.auth.me();
-    if (!user) return Response.json({ error: "Unauthorized" }, { status: 401 });
-
     const { inventions, title } = await req.json();
     if (!inventions?.length) return Response.json({ error: "No inventions provided" }, { status: 400 });
 
