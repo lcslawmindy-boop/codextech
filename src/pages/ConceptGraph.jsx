@@ -70,7 +70,7 @@ export default function ConceptGraph() {
           </div>
           <h2 className="text-white font-black text-2xl mb-2">Research Access</h2>
           <p className="text-gray-400 text-sm leading-relaxed mb-6">
-            Sign the confidentiality agreement to access the institutional research archive.
+            Sign the access agreement to explore the institutional research archive.
           </p>
           <div className="space-y-3">
             <Link to="/vault-nda"
