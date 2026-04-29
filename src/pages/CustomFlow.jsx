@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { ArrowLeft, GripVertical, Plus, X, Play, RotateCcw, ChevronRight } from "lucide-react";
+import { ArrowLeft, GripVertical, Plus, X, Play, RotateCcw, ChevronRight, Eye, ExternalLink } from "lucide-react";
 
 const STORAGE_KEY = "codextech_custom_flow";
 
@@ -119,6 +119,8 @@ export default function CustomFlow() {
     setDragOverIdx(null);
   };
 
+  const [previewPage, setPreviewPage] = useState(null);
+
   const filtered = ALL_PAGES.filter(p => {
     const matchCat = activeCategory === "All" || p.category === activeCategory;
     const matchSearch = p.label.toLowerCase().includes(search.toLowerCase());
@@ -136,6 +138,81 @@ export default function CustomFlow() {
   const launchFlow = () => {
     if (flow.length === 0) return;
     setCurrentStep(0);
+  };
+
+  // Page Preview Modal
+  const PagePreviewModal = ({ page, onClose, onAdd, inFlow }) => {
+    const color = CATEGORY_COLORS[page.category];
+    const colorMap = {
+      cyan: "#06b6d4", blue: "#3b82f6", green: "#22c55e", yellow: "#eab308",
+      purple: "#a855f7", orange: "#f97316", pink: "#ec4899", teal: "#14b8a6", red: "#ef4444"
+    };
+    const hex = colorMap[color] || "#06b6d4";
+
+    return (
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4" onClick={onClose}>
+        <div className="bg-gray-900 border border-gray-700 rounded-2xl w-full max-w-lg overflow-hidden shadow-2xl" onClick={e => e.stopPropagation()}>
+          {/* Mock browser chrome */}
+          <div className="bg-gray-800 border-b border-gray-700 px-4 py-2 flex items-center gap-2">
+            <div className="flex gap-1.5">
+              <div className="w-3 h-3 rounded-full bg-red-500/70" />
+              <div className="w-3 h-3 rounded-full bg-yellow-500/70" />
+              <div className="w-3 h-3 rounded-full bg-green-500/70" />
+            </div>
+            <div className="flex-1 mx-3 bg-gray-700 rounded px-3 py-1 text-gray-400 text-xs font-mono truncate">
+              codextech.app{page.path}
+            </div>
+            <a href={page.path} target="_blank" rel="noopener noreferrer"
+              className="text-gray-500 hover:text-gray-300 transition-colors">
+              <ExternalLink size={13} />
+            </a>
+          </div>
+
+          {/* Visual Preview */}
+          <div className="relative h-56 overflow-hidden flex flex-col items-center justify-center gap-4 px-8"
+            style={{ background: `linear-gradient(135deg, #0f172a 0%, ${hex}18 100%)` }}>
+            {/* Decorative grid */}
+            <div className="absolute inset-0 opacity-10"
+              style={{ backgroundImage: `repeating-linear-gradient(0deg, ${hex} 0, ${hex} 1px, transparent 1px, transparent 40px), repeating-linear-gradient(90deg, ${hex} 0, ${hex} 1px, transparent 1px, transparent 40px)` }} />
+            {/* Glow blob */}
+            <div className="absolute rounded-full blur-3xl opacity-20 w-40 h-40"
+              style={{ background: hex }} />
+            {/* Content */}
+            <div className="relative text-center">
+              <div className="text-6xl mb-3 drop-shadow-lg">{page.emoji}</div>
+              <h3 className="text-white font-black text-xl leading-tight">{page.label}</h3>
+              <p className="text-xs mt-1.5 font-mono" style={{ color: hex }}>{page.path}</p>
+            </div>
+            {/* Category pill */}
+            <div className="relative px-3 py-1 rounded-full border text-xs font-bold" style={{ borderColor: hex + "60", backgroundColor: hex + "20", color: hex }}>
+              {page.category}
+            </div>
+          </div>
+
+          {/* Actions */}
+          <div className="p-4 flex gap-3">
+            <button onClick={onClose}
+              className="flex-1 py-2 rounded-lg border border-gray-700 text-gray-400 hover:text-white text-sm font-bold transition-colors">
+              Close
+            </button>
+            <Link to={page.path}
+              className="flex items-center justify-center gap-1.5 px-4 py-2 rounded-lg border border-gray-600 text-gray-300 hover:text-white text-sm font-bold transition-colors">
+              <ExternalLink size={13} /> Visit
+            </Link>
+            <button
+              onClick={() => { inFlow ? removePage(page.path) : addPage(page); onClose(); }}
+              className={`flex-1 py-2 rounded-lg text-sm font-black transition-colors flex items-center justify-center gap-1.5 ${
+                inFlow
+                  ? "bg-red-900/40 hover:bg-red-800/50 border border-red-700 text-red-300"
+                  : "bg-cyan-600 hover:bg-cyan-500 text-white"
+              }`}
+            >
+              {inFlow ? <><X size={13} /> Remove</> : <><Plus size={13} /> Add to Flow</>}
+            </button>
+          </div>
+        </div>
+      </div>
+    );
   };
 
   if (currentStep !== null && flow[currentStep]) {
@@ -233,6 +310,15 @@ export default function CustomFlow() {
         </div>
       </div>
 
+      {previewPage && (
+        <PagePreviewModal
+          page={previewPage}
+          onClose={() => setPreviewPage(null)}
+          onAdd={addPage}
+          inFlow={!!flow.find(p => p.path === previewPage.path && p.label === previewPage.label)}
+        />
+      )}
+
       <div className="max-w-6xl mx-auto px-6 py-8 grid grid-cols-1 lg:grid-cols-2 gap-8">
 
         {/* LEFT: Page Browser */}
@@ -288,16 +374,24 @@ export default function CustomFlow() {
                       </span>
                     </div>
                   </div>
-                  <button
-                    onClick={() => inFlow ? removePage(page.path) : addPage(page)}
-                    className={`flex-shrink-0 ml-2 w-7 h-7 rounded-full flex items-center justify-center transition-all ${
-                      inFlow
-                        ? "bg-gray-700 text-gray-500 cursor-default"
-                        : "bg-cyan-600 hover:bg-cyan-500 text-white"
-                    }`}
-                  >
-                    {inFlow ? <X size={12} /> : <Plus size={14} />}
-                  </button>
+                  <div className="flex items-center gap-1.5 flex-shrink-0 ml-2">
+                    <button
+                      onClick={() => setPreviewPage(page)}
+                      className="w-7 h-7 rounded-full flex items-center justify-center border border-gray-700 text-gray-500 hover:text-gray-200 hover:border-gray-500 transition-all"
+                    >
+                      <Eye size={12} />
+                    </button>
+                    <button
+                      onClick={() => inFlow ? removePage(page.path) : addPage(page)}
+                      className={`w-7 h-7 rounded-full flex items-center justify-center transition-all ${
+                        inFlow
+                          ? "bg-gray-700 text-gray-500 cursor-default"
+                          : "bg-cyan-600 hover:bg-cyan-500 text-white"
+                      }`}
+                    >
+                      {inFlow ? <X size={12} /> : <Plus size={14} />}
+                    </button>
+                  </div>
                 </div>
               );
             })}
