@@ -94,8 +94,8 @@ export default function ConceptGraph() {
       <div className="flex flex-col border-b border-gray-800 flex-shrink-0">
         <div className="flex items-center justify-between px-6 py-3">
         <div>
-          <h1 className="text-white font-bold text-lg tracking-tight">Institutional Electromagnetic Research Archive — Primary-Source Analysis and Patent Intelligence</h1>
-          <p className="text-gray-500 text-xs">Interactive research network mapping 40+ patents, 200+ peer-reviewed sources, and declassified government archives. Click nodes to view verified source material.</p>
+          <h1 className="text-white font-bold text-lg tracking-tight">Advanced Electromagnetic Research Network</h1>
+          <p className="text-gray-500 text-xs">Interactive research network mapping 40+ patents, 200+ peer-reviewed sources, and government archives. Click nodes to view verified source material.</p>
         </div>
         <div className="flex items-center gap-2">
           {/* View toggle */}
