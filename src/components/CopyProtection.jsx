@@ -107,33 +107,7 @@ export default function CopyProtection() {
     `;
     document.head.appendChild(style);
 
-    // Watermark injected into body
-    const watermark = document.createElement("div");
-    watermark.id = "copy-protection-watermark";
-    watermark.setAttribute("aria-hidden", "true");
-    watermark.style.cssText = `
-      position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      pointer-events: none;
-      z-index: 9999;
-      overflow: hidden;
-    `;
-    const wm = document.createElement("div");
-    wm.style.cssText = `
-      position: absolute;
-      top: 50%; left: 50%;
-      transform: translate(-50%, -50%) rotate(-35deg);
-      font-size: 80px;
-      font-weight: 900;
-      color: rgba(255,255,255,0.025);
-      white-space: nowrap;
-      letter-spacing: 0.2em;
-      pointer-events: none;
-      user-select: none;
-    `;
-    wm.textContent = "CONFIDENTIAL";
-    watermark.appendChild(wm);
-    document.body.appendChild(watermark);
+
 
     return () => {
       document.removeEventListener("contextmenu", blockContext);
@@ -144,7 +118,7 @@ export default function CopyProtection() {
       document.removeEventListener("cut", blockCopy, true);
       window.removeEventListener("beforeprint", blockPrint);
       document.getElementById("copy-protection-style")?.remove();
-      document.getElementById("copy-protection-watermark")?.remove();
+
     };
   }, [isAdmin]);
 
