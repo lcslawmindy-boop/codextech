@@ -1,5 +1,6 @@
 import { ArrowRight, Lock, BookOpen, Zap } from "lucide-react";
 import { Link } from "react-router-dom";
+import UserDashboardSection from "@/components/UserDashboardSection";
 
 export default function Landing() {
   return (
@@ -56,6 +57,13 @@ export default function Landing() {
           </div>
 
           <p className="text-xs text-gray-600">No login required. Start exploring in seconds.</p>
+        </div>
+      </section>
+
+      {/* User Dashboard */}
+      <section className="px-6 py-12 border-b border-gray-800 bg-gray-950">
+        <div className="max-w-4xl mx-auto">
+          <UserDashboardSection />
         </div>
       </section>
 
