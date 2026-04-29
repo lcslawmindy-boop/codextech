@@ -89,12 +89,7 @@ export default function ConceptGraph() {
 
   return (
     <div className="w-screen h-screen bg-gray-950 flex flex-col overflow-hidden pb-20">
-      {isAdmin && (
-        <div className="bg-yellow-950/40 border-b border-yellow-800/30 px-6 py-2 flex items-center gap-2">
-          <div className="w-2 h-2 rounded-full bg-yellow-500 animate-pulse" />
-          <p className="text-xs text-yellow-600">CONFIDENTIAL — RESTRICTED MEMBER ONLY — Admin and authorized researchers</p>
-        </div>
-      )}
+
       {/* Header */}
       <div className="flex flex-col border-b border-gray-800 flex-shrink-0">
         <div className="flex items-center justify-between px-6 py-3">
