@@ -32,7 +32,9 @@ const SAMPLE_INVENTIONS = [
 ];
 
 export default function AdvancedInventionDossierGenerator() {
-  const [step, setStep] = useState("setup"); // setup, generating, results
+  const [step, setStep] = useState("setup"); // setup, inventions, generating, results
+  const [mode, setMode] = useState("hybrid"); // hybrid or custom
+  const [selectedInventions, setSelectedInventions] = useState([]);
   const [concept, setConcept] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedSector, setSelectedSector] = useState("");
@@ -44,8 +46,16 @@ export default function AdvancedInventionDossierGenerator() {
   const leverRef = useRef(null);
   let spinInterval = useRef(null);
 
-  const handleGenerate = async () => {
-    if (!concept.trim() || !selectedCategory || !selectedSector) return;
+  const toggleInventionSelection = (inv) => {
+    if (selectedInventions.find(s => s.name === inv.name)) {
+      setSelectedInventions(selectedInventions.filter(s => s.name !== inv.name));
+    } else if (selectedInventions.length < 4) {
+      setSelectedInventions([...selectedInventions, inv]);
+    }
+  };
+
+  const handleGenerateHybrid = async () => {
+    if (selectedInventions.length < 2 || !selectedCategory || !selectedSector) return;
     setStep("generating");
     setLoading(true);
     setError(null);
@@ -66,59 +76,45 @@ export default function AdvancedInventionDossierGenerator() {
 
     const categoryName = TECH_CATEGORIES.find(c => c.id === selectedCategory)?.name;
     const sectorName = MONETIZATION_SECTORS.find(s => s.id === selectedSector)?.name;
+    const inventionList = selectedInventions.map(i => i.name).join(", ");
 
     const res = await base44.integrations.Core.InvokeLLM({
-      prompt: `You are an AI patent strategy and commercialization expert specializing in advanced technologies. Generate a complete Invention Dossier for:
+      prompt: `You are an AI patent strategy and commercialization expert specializing in hybrid innovations. Generate a complete Hybrid Invention Dossier by combining these technologies:
 
-CONCEPT: ${concept}
+INVENTIONS TO COMBINE: ${inventionList}
 TECHNOLOGY CATEGORY: ${categoryName}
 TARGET MONETIZATION SECTOR: ${sectorName}
 
-RESEARCH INSTRUCTIONS: Use your knowledge of:
-- Verified patents and research in ${categoryName} (Tesla coil theory, Bearden MEG, Schauberger vortex, scalar EM, peer-reviewed literature)
-- Current market trends, company activities, and competitive landscape in ${sectorName}
-- Regulatory pathways, FDA/FCC approval processes, and industry standards
-- Prior art analysis, patent prosecution history, and freedom-to-operate assessment
-- Realistic IP valuation models based on ${sectorName} comparable transactions
-- Licensing frameworks, partnership models, and go-to-market strategies specific to ${sectorName}
+Create a novel hybrid system that integrates the best aspects of each invention, identifies synergies, calculates a synergy score (0-100), and generates the complete commercialization strategy as if this hybrid were a new patent-eligible invention.
 
-Generate a comprehensive, evidence-based dossier with:
-1. IP Strategy (2-3 key approaches, filing timeline, jurisdiction recommendation)
-2. Patent Claims (3-5 independent claims optimized for protection)
-3. Freedom-to-Operate Assessment (risk score 0-100, key prior art to monitor)
-4. Market Positioning (target markets, competitive advantages, estimated TAM)
-5. Commercialization Plan (12-month roadmap with milestones)
-6. Bill of Materials (estimated for prototype build, with part categories and costs)
-7. Licensing & Valuation Model (licensing potential, estimated IP value)
+RESEARCH INSTRUCTIONS: For each invention, analyze its technology base, market position, and synergistic potential. Then design the hybrid system that:
+- Maximizes complementary strengths (e.g., one provides power, another provides sensing)
+- Reduces combined component count through shared subsystems
+- Opens new market applications neither could address alone
+- Improves overall performance metrics (efficiency, range, sensitivity, longevity)
+- Simplifies manufacturing and reduces BOM complexity
 
-Be detailed and actionable. Format the response as structured JSON.`,
+Generate a comprehensive hybrid invention dossier with:
+1. Hybrid Concept (name, mechanism, synergy score 0-100)
+2. Synergy Analysis (how each invention strengthens the others)
+3. Patent Claims (3-5 claims covering the novel hybrid configuration)
+4. Market Applications (target sectors, addressable market)
+5. Technical Integration (shared subsystems, interface specifications)
+6. Commercialization Roadmap (12-month plan for the hybrid product)
+7. Bill of Materials (combined BOM with cost reduction vs standalone)
+8. IP Valuation (estimated market value, licensing scenarios)
+
+Be detailed and innovative. Format the response as structured JSON.`,
       model: "claude_sonnet_4_6",
       add_context_from_internet: true,
       response_json_schema: {
         type: "object",
         properties: {
           invention_name: { type: "string" },
-          ip_strategy: {
-            type: "object",
-            properties: {
-              primary_approach: { type: "string" },
-              filing_timeline: { type: "string" },
-              recommended_jurisdiction: { type: "string" },
-              key_differentiators: { type: "array", items: { type: "string" } }
-            }
-          },
-          patent_claims: {
-            type: "array",
-            items: { type: "string" }
-          },
-          fto_assessment: {
-            type: "object",
-            properties: {
-              risk_score: { type: "number" },
-              summary: { type: "string" },
-              key_prior_art: { type: "array", items: { type: "string" } }
-            }
-          },
+          hybrid_concept: { type: "string" },
+          synergy_score: { type: "number" },
+          synergy_analysis: { type: "string" },
+          patent_claims: { type: "array", items: { type: "string" } },
           market_positioning: {
             type: "object",
             properties: {
@@ -127,6 +123,7 @@ Be detailed and actionable. Format the response as structured JSON.`,
               estimated_tam: { type: "string" }
             }
           },
+          technical_integration: { type: "string" },
           commercialization_plan: {
             type: "object",
             properties: {
@@ -210,17 +207,75 @@ Be detailed and actionable. Format the response as structured JSON.`,
 
         {step === "setup" ? (
           <div className="space-y-8">
-            {/* Concept Input */}
+            {/* Mode Selection */}
             <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6">
-              <label className="text-gray-300 text-sm font-bold block mb-2">Your Invention Concept</label>
-              <textarea
-                value={concept}
-                onChange={(e) => setConcept(e.target.value)}
-                placeholder="Describe your invention, technology, mechanism, problem solved, or unique approach..."
-                rows={6}
-                className="w-full bg-gray-800 border border-gray-700 rounded-xl px-4 py-3 text-white placeholder-gray-600 focus:outline-none focus:border-purple-500 resize-none text-sm"
-              />
+              <label className="text-gray-300 text-sm font-bold block mb-4">Choose Your Path</label>
+              <div className="grid grid-cols-2 gap-4">
+                <button
+                  onClick={() => { setMode("hybrid"); setSelectedInventions([]); }}
+                  className={`p-4 rounded-xl border-2 transition-all text-left ${
+                    mode === "hybrid"
+                      ? "border-cyan-500 bg-cyan-950/30"
+                      : "border-gray-700 bg-gray-800/50 hover:border-gray-600"
+                  }`}
+                >
+                  <p className="font-bold text-white text-sm">🔗 Hybrid Invention</p>
+                  <p className="text-gray-400 text-xs mt-1">Combine 2-4 inventions from the library</p>
+                </button>
+                <button
+                  onClick={() => { setMode("custom"); setConcept(""); }}
+                  className={`p-4 rounded-xl border-2 transition-all text-left ${
+                    mode === "custom"
+                      ? "border-purple-500 bg-purple-950/30"
+                      : "border-gray-700 bg-gray-800/50 hover:border-gray-600"
+                  }`}
+                >
+                  <p className="font-bold text-white text-sm">✨ Custom Concept</p>
+                  <p className="text-gray-400 text-xs mt-1">Describe your own invention</p>
+                </button>
+              </div>
             </div>
+
+            {/* Hybrid Mode: Invention Selection */}
+            {mode === "hybrid" && (
+              <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6">
+                <h4 className="text-white font-black text-lg mb-4">Select 2-4 Inventions to Combine</h4>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3 max-h-96 overflow-y-auto">
+                  {SAMPLE_INVENTIONS.map(inv => (
+                    <button
+                      key={inv.name}
+                      onClick={() => toggleInventionSelection(inv)}
+                      className={`p-3 rounded-lg border-2 transition-all text-left flex items-center gap-2 ${
+                        selectedInventions.find(s => s.name === inv.name)
+                          ? "border-cyan-500 bg-cyan-950/30"
+                          : "border-gray-700 bg-gray-800/50 hover:border-gray-600"
+                      }`}
+                    >
+                      <span className="text-xl">{inv.icon}</span>
+                      <div className="flex-1">
+                        <p className="font-bold text-white text-sm">{inv.name}</p>
+                      </div>
+                      {selectedInventions.find(s => s.name === inv.name) && <span className="text-cyan-400 font-bold">✓</span>}
+                    </button>
+                  ))}
+                </div>
+                <p className="text-gray-400 text-xs mt-3">{selectedInventions.length}/4 selected</p>
+              </div>
+            )}
+
+            {/* Custom Mode: Concept Input */}
+            {mode === "custom" && (
+              <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6">
+                <label className="text-gray-300 text-sm font-bold block mb-2">Your Invention Concept</label>
+                <textarea
+                  value={concept}
+                  onChange={(e) => setConcept(e.target.value)}
+                  placeholder="Describe your invention, technology, mechanism, problem solved, or unique approach..."
+                  rows={6}
+                  className="w-full bg-gray-800 border border-gray-700 rounded-xl px-4 py-3 text-white placeholder-gray-600 focus:outline-none focus:border-purple-500 resize-none text-sm"
+                />
+              </div>
+            )}
 
             {/* Technology Category Selection */}
             <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6">
@@ -269,8 +324,8 @@ Be detailed and actionable. Format the response as structured JSON.`,
             {error && <p className="text-red-400 text-sm text-center">{error}</p>}
 
             <button
-              onClick={handleGenerate}
-              disabled={loading || !concept.trim() || !selectedCategory || !selectedSector}
+              onClick={handleGenerateHybrid}
+              disabled={loading || !selectedCategory || !selectedSector || (mode === "hybrid" ? selectedInventions.length < 2 : !concept.trim())}
               className="w-full py-4 rounded-xl bg-gradient-to-r from-purple-600 to-blue-700 hover:from-purple-500 hover:to-blue-600 disabled:opacity-50 text-white font-black text-base transition-all flex items-center justify-center gap-2"
             >
               {loading ? (
@@ -380,6 +435,25 @@ Be detailed and actionable. Format the response as structured JSON.`,
           </button>
         )}
       </div>
+
+      {/* Hybrid Synergy Section */}
+      {result.synergy_score && (
+        <section className="border-l-4 border-cyan-500 pl-6 bg-cyan-950/20 rounded-lg p-4 mb-8">
+          <h4 className="text-cyan-300 font-black text-lg mb-3">🔗 Hybrid Synergy Analysis</h4>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="bg-gray-800/50 rounded-lg p-4">
+              <p className="text-gray-500 text-xs uppercase font-bold mb-1">Synergy Score</p>
+              <p className="text-cyan-400 font-black text-3xl">{result.synergy_score}</p>
+              <p className="text-gray-400 text-xs mt-1">/100</p>
+            </div>
+            <div className="bg-gray-800/50 rounded-lg p-4">
+              <p className="text-gray-500 text-xs uppercase font-bold mb-1">Technical Integration</p>
+              <p className="text-gray-300 text-sm">{result.technical_integration?.substring(0, 100)}...</p>
+            </div>
+          </div>
+          <div className="mt-3 text-gray-300 text-sm leading-relaxed">{result.synergy_analysis}</div>
+        </section>
+      )}
 
       {/* IP Strategy */}
       <section className="border-l-4 border-purple-500 pl-6">
