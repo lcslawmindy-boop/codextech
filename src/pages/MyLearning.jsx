@@ -236,7 +236,8 @@ export default function MyLearning() {
 
   const loadData = async () => {
     setLoading(true);
-    const user = await base44.auth.me();
+    let user = null;
+    try { user = await base44.auth.me(); } catch (e) {}
 
     // Fetch Stripe purchases
     let purchasedTitles = new Set();
@@ -251,11 +252,13 @@ export default function MyLearning() {
     }
     setPurchases(new Set(purchasedTitles));
 
-    // Fetch progress records
-    const progressRecords = await base44.entities.CourseProgress.filter({ user_email: user.email });
-    const map = {};
-    progressRecords.forEach(r => { map[r.course_title] = r; });
-    setProgressMap(map);
+    // Fetch progress records (only if logged in)
+    if (user?.email) {
+      const progressRecords = await base44.entities.CourseProgress.filter({ user_email: user.email });
+      const map = {};
+      progressRecords.forEach(r => { map[r.course_title] = r; });
+      setProgressMap(map);
+    }
 
     setLoading(false);
   };
