@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { ArrowRight, CheckCircle2, Users, Zap, Lock, BookOpen } from "lucide-react";
+import { ArrowRight, CheckCircle2, Users, Zap, Lock, BookOpen, Zap as ZapIcon } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 
-function CheckoutButton({ title, price, priceInCents, description }) {
+function CheckoutButton({ title, price, priceInCents, description, billingPeriod = "monthly" }) {
   const [loading, setLoading] = useState(false);
 
   const handleCheckout = async () => {
@@ -25,18 +25,24 @@ function CheckoutButton({ title, price, priceInCents, description }) {
     setLoading(false);
   };
 
+  const buttonLabel = billingPeriod === "annual" 
+    ? `Subscribe Annual — ${price}/year`
+    : `Subscribe — ${price}/month`;
+
   return (
     <button
       onClick={handleCheckout}
       disabled={loading}
       className="w-full py-3 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white font-black text-sm transition-all disabled:opacity-50"
     >
-      {loading ? "Processing..." : `Subscribe — ${price}/month`}
+      {loading ? "Processing..." : buttonLabel}
     </button>
   );
 }
 
 export default function ResearchMembership() {
+  const [billingPeriod, setBillingPeriod] = useState("monthly");
+
   return (
     <div className="min-h-screen bg-gray-950 text-white">
       {/* Header */}
@@ -122,6 +128,25 @@ export default function ResearchMembership() {
           <p className="text-gray-600 text-xs text-center">Showing 3 of 200+ research entries. Subscribe to unlock the full archive.</p>
         </div>
 
+        {/* Billing Toggle */}
+        <div className="flex justify-center mb-12">
+          <div className="inline-flex items-center gap-4 bg-gray-900/60 border border-gray-800 rounded-xl p-1.5">
+            <button 
+              onClick={() => setBillingPeriod("monthly")}
+              className={`px-6 py-2 rounded-lg font-bold text-sm transition-all ${billingPeriod === "monthly" ? "bg-cyan-600 text-white" : "text-gray-400 hover:text-white"}`}
+            >
+              Monthly
+            </button>
+            <button 
+              onClick={() => setBillingPeriod("annual")}
+              className={`px-6 py-2 rounded-lg font-bold text-sm transition-all flex items-center gap-2 ${billingPeriod === "annual" ? "bg-cyan-600 text-white" : "text-gray-400 hover:text-white"}`}
+            >
+              Annual 
+              <span className="text-xs bg-green-900/40 text-green-300 px-2 py-0.5 rounded">Save 3 months</span>
+            </button>
+          </div>
+        </div>
+
         {/* Tiers */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-16">
           {/* Researcher Basic Tier */}
@@ -129,8 +154,18 @@ export default function ResearchMembership() {
             <h3 className="text-white font-black text-2xl mb-2">Researcher</h3>
             <p className="text-gray-500 text-sm mb-6">For curious individuals getting started</p>
 
-            <div className="text-3xl font-black text-cyan-300 mb-1">$49</div>
-            <p className="text-gray-500 text-xs mb-8">/month, cancel anytime</p>
+            {billingPeriod === "monthly" ? (
+              <>
+                <div className="text-3xl font-black text-cyan-300 mb-1">$49</div>
+                <p className="text-gray-500 text-xs mb-8">/month, cancel anytime</p>
+              </>
+            ) : (
+              <>
+                <div className="text-3xl font-black text-cyan-300 mb-1">$441</div>
+                <p className="text-gray-500 text-xs mb-2">/year (9 months cost)</p>
+                <p className="text-green-400 text-xs font-bold mb-6">3 months free — save $147</p>
+              </>
+            )}
 
             <div className="space-y-3 mb-8">
               {[
@@ -150,13 +185,22 @@ export default function ResearchMembership() {
             </div>
 
             <CheckoutButton
-              title="Researcher Membership"
-              price="$49"
-              priceInCents={4900}
-              description="Monthly Researcher membership — core archive access"
+              title={billingPeriod === "annual" ? "Researcher Annual Membership" : "Researcher Membership"}
+              price={billingPeriod === "annual" ? "$441" : "$49"}
+              priceInCents={billingPeriod === "annual" ? 44100 : 4900}
+              description={billingPeriod === "annual" ? "Annual Researcher membership — 3 months free + premium perks" : "Monthly Researcher membership — core archive access"}
+              billingPeriod={billingPeriod}
             />
 
-            <p className="text-gray-600 text-xs text-center mt-4">Billed monthly. Cancel anytime.</p>
+            {billingPeriod === "annual" && (
+              <div className="mt-6 pt-6 border-t border-gray-800 space-y-2">
+                <p className="text-gray-400 text-xs font-bold uppercase tracking-widest mb-3">Annual Benefits</p>
+                <p className="text-gray-300 text-xs flex gap-2"><span className="text-green-400">✓</span>First access to new course & build plan drops</p>
+                <p className="text-gray-300 text-xs flex gap-2"><span className="text-green-400">✓</span>Patent suppression monitoring newsletter</p>
+                <p className="text-gray-300 text-xs flex gap-2"><span className="text-green-400">✓</span>Insiders scoop + market investment guidance</p>
+              </div>
+            )}
+            <p className="text-gray-600 text-xs text-center mt-4">{billingPeriod === "annual" ? "Billed annually" : "Billed monthly"}. Cancel anytime.</p>
           </div>
 
           {/* Builder Tier */}
@@ -164,8 +208,18 @@ export default function ResearchMembership() {
             <h3 className="text-white font-black text-2xl mb-2">Builder</h3>
             <p className="text-gray-500 text-sm mb-6">For engineers actively building systems</p>
 
-            <div className="text-3xl font-black text-cyan-300 mb-1">$99</div>
-            <p className="text-gray-500 text-xs mb-8">/month, cancel anytime</p>
+            {billingPeriod === "monthly" ? (
+              <>
+                <div className="text-3xl font-black text-cyan-300 mb-1">$99</div>
+                <p className="text-gray-500 text-xs mb-8">/month, cancel anytime</p>
+              </>
+            ) : (
+              <>
+                <div className="text-3xl font-black text-cyan-300 mb-1">$891</div>
+                <p className="text-gray-500 text-xs mb-2">/year (9 months cost)</p>
+                <p className="text-green-400 text-xs font-bold mb-6">3 months free — save $297</p>
+              </>
+            )}
 
             <div className="space-y-3 mb-8">
               {[
@@ -188,13 +242,22 @@ export default function ResearchMembership() {
             </div>
 
             <CheckoutButton
-              title="Builder Membership"
-              price="$99"
-              priceInCents={9900}
-              description="Monthly Builder membership for engineers actively building systems"
+              title={billingPeriod === "annual" ? "Builder Annual Membership" : "Builder Membership"}
+              price={billingPeriod === "annual" ? "$891" : "$99"}
+              priceInCents={billingPeriod === "annual" ? 89100 : 9900}
+              description={billingPeriod === "annual" ? "Annual Builder membership — 3 months free + premium perks" : "Monthly Builder membership for engineers actively building systems"}
+              billingPeriod={billingPeriod}
             />
 
-            <p className="text-gray-600 text-xs text-center mt-4">Billed monthly. Cancel anytime.</p>
+            {billingPeriod === "annual" && (
+              <div className="mt-6 pt-6 border-t border-gray-800 space-y-2">
+                <p className="text-gray-400 text-xs font-bold uppercase tracking-widest mb-3">Annual Benefits</p>
+                <p className="text-gray-300 text-xs flex gap-2"><span className="text-green-400">✓</span>First access to new course & build plan drops</p>
+                <p className="text-gray-300 text-xs flex gap-2"><span className="text-green-400">✓</span>Patent suppression monitoring newsletter</p>
+                <p className="text-gray-300 text-xs flex gap-2"><span className="text-green-400">✓</span>Insiders scoop + market investment guidance</p>
+              </div>
+            )}
+            <p className="text-gray-600 text-xs text-center mt-4">{billingPeriod === "annual" ? "Billed annually" : "Billed monthly"}. Cancel anytime.</p>
           </div>
 
           {/* Pro Tier */}
@@ -206,8 +269,18 @@ export default function ResearchMembership() {
             <h3 className="text-white font-black text-2xl mb-2">Pro</h3>
             <p className="text-gray-300 text-sm mb-6">For research teams, institutions, and enterprises</p>
 
-            <div className="text-3xl font-black text-cyan-300 mb-1">$199</div>
-            <p className="text-gray-500 text-xs mb-8">/month, cancel anytime</p>
+            {billingPeriod === "monthly" ? (
+              <>
+                <div className="text-3xl font-black text-cyan-300 mb-1">$199</div>
+                <p className="text-gray-500 text-xs mb-8">/month, cancel anytime</p>
+              </>
+            ) : (
+              <>
+                <div className="text-3xl font-black text-cyan-300 mb-1">$1,791</div>
+                <p className="text-gray-500 text-xs mb-2">/year (9 months cost)</p>
+                <p className="text-green-400 text-xs font-bold mb-6">3 months free — save $597</p>
+              </>
+            )}
 
             <div className="space-y-3 mb-8">
               {[
@@ -227,13 +300,22 @@ export default function ResearchMembership() {
             </div>
 
             <CheckoutButton
-              title="Pro Membership"
-              price="$199"
-              priceInCents={19900}
-              description="Monthly Pro membership for research teams and institutions"
+              title={billingPeriod === "annual" ? "Pro Annual Membership" : "Pro Membership"}
+              price={billingPeriod === "annual" ? "$1,791" : "$199"}
+              priceInCents={billingPeriod === "annual" ? 179100 : 19900}
+              description={billingPeriod === "annual" ? "Annual Pro membership — 3 months free + premium perks" : "Monthly Pro membership for research teams and institutions"}
+              billingPeriod={billingPeriod}
             />
 
-            <p className="text-gray-400 text-xs text-center mt-4">Billed monthly. Team access activates immediately.</p>
+            {billingPeriod === "annual" && (
+              <div className="mt-6 pt-6 border-t border-gray-700 space-y-2">
+                <p className="text-gray-300 text-xs font-bold uppercase tracking-widest mb-3">Annual Benefits</p>
+                <p className="text-gray-200 text-xs flex gap-2"><span className="text-green-400">✓</span>First access to new course & build plan drops</p>
+                <p className="text-gray-200 text-xs flex gap-2"><span className="text-green-400">✓</span>Patent suppression monitoring newsletter</p>
+                <p className="text-gray-200 text-xs flex gap-2"><span className="text-green-400">✓</span>Insiders scoop + market investment guidance</p>
+              </div>
+            )}
+            <p className="text-gray-400 text-xs text-center mt-4">{billingPeriod === "annual" ? "Billed annually" : "Billed monthly"}. Team access activates immediately.</p>
           </div>
         </div>
 
