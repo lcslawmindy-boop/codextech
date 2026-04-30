@@ -134,6 +134,8 @@ export default function ResearchMembership() {
 
             <div className="space-y-3 mb-8">
               {[
+                "3 courses + 3 build plans included",
+                "À la carte access: any course or build plan at $49 each",
                 "Access to core research archive",
                 "8 structured research modules",
                 "Monthly research updates",
