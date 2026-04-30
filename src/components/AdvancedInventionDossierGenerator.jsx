@@ -355,7 +355,6 @@ Be detailed and actionable. Format the response as structured JSON.`,
         </div>
         )}
       </div>
-      </div>
     );
   }
 
