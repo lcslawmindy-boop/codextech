@@ -120,6 +120,7 @@ import AcquisitionOutreachTracker from './pages/AcquisitionOutreachTracker';
 import CollabPatentDraft from './pages/CollabPatentDraft';
 import IPPortfolioHealth from './pages/IPPortfolioHealth';
 import BuildMilestoneAI from './pages/BuildMilestoneAI';
+import InventionDossierPackage from './pages/InventionDossierPackage';
 import ValuationAPI from './pages/ValuationAPI';
 import VDRNdaSign from './pages/VDRNdaSign';
 import VDRDocumentGenerator from './pages/VDRDocumentGenerator';
@@ -289,6 +290,7 @@ const AuthenticatedApp = () => {
           <Route path="/collab-patent-draft" element={<CollabPatentDraft />} />
           <Route path="/ip-portfolio-health" element={<IPPortfolioHealth />} />
           <Route path="/build-milestone-ai" element={<BuildMilestoneAI />} />
+          <Route path="/invention-dossier" element={<InventionDossierPackage />} />
           <Route path="/valuation-api" element={<ValuationAPI />} />
           <Route path="/flash-sale" element={<FlashSale />} />
           <Route path="/vdr-nda" element={<VDRNdaSign />} />
