@@ -1712,8 +1712,6 @@ export default function InventionPlans() {
                 </Link>
               </div>
             </div>
-          ) : (isMembershipRequired(selected.title) && !isAdmin) ? (
-            <SpecsLockedGate invention={selected} />
           ) : (isAdminOnly(selected.title) && !isAdmin) ? (
             <div className="flex-1 flex items-center justify-center p-12">
               <div className="max-w-md text-center">
@@ -1731,8 +1729,6 @@ export default function InventionPlans() {
             <NotForSaleGate invention={selected} />
           ) : (isClassifiedInvention(selected.title) && !isAdmin && !tierHasGovAccess(tier)) ? (
             <GovClassifiedGate inventionTitle={selected.title} />
-          ) : !canViewSelected ? (
-            <SpecsLockedGate invention={selected} />
           ) : (
             <div className="max-w-3xl mx-auto">
               {/* ── Global Research Disclaimer ── */}
@@ -1776,69 +1772,86 @@ export default function InventionPlans() {
 
               {data ? (
                 <>
-                  {/* Blur overlay if not purchased */}
-                  {!hasPurchased && isMembershipRequired(selected.title) && !canViewSelected && (
-                    <div className="absolute inset-0 top-96 bg-black/40 backdrop-blur-sm flex items-center justify-center rounded-2xl z-10 pointer-events-none">
-                      <div className="text-center">
-                        <p className="text-white font-black text-sm mb-2">Full Specifications Hidden</p>
-                        <p className="text-gray-300 text-xs">Purchase the build plan to view BOM, assembly steps, and technical details</p>
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Overview */}
+                  {/* Overview — always visible */}
                   <div className="bg-gray-900 border border-gray-800 rounded-2xl p-5 mb-4">
                     <p className="text-cyan-400 font-bold text-xs uppercase tracking-wider mb-2">Technical Overview</p>
                     <p className="text-gray-300 text-sm leading-relaxed">{data.overview}</p>
                   </div>
 
-                  {/* BOM */}
-                  {data.bom?.length > 0 && (
-                    <div className={`bg-gray-900 border border-gray-800 rounded-2xl p-5 mb-4 ${!hasPurchased && isMembershipRequired(selected.title) && !canViewSelected ? 'blur-sm opacity-50 pointer-events-none' : ''}`}>
-                      <button onClick={() => setShowBom(b => !b)}
-                        className="flex items-center justify-between w-full mb-3">
-                        <p className="text-yellow-400 font-bold text-xs uppercase tracking-wider">
-                          Bill of Materials ({data.bom.length} items)
-                        </p>
-                        {showBom ? <ChevronUp size={14} className="text-gray-500" /> : <ChevronDown size={14} className="text-gray-500" />}
-                      </button>
-                      {showBom && (
-                        <BomChecklist
-                          bom={data.bom}
-                          checked={currentChecked}
-                          onToggle={handleBomToggle}
-                          onReset={handleBomReset}
-                        />
-                      )}
+                  {/* Blurred specs with buy overlay for non-purchasers */}
+                  {(!hasPurchased && !isAdmin) ? (
+                    <div className="relative rounded-2xl overflow-hidden mb-4">
+                      {/* Blurred content */}
+                      <div className="blur-sm opacity-40 pointer-events-none select-none space-y-4">
+                        {data.bom?.length > 0 && (
+                          <div className="bg-gray-900 border border-gray-800 rounded-2xl p-5">
+                            <p className="text-yellow-400 font-bold text-xs uppercase tracking-wider mb-3">Bill of Materials ({data.bom.length} items)</p>
+                            <BomChecklist bom={data.bom} checked={[]} onToggle={() => {}} onReset={() => {}} />
+                          </div>
+                        )}
+                        {data.steps?.length > 0 && (
+                          <div className="bg-gray-900 border border-gray-800 rounded-2xl p-5">
+                            <p className="text-green-400 font-bold text-xs uppercase tracking-wider mb-3">Assembly Steps ({data.steps.length})</p>
+                            <div className="space-y-2">
+                              {data.steps.slice(0, 3).map((step, i) => <StepCard key={i} step={step} index={i} />)}
+                            </div>
+                          </div>
+                        )}
+                        {data.notes && (
+                          <div className="bg-gray-900 border border-gray-800 rounded-2xl p-5">
+                            <p className="text-purple-400 font-bold text-xs uppercase tracking-wider mb-2">Technical Notes</p>
+                            <p className="text-gray-400 text-sm leading-relaxed">{data.notes}</p>
+                          </div>
+                        )}
+                      </div>
+                      {/* Buy overlay */}
+                      <div className="absolute inset-0 flex items-center justify-center bg-gray-950/70 backdrop-blur-[2px] z-10">
+                        <div className="bg-gray-900 border border-cyan-800/60 rounded-2xl p-8 text-center max-w-sm shadow-2xl mx-4">
+                          <Lock size={28} className="text-cyan-400 mx-auto mb-3" />
+                          <h3 className="text-white font-black text-lg mb-2">Full Specs Locked</h3>
+                          <p className="text-gray-400 text-sm mb-5">Purchase to unlock the complete BOM, step-by-step assembly instructions, and technical notes.</p>
+                          <button
+                            onClick={handleBuyNow}
+                            disabled={checkoutLoading}
+                            className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-green-700 hover:bg-green-600 disabled:opacity-50 text-white font-black text-sm transition-all"
+                          >
+                            {checkoutLoading ? <Loader2 size={14} className="animate-spin" /> : <ShoppingCart size={14} />}
+                            {checkoutLoading ? "Processing…" : `Buy Now — ${selected.price || "$99"}`}
+                          </button>
+                        </div>
+                      </div>
                     </div>
-                  )}
-
-                  {/* Steps */}
-                  {data.steps?.length > 0 && (
-                    <div className={`bg-gray-900 border border-gray-800 rounded-2xl p-5 mb-4 ${!hasPurchased && isMembershipRequired(selected.title) && !canViewSelected ? 'blur-sm opacity-50 pointer-events-none' : ''}`}>
-                      <button onClick={() => setShowSteps(s => !s)}
-                        className="flex items-center justify-between w-full mb-4">
-                        <p className="text-green-400 font-bold text-xs uppercase tracking-wider">Assembly Steps ({data.steps.length})</p>
-                        {showSteps ? <ChevronUp size={14} className="text-gray-500" /> : <ChevronDown size={14} className="text-gray-500" />}
-                      </button>
-                      {showSteps && (
-                        <div className="space-y-2">
-                          {data.steps.map((step, i) => <StepCard key={i} step={step} index={i} />)}
+                  ) : (
+                    <>
+                      {/* BOM */}
+                      {data.bom?.length > 0 && (
+                        <div className="bg-gray-900 border border-gray-800 rounded-2xl p-5 mb-4">
+                          <button onClick={() => setShowBom(b => !b)} className="flex items-center justify-between w-full mb-3">
+                            <p className="text-yellow-400 font-bold text-xs uppercase tracking-wider">Bill of Materials ({data.bom.length} items)</p>
+                            {showBom ? <ChevronUp size={14} className="text-gray-500" /> : <ChevronDown size={14} className="text-gray-500" />}
+                          </button>
+                          {showBom && <BomChecklist bom={data.bom} checked={currentChecked} onToggle={handleBomToggle} onReset={handleBomReset} />}
                         </div>
                       )}
-                    </div>
+                      {/* Steps */}
+                      {data.steps?.length > 0 && (
+                        <div className="bg-gray-900 border border-gray-800 rounded-2xl p-5 mb-4">
+                          <button onClick={() => setShowSteps(s => !s)} className="flex items-center justify-between w-full mb-4">
+                            <p className="text-green-400 font-bold text-xs uppercase tracking-wider">Assembly Steps ({data.steps.length})</p>
+                            {showSteps ? <ChevronUp size={14} className="text-gray-500" /> : <ChevronDown size={14} className="text-gray-500" />}
+                          </button>
+                          {showSteps && <div className="space-y-2">{data.steps.map((step, i) => <StepCard key={i} step={step} index={i} />)}</div>}
+                        </div>
+                      )}
+                      {/* Notes */}
+                      {data.notes && (
+                        <div className="bg-gray-900 border border-gray-800 rounded-2xl p-5 mb-4">
+                          <p className="text-purple-400 font-bold text-xs uppercase tracking-wider mb-2">Technical Notes</p>
+                          <p className="text-gray-400 text-sm leading-relaxed">{data.notes}</p>
+                        </div>
+                      )}
+                    </>
                   )}
-
-                  {/* Notes */}
-                  {data.notes && (
-                    <div className={`bg-gray-900 border border-gray-800 rounded-2xl p-5 mb-4 ${!hasPurchased && isMembershipRequired(selected.title) && !canViewSelected ? 'blur-sm opacity-50 pointer-events-none' : ''}`}>
-                      <p className="text-purple-400 font-bold text-xs uppercase tracking-wider mb-2">Technical Notes</p>
-                      <p className="text-gray-400 text-sm leading-relaxed">{data.notes}</p>
-                    </div>
-                  )}
-
-
-
                 </>
               ) : (
                 <div className="bg-gray-900 border border-gray-800 rounded-2xl p-8 text-center">
