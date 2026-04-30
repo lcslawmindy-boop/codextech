@@ -212,6 +212,46 @@ export default function AlaCarteMenu() {
         </div>
       </div>
 
+      {/* Builder Tier Benefits Banner */}
+      <div className="bg-gradient-to-r from-cyan-950/40 to-blue-950/40 border-b border-cyan-800/50 px-6 py-8">
+        <div className="max-w-7xl mx-auto">
+          <div className="flex items-start gap-4 mb-4">
+            <div className="flex-shrink-0">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-cyan-600 text-white text-xs font-black">
+                ⚡ BUILDER TIER ($99/month)
+              </span>
+            </div>
+            <Link to="/research-membership" className="ml-auto px-4 py-2 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white text-xs font-bold transition-colors">
+              Join Now →
+            </Link>
+          </div>
+          <h3 className="text-white font-black text-lg mb-3">Unlock Builder Benefits on Every Purchase</h3>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="flex gap-3">
+              <span className="text-cyan-400 font-black text-lg flex-shrink-0">💰</span>
+              <div>
+                <p className="text-white font-bold text-sm">All Courses & Build Plans: $49 each</p>
+                <p className="text-gray-400 text-xs">As a Builder member, access any course or plan from this menu for just $49 (vs. varying prices)</p>
+              </div>
+            </div>
+            <div className="flex gap-3">
+              <span className="text-cyan-400 font-black text-lg flex-shrink-0">🛡️</span>
+              <div>
+                <p className="text-white font-bold text-sm">20% Off EMF Protection Shop</p>
+                <p className="text-gray-400 text-xs">Builder members get exclusive discount on all EMF shielding and protection kits</p>
+              </div>
+            </div>
+            <div className="flex gap-3">
+              <span className="text-cyan-400 font-black text-lg flex-shrink-0">📋</span>
+              <div>
+                <p className="text-white font-bold text-sm">10-Part Invention Dossier IP Package</p>
+                <p className="text-gray-400 text-xs">Complete framework for patent drafting, commercialization roadmap & market launch strategy</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* Tab Navigation */}
       <div className="border-b border-gray-800 bg-gray-900/40 sticky top-[72px] z-30">
         <div className="max-w-7xl mx-auto px-6">
