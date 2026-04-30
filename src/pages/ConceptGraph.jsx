@@ -61,31 +61,7 @@ export default function ConceptGraph() {
     }
   };
 
-  if (!ndaAccepted && !isAdmin) {
-    return (
-      <div className="w-screen h-screen bg-gray-950 flex flex-col items-center justify-center overflow-hidden">
-        <div className="max-w-md text-center">
-          <div className="w-20 h-20 rounded-2xl bg-gray-800 border border-gray-700 flex items-center justify-center text-4xl mx-auto mb-6">
-            🔐
-          </div>
-          <h2 className="text-white font-black text-2xl mb-2">Research Access</h2>
-          <p className="text-gray-400 text-sm leading-relaxed mb-6">
-            Sign the access agreement to explore the institutional research archive.
-          </p>
-          <div className="space-y-3">
-            <Link to="/vault-nda"
-              className="flex items-center justify-center gap-2 w-full py-3 rounded-xl font-black text-white text-sm bg-cyan-600 hover:bg-cyan-500 transition-all">
-              Sign & Access
-            </Link>
-            <Link to="/"
-              className="flex items-center justify-center gap-2 w-full py-3 rounded-xl font-black text-white text-sm bg-gray-700 hover:bg-gray-600 transition-all">
-              Back to Home
-            </Link>
-          </div>
-        </div>
-      </div>
-    );
-  }
+
 
   return (
     <div className="w-screen h-screen bg-gray-950 flex flex-col overflow-hidden pb-20">

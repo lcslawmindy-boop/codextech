@@ -201,21 +201,6 @@ const AuthenticatedApp = () => {
     }
   }
 
-  // Redirect to NDA gate if not accepted
-  if (!ndaAccepted) {
-    return (
-      <Routes>
-        <Route path="/" element={<VaultNDALanding />} />
-        <Route path="/free-vault" element={<FreeVault />} />
-        <Route path="/build-supplies-shop" element={<BuildSuppliesShop />} />
-        <Route path="/emf-impact" element={<EMFImpact />} />
-        <Route path="/vault" element={<ConceptGraph />} />
-        <Route path="/paywall" element={<PaywallPage />} />
-        <Route path="*" element={<LegalAgreement />} />
-      </Routes>
-    );
-  }
-
   // Render the main app
   return (
     <TrialContext.Provider value={{ isTrial: false }}>
