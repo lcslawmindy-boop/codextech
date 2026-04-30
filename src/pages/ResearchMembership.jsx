@@ -128,6 +128,39 @@ export default function ResearchMembership() {
           <p className="text-gray-600 text-xs text-center">Showing 3 of 200+ research entries. Subscribe to unlock the full archive.</p>
         </div>
 
+        {/* Builder Tier Benefits Banner */}
+        <div className="bg-gradient-to-r from-cyan-950/40 to-blue-950/40 border-2 border-cyan-700 rounded-2xl p-8 mb-12">
+          <div className="max-w-4xl mx-auto">
+            <div className="flex items-start gap-4 mb-6">
+              <span className="text-3xl flex-shrink-0">⚡</span>
+              <div className="flex-1">
+                <h3 className="text-white font-black text-2xl mb-2">Builder Tier ($99/mo)</h3>
+                <p className="text-gray-300">The complete IP & commercialization toolkit</p>
+              </div>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="bg-gray-900/60 border border-cyan-800 rounded-xl p-4">
+                <p className="text-cyan-400 font-black text-sm mb-2">💰 Member Pricing</p>
+                <p className="text-white font-bold text-lg mb-1">All Courses & Build Plans: $49</p>
+                <p className="text-gray-400 text-xs">Instead of $50–$297 à la carte</p>
+              </div>
+
+              <div className="bg-gray-900/60 border border-cyan-800 rounded-xl p-4">
+                <p className="text-cyan-400 font-black text-sm mb-2">🛡️ EMF Protection</p>
+                <p className="text-white font-bold text-lg mb-1">20% Off EMF Shop</p>
+                <p className="text-gray-400 text-xs">Exclusive builder member discount</p>
+              </div>
+
+              <div className="bg-gray-900/60 border border-cyan-800 rounded-xl p-4">
+                <p className="text-cyan-400 font-black text-sm mb-2">📋 IP Creation</p>
+                <p className="text-white font-bold text-lg mb-1">10-Part Invention Dossier</p>
+                <p className="text-gray-400 text-xs">Patent drafting + bring-to-market roadmap</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
         {/* Billing Toggle */}
         <div className="flex justify-center mb-12">
           <div className="inline-flex items-center gap-4 bg-gray-900/60 border border-gray-800 rounded-xl p-1.5">
