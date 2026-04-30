@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { ArrowRight, CheckCircle2, Users, Zap, Lock, BookOpen, Zap as ZapIcon } from "lucide-react";
 import { base44 } from "@/api/base44Client";
+import InventionDossierSlotMachine from "@/components/InventionDossierSlotMachine";
 
 function CheckoutButton({ title, price, priceInCents, description, billingPeriod = "monthly" }) {
   const [loading, setLoading] = useState(false);
@@ -153,9 +154,20 @@ export default function ResearchMembership() {
               </div>
 
               <div className="bg-gray-900/60 border border-cyan-800 rounded-xl p-4">
-                <p className="text-cyan-400 font-black text-sm mb-2">📋 IP Creation</p>
-                <p className="text-white font-bold text-lg mb-1">10-Part Invention Dossier</p>
-                <p className="text-gray-400 text-xs">Patent drafting + bring-to-market roadmap</p>
+                <p className="text-cyan-400 font-black text-sm mb-2">🎰 10 Rolls</p>
+                <p className="text-white font-bold text-lg mb-1">Invention Dossier Slot Machine</p>
+                <p className="text-gray-400 text-xs">Pull to generate 10 unique patent strategies</p>
+              </div>
+            </div>
+
+            <div className="mt-6 pt-6 border-t border-cyan-700">
+              <p className="text-cyan-400 font-bold text-sm mb-3">What the Invention Dossier generates:</p>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                {["Patent Strategy", "Claims Analysis", "Prior Art Search", "FTO Assessment", "Commercialization Plan", "Market Positioning", "Licensing Framework", "Valuation Model"].map((item, i) => (
+                  <div key={i} className="bg-gray-900/40 rounded-lg p-2 text-center">
+                    <p className="text-gray-300 text-xs font-semibold">{item}</p>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
@@ -263,15 +275,15 @@ export default function ResearchMembership() {
 
             <div className="space-y-3 mb-8">
               {[
-                { feature: "Everything in Researcher", value: "$693" },
+                { feature: "Everything in Researcher", value: "$993" },
+                { feature: "All courses & build plans", value: "$49 each" },
                 { feature: "40+ patent analyses with prosecution history", value: "$400" },
                 { feature: "Engineering documentation & sourcing guides", value: "$250" },
                 { feature: "Step-by-step build frameworks", value: "$200" },
-                { feature: "Invention Dossier: IP creation framework", value: "$297" },
+                { feature: "10 Invention Dossier Rolls (IP generator)", value: "$490" },
                 { feature: "Bring-to-Market Commercialization Roadmap", value: "$199" },
-                { feature: "1 new course monthly", value: "$49" },
-                { feature: "1 new build plan monthly", value: "$49" },
                 { feature: "Direct expert support (48hr response)", value: "$300" },
+                { feature: "20% off EMF Protection Shop", value: "—" },
                 { feature: "Exclusive research briefs", value: "—" }
               ].map((item, i) => (
                 <div key={i} className="flex gap-3 justify-between items-start">
@@ -284,8 +296,8 @@ export default function ResearchMembership() {
               ))}
             </div>
             <div className="bg-cyan-950/30 border border-cyan-800 rounded-lg p-3 mb-4">
-              <p className="text-cyan-300 text-xs font-bold">Total Market Value: $2,428</p>
-              <p className="text-gray-400 text-xs mt-1">At $99/month, you'd pay $1,188 yearly for individual items. Get everything at $891/year (annual) or $1,188/year (monthly).</p>
+              <p className="text-cyan-300 text-xs font-bold">Total Market Value: $3,825</p>
+              <p className="text-gray-400 text-xs mt-1">At $99/month, you'd pay $1,188+ yearly for individual items. Get everything at $891/year (annual) or $1,188/year (monthly).</p>
             </div>
 
             <CheckoutButton
@@ -305,6 +317,11 @@ export default function ResearchMembership() {
               </div>
             )}
             <p className="text-gray-600 text-xs text-center mt-4">{billingPeriod === "annual" ? "Billed annually" : "Billed monthly"}. Cancel anytime.</p>
+          </div>
+
+          {/* Slot Machine Preview (shown after Builder tier) */}
+          <div className="lg:col-span-3 mt-12">
+            <InventionDossierSlotMachine />
           </div>
 
           {/* Pro Tier */}
