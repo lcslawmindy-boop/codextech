@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import ScalarWaveWatermark from "@/components/ScalarWaveWatermark";
-import { Zap, ChevronRight, Star, Download, Video, CheckCircle2 } from "lucide-react";
+import { Zap, ChevronRight, Star, Download, Video, CheckCircle2, ShoppingCart, Loader2 } from "lucide-react";
 
 const FREE_ITEMS = [
   {
@@ -29,6 +29,8 @@ UPGRADE TO PRO FOR:
 → Verified supplier links & pricing
 → Private engineering forum`,
     href: "/invention-plans",
+    priceInCents: 9900,
+    priceLabel: "$99",
   },
   {
     id: "meg",
@@ -54,10 +56,12 @@ UPGRADE TO PRO FOR:
 → Verified supplier links & part costs
 → Troubleshooting community`,
     href: "/invention-plans",
+    priceInCents: 9900,
+    priceLabel: "$99",
   },
   {
     id: "scalar",
-    title: "Scalar EM Fundamentals — Free Course",
+    title: "Scalar EM Fundamentals — Full Course",
     category: "Course",
     badge: "100% FREE",
     badgeColor: "bg-green-900/60 text-green-300 border-green-800",
@@ -80,6 +84,8 @@ UPGRADE TO PRO FOR:
 → Interactive problem sets & solutions
 → Direct access to course instructor`,
     href: "/courses",
+    priceInCents: 19700,
+    priceLabel: "$197",
   },
 ];
 
@@ -94,9 +100,28 @@ export default function FreeVault() {
   const [expandedId, setExpandedId] = useState(null);
   const [email, setEmail] = useState("");
   const [emailDone, setEmailDone] = useState(false);
+  const [buyingId, setBuyingId] = useState(null);
 
   const handleExpand = (id) => {
     setExpandedId(expandedId === id ? null : id);
+  };
+
+  const handleBuyNow = async (item) => {
+    if (window.self !== window.top) {
+      alert("Checkout is only available from the published app.");
+      return;
+    }
+    setBuyingId(item.id);
+    const res = await base44.functions.invoke("createCheckoutSession", {
+      title: item.title,
+      priceInCents: item.priceInCents,
+      description: item.hook,
+      category: item.category,
+      successUrl: window.location.origin + "/my-learning?success=1",
+      cancelUrl: window.location.href,
+    });
+    if (res.data?.url) window.location.href = res.data.url;
+    setBuyingId(null);
   };
 
   const handleEmailCapture = async () => {
@@ -169,6 +194,14 @@ export default function FreeVault() {
                       {item.detail}
                     </pre>
                     <div className="flex flex-col sm:flex-row gap-3">
+                      <button
+                        onClick={() => handleBuyNow(item)}
+                        disabled={buyingId === item.id}
+                        className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-green-700 hover:bg-green-600 disabled:opacity-50 text-white font-bold transition-colors"
+                      >
+                        {buyingId === item.id ? <Loader2 size={16} className="animate-spin" /> : <ShoppingCart size={16} />}
+                        {buyingId === item.id ? "Redirecting…" : `Buy Pro Access — ${item.priceLabel}`}
+                      </button>
                       <Link to={item.href}
                         className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-cyan-700 hover:bg-cyan-600 text-white font-bold transition-colors">
                         View Full BOM & Specs <ChevronRight size={16} />
