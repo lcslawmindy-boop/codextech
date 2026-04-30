@@ -2,6 +2,24 @@ import { useState, useRef, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
 import { Loader2, Zap, Download, Save, FileText, BarChart3 } from "lucide-react";
 
+const TECH_CATEGORIES = [
+  { id: "em", name: "Electromagnetic", icon: "⚡", desc: "EM energy, scalar fields, resonance" },
+  { id: "bioem", name: "Bioelectromagnetic", icon: "🧬", desc: "Biology + EM, frequency devices" },
+  { id: "torsion", name: "Torsion Fields", icon: "🌀", desc: "Spin, angular momentum phenomena" },
+  { id: "plasma", name: "Plasma Tech", icon: "🔥", desc: "Plasma reactions, ionization" },
+  { id: "quantum", name: "Quantum Effects", icon: "🌌", desc: "Quantum tunneling, coherence" },
+  { id: "resonance", name: "Resonance Systems", icon: "📿", desc: "Harmonic coupling, cavity modes" },
+];
+
+const MONETIZATION_SECTORS = [
+  { id: "energy", name: "Energy Generation", icon: "⚡", revenue: "$10B+ TAM" },
+  { id: "medical", name: "Medical/Biotech", icon: "🏥", revenue: "$500B+ TAM" },
+  { id: "aerospace", name: "Aerospace/Defense", icon: "🚀", revenue: "$600B+ TAM" },
+  { id: "industrial", name: "Industrial Manufacturing", icon: "🏭", revenue: "$2T+ TAM" },
+  { id: "consumer", name: "Consumer Electronics", icon: "📱", revenue: "$1T+ TAM" },
+  { id: "communications", name: "Communications", icon: "📡", revenue: "$1.5T+ TAM" },
+];
+
 const SAMPLE_INVENTIONS = [
   { name: "MEG Generator", icon: "⚡", color: "from-cyan-600 to-blue-600" },
   { name: "Scalar Transmitter", icon: "📡", color: "from-purple-600 to-pink-600" },
@@ -14,22 +32,27 @@ const SAMPLE_INVENTIONS = [
 ];
 
 export default function AdvancedInventionDossierGenerator() {
+  const [step, setStep] = useState("setup"); // setup, generating, results
   const [concept, setConcept] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const [selectedSector, setSelectedSector] = useState("");
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(null);
   const [error, setError] = useState(null);
   const [saved, setSaved] = useState(false);
   const [spinIndex, setSpinIndex] = useState(0);
   const leverRef = useRef(null);
+  let spinInterval = useRef(null);
 
   const handleGenerate = async () => {
-    if (!concept.trim()) return;
+    if (!concept.trim() || !selectedCategory || !selectedSector) return;
+    setStep("generating");
     setLoading(true);
     setError(null);
     setSaved(false);
     
     // Start slot machine spinning animation
-    const spinInterval = setInterval(() => {
+    spinInterval.current = setInterval(() => {
       setSpinIndex(prev => (prev + 1) % SAMPLE_INVENTIONS.length);
     }, 100);
 
@@ -41,12 +64,25 @@ export default function AdvancedInventionDossierGenerator() {
       }, 300);
     }
 
+    const categoryName = TECH_CATEGORIES.find(c => c.id === selectedCategory)?.name;
+    const sectorName = MONETIZATION_SECTORS.find(s => s.id === selectedSector)?.name;
+
     const res = await base44.integrations.Core.InvokeLLM({
-      prompt: `You are an AI patent strategy and commercialization expert. Generate a complete Invention Dossier for the following concept:
+      prompt: `You are an AI patent strategy and commercialization expert specializing in advanced technologies. Generate a complete Invention Dossier for:
 
-INVENTION CONCEPT: ${concept}
+CONCEPT: ${concept}
+TECHNOLOGY CATEGORY: ${categoryName}
+TARGET MONETIZATION SECTOR: ${sectorName}
 
-Create a comprehensive dossier with:
+RESEARCH INSTRUCTIONS: Use your knowledge of:
+- Verified patents and research in ${categoryName} (Tesla coil theory, Bearden MEG, Schauberger vortex, scalar EM, peer-reviewed literature)
+- Current market trends, company activities, and competitive landscape in ${sectorName}
+- Regulatory pathways, FDA/FCC approval processes, and industry standards
+- Prior art analysis, patent prosecution history, and freedom-to-operate assessment
+- Realistic IP valuation models based on ${sectorName} comparable transactions
+- Licensing frameworks, partnership models, and go-to-market strategies specific to ${sectorName}
+
+Generate a comprehensive, evidence-based dossier with:
 1. IP Strategy (2-3 key approaches, filing timeline, jurisdiction recommendation)
 2. Patent Claims (3-5 independent claims optimized for protection)
 3. Freedom-to-Operate Assessment (risk score 0-100, key prior art to monitor)
@@ -57,6 +93,7 @@ Create a comprehensive dossier with:
 
 Be detailed and actionable. Format the response as structured JSON.`,
       model: "claude_sonnet_4_6",
+      add_context_from_internet: true,
       response_json_schema: {
         type: "object",
         properties: {
@@ -125,12 +162,11 @@ Be detailed and actionable. Format the response as structured JSON.`,
 
     setResult(res.data);
     setLoading(false);
+    setStep("results");
     
-    // Stop spinning after 2 seconds
-    if (spinInterval) {
-      setTimeout(() => {
-        clearInterval(spinInterval);
-      }, 2000);
+    // Stop spinning
+    if (spinInterval.current) {
+      clearInterval(spinInterval.current);
     }
   };
 
@@ -164,31 +200,95 @@ Be detailed and actionable. Format the response as structured JSON.`,
 
   if (!result) {
     return (
-      <div className="max-w-4xl mx-auto">
+      <div className="max-w-6xl mx-auto">
         <div className="mb-8">
           <h3 className="text-white font-black text-3xl mb-2 flex items-center gap-2">
-            <Zap size={28} className="text-purple-400" /> Invention Dossier Slot Machine
+            <Zap size={28} className="text-purple-400" /> Invention Dossier Generator
           </h3>
-          <p className="text-gray-400 text-sm">Describe your invention concept, pull the lever, and watch the AI generate your complete patent strategy, commercialization plan, and BOM.</p>
+          <p className="text-gray-400 text-sm">AI-powered patent strategy powered by verified research, proven science, and market intelligence. Select your tech category and target sector to generate a complete commercialization dossier.</p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Input Section */}
-          <div className="lg:col-span-1 space-y-4">
-            <div>
+        {step === "setup" ? (
+          <div className="space-y-8">
+            {/* Concept Input */}
+            <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6">
               <label className="text-gray-300 text-sm font-bold block mb-2">Your Invention Concept</label>
               <textarea
                 value={concept}
                 onChange={(e) => setConcept(e.target.value)}
-                placeholder="Describe your invention, technology, mechanism, or problem you're solving..."
-                rows={8}
+                placeholder="Describe your invention, technology, mechanism, problem solved, or unique approach..."
+                rows={6}
                 className="w-full bg-gray-800 border border-gray-700 rounded-xl px-4 py-3 text-white placeholder-gray-600 focus:outline-none focus:border-purple-500 resize-none text-sm"
               />
             </div>
-          </div>
 
-          {/* Slot Machine */}
-          <div className="lg:col-span-2">
+            {/* Technology Category Selection */}
+            <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6">
+              <h4 className="text-white font-black text-lg mb-4">Select Technology Category</h4>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                {TECH_CATEGORIES.map(cat => (
+                  <button
+                    key={cat.id}
+                    onClick={() => setSelectedCategory(cat.id)}
+                    className={`p-4 rounded-xl border-2 transition-all text-left ${
+                      selectedCategory === cat.id
+                        ? "border-purple-500 bg-purple-950/30"
+                        : "border-gray-700 bg-gray-800/50 hover:border-gray-600"
+                    }`}
+                  >
+                    <div className="text-2xl mb-2">{cat.icon}</div>
+                    <p className="font-bold text-white text-sm">{cat.name}</p>
+                    <p className="text-gray-400 text-xs mt-1">{cat.desc}</p>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Monetization Sector Selection */}
+            <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6">
+              <h4 className="text-white font-black text-lg mb-4">Select Target Monetization Sector</h4>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                {MONETIZATION_SECTORS.map(sector => (
+                  <button
+                    key={sector.id}
+                    onClick={() => setSelectedSector(sector.id)}
+                    className={`p-4 rounded-xl border-2 transition-all text-left ${
+                      selectedSector === sector.id
+                        ? "border-cyan-500 bg-cyan-950/30"
+                        : "border-gray-700 bg-gray-800/50 hover:border-gray-600"
+                    }`}
+                  >
+                    <div className="text-2xl mb-2">{sector.icon}</div>
+                    <p className="font-bold text-white text-sm">{sector.name}</p>
+                    <p className="text-cyan-400 text-xs mt-1">{sector.revenue}</p>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {error && <p className="text-red-400 text-sm text-center">{error}</p>}
+
+            <button
+              onClick={handleGenerate}
+              disabled={loading || !concept.trim() || !selectedCategory || !selectedSector}
+              className="w-full py-4 rounded-xl bg-gradient-to-r from-purple-600 to-blue-700 hover:from-purple-500 hover:to-blue-600 disabled:opacity-50 text-white font-black text-base transition-all flex items-center justify-center gap-2"
+            >
+              {loading ? (
+                <>
+                  <Loader2 size={16} className="animate-spin" /> Analyzing Research & Generating...
+                </>
+              ) : (
+                <>
+                  <Zap size={16} /> Generate Dossier with Slot Machine
+                </>
+              )}
+            </button>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+
+            {/* Slot Machine */}
+            <div className="lg:col-span-2">
             <div className="bg-gradient-to-b from-yellow-900/40 to-yellow-950/60 border-4 border-yellow-700 rounded-3xl p-8 shadow-2xl">
               {/* Display Window */}
               <div className="bg-gray-950 border-4 border-yellow-600 rounded-2xl p-6 mb-8 h-80 flex items-center justify-center overflow-hidden relative shadow-inner">
@@ -250,9 +350,11 @@ Be detailed and actionable. Format the response as structured JSON.`,
               </div>
             </div>
           </div>
-        </div>
 
-        {error && <p className="text-red-400 text-sm text-center mt-4">{error}</p>}
+          {error && <p className="text-red-400 text-sm text-center mt-4">{error}</p>}
+        </div>
+        )}
+      </div>
       </div>
     );
   }
