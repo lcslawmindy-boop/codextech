@@ -339,12 +339,8 @@ Be detailed and innovative. Format the response as structured JSON.`,
                 </>
               )}
             </button>
-          </div>
-      </div>
-    );
-  }
-
-  return (
+            </div>
+            ) : (
     <div className="bg-gray-900 border border-gray-800 rounded-2xl p-8 max-w-4xl mx-auto space-y-8">
       {/* Header */}
       <div className="flex items-start justify-between gap-4">
@@ -553,6 +549,8 @@ Be detailed and innovative. Format the response as structured JSON.`,
           </button>
         )}
       </div>
-    </div>
-  );
-}
+      </div>
+       )}
+      </div>
+      );
+      }

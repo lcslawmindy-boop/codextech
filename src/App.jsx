@@ -37,6 +37,8 @@ import ScalarEMLab from './pages/ScalarEMLab';
 import PatentDraftingTool from './pages/PatentDraftingTool';
 import PatentClaimsGenerator from './pages/PatentClaimsGenerator';
 import TimelinePitchDeck from './pages/TimelinePitchDeck';
+import PatentTracker from './pages/PatentTracker';
+import BOMInteractive from './pages/BOMInteractive';
 import PriorArtArchive from './pages/PriorArtArchive';
 import InvestorPortal from './pages/InvestorPortal';
 import InvestorOutreachWorkflow from './pages/InvestorOutreachWorkflow';
@@ -229,6 +231,8 @@ const AuthenticatedApp = () => {
           <Route path="/patent-tool" element={<PatentDraftingTool />} />
           <Route path="/patent-claims-generator" element={<PatentClaimsGenerator />} />
           <Route path="/timeline-pitch" element={<TimelinePitchDeck />} />
+          <Route path="/patent-tracker" element={<PatentTracker />} />
+          <Route path="/bom-visualizer" element={<BOMInteractive />} />
           <Route path="/prior-art" element={<PriorArtArchive />} />
           <Route path="/investors" element={<InvestorPortal />} />
           <Route path="/investor-portal" element={<InvestorPortal />} />
