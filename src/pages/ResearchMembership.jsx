@@ -126,10 +126,10 @@ export default function ResearchMembership() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16">
           {/* Researcher Tier */}
           <div className="bg-gray-900 border border-gray-800 rounded-2xl p-8">
-            <h3 className="text-white font-black text-2xl mb-2">Researcher</h3>
+            <h3 className="text-white font-black text-2xl mb-2">Pro</h3>
             <p className="text-gray-500 text-sm mb-6">For individual researchers and engineers</p>
 
-            <div className="text-3xl font-black text-cyan-300 mb-1">$197</div>
+            <div className="text-3xl font-black text-cyan-300 mb-1">$49</div>
             <p className="text-gray-500 text-xs mb-8">/month, cancel anytime</p>
 
             <div className="space-y-3 mb-8">
@@ -149,10 +149,10 @@ export default function ResearchMembership() {
             </div>
 
             <CheckoutButton
-              title="Research Membership"
-              price="$197"
-              priceInCents={19700}
-              description="Monthly membership for individual researchers and engineers"
+              title="Pro Membership"
+              price="$49"
+              priceInCents={4900}
+              description="Monthly Pro membership for individual researchers and engineers"
             />
 
             <p className="text-gray-600 text-xs text-center mt-4">Billed monthly. Access everything immediately.</p>
@@ -167,7 +167,7 @@ export default function ResearchMembership() {
             <h3 className="text-white font-black text-2xl mb-2">Institutional</h3>
             <p className="text-gray-300 text-sm mb-6">For research teams, government agencies, and enterprises</p>
 
-            <div className="text-3xl font-black text-cyan-300 mb-1">$497</div>
+            <div className="text-3xl font-black text-cyan-300 mb-1">$199</div>
             <p className="text-gray-500 text-xs mb-8">/month, cancel anytime</p>
 
             <div className="space-y-3 mb-8">
@@ -189,8 +189,8 @@ export default function ResearchMembership() {
 
             <CheckoutButton
               title="Institutional Membership"
-              price="$497"
-              priceInCents={49700}
+              price="$199"
+              priceInCents={19900}
               description="Monthly membership for research teams and institutions"
             />
 
@@ -282,7 +282,7 @@ export default function ResearchMembership() {
         <section className="mb-12 bg-gray-900 border border-gray-800 rounded-2xl p-8">
           <h3 className="text-white font-black text-xl mb-4">Ready to Build?</h3>
           <p className="text-gray-400 mb-4">
-            Membership gives you the research. The Advanced Engineering Bundle ($997) is for teams actually building systems — with hands-on designs, component sourcing, troubleshooting protocols, and measurement validation.
+            Membership (Pro $49/mo · Institutional $199/mo) gives you the research. The Advanced Engineering Bundle ($997) is for teams actually building systems — with hands-on designs, component sourcing, troubleshooting protocols, and measurement validation.
           </p>
           <a
             href="/advanced-engineering-bundle"
@@ -311,7 +311,7 @@ export default function ResearchMembership() {
               },
               {
                 q: "What's the difference between Researcher and Institutional?",
-                a: "Researcher: individual access, all content. Institutional: team seats (up to 5), quarterly live Q&A, direct expert support, pre-release access to Advanced Bundle."
+                a: "Pro ($49/mo): individual access, all content. Institutional ($199/mo): team seats (up to 10), quarterly live Q&A, direct expert support, priority expert answers."
               },
               {
                 q: "Can I upgrade from Researcher to Institutional later?",

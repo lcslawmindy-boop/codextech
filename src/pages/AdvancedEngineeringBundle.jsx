@@ -168,7 +168,7 @@ export default function AdvancedEngineeringBundle() {
               <div className="mt-8 pt-6 border-t border-gray-700">
                 <p className="text-white font-bold text-sm mb-3">Prerequisite</p>
                 <p className="text-gray-400 text-xs">
-                  This bundle assumes you have Research Membership (you understand the theory). If you haven't joined yet, start with Technical Brief Pack or Membership.
+                  This bundle assumes you have Research Membership (you understand the theory). If you haven't joined yet, start with the Pro plan ($49/mo) or Institutional ($199/mo).
                 </p>
               </div>
             </div>
@@ -308,7 +308,7 @@ export default function AdvancedEngineeringBundle() {
             {[
               {
                 q: "Do I need Research Membership first?",
-                a: "Yes. The bundle assumes you understand the theory. Get Membership ($97–$197/month) to understand the foundations before ordering this bundle."
+                a: "Yes. The bundle assumes you understand the theory. Get Membership ($49–$199/month) to understand the foundations before ordering this bundle."
               },
               {
                 q: "Can I get a refund if I realize building isn't for me?",
