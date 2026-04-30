@@ -123,23 +123,22 @@ export default function ResearchMembership() {
         </div>
 
         {/* Tiers */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16">
-          {/* Researcher Tier */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-16">
+          {/* Researcher Basic Tier */}
           <div className="bg-gray-900 border border-gray-800 rounded-2xl p-8">
-            <h3 className="text-white font-black text-2xl mb-2">Pro</h3>
-            <p className="text-gray-500 text-sm mb-6">For individual researchers and engineers</p>
+            <h3 className="text-white font-black text-2xl mb-2">Researcher</h3>
+            <p className="text-gray-500 text-sm mb-6">For curious individuals getting started</p>
 
             <div className="text-3xl font-black text-cyan-300 mb-1">$49</div>
             <p className="text-gray-500 text-xs mb-8">/month, cancel anytime</p>
 
             <div className="space-y-3 mb-8">
               {[
-                "40+ patent analyses with full prosecution history and claims review",
-                "8 structured research modules (80+ hours of primary-source analysis)",
-                "Engineering documentation derived from verified patents and peer-reviewed research",
-                "Monthly research updates: new patents indexed, emerging literature flagged",
-                "Direct expert support: research questions answered within 48 hours",
-                "Exclusive research briefs and institutional findings"
+                "Access to core research archive",
+                "8 structured research modules",
+                "Monthly research updates",
+                "Community access",
+                "Basic research briefs"
               ].map((feature, i) => (
                 <div key={i} className="flex gap-3">
                   <CheckCircle2 size={16} className="text-cyan-400 flex-shrink-0 mt-0.5" />
@@ -149,36 +148,70 @@ export default function ResearchMembership() {
             </div>
 
             <CheckoutButton
-              title="Pro Membership"
+              title="Researcher Membership"
               price="$49"
               priceInCents={4900}
-              description="Monthly Pro membership for individual researchers and engineers"
+              description="Monthly Researcher membership — core archive access"
             />
 
-            <p className="text-gray-600 text-xs text-center mt-4">Billed monthly. Access everything immediately.</p>
+            <p className="text-gray-600 text-xs text-center mt-4">Billed monthly. Cancel anytime.</p>
           </div>
 
-          {/* Institutional Tier */}
-          <div className="bg-gradient-to-br from-cyan-950/30 to-blue-950/30 border-2 border-cyan-600 rounded-2xl p-8 relative">
-            <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-cyan-600 text-white text-xs font-black">
-              INSTITUTIONAL STANDARD
+          {/* Builder Tier */}
+          <div className="bg-gray-900 border border-gray-700 rounded-2xl p-8">
+            <h3 className="text-white font-black text-2xl mb-2">Builder</h3>
+            <p className="text-gray-500 text-sm mb-6">For engineers actively building systems</p>
+
+            <div className="text-3xl font-black text-cyan-300 mb-1">$99</div>
+            <p className="text-gray-500 text-xs mb-8">/month, cancel anytime</p>
+
+            <div className="space-y-3 mb-8">
+              {[
+                "Everything in Researcher",
+                "40+ patent analyses with prosecution history",
+                "Engineering documentation & sourcing guides",
+                "Step-by-step build frameworks",
+                "Direct expert support (48hr response)",
+                "Exclusive research briefs"
+              ].map((feature, i) => (
+                <div key={i} className="flex gap-3">
+                  <CheckCircle2 size={16} className="text-cyan-400 flex-shrink-0 mt-0.5" />
+                  <p className="text-gray-300 text-sm">{feature}</p>
+                </div>
+              ))}
             </div>
 
-            <h3 className="text-white font-black text-2xl mb-2">Institutional</h3>
-            <p className="text-gray-300 text-sm mb-6">For research teams, government agencies, and enterprises</p>
+            <CheckoutButton
+              title="Builder Membership"
+              price="$99"
+              priceInCents={9900}
+              description="Monthly Builder membership for engineers actively building systems"
+            />
+
+            <p className="text-gray-600 text-xs text-center mt-4">Billed monthly. Cancel anytime.</p>
+          </div>
+
+          {/* Pro Tier */}
+          <div className="bg-gradient-to-br from-cyan-950/30 to-blue-950/30 border-2 border-cyan-600 rounded-2xl p-8 relative">
+            <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-cyan-600 text-white text-xs font-black">
+              MOST POWERFUL
+            </div>
+
+            <h3 className="text-white font-black text-2xl mb-2">Pro</h3>
+            <p className="text-gray-300 text-sm mb-6">For research teams, institutions, and enterprises</p>
 
             <div className="text-3xl font-black text-cyan-300 mb-1">$199</div>
             <p className="text-gray-500 text-xs mb-8">/month, cancel anytime</p>
 
             <div className="space-y-3 mb-8">
               {[
-                "Everything in Research tier",
+                "Everything in Builder",
                 "Team access (up to 10 seats)",
-                "Monthly live technical sessions with research directors",
-                "Priority expert support: research & strategic questions",
-                "Quarterly institutional briefings on emerging research",
-                "Custom research requests (1 per month)",
-                "Pre-release access to new patent analyses and modules"
+                "Monthly live technical sessions",
+                "Priority expert support",
+                "Quarterly institutional briefings",
+                "Custom research requests (1/month)",
+                "Pre-release patent analyses & modules"
               ].map((feature, i) => (
                 <div key={i} className="flex gap-3">
                   <CheckCircle2 size={16} className="text-cyan-300 flex-shrink-0 mt-0.5" />
@@ -188,10 +221,10 @@ export default function ResearchMembership() {
             </div>
 
             <CheckoutButton
-              title="Institutional Membership"
+              title="Pro Membership"
               price="$199"
               priceInCents={19900}
-              description="Monthly membership for research teams and institutions"
+              description="Monthly Pro membership for research teams and institutions"
             />
 
             <p className="text-gray-400 text-xs text-center mt-4">Billed monthly. Team access activates immediately.</p>
@@ -282,7 +315,7 @@ export default function ResearchMembership() {
         <section className="mb-12 bg-gray-900 border border-gray-800 rounded-2xl p-8">
           <h3 className="text-white font-black text-xl mb-4">Ready to Build?</h3>
           <p className="text-gray-400 mb-4">
-            Membership (Pro $49/mo · Institutional $199/mo) gives you the research. The Advanced Engineering Bundle ($997) is for teams actually building systems — with hands-on designs, component sourcing, troubleshooting protocols, and measurement validation.
+            Membership (Researcher $49 · Builder $99 · Pro $199/mo) gives you the research. The Advanced Engineering Bundle ($997) is for teams actually building systems — with hands-on designs, component sourcing, troubleshooting protocols, and measurement validation.
           </p>
           <a
             href="/advanced-engineering-bundle"
@@ -310,11 +343,11 @@ export default function ResearchMembership() {
                 a: "No, but the Research Brief (free) gives you a sense of content quality and depth. Start there if unsure."
               },
               {
-                q: "What's the difference between Researcher and Institutional?",
-                a: "Pro ($49/mo): individual access, all content. Institutional ($199/mo): team seats (up to 10), quarterly live Q&A, direct expert support, priority expert answers."
+                q: "What's the difference between the tiers?",
+                a: "Researcher ($49/mo): core archive access. Builder ($99/mo): adds patent analyses, engineering docs, and expert support. Pro ($199/mo): adds team seats, live sessions, and custom research requests."
               },
               {
-                q: "Can I upgrade from Researcher to Institutional later?",
+                q: "Can I upgrade later?",
                 a: "Yes. Contact support or upgrade in account settings. You'll pay the difference pro-rated."
               }
             ].map((item, i) => (

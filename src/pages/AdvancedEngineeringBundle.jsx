@@ -168,7 +168,7 @@ export default function AdvancedEngineeringBundle() {
               <div className="mt-8 pt-6 border-t border-gray-700">
                 <p className="text-white font-bold text-sm mb-3">Prerequisite</p>
                 <p className="text-gray-400 text-xs">
-                  This bundle assumes you have Research Membership (you understand the theory). If you haven't joined yet, start with the Pro plan ($49/mo) or Institutional ($199/mo).
+                  This bundle assumes you have Research Membership (you understand the theory). If you haven't joined yet, start with the Researcher ($49/mo), Builder ($99/mo), or Pro ($199/mo) plan.
                 </p>
               </div>
             </div>
