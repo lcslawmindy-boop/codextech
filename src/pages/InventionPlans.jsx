@@ -1255,6 +1255,27 @@ async function generateMasterPDF(allInventions) {
 }
 
 function SpecsLockedGate({ invention }) {
+  const [loading, setLoading] = useState(false);
+
+  const handleBuy = async () => {
+    if (window.self !== window.top) {
+      alert("Checkout works best on the published app. Please visit the full website to complete your purchase.");
+      return;
+    }
+    setLoading(true);
+    const priceInCents = parseInt(String(invention?.price || "99").replace(/[^\d]/g, "")) * 100 || 9900;
+    const res = await base44.functions.invoke("createCheckoutSession", {
+      title: invention?.title,
+      priceInCents,
+      description: invention?.tagline || "",
+      category: "Invention",
+      successUrl: window.location.origin + "/invention-plans?success=1",
+      cancelUrl: window.location.href,
+    });
+    if (res.data?.url) window.location.href = res.data.url;
+    setLoading(false);
+  };
+
   return (
     <div className="flex-1 flex items-center justify-center p-12">
       <div className="max-w-md text-center">
@@ -1263,16 +1284,31 @@ function SpecsLockedGate({ invention }) {
         </div>
         <div className="flex items-center justify-center gap-2 mb-3">
           <Lock size={16} className="text-indigo-400" />
-          <span className="text-indigo-400 font-bold text-sm uppercase tracking-wider">Specs Hidden</span>
+          <span className="text-indigo-400 font-bold text-sm uppercase tracking-wider">Purchase to Unlock</span>
         </div>
         <h2 className="text-white font-black text-2xl mb-2">{invention?.title}</h2>
         <p className="text-gray-400 text-sm italic mb-4">{invention?.tagline}</p>
-        <p className="text-gray-500 text-sm leading-relaxed mb-6">
-          To view technical specifications, bill of materials, and build instructions for this invention, you need a membership or purchase this plan individually.
+        <p className="text-gray-500 text-sm leading-relaxed mb-4">
+          Purchase this build plan to unlock full technical specifications, bill of materials, step-by-step assembly instructions, and downloadable PDF.
         </p>
-        <div className="space-y-2 mb-6">
+        <div className="bg-gray-900 border border-gray-700 rounded-2xl p-4 mb-5 text-left space-y-2">
+          {["Step-by-step assembly instructions", "Full bill of materials (BOM)", "Schematics & technical specs", "Downloadable PDF plans", "Supplier sourcing guide"].map((item, i) => (
+            <div key={i} className="flex items-center gap-2 text-sm text-gray-300">
+              <CheckCircle2 size={13} className="text-green-500 flex-shrink-0" />{item}
+            </div>
+          ))}
+        </div>
+        <div className="space-y-2">
+          <button
+            onClick={handleBuy}
+            disabled={loading}
+            className="flex items-center justify-center gap-2 w-full py-3 rounded-xl font-black text-white text-sm bg-green-700 hover:bg-green-600 disabled:opacity-50 transition-all"
+          >
+            {loading ? <Loader2 size={14} className="animate-spin" /> : <ShoppingCart size={14} />}
+            {loading ? "Processing…" : `Buy Now — ${invention?.price || "See Pricing"}`}
+          </button>
           <button onClick={() => window.location.href = '/vault'}
-            className="flex items-center justify-center gap-2 w-full py-3 rounded-xl font-black text-white text-sm bg-indigo-700 hover:bg-indigo-600 transition-all">
+            className="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl font-bold text-gray-400 text-sm bg-gray-800 hover:bg-gray-700 transition-all">
             View Database
           </button>
         </div>
@@ -1484,7 +1520,9 @@ export default function InventionPlans() {
         title: selected.title,
         priceInCents,
         description: selected.tagline || selected.description,
-        category: "Invention"
+        category: "Invention",
+        successUrl: window.location.origin + "/invention-plans?success=1",
+        cancelUrl: window.location.href,
       });
 
       if (res.data?.url) {
