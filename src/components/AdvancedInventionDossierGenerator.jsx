@@ -548,8 +548,7 @@ Be detailed and innovative. Format the response as structured JSON.`,
             <Save size={14} /> Save to Invention Library
           </button>
         )}
-      </div>
-       )}
-      </div>
-      );
+        </div>
+        </div>
+        );
       }
