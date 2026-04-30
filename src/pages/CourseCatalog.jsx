@@ -253,9 +253,7 @@ export default function CourseCatalog() {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
             {courses.map((item, i) => (
-              <TierGate key={i} locked={!tierCanAccessCourse(tier, i)} requiredTier={i < 4 ? "starter" : "researcher"}>
-                <CourseCard item={item} />
-              </TierGate>
+              <CourseCard key={i} item={item} />
             ))}
           </div>
         </section>
