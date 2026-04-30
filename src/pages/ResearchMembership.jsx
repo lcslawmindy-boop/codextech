@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { ArrowRight, CheckCircle2, Users, Zap, Lock, BookOpen, Zap as ZapIcon } from "lucide-react";
 import { base44 } from "@/api/base44Client";
-import InventionDossierSlotMachine from "@/components/InventionDossierSlotMachine";
+import AdvancedInventionDossierGenerator from "@/components/AdvancedInventionDossierGenerator";
 
 function CheckoutButton({ title, price, priceInCents, description, billingPeriod = "monthly" }) {
   const [loading, setLoading] = useState(false);
@@ -319,10 +319,8 @@ export default function ResearchMembership() {
             <p className="text-gray-600 text-xs text-center mt-4">{billingPeriod === "annual" ? "Billed annually" : "Billed monthly"}. Cancel anytime.</p>
           </div>
 
-          {/* Slot Machine Preview (shown after Builder tier) */}
-          <div className="lg:col-span-3 mt-12">
-            <InventionDossierSlotMachine />
-          </div>
+          {/* Advanced Generator (shown after all tiers) */}
+          <div className="lg:col-span-3" />
 
           {/* Pro Tier */}
           <div className="bg-gradient-to-br from-cyan-950/30 to-blue-950/30 border-2 border-cyan-600 rounded-2xl p-8 relative">
@@ -468,6 +466,11 @@ export default function ResearchMembership() {
               </div>
             ))}
           </div>
+        </section>
+
+        {/* AI Dossier Generator */}
+        <section className="mb-12">
+          <AdvancedInventionDossierGenerator />
         </section>
 
         {/* Next Level */}
