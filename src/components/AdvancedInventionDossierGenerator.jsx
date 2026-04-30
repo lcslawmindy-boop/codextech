@@ -340,7 +340,6 @@ Be detailed and innovative. Format the response as structured JSON.`,
               )}
             </button>
           </div>
-        )}
       </div>
     );
   }

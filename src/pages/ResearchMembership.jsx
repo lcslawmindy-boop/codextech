@@ -2,6 +2,7 @@ import { useState } from "react";
 import { ArrowRight, CheckCircle2, Users, Zap, Lock, BookOpen, Zap as ZapIcon } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import AdvancedInventionDossierGenerator from "@/components/AdvancedInventionDossierGenerator";
+import CosmicResearchBackground from "@/components/CosmicResearchBackground";
 
 function CheckoutButton({ title, price, priceInCents, description, billingPeriod = "monthly" }) {
   const [loading, setLoading] = useState(false);
@@ -45,7 +46,8 @@ export default function ResearchMembership() {
   const [billingPeriod, setBillingPeriod] = useState("monthly");
 
   return (
-    <div className="min-h-screen bg-gray-950 text-white">
+    <div className="min-h-screen bg-gray-950 text-white relative">
+      <CosmicResearchBackground />
       {/* Header */}
       <div className="border-b border-gray-800 px-6 py-5 bg-gray-900/50">
         <div className="max-w-6xl mx-auto">
