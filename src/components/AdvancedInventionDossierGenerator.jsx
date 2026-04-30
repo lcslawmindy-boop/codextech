@@ -21,14 +21,14 @@ const MONETIZATION_SECTORS = [
 ];
 
 const SAMPLE_INVENTIONS = [
-  { name: "MEG Generator", icon: "⚡", color: "from-cyan-600 to-blue-600" },
-  { name: "Scalar Transmitter", icon: "📡", color: "from-purple-600 to-pink-600" },
-  { name: "Zero-Point Extractor", icon: "🌌", color: "from-indigo-600 to-purple-600" },
-  { name: "Anenergy Pump", icon: "💫", color: "from-yellow-600 to-orange-600" },
-  { name: "Prioré Device", icon: "🔬", color: "from-green-600 to-cyan-600" },
-  { name: "Torsion Field Generator", icon: "🌀", color: "from-red-600 to-pink-600" },
-  { name: "Resonance Cavity", icon: "📿", color: "from-blue-600 to-cyan-600" },
-  { name: "BioEM Interface", icon: "🧬", color: "from-green-600 to-emerald-600" },
+  { name: "MEG Generator", icon: "⚡", color: "from-cyan-600 to-blue-600", tech: "Motionless electromagnetic generator using toroidal coil geometry and permanent magnets to extract EM energy from ambient field fluctuations" },
+  { name: "Scalar Transmitter", icon: "📡", color: "from-purple-600 to-pink-600", tech: "Biconical or toroidal antenna configuration for generating scalar EM waves via destructive interference of orthogonal EM fields" },
+  { name: "Zero-Point Extractor", icon: "🌌", color: "from-indigo-600 to-purple-600", tech: "Quantum vacuum fluctuation harvesting system using high-frequency oscillation circuits and Casimir cavity principles" },
+  { name: "Anenergy Pump", icon: "💫", color: "from-yellow-600 to-orange-600", tech: "Toroidal coil assembly with phased excitation producing coherent EM energy circulation and potential energy amplification" },
+  { name: "Prioré Device", icon: "🔬", color: "from-green-600 to-cyan-600", tech: "RF-driven cylindrical cavity with secondary helical coils generating complex EM field patterns for bioelectromagnetic effects" },
+  { name: "Torsion Field Generator", icon: "🌀", color: "from-red-600 to-pink-600", tech: "Spinning charge assembly or gyroscopic system producing torsion field propagation through spacetime topology" },
+  { name: "Resonance Cavity", icon: "📿", color: "from-blue-600 to-cyan-600", tech: "Tuned cylindrical or spherical chamber exploiting cavity resonance modes to amplify EM energy at specific frequencies" },
+  { name: "BioEM Interface", icon: "🧬", color: "from-green-600 to-emerald-600", tech: "Frequency-tuned electrode array for coupling biological systems to EM fields within therapeutic window parameters" },
 ];
 
 export default function AdvancedInventionDossierGenerator() {
@@ -245,17 +245,18 @@ Be detailed and innovative. Format the response as structured JSON.`,
                     <button
                       key={inv.name}
                       onClick={() => toggleInventionSelection(inv)}
-                      className={`p-3 rounded-lg border-2 transition-all text-left flex items-center gap-2 ${
+                      className={`p-3 rounded-lg border-2 transition-all text-left flex flex-col gap-1.5 ${
                         selectedInventions.find(s => s.name === inv.name)
                           ? "border-cyan-500 bg-cyan-950/30"
                           : "border-gray-700 bg-gray-800/50 hover:border-gray-600"
                       }`}
                     >
-                      <span className="text-xl">{inv.icon}</span>
-                      <div className="flex-1">
-                        <p className="font-bold text-white text-sm">{inv.name}</p>
+                      <div className="flex items-center gap-2">
+                        <span className="text-xl">{inv.icon}</span>
+                        <p className="font-bold text-white text-sm flex-1">{inv.name}</p>
+                        {selectedInventions.find(s => s.name === inv.name) && <span className="text-cyan-400 font-bold">✓</span>}
                       </div>
-                      {selectedInventions.find(s => s.name === inv.name) && <span className="text-cyan-400 font-bold">✓</span>}
+                      <p className="text-gray-400 text-xs leading-snug ml-7">{inv.tech}</p>
                     </button>
                   ))}
                 </div>
@@ -339,75 +340,6 @@ Be detailed and innovative. Format the response as structured JSON.`,
               )}
             </button>
           </div>
-        ) : (
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-
-            {/* Slot Machine */}
-            <div className="lg:col-span-2">
-            <div className="bg-gradient-to-b from-yellow-900/40 to-yellow-950/60 border-4 border-yellow-700 rounded-3xl p-8 shadow-2xl">
-              {/* Display Window */}
-              <div className="bg-gray-950 border-4 border-yellow-600 rounded-2xl p-6 mb-8 h-80 flex items-center justify-center overflow-hidden relative shadow-inner">
-                <div className="absolute inset-0 bg-gradient-to-r from-yellow-600/10 to-transparent" />
-                
-                {loading ? (
-                  <div className="relative w-full h-full flex items-center justify-center">
-                    {/* Spinning cards */}
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      {[0, 1, 2].map((offset) => (
-                        <div
-                          key={offset}
-                          className="absolute"
-                          style={{
-                            transform: `translateY(${Math.sin((spinIndex + offset) * 0.3) * 150}px)`,
-                            opacity: offset === 1 ? 1 : 0.3,
-                            zIndex: offset === 1 ? 10 : 5
-                          }}
-                        >
-                          <div className={`bg-gradient-to-br ${SAMPLE_INVENTIONS[(spinIndex + offset) % SAMPLE_INVENTIONS.length].color} rounded-xl p-6 w-40 h-40 flex flex-col items-center justify-center shadow-lg transform transition-transform`}>
-                            <div className="text-6xl mb-2">{SAMPLE_INVENTIONS[(spinIndex + offset) % SAMPLE_INVENTIONS.length].icon}</div>
-                            <p className="text-white font-bold text-sm text-center">{SAMPLE_INVENTIONS[(spinIndex + offset) % SAMPLE_INVENTIONS.length].name}</p>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                ) : (
-                  <div className="text-center">
-                    <div className="text-6xl mb-3">{SAMPLE_INVENTIONS[spinIndex].icon}</div>
-                    <p className="text-white font-black text-2xl">{SAMPLE_INVENTIONS[spinIndex].name}</p>
-                  </div>
-                )}
-              </div>
-
-              {/* Lever Section */}
-              <div className="flex items-end justify-center mb-6 h-40">
-                <div className="relative w-32 h-32 flex items-end justify-center">
-                  {/* Machine body */}
-                  <div className="absolute bottom-0 w-20 h-12 bg-gradient-to-r from-gray-700 to-gray-600 rounded-b-xl border-2 border-gray-600" />
-                  
-                  {/* Lever handle */}
-                  <button
-                    ref={leverRef}
-                    onClick={handleGenerate}
-                    disabled={loading || !concept.trim()}
-                    className="absolute bottom-6 w-12 h-32 bg-gradient-to-r from-red-600 to-red-500 hover:from-red-500 hover:to-red-400 disabled:opacity-50 rounded-full cursor-grab active:cursor-grabbing shadow-lg transition-all duration-200 flex items-center justify-center disabled:cursor-not-allowed"
-                    style={{ transformOrigin: "center bottom" }}
-                  >
-                    <span className="text-2xl">🎰</span>
-                  </button>
-                </div>
-              </div>
-
-              {/* Pull Text */}
-              <div className="text-center">
-                <p className="text-yellow-300 font-black text-lg animate-pulse">PULL THE LEVER</p>
-                <p className="text-gray-400 text-xs mt-1">Generating invention analysis...</p>
-              </div>
-            </div>
-          </div>
-
-          {error && <p className="text-red-400 text-sm text-center mt-4">{error}</p>}
-        </div>
         )}
       </div>
     );
