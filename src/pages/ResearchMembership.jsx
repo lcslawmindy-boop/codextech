@@ -60,6 +60,68 @@ export default function ResearchMembership() {
           </p>
         </div>
 
+        {/* Teaser — blurred sample content */}
+        <div className="mb-16">
+          <div className="flex items-center gap-3 mb-6">
+            <h3 className="text-white font-black text-xl">What's Inside the Archive</h3>
+            <span className="px-3 py-1 rounded-full bg-purple-900/40 border border-purple-700 text-purple-300 text-xs font-bold">PREVIEW</span>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+            {[
+              {
+                label: "Patent Analysis",
+                icon: "📄",
+                color: "border-cyan-900",
+                preview: "US Patent 6,362,718 — Motionless Electromagnetic Generator",
+                lines: ["Prosecution history: 4 office actions", "Independent claims: 7 | Dependent: 14", "Prior art cited: 23 references", "Freedom-to-operate score: 8.4/10", "Engineering implications: High"],
+              },
+              {
+                label: "Research Module",
+                icon: "📚",
+                color: "border-purple-900",
+                preview: "Module 3 — Vacuum Energy Extraction Frameworks",
+                lines: ["Primary sources analyzed: 34", "Peer-reviewed citations: 18", "Patent cross-references: 12", "Engineering build implications", "Verified replication protocols"],
+              },
+              {
+                label: "Intelligence Brief",
+                icon: "🔬",
+                color: "border-green-900",
+                preview: "Declassified ONR Report R-5-78 (1978)",
+                lines: ["Source: Office of Naval Research", "Classification: Unclassified (1983)", "Key findings: 6 experimental results", "Engineering relevance: Critical", "Cross-references: 9 active patents"],
+              },
+            ].map((card, i) => (
+              <div key={i} className={`relative bg-gray-900 border ${card.color} rounded-xl overflow-hidden`}>
+                {/* Visible header */}
+                <div className="px-4 pt-4 pb-2 border-b border-gray-800 flex items-center gap-2">
+                  <span className="text-xl">{card.icon}</span>
+                  <div>
+                    <p className="text-xs font-black text-gray-400 uppercase tracking-widest">{card.label}</p>
+                    <p className="text-white text-xs font-semibold leading-snug mt-0.5">{card.preview}</p>
+                  </div>
+                </div>
+                {/* Blurred body */}
+                <div className="relative px-4 py-3">
+                  <div className="blur-sm opacity-50 pointer-events-none select-none space-y-1.5">
+                    {card.lines.map((line, j) => (
+                      <div key={j} className="flex items-center gap-2">
+                        <div className="w-1.5 h-1.5 rounded-full bg-cyan-600 flex-shrink-0" />
+                        <p className="text-gray-300 text-xs">{line}</p>
+                      </div>
+                    ))}
+                  </div>
+                  {/* Lock overlay */}
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-gray-950/80 border border-gray-700 text-gray-400 text-xs font-bold">
+                      <Lock size={11} /> Members Only
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <p className="text-gray-600 text-xs text-center">Showing 3 of 200+ research entries. Subscribe to unlock the full archive.</p>
+        </div>
+
         {/* Tiers */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16">
           {/* Researcher Tier */}
