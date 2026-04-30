@@ -173,6 +173,10 @@ export default function ResearchMembership() {
                 "40+ patent analyses with prosecution history",
                 "Engineering documentation & sourcing guides",
                 "Step-by-step build frameworks",
+                "Invention Dossier: IP creation framework",
+                "Bring-to-Market Commercialization Roadmap",
+                "1 new course monthly",
+                "1 new build plan monthly",
                 "Direct expert support (48hr response)",
                 "Exclusive research briefs"
               ].map((feature, i) => (
