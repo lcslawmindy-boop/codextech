@@ -21,10 +21,6 @@ export default function ResearchBriefLanding() {
       });
       setSubmitted(true);
       setEmail("");
-      // Redirect to brief after 2 seconds
-      setTimeout(() => {
-        window.location.href = "/research-brief-download";
-      }, 2000);
     } catch (err) {
       console.error("Subscription error:", err);
     }
