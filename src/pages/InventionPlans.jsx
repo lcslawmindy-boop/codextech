@@ -1307,9 +1307,9 @@ function SpecsLockedGate({ invention }) {
             {loading ? <Loader2 size={14} className="animate-spin" /> : <ShoppingCart size={14} />}
             {loading ? "Processing…" : `Buy Now — ${invention?.price || "See Pricing"}`}
           </button>
-          <button onClick={() => window.location.href = '/vault'}
+          <button onClick={() => window.location.href = '/courses'}
             className="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl font-bold text-gray-400 text-sm bg-gray-800 hover:bg-gray-700 transition-all">
-            View Database
+            Browse All Courses & Plans
           </button>
         </div>
       </div>
