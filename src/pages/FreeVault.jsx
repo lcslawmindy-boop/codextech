@@ -131,10 +131,10 @@ export default function FreeVault() {
           </div>
           <h1 className="text-4xl font-black mb-3">Free Engineering Preview</h1>
           <p className="text-gray-400 max-w-2xl mx-auto text-base leading-relaxed mb-4">
-            Explore 3 complete build systems from C.O.D.E.X.T.E.C.H. with full BOMs and specifications. Membership unlocks 40+ systems, courses, and execution tools.
+            Explore 3 complete build systems from C.O.D.E.X.T.E.C.H. with full BOMs and specifications. Membership unlocks structured courses, build plans, and execution tools.
           </p>
           <p className="text-gray-500 text-sm max-w-xl mx-auto">
-            All systems sourced from granted US patents and peer-reviewed research. Upgrade to Pro ($199/month) for all 40+ builds, PDFs, video guides, and verified supplier sourcing.
+            All systems sourced from granted US patents and peer-reviewed research. Upgrade to Pro ($199/month) for all structured courses, build plans, PDFs, video guides, and verified supplier sourcing.
           </p>
         </div>
 
@@ -187,7 +187,7 @@ export default function FreeVault() {
 
         {/* Browse all */}
         <div className="text-center bg-gray-900 border border-gray-800 rounded-2xl p-8 mb-16">
-          <h2 className="text-2xl font-black mb-3">Browse All 40+ Systems</h2>
+          <h2 className="text-2xl font-black mb-3">Browse Structured Courses & Build Plans</h2>
           <p className="text-gray-400 mb-6 max-w-md mx-auto">
             All builds include full BOMs, exact specifications, and assembly instructions. Completely free.
           </p>
