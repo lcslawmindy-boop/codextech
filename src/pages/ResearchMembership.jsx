@@ -169,19 +169,26 @@ export default function ResearchMembership() {
 
             <div className="space-y-3 mb-8">
               {[
-                "3 courses + 3 build plans included",
-                "À la carte access: any course or build plan at $49 each",
-                "Access to core research archive",
-                "8 structured research modules",
-                "Monthly research updates",
-                "Community access",
-                "Basic research briefs"
-              ].map((feature, i) => (
-                <div key={i} className="flex gap-3">
-                  <CheckCircle2 size={16} className="text-cyan-400 flex-shrink-0 mt-0.5" />
-                  <p className="text-gray-300 text-sm">{feature}</p>
+                { feature: "3 courses + 3 build plans included", value: "$294" },
+                { feature: "À la carte access: any course or build plan at $49 each", value: "$99" },
+                { feature: "Access to core research archive", value: "$200" },
+                { feature: "8 structured research modules", value: "$400" },
+                { feature: "Monthly research updates", value: "—" },
+                { feature: "Community access", value: "—" },
+                { feature: "Basic research briefs", value: "—" }
+              ].map((item, i) => (
+                <div key={i} className="flex gap-3 justify-between items-start">
+                  <div className="flex gap-3 flex-1">
+                    <CheckCircle2 size={16} className="text-cyan-400 flex-shrink-0 mt-0.5" />
+                    <p className="text-gray-300 text-sm">{item.feature}</p>
+                  </div>
+                  <span className="text-cyan-400 text-xs font-bold flex-shrink-0">{item.value}</span>
                 </div>
               ))}
+            </div>
+            <div className="bg-cyan-950/30 border border-cyan-800 rounded-lg p-3 mb-4">
+              <p className="text-cyan-300 text-xs font-bold">Total Market Value: $993</p>
+              <p className="text-gray-400 text-xs mt-1">If bought separately: $993/year. Get everything at $441/year (annual) or $588/year (monthly).</p>
             </div>
 
             <CheckoutButton
@@ -223,22 +230,29 @@ export default function ResearchMembership() {
 
             <div className="space-y-3 mb-8">
               {[
-                "Everything in Researcher",
-                "40+ patent analyses with prosecution history",
-                "Engineering documentation & sourcing guides",
-                "Step-by-step build frameworks",
-                "Invention Dossier: IP creation framework",
-                "Bring-to-Market Commercialization Roadmap",
-                "1 new course monthly",
-                "1 new build plan monthly",
-                "Direct expert support (48hr response)",
-                "Exclusive research briefs"
-              ].map((feature, i) => (
-                <div key={i} className="flex gap-3">
-                  <CheckCircle2 size={16} className="text-cyan-400 flex-shrink-0 mt-0.5" />
-                  <p className="text-gray-300 text-sm">{feature}</p>
+                { feature: "Everything in Researcher", value: "$693" },
+                { feature: "40+ patent analyses with prosecution history", value: "$400" },
+                { feature: "Engineering documentation & sourcing guides", value: "$250" },
+                { feature: "Step-by-step build frameworks", value: "$200" },
+                { feature: "Invention Dossier: IP creation framework", value: "$297" },
+                { feature: "Bring-to-Market Commercialization Roadmap", value: "$199" },
+                { feature: "1 new course monthly", value: "$49" },
+                { feature: "1 new build plan monthly", value: "$49" },
+                { feature: "Direct expert support (48hr response)", value: "$300" },
+                { feature: "Exclusive research briefs", value: "—" }
+              ].map((item, i) => (
+                <div key={i} className="flex gap-3 justify-between items-start">
+                  <div className="flex gap-3 flex-1">
+                    <CheckCircle2 size={16} className="text-cyan-400 flex-shrink-0 mt-0.5" />
+                    <p className="text-gray-300 text-sm">{item.feature}</p>
+                  </div>
+                  <span className="text-cyan-400 text-xs font-bold flex-shrink-0">{item.value}</span>
                 </div>
               ))}
+            </div>
+            <div className="bg-cyan-950/30 border border-cyan-800 rounded-lg p-3 mb-4">
+              <p className="text-cyan-300 text-xs font-bold">Total Market Value: $2,428</p>
+              <p className="text-gray-400 text-xs mt-1">At $99/month, you'd pay $1,188 yearly for individual items. Get everything at $891/year (annual) or $1,188/year (monthly).</p>
             </div>
 
             <CheckoutButton
@@ -284,19 +298,26 @@ export default function ResearchMembership() {
 
             <div className="space-y-3 mb-8">
               {[
-                "Everything in Builder",
-                "Team access (up to 10 seats)",
-                "Monthly live technical sessions",
-                "Priority expert support",
-                "Quarterly institutional briefings",
-                "Custom research requests (1/month)",
-                "Pre-release patent analyses & modules"
-              ].map((feature, i) => (
-                <div key={i} className="flex gap-3">
-                  <CheckCircle2 size={16} className="text-cyan-300 flex-shrink-0 mt-0.5" />
-                  <p className="text-gray-200 text-sm font-semibold">{feature}</p>
+                { feature: "Everything in Builder", value: "$2,428" },
+                { feature: "Team access (up to 10 seats)", value: "$990" },
+                { feature: "Monthly live technical sessions", value: "$500" },
+                { feature: "Priority expert support", value: "$600" },
+                { feature: "Quarterly institutional briefings", value: "$400" },
+                { feature: "Custom research requests (1/month)", value: "$250" },
+                { feature: "Pre-release patent analyses & modules", value: "—" }
+              ].map((item, i) => (
+                <div key={i} className="flex gap-3 justify-between items-start">
+                  <div className="flex gap-3 flex-1">
+                    <CheckCircle2 size={16} className="text-cyan-300 flex-shrink-0 mt-0.5" />
+                    <p className="text-gray-200 text-sm font-semibold">{item.feature}</p>
+                  </div>
+                  <span className="text-cyan-300 text-xs font-bold flex-shrink-0">{item.value}</span>
                 </div>
               ))}
+            </div>
+            <div className="bg-cyan-950/30 border border-cyan-700 rounded-lg p-3 mb-4">
+              <p className="text-cyan-300 text-xs font-bold">Total Market Value: $5,168</p>
+              <p className="text-gray-300 text-xs mt-1">At $199/month, you'd pay $2,388 yearly for individual items. Get everything at $1,791/year (annual) or $2,388/year (monthly).</p>
             </div>
 
             <CheckoutButton
