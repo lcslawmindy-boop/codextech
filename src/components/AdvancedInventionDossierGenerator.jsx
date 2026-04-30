@@ -1,6 +1,17 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
 import { Loader2, Zap, Download, Save, FileText, BarChart3 } from "lucide-react";
+
+const SAMPLE_INVENTIONS = [
+  { name: "MEG Generator", icon: "⚡", color: "from-cyan-600 to-blue-600" },
+  { name: "Scalar Transmitter", icon: "📡", color: "from-purple-600 to-pink-600" },
+  { name: "Zero-Point Extractor", icon: "🌌", color: "from-indigo-600 to-purple-600" },
+  { name: "Anenergy Pump", icon: "💫", color: "from-yellow-600 to-orange-600" },
+  { name: "Prioré Device", icon: "🔬", color: "from-green-600 to-cyan-600" },
+  { name: "Torsion Field Generator", icon: "🌀", color: "from-red-600 to-pink-600" },
+  { name: "Resonance Cavity", icon: "📿", color: "from-blue-600 to-cyan-600" },
+  { name: "BioEM Interface", icon: "🧬", color: "from-green-600 to-emerald-600" },
+];
 
 export default function AdvancedInventionDossierGenerator() {
   const [concept, setConcept] = useState("");
@@ -8,12 +19,27 @@ export default function AdvancedInventionDossierGenerator() {
   const [result, setResult] = useState(null);
   const [error, setError] = useState(null);
   const [saved, setSaved] = useState(false);
+  const [spinIndex, setSpinIndex] = useState(0);
+  const leverRef = useRef(null);
 
   const handleGenerate = async () => {
     if (!concept.trim()) return;
     setLoading(true);
     setError(null);
     setSaved(false);
+    
+    // Start slot machine spinning animation
+    const spinInterval = setInterval(() => {
+      setSpinIndex(prev => (prev + 1) % SAMPLE_INVENTIONS.length);
+    }, 100);
+
+    // Animate lever pull
+    if (leverRef.current) {
+      leverRef.current.style.transform = "rotate(45deg)";
+      setTimeout(() => {
+        leverRef.current.style.transform = "rotate(0deg)";
+      }, 300);
+    }
 
     const res = await base44.integrations.Core.InvokeLLM({
       prompt: `You are an AI patent strategy and commercialization expert. Generate a complete Invention Dossier for the following concept:
@@ -99,6 +125,13 @@ Be detailed and actionable. Format the response as structured JSON.`,
 
     setResult(res.data);
     setLoading(false);
+    
+    // Stop spinning after 2 seconds
+    if (spinInterval) {
+      setTimeout(() => {
+        clearInterval(spinInterval);
+      }, 2000);
+    }
   };
 
   const handleSave = async () => {
@@ -131,44 +164,95 @@ Be detailed and actionable. Format the response as structured JSON.`,
 
   if (!result) {
     return (
-      <div className="bg-gradient-to-br from-purple-950/40 to-blue-950/40 border-2 border-purple-700 rounded-2xl p-8 max-w-4xl mx-auto">
+      <div className="max-w-4xl mx-auto">
         <div className="mb-8">
           <h3 className="text-white font-black text-3xl mb-2 flex items-center gap-2">
-            <Zap size={28} className="text-purple-400" /> Invention Dossier Generator
+            <Zap size={28} className="text-purple-400" /> Invention Dossier Slot Machine
           </h3>
-          <p className="text-gray-400 text-sm">AI-powered patent strategy, commercialization planning, and BOM generation. Results saved to your invention library.</p>
+          <p className="text-gray-400 text-sm">Describe your invention concept, pull the lever, and watch the AI generate your complete patent strategy, commercialization plan, and BOM.</p>
         </div>
 
-        <div className="space-y-4">
-          <div>
-            <label className="text-gray-300 text-sm font-bold block mb-2">Invention Concept or Idea</label>
-            <textarea
-              value={concept}
-              onChange={(e) => setConcept(e.target.value)}
-              placeholder="Describe your invention concept, key technology, problem it solves, or unique mechanism..."
-              rows={6}
-              className="w-full bg-gray-800 border border-gray-700 rounded-xl px-4 py-3 text-white placeholder-gray-600 focus:outline-none focus:border-purple-500 resize-none"
-            />
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* Input Section */}
+          <div className="lg:col-span-1 space-y-4">
+            <div>
+              <label className="text-gray-300 text-sm font-bold block mb-2">Your Invention Concept</label>
+              <textarea
+                value={concept}
+                onChange={(e) => setConcept(e.target.value)}
+                placeholder="Describe your invention, technology, mechanism, or problem you're solving..."
+                rows={8}
+                className="w-full bg-gray-800 border border-gray-700 rounded-xl px-4 py-3 text-white placeholder-gray-600 focus:outline-none focus:border-purple-500 resize-none text-sm"
+              />
+            </div>
           </div>
 
-          <button
-            onClick={handleGenerate}
-            disabled={loading || !concept.trim()}
-            className="w-full py-4 rounded-xl bg-gradient-to-r from-purple-600 to-blue-700 hover:from-purple-500 hover:to-blue-600 disabled:opacity-50 text-white font-black text-base transition-all flex items-center justify-center gap-2"
-          >
-            {loading ? (
-              <>
-                <Loader2 size={16} className="animate-spin" /> Analyzing & Generating Dossier...
-              </>
-            ) : (
-              <>
-                <Zap size={16} /> Generate Complete Dossier
-              </>
-            )}
-          </button>
+          {/* Slot Machine */}
+          <div className="lg:col-span-2">
+            <div className="bg-gradient-to-b from-yellow-900/40 to-yellow-950/60 border-4 border-yellow-700 rounded-3xl p-8 shadow-2xl">
+              {/* Display Window */}
+              <div className="bg-gray-950 border-4 border-yellow-600 rounded-2xl p-6 mb-8 h-80 flex items-center justify-center overflow-hidden relative shadow-inner">
+                <div className="absolute inset-0 bg-gradient-to-r from-yellow-600/10 to-transparent" />
+                
+                {loading ? (
+                  <div className="relative w-full h-full flex items-center justify-center">
+                    {/* Spinning cards */}
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      {[0, 1, 2].map((offset) => (
+                        <div
+                          key={offset}
+                          className="absolute"
+                          style={{
+                            transform: `translateY(${Math.sin((spinIndex + offset) * 0.3) * 150}px)`,
+                            opacity: offset === 1 ? 1 : 0.3,
+                            zIndex: offset === 1 ? 10 : 5
+                          }}
+                        >
+                          <div className={`bg-gradient-to-br ${SAMPLE_INVENTIONS[(spinIndex + offset) % SAMPLE_INVENTIONS.length].color} rounded-xl p-6 w-40 h-40 flex flex-col items-center justify-center shadow-lg transform transition-transform`}>
+                            <div className="text-6xl mb-2">{SAMPLE_INVENTIONS[(spinIndex + offset) % SAMPLE_INVENTIONS.length].icon}</div>
+                            <p className="text-white font-bold text-sm text-center">{SAMPLE_INVENTIONS[(spinIndex + offset) % SAMPLE_INVENTIONS.length].name}</p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ) : (
+                  <div className="text-center">
+                    <div className="text-6xl mb-3">{SAMPLE_INVENTIONS[spinIndex].icon}</div>
+                    <p className="text-white font-black text-2xl">{SAMPLE_INVENTIONS[spinIndex].name}</p>
+                  </div>
+                )}
+              </div>
 
-          {error && <p className="text-red-400 text-sm text-center">{error}</p>}
+              {/* Lever Section */}
+              <div className="flex items-end justify-center mb-6 h-40">
+                <div className="relative w-32 h-32 flex items-end justify-center">
+                  {/* Machine body */}
+                  <div className="absolute bottom-0 w-20 h-12 bg-gradient-to-r from-gray-700 to-gray-600 rounded-b-xl border-2 border-gray-600" />
+                  
+                  {/* Lever handle */}
+                  <button
+                    ref={leverRef}
+                    onClick={handleGenerate}
+                    disabled={loading || !concept.trim()}
+                    className="absolute bottom-6 w-12 h-32 bg-gradient-to-r from-red-600 to-red-500 hover:from-red-500 hover:to-red-400 disabled:opacity-50 rounded-full cursor-grab active:cursor-grabbing shadow-lg transition-all duration-200 flex items-center justify-center disabled:cursor-not-allowed"
+                    style={{ transformOrigin: "center bottom" }}
+                  >
+                    <span className="text-2xl">🎰</span>
+                  </button>
+                </div>
+              </div>
+
+              {/* Pull Text */}
+              <div className="text-center">
+                <p className="text-yellow-300 font-black text-lg animate-pulse">PULL THE LEVER</p>
+                <p className="text-gray-400 text-xs mt-1">Generating invention analysis...</p>
+              </div>
+            </div>
+          </div>
         </div>
+
+        {error && <p className="text-red-400 text-sm text-center mt-4">{error}</p>}
       </div>
     );
   }
