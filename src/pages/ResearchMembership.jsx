@@ -193,11 +193,11 @@ export default function ResearchMembership() {
         </div>
 
         {/* Tiers */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-16">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
           {/* Researcher Basic Tier */}
-          <div className="bg-gray-900 border border-gray-800 rounded-2xl p-8">
+          <div className="bg-gradient-to-br from-gray-900 to-gray-950 border border-gray-700 rounded-2xl p-8 hover:border-cyan-600/40 transition-all">
             <h3 className="text-white font-black text-2xl mb-2">Researcher</h3>
-            <p className="text-gray-500 text-sm mb-6">For curious individuals getting started</p>
+            <p className="text-gray-400 text-sm mb-6">For curious individuals getting started</p>
 
             {billingPeriod === "monthly" ? (
               <>
@@ -256,7 +256,7 @@ export default function ResearchMembership() {
           </div>
 
           {/* Builder Tier */}
-          <div className="bg-gray-900 border border-gray-700 rounded-2xl p-8">
+          <div className="bg-gradient-to-br from-cyan-950/20 to-gray-950 border-2 border-cyan-600 rounded-2xl p-8 relative shadow-lg shadow-cyan-600/20 hover:shadow-cyan-600/30 transition-all">
             <h3 className="text-white font-black text-2xl mb-2">Builder</h3>
             <p className="text-gray-500 text-sm mb-6">For engineers actively building systems</p>
 
@@ -319,16 +319,15 @@ export default function ResearchMembership() {
             <p className="text-gray-600 text-xs text-center mt-4">{billingPeriod === "annual" ? "Billed annually" : "Billed monthly"}. Cancel anytime.</p>
           </div>
 
-          {/* Advanced Generator (shown after all tiers) */}
-          <div className="lg:col-span-3" />
+
 
           {/* Pro Tier */}
-          <div className="bg-gradient-to-br from-cyan-950/30 to-blue-950/30 border-2 border-cyan-600 rounded-2xl p-8 relative">
-            <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-cyan-600 text-white text-xs font-black">
-              MOST POWERFUL
+          <div className="bg-gradient-to-br from-purple-950/30 to-gray-950 border-2 border-purple-600 rounded-2xl p-8 relative shadow-lg shadow-purple-600/20 hover:shadow-purple-600/30 transition-all">
+            <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-gradient-to-r from-purple-600 to-purple-500 text-white text-xs font-black">
+              ENTERPRISE
             </div>
 
-            <h3 className="text-white font-black text-2xl mb-2">Pro</h3>
+            <h3 className="text-white font-black text-2xl mb-2">Enterprise</h3>
             <p className="text-gray-300 text-sm mb-6">For research teams, institutions, and enterprises</p>
 
             {billingPeriod === "monthly" ? (
@@ -338,8 +337,8 @@ export default function ResearchMembership() {
               </>
             ) : (
               <>
-                <div className="text-3xl font-black text-cyan-300 mb-1">$1,791</div>
-                <p className="text-gray-500 text-xs mb-2">/year (9 months cost)</p>
+                <div className="text-3xl font-black text-purple-300 mb-1">$1,791</div>
+                <p className="text-gray-400 text-xs mb-2">/year (9 months cost)</p>
                 <p className="text-green-400 text-xs font-bold mb-6">3 months free — save $597</p>
               </>
             )}
@@ -356,23 +355,23 @@ export default function ResearchMembership() {
               ].map((item, i) => (
                 <div key={i} className="flex gap-3 justify-between items-start">
                   <div className="flex gap-3 flex-1">
-                    <CheckCircle2 size={16} className="text-cyan-300 flex-shrink-0 mt-0.5" />
+                    <CheckCircle2 size={16} className="text-purple-300 flex-shrink-0 mt-0.5" />
                     <p className="text-gray-200 text-sm font-semibold">{item.feature}</p>
                   </div>
-                  <span className="text-cyan-300 text-xs font-bold flex-shrink-0">{item.value}</span>
+                  <span className="text-purple-300 text-xs font-bold flex-shrink-0">{item.value}</span>
                 </div>
               ))}
             </div>
-            <div className="bg-cyan-950/30 border border-cyan-700 rounded-lg p-3 mb-4">
-              <p className="text-cyan-300 text-xs font-bold">Total Market Value: $5,168</p>
-              <p className="text-gray-300 text-xs mt-1">At $199/month, you'd pay $2,388 yearly for individual items. Get everything at $1,791/year (annual) or $2,388/year (monthly).</p>
+            <div className="bg-purple-950/30 border border-purple-700 rounded-lg p-3 mb-4">
+              <p className="text-purple-300 text-xs font-bold">Total Market Value: $5,168</p>
+              <p className="text-gray-300 text-xs mt-1">At $199/month, you'd pay $2,388 yearly. Get everything at $1,791/year (annual) or $2,388/year (monthly).</p>
             </div>
 
             <CheckoutButton
-              title={billingPeriod === "annual" ? "Pro Annual Membership" : "Pro Membership"}
+              title={billingPeriod === "annual" ? "Enterprise Annual Membership" : "Enterprise Membership"}
               price={billingPeriod === "annual" ? "$1,791" : "$199"}
               priceInCents={billingPeriod === "annual" ? 179100 : 19900}
-              description={billingPeriod === "annual" ? "Annual Pro membership — 3 months free + premium perks" : "Monthly Pro membership for research teams and institutions"}
+              description={billingPeriod === "annual" ? "Annual Enterprise membership — 3 months free + premium perks" : "Monthly Enterprise membership for research teams and institutions"}
               billingPeriod={billingPeriod}
             />
 
@@ -384,7 +383,7 @@ export default function ResearchMembership() {
                 <p className="text-gray-200 text-xs flex gap-2"><span className="text-green-400">✓</span>Insiders scoop + market investment guidance</p>
               </div>
             )}
-            <p className="text-gray-400 text-xs text-center mt-4">{billingPeriod === "annual" ? "Billed annually" : "Billed monthly"}. Team access activates immediately.</p>
+            <p className="text-gray-300 text-xs text-center mt-4">{billingPeriod === "annual" ? "Billed annually" : "Billed monthly"}. Team access activates immediately.</p>
           </div>
         </div>
 
