@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { itemImages } from "../lib/itemImages";
 import { Link } from "react-router-dom";
-import { ArrowLeft, BookOpen, Zap, FlaskConical, DollarSign, Package, GraduationCap, Lightbulb, ChevronDown, ChevronUp } from "lucide-react";
+import { ArrowLeft, BookOpen, Zap, FlaskConical, DollarSign, Package, GraduationCap, Lightbulb, ChevronDown, ChevronUp, ShoppingCart, Loader2 } from "lucide-react";
 import { businessItems as items } from "../lib/businessItems";
 import { inventionVisuals } from "../lib/inventionVisuals";
 import NewsletterSignup from "../components/NewsletterSignup";
+import { base44 } from "@/api/base44Client";
 
 const CATEGORIES = ["All", "Course", "Book/PDF", "Product", "Invention", "Service"];
 
@@ -53,8 +54,39 @@ function InventionVisualPanel({ title }) {
 function ItemCard({ item }) {
   const [expanded, setExpanded] = useState(false);
   const [showVisuals, setShowVisuals] = useState(false);
+  const [buying, setBuying] = useState(false);
   const hasVisuals = item.category === "Invention" && !!inventionVisuals[item.title];
   const image = itemImages[item.title];
+
+  // Parse price to cents (use first numeric value found)
+  const parsePriceCents = (priceStr) => {
+    const match = String(priceStr).match(/[\d,]+/);
+    if (!match) return null;
+    return Math.round(parseFloat(match[0].replace(/,/g, "")) * 100);
+  };
+
+  const handleBuyNow = async () => {
+    if (window !== window.top) {
+      alert("Checkout is only available from the published app.");
+      return;
+    }
+    setBuying(true);
+    const priceInCents = parsePriceCents(item.price);
+    if (!priceInCents) { setBuying(false); return; }
+    const res = await base44.functions.invoke("createCheckoutSession", {
+      title: item.title,
+      priceInCents,
+      description: item.tagline || item.description?.slice(0, 100),
+      category: item.category,
+      successUrl: window.location.origin + "/my-learning?success=1",
+      cancelUrl: window.location.href,
+      ...(item.stripeProductId ? { productId: item.stripeProductId } : {}),
+    });
+    if (res.data?.url) {
+      window.location.href = res.data.url;
+    }
+    setBuying(false);
+  };
   return (
     <div
       className="bg-gray-900 border border-gray-800 rounded-xl overflow-hidden hover:border-gray-600 transition-colors flex flex-col gap-3"
@@ -130,6 +162,19 @@ function ItemCard({ item }) {
           <span className="text-gray-500 font-semibold">Target audience: </span>{item.audience}
         </p>
       </div>
+
+      {/* Buy Now button — only for items with a clear numeric price */}
+      {/\d/.test(item.price) && !item.price.includes("–") && !item.price.includes("tiered") && (
+        <button
+          onClick={handleBuyNow}
+          disabled={buying}
+          className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-bold text-white transition-all disabled:opacity-60"
+          style={{ backgroundColor: item.color + "cc" }}
+        >
+          {buying ? <Loader2 size={14} className="animate-spin" /> : <ShoppingCart size={14} />}
+          {buying ? "Redirecting…" : `Buy Now — ${item.price}`}
+        </button>
+      )}
       </div>
     </div>
   );
