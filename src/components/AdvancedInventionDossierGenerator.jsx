@@ -207,6 +207,9 @@ Be detailed and innovative. Format the response as structured JSON.`,
 
         {step === "setup" ? (
           <div className="space-y-8">
+            {!result ? (
+              <>
+
             {/* Mode Selection */}
             <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6">
               <label className="text-gray-300 text-sm font-bold block mb-4">Choose Your Path</label>
@@ -339,9 +342,9 @@ Be detailed and innovative. Format the response as structured JSON.`,
                 </>
               )}
             </button>
-            </div>
+             </>
             ) : (
-            <div className="bg-gray-900 border border-gray-800 rounded-2xl p-8 max-w-4xl mx-auto space-y-8">
+             <div className="bg-gray-900 border border-gray-800 rounded-2xl p-8 max-w-4xl mx-auto space-y-8">
       {/* Header */}
       <div className="flex items-start justify-between gap-4">
         <div>
@@ -548,8 +551,14 @@ Be detailed and innovative. Format the response as structured JSON.`,
             <Save size={14} /> Save to Invention Library
           </button>
         )}
+           </div>
+         )}
         </div>
-        </div>
+        ) : (
+         <div className="bg-gray-900 border border-gray-800 rounded-2xl p-8 max-w-4xl mx-auto space-y-8">
+           <div className="text-center text-gray-400">No results yet</div>
+         </div>
         )}
+        </div>
         );
         }
