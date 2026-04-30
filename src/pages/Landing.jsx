@@ -126,7 +126,7 @@ export default function Landing() {
               <p className="text-cyan-400 font-black text-xs uppercase tracking-widest mb-2">⭐ Top Course</p>
               <h3 className="text-white font-black text-lg mb-1">Regauging and Energy Extraction</h3>
               <p className="text-gray-400 text-xs mb-4">Core electromagnetic theory & energy access</p>
-              <Link to="/alacarte" className="text-cyan-400 hover:text-cyan-300 text-xs font-black">Buy $50 →</Link>
+              <Link to="/alacarte" className="text-cyan-400 hover:text-cyan-300 text-xs font-black">Buy $297 →</Link>
             </div>
             <div className="bg-gray-900 border border-cyan-700/50 rounded-xl p-5">
               <p className="text-cyan-400 font-black text-xs uppercase tracking-widest mb-2">⭐ Top Build Plan</p>
