@@ -146,59 +146,78 @@ export default function Landing() {
 
       {/* Pricing */}
       <section id="pricing" className="px-6 py-16 border-b border-white/10" style={{ background: "#0a0a1a" }}>
-        <div className="max-w-4xl mx-auto">
-          <h2 className="text-3xl font-black mb-12 text-center">Simple Pricing</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="border border-gray-700 rounded-2xl p-8" style={{ background: "rgba(10,10,30,0.75)" }}>
-              <h3 className="text-lg font-black mb-2">Free</h3>
-              <p className="text-gray-500 text-sm mb-6">Explore the database</p>
-              <div className="text-3xl font-black mb-6">$0</div>
-              <ul className="space-y-2 text-sm text-gray-400 mb-6">
-                <li>✓ Browse 40+ patents</li>
-                <li>✓ Read summaries</li>
-                <li>✓ Access public courses</li>
-                <li>✗ Build plans</li>
-              </ul>
-              <Link to="/free-vault" className="w-full py-2 rounded-lg bg-gray-800 hover:bg-gray-700 text-white font-bold text-sm transition-colors text-center block">
-                Start Free
-              </Link>
-            </div>
+       <div className="max-w-6xl mx-auto">
+         <h2 className="text-3xl font-black mb-12 text-center">Membership Tiers</h2>
+         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+           {/* Researcher */}
+           <div className="border border-gray-700 rounded-2xl p-8" style={{ background: "rgba(10,10,30,0.75)" }}>
+             <h3 className="text-lg font-black mb-2">Researcher</h3>
+             <p className="text-gray-500 text-sm mb-6">Get started</p>
+             <div className="text-3xl font-black mb-1 text-cyan-300">$49<span className="text-sm">/mo</span></div>
+             <p className="text-gray-600 text-xs mb-6">Core archive access</p>
+             <ul className="space-y-2 text-sm text-gray-300 mb-6">
+               <li>✓ 3 courses included</li>
+               <li>✓ 3 build plans included</li>
+               <li>✓ Core research archive</li>
+               <li>✓ Monthly content drops</li>
+             </ul>
+             <Link to="/research-membership" className="w-full py-2 rounded-lg bg-gray-800 hover:bg-gray-700 text-white font-bold text-sm transition-colors text-center block">
+               Learn More
+             </Link>
+           </div>
 
-            <div className="bg-cyan-950/30 border-2 border-cyan-600 rounded-2xl p-8 relative">
-              <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 bg-cyan-600 rounded-full text-xs font-black">
-                BEST VALUE
-              </div>
-              <h3 className="text-lg font-black mb-2">Membership</h3>
-              <p className="text-gray-400 text-sm mb-6">Unlimited content + drops</p>
-              <div className="text-3xl font-black mb-6">$99<span className="text-sm">/mo</span></div>
-              <ul className="space-y-2 text-sm text-gray-300 mb-6">
-                <li>✓ 3 courses + 3 build plans</li>
-                <li>✓ 1 new course monthly</li>
-                <li>✓ 1 new build plan monthly</li>
-                <li>✓ Full content library access</li>
-                <li>✓ Cancel anytime</li>
-              </ul>
-              <Link to="/research-membership" className="w-full py-2 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white font-bold text-sm transition-colors text-center block">
-                Join Now
-              </Link>
-            </div>
+           {/* Builder */}
+           <div className="bg-cyan-950/30 border-2 border-cyan-600 rounded-2xl p-8 relative">
+             <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 bg-cyan-600 rounded-full text-xs font-black">
+               MOST POPULAR
+             </div>
+             <h3 className="text-lg font-black mb-2">Builder</h3>
+             <p className="text-gray-400 text-sm mb-6">For engineers building</p>
+             <div className="text-3xl font-black mb-1 text-cyan-300">$99<span className="text-sm">/mo</span></div>
+             <p className="text-gray-600 text-xs mb-6">Full engineering toolkit</p>
+             <ul className="space-y-2 text-sm text-cyan-100 mb-6">
+               <li>✓ All courses & build plans</li>
+               <li>✓ 10 Invention Dossier rolls/mo</li>
+               <li>✓ Patent analyses & FTO tools</li>
+               <li>✓ Expert support (48hr response)</li>
+               <li>✓ 20% EMF shop discount</li>
+             </ul>
+             <Link to="/research-membership" className="w-full py-2 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white font-bold text-sm transition-colors text-center block">
+               Join Now
+             </Link>
+           </div>
 
-            <div className="border border-gray-700 rounded-2xl p-8" style={{ background: "rgba(10,10,30,0.75)" }}>
-              <h3 className="text-lg font-black mb-2">À La Carte</h3>
-              <p className="text-gray-500 text-sm mb-6">Buy what you need</p>
-              <div className="text-3xl font-black mb-6">$49</div>
-              <ul className="space-y-2 text-sm text-gray-400 mb-6">
-                <li>✓ Any course: $49</li>
-                <li>✓ Any build plan: $49</li>
-                <li>✓ One-time payment</li>
-                <li>✓ Lifetime access</li>
-              </ul>
-              <Link to="/alacarte" className="w-full py-2 rounded-lg bg-gray-800 hover:bg-gray-700 text-white font-bold text-sm transition-colors text-center block">
-                Browse Catalog
-              </Link>
-            </div>
-          </div>
-        </div>
+           {/* Pro */}
+           <div className="bg-purple-950/30 border-2 border-purple-600 rounded-2xl p-8 relative">
+             <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 bg-purple-600 rounded-full text-xs font-black">
+               🔥 FULL SUITE
+             </div>
+             <h3 className="text-lg font-black mb-2">Pro</h3>
+             <p className="text-gray-400 text-sm mb-6">Complete platform</p>
+             <div className="text-3xl font-black mb-1 text-purple-300">$199<span className="text-sm">/mo</span></div>
+             <p className="text-gray-600 text-xs mb-6">Everything included</p>
+             <ul className="space-y-2 text-sm text-purple-100 mb-6">
+               <li>✓ All Builder features</li>
+               <li>✓ 25 Invention Dossier rolls/mo</li>
+               <li>✓ AI Patent Attorney tool</li>
+               <li>✓ Verified supplier sourcing</li>
+               <li>✓ Commercialization roadmap</li>
+               <li>✓ Priority support</li>
+             </ul>
+             <Link to="/research-membership" className="w-full py-2 rounded-lg bg-purple-600 hover:bg-purple-500 text-white font-bold text-sm transition-colors text-center block">
+               Upgrade Pro
+             </Link>
+           </div>
+         </div>
+
+         {/* À La Carte Option */}
+         <div className="border border-gray-700 rounded-2xl p-6 text-center" style={{ background: "rgba(10,10,30,0.5)" }}>
+           <p className="text-gray-400 text-sm mb-3">Prefer to buy individual items?</p>
+           <Link to="/alacarte" className="inline-flex items-center gap-2 text-cyan-400 hover:text-cyan-300 font-bold text-sm">
+             Browse À La Carte Catalog (Courses $147–$247, Build Plans $189–$1,297) →
+           </Link>
+         </div>
+       </div>
       </section>
 
       {/* Footer */}
