@@ -77,7 +77,7 @@ export default function AlaCarteShop() {
             <ArrowLeft size={14} /> Back
           </Link>
           <h1 className="text-2xl font-black text-white">À La Carte Catalog</h1>
-          <p className="text-gray-500 text-sm mt-1">Buy individual courses and build plans at standard pricing. One-time payment, lifetime access. Builder members ($99/mo) get everything for $49 each.</p>
+          <p className="text-gray-500 text-sm mt-1">Buy individual courses and build plans at standard pricing. One-time payment, lifetime access. Builder members ($99/mo) get unlimited access to all courses, build plans, and 10 Invention Dossier generations monthly.</p>
         </div>
       </div>
 
