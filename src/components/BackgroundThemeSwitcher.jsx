@@ -78,10 +78,11 @@ export function useBackgroundTheme() {
 export function ActiveBackground({ themeId }) {
   const theme = THEMES.find(t => t.id === themeId) || THEMES[0];
   const Component = theme.component;
-  return (
+  return createPortal(
     <Suspense fallback={<div className="fixed inset-0 -z-10" style={{ background: theme.bg }} />}>
       <Component />
-    </Suspense>
+    </Suspense>,
+    document.body
   );
 }
 
