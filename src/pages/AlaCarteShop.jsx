@@ -6,19 +6,19 @@ import MembershipUpsellBanner from "../components/MembershipUpsellBanner";
 import ContentDropSchedule from "../components/ContentDropSchedule";
 
 const ALACARTE_ITEMS = [
-  // Courses ($49 each)
-  { id: "course-1", type: "course", title: "Regauging and Energy Extraction", price: "$49", priceInCents: 4900, desc: "Core electromagnetic theory & energy access", category: "Course", popular: true, included: true },
-  { id: "course-2", type: "course", title: "Scalar Potential as Information Carrier", price: "$49", priceInCents: 4900, desc: "How fields transmit energy independently", category: "Course", popular: true, included: true },
-  { id: "course-3", type: "course", title: "Phase-Conjugate Wavefront Reversal", price: "$49", priceInCents: 4900, desc: "Time-reversal and focused energy", category: "Course", popular: false, included: true },
-  { id: "course-4", type: "course", title: "Patent Strategy & IP Protection", price: "$49", priceInCents: 4900, desc: "Filing claims, FTO analysis, design-arounds", category: "Course", popular: false },
-  { id: "course-5", type: "course", title: "Measurement & Validation Protocols", price: "$49", priceInCents: 4900, desc: "Testing frameworks for prototypes", category: "Course", popular: false },
+  // Courses — standard pricing
+  { id: "course-1", type: "course", title: "Regauging and Energy Extraction", price: "$197", priceInCents: 19700, desc: "Core electromagnetic theory & energy access", category: "Course", popular: true, included: true },
+  { id: "course-2", type: "course", title: "Scalar Electromagnetics: From Maxwell to Bearden", price: "$197", priceInCents: 19700, desc: "The suppressed physics they didn't teach in school", category: "Course", popular: true, included: true },
+  { id: "course-3", type: "course", title: "Phase-Conjugate Wavefront Reversal", price: "$247", priceInCents: 24700, desc: "Time-reversal and focused energy", category: "Course", popular: false, included: true },
+  { id: "course-4", type: "course", title: "Patent Strategy & IP Protection", price: "$197", priceInCents: 19700, desc: "Filing claims, FTO analysis, design-arounds", category: "Course", popular: false },
+  { id: "course-5", type: "course", title: "Measurement & Validation Protocols", price: "$147", priceInCents: 14700, desc: "Testing frameworks for prototypes", category: "Course", popular: false },
 
-  // Build Plans ($49 each)
-  { id: "build-1", type: "build", title: "Motionless Electromagnetic Generator (MEG)", price: "$49", priceInCents: 4900, desc: "Complete BOM, schematics, assembly steps", category: "Build Plan", popular: true, included: true },
-  { id: "build-2", type: "build", title: "Prioré-Type Multichannel EM System", price: "$49", priceInCents: 4900, desc: "Therapeutic field generation framework", category: "Build Plan", popular: true, included: true },
-  { id: "build-3", type: "build", title: "Time-Reversal Zone Reactor", price: "$49", priceInCents: 4900, desc: "Cold fusion and energy experiments", category: "Build Plan", popular: false, included: true },
-  { id: "build-4", type: "build", title: "Anenergy Pump Circuit", price: "$49", priceInCents: 4900, desc: "Free energy extraction system", category: "Build Plan", popular: false },
-  { id: "build-5", type: "build", title: "Scalar EM Lab Fundamentals Kit", price: "$49", priceInCents: 4900, desc: "Beginner-friendly measurement setup", category: "Build Plan", popular: false },
+  // Build Plans — standard pricing
+  { id: "build-1", type: "build", title: "Motionless Electromagnetic Generator (MEG)", price: "$847", priceInCents: 84700, desc: "Complete BOM, schematics, assembly steps — peer-reviewed COP>1 device", category: "Build Plan", popular: true, included: true },
+  { id: "build-2", type: "build", title: "Prioré-Type Multichannel EM System", price: "$697", priceInCents: 69700, desc: "Therapeutic field generation framework", category: "Build Plan", popular: true, included: true },
+  { id: "build-3", type: "build", title: "Time-Reversal Zone Cold Fusion Reactor", price: "$1,297", priceInCents: 129700, desc: "Cold fusion and energy experiments", category: "Build Plan", popular: false, included: true },
+  { id: "build-4", type: "build", title: "Anenergy Pump Demonstration Circuit", price: "$297", priceInCents: 29700, desc: "Free energy extraction system — Bearden's phi-field mechanism", category: "Build Plan", popular: false },
+  { id: "build-5", type: "build", title: "Vacuum Potential Oscillator (VPO) Circuit Kit", price: "$189", priceInCents: 18900, desc: "Hands-on scalar phi-field principles exploration", category: "Build Plan", popular: false },
 ];
 
 function CheckoutButton({ item }) {
@@ -77,7 +77,7 @@ export default function AlaCarteShop() {
             <ArrowLeft size={14} /> Back
           </Link>
           <h1 className="text-2xl font-black text-white">À La Carte Catalog</h1>
-          <p className="text-gray-500 text-sm mt-1">Buy individual courses ($49) and build plans ($49). One-time payment, lifetime access.</p>
+          <p className="text-gray-500 text-sm mt-1">Buy individual courses and build plans at standard pricing. One-time payment, lifetime access. Builder members ($99/mo) get everything for $49 each.</p>
         </div>
       </div>
 
@@ -98,7 +98,7 @@ export default function AlaCarteShop() {
               filter === "course" ? "bg-cyan-600 text-white" : "bg-gray-800 text-gray-400 hover:text-white"
             }`}
           >
-            Courses — $49 (5)
+            Courses (5)
           </button>
           <button
             onClick={() => setFilter("build")}
@@ -106,7 +106,7 @@ export default function AlaCarteShop() {
               filter === "build" ? "bg-cyan-600 text-white" : "bg-gray-800 text-gray-400 hover:text-white"
             }`}
           >
-            Build Plans — $49 (5)
+            Build Plans (5)
           </button>
         </div>
       </div>
@@ -157,7 +157,7 @@ export default function AlaCarteShop() {
           <div className="bg-blue-950/30 border border-blue-700/50 rounded-xl p-5 text-center">
             <p className="text-blue-300 text-xs font-black uppercase tracking-widest mb-2">💳 Membership Credits</p>
             <p className="text-gray-300 text-sm">
-              Already bought à la carte items? Each $49 purchase counts as 1 month credit toward membership. Buy 2 items, then join and get 2 months free.
+              Already bought à la carte items? Your purchases count as credit toward membership. Join Builder ($99/mo) and get everything else for $49 each going forward.
             </p>
           </div>
         </div>
