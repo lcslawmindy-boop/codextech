@@ -132,7 +132,28 @@ export default function AdvancedInventionDossierGenerator() {
   const handleSave = async () => {
     if (!result) return;
     setLoading(true);
-    const res = await base44.functions.invoke("generateInventionDossier", result);
+    const payload = {
+      invention_name: result.invention_name,
+      ip_strategy: {
+        primary_approach: result.technical_integration || result.hybrid_concept || "",
+        recommended_jurisdiction: "USPTO",
+        filing_timeline: result.commercialization_plan?.phase_1 || "File within 12 months"
+      },
+      patent_claims: result.patent_claims || [],
+      fto_assessment: {
+        risk_score: result.synergy_score || 75,
+        summary: result.synergy_analysis || result.hybrid_concept || ""
+      },
+      market_positioning: result.market_positioning || { target_markets: [], estimated_tam: "N/A" },
+      commercialization_plan: result.commercialization_plan || { phase_1: "", phase_2: "", phase_3: "" },
+      bom: result.bom || [],
+      valuation: result.valuation || { estimated_value_low: "$0", estimated_value_high: "$0", licensing_potential: "" },
+      // Pass full AI result fields for richer description
+      synergy_analysis: result.synergy_analysis,
+      hybrid_concept: result.hybrid_concept,
+      market_sectors: MONETIZATION_SECTORS.filter(s => selectedSectors.includes(s.id)).map(s => s.name),
+    };
+    const res = await base44.functions.invoke("generateInventionDossier", payload);
     if (res.data?.success) {
       setSaved(true);
       if (res.data.pdf_data) {

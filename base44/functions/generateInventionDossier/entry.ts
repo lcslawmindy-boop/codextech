@@ -6,7 +6,7 @@ Deno.serve(async (req) => {
     const base44 = createClientFromRequest(req);
     const body = await req.json();
 
-    const { invention_name, ip_strategy, patent_claims, bom, market_positioning, commercialization_plan, valuation, fto_assessment } = body;
+    const { invention_name, ip_strategy, patent_claims, bom, market_positioning, commercialization_plan, valuation, fto_assessment, synergy_analysis, hybrid_concept, market_sectors } = body;
 
     if (!invention_name) {
       return Response.json({ error: 'Invention name required' }, { status: 400 });
@@ -96,20 +96,26 @@ Deno.serve(async (req) => {
     const pdfOutput = doc.output('dataurlstring');
     const pdfBase64 = pdfOutput.split(',')[1];
 
+    // Build a rich description from concept + synergy analysis
+    const richDescription = [
+      hybrid_concept || synergy_analysis || fto_assessment.summary,
+    ].filter(Boolean).join(' ').substring(0, 950);
+
     // Save invention to database with PDF reference
     const invention = await base44.asServiceRole.entities.HybridInvention.create({
       hybrid_concept: invention_name,
       mechanism: ip_strategy.primary_approach,
-      synergy_score: 85,
+      synergy_score: fto_assessment.risk_score || 85,
       patent_claims: patent_claims.join(' | '),
       market_applications: market_positioning.target_markets.join(', '),
       required_components: bom.map(b => b.component).join(', '),
       ip_valuation: `${valuation.estimated_value_low} - ${valuation.estimated_value_high}`,
-      ip_value_low: parseFloat(valuation.estimated_value_low.replace(/[^\d]/g, '')) / 1_000_000,
-      ip_value_high: parseFloat(valuation.estimated_value_high.replace(/[^\d]/g, '')) / 1_000_000,
-      suggested_next_steps: commercialization_plan.phase_1,
+      ip_value_low: parseFloat(valuation.estimated_value_low.replace(/[^\d\.MBK$,]/g, '')) || 0,
+      ip_value_high: parseFloat(valuation.estimated_value_high.replace(/[^\d\.MBK$,]/g, '')) || 0,
+      suggested_next_steps: [commercialization_plan.phase_1, commercialization_plan.phase_2, commercialization_plan.phase_3].filter(Boolean).join(' → '),
+      market_sectors: market_sectors || [],
       status: 'draft',
-      description: `FTO Risk: ${fto_assessment.risk_score}/100. ${fto_assessment.summary}`
+      description: richDescription,
     });
 
     // Create build video entry
