@@ -470,8 +470,22 @@ export default function ResearchMembership() {
         </section>
 
         {/* AI Dossier Generator */}
-        <section className="mb-12">
+        <section className="mb-6">
           <AdvancedInventionDossierGenerator />
+        </section>
+
+        {/* Dossier Workspace CTA */}
+        <section className="mb-12 bg-gradient-to-r from-blue-950/40 to-purple-950/40 border border-blue-800/60 rounded-2xl p-6 flex flex-col md:flex-row items-center gap-6">
+          <div className="flex-1">
+            <p className="text-white font-black text-lg mb-1">Turn Dossiers into Patent Drafts & Investor Decks</p>
+            <p className="text-gray-400 text-sm">Open the Dossier Workspace to convert your saved invention dossiers into structured patent draft documents or auto-generate investor-facing slide decks with TAM, milestones, and IP valuation.</p>
+          </div>
+          <a
+            href="/dossier-workspace"
+            className="flex-shrink-0 flex items-center gap-2 px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-black text-sm transition-all whitespace-nowrap"
+          >
+            Open Workspace →
+          </a>
         </section>
 
         {/* Next Level */}
