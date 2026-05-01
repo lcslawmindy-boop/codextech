@@ -36,7 +36,7 @@ export default function AdvancedInventionDossierGenerator() {
   const [selectedInventions, setSelectedInventions] = useState([]);
   const [concept, setConcept] = useState("");
   const [selectedCategories, setSelectedCategories] = useState([]);
-  const [selectedSector, setSelectedSector] = useState("");
+  const [selectedSectors, setSelectedSectors] = useState([]);
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(null);
   const [error, setError] = useState(null);
@@ -52,7 +52,7 @@ export default function AdvancedInventionDossierGenerator() {
   };
 
   const handleGenerate = async () => {
-    if (selectedCategories.length === 0 || !selectedSector) return;
+    if (selectedCategories.length === 0 || selectedSectors.length === 0) return;
     if (mode === "hybrid" && selectedInventions.length < 2) return;
     if (mode === "custom" && !concept.trim()) return;
 
@@ -66,7 +66,7 @@ export default function AdvancedInventionDossierGenerator() {
     }
 
     const categoryName = TECH_CATEGORIES.filter(c => selectedCategories.includes(c.id)).map(c => c.name).join(", ");
-    const sectorName = MONETIZATION_SECTORS.find(s => s.id === selectedSector)?.name;
+    const sectorName = MONETIZATION_SECTORS.filter(s => selectedSectors.includes(s.id)).map(s => s.name).join(", ");
     const inventionList = selectedInventions.map(i => i.name).join(", ");
 
     const promptContent = mode === "hybrid"
@@ -426,20 +426,30 @@ export default function AdvancedInventionDossierGenerator() {
 
         {/* Monetization Sector */}
         <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6">
-          <h4 className="text-white font-black text-lg mb-4">Select Target Monetization Sector</h4>
+          <h4 className="text-white font-black text-lg mb-1">Select Target Monetization Sectors</h4>
+          <p className="text-gray-500 text-xs mb-4">Select one or more</p>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-            {MONETIZATION_SECTORS.map(sector => (
-              <button
-                key={sector.id}
-                onClick={() => setSelectedSector(sector.id)}
-                className={`p-4 rounded-xl border-2 transition-all text-left ${selectedSector === sector.id ? "border-cyan-500 bg-cyan-950/30" : "border-gray-700 bg-gray-800/50 hover:border-gray-600"}`}
-              >
-                <div className="text-2xl mb-2">{sector.icon}</div>
-                <p className="font-bold text-white text-sm">{sector.name}</p>
-                <p className="text-cyan-400 text-xs mt-1">{sector.revenue}</p>
-              </button>
-            ))}
+            {MONETIZATION_SECTORS.map(sector => {
+              const selected = selectedSectors.includes(sector.id);
+              return (
+                <button
+                  key={sector.id}
+                  onClick={() => setSelectedSectors(prev => selected ? prev.filter(id => id !== sector.id) : [...prev, sector.id])}
+                  className={`p-4 rounded-xl border-2 transition-all text-left ${selected ? "border-cyan-500 bg-cyan-950/30" : "border-gray-700 bg-gray-800/50 hover:border-gray-600"}`}
+                >
+                  <div className="flex items-start justify-between">
+                    <div className="text-2xl mb-2">{sector.icon}</div>
+                    {selected && <span className="text-cyan-400 font-bold text-sm">✓</span>}
+                  </div>
+                  <p className="font-bold text-white text-sm">{sector.name}</p>
+                  <p className="text-cyan-400 text-xs mt-1">{sector.revenue}</p>
+                </button>
+              );
+            })}
           </div>
+          {selectedSectors.length > 0 && (
+            <p className="text-cyan-400 text-xs mt-3">{selectedSectors.length} selected</p>
+          )}
         </div>
 
         {error && <p className="text-red-400 text-sm text-center">{error}</p>}
@@ -447,7 +457,7 @@ export default function AdvancedInventionDossierGenerator() {
         <button
           ref={leverRef}
           onClick={handleGenerate}
-          disabled={loading || selectedCategories.length === 0 || !selectedSector || (mode === "hybrid" ? selectedInventions.length < 2 : !concept.trim())}
+          disabled={loading || selectedCategories.length === 0 || selectedSectors.length === 0 || (mode === "hybrid" ? selectedInventions.length < 2 : !concept.trim())}
           className="w-full py-4 rounded-xl bg-gradient-to-r from-purple-600 to-blue-700 hover:from-purple-500 hover:to-blue-600 disabled:opacity-50 text-white font-black text-base transition-all flex items-center justify-center gap-2"
           style={{ transition: "transform 0.3s ease" }}
         >
