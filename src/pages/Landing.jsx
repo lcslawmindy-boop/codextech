@@ -11,7 +11,7 @@ export default function Landing() {
       <ActiveBackground themeId={themeId} />
       <BackgroundThemeSwitcher themeId={themeId} setThemeId={setThemeId} />
       {/* Nav */}
-      <nav className="border-b border-white/10 px-6 py-4 sticky top-0 z-40 backdrop-blur-md" style={{ background: "rgba(0,0,20,0.75)" }}>
+      <nav className="border-b border-white/10 px-6 py-4 sticky top-0 z-40" style={{ background: "#0a0a1a" }}>
         <div className="max-w-6xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-3">
             <img src="https://media.base44.com/images/public/69ccefebfea78b23498c66a8/a90918e3c_ZARPlogo.png" alt="ZARP" className="h-8 w-8" />
@@ -25,7 +25,7 @@ export default function Landing() {
       </nav>
 
       {/* Hero */}
-      <section className="px-6 py-20 border-b border-white/10">
+      <section className="px-6 py-20 border-b border-white/10" style={{ background: "#0a0a1e" }}>
         <div className="max-w-4xl mx-auto text-center">
           <h1 className="text-5xl font-black mb-6 leading-tight">
             Institutional Research Intelligence for Advanced Electromagnetics
@@ -66,14 +66,14 @@ export default function Landing() {
       </section>
 
       {/* User Dashboard */}
-      <section className="px-6 py-12 border-b border-white/10" style={{ background: "rgba(0,0,20,0.6)", backdropFilter: "blur(8px)" }}>
+      <section className="px-6 py-12 border-b border-white/10" style={{ background: "#0a0a1a" }}>
         <div className="max-w-4xl mx-auto">
           <UserDashboardSection />
         </div>
       </section>
 
       {/* What's Included */}
-      <section className="px-6 py-16 border-b border-white/10" style={{ background: "rgba(0,0,15,0.55)", backdropFilter: "blur(8px)" }}>
+      <section className="px-6 py-16 border-b border-white/10" style={{ background: "#080812" }}>
         <div className="max-w-4xl mx-auto">
           <h2 className="text-3xl font-black mb-12 text-center">What You Get</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -98,7 +98,7 @@ export default function Landing() {
       </section>
 
       {/* How It Works */}
-      <section id="how-it-works" className="px-6 py-16 border-b border-white/10" style={{ background: "rgba(0,0,20,0.6)", backdropFilter: "blur(8px)" }}>
+      <section id="how-it-works" className="px-6 py-16 border-b border-white/10" style={{ background: "#0a0a1a" }}>
         <div className="max-w-4xl mx-auto">
           <h2 className="text-3xl font-black mb-12 text-center">How It Works</h2>
           <div className="space-y-6">
@@ -123,7 +123,7 @@ export default function Landing() {
       </section>
 
       {/* Top Content */}
-      <section className="px-6 py-16 border-b border-white/10" style={{ background: "rgba(0,0,15,0.55)", backdropFilter: "blur(8px)" }}>
+      <section className="px-6 py-16 border-b border-white/10" style={{ background: "#080812" }}>
         <div className="max-w-4xl mx-auto">
           <h2 className="text-3xl font-black mb-12 text-center">Most Popular Items</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -145,7 +145,7 @@ export default function Landing() {
       </section>
 
       {/* Pricing */}
-      <section id="pricing" className="px-6 py-16 border-b border-white/10" style={{ background: "rgba(0,0,20,0.65)", backdropFilter: "blur(8px)" }}>
+      <section id="pricing" className="px-6 py-16 border-b border-white/10" style={{ background: "#0a0a1a" }}>
         <div className="max-w-4xl mx-auto">
           <h2 className="text-3xl font-black mb-12 text-center">Simple Pricing</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -202,7 +202,7 @@ export default function Landing() {
       </section>
 
       {/* Footer */}
-      <section className="px-6 py-12" style={{ background: "rgba(0,0,20,0.8)", backdropFilter: "blur(8px)" }}>
+      <section className="px-6 py-12" style={{ background: "#060610" }}>
         <div className="max-w-4xl mx-auto text-center text-sm text-gray-600">
           <p>Primary sources only. Institutional research. No speculation.</p>
         </div>
