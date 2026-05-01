@@ -146,7 +146,6 @@ export default function ResearchMembership() {
               <div className="bg-gray-900/60 border border-cyan-800 rounded-xl p-4">
                 <p className="text-cyan-400 font-black text-sm mb-2">💰 Member Pricing</p>
                 <p className="text-white font-bold text-lg mb-1">All Courses & Build Plans: $49</p>
-                <p className="text-gray-400 text-xs">Instead of $50–$297 à la carte</p>
               </div>
 
               <div className="bg-gray-900/60 border border-cyan-800 rounded-xl p-4">
