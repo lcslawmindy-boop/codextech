@@ -1,4 +1,5 @@
-import { useState, useEffect, lazy, Suspense } from "react";
+import { useState, lazy, Suspense } from "react";
+import { createPortal } from "react-dom";
 import { Monitor } from "lucide-react";
 
 const RadarSweepBackground = lazy(() => import("./backgrounds/RadarSweepBackground"));
@@ -87,8 +88,8 @@ export function ActiveBackground({ themeId }) {
 export default function BackgroundThemeSwitcher({ themeId, setThemeId }) {
   const [open, setOpen] = useState(false);
 
-  return (
-    <div className="fixed bottom-6 right-4 z-50">
+  const ui = (
+    <div className="fixed bottom-6 right-4 z-[9999]">
       {/* Palette panel */}
       {open && (
         <div
@@ -137,4 +138,6 @@ export default function BackgroundThemeSwitcher({ themeId, setThemeId }) {
       </button>
     </div>
   );
+
+  return createPortal(ui, document.body);
 }
