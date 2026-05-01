@@ -113,7 +113,7 @@ function generateNDA(recipientName, recipientOrg, recipientTitle) {
   doc.setFont('helvetica', 'normal');
   doc.setTextColor(190, 190, 190);
   doc.text('ZENITH APEX RESEARCH PORTFOLIO', pageW / 2, 22, { align: 'center' });
-  doc.text('Advanced Research  ·  Intellectual Property  ·  AI-Powered Innovation', pageW / 2, 31, { align: 'center' });
+  doc.text('Advanced Research  ·  Intellectual Property  ·  AI-Powered Innovation  ·  Platform Valuation: $8.5M–$18.5M', pageW / 2, 31, { align: 'center' });
 
   doc.setFontSize(26);
   doc.setFont('helvetica', 'bold');
@@ -130,6 +130,10 @@ function generateNDA(recipientName, recipientOrg, recipientTitle) {
   doc.setFontSize(11);
   doc.setTextColor(60, 60, 60);
   doc.text('Governing Disclosure of Proprietary Research, Intellectual Property, and Trade Secrets', pageW / 2, y, { align: 'center' });
+  y += 6;
+  doc.setFontSize(9);
+  doc.setTextColor(100, 100, 100);
+  doc.text('Platform Acquisition Valuation: $8.5M–$18.5M (DCF) · Asking: $12M–$28M · April 2026 AI SaaS Market Multiples Applied', pageW / 2, y, { align: 'center' });
   y += 16;
 
   // Parties box

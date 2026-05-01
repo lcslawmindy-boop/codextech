@@ -7,9 +7,9 @@ import {
 } from "lucide-react";
 import { jsPDF } from "jspdf";
 
-const ASKING_PRICE_LOW = 750_000;
-const ASKING_PRICE_HIGH = 2_500_000;
-const IP_FLOOR = 16_200_000;
+const ASKING_PRICE_LOW = 12_000_000;
+const ASKING_PRICE_HIGH = 28_000_000;
+const IP_FLOOR = 18_500_000;
 const MRR_TARGET = 5_000; // Conservative — update with real Stripe data
 const ARR_TARGET = MRR_TARGET * 12;
 
