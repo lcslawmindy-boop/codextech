@@ -1,6 +1,6 @@
 import { useState, useRef } from "react";
 import { base44 } from "@/api/base44Client";
-import { Loader2, Zap, Save, FileText, BarChart3 } from "lucide-react";
+import { Loader2, Zap, Save, FileText, BarChart3, CheckCircle, ChevronRight, AlertCircle, Edit3, X } from "lucide-react";
 
 const TECH_CATEGORIES = [
   { id: "em", name: "Electromagnetic", icon: "⚡", desc: "EM energy, scalar fields, resonance" },
@@ -175,173 +175,324 @@ export default function AdvancedInventionDossierGenerator() {
   };
 
   // ── Result view ──────────────────────────────────────────────────────────────
-  if (result) {
-    return (
-      <div className="bg-gray-900 border border-gray-800 rounded-2xl p-8 max-w-4xl mx-auto space-y-8">
-        {/* Header */}
-        <div className="flex items-start justify-between gap-4">
-          <div>
-            <h3 className="text-white font-black text-3xl mb-2">{result.invention_name}</h3>
-            <p className="text-gray-400">Complete IP &amp; Commercialization Dossier</p>
-          </div>
-          {saved ? (
-            <div className="flex items-center gap-2 px-4 py-2 rounded-lg bg-green-900/30 border border-green-700 text-green-300">
-              <span>✓</span> Saved
-            </div>
-          ) : (
-            <button
-              onClick={handleSave}
-              disabled={loading}
-              className="flex items-center gap-2 px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-bold text-sm transition-all disabled:opacity-50"
-            >
-              <Save size={14} /> Save to Library
-            </button>
-          )}
-        </div>
+  const TABS = ["Overview", "IP & Claims", "Market", "BOM", "Valuation"];
+  const [activeTab, setActiveTab] = useState("Overview");
+  const [editingName, setEditingName] = useState(false);
+  const [editedName, setEditedName] = useState("");
 
-        {/* Synergy */}
-        {result.synergy_score && (
-          <section className="border-l-4 border-cyan-500 pl-6 bg-cyan-950/20 rounded-lg p-4">
-            <h4 className="text-cyan-300 font-black text-lg mb-3">🔗 Hybrid Synergy Analysis</h4>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-3">
-              <div className="bg-gray-800/50 rounded-lg p-4">
-                <p className="text-gray-500 text-xs uppercase font-bold mb-1">Synergy Score</p>
-                <p className="text-cyan-400 font-black text-3xl">{result.synergy_score}</p>
-                <p className="text-gray-400 text-xs mt-1">/100</p>
-              </div>
-              <div className="bg-gray-800/50 rounded-lg p-4">
-                <p className="text-gray-500 text-xs uppercase font-bold mb-1">Technical Integration</p>
-                <p className="text-gray-300 text-sm">{result.technical_integration?.substring(0, 100)}...</p>
-              </div>
+  if (result) {
+    const bomTotal = (result.bom || []).reduce((sum, item) => {
+      const num = parseFloat((item.estimated_cost || "0").replace(/[^0-9.]/g, ""));
+      return sum + (isNaN(num) ? 0 : num);
+    }, 0);
+
+    return (
+      <div className="max-w-4xl mx-auto space-y-0">
+        {/* Review Banner */}
+        {!saved && (
+          <div className="flex items-center gap-3 px-5 py-3 bg-amber-950/40 border border-amber-700 rounded-t-2xl">
+            <AlertCircle size={16} className="text-amber-400 flex-shrink-0" />
+            <p className="text-amber-300 text-sm font-bold">Review your dossier below before saving to your library.</p>
+            <div className="ml-auto flex gap-2">
+              <button onClick={handleReset} className="text-gray-400 hover:text-white text-xs transition-colors flex items-center gap-1">
+                <X size={12} /> Discard
+              </button>
             </div>
-            <p className="text-gray-300 text-sm leading-relaxed">{result.synergy_analysis}</p>
-          </section>
+          </div>
         )}
 
-        {/* Patent Claims */}
-        <section className="border-l-4 border-blue-500 pl-6">
-          <h4 className="text-blue-300 font-black text-lg mb-3 flex items-center gap-2">
-            <FileText size={16} /> Patent Claims
-          </h4>
-          <div className="space-y-2">
-            {(result.patent_claims || []).map((claim, i) => (
-              <div key={i} className="bg-gray-800/50 rounded-lg p-4">
-                <p className="text-gray-400 text-xs font-bold mb-1">Claim {i + 1}</p>
-                <p className="text-white text-sm leading-relaxed">{claim}</p>
+        <div className={`bg-gray-900 border border-gray-800 ${!saved ? "border-t-0 rounded-b-2xl" : "rounded-2xl"} overflow-hidden`}>
+          {/* Header */}
+          <div className="px-8 pt-7 pb-5 bg-gradient-to-r from-gray-900 to-gray-950 border-b border-gray-800">
+            <div className="flex items-start justify-between gap-4">
+              <div className="flex-1">
+                {editingName ? (
+                  <div className="flex items-center gap-2">
+                    <input
+                      autoFocus
+                      value={editedName}
+                      onChange={e => setEditedName(e.target.value)}
+                      className="bg-gray-800 border border-cyan-600 rounded-lg px-3 py-1.5 text-white font-black text-2xl w-full outline-none"
+                    />
+                    <button onClick={() => { setResult({ ...result, invention_name: editedName }); setEditingName(false); }}
+                      className="px-3 py-1.5 rounded-lg bg-cyan-700 hover:bg-cyan-600 text-white text-xs font-bold transition-colors">Save</button>
+                    <button onClick={() => setEditingName(false)} className="text-gray-500 hover:text-white"><X size={14} /></button>
+                  </div>
+                ) : (
+                  <div className="flex items-center gap-2 group">
+                    <h3 className="text-white font-black text-2xl md:text-3xl leading-tight">{result.invention_name}</h3>
+                    <button onClick={() => { setEditedName(result.invention_name); setEditingName(true); }}
+                      className="opacity-0 group-hover:opacity-100 text-gray-500 hover:text-cyan-400 transition-all">
+                      <Edit3 size={14} />
+                    </button>
+                  </div>
+                )}
+                <p className="text-gray-500 text-sm mt-1">Complete IP &amp; Commercialization Dossier</p>
               </div>
+
+              {/* Score + Save */}
+              <div className="flex items-center gap-3 flex-shrink-0">
+                {result.synergy_score && (
+                  <div className="text-center px-4 py-2 rounded-xl bg-cyan-950/50 border border-cyan-800">
+                    <p className="text-cyan-400 font-black text-2xl leading-none">{result.synergy_score}</p>
+                    <p className="text-gray-500 text-xs mt-0.5">/ 100</p>
+                  </div>
+                )}
+                {saved ? (
+                  <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-green-900/30 border border-green-700 text-green-300 text-sm font-bold">
+                    <CheckCircle size={15} /> Saved to Library
+                  </div>
+                ) : (
+                  <button onClick={handleSave} disabled={loading}
+                    className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600 text-white font-black text-sm transition-all disabled:opacity-50 shadow-lg shadow-blue-900/40">
+                    {loading ? <Loader2 size={14} className="animate-spin" /> : <Save size={14} />}
+                    {loading ? "Saving..." : "Save to Library"}
+                  </button>
+                )}
+              </div>
+            </div>
+
+            {/* Quick stats row */}
+            <div className="flex flex-wrap gap-4 mt-5">
+              <div className="flex items-center gap-2">
+                <span className="text-gray-500 text-xs uppercase font-bold">IP Value</span>
+                <span className="text-green-400 font-bold text-sm">{result.valuation?.estimated_value_low} – {result.valuation?.estimated_value_high}</span>
+              </div>
+              <div className="w-px bg-gray-700" />
+              <div className="flex items-center gap-2">
+                <span className="text-gray-500 text-xs uppercase font-bold">TAM</span>
+                <span className="text-cyan-400 font-bold text-sm">{result.market_positioning?.estimated_tam || "—"}</span>
+              </div>
+              <div className="w-px bg-gray-700" />
+              <div className="flex items-center gap-2">
+                <span className="text-gray-500 text-xs uppercase font-bold">Claims</span>
+                <span className="text-blue-400 font-bold text-sm">{(result.patent_claims || []).length}</span>
+              </div>
+              <div className="w-px bg-gray-700" />
+              <div className="flex items-center gap-2">
+                <span className="text-gray-500 text-xs uppercase font-bold">BOM Items</span>
+                <span className="text-purple-400 font-bold text-sm">{(result.bom || []).length} components</span>
+              </div>
+              {bomTotal > 0 && (
+                <>
+                  <div className="w-px bg-gray-700" />
+                  <div className="flex items-center gap-2">
+                    <span className="text-gray-500 text-xs uppercase font-bold">Est. Build Cost</span>
+                    <span className="text-yellow-400 font-bold text-sm">~${bomTotal.toFixed(0)}</span>
+                  </div>
+                </>
+              )}
+            </div>
+          </div>
+
+          {/* Tabs */}
+          <div className="flex gap-0 border-b border-gray-800 overflow-x-auto">
+            {TABS.map(tab => (
+              <button key={tab} onClick={() => setActiveTab(tab)}
+                className={`px-5 py-3 text-sm font-bold whitespace-nowrap transition-all border-b-2 ${activeTab === tab ? "text-white border-cyan-500 bg-gray-800/40" : "text-gray-500 border-transparent hover:text-gray-300 hover:bg-gray-800/20"}`}>
+                {tab}
+              </button>
             ))}
           </div>
-        </section>
 
-        {/* Market */}
-        <section className="border-l-4 border-green-500 pl-6">
-          <h4 className="text-green-300 font-black text-lg mb-3">Market &amp; Commercialization</h4>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-            <div className="bg-gray-800/50 rounded-lg p-4">
-              <p className="text-gray-500 text-xs uppercase font-bold mb-2">Target Markets</p>
-              <ul className="space-y-1">
-                {(result.market_positioning?.target_markets || []).map((m, i) => (
-                  <li key={i} className="text-white text-sm">• {m}</li>
+          {/* Tab Content */}
+          <div className="p-6 space-y-6">
+
+            {/* ── OVERVIEW ── */}
+            {activeTab === "Overview" && (
+              <div className="space-y-5">
+                {/* Concept description */}
+                <div className="bg-gray-800/40 border border-gray-700 rounded-xl p-5">
+                  <p className="text-gray-400 text-xs uppercase font-bold tracking-wider mb-3">Hybrid Concept</p>
+                  <p className="text-white text-sm leading-relaxed">{result.hybrid_concept}</p>
+                </div>
+
+                {/* Synergy analysis — full text */}
+                {result.synergy_analysis && (
+                  <div className="bg-cyan-950/20 border border-cyan-800/50 rounded-xl p-5">
+                    <p className="text-cyan-400 text-xs uppercase font-bold tracking-wider mb-3">🔗 Synergy Analysis</p>
+                    <p className="text-gray-200 text-sm leading-relaxed whitespace-pre-wrap">{result.synergy_analysis}</p>
+                  </div>
+                )}
+
+                {/* Technical integration — full text */}
+                {result.technical_integration && (
+                  <div className="bg-purple-950/20 border border-purple-800/50 rounded-xl p-5">
+                    <p className="text-purple-400 text-xs uppercase font-bold tracking-wider mb-3">⚙️ Technical Integration</p>
+                    <p className="text-gray-200 text-sm leading-relaxed whitespace-pre-wrap">{result.technical_integration}</p>
+                  </div>
+                )}
+
+                {/* Competitive advantages */}
+                {(result.market_positioning?.competitive_advantages || []).length > 0 && (
+                  <div className="bg-gray-800/40 border border-gray-700 rounded-xl p-5">
+                    <p className="text-gray-400 text-xs uppercase font-bold tracking-wider mb-3">Competitive Advantages</p>
+                    <ul className="space-y-2">
+                      {result.market_positioning.competitive_advantages.map((adv, i) => (
+                        <li key={i} className="flex items-start gap-2.5">
+                          <ChevronRight size={14} className="text-cyan-500 flex-shrink-0 mt-0.5" />
+                          <span className="text-gray-200 text-sm">{adv}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* ── IP & CLAIMS ── */}
+            {activeTab === "IP & Claims" && (
+              <div className="space-y-4">
+                <div className="flex items-center gap-2 text-gray-400 text-xs uppercase font-bold tracking-wider mb-2">
+                  <FileText size={13} /> {(result.patent_claims || []).length} Patent Claims
+                </div>
+                {(result.patent_claims || []).map((claim, i) => (
+                  <div key={i} className={`rounded-xl p-5 border ${i === 0 ? "bg-blue-950/20 border-blue-700/50" : "bg-gray-800/30 border-gray-700"}`}>
+                    <div className="flex items-center gap-2 mb-2">
+                      <span className={`text-xs font-black px-2 py-0.5 rounded-full ${i === 0 ? "bg-blue-700 text-white" : "bg-gray-700 text-gray-300"}`}>
+                        {i === 0 ? "Independent Claim 1" : `Dependent Claim ${i + 1}`}
+                      </span>
+                    </div>
+                    <p className="text-white text-sm leading-relaxed">{claim}</p>
+                  </div>
                 ))}
-              </ul>
-            </div>
-            <div className="bg-gray-800/50 rounded-lg p-4">
-              <p className="text-gray-500 text-xs uppercase font-bold mb-2">Estimated TAM</p>
-              <p className="text-cyan-400 font-bold text-lg">{result.market_positioning?.estimated_tam}</p>
-            </div>
+              </div>
+            )}
+
+            {/* ── MARKET ── */}
+            {activeTab === "Market" && (
+              <div className="space-y-5">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="bg-gray-800/40 border border-gray-700 rounded-xl p-5">
+                    <p className="text-gray-400 text-xs uppercase font-bold mb-3">Target Markets</p>
+                    <ul className="space-y-2">
+                      {(result.market_positioning?.target_markets || []).map((m, i) => (
+                        <li key={i} className="flex items-start gap-2">
+                          <div className="w-1.5 h-1.5 rounded-full bg-green-500 flex-shrink-0 mt-1.5" />
+                          <span className="text-white text-sm">{m}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                  <div className="bg-green-950/20 border border-green-800/50 rounded-xl p-5 flex flex-col justify-center">
+                    <p className="text-gray-400 text-xs uppercase font-bold mb-1">Estimated TAM</p>
+                    <p className="text-green-400 font-black text-3xl">{result.market_positioning?.estimated_tam || "—"}</p>
+                  </div>
+                </div>
+
+                {result.commercialization_plan && (
+                  <div>
+                    <p className="text-gray-400 text-xs uppercase font-bold tracking-wider mb-3">12-Month Commercialization Plan</p>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      {[
+                        { label: "Phase 1", color: "text-yellow-300 border-yellow-700/50 bg-yellow-950/20", text: result.commercialization_plan.phase_1 },
+                        { label: "Phase 2", color: "text-orange-300 border-orange-700/50 bg-orange-950/20", text: result.commercialization_plan.phase_2 },
+                        { label: "Phase 3", color: "text-red-300 border-red-700/50 bg-red-950/20", text: result.commercialization_plan.phase_3 },
+                      ].map(({ label, color, text }) => (
+                        <div key={label} className={`rounded-xl p-4 border ${color}`}>
+                          <p className={`font-black text-xs mb-2 ${color.split(" ")[0]}`}>{label}</p>
+                          <p className="text-gray-200 text-sm leading-relaxed">{text}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* ── BOM ── */}
+            {activeTab === "BOM" && (
+              <div>
+                <div className="flex items-center justify-between mb-4">
+                  <p className="text-gray-400 text-xs uppercase font-bold tracking-wider">Bill of Materials ({(result.bom || []).length} components)</p>
+                  {bomTotal > 0 && (
+                    <div className="px-3 py-1 rounded-lg bg-yellow-950/30 border border-yellow-800 text-yellow-300 text-xs font-bold">
+                      Total Est. Cost: ~${bomTotal.toFixed(0)}
+                    </div>
+                  )}
+                </div>
+                {(result.bom || []).length === 0 ? (
+                  <p className="text-gray-600 text-sm text-center py-8">No BOM data available.</p>
+                ) : (
+                  <div className="overflow-x-auto rounded-xl border border-gray-700">
+                    <table className="w-full text-sm">
+                      <thead className="bg-gray-800">
+                        <tr>
+                          <th className="text-left text-gray-400 font-bold text-xs uppercase py-3 px-4">Component</th>
+                          <th className="text-left text-gray-400 font-bold text-xs uppercase py-3 px-4">Category</th>
+                          <th className="text-right text-gray-400 font-bold text-xs uppercase py-3 px-4">Qty</th>
+                          <th className="text-right text-gray-400 font-bold text-xs uppercase py-3 px-4">Est. Cost</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {result.bom.map((item, i) => (
+                          <tr key={i} className={`border-t border-gray-800 ${i % 2 === 0 ? "" : "bg-gray-800/20"}`}>
+                            <td className="py-3 px-4 text-white font-medium">{item.component}</td>
+                            <td className="py-3 px-4"><span className="px-2 py-0.5 rounded-full bg-gray-700 text-gray-300 text-xs">{item.category}</span></td>
+                            <td className="py-3 px-4 text-right text-gray-400">{item.quantity}</td>
+                            <td className="py-3 px-4 text-right text-cyan-400 font-bold">{item.estimated_cost}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                      {bomTotal > 0 && (
+                        <tfoot className="bg-gray-800/60 border-t-2 border-gray-700">
+                          <tr>
+                            <td colSpan={3} className="py-3 px-4 text-gray-400 font-bold text-xs uppercase">Estimated Total</td>
+                            <td className="py-3 px-4 text-right text-yellow-400 font-black">${bomTotal.toFixed(0)}</td>
+                          </tr>
+                        </tfoot>
+                      )}
+                    </table>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* ── VALUATION ── */}
+            {activeTab === "Valuation" && result.valuation && (
+              <div className="space-y-5">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="bg-green-950/25 border-2 border-green-700/60 rounded-xl p-6 text-center">
+                    <p className="text-green-400 text-xs uppercase font-bold tracking-wider mb-2">Conservative Estimate</p>
+                    <p className="text-white font-black text-3xl">{result.valuation.estimated_value_low}</p>
+                    <p className="text-gray-500 text-xs mt-1">IP Value (Low)</p>
+                  </div>
+                  <div className="bg-green-950/40 border-2 border-green-500/60 rounded-xl p-6 text-center">
+                    <p className="text-green-300 text-xs uppercase font-bold tracking-wider mb-2">Optimistic Estimate</p>
+                    <p className="text-white font-black text-3xl">{result.valuation.estimated_value_high}</p>
+                    <p className="text-gray-500 text-xs mt-1">IP Value (High)</p>
+                  </div>
+                </div>
+                <div className="bg-gray-800/40 border border-gray-700 rounded-xl p-5">
+                  <p className="text-gray-400 text-xs uppercase font-bold tracking-wider mb-3">Licensing Potential</p>
+                  <p className="text-white text-sm leading-relaxed">{result.valuation.licensing_potential}</p>
+                </div>
+              </div>
+            )}
           </div>
-          {result.commercialization_plan && (
-            <div className="bg-gray-800/50 rounded-lg p-4">
-              <p className="text-gray-500 text-xs uppercase font-bold mb-3">12-Month Commercialization Plan</p>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-sm">
-                <div className="bg-gray-900 rounded p-3">
-                  <p className="text-yellow-300 font-bold text-xs mb-1">Phase 1</p>
-                  <p className="text-gray-300">{result.commercialization_plan.phase_1}</p>
-                </div>
-                <div className="bg-gray-900 rounded p-3">
-                  <p className="text-orange-300 font-bold text-xs mb-1">Phase 2</p>
-                  <p className="text-gray-300">{result.commercialization_plan.phase_2}</p>
-                </div>
-                <div className="bg-gray-900 rounded p-3">
-                  <p className="text-red-300 font-bold text-xs mb-1">Phase 3</p>
-                  <p className="text-gray-300">{result.commercialization_plan.phase_3}</p>
-                </div>
-              </div>
-            </div>
-          )}
-        </section>
 
-        {/* BOM */}
-        {result.bom && result.bom.length > 0 && (
-          <section className="border-l-4 border-cyan-500 pl-6">
-            <h4 className="text-cyan-300 font-black text-lg mb-3">Bill of Materials (Prototype)</h4>
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead>
-                  <tr className="border-b border-gray-700">
-                    <th className="text-left text-gray-400 font-bold py-2">Component</th>
-                    <th className="text-left text-gray-400 font-bold py-2">Category</th>
-                    <th className="text-right text-gray-400 font-bold py-2">Qty</th>
-                    <th className="text-right text-gray-400 font-bold py-2">Est. Cost</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {result.bom.map((item, i) => (
-                    <tr key={i} className="border-b border-gray-800 hover:bg-gray-800/30">
-                      <td className="py-2 text-white">{item.component}</td>
-                      <td className="py-2 text-gray-400 text-xs">{item.category}</td>
-                      <td className="py-2 text-right text-gray-400">{item.quantity}</td>
-                      <td className="py-2 text-right text-cyan-400 font-bold">{item.estimated_cost}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </section>
-        )}
+          {error && <div className="mx-6 mb-4 p-3 rounded-xl bg-red-950/30 border border-red-800 text-red-400 text-sm">{error}</div>}
 
-        {/* Valuation */}
-        {result.valuation && (
-          <section className="border-l-4 border-green-500 pl-6">
-            <h4 className="text-green-300 font-black text-lg mb-3 flex items-center gap-2">
-              <BarChart3 size={16} /> IP Valuation &amp; Licensing
-            </h4>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="bg-green-950/20 border border-green-800 rounded-lg p-4">
-                <p className="text-green-300 text-xs uppercase font-bold mb-1">Est. IP Value (Low)</p>
-                <p className="text-white font-bold text-xl">{result.valuation.estimated_value_low}</p>
-              </div>
-              <div className="bg-green-950/20 border border-green-800 rounded-lg p-4">
-                <p className="text-green-300 text-xs uppercase font-bold mb-1">Est. IP Value (High)</p>
-                <p className="text-white font-bold text-xl">{result.valuation.estimated_value_high}</p>
-              </div>
-              <div className="bg-gray-800/50 rounded-lg p-4">
-                <p className="text-gray-400 text-xs uppercase font-bold mb-1">Licensing Potential</p>
-                <p className="text-white text-sm">{result.valuation.licensing_potential}</p>
-              </div>
-            </div>
-          </section>
-        )}
-
-        {error && <p className="text-red-400 text-sm">{error}</p>}
-
-        {/* Actions */}
-        <div className="flex gap-4 pt-4 border-t border-gray-800">
-          <button
-            onClick={handleReset}
-            className="flex-1 py-3 rounded-lg border border-gray-700 text-gray-300 hover:text-white font-bold transition-colors"
-          >
-            Generate Another
-          </button>
-          {!saved && (
-            <button
-              onClick={handleSave}
-              disabled={loading}
-              className="flex-1 py-3 rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-bold transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
-            >
-              <Save size={14} /> Save to Invention Library
+          {/* Footer Actions */}
+          <div className="px-6 pb-6 pt-2 border-t border-gray-800 flex gap-3">
+            <button onClick={handleReset}
+              className="px-5 py-2.5 rounded-xl border border-gray-700 text-gray-300 hover:text-white font-bold text-sm transition-colors">
+              ← Generate Another
             </button>
-          )}
+            <div className="flex-1" />
+            {!saved && (
+              <button onClick={handleSave} disabled={loading}
+                className="flex items-center gap-2 px-6 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600 text-white font-black text-sm transition-all disabled:opacity-50 shadow-lg shadow-blue-900/40">
+                {loading ? <Loader2 size={14} className="animate-spin" /> : <Save size={14} />}
+                {loading ? "Saving..." : "Confirm & Save to Library"}
+              </button>
+            )}
+            {saved && (
+              <div className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-green-900/30 border border-green-700 text-green-300 text-sm font-bold">
+                <CheckCircle size={15} /> Saved to Library
+              </div>
+            )}
+          </div>
         </div>
       </div>
     );
