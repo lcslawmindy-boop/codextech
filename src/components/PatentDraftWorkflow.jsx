@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { base44 } from "@/api/base44Client";
-import { FileText, ChevronRight, ChevronLeft, Edit3, Download, CheckCircle, Loader2, Plus, Trash2 } from "lucide-react";
+import { FileText, ChevronRight, ChevronLeft, Download, CheckCircle, Loader2, Plus, Trash2 } from "lucide-react";
+import { jsPDF } from "jspdf";
 
 const STEPS = ["Select Dossier", "Edit Claims", "Edit Description", "Review & Export"];
 
@@ -33,27 +33,91 @@ export default function PatentDraftWorkflow({ inventions = [] }) {
   const removeClaim = (i) => setClaims(claims.filter((_, idx) => idx !== i));
   const updateClaim = (i, val) => setClaims(claims.map((c, idx) => idx === i ? val : c));
 
-  const handleExport = async () => {
+  const handleExport = () => { // synchronous client-side PDF
     setLoading(true);
     setError(null);
     try {
-      const res = await base44.functions.invoke("exportPatentDoc", {
-        title,
-        abstract,
-        background,
-        detailed_description: detailedDesc,
-        claims,
-        invention_id: selected?.id,
+      const doc = new jsPDF({ orientation: "portrait", unit: "mm", format: "letter" });
+      const pageW = 216;
+      const pageH = 279;
+      const marginL = 20;
+      const textW = 176;
+      let y = 20;
+
+      const addPage = () => { doc.addPage(); y = 20; };
+
+      const writeText = (text, size, bold, color = [20, 20, 35], indent = 0) => {
+        doc.setFontSize(size);
+        doc.setFont("helvetica", bold ? "bold" : "normal");
+        doc.setTextColor(...color);
+        const lines = doc.splitTextToSize(text || "", textW - indent);
+        lines.forEach(line => {
+          if (y > pageH - 20) addPage();
+          doc.text(line, marginL + indent, y);
+          y += size * 0.42;
+        });
+        y += 3;
+      };
+
+      const sectionHeader = (label) => {
+        if (y > pageH - 30) addPage();
+        doc.setFillColor(30, 30, 50);
+        doc.rect(marginL, y, textW, 8, "F");
+        doc.setTextColor(255, 255, 255);
+        doc.setFontSize(8);
+        doc.setFont("helvetica", "bold");
+        doc.text(label, marginL + 4, y + 5.5);
+        y += 13;
+      };
+
+      // Cover
+      doc.setFillColor(240, 240, 248);
+      doc.roundedRect(marginL, y, textW, 32, 2, 2, "F");
+      doc.setTextColor(50, 50, 80);
+      doc.setFontSize(10);
+      doc.setFont("helvetica", "bold");
+      doc.text("UNITED STATES PATENT AND TRADEMARK OFFICE", pageW / 2, y + 10, { align: "center" });
+      doc.setFontSize(8);
+      doc.setFont("helvetica", "normal");
+      doc.text("PROVISIONAL PATENT APPLICATION — 35 U.S.C. § 111(b)", pageW / 2, y + 17, { align: "center" });
+      doc.text(`Filing Date: ${new Date().toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}`, pageW / 2, y + 24, { align: "center" });
+      y += 38;
+
+      writeText(title.toUpperCase(), 14, true, [20, 20, 40]);
+      y += 5;
+
+      sectionHeader("ABSTRACT");
+      writeText(abstract, 9.5, false);
+
+      sectionHeader("BACKGROUND OF THE INVENTION");
+      writeText(background, 9.5, false);
+
+      sectionHeader("DETAILED DESCRIPTION OF THE INVENTION");
+      writeText(detailedDesc, 9.5, false);
+
+      sectionHeader("CLAIMS");
+      claims.filter(c => c.trim()).forEach((claim, i) => {
+        writeText(`${i + 1}. ${claim}`, 9, false, [20, 20, 50], 0);
+        y += 2;
       });
-      if (res.data?.pdf_data) {
-        const link = document.createElement("a");
-        link.href = `data:application/pdf;base64,${res.data.pdf_data}`;
-        link.download = res.data.filename || "patent_draft.pdf";
-        link.click();
-        setExported(true);
-      } else if (res.data?.error) {
-        setError(res.data.error);
-      }
+
+      sectionHeader("INVENTOR'S DECLARATION");
+      writeText("I hereby declare that I am the original inventor of the subject matter claimed herein and authorize the filing of this provisional patent application.", 9, false);
+      y += 10;
+      doc.setDrawColor(120, 120, 130);
+      doc.setLineWidth(0.3);
+      doc.line(marginL, y, marginL + 80, y);
+      doc.line(marginL + 100, y, marginL + 176, y);
+      y += 4;
+      doc.setFontSize(8);
+      doc.setFont("helvetica", "normal");
+      doc.setTextColor(100, 100, 110);
+      doc.text("Inventor Signature", marginL, y);
+      doc.text("Date", marginL + 100, y);
+
+      const filename = `${title.replace(/[^a-zA-Z0-9]/g, "_").substring(0, 40)}_patent_draft.pdf`;
+      doc.save(filename);
+      setExported(true);
     } catch (e) {
       setError(e.message);
     }
