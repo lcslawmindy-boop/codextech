@@ -241,6 +241,10 @@ export default function FreeVault() {
               { icon: "🎬", title: "Video Guides", desc: "3–12 hour assembly walkthroughs per device" },
               { icon: "🔗", title: "Supplier Links", desc: "Verified part sources + current pricing" },
               { icon: "💬", title: "Build Forum", desc: "Troubleshoot with 2,000+ active builders" },
+              { icon: "🧠", title: "25 Invention Dossiers/mo", desc: "AI IP creation suite with patent strategy & commercialization roadmap" },
+              { icon: "📋", title: "Upgraded PDF Export", desc: "Professional IP documentation with patent claims & market analysis" },
+              { icon: "🎥", title: "Upgraded Build Videos", desc: "Premium video guides with troubleshooting & measurement validation" },
+              { icon: "🎯", title: "All Courses & Build Plans", desc: "Unlimited access to every course, build plan, research brief & guide" },
             ].map((feature, i) => (
               <div key={i} className="bg-gray-900 border border-gray-800 rounded-xl p-4">
                 <span className="text-2xl block mb-2">{feature.icon}</span>
