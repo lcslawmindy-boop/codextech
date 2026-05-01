@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
-import { X, Zap, Star, DollarSign, ShoppingCart, FileText, ChevronRight, Search } from "lucide-react";
+import { X, Zap, Star, DollarSign, ShoppingCart, FileText, ChevronRight, Search, GitCompare } from "lucide-react";
 import { base44 } from "@/api/base44Client";
+import InventionComparator from "./InventionComparator";
 
 // ── Invention catalog data ────────────────────────────────────────────────────
 const INVENTION_CATALOG = [
@@ -434,13 +435,14 @@ export default function CosmicOverlay({ onSearchSync }) {
   const [selectedInvention, setSelectedInvention] = useState(null);
   const [showBuildLibrary, setShowBuildLibrary] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
+  const [showComparator, setShowComparator] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
 
   // Keyboard shortcut for search
   useEffect(() => {
     const handler = (e) => {
       if ((e.metaKey || e.ctrlKey) && e.key === "k") { e.preventDefault(); setShowSearch(s => !s); }
-      if (e.key === "Escape") { setShowSearch(false); setSelectedInvention(null); setShowBuildLibrary(false); }
+      if (e.key === "Escape") { setShowSearch(false); setSelectedInvention(null); setShowBuildLibrary(false); setShowComparator(false); }
     };
     window.addEventListener("keydown", handler);
     return () => window.removeEventListener("keydown", handler);
@@ -477,6 +479,12 @@ export default function CosmicOverlay({ onSearchSync }) {
           style={{ background: "rgba(0,0,20,0.8)", backdropFilter: "blur(12px)", border: "1px solid #ff00ff33", color: "#ff00ff" }}>
           <Zap size={14} /> Build Library
         </button>
+        <button
+          onClick={() => setShowComparator(true)}
+          className="flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-bold transition-all"
+          style={{ background: "rgba(0,0,20,0.8)", backdropFilter: "blur(12px)", border: "1px solid #00ff8833", color: "#00ff88" }}>
+          <GitCompare size={14} /> Compare
+        </button>
       </div>
 
       {/* Search sync panel */}
@@ -493,6 +501,14 @@ export default function CosmicOverlay({ onSearchSync }) {
           invention={selectedInvention}
           onClose={() => setSelectedInvention(null)}
           onBuild={() => handleOpenBuildLibrary(selectedInvention)}
+        />
+      )}
+
+      {/* Invention Comparator */}
+      {showComparator && (
+        <InventionComparator
+          catalog={INVENTION_CATALOG}
+          onClose={() => setShowComparator(false)}
         />
       )}
 
