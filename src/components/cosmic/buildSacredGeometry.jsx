@@ -11,7 +11,7 @@ export function buildSacredGeometry(scene) {
     { geo: new THREE.OctahedronGeometry(9),     name: "Octahedron",    color: 0x00ffff },
     { geo: new THREE.IcosahedronGeometry(9),    name: "Icosahedron",   color: 0x00ff88 },
     { geo: new THREE.DodecahedronGeometry(9),   name: "Dodecahedron",  color: 0xff6600 },
-    { geo: new THREE.BoxGeometry(13, 13, 13),   name: "Hexahedron",    color: 0x8800ff },
+    { geo: new THREE.IcosahedronGeometry(10, 1), name: "12-face Dual",  color: 0x8800ff },
   ];
   platonicDefs.forEach((d, i) => {
     const grp = new THREE.Group();

@@ -6,6 +6,8 @@ import { buildComets, tickComets } from "./cosmic/buildComets";
 import { buildSacredGeometry, tickSacredGeo } from "./cosmic/buildSacredGeometry";
 import { buildUFOs, tickUFOs, buildAngels, tickAngels, buildAkashicPortals, tickAkashic } from "./cosmic/buildMystical";
 import { buildInventionBubbles, tickInventions, buildInventorPortraits, tickInventors, buildMathEquations, tickEquations } from "./cosmic/buildInventions";
+import { buildWonderObjects, tickWonderObjects } from "./cosmic/buildWonderObjects";
+import { buildExtraToroidalDonuts, tickExtraToroidalDonuts, buildExtraStars, tickExtraStars, buildExtraCubes, tickExtraCubes } from "./cosmic/buildMoreGeometry";
 
 // ── Starfield ─────────────────────────────────────────────────────────────────
 function addStars(scene) {
@@ -226,15 +228,19 @@ export default function CosmicResearchBackground() {
     const {mesh:ionMesh, vel:ionVel, count:ionCount} = addIonField(scene);
     const shooters   = addShootingStars(scene);
 
-    const asteroids  = buildAsteroids(scene);
-    const comets     = buildComets(scene);
-    const sacredGeo  = buildSacredGeometry(scene);
-    const ufos       = buildUFOs(scene);
-    const angels     = buildAngels(scene);
-    const portals    = buildAkashicPortals(scene);
-    const bubbles    = buildInventionBubbles(scene);
-    const inventors  = buildInventorPortraits(scene);
-    const equations  = buildMathEquations(scene);
+    const asteroids    = buildAsteroids(scene);
+    const comets       = buildComets(scene);
+    const sacredGeo    = buildSacredGeometry(scene);
+    const ufos         = buildUFOs(scene);
+    const angels       = buildAngels(scene);
+    const portals      = buildAkashicPortals(scene);
+    const bubbles      = buildInventionBubbles(scene);
+    const inventors    = buildInventorPortraits(scene);
+    const equations    = buildMathEquations(scene);
+    const wonders      = buildWonderObjects(scene);
+    const extraDonuts  = buildExtraToroidalDonuts(scene);
+    const extraStars   = buildExtraStars(scene);
+    const extraCubes   = buildExtraCubes(scene);
 
     const onResize = () => {
       camera.aspect = mount.clientWidth/mount.clientHeight;
@@ -312,6 +318,10 @@ export default function CosmicResearchBackground() {
       tickInventions(bubbles, t);
       tickInventors(inventors, t);
       tickEquations(equations, t);
+      tickWonderObjects(wonders, t);
+      tickExtraToroidalDonuts(extraDonuts, t);
+      tickExtraStars(extraStars, t);
+      tickExtraCubes(extraCubes, t);
 
       renderer.render(scene, camera);
     };
