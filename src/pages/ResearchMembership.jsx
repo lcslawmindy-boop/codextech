@@ -46,7 +46,7 @@ export default function ResearchMembership() {
   const [billingPeriod, setBillingPeriod] = useState("monthly");
 
   return (
-    <div className="min-h-screen bg-gray-950 text-white relative">
+    <div className="min-h-screen bg-transparent text-white relative">
       <CosmicResearchBackground />
       {/* Header */}
       <div className="border-b border-gray-800 px-6 py-5 bg-gray-900/50">
@@ -164,12 +164,33 @@ export default function ResearchMembership() {
 
             <div className="mt-6 pt-6 border-t border-cyan-700">
               <p className="text-cyan-400 font-bold text-sm mb-3">What the Invention Dossier generates:</p>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-5">
                 {["Patent Strategy", "Claims Analysis", "Prior Art Search", "FTO Assessment", "Commercialization Plan", "Market Positioning", "Licensing Framework", "Valuation Model"].map((item, i) => (
                   <div key={i} className="bg-gray-900/40 rounded-lg p-2 text-center">
                     <p className="text-gray-300 text-xs font-semibold">{item}</p>
                   </div>
                 ))}
+              </div>
+
+              {/* Dossier Pricing */}
+              <div className="bg-gray-900/60 border border-cyan-800/60 rounded-xl p-4">
+                <p className="text-white font-black text-sm mb-3">📄 Dossier Add-On Pricing (à la carte)</p>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                  {[
+                    { tier: "Starter", count: "1 Invention", price: "$197", note: "Full IP & commercialization dossier", color: "border-gray-700 text-gray-300" },
+                    { tier: "Growth", count: "3 Inventions", price: "$497", note: "3 full dossiers + video walkthroughs", color: "border-cyan-700 text-cyan-300", highlight: true },
+                    { tier: "Portfolio", count: "10 Inventions", price: "$997", note: "10 dossiers + licensing templates + VDR", color: "border-purple-700 text-purple-300" },
+                  ].map(({ tier, count, price, note, color, highlight }) => (
+                    <div key={tier} className={`relative rounded-lg p-3 border ${color} bg-gray-900/40 ${highlight ? "ring-1 ring-cyan-600" : ""}`}>
+                      {highlight && <span className="absolute -top-2 left-3 px-2 py-0.5 rounded-full bg-cyan-700 text-white text-xs font-bold">Most Popular</span>}
+                      <p className="text-xs font-bold uppercase tracking-wider opacity-70 mb-1">{tier}</p>
+                      <p className="text-white font-black text-xl">{price}</p>
+                      <p className="text-xs font-bold mt-0.5">{count}</p>
+                      <p className="text-gray-500 text-xs mt-1">{note}</p>
+                    </div>
+                  ))}
+                </div>
+                <p className="text-gray-500 text-xs mt-3">Builder members get 10 free Invention Dossier rolls included. <a href="/invention-dossier" className="text-cyan-400 underline">View full dossier packages →</a></p>
               </div>
             </div>
           </div>
