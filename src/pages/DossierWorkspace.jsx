@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
-import { ArrowLeft, FileText, Presentation, RefreshCw } from "lucide-react";
+import { ArrowLeft, FileText, Presentation, RefreshCw, GitCompare, BarChart3 } from "lucide-react";
 import { Link } from "react-router-dom";
 import PatentDraftWorkflow from "@/components/PatentDraftWorkflow";
 import InvestorDeckGenerator from "@/components/InvestorDeckGenerator";
@@ -75,6 +75,24 @@ export default function DossierWorkspace() {
             available for processing
           </div>
         )}
+
+        {/* Quick Links */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+          <Link to="/invention-comparison" className="flex items-center gap-3 p-4 bg-gray-900/60 border border-gray-700 hover:border-cyan-700 rounded-xl transition-all group">
+            <GitCompare size={20} className="text-cyan-400 group-hover:text-cyan-300" />
+            <div>
+              <p className="text-white font-bold text-sm">Invention Comparison</p>
+              <p className="text-gray-500 text-xs">Side-by-side BOM & cost analysis</p>
+            </div>
+          </Link>
+          <Link to="/invention-dashboard" className="flex items-center gap-3 p-4 bg-gray-900/60 border border-gray-700 hover:border-purple-700 rounded-xl transition-all group">
+            <BarChart3 size={20} className="text-purple-400 group-hover:text-purple-300" />
+            <div>
+              <p className="text-white font-bold text-sm">Portfolio Dashboard</p>
+              <p className="text-gray-500 text-xs">IP value, synergy & licensing charts</p>
+            </div>
+          </Link>
+        </div>
 
         {/* Tab Content */}
         {activeTab === "patent" && <PatentDraftWorkflow inventions={inventions} />}
