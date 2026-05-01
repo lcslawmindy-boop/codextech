@@ -35,7 +35,7 @@ export default function AdvancedInventionDossierGenerator() {
   const [mode, setMode] = useState("hybrid");
   const [selectedInventions, setSelectedInventions] = useState([]);
   const [concept, setConcept] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState("");
+  const [selectedCategories, setSelectedCategories] = useState([]);
   const [selectedSector, setSelectedSector] = useState("");
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(null);
@@ -52,7 +52,7 @@ export default function AdvancedInventionDossierGenerator() {
   };
 
   const handleGenerate = async () => {
-    if (!selectedCategory || !selectedSector) return;
+    if (selectedCategories.length === 0 || !selectedSector) return;
     if (mode === "hybrid" && selectedInventions.length < 2) return;
     if (mode === "custom" && !concept.trim()) return;
 
@@ -65,7 +65,7 @@ export default function AdvancedInventionDossierGenerator() {
       setTimeout(() => { leverRef.current.style.transform = "rotate(0deg)"; }, 300);
     }
 
-    const categoryName = TECH_CATEGORIES.find(c => c.id === selectedCategory)?.name;
+    const categoryName = TECH_CATEGORIES.filter(c => selectedCategories.includes(c.id)).map(c => c.name).join(", ");
     const sectorName = MONETIZATION_SECTORS.find(s => s.id === selectedSector)?.name;
     const inventionList = selectedInventions.map(i => i.name).join(", ");
 
@@ -398,20 +398,30 @@ export default function AdvancedInventionDossierGenerator() {
 
         {/* Technology Category */}
         <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6">
-          <h4 className="text-white font-black text-lg mb-4">Select Technology Category</h4>
+          <h4 className="text-white font-black text-lg mb-1">Select Technology Categories</h4>
+          <p className="text-gray-500 text-xs mb-4">Select one or more</p>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-            {TECH_CATEGORIES.map(cat => (
-              <button
-                key={cat.id}
-                onClick={() => setSelectedCategory(cat.id)}
-                className={`p-4 rounded-xl border-2 transition-all text-left ${selectedCategory === cat.id ? "border-purple-500 bg-purple-950/30" : "border-gray-700 bg-gray-800/50 hover:border-gray-600"}`}
-              >
-                <div className="text-2xl mb-2">{cat.icon}</div>
-                <p className="font-bold text-white text-sm">{cat.name}</p>
-                <p className="text-gray-400 text-xs mt-1">{cat.desc}</p>
-              </button>
-            ))}
+            {TECH_CATEGORIES.map(cat => {
+              const selected = selectedCategories.includes(cat.id);
+              return (
+                <button
+                  key={cat.id}
+                  onClick={() => setSelectedCategories(prev => selected ? prev.filter(id => id !== cat.id) : [...prev, cat.id])}
+                  className={`p-4 rounded-xl border-2 transition-all text-left ${selected ? "border-purple-500 bg-purple-950/30" : "border-gray-700 bg-gray-800/50 hover:border-gray-600"}`}
+                >
+                  <div className="flex items-start justify-between">
+                    <div className="text-2xl mb-2">{cat.icon}</div>
+                    {selected && <span className="text-purple-400 font-bold text-sm">✓</span>}
+                  </div>
+                  <p className="font-bold text-white text-sm">{cat.name}</p>
+                  <p className="text-gray-400 text-xs mt-1">{cat.desc}</p>
+                </button>
+              );
+            })}
           </div>
+          {selectedCategories.length > 0 && (
+            <p className="text-purple-400 text-xs mt-3">{selectedCategories.length} selected</p>
+          )}
         </div>
 
         {/* Monetization Sector */}
@@ -437,7 +447,7 @@ export default function AdvancedInventionDossierGenerator() {
         <button
           ref={leverRef}
           onClick={handleGenerate}
-          disabled={loading || !selectedCategory || !selectedSector || (mode === "hybrid" ? selectedInventions.length < 2 : !concept.trim())}
+          disabled={loading || selectedCategories.length === 0 || !selectedSector || (mode === "hybrid" ? selectedInventions.length < 2 : !concept.trim())}
           className="w-full py-4 rounded-xl bg-gradient-to-r from-purple-600 to-blue-700 hover:from-purple-500 hover:to-blue-600 disabled:opacity-50 text-white font-black text-base transition-all flex items-center justify-center gap-2"
           style={{ transition: "transform 0.3s ease" }}
         >
