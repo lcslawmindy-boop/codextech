@@ -48,15 +48,15 @@ export default function Landing() {
               className="flex flex-col items-center gap-3 p-6 rounded-2xl border-2 border-cyan-600 bg-cyan-950/20 hover:bg-cyan-950/40 transition-all">
               <Lock size={24} className="text-cyan-300" />
               <span className="font-black text-sm">Membership</span>
-              <p className="text-xs text-gray-400">$49/month • 3 + 3 included</p>
+              <p className="text-xs text-gray-400">$99/month • Builder tier</p>
               <ArrowRight size={14} className="text-cyan-400 mt-2" />
             </Link>
 
-            <Link to="/invention-plans"
+            <Link to="/alacarte"
               className="flex flex-col items-center gap-3 p-6 rounded-2xl border border-gray-700 hover:border-green-600 transition-all bg-gray-900/50 hover:bg-gray-900">
               <BookOpen size={24} className="text-green-400" />
-              <span className="font-black text-sm">Buy Plans</span>
-              <p className="text-xs text-gray-500">$49–99 per plan</p>
+              <span className="font-black text-sm">À La Carte</span>
+              <p className="text-xs text-gray-500">$49 per course or plan</p>
               <ArrowRight size={14} className="text-gray-600 mt-2" />
             </Link>
           </div>
@@ -137,7 +137,7 @@ export default function Landing() {
               <p className="text-cyan-400 font-black text-xs uppercase tracking-widest mb-2">⭐ Top Build Plan</p>
               <h3 className="text-white font-black text-lg mb-1">Motionless Electromagnetic Generator</h3>
               <p className="text-gray-400 text-xs mb-4">Complete BOM, schematics, assembly steps</p>
-              <Link to="/alacarte" className="text-cyan-400 hover:text-cyan-300 text-xs font-black">Buy $50 →</Link>
+              <Link to="/alacarte" className="text-cyan-400 hover:text-cyan-300 text-xs font-black">Buy $49 →</Link>
             </div>
           </div>
           <p className="text-center text-gray-500 text-xs mt-6">Membership includes first 3 courses + 3 build plans, then 1 of each added monthly</p>
@@ -170,7 +170,7 @@ export default function Landing() {
               </div>
               <h3 className="text-lg font-black mb-2">Membership</h3>
               <p className="text-gray-400 text-sm mb-6">Unlimited content + drops</p>
-              <div className="text-3xl font-black mb-6">$49<span className="text-sm">/mo</span></div>
+              <div className="text-3xl font-black mb-6">$99<span className="text-sm">/mo</span></div>
               <ul className="space-y-2 text-sm text-gray-300 mb-6">
                 <li>✓ 3 courses + 3 build plans</li>
                 <li>✓ 1 new course monthly</li>
