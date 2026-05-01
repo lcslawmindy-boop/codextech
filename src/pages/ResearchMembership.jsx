@@ -344,17 +344,18 @@ export default function ResearchMembership() {
 
 
           {/* Pro Tier */}
-          <div className="bg-gradient-to-br from-purple-950/30 to-gray-950 border-2 border-purple-600 rounded-2xl p-8 relative shadow-lg shadow-purple-600/20 hover:shadow-purple-600/30 transition-all">
-            <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-gradient-to-r from-purple-600 to-purple-500 text-white text-xs font-black">
-              ENTERPRISE
+          <div className="bg-gradient-to-br from-purple-950/40 to-gray-950 border-2 border-purple-500 rounded-2xl p-8 relative shadow-xl shadow-purple-600/30 hover:shadow-purple-600/40 transition-all">
+            <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-gradient-to-r from-purple-600 to-pink-600 text-white text-xs font-black whitespace-nowrap">
+              🔥 MOST POWERFUL
             </div>
 
-            <h3 className="text-white font-black text-2xl mb-2">Enterprise</h3>
-            <p className="text-gray-300 text-sm mb-6">For research teams, institutions, and enterprises</p>
+            <h3 className="text-white font-black text-2xl mb-1">Pro</h3>
+            <p className="text-purple-300 text-xs font-bold mb-2">$2,500+ value / month</p>
+            <p className="text-gray-400 text-sm mb-6">For serious inventors ready to build, patent & commercialize</p>
 
             {billingPeriod === "monthly" ? (
               <>
-                <div className="text-3xl font-black text-cyan-300 mb-1">$199</div>
+                <div className="text-3xl font-black text-purple-300 mb-1">$199</div>
                 <p className="text-gray-500 text-xs mb-8">/month, cancel anytime</p>
               </>
             ) : (
@@ -365,47 +366,53 @@ export default function ResearchMembership() {
               </>
             )}
 
-            <div className="space-y-3 mb-8">
+            <div className="space-y-3 mb-6">
               {[
-                { feature: "Everything in Builder", value: "$2,428" },
-                { feature: "Team access (up to 10 seats)", value: "$990" },
-                { feature: "Monthly live technical sessions", value: "$500" },
-                { feature: "Priority expert support", value: "$600" },
-                { feature: "Quarterly institutional briefings", value: "$400" },
-                { feature: "Custom research requests (1/month)", value: "$250" },
-                { feature: "Pre-release patent analyses & modules", value: "—" }
+                { feature: "Everything in Builder ($99/mo)", value: "✓" },
+                { feature: "ALL structured courses — full library, unlimited", value: "$1,200+" },
+                { feature: "ALL build plans — complete collection with BOM", value: "$800+" },
+                { feature: "ALL PDFs — research briefs, guides, frameworks", value: "$300+" },
+                { feature: "Video build guides — step-by-step ($50 ea, included free)", value: "$50 ea" },
+                { feature: "Verified supplier sourcing list per device", value: "$200+" },
+                { feature: "AI Patent Attorney — full patent drafting tool", value: "$500+" },
+                { feature: "25 Invention Dossier IP Generator rolls/mo", value: "$1,225" },
+                { feature: "Commercialization roadmap w/ BOM & milestones", value: "$400" },
+                { feature: "Bring-to-Market pitch deck (auto-generated)", value: "$300" },
+                { feature: "PDF export included ($50 value — free for Pro)", value: "$50 ea" },
               ].map((item, i) => (
                 <div key={i} className="flex gap-3 justify-between items-start">
                   <div className="flex gap-3 flex-1">
-                    <CheckCircle2 size={16} className="text-purple-300 flex-shrink-0 mt-0.5" />
-                    <p className="text-gray-200 text-sm font-semibold">{item.feature}</p>
+                    <CheckCircle2 size={16} className="text-purple-400 flex-shrink-0 mt-0.5" />
+                    <p className="text-gray-200 text-sm">{item.feature}</p>
                   </div>
                   <span className="text-purple-300 text-xs font-bold flex-shrink-0">{item.value}</span>
                 </div>
               ))}
             </div>
-            <div className="bg-purple-950/30 border border-purple-700 rounded-lg p-3 mb-4">
-              <p className="text-purple-300 text-xs font-bold">Total Market Value: $5,168</p>
-              <p className="text-gray-300 text-xs mt-1">At $199/month, you'd pay $2,388 yearly. Get everything at $1,791/year (annual) or $2,388/year (monthly).</p>
+
+            {/* Value callout box */}
+            <div className="bg-gradient-to-r from-purple-950/60 to-pink-950/40 border border-purple-600 rounded-xl p-4 mb-4">
+              <p className="text-purple-200 text-xs font-black mb-1">🎯 Total Bundle Value: $5,025+/month</p>
+              <p className="text-gray-300 text-xs">Courses + Build Plans + PDFs + Video Guides + Supplier Sourcing + AI Patent Attorney + 25 Dossiers + Commercialization Roadmap + Pitch Deck + PDF/Video exports</p>
             </div>
 
             <CheckoutButton
-              title={billingPeriod === "annual" ? "Enterprise Annual Membership" : "Enterprise Membership"}
+              title={billingPeriod === "annual" ? "Pro Annual Membership" : "Pro Membership"}
               price={billingPeriod === "annual" ? "$1,791" : "$199"}
               priceInCents={billingPeriod === "annual" ? 179100 : 19900}
-              description={billingPeriod === "annual" ? "Annual Enterprise membership — 3 months free + premium perks" : "Monthly Enterprise membership for research teams and institutions"}
+              description={billingPeriod === "annual" ? "Annual Pro membership — full library + AI patent tools + 25 dossiers/mo + commercialization suite" : "Monthly Pro membership — all courses, build plans, PDFs, video guides, AI patent attorney, 25 dossier rolls, commercialization roadmap & pitch deck"}
               billingPeriod={billingPeriod}
             />
 
             {billingPeriod === "annual" && (
-              <div className="mt-6 pt-6 border-t border-gray-700 space-y-2">
-                <p className="text-gray-300 text-xs font-bold uppercase tracking-widest mb-3">Annual Benefits</p>
+              <div className="mt-6 pt-6 border-t border-purple-800 space-y-2">
+                <p className="text-purple-300 text-xs font-bold uppercase tracking-widest mb-3">Annual Benefits</p>
                 <p className="text-gray-200 text-xs flex gap-2"><span className="text-green-400">✓</span>First access to new course & build plan drops</p>
                 <p className="text-gray-200 text-xs flex gap-2"><span className="text-green-400">✓</span>Patent suppression monitoring newsletter</p>
                 <p className="text-gray-200 text-xs flex gap-2"><span className="text-green-400">✓</span>Insiders scoop + market investment guidance</p>
               </div>
             )}
-            <p className="text-gray-300 text-xs text-center mt-4">{billingPeriod === "annual" ? "Billed annually" : "Billed monthly"}. Team access activates immediately.</p>
+            <p className="text-gray-400 text-xs text-center mt-4">{billingPeriod === "annual" ? "Billed annually" : "Billed monthly"}. Cancel anytime.</p>
           </div>
         </div>
 
@@ -512,7 +519,7 @@ export default function ResearchMembership() {
         <section className="mb-12 bg-gray-900 border border-gray-800 rounded-2xl p-8">
           <h3 className="text-white font-black text-xl mb-4">Ready to Build?</h3>
           <p className="text-gray-400 mb-4">
-            Membership (Researcher $49 · Builder $99 · Pro $199/mo) gives you the research. The Advanced Engineering Bundle ($997) is for teams actually building systems — with hands-on designs, component sourcing, troubleshooting protocols, and measurement validation.
+            Membership (Researcher $49 · Builder $99 · Pro $199/mo) gives you the research and tools. Pro members get everything — all courses, all build plans, all PDFs, video build guides, verified supplier sourcing, AI Patent Attorney, 25 dossier rolls/mo, commercialization roadmap, and pitch deck. The Advanced Engineering Bundle ($997) is for teams needing hands-on assembly support, component sourcing, troubleshooting protocols, and measurement validation.
           </p>
           <a
             href="/advanced-engineering-bundle"
@@ -541,7 +548,7 @@ export default function ResearchMembership() {
               },
               {
                 q: "What's the difference between the tiers?",
-                a: "Researcher ($49/mo): core archive access. Builder ($99/mo): adds patent analyses, engineering docs, and expert support. Pro ($199/mo): adds team seats, live sessions, and custom research requests."
+                a: "Researcher ($49/mo): core archive access. Builder ($99/mo): adds patent analyses, engineering docs, expert support, and $49 à la carte pricing. Pro ($199/mo): everything in Builder PLUS all courses & build plans unlocked, all PDFs, video build guides, verified supplier sourcing, AI Patent Attorney drafting tool, 25 Invention Dossier IP generator rolls/mo, commercialization roadmap with BOM, bring-to-market pitch deck, and free PDF/video exports ($50 value each)."
               },
               {
                 q: "Can I upgrade later?",
