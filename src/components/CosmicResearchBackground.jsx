@@ -63,13 +63,18 @@ export default function CosmicResearchBackground() {
 
     // Initialize shooting stars
     for (let i = 0; i < 5; i++) {
+      const angle = (Math.random() * 30 + 15) * (Math.PI / 180); // 15–45° downward
+      const speed = Math.random() * 4 + 3;
       shootingStars.push({
         x: Math.random() * canvas.width,
-        y: Math.random() * canvas.height * 0.5,
-        vx: Math.random() * 3 + 2,
-        vy: Math.random() * 2 - 1,
+        y: Math.random() * canvas.height * 0.4,
+        vx: Math.cos(angle) * speed,
+        vy: Math.sin(angle) * speed,
         life: 0,
-        maxLife: Math.random() * 40 + 20,
+        maxLife: Math.random() * 80 + 60,
+        length: Math.random() * 120 + 60,
+        width: Math.random() * 1.5 + 0.5,
+        color: Math.random() > 0.7 ? [255, 220, 150] : [200, 230, 255],
       });
     }
 
@@ -79,12 +84,12 @@ export default function CosmicResearchBackground() {
         text: FORMULAS[Math.floor(Math.random() * FORMULAS.length)],
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
-        vx: (Math.random() - 0.5) * 0.5,
-        vy: -Math.random() * 0.3 - 0.1,
+        vx: (Math.random() - 0.5) * 0.12,
+        vy: -Math.random() * 0.06 - 0.02,
         opacity: Math.random() * 0.4 + 0.2,
         size: Math.random() * 12 + 10,
         rotation: Math.random() * Math.PI * 2,
-        rotationSpeed: (Math.random() - 0.5) * 0.02,
+        rotationSpeed: (Math.random() - 0.5) * 0.003,
       });
     }
 
@@ -95,12 +100,12 @@ export default function CosmicResearchBackground() {
         text: isDevice ? DEVICES[Math.floor(Math.random() * DEVICES.length)] : SYMBOLS[Math.floor(Math.random() * SYMBOLS.length)],
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
-        vx: (Math.random() - 0.5) * 0.8,
-        vy: -Math.random() * 0.4 - 0.1,
+        vx: (Math.random() - 0.5) * 0.15,
+        vy: -Math.random() * 0.08 - 0.02,
         opacity: Math.random() * 0.3 + 0.15,
         size: isDevice ? Math.random() * 16 + 12 : Math.random() * 20 + 16,
         rotation: Math.random() * Math.PI * 2,
-        rotationSpeed: (Math.random() - 0.5) * 0.04,
+        rotationSpeed: (Math.random() - 0.5) * 0.005,
         isGolden: !isDevice && Math.random() > 0.7,
       });
     }
@@ -206,13 +211,18 @@ export default function CosmicResearchBackground() {
         ss.life += 1;
 
         if (ss.life > ss.maxLife) {
+          const angle = (Math.random() * 30 + 15) * (Math.PI / 180);
+          const speed = Math.random() * 4 + 3;
           shootingStars[i] = {
-            x: Math.random() * canvas.width,
-            y: Math.random() * canvas.height * 0.5,
-            vx: Math.random() * 3 + 2,
-            vy: Math.random() * 2 - 1,
+            x: Math.random() * canvas.width * 0.8,
+            y: Math.random() * canvas.height * 0.4,
+            vx: Math.cos(angle) * speed,
+            vy: Math.sin(angle) * speed,
             life: 0,
-            maxLife: Math.random() * 40 + 20,
+            maxLife: Math.random() * 80 + 60,
+            length: Math.random() * 120 + 60,
+            width: Math.random() * 1.5 + 0.5,
+            color: Math.random() > 0.7 ? [255, 220, 150] : [200, 230, 255],
           };
           continue;
         }
@@ -221,19 +231,39 @@ export default function CosmicResearchBackground() {
         ss.y += ss.vy;
 
         const progress = ss.life / ss.maxLife;
-        const opacity = Math.sin(progress * Math.PI) * 0.8;
+        // Fade in quickly, hold, then fade out
+        const opacity = progress < 0.1
+          ? (progress / 0.1) * 0.9
+          : progress > 0.7
+          ? ((1 - progress) / 0.3) * 0.9
+          : 0.9;
 
-        ctx.strokeStyle = `rgba(255, 200, 100, ${opacity})`;
-        ctx.lineWidth = 2;
+        const [r, g, b] = ss.color;
+        const tailX = ss.x - ss.vx * (ss.length / ss.vx);
+        const tailY = ss.y - ss.vy * (ss.length / ss.vx);
+
+        // Gradient trail
+        const grad = ctx.createLinearGradient(tailX, tailY, ss.x, ss.y);
+        grad.addColorStop(0, `rgba(${r},${g},${b},0)`);
+        grad.addColorStop(0.6, `rgba(${r},${g},${b},${opacity * 0.3})`);
+        grad.addColorStop(1, `rgba(${r},${g},${b},${opacity})`);
+
+        ctx.strokeStyle = grad;
+        ctx.lineWidth = ss.width;
+        ctx.lineCap = "round";
         ctx.beginPath();
-        ctx.moveTo(ss.x, ss.y);
-        ctx.lineTo(ss.x - ss.vx * 15, ss.y - ss.vy * 15);
+        ctx.moveTo(tailX, tailY);
+        ctx.lineTo(ss.x, ss.y);
         ctx.stroke();
 
-        // Glow
-        ctx.fillStyle = `rgba(255, 200, 100, ${opacity * 0.5})`;
+        // Bright head glow
+        const headGrad = ctx.createRadialGradient(ss.x, ss.y, 0, ss.x, ss.y, 4);
+        headGrad.addColorStop(0, `rgba(255,255,255,${opacity})`);
+        headGrad.addColorStop(0.4, `rgba(${r},${g},${b},${opacity * 0.8})`);
+        headGrad.addColorStop(1, `rgba(${r},${g},${b},0)`);
+        ctx.fillStyle = headGrad;
         ctx.beginPath();
-        ctx.arc(ss.x, ss.y, 3, 0, Math.PI * 2);
+        ctx.arc(ss.x, ss.y, 4, 0, Math.PI * 2);
         ctx.fill();
       }
 
@@ -242,7 +272,7 @@ export default function CosmicResearchBackground() {
         text.x += text.vx;
         text.y += text.vy;
         text.rotation += text.rotationSpeed;
-        text.vy -= 0.01; // Slight upward drift
+        text.vy -= 0.001; // Slight upward drift
 
         // Wrap around screen
         if (text.x > canvas.width) text.x = -50;
