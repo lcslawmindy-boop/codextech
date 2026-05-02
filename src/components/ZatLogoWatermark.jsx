@@ -25,14 +25,11 @@ export default function ZatLogoWatermark() {
       <div className="font-black text-cyan-300 tracking-widest text-center opacity-80 whitespace-nowrap" style={{ fontSize: '22px', textShadow: '0 0 12px rgba(0, 220, 255, 0.8)', lineHeight: '1.2', letterSpacing: '4px' }}>
         T.E.C.H
       </div>
-      <div className="font-black text-cyan-400 tracking-widest text-center opacity-75 whitespace-nowrap" style={{ fontSize: '8px', textShadow: '0 0 8px rgba(0, 220, 255, 0.6)', lineHeight: '1.2' }}>
-        TEACH · EXPLORE · CONSTRUCT · HARNESS
+      <div className="font-bold text-cyan-300 tracking-widest text-center opacity-80 whitespace-normal max-w-[220px]" style={{ fontSize: '11px', textShadow: '0 0 10px rgba(0, 220, 255, 0.7)', lineHeight: '1.3', letterSpacing: '0.5px', marginTop: '2px' }}>
+        Tethering · Electromagnetic · Consciousness · Hub
       </div>
-      <div className="font-bold text-cyan-300 tracking-widest text-center opacity-80 whitespace-nowrap" style={{ fontSize: '10px', textShadow: '0 0 10px rgba(0, 220, 255, 0.7)', lineHeight: '1.2', letterSpacing: '1px' }}>
-        Transmit · Electromagnetics · Coherence · Harness
-      </div>
-      <div className="font-semibold text-cyan-200 text-center opacity-85 whitespace-normal max-w-[200px]" style={{ fontSize: '9px', textShadow: '0 0 8px rgba(0, 220, 255, 0.6)', lineHeight: '1.4', marginTop: '6px', letterSpacing: '0.5px' }}>
-        Share advanced EM knowledge, unite inventors through coherent understanding, and help them build/patent real solutions.
+      <div className="font-semibold text-cyan-200 text-center opacity-90 whitespace-normal max-w-[240px]" style={{ fontSize: '10px', textShadow: '0 0 10px rgba(0, 220, 255, 0.7)', lineHeight: '1.5', marginTop: '8px', letterSpacing: '0.3px' }}>
+        Anchor advanced EM knowledge to conscious practice. Unite inventors. Expose suppressed technologies. Build the future.
       </div>
       <style>{`
         @keyframes zatPulse {
