@@ -188,6 +188,7 @@ import CustomFlow from './pages/CustomFlow';
 import IoTDashboard from './pages/IoTDashboard';
 import MemberProfileSetup from './pages/MemberProfileSetup';
 import IPBrokeringGuide from './pages/IPBrokeringGuide';
+import DocumentDashboard from './pages/DocumentDashboard';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -395,6 +396,7 @@ const AuthenticatedApp = () => {
           <Route path="/iot-dashboard" element={<IoTDashboard />} />
           <Route path="/member-profile-setup" element={<MemberProfileSetup />} />
           <Route path="/ip-brokering-guide" element={<IPBrokeringGuide />} />
+          <Route path="/document-dashboard" element={<DocumentDashboard />} />
 
           <Route path="*" element={<PageNotFound />} />
         </Route>
