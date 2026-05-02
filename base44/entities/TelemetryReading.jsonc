@@ -1,0 +1,44 @@
+{
+  "name": "TelemetryReading",
+  "type": "object",
+  "properties": {
+    "device_id": {
+      "type": "string"
+    },
+    "device_name": {
+      "type": "string"
+    },
+    "user_email": {
+      "type": "string"
+    },
+    "channel": {
+      "type": "string"
+    },
+    "label": {
+      "type": "string"
+    },
+    "value": {
+      "type": "number"
+    },
+    "unit": {
+      "type": "string"
+    },
+    "timestamp": {
+      "type": "string"
+    },
+    "session_id": {
+      "type": "string",
+      "description": "Groups readings in one streaming session"
+    },
+    "alert_triggered": {
+      "type": "boolean",
+      "default": false
+    }
+  },
+  "required": [
+    "device_id",
+    "channel",
+    "value",
+    "timestamp"
+  ]
+}
