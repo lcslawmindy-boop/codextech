@@ -32,9 +32,10 @@ export default function ZaraAlienMascot() {
             50% { filter: drop-shadow(0 0 16px rgba(173, 216, 230, 0.9)); }
           }
         `}</style>
-        <div className="relative w-16 h-16" style={{ animation: 'pupilGlow 4s ease-in-out infinite' }}>
-          {/* 3D Realistic Eyeball */}
-          <svg viewBox="0 0 100 100" className="w-full h-full" style={{ filter: 'drop-shadow(0 0 20px rgba(173, 216, 230, 0.8))' }}>
+        <div className="flex flex-col items-center gap-2">
+          <div className="relative w-28 h-28" style={{ animation: 'pupilGlow 4s ease-in-out infinite' }}>
+            {/* 3D Realistic Eyeball */}
+            <svg viewBox="0 0 100 100" className="w-full h-full" style={{ filter: 'drop-shadow(0 0 20px rgba(173, 216, 230, 0.8))' }}>
             <defs>
               {/* Gradient for 3D sphere effect */}
               <radialGradient id="eyeSphere" cx="35%" cy="35%">
@@ -81,9 +82,14 @@ export default function ZaraAlienMascot() {
 
             {/* Tertiary shine */}
             <circle cx="55" cy="46" r="1.5" fill="#ffffff" opacity="0.4" />
-          </svg>
-        </div>
-      </button>
+            </svg>
+            </div>
+            <div className="text-center">
+            <p className="text-xs font-black text-blue-400 leading-tight">ZARA</p>
+            <p className="text-xs text-blue-300 font-bold">AI ASSISTANT</p>
+            </div>
+            </div>
+            </button>
     );
   }
 
