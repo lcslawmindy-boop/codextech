@@ -37,78 +37,95 @@ export default function ZaraAlienMascot() {
           }
         `}</style>
         <div className="flex flex-col items-center gap-3">
-          <div className="relative w-48 h-48" style={{ animation: 'pupilGlow 4s ease-in-out infinite' }}>
+          <div className="relative w-80 h-80" style={{ animation: 'pupilGlow 4s ease-in-out infinite' }}>
             {/* 3D Realistic Eyeball */}
-            <svg viewBox="0 0 100 100" className="w-full h-full" style={{ filter: 'drop-shadow(0 0 20px rgba(173, 216, 230, 0.8))' }}>
-            <defs>
-              {/* Gradient for 3D sphere effect */}
-              <radialGradient id="eyeSphere" cx="35%" cy="35%">
-                <stop offset="0%" style={{ stopColor: '#ffffff', stopOpacity: 1 }} />
-                <stop offset="70%" style={{ stopColor: '#f0f8ff', stopOpacity: 1 }} />
-                <stop offset="100%" style={{ stopColor: '#e6f2ff', stopOpacity: 1 }} />
-              </radialGradient>
-              {/* Gradient for iris */}
-              <radialGradient id="irisGradient" cx="45%" cy="45%">
-                <stop offset="0%" style={{ stopColor: '#87ceeb', stopOpacity: 1 }} />
-                <stop offset="60%" style={{ stopColor: '#5dade2', stopOpacity: 1 }} />
-                <stop offset="100%" style={{ stopColor: '#2e8bb3', stopOpacity: 1 }} />
-              </radialGradient>
-              {/* Highlight gradient */}
-              <radialGradient id="highlight" cx="40%" cy="40%">
-                <stop offset="0%" style={{ stopColor: '#ffffff', stopOpacity: 0.9 }} />
-                <stop offset="100%" style={{ stopColor: '#ffffff', stopOpacity: 0 }} />
-              </radialGradient>
-            </defs>
+            <svg viewBox="0 0 100 100" className="w-full h-full" style={{ filter: 'drop-shadow(0 0 32px rgba(173, 216, 230, 0.9))' }}>
+              <defs>
+                {/* Advanced 3D sphere gradient */}
+                <radialGradient id="eyeSphere" cx="30%" cy="30%">
+                  <stop offset="0%" style={{ stopColor: '#ffffff', stopOpacity: 1 }} />
+                  <stop offset="40%" style={{ stopColor: '#f5f9ff', stopOpacity: 1 }} />
+                  <stop offset="70%" style={{ stopColor: '#e0f0ff', stopOpacity: 1 }} />
+                  <stop offset="100%" style={{ stopColor: '#c9e3ff', stopOpacity: 1 }} />
+                </radialGradient>
 
-            {/* White sclera with 3D shading */}
-            <circle cx="50" cy="50" r="30" fill="url(#eyeSphere)" />
+                {/* Enhanced iris gradient */}
+                <radialGradient id="irisGradient" cx="45%" cy="40%">
+                  <stop offset="0%" style={{ stopColor: '#5dade2', stopOpacity: 1 }} />
+                  <stop offset="50%" style={{ stopColor: '#2e8bb3', stopOpacity: 1 }} />
+                  <stop offset="100%" style={{ stopColor: '#1a5276', stopOpacity: 1 }} />
+                </radialGradient>
 
-            {/* Subtle shadow ring for depth */}
-            <circle cx="50" cy="50" r="30" fill="none" stroke="rgba(0,0,0,0.1)" strokeWidth="2" />
+                {/* Iris ring texture */}
+                <radialGradient id="irisRing" cx="50%" cy="50%">
+                  <stop offset="85%" style={{ stopColor: 'rgba(100, 180, 220, 0.3)', stopOpacity: 1 }} />
+                  <stop offset="100%" style={{ stopColor: 'rgba(46, 139, 179, 0.6)', stopOpacity: 1 }} />
+                </radialGradient>
 
-            {/* Light blue iris with gradient */}
-            <circle cx="50" cy="50" r="18" fill="url(#irisGradient)" />
+                {/* Premium highlight */}
+                <radialGradient id="highlight" cx="35%" cy="35%">
+                  <stop offset="0%" style={{ stopColor: '#ffffff', stopOpacity: 1 }} />
+                  <stop offset="50%" style={{ stopColor: '#ffffff', stopOpacity: 0.4 }} />
+                  <stop offset="100%" style={{ stopColor: '#ffffff', stopOpacity: 0 }} />
+                </radialGradient>
 
-            {/* Iris pattern/texture */}
-            <circle cx="50" cy="50" r="18" fill="none" stroke="rgba(45, 139, 179, 0.3)" strokeWidth="1" opacity="0.5" />
+                {/* Secondary shine */}
+                <radialGradient id="shine2" cx="40%" cy="40%">
+                  <stop offset="0%" style={{ stopColor: 'rgba(255,255,255,0.8)', stopOpacity: 1 }} />
+                  <stop offset="100%" style={{ stopColor: 'rgba(255,255,255,0)', stopOpacity: 0 }} />
+                </radialGradient>
+              </defs>
 
-            {/* Black pupil */}
-            <circle cx="50" cy="50" r="11" fill="#000000" />
+              {/* Main white sclera sphere */}
+              <circle cx="50" cy="50" r="32" fill="url(#eyeSphere)" />
 
-            {/* Pupil gradient for depth */}
-            <circle cx="50" cy="50" r="11" fill="none" stroke="rgba(255,255,255,0.2)" strokeWidth="1" />
+              {/* Depth shadow edge */}
+              <circle cx="50" cy="50" r="32" fill="none" stroke="rgba(0,0,0,0.15)" strokeWidth="2" />
 
-            {/* Primary highlight (large) */}
-            <circle cx="42" cy="42" r="7" fill="url(#highlight)" opacity="0.95" />
+              {/* Inner sphere shading */}
+              <circle cx="50" cy="50" r="32" fill="rgba(0,0,0,0.05)" opacity="0.3" />
 
-            {/* Secondary highlight (small) */}
-            <circle cx="58" cy="58" r="3" fill="#ffffff" opacity="0.6" />
+              {/* Iris - large and detailed */}
+              <circle cx="50" cy="50" r="20" fill="url(#irisGradient)" />
 
-            {/* Tertiary shine */}
-            <circle cx="55" cy="46" r="1.5" fill="#ffffff" opacity="0.4" />
+              {/* Iris ring detail */}
+              <circle cx="50" cy="50" r="20" fill="url(#irisRing)" opacity="0.6" />
 
-            {/* Top Eyelashes */}
-            <g stroke="#87ceeb" strokeWidth="1.5" strokeLinecap="round">
-              <line x1="30" y1="20" x2="28" y2="10" />
-              <line x1="40" y1="18" x2="40" y2="6" />
-              <line x1="50" y1="18" x2="50" y2="6" />
-              <line x1="60" y1="18" x2="60" y2="6" />
-              <line x1="70" y1="20" x2="72" y2="10" />
-            </g>
+              {/* Iris radial texture */}
+              <g stroke="rgba(46, 139, 179, 0.2)" strokeWidth="0.5" opacity="0.4">
+                <line x1="50" y1="30" x2="50" y2="70" />
+                <line x1="50" y1="30" x2="50" y2="70" transform="rotate(30 50 50)" />
+                <line x1="50" y1="30" x2="50" y2="70" transform="rotate(60 50 50)" />
+                <line x1="50" y1="30" x2="50" y2="70" transform="rotate(90 50 50)" />
+                <line x1="50" y1="30" x2="50" y2="70" transform="rotate(120 50 50)" />
+                <line x1="50" y1="30" x2="50" y2="70" transform="rotate(150 50 50)" />
+              </g>
 
-            {/* Bottom Eyelashes */}
-            <g stroke="#87ceeb" strokeWidth="1.5" strokeLinecap="round">
-              <line x1="30" y1="80" x2="28" y2="90" />
-              <line x1="40" y1="82" x2="40" y2="94" />
-              <line x1="50" y1="82" x2="50" y2="94" />
-              <line x1="60" y1="82" x2="60" y2="94" />
-              <line x1="70" y1="80" x2="72" y2="90" />
-            </g>
+              {/* Deep black pupil */}
+              <circle cx="50" cy="50" r="12" fill="#0a0a0a" />
 
-            {/* Twinkling effect circle */}
-            <circle cx="42" cy="42" r="6" fill="url(#highlight)" opacity="0.6" style={{ animation: 'twinkle 2s ease-in-out infinite' }} />
+              {/* Pupil inner glow */}
+              <circle cx="50" cy="50" r="12" fill="none" stroke="rgba(255,255,255,0.15)" strokeWidth="1.5" />
+
+              {/* Large primary highlight - ultra glossy */}
+              <circle cx="38" cy="38" r="9" fill="url(#highlight)" opacity="0.98" />
+
+              {/* Secondary bright shine */}
+              <circle cx="62" cy="62" r="4" fill="url(#shine2)" opacity="0.85" />
+
+              {/* Tertiary micro-shine */}
+              <circle cx="58" cy="45" r="1.5" fill="#ffffff" opacity="0.7" />
+
+              {/* Twinkling effect on primary highlight */}
+              <circle cx="38" cy="38" r="8" fill="#ffffff" opacity="0" style={{ animation: 'twinkle 2.5s ease-in-out infinite' }} />
+
+              {/* Upper eyelid */}
+              <path d="M 18 50 Q 50 25 82 50 L 82 45 Q 50 22 18 45 Z" fill="rgba(20, 30, 50, 0.8)" opacity="0.9" />
+
+              {/* Lower eyelid */}
+              <path d="M 18 50 Q 50 75 82 50 L 82 55 Q 50 78 18 55 Z" fill="rgba(20, 30, 50, 0.7)" opacity="0.85" />
             </svg>
-            </div>
+          </div>
             <div className="text-center">
             <p className="text-sm font-black text-blue-400 leading-tight">ASK ZARA</p>
             <p className="text-xs text-blue-300 font-bold">YOUR ZENITH APEX RESEARCH ASSISTANT</p>
