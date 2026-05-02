@@ -28,7 +28,7 @@ export default function Landing() {
           {/* Logo & Mission - Classified Style - ENLARGED */}
           <div className="flex items-center gap-6 flex-1">
             <div style={{ animation: "zatPulse 2.5s ease-in-out infinite" }} className="relative">
-              <img src="https://media.base44.com/images/public/69ccefebfea78b23498c66a8/bcf3bcb42_df887ac44_logo.png" alt="Zenith Apex Tech" className="h-32 w-32 rounded-lg" style={{ filter: "drop-shadow(0 0 40px rgba(0, 255, 0, 1))", border: "4px solid rgba(0, 255, 0, 0.95)" }} />
+              <img src="https://media.base44.com/images/public/69ccefebfea78b23498c66a8/200cea9a1_generated_image.png" alt="Zenith Apex Tech" className="h-32 w-32 rounded-lg" style={{ filter: "drop-shadow(0 0 40px rgba(0, 255, 0, 1))", border: "4px solid rgba(0, 255, 0, 0.95)" }} />
               <div className="absolute -top-3 -right-3 px-3 py-1.5 bg-orange-600 text-black text-xs font-black rounded" style={{ boxShadow: "0 0 16px rgba(255, 102, 0, 1)" }}>TOP SECRET</div>
             </div>
             <div>
