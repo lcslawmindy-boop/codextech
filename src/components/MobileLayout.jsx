@@ -34,11 +34,11 @@ export default function MobileLayout() {
         paddingTop: isTrial ? "calc(env(safe-area-inset-top) + 34px)" : "env(safe-area-inset-top)",
         paddingBottom: hideTab ? "env(safe-area-inset-bottom)" : "calc(env(safe-area-inset-bottom) + 64px)",
         overscrollBehavior: "none",
-        background: "hsl(222 47% 11%)",
+        background: "transparent",
       }}
     >
       <ZenithApexBackground />
-      <div className="flex-1 relative overflow-hidden">
+      <div className="flex-1 relative overflow-hidden" style={{ zIndex: 1 }}>
         <AnimatePresence mode="wait" initial={false}>
           <motion.div
             key={pathname}

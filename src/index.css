@@ -135,7 +135,8 @@ html[data-theme="steel"] {
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply text-foreground;
+    background: #0a0e1a;
     font-size: 14px;
     -webkit-text-size-adjust: 100%;
     overscroll-behavior: none;

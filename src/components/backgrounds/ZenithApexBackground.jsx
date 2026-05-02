@@ -154,6 +154,12 @@ function metatronsCube() {
   return { pts, edges };
 }
 
+const LOGO_URLS = [
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/75d43b957_df887ac44_logo.png",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/a1d75a1f1_839284090_logo.png",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/fc82e79c5_3fd362d3e_logo.png",
+];
+
 export default function ZenithApexBackground() {
   const canvasRef = useRef(null);
   const animRef = useRef(null);
@@ -170,6 +176,14 @@ export default function ZenithApexBackground() {
     };
     resize();
     window.addEventListener("resize", resize);
+
+    // Preload logos
+    const logos = LOGO_URLS.map(src => {
+      const img = new Image();
+      img.crossOrigin = "anonymous";
+      img.src = src;
+      return img;
+    });
 
     // Stars
     const stars = Array.from({ length: 200 }, () => ({
@@ -747,6 +761,33 @@ export default function ZenithApexBackground() {
       }
       ctx.restore();
 
+      // ── Logo globe watermarks ──
+      // Logo 1: large central globe watermark (faint, slowly rotating glow)
+      if (logos[1]?.complete && logos[1].naturalWidth > 0) {
+        const logoSize = Math.min(W, H) * 0.55;
+        ctx.save();
+        ctx.globalAlpha = 0.07 + 0.025 * Math.sin(t * 0.4);
+        ctx.translate(cx, cy * 0.72);
+        ctx.drawImage(logos[1], -logoSize / 2, -logoSize / 2, logoSize, logoSize);
+        ctx.restore();
+      }
+      // Logo 2 (globe with sun): bottom-left corner, subtle
+      if (logos[0]?.complete && logos[0].naturalWidth > 0) {
+        const logoSize = Math.min(W, H) * 0.18;
+        ctx.save();
+        ctx.globalAlpha = 0.10 + 0.04 * Math.sin(t * 0.55 + 1);
+        ctx.drawImage(logos[0], 24, H - logoSize - 24, logoSize, logoSize);
+        ctx.restore();
+      }
+      // Logo 3 (world map globe): bottom-right corner, subtle
+      if (logos[2]?.complete && logos[2].naturalWidth > 0) {
+        const logoSize = Math.min(W, H) * 0.18;
+        ctx.save();
+        ctx.globalAlpha = 0.10 + 0.04 * Math.sin(t * 0.5 + 2);
+        ctx.drawImage(logos[2], W - logoSize - 24, H - logoSize - 24, logoSize, logoSize);
+        ctx.restore();
+      }
+
       t += 0.007;
       animRef.current = requestAnimationFrame(draw);
     };
@@ -762,7 +803,7 @@ export default function ZenithApexBackground() {
     <canvas
       ref={canvasRef}
       className="fixed inset-0 pointer-events-none"
-      style={{ zIndex: -1 }}
+      style={{ zIndex: 0 }}
     />
   );
 }
