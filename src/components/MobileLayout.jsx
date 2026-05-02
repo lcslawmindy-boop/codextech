@@ -7,6 +7,8 @@ import FloatingLogos from "./FloatingLogos";
 import DraggableLogoSignature from "./DraggableLogoSignature";
 import ZenithInteractiveController from "./ZenithInteractiveController";
 import ZenithThemeSwitcher from "./ZenithThemeSwitcher";
+import FloatingWatermarkLogo from "./FloatingWatermarkLogo";
+import SiteSearchBar from "./SiteSearchBar";
 
 // Pages that should NOT show the bottom tab bar
 const HIDDEN_TAB_ROUTES = ["/legal", "/checkout", "/paywall", "/pricing", "/free-vault", "/"];
@@ -46,6 +48,8 @@ export default function MobileLayout() {
       <DraggableLogoSignature />
       <ZenithInteractiveController />
       <ZenithThemeSwitcher />
+      <FloatingWatermarkLogo />
+      <SiteSearchBar />
       <div className="flex-1 relative overflow-hidden" style={{ zIndex: 1 }}>
         <AnimatePresence mode="wait" initial={false}>
           <motion.div
