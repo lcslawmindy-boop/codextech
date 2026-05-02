@@ -64,6 +64,7 @@ export default function MobileLayout() {
       <TopNav />
       {isTrial && <div className="h-[34px] bg-yellow-900/20 border-b border-yellow-700 flex items-center px-4"><span className="text-xs font-bold text-yellow-300">Trial Mode</span></div>}
       <BackgroundModeControl mode={mode} setMode={setMode} />
+      <ZatLogoWatermark />
       <ZenithAIMascot />
       {mode === 'interactive' && <ZenithInteractiveController />}
       {mode === 'interactive' && <ZenithThemeSwitcher />}
