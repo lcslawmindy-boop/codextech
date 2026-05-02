@@ -280,10 +280,10 @@ export default function ZenithApexBackground() {
         ctx.restore();
       }
 
-      // ── Central Phi Ratio symbol — placed lower, below membership section ──
+      // ── Central Phi Ratio symbol — centered at 75% down the page ──
       {
         const phiX = cx;
-        const phiY = cy + H * 0.55;
+        const phiY = H * 0.75;
         const phiPulse = 0.7 + 0.3 * Math.sin(t * 1.1);
         ctx.save();
         ctx.globalAlpha = 0.72 * phiPulse;
@@ -510,9 +510,9 @@ export default function ZenithApexBackground() {
       }
 
       // ── Neon Circuit Board Sphere with Lightning ──
-      const globeR = Math.min(W, H) * 0.52;
+      const globeR = Math.min(W, H) * 0.42;
       const globeX = cx;
-      const globeY = cy + globeR * 1.1;
+      const globeY = H * 0.82;
 
       ctx.save();
       ctx.beginPath();
@@ -631,7 +631,7 @@ export default function ZenithApexBackground() {
       const sunAngle = t * 1.2;
       const sunOrbitR = globeR * 0.22;
       const sunX = globeX + Math.sin(sunAngle) * sunOrbitR;
-      const sunY = (globeY - globeR) + 12 + Math.cos(sunAngle) * sunOrbitR * 0.35;
+      const sunY = (globeY - globeR) + 30 + Math.cos(sunAngle) * sunOrbitR * 0.35;
       const sunRadius = 18;
 
       const corona = ctx.createRadialGradient(sunX, sunY, 0, sunX, sunY, sunRadius * 5);
