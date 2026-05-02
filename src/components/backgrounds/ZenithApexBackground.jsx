@@ -121,6 +121,37 @@ function dodecahedron() {
   ];
   return { v, e };
 }
+function starTetrahedron() {
+  // Stella octangula - compound of two tetrahedra
+  const s = 1;
+  const tet1 = [[s,s,s], [-s,-s,s], [-s,s,-s], [s,-s,-s]];
+  const tet2 = [[-s,-s,-s], [s,s,-s], [s,-s,s], [-s,s,s]];
+  const v = [...tet1, ...tet2].map(p => { const l = Math.sqrt(p[0]**2+p[1]**2+p[2]**2); return p.map(c=>c/l); });
+  const e = [
+    [0,1],[0,2],[0,3],[1,2],[1,3],[2,3],
+    [4,5],[4,6],[4,7],[5,6],[5,7],[6,7],
+    [0,4],[1,5],[2,6],[3,7]
+  ];
+  return { v, e };
+}
+function stellatedStarTetrahedron() {
+  // Star tetrahedron with extended points
+  const s = 1.2;
+  const inner = [[s,s,s], [-s,-s,s], [-s,s,-s], [s,-s,-s]];
+  const outer = [[s,s,s], [-s,-s,s], [-s,s,-s], [s,-s,-s]].map(p => {
+    const l = Math.sqrt(p[0]**2+p[1]**2+p[2]**2);
+    const scale = 1.8 / (l || 1);
+    return [p[0]*scale, p[1]*scale, p[2]*scale];
+  });
+  const v = [...inner, ...outer].map(p => { const l = Math.sqrt(p[0]**2+p[1]**2+p[2]**2); return p.map(c=>c/l); });
+  const e = [
+    [0,1],[0,2],[0,3],[1,2],[1,3],[2,3],
+    [4,5],[4,6],[4,7],[5,6],[5,7],[6,7],
+    [0,4],[1,5],[2,6],[3,7],
+    [0,5],[0,6],[1,4],[1,7],[2,4],[2,7],[3,5],[3,6]
+  ];
+  return { v, e };
+}
 
 // Metatron's Cube — Fruit of Life + connecting lines
 function metatronsCube() {
@@ -205,10 +236,10 @@ export default function ZenithApexBackground() {
       drift: (Math.random() - 0.5) * 0.00015,
     }));
 
-    const solids = [tetrahedron(), cube(), octahedron(), icosahedron(), dodecahedron()];
+    const solids = [tetrahedron(), cube(), octahedron(), icosahedron(), dodecahedron(), starTetrahedron(), stellatedStarTetrahedron()];
     const solidColors = [
       "rgba(80,200,255,", "rgba(180,100,255,", "rgba(80,255,160,",
-      "rgba(255,180,60,", "rgba(255,80,160,"
+      "rgba(255,180,60,", "rgba(255,80,160,", "rgba(100,255,200,", "rgba(255,150,100,"
     ];
     // Each solid orbits at different radius/speed/phase — further out, pushed lower
     const solidOrbit = [
@@ -217,6 +248,8 @@ export default function ZenithApexBackground() {
       { r: 0.48, speed: 0.55, phase: 2.4, scale: 56, tilt: 1.1, yOff: 0.30 },
       { r: 0.62, speed: 0.22, phase: 3.7, scale: 48, tilt: 0.6, yOff: 0.38 },
       { r: 0.58, speed: 0.33, phase: 5.0, scale: 46, tilt: 1.5, yOff: 0.34 },
+      { r: 0.54, speed: 0.45, phase: 1.8, scale: 50, tilt: 1.2, yOff: 0.33 },
+      { r: 0.60, speed: 0.25, phase: 4.2, scale: 44, tilt: 0.9, yOff: 0.36 },
     ];
 
     const metCube = metatronsCube();
