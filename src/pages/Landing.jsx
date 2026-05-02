@@ -2,20 +2,13 @@ import { ArrowRight, Lock, BookOpen, Zap, Brain, Lightbulb, TrendingUp, Users, E
 import { Link } from "react-router-dom";
 import UserDashboardSection from "@/components/UserDashboardSection";
 import TrustProofSection from "@/components/TrustProofSection";
-import BackgroundThemeSwitcher, { ActiveBackground, useBackgroundTheme } from "@/components/BackgroundThemeSwitcher";
-import ZenithApexBackground from "@/components/backgrounds/ZenithApexBackground";
 import ConversionHero from "@/components/conversion/ConversionHero";
 import TrustSignals from "@/components/conversion/TrustSignals";
 import PricingComparison from "@/components/conversion/PricingComparison";
 
 export default function Landing() {
-  const { themeId, setThemeId } = useBackgroundTheme();
-
   return (
-    <div className="min-h-screen text-white relative" style={{ background: "transparent" }}>
-      <ZenithApexBackground />
-      <ActiveBackground themeId={themeId} />
-      <BackgroundThemeSwitcher themeId={themeId} setThemeId={setThemeId} />
+    <div className="min-h-screen text-white relative bg-black">
       {/* Nav */}
       <nav className="border-b border-white/10 px-6 py-4 sticky top-0 z-50" style={{ background: "rgba(10,10,26,0.85)", backdropFilter: "blur(12px)" }}>
         <div className="max-w-6xl mx-auto flex items-center justify-between">
