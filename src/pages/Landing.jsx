@@ -1,6 +1,7 @@
 import { ArrowRight, Lock, BookOpen, Zap, Brain, Lightbulb, TrendingUp, Users, Eye, FileText, BarChart3, Percent, Search, Shield } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useState } from "react";
+import { base44 } from "@/api/base44Client";
 import UserDashboardSection from "@/components/UserDashboardSection";
 import TrustProofSection from "@/components/TrustProofSection";
 import ConversionHero from "@/components/conversion/ConversionHero";
@@ -11,6 +12,22 @@ import ClassifiedMatrixBackground from "@/components/backgrounds/ClassifiedMatri
 
 export default function Landing() {
   const [searchQuery, setSearchQuery] = useState("");
+
+  const handleLogoDownload = async () => {
+    try {
+      const response = await base44.functions.invoke('exportLogoPDF', {});
+      const blob = new Blob([response.data], { type: 'application/pdf' });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'zenith-apex-tech-logo.pdf';
+      a.click();
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error('Download failed:', error);
+      alert('Failed to download PDF');
+    }
+  };
 
   return (
     <div className="min-h-screen relative bg-black" style={{ fontFamily: "'Courier Prime', monospace", letterSpacing: "0.05em" }}>
@@ -29,8 +46,8 @@ export default function Landing() {
           <div className="flex items-center gap-6 flex-1">
             <div style={{ animation: "zatPulse 2.5s ease-in-out infinite" }} className="relative">
               <div className="relative group">
-                <img src="https://media.base44.com/images/public/69ccefebfea78b23498c66a8/0b2ba0d8e_generated_image.png" alt="Zenith Apex Tech" className="h-48 w-48 rounded-lg cursor-pointer hover:opacity-90 transition-opacity" style={{ filter: "drop-shadow(0 0 40px rgba(0, 255, 0, 1))", border: "4px solid rgba(0, 255, 0, 0.95)" }} />
-                <a href="https://media.base44.com/images/public/69ccefebfea78b23498c66a8/0b2ba0d8e_generated_image.png" download className="absolute -bottom-8 left-0 text-xs text-green-400 opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap font-bold hover:text-green-300">[ Download PDF ]</a>
+                <img src="https://media.base44.com/images/public/69ccefebfea78b23498c66a8/b8b502123_generated_image.png" alt="Zenith Apex Tech" className="h-48 w-48 rounded-lg cursor-pointer hover:opacity-90 transition-opacity" style={{ filter: "drop-shadow(0 0 40px rgba(0, 255, 0, 1))", border: "4px solid rgba(0, 255, 0, 0.95)" }} />
+                <button onClick={handleLogoDownload} className="absolute -bottom-8 left-0 text-xs text-green-400 opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap font-bold hover:text-green-300">[ Download PDF ]</button>
               </div>
               <div className="absolute -top-3 -right-3 px-3 py-1.5 bg-orange-600 text-black text-xs font-black rounded" style={{ boxShadow: "0 0 16px rgba(255, 102, 0, 1)" }}>TOP SECRET</div>
             </div>
