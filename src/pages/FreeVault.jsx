@@ -136,18 +136,13 @@ export default function FreeVault() {
       <ScalarWaveWatermark />
       {/* Nav */}
       <div className="border-b border-gray-800 bg-gray-900/90 backdrop-blur px-5 py-4 flex items-center justify-between sticky top-0 z-40">
-        <div className="flex items-center gap-3">
-          <Link to="/" className="flex items-center gap-3">
-            <img src="https://media.base44.com/images/public/69ccefebfea78b23498c66a8/bcf3bcb42_df887ac44_logo.png" alt="ZAT Logo" className="h-11 w-11 rounded-lg object-contain" />
-            <span className="font-black text-sm">T.E.C.H</span>
-          </Link>
-          <span className="text-xs text-green-600 border border-green-800 px-2 py-0.5 rounded font-bold">100% FREE</span>
-        </div>
+        <div />
         <Link to="/vault"
           className="px-4 py-2 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white text-sm font-bold transition-colors flex items-center gap-1.5">
           <Video size={13} /> Access the Database
         </Link>
       </div>
+      <ZatLogoWatermark />
 
       <div className="max-w-4xl mx-auto px-5 py-12">
         {/* Header */}
