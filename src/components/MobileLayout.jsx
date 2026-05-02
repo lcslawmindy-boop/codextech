@@ -5,6 +5,8 @@ import { AnimatePresence, motion } from "framer-motion";
 import ZenithApexBackground from "./backgrounds/ZenithApexBackground";
 import FloatingLogos from "./FloatingLogos";
 import DraggableLogoSignature from "./DraggableLogoSignature";
+import ZenithInteractiveController from "./ZenithInteractiveController";
+import ZenithThemeSwitcher from "./ZenithThemeSwitcher";
 
 // Pages that should NOT show the bottom tab bar
 const HIDDEN_TAB_ROUTES = ["/legal", "/checkout", "/paywall", "/pricing", "/free-vault", "/"];
@@ -42,6 +44,8 @@ export default function MobileLayout() {
       <ZenithApexBackground />
       <FloatingLogos />
       <DraggableLogoSignature />
+      <ZenithInteractiveController />
+      <ZenithThemeSwitcher />
       <div className="flex-1 relative overflow-hidden" style={{ zIndex: 1 }}>
         <AnimatePresence mode="wait" initial={false}>
           <motion.div
