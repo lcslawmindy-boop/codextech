@@ -38,6 +38,7 @@ export const TIERS = {
     patentTools: true,
     investorTools: false,
     govAccess: false,
+    dossierRollsPerMonth: 3,
   },
   pro: {
     id: "pro",
@@ -51,6 +52,7 @@ export const TIERS = {
     patentTools: true,
     investorTools: true,
     govAccess: false,
+    dossierRollsPerMonth: 5,
   },
   government: {
     id: "government",

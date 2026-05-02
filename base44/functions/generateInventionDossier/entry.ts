@@ -6,10 +6,19 @@ Deno.serve(async (req) => {
     const base44 = createClientFromRequest(req);
     const body = await req.json();
 
-    const { invention_name, ip_strategy, patent_claims, bom, market_positioning, commercialization_plan, valuation, fto_assessment, synergy_analysis, hybrid_concept, market_sectors } = body;
+    const { invention_name, ip_strategy, patent_claims, bom, market_positioning, commercialization_plan, valuation, fto_assessment, synergy_analysis, hybrid_concept, market_sectors, user_email } = body;
 
-    if (!invention_name) {
-      return Response.json({ error: 'Invention name required' }, { status: 400 });
+    if (!invention_name || !user_email) {
+      return Response.json({ error: 'Invention name and user email required' }, { status: 400 });
+    }
+
+    // Check if user has inventor profile on marketplace
+    const profiles = await base44.asServiceRole.entities.MarketplaceProfile.filter({ user_email });
+    if (!profiles || profiles.length === 0) {
+      return Response.json({ 
+        error: 'Inventor profile required. Create a profile on the IP Marketplace before generating dossiers.',
+        code: 'NO_INVENTOR_PROFILE'
+      }, { status: 403 });
     }
 
     // Generate PDF dossier
@@ -36,7 +45,7 @@ Deno.serve(async (req) => {
       doc.setTextColor(0, 0, 0);
     };
 
-    // Cover page
+    // Cover page with legal language
     doc.setFontSize(24);
     doc.setFont(undefined, 'bold');
     doc.text('Invention Dossier', margin, yPosition);
@@ -49,7 +58,14 @@ Deno.serve(async (req) => {
     doc.setFontSize(10);
     doc.setTextColor(100, 100, 100);
     doc.text(`Generated: ${new Date().toLocaleDateString()}`, margin, yPosition);
-    yPosition += 30;
+    yPosition += 8;
+    
+    // Legal language
+    doc.setFontSize(8);
+    const legalText = `ZENITH APEX TECHNOLOGY INTELLECTUAL PROPERTY RIGHTS DECLARATION: Zenith Apex Technology, Inc. asserts intellectual property rights to this invention as documented herein. By creating this dossier, the inventor grants Zenith Apex Technology a non-exclusive license to list and promote this invention on the IP Marketplace. This invention has been automatically registered on the Zenith Apex IP Marketplace for potential licensing, partnerships, and investor matching.`;
+    const legalLines = doc.splitTextToSize(legalText, pageWidth - 2 * margin);
+    doc.text(legalLines, margin, yPosition);
+    yPosition += legalLines.length * 3 + 10;
 
     // IP Strategy
     addText('IP STRATEGY', 14, true, [0, 102, 204]);
@@ -101,7 +117,7 @@ Deno.serve(async (req) => {
       hybrid_concept || synergy_analysis || fto_assessment.summary,
     ].filter(Boolean).join(' ').substring(0, 950);
 
-    // Save invention to database with PDF reference
+    // Save invention to database with PDF reference (skip video creation for speed)
     const invention = await base44.asServiceRole.entities.HybridInvention.create({
       hybrid_concept: invention_name,
       mechanism: ip_strategy.primary_approach,
@@ -114,35 +130,40 @@ Deno.serve(async (req) => {
       ip_value_high: parseFloat(valuation.estimated_value_high.replace(/[^\d\.MBK$,]/g, '')) || 0,
       suggested_next_steps: [commercialization_plan.phase_1, commercialization_plan.phase_2, commercialization_plan.phase_3].filter(Boolean).join(' → '),
       market_sectors: market_sectors || [],
-      status: 'draft',
+      status: 'live',
       description: richDescription,
     });
 
-    // Create build video entry
-    const buildVideo = await base44.asServiceRole.entities.BuildVideo.create({
-      invention_name: invention_name,
-      invention_category: market_positioning.target_markets[0] || 'General',
-      invention_tagline: ip_strategy.primary_approach,
-      steps: bom.map((item, i) => ({
-        step_number: i + 1,
-        title: `Install ${item.component}`,
-        description: `Quantity: ${item.quantity}, Cost: ${item.estimated_cost}`,
-        duration_seconds: 120
-      })),
-      step_count: bom.length
+    // Auto-create marketplace listing
+    const userProfile = profiles[0];
+    const opportunityCard = await base44.asServiceRole.entities.OpportunityCard.create({
+      alias: invention_name,
+      category: market_positioning.target_markets[0] || 'General',
+      stage: 'Patent Pending',
+      funding_ask: parseFloat(valuation.estimated_value_low.replace(/[^\d\.MBK$,]/g, '')) || 0,
+      headline: invention_name,
+      problem_statement: market_positioning.problem || 'Advanced electromagnetic device',
+      solution_summary: ip_strategy.primary_approach,
+      market_size: market_positioning.estimated_tam || 'Emerging',
+      ip_valuation: parseFloat(valuation.estimated_value_high.replace(/[^\d\.MBK$,]/g, '')) || 0,
+      tags: market_sectors || [],
+      status: 'live',
+      contact_email_encrypted: user_email,
+      verified_inventor: false,
     });
 
     // Log for admin
     console.log(`[DOSSIER] Generated invention: ${invention_name}, ID: ${invention.id}`);
-    console.log(`[DOSSIER] Build video created: ${buildVideo.id}`);
+    console.log(`[DOSSIER] Auto-listed on marketplace: ${opportunityCard.id}`);
     console.log(`[DOSSIER] PDF size: ${pdfBase64.length} bytes`);
 
     return Response.json({
       success: true,
       invention_id: invention.id,
-      build_video_id: buildVideo.id,
+      opportunity_card_id: opportunityCard.id,
       pdf_data: pdfBase64,
-      pdf_filename: `${invention_name.replace(/[^a-zA-Z0-9]/g, '_')}_Dossier.pdf`
+      pdf_filename: `${invention_name.replace(/[^a-zA-Z0-9]/g, '_')}_Dossier.pdf`,
+      message: 'Dossier generated and automatically listed on IP Marketplace.'
     });
   } catch (error) {
     console.error('[DOSSIER ERROR]', error.message);
