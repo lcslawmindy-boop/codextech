@@ -761,30 +761,43 @@ export default function ZenithApexBackground() {
       }
       ctx.restore();
 
-      // ── Logo globe watermarks ──
-      // Logo 1: large central globe watermark (faint, slowly rotating glow)
-      if (logos[1]?.complete && logos[1].naturalWidth > 0) {
-        const logoSize = Math.min(W, H) * 0.55;
+      // ── Logo signature — bottom-left corner, bright & glowing ──
+      if (logos[0]?.complete && logos[0].naturalWidth > 0) {
+        const logoSize = Math.min(W, H) * 0.13;
+        const lx = 18;
+        const ly = H - logoSize - 18;
+        const pulse = 0.82 + 0.18 * Math.sin(t * 1.1);
         ctx.save();
-        ctx.globalAlpha = 0.07 + 0.025 * Math.sin(t * 0.4);
+        // Glow halo behind logo
+        const halo = ctx.createRadialGradient(lx + logoSize/2, ly + logoSize/2, 0, lx + logoSize/2, ly + logoSize/2, logoSize * 0.85);
+        halo.addColorStop(0, `rgba(0,220,255,${0.22 * pulse})`);
+        halo.addColorStop(1, "rgba(0,100,200,0)");
+        ctx.fillStyle = halo;
+        ctx.beginPath();
+        ctx.arc(lx + logoSize/2, ly + logoSize/2, logoSize * 0.85, 0, Math.PI * 2);
+        ctx.fill();
+        // Logo image
+        ctx.globalAlpha = 0.92 * pulse;
+        ctx.shadowColor = "rgba(0,220,255,1)";
+        ctx.shadowBlur = 28;
+        ctx.drawImage(logos[0], lx, ly, logoSize, logoSize);
+        // "ZENITH APEX TECH" text signature
+        ctx.shadowBlur = 14;
+        ctx.globalAlpha = 0.88 * pulse;
+        ctx.font = "bold 9px monospace";
+        ctx.fillStyle = "rgba(0,230,255,1)";
+        ctx.textAlign = "left";
+        ctx.fillText("ZENITH APEX TECH", lx, ly + logoSize + 13);
+        ctx.restore();
+      }
+
+      // ── Central faint watermark ──
+      if (logos[1]?.complete && logos[1].naturalWidth > 0) {
+        const logoSize = Math.min(W, H) * 0.48;
+        ctx.save();
+        ctx.globalAlpha = 0.045 + 0.015 * Math.sin(t * 0.4);
         ctx.translate(cx, cy * 0.72);
         ctx.drawImage(logos[1], -logoSize / 2, -logoSize / 2, logoSize, logoSize);
-        ctx.restore();
-      }
-      // Logo 2 (globe with sun): bottom-left corner, subtle
-      if (logos[0]?.complete && logos[0].naturalWidth > 0) {
-        const logoSize = Math.min(W, H) * 0.18;
-        ctx.save();
-        ctx.globalAlpha = 0.10 + 0.04 * Math.sin(t * 0.55 + 1);
-        ctx.drawImage(logos[0], 24, H - logoSize - 24, logoSize, logoSize);
-        ctx.restore();
-      }
-      // Logo 3 (world map globe): bottom-right corner, subtle
-      if (logos[2]?.complete && logos[2].naturalWidth > 0) {
-        const logoSize = Math.min(W, H) * 0.18;
-        ctx.save();
-        ctx.globalAlpha = 0.10 + 0.04 * Math.sin(t * 0.5 + 2);
-        ctx.drawImage(logos[2], W - logoSize - 24, H - logoSize - 24, logoSize, logoSize);
         ctx.restore();
       }
 

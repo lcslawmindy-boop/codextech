@@ -217,7 +217,7 @@ export default function ResearchMembership() {
         {/* Tiers */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
           {/* Researcher Basic Tier */}
-          <div className="bg-gradient-to-br from-gray-900 to-gray-950 border border-gray-700 rounded-2xl p-8 hover:border-cyan-600/40 transition-all">
+          <div className="neon-card-default rounded-2xl p-8 hover:border-cyan-500/70 transition-all">
             <h3 className="text-white font-black text-2xl mb-2">Researcher</h3>
             <p className="text-gray-400 text-sm mb-6">For curious individuals getting started</p>
 
@@ -278,7 +278,7 @@ export default function ResearchMembership() {
           </div>
 
           {/* Builder Tier */}
-          <div className="bg-gradient-to-br from-cyan-950/20 to-gray-950 border-2 border-cyan-600 rounded-2xl p-8 relative shadow-lg shadow-cyan-600/20 hover:shadow-cyan-600/30 transition-all">
+          <div className="neon-card-cyan rounded-2xl p-8 relative transition-all">
             <h3 className="text-white font-black text-2xl mb-2">Builder</h3>
             <p className="text-gray-500 text-sm mb-6">For engineers actively building systems</p>
 
@@ -344,7 +344,7 @@ export default function ResearchMembership() {
 
 
           {/* Pro Tier */}
-          <div className="bg-gradient-to-br from-purple-950/40 to-gray-950 border-2 border-purple-500 rounded-2xl p-8 relative shadow-xl shadow-purple-600/30 hover:shadow-purple-600/40 transition-all">
+          <div className="neon-card-purple rounded-2xl p-8 relative transition-all">
             <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-gradient-to-r from-purple-600 to-pink-600 text-white text-xs font-black whitespace-nowrap">
               🔥 MOST POWERFUL
             </div>

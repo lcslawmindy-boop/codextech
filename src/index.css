@@ -157,3 +157,36 @@ html[data-theme="steel"] {
   .safe-top { padding-top: env(safe-area-inset-top); }
   .safe-bottom { padding-bottom: env(safe-area-inset-bottom); }
 }
+
+/* ── Global: all cards and content boxes are solid/readable over the canvas ── */
+.bg-gray-900 { background-color: rgb(17, 19, 32) !important; }
+.bg-gray-800 { background-color: rgb(24, 27, 44) !important; }
+.bg-gray-950 { background-color: rgb(9, 10, 18) !important; }
+
+/* Neon membership/pricing card styles */
+.neon-card-cyan {
+  background: rgba(10, 20, 40, 0.97) !important;
+  border: 2px solid rgba(0, 220, 255, 0.85) !important;
+  box-shadow: 0 0 18px rgba(0, 220, 255, 0.35), inset 0 0 30px rgba(0, 180, 255, 0.07) !important;
+}
+.neon-card-purple {
+  background: rgba(15, 8, 35, 0.97) !important;
+  border: 2px solid rgba(180, 80, 255, 0.85) !important;
+  box-shadow: 0 0 18px rgba(160, 60, 255, 0.35), inset 0 0 30px rgba(140, 40, 255, 0.07) !important;
+}
+.neon-card-green {
+  background: rgba(8, 22, 16, 0.97) !important;
+  border: 2px solid rgba(0, 255, 120, 0.75) !important;
+  box-shadow: 0 0 18px rgba(0, 220, 100, 0.3), inset 0 0 30px rgba(0, 200, 80, 0.06) !important;
+}
+.neon-card-default {
+  background: rgba(12, 14, 28, 0.97) !important;
+  border: 1.5px solid rgba(80, 120, 200, 0.5) !important;
+  box-shadow: 0 0 10px rgba(60, 100, 200, 0.15) !important;
+}
+
+/* Solid text/info section backgrounds */
+.solid-section {
+  background: rgba(10, 12, 24, 0.96) !important;
+  backdrop-filter: blur(8px);
+}

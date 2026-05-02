@@ -71,14 +71,14 @@ export default function Landing() {
       </section>
 
       {/* User Dashboard */}
-      <section className="px-6 py-12 border-b border-white/10" style={{ background: "rgba(13,13,31,0.6)" }}>
+      <section className="px-6 py-12 border-b border-white/10 solid-section">
         <div className="max-w-4xl mx-auto">
           <UserDashboardSection />
         </div>
       </section>
 
       {/* What's Included */}
-      <section className="px-6 py-16 border-b border-white/10" style={{ background: "rgba(10,10,26,0.6)" }}>
+      <section className="px-6 py-16 border-b border-white/10 solid-section">
         <div className="max-w-4xl mx-auto">
           <h2 className="text-3xl font-black mb-12 text-center">What You Get</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -103,7 +103,7 @@ export default function Landing() {
       </section>
 
       {/* How It Works */}
-      <section id="how-it-works" className="px-6 py-16 border-b border-white/10" style={{ background: "rgba(8,8,18,0.6)" }}>
+      <section id="how-it-works" className="px-6 py-16 border-b border-white/10 solid-section">
         <div className="max-w-4xl mx-auto">
           <h2 className="text-3xl font-black mb-12 text-center text-white drop-shadow-[0_0_20px_rgba(80,200,255,0.4)]">How It Works</h2>
           <div className="space-y-4">
@@ -128,7 +128,7 @@ export default function Landing() {
       </section>
 
       {/* Build Plans Showcase */}
-      <section className="px-6 py-16 border-b border-white/10" style={{ background: "rgba(10,10,26,0.6)" }}>
+      <section className="px-6 py-16 border-b border-white/10 solid-section">
         <div className="max-w-6xl mx-auto">
           <h2 className="text-3xl font-black mb-4 text-center">What Build Plans Look Like</h2>
           <p className="text-center text-gray-400 text-sm mb-12 max-w-2xl mx-auto">Each build plan includes complete BOM, schematics, step-by-step assembly, and video guides. From concept to working prototype.</p>
@@ -170,7 +170,7 @@ export default function Landing() {
       </section>
 
       {/* Invention Dossier Teaser */}
-      <section className="px-6 py-16 border-b border-white/10" style={{ background: "rgba(10,10,26,0.6)" }}>
+      <section className="px-6 py-16 border-b border-white/10 solid-section">
         <div className="max-w-6xl mx-auto">
           <h2 className="text-3xl font-black mb-4 text-center">AI Invention Dossier IP Creation Suite</h2>
           <p className="text-center text-gray-400 text-sm mb-12 max-w-2xl mx-auto">Generate complete patent strategies, commercialization roadmaps, and IP valuations in minutes. Builder members get 10/month, Pro gets 25/month.</p>
@@ -197,7 +197,7 @@ export default function Landing() {
       </section>
 
       {/* Patent Drafter & Tools */}
-      <section className="px-6 py-16 border-b border-white/10" style={{ background: "rgba(8,8,18,0.6)" }}>
+      <section className="px-6 py-16 border-b border-white/10 solid-section">
         <div className="max-w-6xl mx-auto">
           <h2 className="text-3xl font-black mb-4 text-center">Patent Drafting Tools</h2>
           <p className="text-center text-gray-400 text-sm mb-12 max-w-2xl mx-auto">AI-powered tools that replace $3K–$15K attorney work. FTO analysis, claim generation, and patent drafting in minutes.</p>
@@ -225,7 +225,7 @@ export default function Landing() {
       </section>
 
       {/* Bearden Database & IP Marketplace */}
-      <section className="px-6 py-16 border-b border-white/10" style={{ background: "rgba(10,10,26,0.6)" }}>
+      <section className="px-6 py-16 border-b border-white/10 solid-section">
         <div className="max-w-6xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
             {/* Bearden Graph */}
@@ -267,7 +267,7 @@ export default function Landing() {
       </section>
 
       {/* Create Profile CTA */}
-      <section className="px-6 py-16 border-b border-white/10" style={{ background: "rgba(8,8,18,0.6)" }}>
+      <section className="px-6 py-16 border-b border-white/10 solid-section">
         <div className="max-w-6xl mx-auto">
           <h2 className="text-3xl font-black mb-4 text-center">Ready to Broker Deals?</h2>
           <p className="text-center text-gray-400 text-sm mb-10 max-w-2xl mx-auto">Create an anonymous inventor or investor profile. Get matched with co-inventors, capital, licensing deals, and partnerships.</p>
@@ -298,58 +298,58 @@ export default function Landing() {
       </section>
 
       {/* Pricing */}
-      <section id="pricing" className="px-6 py-16 border-b border-white/10" style={{ background: "rgba(10,10,26,0.6)" }}>
+      <section id="pricing" className="px-6 py-16 border-b border-white/10 solid-section">
        <div className="max-w-6xl mx-auto">
-         <h2 className="text-3xl font-black mb-12 text-center">Membership Tiers</h2>
+         <h2 className="text-3xl font-black mb-12 text-center text-white drop-shadow-[0_0_20px_rgba(0,220,255,0.5)]">Membership Tiers</h2>
          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
            {/* Researcher */}
-           <div className="border border-gray-700 rounded-2xl p-8" style={{ background: "rgba(10,10,30,0.75)" }}>
-             <h3 className="text-lg font-black mb-2">Researcher</h3>
-             <p className="text-gray-500 text-sm mb-6">Get started</p>
-             <div className="text-3xl font-black mb-1 text-cyan-300">$49<span className="text-sm">/mo</span></div>
-             <p className="text-gray-600 text-xs mb-6">Core archive access</p>
-             <ul className="space-y-2 text-sm text-gray-300 mb-6">
+           <div className="neon-card-default rounded-2xl p-8">
+             <h3 className="text-lg font-black mb-2 text-white">Researcher</h3>
+             <p className="text-gray-300 text-sm mb-6">Get started</p>
+             <div className="text-3xl font-black mb-1 text-cyan-300 drop-shadow-[0_0_10px_rgba(0,220,255,0.6)]">$49<span className="text-sm">/mo</span></div>
+             <p className="text-gray-400 text-xs mb-6">Core archive access</p>
+             <ul className="space-y-2 text-sm text-gray-100 mb-6 font-semibold">
                <li>✓ 3 courses included</li>
                <li>✓ 3 build plans included</li>
                <li>✓ Core research archive</li>
                <li>✓ Monthly content drops</li>
              </ul>
-             <Link to="/research-membership" className="w-full py-2 rounded-lg bg-gray-800 hover:bg-gray-700 text-white font-bold text-sm transition-colors text-center block">
+             <Link to="/research-membership" className="w-full py-2 rounded-lg bg-slate-700 hover:bg-slate-600 text-white font-bold text-sm transition-colors text-center block border border-slate-500">
                Learn More
              </Link>
            </div>
 
            {/* Builder */}
-           <div className="bg-cyan-950/30 border-2 border-cyan-600 rounded-2xl p-8 relative">
-             <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 bg-cyan-600 rounded-full text-xs font-black">
+           <div className="neon-card-cyan rounded-2xl p-8 relative">
+             <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 bg-cyan-500 rounded-full text-xs font-black text-black shadow-[0_0_12px_rgba(0,220,255,0.8)]">
                MOST POPULAR
              </div>
-             <h3 className="text-lg font-black mb-2">Builder</h3>
-             <p className="text-gray-400 text-sm mb-6">For engineers building</p>
-             <div className="text-3xl font-black mb-1 text-cyan-300">$99<span className="text-sm">/mo</span></div>
-             <p className="text-gray-600 text-xs mb-6">Full engineering toolkit</p>
-             <ul className="space-y-2 text-sm text-cyan-100 mb-6">
+             <h3 className="text-lg font-black mb-2 text-white">Builder</h3>
+             <p className="text-cyan-200 text-sm mb-6 font-semibold">For engineers building</p>
+             <div className="text-3xl font-black mb-1 text-cyan-300 drop-shadow-[0_0_14px_rgba(0,220,255,0.8)]">$99<span className="text-sm">/mo</span></div>
+             <p className="text-cyan-200/70 text-xs mb-6">Full engineering toolkit</p>
+             <ul className="space-y-2 text-sm text-white mb-6 font-semibold">
                <li>✓ All courses & build plans</li>
                <li>✓ 10 Invention Dossier rolls/mo</li>
                <li>✓ Patent analyses & FTO tools</li>
                <li>✓ Expert support (48hr response)</li>
                <li>✓ 20% EMF shop discount</li>
              </ul>
-             <Link to="/research-membership" className="w-full py-2 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white font-bold text-sm transition-colors text-center block">
+             <Link to="/research-membership" className="w-full py-2 rounded-lg bg-cyan-500 hover:bg-cyan-400 text-black font-black text-sm transition-colors text-center block shadow-[0_0_16px_rgba(0,220,255,0.5)]">
                Join Now
              </Link>
            </div>
 
            {/* Pro */}
-           <div className="bg-purple-950/30 border-2 border-purple-600 rounded-2xl p-8 relative">
-             <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 bg-purple-600 rounded-full text-xs font-black">
+           <div className="neon-card-purple rounded-2xl p-8 relative">
+             <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 bg-purple-500 rounded-full text-xs font-black text-white shadow-[0_0_12px_rgba(160,60,255,0.8)]">
                🔥 FULL SUITE
              </div>
-             <h3 className="text-lg font-black mb-2">Pro</h3>
-             <p className="text-gray-400 text-sm mb-6">Complete platform</p>
-             <div className="text-3xl font-black mb-1 text-purple-300">$199<span className="text-sm">/mo</span></div>
-             <p className="text-gray-600 text-xs mb-6">Everything included</p>
-             <ul className="space-y-2 text-sm text-purple-100 mb-6">
+             <h3 className="text-lg font-black mb-2 text-white">Pro</h3>
+             <p className="text-purple-200 text-sm mb-6 font-semibold">Complete platform</p>
+             <div className="text-3xl font-black mb-1 text-purple-300 drop-shadow-[0_0_14px_rgba(180,80,255,0.8)]">$199<span className="text-sm">/mo</span></div>
+             <p className="text-purple-200/70 text-xs mb-6">Everything included</p>
+             <ul className="space-y-2 text-sm text-white mb-6 font-semibold">
                <li>✓ All Builder features</li>
                <li>✓ 25 Invention Dossier rolls/mo</li>
                <li>✓ AI Patent Attorney tool</li>
@@ -357,7 +357,7 @@ export default function Landing() {
                <li>✓ Commercialization roadmap</li>
                <li>✓ Priority support</li>
              </ul>
-             <Link to="/research-membership" className="w-full py-2 rounded-lg bg-purple-600 hover:bg-purple-500 text-white font-bold text-sm transition-colors text-center block">
+             <Link to="/research-membership" className="w-full py-2 rounded-lg bg-purple-500 hover:bg-purple-400 text-white font-black text-sm transition-colors text-center block shadow-[0_0_16px_rgba(160,60,255,0.5)]">
                Upgrade Pro
              </Link>
            </div>
@@ -374,7 +374,7 @@ export default function Landing() {
       </section>
 
       {/* Footer CTA */}
-      <section className="px-6 py-12 border-t border-white/10" style={{ background: "rgba(6,6,16,0.7)" }}>
+      <section className="px-6 py-12 border-t border-white/10 solid-section">
         <div className="max-w-6xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
             <div className="text-center">
