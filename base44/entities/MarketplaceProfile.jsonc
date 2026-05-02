@@ -1,0 +1,81 @@
+{
+  "name": "MarketplaceProfile",
+  "type": "object",
+  "properties": {
+    "user_email": {
+      "type": "string"
+    },
+    "profile_type": {
+      "type": "string",
+      "enum": [
+        "inventor",
+        "investor",
+        "both"
+      ],
+      "default": "inventor"
+    },
+    "alias": {
+      "type": "string",
+      "description": "Public anonymous alias shown in marketplace"
+    },
+    "bio": {
+      "type": "string"
+    },
+    "expertise_areas": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "investment_range_min": {
+      "type": "number"
+    },
+    "investment_range_max": {
+      "type": "number"
+    },
+    "preferred_categories": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "anonymous": {
+      "type": "boolean",
+      "default": true
+    },
+    "verified": {
+      "type": "boolean",
+      "default": false
+    },
+    "nda_on_file": {
+      "type": "boolean",
+      "default": false
+    },
+    "active_deals": {
+      "type": "integer",
+      "default": 0
+    },
+    "closed_deals": {
+      "type": "integer",
+      "default": 0
+    },
+    "total_deal_value": {
+      "type": "number",
+      "default": 0
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "active",
+        "suspended"
+      ],
+      "default": "pending"
+    }
+  },
+  "required": [
+    "user_email",
+    "profile_type",
+    "alias"
+  ]
+}

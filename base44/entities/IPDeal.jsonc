@@ -1,0 +1,83 @@
+{
+  "name": "IPDeal",
+  "type": "object",
+  "properties": {
+    "listing_id": {
+      "type": "string"
+    },
+    "listing_alias": {
+      "type": "string"
+    },
+    "listing_category": {
+      "type": "string"
+    },
+    "inventor_email": {
+      "type": "string"
+    },
+    "investor_email": {
+      "type": "string"
+    },
+    "deal_stage": {
+      "type": "string",
+      "enum": [
+        "LOI Submitted",
+        "NDA Signed",
+        "Due Diligence",
+        "Term Sheet",
+        "Negotiating",
+        "Closed",
+        "Dead"
+      ],
+      "default": "LOI Submitted"
+    },
+    "deal_value": {
+      "type": "number"
+    },
+    "equity_offered": {
+      "type": "number"
+    },
+    "commission_pct": {
+      "type": "number",
+      "default": 5
+    },
+    "commission_amount": {
+      "type": "number"
+    },
+    "vdr_session_id": {
+      "type": "string"
+    },
+    "vdr_access_granted": {
+      "type": "boolean",
+      "default": false
+    },
+    "nda_signed_at": {
+      "type": "string"
+    },
+    "term_sheet_sent_at": {
+      "type": "string"
+    },
+    "closed_at": {
+      "type": "string"
+    },
+    "commission_paid": {
+      "type": "boolean",
+      "default": false
+    },
+    "commission_paid_at": {
+      "type": "string"
+    },
+    "notes": {
+      "type": "string"
+    },
+    "inventor_role": {
+      "type": "string"
+    },
+    "investor_org": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "listing_alias",
+    "deal_stage"
+  ]
+}

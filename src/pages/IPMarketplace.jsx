@@ -351,7 +351,11 @@ export default function IPMarketplace() {
           </div>
         </div>
         <div className="flex items-center gap-2">
-           <button onClick={() => setShowInventorSignup(true)}
+          <Link to="/ip-marketplace/dashboard"
+            className="flex items-center gap-1.5 px-4 py-2 rounded-xl border bg-gray-800 border-gray-700 text-gray-300 hover:border-cyan-600 hover:text-white text-xs font-black transition-all">
+            My Dashboard
+          </Link>
+          <button onClick={() => setShowInventorSignup(true)}
              className="flex items-center gap-1.5 px-4 py-2 rounded-xl border bg-indigo-900/40 border-indigo-700 text-indigo-300 hover:bg-indigo-900/60 text-xs font-black transition-all">
              <Users size={12} /> Become an Inventor
            </button>

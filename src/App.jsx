@@ -112,6 +112,7 @@ import HybridPortfolio from './pages/HybridPortfolio';
 import FTOAnalysisTool from './pages/FTOAnalysisTool';
 import PatentAttorneyChat from './pages/PatentAttorneyChat';
 import IPMarketplace from './pages/IPMarketplace';
+import IPMarketplaceDashboard from './pages/IPMarketplaceDashboard';
 import CoInventorMatching from './pages/CoInventorMatching';
 import FlashSale from './pages/FlashSale';
 import AdminPromoBlast from './pages/AdminPromoBlast';
@@ -290,6 +291,7 @@ const AuthenticatedApp = () => {
           <Route path="/fto-analysis" element={<FTOAnalysisTool />} />
           <Route path="/patent-attorney-chat" element={<PatentAttorneyChat />} />
           <Route path="/ip-marketplace" element={<IPMarketplace />} />
+          <Route path="/ip-marketplace/dashboard" element={<IPMarketplaceDashboard />} />
           <Route path="/co-inventor-matching" element={<CoInventorMatching />} />
           <Route path="/white-label-saas" element={<WhiteLabelSaaS />} />
           <Route path="/sbir-pipeline" element={<SBIRPipeline />} />
