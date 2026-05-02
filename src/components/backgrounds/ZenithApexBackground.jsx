@@ -53,7 +53,7 @@ export default function ZenithApexBackground() {
       // --- Globe watermark (large, centered) ---
       const globeR = Math.min(W, H) * 0.52;
       const globeX = cx;
-      const globeY = cy + globeR * 0.55;
+      const globeY = cy + globeR * 1.1;
 
       ctx.save();
       ctx.globalAlpha = 0.13;
