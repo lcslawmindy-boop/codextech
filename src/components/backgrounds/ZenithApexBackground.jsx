@@ -266,6 +266,11 @@ export default function ZenithApexBackground() {
       const speedMult = controls.sunSpeedMultiplier || 1;
       const skewAngle = controls.orbitSkew || 0;
 
+      // ── Dual Sun orbit parameters (declare early for all uses) ──
+      const sunAngle = t * 0.6 * speedMult + skewAngle;
+      const sunOrbitRx = Math.min(W, H) * 0.32;
+      const sunOrbitRy = Math.min(W, H) * 0.12;
+
       // ── Stars ──
       for (const s of stars) {
         const tw = 0.5 + 0.5 * Math.sin(t * s.s * 6 + s.tw);
@@ -673,11 +678,6 @@ export default function ZenithApexBackground() {
       ctx.lineWidth = 2.5;
       ctx.stroke();
       ctx.restore();
-
-      // ── Dual Sun orbit parameters (orbiting around center watermark) ──
-      const sunAngle = t * 0.6 * speedMult + skewAngle;
-      const sunOrbitRx = Math.min(W, H) * 0.32;
-      const sunOrbitRy = Math.min(W, H) * 0.12;
       
       // Sun 1 (bright primary)
       const sunX1 = cx + Math.cos(sunAngle) * sunOrbitRx;
@@ -688,6 +688,8 @@ export default function ZenithApexBackground() {
       const sunX2 = cx + Math.cos(sunAngle + Math.PI) * sunOrbitRx;
       const sunY2 = cy + Math.sin(sunAngle + Math.PI) * sunOrbitRy;
       const sunRadius2 = 20;
+
+      // (sun orbit params already declared earlier)
 
       // ── 3D Rotating green XYZ laser axis (from center) ──
       ctx.save();
