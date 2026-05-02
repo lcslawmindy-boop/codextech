@@ -39,21 +39,15 @@ export default function ZatLogoWatermark() {
         alt="Zenith Apex Tech"
         className="rounded-lg opacity-80 hover:opacity-100 transition-opacity"
         style={{
-          width: '300px',
-          height: '300px',
+          width: '120px',
+          height: '120px',
           filter: 'drop-shadow(0 0 16px rgba(0, 220, 255, 0.9)) drop-shadow(0 0 32px rgba(0, 180, 255, 0.6))',
           animation: 'zatPulse 3s ease-in-out infinite',
-          marginTop: '20px',
+          marginTop: '10px',
         }}
       />
-      <div className="font-black text-cyan-300 tracking-widest text-center opacity-90 whitespace-normal max-w-[300px]" style={{ fontSize: '28px', textShadow: '0 0 16px rgba(0, 220, 255, 1), 0 0 8px rgba(0, 200, 255, 0.8)', lineHeight: '1.1', letterSpacing: '3px', marginTop: '4px' }}>
-        ZENITH APEX T.E.C.H
-      </div>
-      <div className="font-bold text-cyan-300 tracking-widest text-center opacity-85 whitespace-normal max-w-[280px]" style={{ fontSize: '13px', textShadow: '0 0 12px rgba(0, 220, 255, 0.8)', lineHeight: '1.3', letterSpacing: '0.5px' }}>
+      <div className="font-bold text-cyan-300 tracking-widest text-center opacity-85 whitespace-normal max-w-[180px]" style={{ fontSize: '10px', textShadow: '0 0 12px rgba(0, 220, 255, 0.8)', lineHeight: '1.3', letterSpacing: '0.5px' }}>
         Tethering · Electromagnetic · Consciousness · Hub
-      </div>
-      <div className="font-semibold text-cyan-200 text-center opacity-90 whitespace-normal max-w-[300px] italic" style={{ fontSize: '12px', textShadow: '0 0 10px rgba(0, 220, 255, 0.7)', lineHeight: '1.6', letterSpacing: '0.3px' }}>
-        "Anchor advanced EM knowledge to conscious practice. Unite inventors. Expose suppressed technologies. Build the future."
       </div>
       <style>{`
         @keyframes zatPulse {
