@@ -108,6 +108,16 @@ Deno.serve(async (req) => {
     addText(`Estimated Value: ${valuation.estimated_value_low} - ${valuation.estimated_value_high}`, 10, true);
     addText(`Licensing Potential: ${valuation.licensing_potential}`, 10);
 
+    // Add watermark
+    const totalPages = doc.internal.pages.length;
+    for (let i = 1; i < totalPages; i++) {
+      doc.setPage(i);
+      doc.setFontSize(8);
+      doc.setTextColor(0, 220, 255);
+      doc.setGlobalAlpha(0.3);
+      doc.text('ZENITH APEX TECHNOLOGY', pageWidth - margin - 50, pageHeight - margin);
+    }
+
     // Convert PDF to base64
     const pdfOutput = doc.output('dataurlstring');
     const pdfBase64 = pdfOutput.split(',')[1];

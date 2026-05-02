@@ -1,11 +1,16 @@
 import { Outlet, useLocation } from "react-router-dom";
+import { useState, useEffect } from "react";
 import BottomTabBar from "./BottomTabBar";
 import { useTrial } from "@/lib/TrialContext";
 import { AnimatePresence, motion } from "framer-motion";
 import ZenithApexBackground from "./backgrounds/ZenithApexBackground";
+import SolidLogoBackground from "./backgrounds/SolidLogoBackground";
+import SubduedEquationsBackground from "./backgrounds/SubduedEquationsBackground";
 import ZenithInteractiveController from "./ZenithInteractiveController";
 import ZenithThemeSwitcher from "./ZenithThemeSwitcher";
-import FloatingWatermarkLogo from "./FloatingWatermarkLogo";
+import BackgroundModeControl, { useBackgroundMode } from "./BackgroundModeControl";
+import ZatLogoWatermark from "./ZatLogoWatermark";
+import ZenithAIMascot from "./ZenithAIMascot";
 import SiteSearchBar from "./SiteSearchBar";
 
 // Pages that should NOT show the bottom tab bar
@@ -26,6 +31,19 @@ const slideVariants = {
 export default function MobileLayout() {
   const { pathname } = useLocation();
   const { isTrial } = useTrial();
+  const { mode, setMode } = useBackgroundMode();
+
+  const renderBackground = () => {
+    switch (mode) {
+      case 'off':
+        return <SolidLogoBackground />;
+      case 'subdued':
+        return <SubduedEquationsBackground />;
+      case 'interactive':
+      default:
+        return <ZenithApexBackground />;
+    }
+  };
 
   const hideTab = HIDDEN_TAB_ROUTES.some(r => pathname === r) ||
                   IMMERSIVE_ROUTES.some(r => pathname.startsWith(r));
@@ -41,9 +59,12 @@ export default function MobileLayout() {
         background: "transparent",
       }}
     >
-      <ZenithApexBackground />
-      <ZenithInteractiveController />
-      <ZenithThemeSwitcher />
+      {renderBackground()}
+      <BackgroundModeControl mode={mode} setMode={setMode} />
+      <ZatLogoWatermark />
+      <ZenithAIMascot />
+      {mode === 'interactive' && <ZenithInteractiveController />}
+      {mode === 'interactive' && <ZenithThemeSwitcher />}
       <SiteSearchBar />
       <div className="flex-1 relative overflow-hidden" style={{ zIndex: 1 }}>
         <AnimatePresence mode="wait" initial={false}>

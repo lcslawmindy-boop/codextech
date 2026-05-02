@@ -1,0 +1,132 @@
+import { useState, useRef, useEffect } from 'react';
+import { createPortal } from 'react-dom';
+import { X, Send, Loader2 } from 'lucide-react';
+import { base44 } from '@/api/base44Client';
+
+export default function ZenithAIMascot() {
+  const [open, setOpen] = useState(false);
+  const [messages, setMessages] = useState([
+    { role: 'assistant', content: 'Hey! I\'m ZETA, your Zenith Apex research assistant. Need help navigating the platform or have questions about electromagnetics?' }
+  ]);
+  const [input, setInput] = useState('');
+  const [loading, setLoading] = useState(false);
+  const messagesEndRef = useRef(null);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!input.trim()) return;
+
+    const userMsg = input;
+    setInput('');
+    setMessages(prev => [...prev, { role: 'user', content: userMsg }]);
+    setLoading(true);
+
+    try {
+      const response = await base44.integrations.Core.InvokeLLM({
+        prompt: `You are ZETA, a friendly AI mascot for Zenith Apex Technology. You help users navigate the research platform, explain electromagnetic concepts, and provide guidance on features. Keep responses concise and helpful. User asks: ${userMsg}`,
+        add_context_from_internet: false,
+      });
+
+      setMessages(prev => [...prev, { role: 'assistant', content: response }]);
+    } catch (error) {
+      setMessages(prev => [...prev, { role: 'assistant', content: 'Sorry, I encountered an error. Try again!' }]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const ui = (
+    <div className="fixed bottom-24 right-6 z-[9991]">
+      {open && (
+        <div
+          className="mb-3 rounded-2xl shadow-2xl overflow-hidden flex flex-col"
+          style={{
+            background: 'rgba(0,0,20,0.95)',
+            backdropFilter: 'blur(20px)',
+            border: '2px solid rgba(0,220,255,0.6)',
+            width: 320,
+            height: 420,
+            boxShadow: '0 0 30px rgba(0,220,255,0.5), inset 0 0 20px rgba(0,200,255,0.1)',
+          }}
+        >
+          <div className="flex items-center justify-between p-3 border-b border-cyan-700/30">
+            <div>
+              <h3 className="font-black text-cyan-300 text-sm">ZETA Assistant</h3>
+              <p className="text-xs text-gray-500">Zenith Research AI</p>
+            </div>
+            <button
+              onClick={() => setOpen(false)}
+              className="p-1 hover:bg-cyan-900/20 rounded transition-colors"
+            >
+              <X size={14} className="text-gray-400" />
+            </button>
+          </div>
+
+          <div className="flex-1 overflow-y-auto p-3 space-y-3">
+            {messages.map((msg, i) => (
+              <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+                <div
+                  className="rounded-lg px-3 py-2 max-w-[80%] text-xs"
+                  style={{
+                    background: msg.role === 'user' ? 'rgba(0,220,255,0.2)' : 'rgba(80,200,255,0.1)',
+                    color: msg.role === 'user' ? '#00ffff' : '#a0d8ff',
+                    borderLeft: `2px solid ${msg.role === 'user' ? '#00ffff' : '#00d4ff'}`,
+                  }}
+                >
+                  {msg.content}
+                </div>
+              </div>
+            ))}
+            {loading && (
+              <div className="flex justify-start">
+                <Loader2 size={14} className="text-cyan-400 animate-spin" />
+              </div>
+            )}
+            <div ref={messagesEndRef} />
+          </div>
+
+          <form onSubmit={handleSubmit} className="p-3 border-t border-cyan-700/30 flex gap-2">
+            <input
+              type="text"
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              placeholder="Ask ZETA..."
+              className="flex-1 px-2 py-1 rounded text-xs bg-gray-900 border border-cyan-700/30 text-cyan-100 placeholder-gray-600 focus:outline-none focus:border-cyan-500"
+              disabled={loading}
+            />
+            <button
+              type="submit"
+              disabled={loading || !input.trim()}
+              className="p-1 rounded hover:bg-cyan-900/30 transition-colors disabled:opacity-50"
+            >
+              <Send size={14} className="text-cyan-400" />
+            </button>
+          </form>
+        </div>
+      )}
+
+      <button
+        onClick={() => setOpen(!open)}
+        className="flex items-center justify-center w-12 h-12 rounded-full font-bold text-sm transition-all"
+        style={{
+          background: 'linear-gradient(135deg, rgba(0,220,255,0.8), rgba(0,180,255,0.6))',
+          border: '2px solid rgba(0,220,255,0.9)',
+          color: '#fff',
+          boxShadow: '0 0 20px rgba(0,220,255,0.8)',
+        }}
+      >
+        {open ? '✕' : 'ζ'}
+      </button>
+    </div>
+  );
+
+  return createPortal(ui, document.body);
+}
