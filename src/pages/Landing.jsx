@@ -2,12 +2,14 @@ import { ArrowRight, Lock, BookOpen, Zap, Brain, Lightbulb, TrendingUp, Users, E
 import { Link } from "react-router-dom";
 import UserDashboardSection from "@/components/UserDashboardSection";
 import BackgroundThemeSwitcher, { ActiveBackground, useBackgroundTheme } from "@/components/BackgroundThemeSwitcher";
+import ZenithApexBackground from "@/components/backgrounds/ZenithApexBackground";
 
 export default function Landing() {
   const { themeId, setThemeId } = useBackgroundTheme();
 
   return (
     <div className="min-h-screen text-white relative" style={{ background: "transparent" }}>
+      <ZenithApexBackground />
       <ActiveBackground themeId={themeId} />
       <BackgroundThemeSwitcher themeId={themeId} setThemeId={setThemeId} />
       {/* Nav */}
