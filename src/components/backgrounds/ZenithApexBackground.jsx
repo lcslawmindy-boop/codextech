@@ -296,20 +296,13 @@ export default function ZenithApexBackground() {
       }
       ctx.restore();
 
-      // ── Quantum & Scalar waves (prominent) ──
-      for (let i = 0; i < 8; i++) {
-        const phase = (t * 0.4 + i / 8) % 1;
-        const r = phase * Math.max(W, H) * 0.95;
-        const alpha = (1 - phase) * 0.45;
+      // ── Quantum waves (minimal) ──
+      for (let i = 0; i < 3; i++) {
+        const phase = (t * 0.3 + i / 3) % 1;
+        const r = phase * Math.max(W, H) * 0.85;
+        const alpha = (1 - phase) * 0.25;
         ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2);
-        ctx.strokeStyle = `rgba(80,180,255,${alpha})`; ctx.lineWidth = 2.5; ctx.stroke();
-      }
-      for (let i = 0; i < 6; i++) {
-        const phase = (t * 0.28 + i / 6) % 1;
-        const r = phase * Math.max(W, H) * 0.75;
-        const alpha = (1 - phase) * 0.35;
-        ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2);
-        ctx.strokeStyle = `rgba(140,230,255,${alpha})`; ctx.lineWidth = 2; ctx.stroke();
+        ctx.strokeStyle = `rgba(80,180,255,${alpha})`; ctx.lineWidth = 2; ctx.stroke();
       }
 
 
@@ -371,53 +364,26 @@ export default function ZenithApexBackground() {
         ctx.restore();
       }
 
-      // ── Torus field ──
-      const torusR = Math.min(W, H) * 0.14; // major radius
-      const torusr = torusR * 0.42;          // minor radius
-      const torusSeg = 48;
-      const torusTube = 20;
+      // ── Torus field vortex (smaller, in background) ──
+      const torusR = Math.min(W, H) * 0.1;
+      const torusr = torusR * 0.35;
+      const torusSeg = 32;
       ctx.save();
-      ctx.globalAlpha = 0.55;
+      ctx.globalAlpha = 0.35;
       // Draw torus rings
       for (let i = 0; i < torusSeg; i++) {
         const phi = (Math.PI * 2 / torusSeg) * i + t * 0.5;
         const px = cx + Math.cos(phi) * torusR;
-        const py = cy + Math.sin(phi) * torusR * 0.38; // flatten for perspective
-        const rr = torusr * (0.7 + 0.3 * Math.sin(phi * 3 + t));
-        // gradient ring
+        const py = cy + Math.sin(phi) * torusR * 0.38;
+        const rr = torusr * (0.6 + 0.2 * Math.sin(phi * 3 + t));
         const grad = ctx.createRadialGradient(px, py, 0, px, py, rr);
         grad.addColorStop(0, "rgba(80,200,255,0.0)");
-        grad.addColorStop(0.5, "rgba(80,200,255,0.22)");
+        grad.addColorStop(0.5, "rgba(80,200,255,0.15)");
         grad.addColorStop(1, "rgba(160,80,255,0.0)");
         ctx.beginPath();
         ctx.arc(px, py, rr, 0, Math.PI * 2);
         ctx.fillStyle = grad;
         ctx.fill();
-      }
-      // Draw torus outline circles
-      for (let tube = 0; tube < torusTube; tube++) {
-        const theta = (Math.PI * 2 / torusTube) * tube + t * 0.3;
-        const ox = cx + Math.cos(theta) * torusR;
-        const oy = cy + Math.sin(theta) * torusR * 0.38;
-        const rx2 = torusr * Math.abs(Math.cos(theta * 0.5 + t * 0.2)) + 2;
-        const ry2 = torusr * 0.5;
-        ctx.beginPath();
-        ctx.ellipse(ox, oy, rx2, ry2, theta, 0, Math.PI * 2);
-        ctx.strokeStyle = `rgba(80,200,255,0.18)`;
-        ctx.lineWidth = 1.2;
-        ctx.stroke();
-      }
-      // Torus field lines (radial from center)
-      for (let i = 0; i < 24; i++) {
-        const a = (Math.PI * 2 / 24) * i + t * 0.15;
-        const innerEnd = torusR * 0.3;
-        const outerEnd = torusR * 1.7;
-        ctx.beginPath();
-        ctx.moveTo(cx + Math.cos(a) * innerEnd, cy + Math.sin(a) * innerEnd * 0.38);
-        ctx.lineTo(cx + Math.cos(a) * outerEnd, cy + Math.sin(a) * outerEnd * 0.38);
-        ctx.strokeStyle = `rgba(160,80,255,0.12)`;
-        ctx.lineWidth = 1;
-        ctx.stroke();
       }
       ctx.restore();
 
@@ -466,39 +432,22 @@ export default function ZenithApexBackground() {
         ctx.restore();
       }
 
-      // ── Draw Platonic Solids orbital paths (ordered rings) ──
+      // ── All Platonic Solids on same sun orbit ──
       solids.forEach((solid, si) => {
-        const orb = solidOrbit[si];
-        const orbitR = Math.min(W, H) * orb.r;
-        ctx.save();
-        ctx.globalAlpha = 0.25 + 0.1 * Math.sin(t * 0.6 + si);
-        ctx.translate(cx, cy + H * orb.yOff);
-        ctx.beginPath();
-        ctx.ellipse(0, 0, orbitR, orbitR * 0.4, 0, 0, Math.PI * 2);
-        // Color match the solid
-        const color = solidColors[si];
-        ctx.strokeStyle = `${color}0.5)`;
-        ctx.lineWidth = 1.5;
-        ctx.stroke();
-        ctx.restore();
-      });
-
-      // ── 5 Platonic Solids in ordered orbits ──
-      solids.forEach((solid, si) => {
-        const orb = solidOrbit[si];
-        const orbitR = Math.min(W, H) * orb.r;
-        const angle = t * orb.speed + orb.phase;
-        const sox = cx + Math.cos(angle) * orbitR;
-        const soy = cy + H * orb.yOff + Math.sin(angle) * orbitR * 0.4;
+        const orbitAngle = sunAngle + (Math.PI * 2 / 5) * si; // Evenly spaced around orbit
+        const sox = cx + Math.cos(orbitAngle) * sunOrbitRx;
+        const soy = cy + Math.sin(orbitAngle) * sunOrbitRy;
         const spin = t * (0.5 + si * 0.08);
         const color = solidColors[si];
+        const scale = 28 + si * 2;
+        const tilt = 0.4 + si * 0.2;
 
         const proj = solid.v.map(v => {
           let p = [...v];
-          p = rotX(p, spin + orb.tilt);
+          p = rotX(p, spin + tilt);
           p = rotY(p, spin * 0.8);
           p = rotZ(p, spin * 0.6);
-          return project(p, sox, soy, 350, orb.scale);
+          return project(p, sox, soy, 350, scale);
         });
 
         ctx.save();
@@ -529,13 +478,12 @@ export default function ZenithApexBackground() {
 
 
 
-      // ── Metatron's Cube + Ionosphere (own ordered orbit) ──
+      // ── Metatron's Cube (orbiting on same path as sun/solids) ──
        {
-         const metAngle = t * 0.12;
-         const metOrbitR = Math.min(W, H) * 0.30;
-         const metX = cx + Math.cos(metAngle) * metOrbitR;
-         const metY = H * 0.80 + Math.sin(metAngle) * metOrbitR * 0.4;
-         const metScale = Math.min(W, H) * 0.04;
+         const metAngle = t * 0.6 * speedMult + Math.PI; // Opposite side of sun
+         const metX = cx + Math.cos(metAngle) * sunOrbitRx * 0.9;
+         const metY = cy + Math.sin(metAngle) * sunOrbitRy * 0.9;
+         const metScale = Math.min(W, H) * 0.035;
          const metRot = t * 0.25;
          const metRotX = t * 0.3;
          const metRotY = t * 0.2;
@@ -727,21 +675,19 @@ export default function ZenithApexBackground() {
       ctx.restore();
 
       // ── Dual Sun orbit parameters (orbiting around center watermark) ──
-      const sunAngle = t * 0.8 * speedMult + skewAngle;
-      const sunOrbitRx = Math.min(W, H) * 0.35;
-      const sunOrbitRy = Math.min(W, H) * 0.15;
-      const sunOrbitCX = cx;
-      const sunOrbitCY = cy;
+      const sunAngle = t * 0.6 * speedMult + skewAngle;
+      const sunOrbitRx = Math.min(W, H) * 0.32;
+      const sunOrbitRy = Math.min(W, H) * 0.12;
       
       // Sun 1 (bright primary)
-      const sunX1 = sunOrbitCX + Math.cos(sunAngle) * sunOrbitRx;
-      const sunY1 = sunOrbitCY + Math.sin(sunAngle) * sunOrbitRy;
-      const sunRadius1 = 36;
+      const sunX1 = cx + Math.cos(sunAngle) * sunOrbitRx;
+      const sunY1 = cy + Math.sin(sunAngle) * sunOrbitRy;
+      const sunRadius1 = 32;
       
       // Sun 2 (dim secondary, opposite side)
-      const sunX2 = sunOrbitCX + Math.cos(sunAngle + Math.PI) * sunOrbitRx;
-      const sunY2 = sunOrbitCY + Math.sin(sunAngle + Math.PI) * sunOrbitRy;
-      const sunRadius2 = 24;
+      const sunX2 = cx + Math.cos(sunAngle + Math.PI) * sunOrbitRx;
+      const sunY2 = cy + Math.sin(sunAngle + Math.PI) * sunOrbitRy;
+      const sunRadius2 = 20;
 
       // ── 3D Rotating green XYZ laser axis (from center) ──
       ctx.save();
@@ -787,14 +733,14 @@ export default function ZenithApexBackground() {
       ctx.fill();
       ctx.restore();
 
-      // ── Green laser orbit ring (theme-dependent, around sun) ──
+      // ── Green laser orbit ring (around center watermark) ──
       ctx.save();
       // Outer glow of the orbit ellipse (green laser)
       for (let pass = 0; pass < 3; pass++) {
         const lw = [6, 3, 1.2][pass];
-        const alpha = [0.18, 0.38, 0.75][pass];
+        const alpha = [0.22, 0.45, 0.85][pass];
         ctx.beginPath();
-        ctx.ellipse(sunOrbitCX, sunOrbitCY, sunOrbitRx, sunOrbitRy, 0, 0, Math.PI * 2);
+        ctx.ellipse(cx, cy, sunOrbitRx, sunOrbitRy, 0, 0, Math.PI * 2);
         ctx.strokeStyle = `rgba(0,255,80,${alpha})`;
         ctx.lineWidth = lw;
         ctx.shadowColor = "rgba(0,255,80,1)";
@@ -808,8 +754,8 @@ export default function ZenithApexBackground() {
         ctx.beginPath();
         for (let step = 0; step <= 12; step++) {
           const a = dAngle + dashLen * (step / 12);
-          const dx = sunOrbitCX + Math.cos(a) * sunOrbitRx;
-          const dy = sunOrbitCY + Math.sin(a) * sunOrbitRy;
+          const dx = cx + Math.cos(a) * sunOrbitRx;
+          const dy = cy + Math.sin(a) * sunOrbitRy;
           step === 0 ? ctx.moveTo(dx, dy) : ctx.lineTo(dx, dy);
         }
         ctx.strokeStyle = "rgba(120,255,120,0.95)";
@@ -826,8 +772,8 @@ export default function ZenithApexBackground() {
       const smokeSamples = 120;
       for (let s = 0; s < smokeSamples; s++) {
         const a = (Math.PI * 2 / smokeSamples) * s;
-        const sx = sunOrbitCX + Math.cos(a) * sunOrbitRx;
-        const sy = sunOrbitCY + Math.sin(a) * sunOrbitRy;
+        const sx = cx + Math.cos(a) * sunOrbitRx;
+        const sy = cy + Math.sin(a) * sunOrbitRy;
         const smokeR = 18 + 10 * Math.sin(a * 5 + t * 0.8);
         const smokeAlpha = 0.04 + 0.03 * Math.sin(a * 3 + t * 1.2);
         const smGrad = ctx.createRadialGradient(sx, sy, 0, sx, sy, smokeR);
@@ -842,8 +788,8 @@ export default function ZenithApexBackground() {
       // Extra outer smoke haze
       for (let s = 0; s < 60; s++) {
         const a = (Math.PI * 2 / 60) * s + t * 0.05;
-        const sx = sunOrbitCX + Math.cos(a) * sunOrbitRx;
-        const sy = sunOrbitCY + Math.sin(a) * sunOrbitRy;
+        const sx = cx + Math.cos(a) * sunOrbitRx;
+        const sy = cy + Math.sin(a) * sunOrbitRy;
         const smokeR = 30 + 14 * Math.sin(a * 7 + t * 0.5);
         const smGrad = ctx.createRadialGradient(sx, sy, 0, sx, sy, smokeR);
         smGrad.addColorStop(0, "rgba(255,140,30,0.06)");
