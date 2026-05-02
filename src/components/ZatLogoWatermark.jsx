@@ -10,18 +10,23 @@ export default function ZatLogoWatermark() {
   }, [logoUrl]);
 
   return (
-    <div className="fixed bottom-6 right-6 z-[9990] pointer-events-none">
+    <div className="fixed bottom-6 right-6 z-[9990] pointer-events-none flex flex-col items-center gap-2">
       <img
         src={logoUrl}
         alt="Zenith Apex Tech"
         className="rounded-lg opacity-75 hover:opacity-100 transition-opacity"
         style={{
-          width: '288px',
-          height: '288px',
+          width: '240px',
+          height: '240px',
           filter: 'drop-shadow(0 0 12px rgba(0, 220, 255, 0.8)) drop-shadow(0 0 24px rgba(0, 180, 255, 0.5))',
           animation: 'zatPulse 3s ease-in-out infinite',
         }}
       />
+      <div className="text-xs font-black text-cyan-400 tracking-widest text-center opacity-75" style={{ textShadow: '0 0 8px rgba(0, 220, 255, 0.6)' }}>
+        TEST · ENGINEER
+        <br />
+        CONSTRUCT · HARNESS
+      </div>
       <style>{`
         @keyframes zatPulse {
           0%, 100% { opacity: 0.75; filter: drop-shadow(0 0 12px rgba(0, 220, 255, 0.8)) drop-shadow(0 0 24px rgba(0, 180, 255, 0.5)); }
