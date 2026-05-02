@@ -16,8 +16,8 @@ export default function TrustSignals() {
             <p className="text-gray-400 text-sm">Research Institutions Using This Data</p>
           </div>
           <div className="text-center space-y-2">
-            <div className="text-3xl font-black text-blue-400">100% Verified</div>
-            <p className="text-gray-400 text-sm">All Sources Traceable to USPTO, Journals, Archives</p>
+            <div className="text-3xl font-black text-blue-400">Primary Sources</div>
+            <p className="text-gray-400 text-sm">All Sources Verified via USPTO, Peer-Reviewed Journals, Public Records</p>
           </div>
         </div>
       </div>

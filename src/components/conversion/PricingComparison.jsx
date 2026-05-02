@@ -6,14 +6,14 @@ export default function PricingComparison() {
       name: "Researcher",
       price: "$49",
       period: "/month",
-      description: "For individuals exploring the archive",
-      cta: "Start Free Trial",
+      description: "For technical professionals exploring EM research",
+      cta: "Get Started",
       features: [
         "3 courses + 3 build plans included",
-        "Core research archive access",
-        "8 structured research modules",
-        "Monthly updates",
-        "Community access"
+        "Core patent & research archive access",
+        "8 structured technical modules",
+        "Monthly content updates",
+        "Technical community access"
       ],
       value: "$993/year value",
     },
@@ -21,16 +21,16 @@ export default function PricingComparison() {
       name: "Builder",
       price: "$99",
       period: "/month",
-      description: "For engineers actively building systems",
+      description: "For engineers & technical entrepreneurs",
       cta: "Subscribe Now",
       highlight: true,
       features: [
         "Everything in Researcher",
-        "40+ patent analyses",
-        "Engineering documentation",
+        "40+ patent analyses with prosecution history",
+        "Engineering frameworks & specifications",
         "3 Invention Dossier Generations (3 inventions each)",
-        "Expert support (48hr response)",
-        "20% off EMF Shop"
+        "Expert technical support (48hr response)",
+        "20% off component sourcing"
       ],
       value: "$3,929/year value",
     },
@@ -38,16 +38,16 @@ export default function PricingComparison() {
       name: "Pro",
       price: "$199",
       period: "/month",
-      description: "For serious inventors & commercialization",
+      description: "For teams commercializing advanced technology",
       cta: "Subscribe Now",
       features: [
         "Everything in Builder",
-        "ALL courses & build plans unlocked",
-        "ALL research PDFs included",
-        "Video build guides with BOM",
-        "AI Patent Attorney tool",
+        "ALL courses & technical resources",
+        "Complete research library + PDFs",
+        "Video assembly guides with supplier sourcing",
+        "AI-powered patent drafting tool",
         "5 Invention Dossiers/month (5 inventions each)",
-        "Pitch deck generator"
+        "Investor pitch deck generator"
       ],
       value: "$5,294/year value",
     }
@@ -56,9 +56,9 @@ export default function PricingComparison() {
   return (
     <div id="pricing" className="bg-gray-950 py-16 border-t border-gray-800">
       <div className="max-w-6xl mx-auto px-6">
-        <h2 className="text-3xl font-black text-white mb-4 text-center">Simple, Transparent Pricing</h2>
+        <h2 className="text-3xl font-black text-white mb-4 text-center">Membership Tiers</h2>
         <p className="text-gray-400 text-center mb-12 max-w-2xl mx-auto">
-          Choose the tier that matches your role. All plans include access to the complete research archive, updated monthly.
+          Choose the tier that matches your goals—from individual research to enterprise engineering teams. All plans include institutional-grade research intelligence updated monthly.
         </p>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -113,15 +113,15 @@ export default function PricingComparison() {
         </div>
 
         <div className="mt-12 bg-gray-900 border border-gray-800 rounded-lg p-8">
-          <h3 className="font-black text-white mb-4">What's Included in Every Plan</h3>
+          <h3 className="font-black text-white mb-4">Institutional-Grade Resources in Every Plan</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <p className="text-sm font-bold text-blue-400 mb-2">Core Research</p>
-              <p className="text-gray-300 text-sm">40+ patent analyses, 200+ peer-reviewed publications, declassified reports, 8 structured research modules, monthly updates.</p>
+              <p className="text-sm font-bold text-blue-400 mb-2">Technical Intelligence</p>
+              <p className="text-gray-300 text-sm">40+ patent landscapes, 200+ peer-reviewed publications, public research archives, 8 advanced technical modules, monthly research updates.</p>
             </div>
             <div>
-              <p className="text-sm font-bold text-blue-400 mb-2">Commercialization Tools</p>
-              <p className="text-gray-300 text-sm">Invention dossier IP generation, patent strategy, bring-to-market roadmap, BOM sourcing guides, step-by-step build frameworks.</p>
+              <p className="text-sm font-bold text-blue-400 mb-2">IP & Commercialization</p>
+              <p className="text-gray-300 text-sm">Patent strategy analysis, IP valuation frameworks, regulatory compliance roadmaps, component sourcing networks, technical feasibility assessments.</p>
             </div>
           </div>
         </div>

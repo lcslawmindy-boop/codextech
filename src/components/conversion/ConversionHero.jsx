@@ -29,7 +29,7 @@ export default function ConversionHero() {
             </div>
 
             <p className="text-lg text-gray-300 italic leading-relaxed max-w-2xl">
-              "Anchor advanced EM knowledge to conscious practice. Unite inventors. Expose suppressed technologies. Build the future."
+              "Enable inventors and engineers with institutional-grade research. Bridge patents to commercialization. Build scalable technology businesses."
             </p>
 
             <p className="text-sm text-gray-500">
