@@ -1,34 +1,79 @@
-import { ArrowRight, Lock, BookOpen, Zap, Brain, Lightbulb, TrendingUp, Users, Eye, FileText, BarChart3, Percent } from "lucide-react";
+import { ArrowRight, Lock, BookOpen, Zap, Brain, Lightbulb, TrendingUp, Users, Eye, FileText, BarChart3, Percent, Search } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useState } from "react";
 import UserDashboardSection from "@/components/UserDashboardSection";
 import TrustProofSection from "@/components/TrustProofSection";
 import ConversionHero from "@/components/conversion/ConversionHero";
 import TrustSignals from "@/components/conversion/TrustSignals";
 import PricingComparison from "@/components/conversion/PricingComparison";
+import EnhancedResearchNavBar from "@/components/EnhancedResearchNavBar";
 
 export default function Landing() {
+  const [searchQuery, setSearchQuery] = useState("");
+
   return (
     <div className="min-h-screen text-white relative bg-black">
-      {/* Nav */}
-      <nav className="border-b border-white/10 px-6 py-4 sticky top-0 z-50" style={{ background: "rgba(10,10,26,0.85)", backdropFilter: "blur(12px)" }}>
-        <div className="max-w-6xl mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <img src="https://media.base44.com/images/public/69ccefebfea78b23498c66a8/bcf3bcb42_df887ac44_logo.png" alt="Zenith Apex Tech" className="h-9 w-9 rounded-lg" />
+      {/* Watermark - Bottom Left */}
+      <div className="fixed bottom-6 left-6 z-40 flex items-center gap-2" style={{ animation: "zatPulse 3s ease-in-out infinite" }}>
+        <img src="https://media.base44.com/images/public/69ccefebfea78b23498c66a8/bcf3bcb42_df887ac44_logo.png" alt="ZAT" className="h-16 w-16 rounded-lg" style={{ filter: "drop-shadow(0 0 16px rgba(0, 220, 255, 0.9))", border: "2px solid rgba(0, 220, 255, 0.8)" }} />
+      </div>
+
+      {/* Research Navigation Bar */}
+      <EnhancedResearchNavBar />
+
+      {/* Enhanced Header with Bigger Neon Icon & Mission */}
+      <nav className="border-b border-white/10 px-6 py-6 sticky top-0 z-50" style={{ background: "rgba(10,10,26,0.95)", backdropFilter: "blur(12px)" }}>
+        <div className="max-w-6xl mx-auto flex items-center justify-between gap-6">
+          {/* Logo & Mission */}
+          <div className="flex items-center gap-4 flex-1">
+            <div style={{ animation: "zatPulse 2.5s ease-in-out infinite" }}>
+              <img src="https://media.base44.com/images/public/69ccefebfea78b23498c66a8/bcf3bcb42_df887ac44_logo.png" alt="Zenith Apex Tech" className="h-16 w-16 rounded-lg" style={{ filter: "drop-shadow(0 0 20px rgba(0, 220, 255, 1))", border: "2.5px solid rgba(0, 220, 255, 0.9)" }} />
+            </div>
             <div>
-              <span className="font-black text-lg leading-none block">ZENITH APEX TECH</span>
-              <span className="text-gray-500 text-xs tracking-widest">TRUST · EVOLVE · COMMUNITY · HONOR</span>
+              <p className="text-cyan-300 font-black text-xs tracking-widest">ZENITH APEX T.E.C.H</p>
+              <p className="text-gray-400 text-xs italic">Tethering · Electromagnetic · Consciousness · Hub</p>
             </div>
           </div>
-          <div className="flex items-center gap-4">
-            <a href="#how-it-works" className="text-sm text-gray-400 hover:text-white transition">How it Works</a>
-            <a href="#pricing" className="text-sm text-gray-400 hover:text-white transition">Pricing</a>
+
+          {/* Search Bar - Neon Yellow Pulsing */}
+          <div className="hidden lg:flex items-center flex-1 max-w-xs" style={{ animation: "neonPulse 2s ease-in-out infinite" }}>
+            <div className="w-full relative">
+              <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-yellow-400" />
+              <input
+                type="text"
+                placeholder="Search research..."
+                value={searchQuery}
+                onChange={e => setSearchQuery(e.target.value)}
+                className="w-full pl-9 pr-3 py-2 rounded-lg bg-yellow-950/20 border-2 border-yellow-400 text-yellow-300 placeholder-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-400 text-xs font-bold"
+                style={{ boxShadow: "0 0 12px rgba(250, 204, 21, 0.4)" }}
+              />
+            </div>
+          </div>
+
+          {/* Quick Links */}
+          <div className="flex items-center gap-3">
+            <a href="#how-it-works" className="text-xs text-gray-400 hover:text-white transition font-semibold">How it Works</a>
+            <a href="#pricing" className="text-xs text-gray-400 hover:text-white transition font-semibold">Pricing</a>
           </div>
         </div>
       </nav>
 
-      {/* New Conversion Hero & Trust Signals */}
-      <ConversionHero />
-      <TrustSignals />
+      <style>{`
+        @keyframes zatPulse {
+          0%, 100% { opacity: 0.9; filter: drop-shadow(0 0 12px rgba(0,220,255,0.6)); }
+          50% { opacity: 1; filter: drop-shadow(0 0 24px rgba(0,220,255,1)); }
+        }
+        @keyframes neonPulse {
+          0%, 100% { box-shadow: 0 0 12px rgba(250, 204, 21, 0.4), inset 0 0 10px rgba(250, 204, 21, 0.1); }
+          50% { box-shadow: 0 0 20px rgba(250, 204, 21, 0.8), inset 0 0 15px rgba(250, 204, 21, 0.2); }
+        }
+      `}</style>
+
+      {/* Content wrapper - offset for sidebar on desktop */}
+      <div className="lg:ml-20">
+        {/* New Conversion Hero & Trust Signals */}
+        <ConversionHero />
+        <TrustSignals />
 
       {/* User Dashboard */}
       <section className="px-6 py-12 border-b border-white/10 solid-section">
@@ -290,6 +335,7 @@ export default function Landing() {
           </div>
         </div>
       </section>
+      </div>
     </div>
   );
 }
