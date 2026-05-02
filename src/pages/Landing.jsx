@@ -4,6 +4,9 @@ import UserDashboardSection from "@/components/UserDashboardSection";
 import TrustProofSection from "@/components/TrustProofSection";
 import BackgroundThemeSwitcher, { ActiveBackground, useBackgroundTheme } from "@/components/BackgroundThemeSwitcher";
 import ZenithApexBackground from "@/components/backgrounds/ZenithApexBackground";
+import ConversionHero from "@/components/conversion/ConversionHero";
+import TrustSignals from "@/components/conversion/TrustSignals";
+import PricingComparison from "@/components/conversion/PricingComparison";
 
 export default function Landing() {
   const { themeId, setThemeId } = useBackgroundTheme();
@@ -30,46 +33,9 @@ export default function Landing() {
         </div>
       </nav>
 
-      {/* Hero */}
-      <section className="px-6 py-20 border-b border-white/10" style={{ background: "rgba(10,10,30,0.55)" }}>
-        <div className="max-w-4xl mx-auto text-center">
-          <h1 className="text-5xl md:text-6xl font-black mb-6 leading-tight text-white drop-shadow-[0_0_30px_rgba(80,200,255,0.6)] tracking-tight">
-            Institutional Research Intelligence for Advanced Electromagnetics
-          </h1>
-          <p className="text-xl text-gray-200 mb-10 leading-relaxed bg-gray-950/80 border border-gray-700 rounded-xl px-5 py-4">
-            Complete archive of 40+ patents, 200+ peer-reviewed publications, declassified government reports, and verified engineering frameworks. All sourced from primary documents. Everything you need to build.
-          </p>
-
-          {/* Three CTAs */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-12">
-            <Link to="/free-vault"
-              className="flex flex-col items-center gap-3 p-6 rounded-2xl border border-gray-700 hover:border-cyan-600 transition-all bg-gray-900 hover:bg-gray-800">
-              <Zap size={24} className="text-cyan-400" />
-              <span className="font-black text-sm text-white">Free Preview</span>
-              <p className="text-xs text-gray-400">Browse the public database</p>
-              <ArrowRight size={14} className="text-gray-400 mt-2" />
-            </Link>
-
-            <Link to="/research-membership"
-              className="flex flex-col items-center gap-3 p-6 rounded-2xl border-2 border-cyan-500 bg-cyan-950 hover:bg-cyan-900 transition-all">
-              <Lock size={24} className="text-cyan-300" />
-              <span className="font-black text-sm text-white">Membership</span>
-              <p className="text-xs text-gray-300">$99/month • Builder tier</p>
-              <ArrowRight size={14} className="text-cyan-400 mt-2" />
-            </Link>
-
-            <Link to="/alacarte"
-              className="flex flex-col items-center gap-3 p-6 rounded-2xl border border-gray-700 hover:border-green-600 transition-all bg-gray-900 hover:bg-gray-800">
-              <BookOpen size={24} className="text-green-400" />
-              <span className="font-black text-sm text-white">À La Carte</span>
-              <p className="text-xs text-gray-400">$49 per course or plan</p>
-              <ArrowRight size={14} className="text-gray-400 mt-2" />
-            </Link>
-          </div>
-
-          <p className="text-xs text-gray-600">No login required. Start exploring in seconds.</p>
-        </div>
-      </section>
+      {/* New Conversion Hero & Trust Signals */}
+      <ConversionHero />
+      <TrustSignals />
 
       {/* User Dashboard */}
       <section className="px-6 py-12 border-b border-white/10 solid-section">
@@ -301,81 +267,8 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* Pricing */}
-      <section id="pricing" className="px-6 py-16 border-b border-white/10" style={{ background: "rgb(5, 6, 14)" }}>
-       <div className="max-w-6xl mx-auto">
-         <h2 className="text-3xl font-black mb-12 text-center text-white drop-shadow-[0_0_20px_rgba(0,220,255,0.5)]">Membership Tiers</h2>
-         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-           {/* Researcher */}
-           <div className="neon-card-default rounded-2xl p-8" style={{ background: "rgb(8,10,22)", border: "2px solid rgba(80,160,240,0.8)", boxShadow: "0 0 24px rgba(60,130,240,0.4), inset 0 0 30px rgba(60,100,200,0.08)" }}>
-             <h3 className="text-xl font-black mb-2 text-white" style={{ textShadow: "0 0 12px rgba(80,180,255,0.5)" }}>Researcher</h3>
-             <p className="text-gray-200 text-sm mb-6 font-bold">Get started</p>
-             <div className="text-4xl font-black mb-1 text-cyan-300" style={{ textShadow: "0 0 18px rgba(0,220,255,0.9)" }}>$49<span className="text-base">/mo</span></div>
-             <p className="text-gray-300 text-xs mb-6 font-semibold">Core archive access</p>
-             <ul className="space-y-2.5 text-sm text-white mb-6 font-bold">
-               <li>✓ 3 courses included</li>
-               <li>✓ 3 build plans included</li>
-               <li>✓ Core research archive</li>
-               <li>✓ Monthly content drops</li>
-             </ul>
-             <Link to="/research-membership" className="w-full py-2.5 rounded-lg bg-slate-700 hover:bg-slate-600 text-white font-black text-sm transition-colors text-center block border-2 border-blue-400/60" style={{ boxShadow: "0 0 12px rgba(80,160,255,0.3)" }}>
-               Learn More
-             </Link>
-           </div>
-
-           {/* Builder */}
-           <div className="neon-card-cyan rounded-2xl p-8 relative">
-             <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 bg-cyan-500 rounded-full text-xs font-black text-black" style={{ boxShadow: "0 0 20px rgba(0,220,255,1)" }}>
-               MOST POPULAR
-             </div>
-             <h3 className="text-xl font-black mb-2 text-white" style={{ textShadow: "0 0 14px rgba(0,220,255,0.7)" }}>Builder</h3>
-             <p className="text-cyan-100 text-sm mb-6 font-bold">For engineers building</p>
-             <div className="text-4xl font-black mb-1 text-cyan-300" style={{ textShadow: "0 0 22px rgba(0,230,255,1)" }}>$99<span className="text-base">/mo</span></div>
-             <p className="text-cyan-200 text-xs mb-6 font-semibold">Full engineering toolkit</p>
-             <ul className="space-y-2.5 text-sm text-white mb-6 font-bold">
-               <li>✓ All courses & build plans</li>
-               <li>✓ 10 Invention Dossier rolls/mo</li>
-               <li>✓ Patent analyses & FTO tools</li>
-               <li>✓ Expert support (48hr response)</li>
-               <li>✓ 20% EMF shop discount</li>
-             </ul>
-             <Link to="/research-membership" className="w-full py-2.5 rounded-lg bg-cyan-500 hover:bg-cyan-400 text-black font-black text-sm transition-colors text-center block" style={{ boxShadow: "0 0 24px rgba(0,220,255,0.8)" }}>
-               Join Now
-             </Link>
-           </div>
-
-           {/* Pro */}
-           <div className="neon-card-purple rounded-2xl p-8 relative">
-             <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 bg-purple-500 rounded-full text-xs font-black text-white" style={{ boxShadow: "0 0 20px rgba(180,80,255,1)" }}>
-               🔥 FULL SUITE
-             </div>
-             <h3 className="text-xl font-black mb-2 text-white" style={{ textShadow: "0 0 14px rgba(190,90,255,0.7)" }}>Pro</h3>
-             <p className="text-purple-100 text-sm mb-6 font-bold">Complete platform</p>
-             <div className="text-4xl font-black mb-1 text-purple-300" style={{ textShadow: "0 0 22px rgba(190,90,255,1)" }}>$199<span className="text-base">/mo</span></div>
-             <p className="text-purple-100 text-xs mb-6 font-semibold">Everything included</p>
-             <ul className="space-y-2.5 text-sm text-white mb-6 font-bold">
-               <li>✓ All Builder features</li>
-               <li>✓ 25 Invention Dossier rolls/mo</li>
-               <li>✓ AI Patent Attorney tool</li>
-               <li>✓ Verified supplier sourcing</li>
-               <li>✓ Commercialization roadmap</li>
-               <li>✓ Priority support</li>
-             </ul>
-             <Link to="/research-membership" className="w-full py-2.5 rounded-lg bg-purple-500 hover:bg-purple-400 text-white font-black text-sm transition-colors text-center block" style={{ boxShadow: "0 0 24px rgba(180,80,255,0.8)" }}>
-               Upgrade Pro
-             </Link>
-           </div>
-         </div>
-
-         {/* À La Carte Option */}
-         <div className="border border-gray-700 rounded-2xl p-6 text-center" style={{ background: "rgba(10,10,30,0.5)" }}>
-           <p className="text-gray-400 text-sm mb-3">Prefer to buy individual items?</p>
-           <Link to="/alacarte" className="inline-flex items-center gap-2 text-cyan-400 hover:text-cyan-300 font-bold text-sm">
-             Browse À La Carte Catalog (Courses $147–$247, Build Plans $189–$1,297) for Zenith Apex Tech members →
-           </Link>
-         </div>
-       </div>
-      </section>
+      {/* New Simplified Pricing */}
+      <PricingComparison />
 
       {/* Footer CTA */}
       <section className="px-6 py-12 border-t border-white/10 solid-section">
