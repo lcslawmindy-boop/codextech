@@ -189,7 +189,7 @@ export default function ResearchMembership() {
                     </div>
                   ))}
                 </div>
-                <p className="text-gray-500 text-xs mt-3">Builder members get 10 free Invention Dossier generations included monthly. <a href="/invention-dossier" className="text-cyan-400 underline">View full dossier packages →</a></p>
+                <p className="text-gray-500 text-xs mt-3">Builder members get 3 Invention Dossier generations (up to 3 inventions per dossier) included monthly. <a href="/invention-dossier" className="text-cyan-400 underline">View full dossier packages →</a></p>
               </div>
             </div>
           </div>
