@@ -494,7 +494,7 @@ export default function ZenithApexBackground() {
           p = rotX(p, spin + orb.tilt);
           p = rotY(p, spin * 0.8);
           p = rotZ(p, spin * 0.6);
-          return project(p, sox, soy, 350, orb.scale);
+          return project(p, sox, soy, 350, orb.scale * 0.65);
         });
 
         ctx.save();
@@ -512,14 +512,14 @@ export default function ZenithApexBackground() {
           ctx.stroke();
         });
         // Vertex dots
-        proj.forEach(p => {
-          ctx.beginPath();
-          ctx.arc(p[0], p[1], 3.5, 0, Math.PI * 2);
-          ctx.fillStyle = `${color}1)`;
-          ctx.shadowColor = color + "1)";
-          ctx.shadowBlur = 12;
-          ctx.fill();
-        });
+         proj.forEach(p => {
+           ctx.beginPath();
+           ctx.arc(p[0], p[1], 2.2, 0, Math.PI * 2);
+           ctx.fillStyle = `${color}1)`;
+           ctx.shadowColor = color + "1)";
+           ctx.shadowBlur = 8;
+           ctx.fill();
+         });
         ctx.restore();
       });
 
@@ -531,11 +531,12 @@ export default function ZenithApexBackground() {
         const metOrbitR = Math.min(W, H) * 0.30;
         const metX = cx + Math.cos(metAngle) * metOrbitR;
         const metY = H * 0.80 + Math.sin(metAngle) * metOrbitR * 0.4;
-        const metScale = Math.min(W, H) * 0.065;
-        const metRot = t * 0.25;
+        const metScale = Math.min(W, H) * 0.045;
+        const metRot = t * 0.35;
+        const metRot3D = t * 0.25;
 
         ctx.save();
-        ctx.globalAlpha = 0.65;
+        ctx.globalAlpha = 0.72;
 
         // Draw ionosphere layers (concentric circles around Metatron)
         for (let layer = 0; layer < 3; layer++) {
@@ -547,38 +548,53 @@ export default function ZenithApexBackground() {
           ctx.stroke();
         }
 
-        // Draw edges
-        metCube.edges.forEach(([a, b]) => {
-          const pa = metCube.pts[a], pb = metCube.pts[b];
-          const ax = metX + (pa[0] * Math.cos(metRot) - pa[1] * Math.sin(metRot)) * metScale;
-          const ay = metY + (pa[0] * Math.sin(metRot) + pa[1] * Math.cos(metRot)) * metScale;
-          const bx = metX + (pb[0] * Math.cos(metRot) - pb[1] * Math.sin(metRot)) * metScale;
-          const by = metY + (pb[0] * Math.sin(metRot) + pb[1] * Math.cos(metRot)) * metScale;
-          ctx.beginPath();
-          ctx.moveTo(ax, ay);
-          ctx.lineTo(bx, by);
-          ctx.strokeStyle = "rgba(255,150,200,0.35)";
-          ctx.lineWidth = 1;
-          ctx.stroke();
-        });
+        // Draw edges with 3D depth
+         metCube.edges.forEach(([a, b]) => {
+           const pa = metCube.pts[a], pb = metCube.pts[b];
+           const ax = metX + (pa[0] * Math.cos(metRot) - pa[1] * Math.sin(metRot)) * metScale;
+           const ay = metY + (pa[0] * Math.sin(metRot) + pa[1] * Math.cos(metRot)) * metScale;
+           const bx = metX + (pb[0] * Math.cos(metRot) - pb[1] * Math.sin(metRot)) * metScale;
+           const by = metY + (pb[0] * Math.sin(metRot) + pb[1] * Math.cos(metRot)) * metScale;
+           ctx.beginPath();
+           ctx.moveTo(ax, ay);
+           ctx.lineTo(bx, by);
+           const depth = Math.sin((pa[0] + pb[0]) * 0.5 + metRot3D) * 0.5 + 0.5;
+           ctx.strokeStyle = `rgba(255,${Math.round(150 + depth * 50)},${Math.round(200 - depth * 50)},${0.45 + depth * 0.35})`;
+           ctx.lineWidth = 1.2 + depth * 0.8;
+           ctx.shadowColor = `rgba(255,100,200,${0.4 + depth * 0.4})`;
+           ctx.shadowBlur = 6 + depth * 8;
+           ctx.stroke();
+         });
 
-        // Draw circles (Flower of Life)
-        metCube.pts.forEach(p => {
-          const px = metX + (p[0] * Math.cos(metRot) - p[1] * Math.sin(metRot)) * metScale;
-          const py = metY + (p[0] * Math.sin(metRot) + p[1] * Math.cos(metRot)) * metScale;
-          const cr = metScale * 0.50;
-          const grad = ctx.createRadialGradient(px, py, 0, px, py, cr);
-          grad.addColorStop(0, "rgba(255,150,200,0.0)");
-          grad.addColorStop(0.7, "rgba(255,100,180,0.12)");
-          grad.addColorStop(1, "rgba(255,80,200,0.20)");
-          ctx.beginPath();
-          ctx.arc(px, py, cr, 0, Math.PI * 2);
-          ctx.strokeStyle = "rgba(255,120,200,0.45)";
-          ctx.lineWidth = 1.1;
-          ctx.stroke();
-          ctx.fillStyle = grad;
-          ctx.fill();
-        });
+        // Draw circles (Flower of Life) with 3D depth
+         metCube.pts.forEach((p, idx) => {
+           const px = metX + (p[0] * Math.cos(metRot) - p[1] * Math.sin(metRot)) * metScale;
+           const py = metY + (p[0] * Math.sin(metRot) + p[1] * Math.cos(metRot)) * metScale;
+           const cr = metScale * 0.38;
+           const depth = Math.sin(idx + metRot3D) * 0.5 + 0.5;
+           // 3D sphere effect with layered circles
+           ctx.save();
+           for (let layer = 0; layer < 2; layer++) {
+             const layerAlpha = (1 - layer * 0.5) * (0.3 + depth * 0.5);
+             const layerR = cr * (1 - layer * 0.15);
+             const grad = ctx.createRadialGradient(px - 2, py - 2, 0, px, py, layerR);
+             grad.addColorStop(0, `rgba(255,${Math.round(150 + depth * 80)},${Math.round(200 + depth * 40)},${0.2 + layerAlpha})`);
+             grad.addColorStop(0.6, `rgba(255,100,200,${0.1 + layerAlpha * 0.5})`);
+             grad.addColorStop(1, `rgba(255,80,200,${layerAlpha * 0.15})`);
+             ctx.beginPath();
+             ctx.arc(px, py, layerR, 0, Math.PI * 2);
+             ctx.fillStyle = grad;
+             ctx.fill();
+           }
+           ctx.beginPath();
+           ctx.arc(px, py, cr, 0, Math.PI * 2);
+           ctx.strokeStyle = `rgba(255,${Math.round(120 + depth * 80)},${Math.round(200 - depth * 50)},${0.55 + depth * 0.35})`;
+           ctx.lineWidth = 1.3 + depth * 0.7;
+           ctx.shadowColor = `rgba(255,150,220,${0.5 + depth * 0.3})`;
+           ctx.shadowBlur = 8 + depth * 6;
+           ctx.stroke();
+           ctx.restore();
+         });
 
         ctx.restore();
       }
