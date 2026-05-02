@@ -7,60 +7,60 @@ export default function SaaSPricing() {
 
   const tiers = [
     {
-      name: "Research Access",
+      name: "Researcher",
       price: "$49",
       period: "per month",
       badge: null,
-      tagline: "For researchers starting out",
+      tagline: "For curious individuals getting started",
       cta: "Get Started",
-      description: "Access to core research database. Ideal for individual researchers and early-stage builders.",
+      description: "Access to core research database and 3 courses + 3 build plans. Ideal for individual researchers and early-stage builders.",
       features: [
         { feature: "Patent Database (40+)", included: true },
         { feature: "Peer-Reviewed Publications (200+)", included: true },
+        { feature: "3 Courses + 3 Build Plans", included: true },
         { feature: "Declassified Archives", included: false },
-        { feature: "Research Modules (8)", included: false },
         { feature: "Engineering System Specs", included: false },
         { feature: "Monthly Updates", included: true },
         { feature: "Email Support", included: true },
-        { feature: "Expert Consultation", included: false }
+        { feature: "AI Patent Attorney", included: false }
       ]
     },
     {
-      name: "Builder Access",
-      price: "$97",
+      name: "Builder",
+      price: "$99",
       period: "per month",
-      badge: null,
-      tagline: "For active developers and teams",
+      badge: "MOST POPULAR",
+      tagline: "For engineers actively building systems",
       cta: "Get Started",
-      description: "Full research library with engineering documentation. For hardware builders and technical teams.",
+      description: "Full research library with engineering documentation, patent analyses, and 10 Invention Dossier rolls/month.",
       features: [
-        { feature: "Patent Database (40+)", included: true },
-        { feature: "Peer-Reviewed Publications (200+)", included: true },
+        { feature: "Everything in Researcher", included: true },
+        { feature: "All Courses & Build Plans ($49 each)", included: true },
+        { feature: "40+ Patent Analyses", included: true },
         { feature: "Declassified Archives", included: true },
-        { feature: "Research Modules (8)", included: true },
         { feature: "Engineering System Specs", included: true },
-        { feature: "Monthly Updates", included: true },
-        { feature: "Email Support", included: true },
-        { feature: "Expert Consultation", included: false }
+        { feature: "10 Invention Dossier Rolls/mo", included: true },
+        { feature: "20% Off EMF Shop", included: true },
+        { feature: "AI Patent Attorney", included: false }
       ]
     },
     {
-      name: "Operator Access",
-      price: "$197",
+      name: "Pro",
+      price: "$199",
       period: "per month",
-      badge: "MOST USED BY ENGINEERS",
-      tagline: "For serious builders and institutions",
+      badge: "🔥 MOST POWERFUL",
+      tagline: "For serious inventors ready to build, patent & commercialize",
       cta: "Get Full Access",
-      description: "Complete platform with expert support and institutional features. For teams building production systems.",
+      description: "Complete platform — all courses, build plans, PDFs, video guides, AI Patent Attorney, 25 dossier rolls/month, and commercialization suite.",
       features: [
-        { feature: "Patent Database (40+)", included: true },
-        { feature: "Peer-Reviewed Publications (200+)", included: true },
-        { feature: "Declassified Archives", included: true },
-        { feature: "Research Modules (8)", included: true },
-        { feature: "Engineering System Specs", included: true },
-        { feature: "Monthly Updates", included: true },
-        { feature: "Email Support", included: true },
-        { feature: "Expert Consultation", included: true }
+        { feature: "Everything in Builder", included: true },
+        { feature: "All PDFs + Video Build Guides", included: true },
+        { feature: "AI Patent Attorney Tool", included: true },
+        { feature: "25 Invention Dossier Rolls/mo", included: true },
+        { feature: "Verified Supplier Sourcing", included: true },
+        { feature: "Commercialization Roadmap", included: true },
+        { feature: "Bring-to-Market Pitch Deck", included: true },
+        { feature: "Priority Support", included: true }
       ]
     }
   ];
@@ -279,9 +279,9 @@ export default function SaaSPricing() {
               </div>
             </div>
             <div className="flex gap-4 font-medium text-gray-900">
-              <div className="text-center w-20">Research Access</div>
-              <div className="text-center w-20">Builder Access</div>
-              <div className="text-center w-20">Operator Access</div>
+              <div className="text-center w-20">Researcher</div>
+              <div className="text-center w-20">Builder</div>
+              <div className="text-center w-20">Pro</div>
             </div>
           </div>
         </div>
@@ -356,7 +356,7 @@ export default function SaaSPricing() {
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="text-4xl font-black mb-4">Ready to Access the Research?</h2>
           <p className="text-lg text-gray-300 max-w-2xl mx-auto mb-10">
-            Join engineering teams building on verified primary sources. Start with Research Access or jump straight to Operator Access.
+            Join engineers building on verified primary sources. Start with Researcher or jump straight to Pro.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link to="/research-brief"

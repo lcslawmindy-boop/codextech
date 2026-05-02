@@ -3,63 +3,63 @@ import { ArrowRight, Check, Star } from "lucide-react";
 
 const TIERS = [
   {
-    name: "Free Vault",
-    price: "Always Free",
-    period: "",
+    name: "Researcher",
+    price: "$49",
+    period: "/month",
     highlight: false,
-    cta: "Start Browsing",
-    desc: "Forever free",
+    cta: "Get Started",
+    desc: "For curious individuals",
     features: [
-      "All 40 builds searchable",
-      "Complete BOMs & schematics",
-      "Supplier recommendations",
-      "PDF downloads",
-      "No login required",
+      "Patent database (40+)",
+      "200+ peer-reviewed publications",
+      "3 courses + 3 build plans included",
+      "Core research archive",
+      "Monthly research updates",
+      "Email support",
     ],
     notIncluded: [
-      "Video assembly",
-      "Community forums",
-      "Sourcing links",
+      "Declassified archives",
+      "Engineering system specs",
+      "AI Patent Attorney",
+    ],
+  },
+  {
+    name: "Builder",
+    price: "$99",
+    period: "/month",
+    highlight: true,
+    cta: "Get Builder Access",
+    desc: "Most popular",
+    features: [
+      "Everything in Researcher",
+      "All courses & build plans ($49 each)",
+      "40+ patent analyses",
+      "Declassified archives",
+      "Engineering system specs",
+      "10 Invention Dossier Rolls/mo",
+      "20% off EMF shop",
+    ],
+    notIncluded: [
+      "AI Patent Attorney",
     ],
   },
   {
     name: "Pro",
-    price: "$99",
+    price: "$199",
     period: "/month",
-    highlight: true,
-    cta: "Start Free Trial",
-    desc: "Most popular",
-    features: [
-      "Everything in Free Vault",
-      "Video assembly guides (3–12 hrs each)",
-      "Verified supplier links & pricing",
-      "Engineer community & forums",
-      "Priority support",
-      "Weekly new builds",
-      "Advanced courses",
-    ],
-    notIncluded: [
-      "One-time purchase option",
-    ],
-  },
-  {
-    name: "À La Carte",
-    price: "$299",
-    period: "per build",
     highlight: false,
-    cta: "Buy Single Build",
-    desc: "Pay as you go",
+    cta: "Get Full Access",
+    desc: "🔥 Complete platform",
     features: [
-      "One complete build (video + sourcing)",
-      "Lifetime access",
-      "No subscription",
-      "No cancellation",
-      "30 downloads included",
+      "Everything in Builder",
+      "All PDFs + video build guides",
+      "AI Patent Attorney tool",
+      "25 Invention Dossier Rolls/mo",
+      "Verified supplier sourcing",
+      "Commercialization roadmap",
+      "Bring-to-market pitch deck",
     ],
-    notIncluded: [
-      "Community access",
-      "Course library",
-    ],
+    notIncluded: [],
   },
 ];
 
@@ -146,7 +146,7 @@ export default function VaultPricing() {
             {[
               {
                 q: "Do I need to sign up to browse the vault?",
-                a: "No. The entire vault is free and searchable without login. You only need to register if you want to upgrade to Pro or purchase à la carte.",
+                a: "No. The entire vault is free and searchable without login. You only need to register if you want to upgrade to Researcher, Builder, or Pro.",
               },
               {
                 q: "Can I download BOMs and schematics for free?",
@@ -157,8 +157,8 @@ export default function VaultPricing() {
                 a: "Yes. Pro subscriptions come with a 30-day money-back guarantee. À la carte purchases are final but include lifetime access.",
               },
               {
-                q: "What's the difference between Pro ($99/mo) and À La Carte ($299)?",
-                a: "Pro: video assembly + sourcing + community for all 40 builds, recurring. À La Carte: one complete build, one-time payment, lifetime access. Choose based on how many builds you plan to use.",
+                q: "What's the difference between Builder ($99/mo) and Pro ($199/mo)?",
+                a: "Builder: all courses & build plans + 10 Invention Dossier rolls/mo + engineering docs. Pro: everything in Builder PLUS AI Patent Attorney, 25 dossier rolls, video build guides, verified sourcing, commercialization roadmap, and pitch deck.",
               },
               {
                 q: "Do universities and institutions get discounts?",
@@ -186,10 +186,10 @@ export default function VaultPricing() {
         <div className="text-center">
           <h2 className="text-2xl font-black mb-4">Ready to get started?</h2>
           <p className="text-gray-400 mb-8 max-w-md mx-auto">
-            Browse 40 builds free. Upgrade to Pro for video guides & sourcing. Or buy individual builds à la carte.
+            Start with Researcher ($49/mo), level up to Builder ($99/mo), or unlock everything with Pro ($199/mo).
           </p>
-          <Link to="/vault" className="inline-flex items-center gap-2 px-10 py-4 rounded-xl bg-gradient-to-r from-cyan-600 to-blue-700 hover:from-cyan-500 hover:to-blue-600 text-white font-black transition-all">
-            Browse All Builds <ArrowRight size={16} />
+          <Link to="/research-membership" className="inline-flex items-center gap-2 px-10 py-4 rounded-xl bg-gradient-to-r from-cyan-600 to-blue-700 hover:from-cyan-500 hover:to-blue-600 text-white font-black transition-all">
+            Choose Your Plan <ArrowRight size={16} />
           </Link>
         </div>
       </div>
