@@ -656,15 +656,22 @@ export default function ZenithApexBackground() {
       ctx.stroke();
       ctx.restore();
 
-      // ── Sun orbit parameters ──
+      // ── Dual Sun orbit parameters ──
       const sunAngle = t * 1.2;
-      const sunOrbitRx = globeR * 0.52;   // horizontal orbit radius
-      const sunOrbitRy = globeR * 0.18;   // vertical (flattened ellipse)
+      const sunOrbitRx = globeR * 0.52;
+      const sunOrbitRy = globeR * 0.18;
       const sunOrbitCX = globeX;
       const sunOrbitCY = (globeY - globeR) + 38;
-      const sunX = sunOrbitCX + Math.cos(sunAngle) * sunOrbitRx;
-      const sunY = sunOrbitCY + Math.sin(sunAngle) * sunOrbitRy;
-      const sunRadius = 36; // much bigger
+      
+      // Sun 1 (bright primary)
+      const sunX1 = sunOrbitCX + Math.cos(sunAngle) * sunOrbitRx;
+      const sunY1 = sunOrbitCY + Math.sin(sunAngle) * sunOrbitRy;
+      const sunRadius1 = 36;
+      
+      // Sun 2 (dim secondary, opposite side)
+      const sunX2 = sunOrbitCX + Math.cos(sunAngle + Math.PI) * sunOrbitRx;
+      const sunY2 = sunOrbitCY + Math.sin(sunAngle + Math.PI) * sunOrbitRy;
+      const sunRadius2 = 24;
 
       // ── Green laser orbit ring ──
       ctx.save();
@@ -734,37 +741,33 @@ export default function ZenithApexBackground() {
       }
       ctx.restore();
 
-      // ── Sun body ──
-      // Huge outer corona
-      const corona = ctx.createRadialGradient(sunX, sunY, 0, sunX, sunY, sunRadius * 7);
-      corona.addColorStop(0, "rgba(255,220,80,0.55)");
-      corona.addColorStop(0.2, "rgba(255,160,30,0.30)");
-      corona.addColorStop(0.5, "rgba(255,100,0,0.12)");
-      corona.addColorStop(0.8, "rgba(255,60,0,0.04)");
-      corona.addColorStop(1, "rgba(255,60,0,0)");
-      ctx.beginPath(); ctx.arc(sunX, sunY, sunRadius * 7, 0, Math.PI * 2); ctx.fillStyle = corona; ctx.fill();
+      // ── Primary Sun (bright) ──
+      const corona1 = ctx.createRadialGradient(sunX1, sunY1, 0, sunX1, sunY1, sunRadius1 * 7);
+      corona1.addColorStop(0, "rgba(255,220,80,0.55)");
+      corona1.addColorStop(0.2, "rgba(255,160,30,0.30)");
+      corona1.addColorStop(0.5, "rgba(255,100,0,0.12)");
+      corona1.addColorStop(0.8, "rgba(255,60,0,0.04)");
+      corona1.addColorStop(1, "rgba(255,60,0,0)");
+      ctx.beginPath(); ctx.arc(sunX1, sunY1, sunRadius1 * 7, 0, Math.PI * 2); ctx.fillStyle = corona1; ctx.fill();
 
-      // Mid glow
-      const midGlow = ctx.createRadialGradient(sunX, sunY, 0, sunX, sunY, sunRadius * 3);
-      midGlow.addColorStop(0, "rgba(255,250,180,0.85)");
-      midGlow.addColorStop(0.4, "rgba(255,200,50,0.55)");
-      midGlow.addColorStop(1, "rgba(255,120,0,0)");
-      ctx.beginPath(); ctx.arc(sunX, sunY, sunRadius * 3, 0, Math.PI * 2); ctx.fillStyle = midGlow; ctx.fill();
+      const midGlow1 = ctx.createRadialGradient(sunX1, sunY1, 0, sunX1, sunY1, sunRadius1 * 3);
+      midGlow1.addColorStop(0, "rgba(255,250,180,0.85)");
+      midGlow1.addColorStop(0.4, "rgba(255,200,50,0.55)");
+      midGlow1.addColorStop(1, "rgba(255,120,0,0)");
+      ctx.beginPath(); ctx.arc(sunX1, sunY1, sunRadius1 * 3, 0, Math.PI * 2); ctx.fillStyle = midGlow1; ctx.fill();
 
-      // Core
-      const core = ctx.createRadialGradient(sunX - 6, sunY - 6, 2, sunX, sunY, sunRadius);
-      core.addColorStop(0, "rgba(255,255,240,1)");
-      core.addColorStop(0.3, "rgba(255,235,100,1)");
-      core.addColorStop(0.7, "rgba(255,170,20,1)");
-      core.addColorStop(1, "rgba(220,80,0,0.95)");
-      ctx.beginPath(); ctx.arc(sunX, sunY, sunRadius, 0, Math.PI * 2); ctx.fillStyle = core; ctx.fill();
+      const core1 = ctx.createRadialGradient(sunX1 - 6, sunY1 - 6, 2, sunX1, sunY1, sunRadius1);
+      core1.addColorStop(0, "rgba(255,255,240,1)");
+      core1.addColorStop(0.3, "rgba(255,235,100,1)");
+      core1.addColorStop(0.7, "rgba(255,170,20,1)");
+      core1.addColorStop(1, "rgba(220,80,0,0.95)");
+      ctx.beginPath(); ctx.arc(sunX1, sunY1, sunRadius1, 0, Math.PI * 2); ctx.fillStyle = core1; ctx.fill();
 
-      // Solar rays
-      ctx.save(); ctx.translate(sunX, sunY); ctx.rotate(t * 1.8);
+      ctx.save(); ctx.translate(sunX1, sunY1); ctx.rotate(t * 1.8);
       for (let r = 0; r < 16; r++) {
         const ra = (Math.PI * 2 / 16) * r;
-        const inn = sunRadius + 5;
-        const out = sunRadius + 30 + Math.sin(t * 3 + r) * 10;
+        const inn = sunRadius1 + 5;
+        const out = sunRadius1 + 30 + Math.sin(t * 3 + r) * 10;
         ctx.beginPath();
         ctx.moveTo(Math.cos(ra) * inn, Math.sin(ra) * inn);
         ctx.lineTo(Math.cos(ra) * out, Math.sin(ra) * out);
@@ -775,6 +778,19 @@ export default function ZenithApexBackground() {
         ctx.stroke();
       }
       ctx.restore();
+
+      // ── Secondary Sun (dim) ──
+      const corona2 = ctx.createRadialGradient(sunX2, sunY2, 0, sunX2, sunY2, sunRadius2 * 6);
+      corona2.addColorStop(0, "rgba(255,180,60,0.3)");
+      corona2.addColorStop(0.5, "rgba(255,80,0,0.08)");
+      corona2.addColorStop(1, "rgba(255,60,0,0)");
+      ctx.beginPath(); ctx.arc(sunX2, sunY2, sunRadius2 * 6, 0, Math.PI * 2); ctx.fillStyle = corona2; ctx.fill();
+
+      const core2 = ctx.createRadialGradient(sunX2 - 4, sunY2 - 4, 1, sunX2, sunY2, sunRadius2);
+      core2.addColorStop(0, "rgba(255,230,150,0.8)");
+      core2.addColorStop(0.5, "rgba(255,150,30,0.6)");
+      core2.addColorStop(1, "rgba(200,60,0,0.4)");
+      ctx.beginPath(); ctx.arc(sunX2, sunY2, sunRadius2, 0, Math.PI * 2); ctx.fillStyle = core2; ctx.fill();
 
       // ── Logo signature — bottom-left corner, ultra-bright neon ──
       if (logos[0]?.complete && logos[0].naturalWidth > 0) {

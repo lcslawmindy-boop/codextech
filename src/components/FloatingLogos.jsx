@@ -37,13 +37,14 @@ export default function FloatingLogos() {
       return img;
     });
 
-    // Orbital parameters for each logo
+    // Orbital parameters for each logo — follow elliptical orbits
     const orbits = LOGO_URLS.map((_, i) => ({
       angle: (Math.PI * 2 / LOGO_URLS.length) * i,
-      radius: 120 + i * 35,
-      speed: 0.3 + (i % 3) * 0.15,
-      size: 60 + (i % 4) * 15,
-      layer: i % 2, // alternate front/back
+      radiusX: 140 + i * 30,
+      radiusY: (140 + i * 30) * 0.5,
+      speed: 0.25 + (i % 3) * 0.12,
+      size: 55 + (i % 4) * 12,
+      layer: i % 2,
     }));
 
     const draw = () => {
@@ -56,8 +57,8 @@ export default function FloatingLogos() {
         if (orbits[i].layer !== 0) continue;
         const orb = orbits[i];
         const angle = orb.angle + t * orb.speed;
-        const x = cx + Math.cos(angle) * orb.radius;
-        const y = cy + Math.sin(angle) * orb.radius;
+        const x = cx + Math.cos(angle) * orb.radiusX;
+        const y = cy + Math.sin(angle) * orb.radiusY;
 
         if (images[i]?.complete && images[i].naturalWidth > 0) {
           ctx.save();
@@ -72,8 +73,8 @@ export default function FloatingLogos() {
         if (orbits[i].layer !== 1) continue;
         const orb = orbits[i];
         const angle = orb.angle + t * orb.speed;
-        const x = cx + Math.cos(angle) * orb.radius;
-        const y = cy + Math.sin(angle) * orb.radius;
+        const x = cx + Math.cos(angle) * orb.radiusX;
+        const y = cy + Math.sin(angle) * orb.radiusY;
 
         if (images[i]?.complete && images[i].naturalWidth > 0) {
           ctx.save();
