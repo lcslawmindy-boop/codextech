@@ -28,12 +28,16 @@ export default function ZaraAlienMascot() {
             5% { transform: scaleY(0.1); }
           }
           @keyframes pupilGlow {
-            0%, 100% { filter: drop-shadow(0 0 8px rgba(173, 216, 230, 0.6)); }
-            50% { filter: drop-shadow(0 0 16px rgba(173, 216, 230, 0.9)); }
+            0%, 100% { filter: drop-shadow(0 0 12px rgba(173, 216, 230, 0.6)); }
+            50% { filter: drop-shadow(0 0 24px rgba(173, 216, 230, 0.9)); }
+          }
+          @keyframes twinkle {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
           }
         `}</style>
-        <div className="flex flex-col items-center gap-2">
-          <div className="relative w-28 h-28" style={{ animation: 'pupilGlow 4s ease-in-out infinite' }}>
+        <div className="flex flex-col items-center gap-3">
+          <div className="relative w-48 h-48" style={{ animation: 'pupilGlow 4s ease-in-out infinite' }}>
             {/* 3D Realistic Eyeball */}
             <svg viewBox="0 0 100 100" className="w-full h-full" style={{ filter: 'drop-shadow(0 0 20px rgba(173, 216, 230, 0.8))' }}>
             <defs>
@@ -82,11 +86,32 @@ export default function ZaraAlienMascot() {
 
             {/* Tertiary shine */}
             <circle cx="55" cy="46" r="1.5" fill="#ffffff" opacity="0.4" />
+
+            {/* Top Eyelashes */}
+            <g stroke="#87ceeb" strokeWidth="1.5" strokeLinecap="round">
+              <line x1="30" y1="20" x2="28" y2="10" />
+              <line x1="40" y1="18" x2="40" y2="6" />
+              <line x1="50" y1="18" x2="50" y2="6" />
+              <line x1="60" y1="18" x2="60" y2="6" />
+              <line x1="70" y1="20" x2="72" y2="10" />
+            </g>
+
+            {/* Bottom Eyelashes */}
+            <g stroke="#87ceeb" strokeWidth="1.5" strokeLinecap="round">
+              <line x1="30" y1="80" x2="28" y2="90" />
+              <line x1="40" y1="82" x2="40" y2="94" />
+              <line x1="50" y1="82" x2="50" y2="94" />
+              <line x1="60" y1="82" x2="60" y2="94" />
+              <line x1="70" y1="80" x2="72" y2="90" />
+            </g>
+
+            {/* Twinkling effect circle */}
+            <circle cx="42" cy="42" r="6" fill="url(#highlight)" opacity="0.6" style={{ animation: 'twinkle 2s ease-in-out infinite' }} />
             </svg>
             </div>
             <div className="text-center">
-            <p className="text-xs font-black text-blue-400 leading-tight">ZARA</p>
-            <p className="text-xs text-blue-300 font-bold">AI ASSISTANT</p>
+            <p className="text-sm font-black text-blue-400 leading-tight">ASK ZARA</p>
+            <p className="text-xs text-blue-300 font-bold">YOUR ZENITH APEX RESEARCH ASSISTANT</p>
             </div>
             </div>
             </button>
