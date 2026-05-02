@@ -26,6 +26,7 @@ export default function TopNav() {
           <img src="https://media.base44.com/images/public/69ccefebfea78b23498c66a8/bcf3bcb42_df887ac44_logo.png" alt="ZAT" className="h-8 w-8 rounded" />
           <div className="hidden sm:block">
             <span className="font-black text-sm text-white block">ZENITH APEX TECH</span>
+            <span className="text-xs text-gray-400 tracking-widest leading-tight">T.E.C.H.</span>
             <span className="text-xs text-gray-400 tracking-widest leading-tight">TEACH · ENGINEERS · CONSTRUCT · HARNESS</span>
             <span className="text-xs text-gray-500 tracking-widest leading-tight">TRUST · EVOLVE · COMMUNITY · HONOR</span>
           </div>

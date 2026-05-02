@@ -22,6 +22,9 @@ export default function ZatLogoWatermark() {
           animation: 'zatPulse 3s ease-in-out infinite',
         }}
       />
+      <div className="font-black text-cyan-400 tracking-widest text-center opacity-75 whitespace-nowrap" style={{ fontSize: '9px', textShadow: '0 0 8px rgba(0, 220, 255, 0.6)', lineHeight: '1.2', letterSpacing: '2px' }}>
+        T.E.C.H.
+      </div>
       <div className="font-black text-cyan-400 tracking-widest text-center opacity-75 whitespace-nowrap" style={{ fontSize: '8px', textShadow: '0 0 8px rgba(0, 220, 255, 0.6)', lineHeight: '1.2' }}>
         TEACH · ENGINEERS · CONSTRUCT · HARNESS
       </div>
