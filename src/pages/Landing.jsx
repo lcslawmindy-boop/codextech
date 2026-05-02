@@ -13,7 +13,7 @@ export default function Landing() {
       <ActiveBackground themeId={themeId} />
       <BackgroundThemeSwitcher themeId={themeId} setThemeId={setThemeId} />
       {/* Nav */}
-      <nav className="border-b border-white/10 px-6 py-4 sticky top-0 z-40" style={{ background: "#0a0a1a" }}>
+      <nav className="border-b border-white/10 px-6 py-4 sticky top-0 z-50" style={{ background: "#0a0a1a" }}>
         <div className="max-w-6xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-3">
             <img src="https://media.base44.com/images/public/69ccefebfea78b23498c66a8/6722a4c01_839284090_logo.png" alt="Zenith Apex Tech" className="h-9 w-9 rounded-lg" />
@@ -32,37 +32,37 @@ export default function Landing() {
       {/* Hero */}
       <section className="px-6 py-20 border-b border-white/10" style={{ background: "#0a0a1e", opacity: 1 }}>
         <div className="max-w-4xl mx-auto text-center">
-          <h1 className="text-5xl font-black mb-6 leading-tight">
+          <h1 className="text-5xl md:text-6xl font-black mb-6 leading-tight text-white drop-shadow-[0_0_30px_rgba(80,200,255,0.6)] tracking-tight">
             Institutional Research Intelligence for Advanced Electromagnetics
           </h1>
-          <p className="text-xl text-gray-400 mb-10 leading-relaxed">
+          <p className="text-xl text-gray-200 mb-10 leading-relaxed bg-gray-950/80 border border-gray-700 rounded-xl px-5 py-4">
             Complete archive of 40+ patents, 200+ peer-reviewed publications, declassified government reports, and verified engineering frameworks. All sourced from primary documents. Everything you need to build.
           </p>
 
           {/* Three CTAs */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-12">
             <Link to="/free-vault"
-              className="flex flex-col items-center gap-3 p-6 rounded-2xl border border-gray-700 hover:border-cyan-600 transition-all bg-gray-900/50 hover:bg-gray-900">
+              className="flex flex-col items-center gap-3 p-6 rounded-2xl border border-gray-700 hover:border-cyan-600 transition-all bg-gray-900 hover:bg-gray-800">
               <Zap size={24} className="text-cyan-400" />
-              <span className="font-black text-sm">Free Preview</span>
-              <p className="text-xs text-gray-500">Browse the public database</p>
-              <ArrowRight size={14} className="text-gray-600 mt-2" />
+              <span className="font-black text-sm text-white">Free Preview</span>
+              <p className="text-xs text-gray-400">Browse the public database</p>
+              <ArrowRight size={14} className="text-gray-400 mt-2" />
             </Link>
 
             <Link to="/research-membership"
-              className="flex flex-col items-center gap-3 p-6 rounded-2xl border-2 border-cyan-600 bg-cyan-950/20 hover:bg-cyan-950/40 transition-all">
+              className="flex flex-col items-center gap-3 p-6 rounded-2xl border-2 border-cyan-500 bg-cyan-950 hover:bg-cyan-900 transition-all">
               <Lock size={24} className="text-cyan-300" />
-              <span className="font-black text-sm">Membership</span>
-              <p className="text-xs text-gray-400">$99/month • Builder tier</p>
+              <span className="font-black text-sm text-white">Membership</span>
+              <p className="text-xs text-gray-300">$99/month • Builder tier</p>
               <ArrowRight size={14} className="text-cyan-400 mt-2" />
             </Link>
 
             <Link to="/alacarte"
-              className="flex flex-col items-center gap-3 p-6 rounded-2xl border border-gray-700 hover:border-green-600 transition-all bg-gray-900/50 hover:bg-gray-900">
+              className="flex flex-col items-center gap-3 p-6 rounded-2xl border border-gray-700 hover:border-green-600 transition-all bg-gray-900 hover:bg-gray-800">
               <BookOpen size={24} className="text-green-400" />
-              <span className="font-black text-sm">À La Carte</span>
-              <p className="text-xs text-gray-500">$49 per course or plan</p>
-              <ArrowRight size={14} className="text-gray-600 mt-2" />
+              <span className="font-black text-sm text-white">À La Carte</span>
+              <p className="text-xs text-gray-400">$49 per course or plan</p>
+              <ArrowRight size={14} className="text-gray-400 mt-2" />
             </Link>
           </div>
 
@@ -71,49 +71,49 @@ export default function Landing() {
       </section>
 
       {/* User Dashboard */}
-      <section className="px-6 py-12 border-b border-white/10" style={{ background: "#0a0a1a" }}>
+      <section className="px-6 py-12 border-b border-white/10" style={{ background: "#0d0d1f" }}>
         <div className="max-w-4xl mx-auto">
           <UserDashboardSection />
         </div>
       </section>
 
       {/* What's Included */}
-      <section className="px-6 py-16 border-b border-white/10" style={{ background: "#080812" }}>
+      <section className="px-6 py-16 border-b border-white/10" style={{ background: "#0a0a1a" }}>
         <div className="max-w-4xl mx-auto">
           <h2 className="text-3xl font-black mb-12 text-center">What You Get</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div>
-              <h3 className="text-lg font-black mb-3 flex items-center gap-2">📋 Patent Intelligence</h3>
-              <p className="text-gray-400 text-sm leading-relaxed">40+ patents with full prosecution history, claims analysis, prior art assessment, and engineering specifications.</p>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="bg-gray-900 border border-gray-700 rounded-xl p-5">
+              <h3 className="text-lg font-black mb-3 flex items-center gap-2 text-white">📋 Patent Intelligence</h3>
+              <p className="text-gray-300 text-sm leading-relaxed">40+ patents with full prosecution history, claims analysis, prior art assessment, and engineering specifications.</p>
             </div>
-            <div>
-              <h3 className="text-lg font-black mb-3 flex items-center gap-2">📚 Research Archive</h3>
-              <p className="text-gray-400 text-sm leading-relaxed">200+ peer-reviewed publications, declassified government reports, and technical documentation sourced from verified primary sources.</p>
+            <div className="bg-gray-900 border border-gray-700 rounded-xl p-5">
+              <h3 className="text-lg font-black mb-3 flex items-center gap-2 text-white">📚 Research Archive</h3>
+              <p className="text-gray-300 text-sm leading-relaxed">200+ peer-reviewed publications, declassified government reports, and technical documentation sourced from verified primary sources.</p>
             </div>
-            <div>
-              <h3 className="text-lg font-black mb-3 flex items-center gap-2">🔨 Build Plans</h3>
-              <p className="text-gray-400 text-sm leading-relaxed">21+ invention systems with step-by-step instructions, bills of materials, schematics, and troubleshooting guides.</p>
+            <div className="bg-gray-900 border border-gray-700 rounded-xl p-5">
+              <h3 className="text-lg font-black mb-3 flex items-center gap-2 text-white">🔨 Build Plans</h3>
+              <p className="text-gray-300 text-sm leading-relaxed">21+ invention systems with step-by-step instructions, bills of materials, schematics, and troubleshooting guides.</p>
             </div>
-            <div>
-              <h3 className="text-lg font-black mb-3 flex items-center gap-2">🎓 Structured Courses</h3>
-              <p className="text-gray-400 text-sm leading-relaxed">8+ research modules covering electromagnetic theory, patent strategy, engineering frameworks, and validation methods.</p>
+            <div className="bg-gray-900 border border-gray-700 rounded-xl p-5">
+              <h3 className="text-lg font-black mb-3 flex items-center gap-2 text-white">🎓 Structured Courses</h3>
+              <p className="text-gray-300 text-sm leading-relaxed">8+ research modules covering electromagnetic theory, patent strategy, engineering frameworks, and validation methods.</p>
             </div>
           </div>
         </div>
       </section>
 
       {/* How It Works */}
-      <section id="how-it-works" className="px-6 py-16 border-b border-white/10" style={{ background: "#0a0a1a" }}>
+      <section id="how-it-works" className="px-6 py-16 border-b border-white/10" style={{ background: "#080812" }}>
         <div className="max-w-4xl mx-auto">
-          <h2 className="text-3xl font-black mb-12 text-center">How It Works</h2>
-          <div className="space-y-6">
+          <h2 className="text-3xl font-black mb-12 text-center text-white drop-shadow-[0_0_20px_rgba(80,200,255,0.4)]">How It Works</h2>
+          <div className="space-y-4">
             {[
               { num: "1", title: "Explore", desc: "Browse 40+ patents and research topics in the interactive database. No login needed." },
               { num: "2", title: "Learn", desc: "Read primary source analysis, peer-reviewed research, and patent prosecution history." },
               { num: "3", title: "Build", desc: "Access step-by-step build plans with complete bills of materials and specifications." },
               { num: "4", title: "Validate", desc: "Use measurement protocols and engineering frameworks to test your prototypes." },
             ].map((step, i) => (
-              <div key={i} className="flex gap-4 items-start">
+              <div key={i} className="flex gap-4 items-start bg-gray-900 border border-gray-700 rounded-xl p-4">
                 <div className="w-8 h-8 rounded-full bg-cyan-600 flex items-center justify-center flex-shrink-0 font-black text-xs">
                   {step.num}
                 </div>
@@ -128,7 +128,7 @@ export default function Landing() {
       </section>
 
       {/* Build Plans Showcase */}
-      <section className="px-6 py-16 border-b border-white/10" style={{ background: "#080812" }}>
+      <section className="px-6 py-16 border-b border-white/10" style={{ background: "#0a0a1a" }}>
         <div className="max-w-6xl mx-auto">
           <h2 className="text-3xl font-black mb-4 text-center">What Build Plans Look Like</h2>
           <p className="text-center text-gray-400 text-sm mb-12 max-w-2xl mx-auto">Each build plan includes complete BOM, schematics, step-by-step assembly, and video guides. From concept to working prototype.</p>

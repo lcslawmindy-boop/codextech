@@ -280,10 +280,10 @@ export default function ZenithApexBackground() {
         ctx.restore();
       }
 
-      // ── Central Phi Ratio symbol ──
+      // ── Central Phi Ratio symbol — placed lower, below membership section ──
       {
         const phiX = cx;
-        const phiY = cy + H * 0.04;
+        const phiY = cy + H * 0.55;
         const phiPulse = 0.7 + 0.3 * Math.sin(t * 1.1);
         ctx.save();
         ctx.globalAlpha = 0.72 * phiPulse;
@@ -509,40 +509,122 @@ export default function ZenithApexBackground() {
         ctx.restore();
       }
 
-      // ── Globe watermark ──
+      // ── Neon Circuit Board Sphere with Lightning ──
       const globeR = Math.min(W, H) * 0.52;
       const globeX = cx;
       const globeY = cy + globeR * 1.1;
 
       ctx.save();
-      ctx.globalAlpha = 0.11;
       ctx.beginPath();
       ctx.arc(globeX, globeY, globeR, 0, Math.PI * 2);
       ctx.clip();
-      for (let i = 1; i < 9; i++) {
-        const lat = -Math.PI / 2 + (Math.PI / 9) * i;
-        const y = globeY + Math.sin(lat) * globeR;
-        const rLat = Math.abs(Math.cos(lat) * globeR);
-        ctx.beginPath();
-        ctx.ellipse(globeX, y, rLat, rLat * 0.22, 0, 0, Math.PI * 2);
-        ctx.strokeStyle = "rgba(255,255,255,1)"; ctx.lineWidth = 1.8; ctx.stroke();
+
+      // Circuit board grid lines — neon cyan
+      const gridStep = 38;
+      ctx.lineWidth = 0.7;
+      for (let gx = globeX - globeR; gx < globeX + globeR; gx += gridStep) {
+        const pulse = 0.12 + 0.08 * Math.sin(t * 2.2 + gx * 0.04);
+        ctx.strokeStyle = `rgba(0,255,220,${pulse})`;
+        ctx.beginPath(); ctx.moveTo(gx, globeY - globeR); ctx.lineTo(gx, globeY + globeR); ctx.stroke();
       }
-      for (let i = 0; i < 10; i++) {
-        const angle = (Math.PI / 10) * i;
+      for (let gy = globeY - globeR; gy < globeY + globeR; gy += gridStep) {
+        const pulse = 0.12 + 0.08 * Math.sin(t * 1.8 + gy * 0.04);
+        ctx.strokeStyle = `rgba(0,255,220,${pulse})`;
+        ctx.beginPath(); ctx.moveTo(globeX - globeR, gy); ctx.lineTo(globeX + globeR, gy); ctx.stroke();
+      }
+
+      // Circuit nodes at intersections
+      for (let gx = globeX - globeR + gridStep; gx < globeX + globeR; gx += gridStep) {
+        for (let gy = globeY - globeR + gridStep; gy < globeY + globeR; gy += gridStep) {
+          const dx = gx - globeX, dy = gy - globeY;
+          if (dx*dx + dy*dy > globeR*globeR) continue;
+          if (Math.random() < 0.97) continue; // sparse nodes each frame
+          ctx.beginPath();
+          ctx.arc(gx, gy, 2.5, 0, Math.PI * 2);
+          ctx.fillStyle = "rgba(0,255,200,0.9)";
+          ctx.shadowColor = "rgba(0,255,200,1)";
+          ctx.shadowBlur = 8;
+          ctx.fill();
+          ctx.shadowBlur = 0;
+        }
+      }
+
+      // Lightning bolt pulses along grid lines
+      const numBolts = 5;
+      for (let b = 0; b < numBolts; b++) {
+        const bPhase = (t * 0.9 + b / numBolts) % 1;
+        if (bPhase > 0.18) continue; // only flash briefly
+        const bAlpha = (0.18 - bPhase) / 0.18;
+        // pick a random-ish horizontal line inside globe
+        const lineY = globeY - globeR * 0.7 + (b / numBolts) * globeR * 1.4;
+        const lineX0 = globeX - globeR * 0.8;
+        const lineX1 = globeX + globeR * 0.8;
         ctx.save();
-        ctx.translate(globeX, globeY);
-        ctx.rotate(angle);
+        ctx.globalAlpha = bAlpha * 0.85;
+        ctx.lineWidth = 1.5 + bAlpha * 2;
+        ctx.shadowColor = "rgba(80,220,255,1)";
+        ctx.shadowBlur = 18;
+        ctx.strokeStyle = "rgba(160,240,255,1)";
         ctx.beginPath();
-        ctx.ellipse(0, 0, globeR * 0.22, globeR, 0, 0, Math.PI * 2);
-        ctx.strokeStyle = "rgba(255,255,255,1)"; ctx.lineWidth = 1.8; ctx.stroke();
+        ctx.moveTo(lineX0, lineY);
+        // jagged lightning path
+        const segs = 14;
+        for (let s = 1; s <= segs; s++) {
+          const lx = lineX0 + (lineX1 - lineX0) * (s / segs);
+          const jag = (s % 2 === 0 ? 1 : -1) * (4 + Math.sin(t * 20 + b * 3 + s) * 8);
+          ctx.lineTo(lx, lineY + jag);
+        }
+        ctx.stroke();
+        // vertical branch
+        const branchX = lineX0 + (lineX1 - lineX0) * (0.3 + (b % 3) * 0.2);
+        ctx.beginPath();
+        ctx.moveTo(branchX, lineY);
+        ctx.lineTo(branchX + 12, lineY + 22);
+        ctx.lineTo(branchX + 6, lineY + 38);
+        ctx.strokeStyle = "rgba(200,255,255,0.8)";
+        ctx.lineWidth = 1;
+        ctx.stroke();
         ctx.restore();
       }
+
+      // Vertical lightning bolts
+      for (let b = 0; b < numBolts; b++) {
+        const bPhase = (t * 0.7 + (b + 0.5) / numBolts) % 1;
+        if (bPhase > 0.15) continue;
+        const bAlpha = (0.15 - bPhase) / 0.15;
+        const lineX = globeX - globeR * 0.6 + (b / numBolts) * globeR * 1.2;
+        const lineY0 = globeY - globeR * 0.75;
+        const lineY1 = globeY + globeR * 0.75;
+        ctx.save();
+        ctx.globalAlpha = bAlpha * 0.7;
+        ctx.lineWidth = 1.2 + bAlpha * 1.5;
+        ctx.shadowColor = "rgba(120,80,255,1)";
+        ctx.shadowBlur = 14;
+        ctx.strokeStyle = "rgba(180,120,255,1)";
+        ctx.beginPath();
+        ctx.moveTo(lineX, lineY0);
+        const segs2 = 12;
+        for (let s = 1; s <= segs2; s++) {
+          const ly = lineY0 + (lineY1 - lineY0) * (s / segs2);
+          const jag = (s % 2 === 0 ? 1 : -1) * (3 + Math.sin(t * 15 + b * 5 + s) * 6);
+          ctx.lineTo(lineX + jag, ly);
+        }
+        ctx.stroke();
+        ctx.restore();
+      }
+
       ctx.restore();
+
+      // Neon sphere outline
       ctx.save();
-      ctx.globalAlpha = 0.15;
+      ctx.globalAlpha = 0.35 + 0.1 * Math.sin(t * 1.5);
       ctx.beginPath();
       ctx.arc(globeX, globeY, globeR, 0, Math.PI * 2);
-      ctx.strokeStyle = "rgba(255,255,255,1)"; ctx.lineWidth = 3; ctx.stroke();
+      ctx.shadowColor = "rgba(0,255,200,1)";
+      ctx.shadowBlur = 20;
+      ctx.strokeStyle = "rgba(0,255,200,0.7)";
+      ctx.lineWidth = 2.5;
+      ctx.stroke();
       ctx.restore();
 
       // ── Sun ──
@@ -593,7 +675,7 @@ export default function ZenithApexBackground() {
     <canvas
       ref={canvasRef}
       className="fixed inset-0 pointer-events-none"
-      style={{ zIndex: 0 }}
+      style={{ zIndex: -1 }}
     />
   );
 }
