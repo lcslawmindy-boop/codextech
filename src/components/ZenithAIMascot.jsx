@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { X, Send, Loader2, BookOpen, Zap, Lightbulb, Users } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import { base44 } from '@/api/base44Client';
 
 export default function ZenithAIMascot() {
@@ -11,6 +12,7 @@ export default function ZenithAIMascot() {
   ]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
+  const [position, setPosition] = useState({ x: 0, y: 0 });
   const messagesEndRef = useRef(null);
 
   const scrollToBottom = () => {
@@ -45,10 +47,18 @@ export default function ZenithAIMascot() {
   };
 
   const ui = (
-    <div className="fixed bottom-24 right-6 z-[9991]">
+    <motion.div 
+      drag
+      dragMomentum={false}
+      onDragEnd={(event, info) => {
+        setPosition({ x: position.x + info.offset.x, y: position.y + info.offset.y });
+      }}
+      style={{ x: position.x, y: position.y }}
+      className="fixed bottom-24 right-6 z-[9991]"
+    >
       {open && (
         <div
-          className="mb-3 rounded-2xl shadow-2xl overflow-hidden flex flex-col"
+          className="mb-3 rounded-2xl shadow-2xl overflow-hidden flex flex-col cursor-grab active:cursor-grabbing"
           style={{
             background: 'rgba(0,0,20,0.95)',
             backdropFilter: 'blur(20px)',
@@ -136,7 +146,7 @@ export default function ZenithAIMascot() {
       >
         {open ? '✕' : 'ζ'}
       </button>
-    </div>
+    </motion.div>
   );
 
   return createPortal(ui, document.body);
