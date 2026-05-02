@@ -8,7 +8,7 @@ export default function Landing() {
   const { themeId, setThemeId } = useBackgroundTheme();
 
   return (
-    <div className="min-h-screen text-white relative" style={{ background: "transparent" }}>
+    <div className="min-h-screen text-white relative" style={{ background: "#0a0a1a" }}>
       <ZenithApexBackground />
       <ActiveBackground themeId={themeId} />
       <BackgroundThemeSwitcher themeId={themeId} setThemeId={setThemeId} />
@@ -30,7 +30,7 @@ export default function Landing() {
       </nav>
 
       {/* Hero */}
-      <section className="px-6 py-20 border-b border-white/10" style={{ background: "#0a0a1e" }}>
+      <section className="px-6 py-20 border-b border-white/10" style={{ background: "#0a0a1e", opacity: 1 }}>
         <div className="max-w-4xl mx-auto text-center">
           <h1 className="text-5xl font-black mb-6 leading-tight">
             Institutional Research Intelligence for Advanced Electromagnetics

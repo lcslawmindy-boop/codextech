@@ -194,13 +194,13 @@ export default function ZenithApexBackground() {
       "rgba(80,200,255,", "rgba(180,100,255,", "rgba(80,255,160,",
       "rgba(255,180,60,", "rgba(255,80,160,"
     ];
-    // Each solid orbits at different radius/speed/phase — bigger, lower orbit
+    // Each solid orbits at different radius/speed/phase — further out, pushed lower
     const solidOrbit = [
-      { r: 0.34, speed: 0.4,  phase: 0,   scale: 58, tilt: 0.4, yOff: 0.18 },
-      { r: 0.38, speed: 0.28, phase: 1.2, scale: 52, tilt: 0.8, yOff: 0.20 },
-      { r: 0.30, speed: 0.55, phase: 2.4, scale: 56, tilt: 1.1, yOff: 0.16 },
-      { r: 0.44, speed: 0.22, phase: 3.7, scale: 48, tilt: 0.6, yOff: 0.22 },
-      { r: 0.40, speed: 0.33, phase: 5.0, scale: 46, tilt: 1.5, yOff: 0.19 },
+      { r: 0.52, speed: 0.4,  phase: 0,   scale: 58, tilt: 0.4, yOff: 0.32 },
+      { r: 0.56, speed: 0.28, phase: 1.2, scale: 52, tilt: 0.8, yOff: 0.35 },
+      { r: 0.48, speed: 0.55, phase: 2.4, scale: 56, tilt: 1.1, yOff: 0.30 },
+      { r: 0.62, speed: 0.22, phase: 3.7, scale: 48, tilt: 0.6, yOff: 0.38 },
+      { r: 0.58, speed: 0.33, phase: 5.0, scale: 46, tilt: 1.5, yOff: 0.34 },
     ];
 
     const metCube = metatronsCube();
