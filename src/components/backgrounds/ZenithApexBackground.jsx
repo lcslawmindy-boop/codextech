@@ -194,13 +194,13 @@ export default function ZenithApexBackground() {
       "rgba(80,200,255,", "rgba(180,100,255,", "rgba(80,255,160,",
       "rgba(255,180,60,", "rgba(255,80,160,"
     ];
-    // Each solid orbits at different radius/speed/phase
+    // Each solid orbits at different radius/speed/phase — bigger, lower orbit
     const solidOrbit = [
-      { r: 0.28, speed: 0.4, phase: 0, scale: 38, tilt: 0.4 },
-      { r: 0.32, speed: 0.28, phase: 1.2, scale: 32, tilt: 0.8 },
-      { r: 0.25, speed: 0.55, phase: 2.4, scale: 36, tilt: 1.1 },
-      { r: 0.38, speed: 0.22, phase: 3.7, scale: 28, tilt: 0.6 },
-      { r: 0.35, speed: 0.33, phase: 5.0, scale: 26, tilt: 1.5 },
+      { r: 0.34, speed: 0.4,  phase: 0,   scale: 58, tilt: 0.4, yOff: 0.18 },
+      { r: 0.38, speed: 0.28, phase: 1.2, scale: 52, tilt: 0.8, yOff: 0.20 },
+      { r: 0.30, speed: 0.55, phase: 2.4, scale: 56, tilt: 1.1, yOff: 0.16 },
+      { r: 0.44, speed: 0.22, phase: 3.7, scale: 48, tilt: 0.6, yOff: 0.22 },
+      { r: 0.40, speed: 0.33, phase: 5.0, scale: 46, tilt: 1.5, yOff: 0.19 },
     ];
 
     const metCube = metatronsCube();
@@ -252,17 +252,69 @@ export default function ZenithApexBackground() {
         ctx.strokeStyle = `rgba(120,210,255,${alpha})`; ctx.lineWidth = 1.5; ctx.stroke();
       }
 
-      // ── Floating equations ──
+      // ── Floating equations (bright, 3D glowing) ──
       for (const eq of equations) {
         eq.y -= eq.speed; eq.x += eq.drift;
         if (eq.y < -0.05) { eq.y = 1.05; eq.x = Math.random(); }
         if (eq.x < -0.1) eq.x = 1.1;
         if (eq.x > 1.1) eq.x = -0.1;
+        const pulse = 0.75 + 0.25 * Math.sin(t * 1.8 + eq.y * 12);
+        const alpha = Math.min(1, (eq.alpha + 0.5) * pulse);
         ctx.save();
-        ctx.globalAlpha = eq.alpha * (0.7 + 0.3 * Math.sin(t * 1.2 + eq.y * 10));
-        ctx.font = `${eq.size}px monospace`;
-        ctx.fillStyle = "rgba(120,200,255,1)";
+        ctx.globalAlpha = alpha;
+        ctx.font = `bold ${eq.size + 3}px monospace`;
+        // 3D depth effect: dark shadow offset, then bright fill
+        ctx.fillStyle = "rgba(0,0,40,0.9)";
+        ctx.fillText(eq.text, eq.x * W + 2, eq.y * H + 3);
+        ctx.fillStyle = "rgba(0,20,80,0.7)";
+        ctx.fillText(eq.text, eq.x * W + 1, eq.y * H + 1.5);
+        // Glow layer
+        ctx.shadowColor = "rgba(80,220,255,1)";
+        ctx.shadowBlur = 12;
+        ctx.fillStyle = "rgba(180,240,255,1)";
         ctx.fillText(eq.text, eq.x * W, eq.y * H);
+        // Extra bright highlight pass
+        ctx.shadowBlur = 4;
+        ctx.fillStyle = "rgba(255,255,255,0.85)";
+        ctx.fillText(eq.text, eq.x * W, eq.y * H);
+        ctx.restore();
+      }
+
+      // ── Central Phi Ratio symbol ──
+      {
+        const phiX = cx;
+        const phiY = cy + H * 0.04;
+        const phiPulse = 0.7 + 0.3 * Math.sin(t * 1.1);
+        ctx.save();
+        ctx.globalAlpha = 0.72 * phiPulse;
+        // Outer glow ring
+        const phiGrad = ctx.createRadialGradient(phiX, phiY, 0, phiX, phiY, 90);
+        phiGrad.addColorStop(0, "rgba(255,215,0,0.18)");
+        phiGrad.addColorStop(0.5, "rgba(255,180,0,0.07)");
+        phiGrad.addColorStop(1, "rgba(255,140,0,0)");
+        ctx.beginPath(); ctx.arc(phiX, phiY, 90, 0, Math.PI * 2);
+        ctx.fillStyle = phiGrad; ctx.fill();
+        // Shadow/3D depth
+        ctx.font = "bold 72px serif";
+        ctx.fillStyle = "rgba(0,0,0,0.7)";
+        ctx.textAlign = "center"; ctx.textBaseline = "middle";
+        ctx.fillText("φ", phiX + 3, phiY + 4);
+        ctx.fillStyle = "rgba(80,40,0,0.5)";
+        ctx.fillText("φ", phiX + 1.5, phiY + 2);
+        // Glowing gold phi
+        ctx.shadowColor = "rgba(255,200,0,1)";
+        ctx.shadowBlur = 28;
+        ctx.fillStyle = "rgba(255,220,60,1)";
+        ctx.fillText("φ", phiX, phiY);
+        ctx.shadowBlur = 10;
+        ctx.fillStyle = "rgba(255,255,180,0.9)";
+        ctx.fillText("φ", phiX, phiY);
+        // Subtitle
+        ctx.shadowBlur = 0;
+        ctx.font = "bold 13px monospace";
+        ctx.globalAlpha = 0.55 * phiPulse;
+        ctx.fillStyle = "rgba(255,210,80,1)";
+        ctx.fillText("φ = (1+√5)/2 ≈ 1.618033...", phiX, phiY + 52);
         ctx.restore();
       }
 
@@ -361,13 +413,13 @@ export default function ZenithApexBackground() {
         ctx.restore();
       }
 
-      // ── Platonic Solids orbiting ──
+      // ── Platonic Solids orbiting (bigger, lower below sun) ──
       solids.forEach((solid, si) => {
         const orb = solidOrbit[si];
         const orbitR = Math.min(W, H) * orb.r;
         const angle = t * orb.speed + orb.phase;
         const sox = cx + Math.cos(angle) * orbitR;
-        const soy = cy + Math.sin(angle) * orbitR * 0.55;
+        const soy = cy + H * orb.yOff + Math.sin(angle) * orbitR * 0.45;
         const spin = t * (0.7 + si * 0.15);
         const color = solidColors[si];
 
@@ -380,22 +432,26 @@ export default function ZenithApexBackground() {
         });
 
         ctx.save();
-        ctx.globalAlpha = 0.7;
+        ctx.globalAlpha = 0.88;
         solid.e.forEach(([a, b]) => {
           const pa = proj[a], pb = proj[b];
           const depth = Math.max(0, Math.min(1, (pa[2] + pb[2]) / 600));
           ctx.beginPath();
           ctx.moveTo(pa[0], pa[1]);
           ctx.lineTo(pb[0], pb[1]);
-          ctx.strokeStyle = `${color}${0.2 + depth * 0.6})`;
-          ctx.lineWidth = 1.2;
+          ctx.shadowColor = color + "1)";
+          ctx.shadowBlur = 8;
+          ctx.strokeStyle = `${color}${0.35 + depth * 0.65})`;
+          ctx.lineWidth = 1.8;
           ctx.stroke();
         });
         // Vertex dots
         proj.forEach(p => {
           ctx.beginPath();
-          ctx.arc(p[0], p[1], 2, 0, Math.PI * 2);
-          ctx.fillStyle = `${color}0.8)`;
+          ctx.arc(p[0], p[1], 3, 0, Math.PI * 2);
+          ctx.fillStyle = `${color}1)`;
+          ctx.shadowColor = color + "1)";
+          ctx.shadowBlur = 10;
           ctx.fill();
         });
         ctx.restore();
