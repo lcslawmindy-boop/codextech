@@ -2,6 +2,7 @@ import { Outlet, useLocation } from "react-router-dom";
 import BottomTabBar from "./BottomTabBar";
 import { useTrial } from "@/lib/TrialContext";
 import { AnimatePresence, motion } from "framer-motion";
+import ZenithApexBackground from "./backgrounds/ZenithApexBackground";
 
 // Pages that should NOT show the bottom tab bar
 const HIDDEN_TAB_ROUTES = ["/legal", "/checkout", "/paywall", "/pricing", "/free-vault", "/"];
@@ -33,8 +34,10 @@ export default function MobileLayout() {
         paddingTop: isTrial ? "calc(env(safe-area-inset-top) + 34px)" : "env(safe-area-inset-top)",
         paddingBottom: hideTab ? "env(safe-area-inset-bottom)" : "calc(env(safe-area-inset-bottom) + 64px)",
         overscrollBehavior: "none",
+        background: "hsl(222 47% 11%)",
       }}
     >
+      <ZenithApexBackground />
       <div className="flex-1 relative overflow-hidden">
         <AnimatePresence mode="wait" initial={false}>
           <motion.div
