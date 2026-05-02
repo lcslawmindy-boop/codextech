@@ -14,7 +14,7 @@ export default function ZatLogoWatermark() {
       <img
         src={logoUrl}
         alt="Zenith Apex Tech"
-        className="h-16 w-16 rounded-lg opacity-75 hover:opacity-100 transition-opacity"
+        className="h-20 w-20 rounded-lg opacity-75 hover:opacity-100 transition-opacity"
         style={{
           filter: 'drop-shadow(0 0 12px rgba(0, 220, 255, 0.8)) drop-shadow(0 0 24px rgba(0, 180, 255, 0.5))',
           animation: 'zatPulse 3s ease-in-out infinite',
