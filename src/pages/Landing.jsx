@@ -29,13 +29,13 @@ export default function Landing() {
           <div className="flex items-center gap-6 flex-1">
             <div style={{ animation: "zatPulse 2.5s ease-in-out infinite" }} className="relative">
               <div className="relative group">
-                <img src="https://media.base44.com/images/public/69ccefebfea78b23498c66a8/0b2ba0d8e_generated_image.png" alt="Zenith Apex Tech" className="h-32 w-32 rounded-lg cursor-pointer hover:opacity-90 transition-opacity" style={{ filter: "drop-shadow(0 0 40px rgba(0, 255, 0, 1))", border: "4px solid rgba(0, 255, 0, 0.95)" }} />
+                <img src="https://media.base44.com/images/public/69ccefebfea78b23498c66a8/0b2ba0d8e_generated_image.png" alt="Zenith Apex Tech" className="h-48 w-48 rounded-lg cursor-pointer hover:opacity-90 transition-opacity" style={{ filter: "drop-shadow(0 0 40px rgba(0, 255, 0, 1))", border: "4px solid rgba(0, 255, 0, 0.95)" }} />
                 <a href="https://media.base44.com/images/public/69ccefebfea78b23498c66a8/0b2ba0d8e_generated_image.png" download className="absolute -bottom-8 left-0 text-xs text-green-400 opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap font-bold hover:text-green-300">[ Download PDF ]</a>
               </div>
               <div className="absolute -top-3 -right-3 px-3 py-1.5 bg-orange-600 text-black text-xs font-black rounded" style={{ boxShadow: "0 0 16px rgba(255, 102, 0, 1)" }}>TOP SECRET</div>
             </div>
             <div>
-              <p className="text-white font-black text-5xl tracking-[0.2em] leading-tight" style={{ textShadow: "0 0 0 3px rgba(0, 255, 0, 0.9), 0 0 20px rgba(0, 255, 0, 1), 0 0 40px rgba(0, 255, 0, 0.8), 0 0 60px rgba(0, 255, 0, 0.5)" }}>ZENITH APEX T.E.C.H</p>
+              <p className="text-white font-black text-7xl tracking-[0.3em] leading-tight" style={{ textShadow: "0 0 0 3px rgba(0, 255, 0, 0.9), 0 0 20px rgba(0, 255, 0, 1), 0 0 40px rgba(0, 255, 0, 0.8), 0 0 60px rgba(0, 255, 0, 0.5)" }}>ZENITH APEX T.E.C.H</p>
               <p className="text-green-600 text-sm font-bold">[ CLASSIFIED ACCESS ONLY ]</p>
               <p className="text-green-500 text-sm mt-1 italic">Members Granted Special Clearance</p>
             </div>
