@@ -83,6 +83,12 @@ export default function ZaraAlienMascot() {
               {/* Mouth inner */}
               <ellipse cx="50" cy="75" rx="5" ry="3" fill="rgba(0,0,0,0.2)" style={{ animation: 'mouthTalk 1.2s ease-in-out infinite' }} />
 
+              {/* Large eye - top center */}
+              <circle cx="50" cy="25" r="10" fill="#ffffff" stroke="rgba(0,0,0,0.1)" strokeWidth="1" />
+              <circle cx="50" cy="25" r="7" fill="#00ff80" />
+              <circle cx="50" cy="25" r="4" fill="#000000" />
+              <circle cx="48" cy="23" r="1.5" fill="#ffffff" opacity="0.9" />
+
               {/* Outer glow */}
               <circle cx="50" cy="45" r="38" fill="none" stroke="rgba(0, 220, 255, 0.3)" strokeWidth="2" />
             </svg>
@@ -144,6 +150,12 @@ export default function ZaraAlienMascot() {
               {/* Glowing synapses - right */}
               <circle cx="75" cy="30" r="1.5" fill="#00ff80" opacity="0.7" style={{ animation: 'neuronPulse 1.7s ease-in-out infinite' }} />
               <circle cx="68" cy="55" r="1.5" fill="#00ff80" opacity="0.7" style={{ animation: 'neuronPulse 1.9s ease-in-out infinite' }} />
+              {/* Large eye - top center */}
+              <circle cx="50" cy="20" r="8" fill="#ffffff" stroke="rgba(0,0,0,0.1)" strokeWidth="0.8" />
+              <circle cx="50" cy="20" r="5.5" fill="#00ff80" />
+              <circle cx="50" cy="20" r="3" fill="#000000" />
+              <circle cx="48.5" cy="18.5" r="1" fill="#ffffff" opacity="0.9" />
+
               {/* Mouth - talking */}
               <ellipse cx="50" cy="75" rx="6" ry="4" fill="#ff6b9d" stroke="rgba(0,0,0,0.3)" strokeWidth="0.8" style={{ animation: 'mouthTalk 1.2s ease-in-out infinite' }} />
             </svg>
