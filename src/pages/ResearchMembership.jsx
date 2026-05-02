@@ -302,7 +302,7 @@ export default function ResearchMembership() {
                 { feature: "40+ patent analyses with prosecution history", value: "$400" },
                 { feature: "Engineering documentation & sourcing guides", value: "$250" },
                 { feature: "Step-by-step build frameworks", value: "$200" },
-                { feature: "10 Invention Dossier Rolls (up to 3 inventions per dossier)", value: "$490" },
+                { feature: "3 Invention Dossier Generations (up to 3 inventions each)", value: "$597" },
                 { feature: "Bring-to-Market Commercialization Roadmap", value: "$199" },
                 { feature: "Direct expert support (48hr response)", value: "$300" },
                 { feature: "20% off EMF Protection Shop", value: "—" },
@@ -318,7 +318,7 @@ export default function ResearchMembership() {
               ))}
             </div>
             <div className="bg-cyan-950/30 border border-cyan-800 rounded-lg p-3 mb-4">
-              <p className="text-cyan-300 text-xs font-bold">Total Market Value: $3,825</p>
+              <p className="text-cyan-300 text-xs font-bold">Total Market Value: $3,929</p>
               <p className="text-gray-400 text-xs mt-1">At $99/month, you'd pay $1,188+ yearly for individual items. Get everything at $891/year (annual) or $1,188/year (monthly).</p>
             </div>
 
@@ -375,7 +375,7 @@ export default function ResearchMembership() {
                 { feature: "Video build guides — step-by-step ($50 ea, included free)", value: "$50 ea" },
                 { feature: "Verified supplier sourcing list per device", value: "$200+" },
                 { feature: "AI Patent Attorney — full patent drafting tool", value: "$500+" },
-                { feature: "25 Invention Dossier IP Generator rolls/mo", value: "$1,225" },
+                { feature: "5 Invention Dossier Generations (up to 5 inventions each, unlimited monthly)", value: "$1,497" },
                 { feature: "Commercialization roadmap w/ BOM & milestones", value: "$400" },
                 { feature: "Bring-to-Market pitch deck (auto-generated)", value: "$300" },
                 { feature: "PDF export included ($50 value — free for Pro)", value: "$50 ea" },
@@ -392,8 +392,8 @@ export default function ResearchMembership() {
 
             {/* Value callout box */}
             <div className="bg-gradient-to-r from-purple-950/60 to-pink-950/40 border border-purple-600 rounded-xl p-4 mb-4">
-              <p className="text-purple-200 text-xs font-black mb-1">🎯 Total Bundle Value: $5,025+/month</p>
-              <p className="text-gray-300 text-xs">Courses + Build Plans + PDFs + Video Guides + Supplier Sourcing + AI Patent Attorney + 25 Dossiers + Commercialization Roadmap + Pitch Deck + PDF/Video exports</p>
+              <p className="text-purple-200 text-xs font-black mb-1">🎯 Total Bundle Value: $5,294+/month</p>
+              <p className="text-gray-300 text-xs">Courses + Build Plans + PDFs + Video Guides + Supplier Sourcing + AI Patent Attorney + 5 Invention Dossier Generations (5 inventions each) + Commercialization Roadmap + Pitch Deck + PDF/Video exports</p>
             </div>
 
             <CheckoutButton
