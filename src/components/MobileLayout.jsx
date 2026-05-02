@@ -37,8 +37,12 @@ export default function MobileLayout() {
       case 'off':
         return <SolidLogoBackground />;
       case 'subdued':
+      case 'defense':
+      case 'researcher':
+      case 'institutional':
         return <SubduedEquationsBackground />;
       case 'interactive':
+      case 'fun':
       default:
         return <ZenithApexBackground />;
     }
