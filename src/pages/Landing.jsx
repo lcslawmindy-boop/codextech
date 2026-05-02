@@ -291,7 +291,7 @@ export default function Landing() {
           </div>
           <div className="mt-8 bg-yellow-950/20 border border-yellow-700/50 rounded-xl p-6 text-center">
             <p className="text-yellow-300 text-sm font-bold flex items-center justify-center gap-2">
-              <Percent size={16} /> When a deal closes, ZARP takes 5% commission — transparent, fair, and focused on member success.
+              <Percent size={16} /> When a deal closes, Zenith Apex Tech takes 5% commission — transparent, fair, and focused on member success.
             </p>
           </div>
         </div>
@@ -367,7 +367,7 @@ export default function Landing() {
          <div className="border border-gray-700 rounded-2xl p-6 text-center" style={{ background: "rgba(10,10,30,0.5)" }}>
            <p className="text-gray-400 text-sm mb-3">Prefer to buy individual items?</p>
            <Link to="/alacarte" className="inline-flex items-center gap-2 text-cyan-400 hover:text-cyan-300 font-bold text-sm">
-             Browse À La Carte Catalog (Courses $147–$247, Build Plans $189–$1,297) →
+             Browse À La Carte Catalog (Courses $147–$247, Build Plans $189–$1,297) for Zenith Apex Tech members →
            </Link>
          </div>
        </div>

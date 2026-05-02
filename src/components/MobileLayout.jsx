@@ -3,7 +3,7 @@ import BottomTabBar from "./BottomTabBar";
 import { useTrial } from "@/lib/TrialContext";
 import { AnimatePresence, motion } from "framer-motion";
 import ZenithApexBackground from "./backgrounds/ZenithApexBackground";
-import ZatLogoSignature from "./ZatLogoSignature";
+import ZenithApexLogoWatermark from "./ZenithApexLogoWatermark";
 
 // Pages that should NOT show the bottom tab bar
 const HIDDEN_TAB_ROUTES = ["/legal", "/checkout", "/paywall", "/pricing", "/free-vault", "/"];
@@ -39,7 +39,7 @@ export default function MobileLayout() {
       }}
     >
       <ZenithApexBackground />
-      <ZatLogoSignature />
+      <ZenithApexLogoWatermark />
       <div className="flex-1 relative overflow-hidden" style={{ zIndex: 1 }}>
         <AnimatePresence mode="wait" initial={false}>
           <motion.div

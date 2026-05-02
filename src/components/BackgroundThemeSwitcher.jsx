@@ -66,7 +66,7 @@ const THEMES = [
   },
 ];
 
-const STORAGE_KEY = "codextech_bg_theme";
+const STORAGE_KEY = "zenith_apex_bg_theme";
 
 export function useBackgroundTheme() {
   const [themeId, setThemeId] = useState(() => localStorage.getItem(STORAGE_KEY) || "radar");

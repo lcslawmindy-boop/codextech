@@ -3,8 +3,8 @@ import { Link } from "react-router-dom";
 import { BookOpen, Heart, Clock, ChevronRight, Loader2 } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 
-const RECENT_DOCS_KEY = "codextech_recent_docs";
-const FAVORITES_KEY = "codextech_fav_builds";
+const RECENT_DOCS_KEY = "zenith_apex_recent_docs";
+const FAVORITES_KEY = "zenith_apex_fav_builds";
 
 export function trackRecentDoc(doc) {
   const existing = JSON.parse(localStorage.getItem(RECENT_DOCS_KEY) || "[]");
