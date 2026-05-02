@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
+import { motion } from 'framer-motion';
 
 export default function ZatLogoWatermark() {
   const [logoUrl] = useState('https://media.base44.com/images/public/69ccefebfea78b23498c66a8/bcf3bcb42_df887ac44_logo.png');
+  const [position, setPosition] = useState({ x: 0, y: 0 });
 
   useEffect(() => {
     // Preload logo
@@ -10,7 +12,15 @@ export default function ZatLogoWatermark() {
   }, [logoUrl]);
 
   return (
-    <div className="fixed top-4 right-6 z-[9990] pointer-events-none flex flex-col items-center gap-3">
+    <motion.div
+      drag
+      dragMomentum={false}
+      onDragEnd={(event, info) => {
+        setPosition({ x: position.x + info.offset.x, y: position.y + info.offset.y });
+      }}
+      style={{ x: position.x, y: position.y }}
+      className="fixed top-4 right-6 z-[9990] flex flex-col items-center gap-3 cursor-grab active:cursor-grabbing"
+    >
       {/* Neon Sphere */}
       <div
         className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
@@ -55,6 +65,6 @@ export default function ZatLogoWatermark() {
           50% { boxShadow: 0 0 30px rgba(0, 255, 200, 1), 0 0 60px rgba(0, 220, 255, 0.8), inset -2px -2px 12px rgba(0, 0, 0, 0.5); }
         }
       `}</style>
-    </div>
+    </motion.div>
   );
 }
