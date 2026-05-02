@@ -16,11 +16,7 @@ export default function Landing() {
     <div className="min-h-screen relative bg-black" style={{ fontFamily: "'Courier Prime', monospace", letterSpacing: "0.05em" }}>
       <ClassifiedMatrixBackground />
       
-      {/* Classified Document Watermark - Bottom Left */}
-      <div className="fixed bottom-6 left-6 z-40 flex flex-col items-start gap-2" style={{ animation: "zatPulse 3s ease-in-out infinite" }}>
-        <img src="https://media.base44.com/images/public/69ccefebfea78b23498c66a8/bcf3bcb42_df887ac44_logo.png" alt="ZAT" className="h-16 w-16 rounded-lg" style={{ filter: "drop-shadow(0 0 24px rgba(0, 255, 0, 0.8))", border: "3px solid rgba(0, 255, 0, 0.7)" }} />
-        <p className="text-xs text-green-400 font-bold tracking-widest">[ CLASSIFIED ]</p>
-      </div>
+
 
       {/* Research Navigation Bar */}
       <EnhancedResearchNavBar />
@@ -29,16 +25,16 @@ export default function Landing() {
       <nav className="border-b-4 px-6 py-6 sticky top-0 z-50 relative" style={{ background: "rgba(5, 5, 5, 0.98)", backdropFilter: "blur(12px)", borderColor: "#ff6600" }}>
         <div className="absolute inset-0 pointer-events-none opacity-5" style={{ backgroundImage: "repeating-linear-gradient(0deg, transparent, transparent 2px, #00ff00 2px, #00ff00 4px)" }} />
         <div className="max-w-6xl mx-auto flex items-center justify-between gap-6 relative z-10">
-          {/* Logo & Mission - Classified Style */}
-          <div className="flex items-center gap-4 flex-1">
+          {/* Logo & Mission - Classified Style - ENLARGED */}
+          <div className="flex items-center gap-6 flex-1">
             <div style={{ animation: "zatPulse 2.5s ease-in-out infinite" }} className="relative">
-              <img src="https://media.base44.com/images/public/69ccefebfea78b23498c66a8/bcf3bcb42_df887ac44_logo.png" alt="Zenith Apex Tech" className="h-16 w-16 rounded-lg" style={{ filter: "drop-shadow(0 0 24px rgba(0, 255, 0, 0.9))", border: "3px solid rgba(0, 255, 0, 0.8)" }} />
-              <div className="absolute -top-2 -right-2 px-2 py-1 bg-orange-600 text-black text-xs font-black rounded" style={{ boxShadow: "0 0 12px rgba(255, 102, 0, 0.8)" }}>TOP SECRET</div>
+              <img src="https://media.base44.com/images/public/69ccefebfea78b23498c66a8/bcf3bcb42_df887ac44_logo.png" alt="Zenith Apex Tech" className="h-32 w-32 rounded-lg" style={{ filter: "drop-shadow(0 0 40px rgba(0, 255, 0, 1))", border: "4px solid rgba(0, 255, 0, 0.95)" }} />
+              <div className="absolute -top-3 -right-3 px-3 py-1.5 bg-orange-600 text-black text-xs font-black rounded" style={{ boxShadow: "0 0 16px rgba(255, 102, 0, 1)" }}>TOP SECRET</div>
             </div>
             <div>
-              <p className="text-green-400 font-black text-sm tracking-[0.2em]">ZENITH APEX T.E.C.H</p>
-              <p className="text-green-600 text-xs font-bold">[ CLASSIFIED ACCESS ONLY ]</p>
-              <p className="text-green-500 text-xs mt-1 italic">Members Granted Special Clearance</p>
+              <p className="text-green-400 font-black text-2xl tracking-[0.2em]">ZENITH APEX T.E.C.H</p>
+              <p className="text-green-600 text-sm font-bold">[ CLASSIFIED ACCESS ONLY ]</p>
+              <p className="text-green-500 text-sm mt-1 italic">Members Granted Special Clearance</p>
             </div>
           </div>
 
