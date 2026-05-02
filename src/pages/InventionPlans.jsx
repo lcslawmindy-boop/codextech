@@ -17,6 +17,8 @@ import { jsPDF } from "jspdf";
 import ResearchDisclaimer from "../components/ResearchDisclaimer";
 import AttributionFooter from "../components/AttributionFooter";
 import { itemImages } from "../lib/itemImages";
+import InventionSimulator from "../components/InventionSimulator";
+import BOMSourcingPanel from "../components/BOMSourcingPanel";
 
 
 // Legacy admin-only gate (free energy / medical claims — still admin-only)
@@ -1826,6 +1828,9 @@ export default function InventionPlans() {
 
               <VisualExplainer visual={visual} />
 
+              {/* Pre-Build Simulator */}
+              <InventionSimulator invention={data} />
+
               {data ? (
                 <>
                   {/* Overview — always visible */}
@@ -1881,13 +1886,20 @@ export default function InventionPlans() {
                     <>
                       {/* BOM */}
                       {data.bom?.length > 0 && (
-                        <div className="bg-gray-900 border border-gray-800 rounded-2xl p-5 mb-4">
-                          <button onClick={() => setShowBom(b => !b)} className="flex items-center justify-between w-full mb-3">
-                            <p className="text-yellow-400 font-bold text-xs uppercase tracking-wider">Bill of Materials ({data.bom.length} items)</p>
-                            {showBom ? <ChevronUp size={14} className="text-gray-500" /> : <ChevronDown size={14} className="text-gray-500" />}
-                          </button>
-                          {showBom && <BomChecklist bom={data.bom} checked={currentChecked} onToggle={handleBomToggle} onReset={handleBomReset} />}
-                        </div>
+                        <>
+                          <div className="bg-gray-900 border border-gray-800 rounded-2xl p-5 mb-4">
+                            <button onClick={() => setShowBom(b => !b)} className="flex items-center justify-between w-full mb-3">
+                              <p className="text-yellow-400 font-bold text-xs uppercase tracking-wider">Bill of Materials ({data.bom.length} items)</p>
+                              {showBom ? <ChevronUp size={14} className="text-gray-500" /> : <ChevronDown size={14} className="text-gray-500" />}
+                            </button>
+                            {showBom && <BomChecklist bom={data.bom} checked={currentChecked} onToggle={handleBomToggle} onReset={handleBomReset} />}
+                          </div>
+                          <BOMSourcingPanel
+                            bom={data.bom}
+                            checked={currentChecked}
+                            inventionTitle={selected?.title}
+                          />
+                        </>
                       )}
                       {/* Steps */}
                       {data.steps?.length > 0 && (
