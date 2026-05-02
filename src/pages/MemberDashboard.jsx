@@ -107,7 +107,7 @@ export default function MemberDashboard() {
               <div className="font-black text-white mb-1">
                 {tier === "starter" || tier === "member"
                     ? "Upgrade to Pro — Unlock Full Course Library + Advanced AI Tools"
-                    : "Upgrade to Elite — Advanced Systems + Monthly Strategy Call"}
+                    : "Upgrade to Pro — Advanced Systems + Monthly Strategy Call"}
               </div>
               <p className="text-gray-400 text-sm">
                 {tier === "starter" || tier === "member"
