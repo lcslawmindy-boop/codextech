@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from "react";
-import { Search, X, Loader2, MessageCircle, FileText, BookOpen } from "lucide-react";
+import { Search, X, Loader2, MessageCircle, FileText, BookOpen, GripVertical } from "lucide-react";
+import { motion } from "framer-motion";
 import { base44 } from "@/api/base44Client";
 
 const SITE_INDEX = [
@@ -27,6 +28,7 @@ export default function SiteSearchBar() {
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
   const [showAssistant, setShowAssistant] = useState(false);
+  const [position, setPosition] = useState({ x: 0, y: 0 });
   const searchRef = useRef(null);
 
   const handleSearch = (value) => {
@@ -80,7 +82,16 @@ export default function SiteSearchBar() {
   }, []);
 
   return (
-    <div className="fixed top-4 left-1/2 -translate-x-1/2 z-[8990] w-full max-w-2xl px-4" ref={searchRef}>
+    <motion.div 
+      drag
+      dragMomentum={false}
+      onDragEnd={(event, info) => {
+        setPosition({ x: position.x + info.offset.x, y: position.y + info.offset.y });
+      }}
+      style={{ x: position.x, y: position.y }}
+      className="fixed top-4 left-1/2 -translate-x-1/2 z-[8990] w-full max-w-2xl px-4 pointer-events-auto" 
+      ref={searchRef}
+    >
       <style>{`
         .search-input-focus {
           box-shadow: 0 0 24px rgba(0, 220, 255, 0.5), inset 0 0 12px rgba(0, 220, 255, 0.1);
@@ -91,14 +102,16 @@ export default function SiteSearchBar() {
       {/* Search Bar */}
       <div
         className={`relative transition-all duration-300 ${
-          isOpen ? "scale-100" : "scale-95 opacity-70 hover:scale-100 hover:opacity-100"
+          isOpen ? "scale-100" : "scale-100 opacity-85 hover:opacity-100"
         }`}
       >
         <div
-          className={`flex items-center gap-2 px-4 py-2.5 rounded-xl border border-gray-700 bg-gray-950/80 backdrop-blur-sm transition-all ${
-            isOpen ? "search-input-focus" : "hover:border-gray-600"
+          className={`flex items-center gap-2 px-4 py-2.5 rounded-xl border border-cyan-600/60 bg-gray-950/90 backdrop-blur-md transition-all shadow-lg hover:shadow-xl cursor-grab active:cursor-grabbing ${
+            isOpen ? "search-input-focus shadow-2xl" : ""
           }`}
         >
+          <GripVertical size={14} className="text-gray-600 hover:text-cyan-400 flex-shrink-0 cursor-grab" />
+          <Search size={16} className="text-cyan-500 flex-shrink-0" />
           <Search size={16} className="text-gray-500 flex-shrink-0" />
           <input
             type="text"
@@ -183,6 +196,6 @@ export default function SiteSearchBar() {
           </div>
         )}
       </div>
-    </div>
+    </motion.div>
   );
 }
