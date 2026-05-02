@@ -11,6 +11,7 @@ import { useBackgroundMode } from "./BackgroundModeControl";
 import InteractiveZatLogo from "./InteractiveZatLogo";
 import ZatLogoWatermark from "./ZatLogoWatermark";
 import SiteSearchBar from "./SiteSearchBar";
+import TopLogoHeader from "./TopLogoHeader";
 
 // Pages that should NOT show the bottom tab bar
 const HIDDEN_TAB_ROUTES = ["/legal", "/checkout", "/paywall", "/pricing", "/free-vault", "/"];
@@ -62,12 +63,13 @@ export default function MobileLayout() {
       <div
         className="flex flex-col flex-1"
         style={{
-          paddingTop: "env(safe-area-inset-top)",
+          paddingTop: "calc(env(safe-area-inset-top) + 140px)",
           paddingBottom: hideTab ? "env(safe-area-inset-bottom)" : "calc(env(safe-area-inset-bottom) + 64px)",
           overscrollBehavior: "none",
           background: "transparent",
         }}
       >
+        <TopLogoHeader />
         {/* Mobile Sidebar Toggle */}
         <div className="md:hidden">
           <SidebarNav />
