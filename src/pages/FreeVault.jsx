@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import ScalarWaveWatermark from "@/components/ScalarWaveWatermark";
 import { Zap, ChevronRight, Star, Download, Video, CheckCircle2, ShoppingCart, Loader2 } from "lucide-react";
+import ZatLogoWatermark from "@/components/ZatLogoWatermark";
 
 const FREE_ITEMS = [
   {
@@ -137,8 +138,8 @@ export default function FreeVault() {
       <div className="border-b border-gray-800 bg-gray-900/90 backdrop-blur px-5 py-4 flex items-center justify-between sticky top-0 z-40">
         <div className="flex items-center gap-3">
           <Link to="/" className="flex items-center gap-3">
-            <img src="https://media.base44.com/images/public/69ccefebfea78b23498c66a8/afb5ad292_CODEXTECHLOGO.png" alt="C.O.D.E.X.T.E.C.H." className="h-11 w-11 object-contain" />
-            <span className="font-black text-lg">C.O.D.E.X.T.E.C.H.</span>
+            <img src="https://media.base44.com/images/public/69ccefebfea78b23498c66a8/bcf3bcb42_df887ac44_logo.png" alt="ZAT Logo" className="h-11 w-11 rounded-lg object-contain" />
+            <span className="font-black text-sm">T.E.C.H</span>
           </Link>
           <span className="text-xs text-green-600 border border-green-800 px-2 py-0.5 rounded font-bold">100% FREE</span>
         </div>
