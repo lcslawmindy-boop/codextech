@@ -238,14 +238,14 @@ export default function TrustProofSection() {
                    <p className="text-cyan-300 text-xs font-semibold italic mt-2">{patent.relevance}</p>
                  </div>
                 <a
-                  href={`https://patents.google.com/patent/${patent.number}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-green-400 hover:text-green-300 text-xs font-bold flex items-center gap-1 transition-colors"
-                >
-                  View Patent
-                  <ExternalLink size={10} />
-                </a>
+                   href={`https://patents.google.com/patent/${patent.number.replace(/\s+/g, '').replace(/,/g, '')}`}
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   className="text-green-400 hover:text-green-300 text-xs font-bold flex items-center gap-1 transition-colors"
+                 >
+                   View Patent
+                   <ExternalLink size={10} />
+                 </a>
               </div>
             ))}
           </div>
