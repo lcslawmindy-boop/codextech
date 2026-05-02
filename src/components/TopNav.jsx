@@ -27,7 +27,7 @@ export default function TopNav() {
           <div className="hidden sm:block">
             <span className="font-black text-sm text-white block">ZENITH APEX TECH</span>
             <span className="text-xs text-gray-400 tracking-widest leading-tight" style={{ fontSize: '14px', fontWeight: '900' }}>T.E.C.H.</span>
-            <span className="text-xs text-gray-400 tracking-widest leading-tight">TEACH · ENGINEERS · CONSTRUCT · HARNESS</span>
+            <span className="text-xs text-gray-400 tracking-widest leading-tight">TEST · EXPERIMENT · CONSTRUCT · HARNESS</span>
             <span className="text-xs text-gray-500 tracking-widest leading-tight">TRUST · EVOLVE · COMMUNITY · HONOR</span>
           </div>
         </Link>
