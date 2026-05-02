@@ -126,29 +126,35 @@ export default function TrustProofSection() {
     <section className="px-6 py-16 border-b border-white/10">
       <style>{`
         .trust-card {
-          background: linear-gradient(135deg, rgba(10,30,60,0.6) 0%, rgba(15,40,70,0.4) 100%);
-          border: 1px solid rgba(80,180,255,0.3);
+          background: rgb(8, 12, 24);
+          border: 2px solid rgba(0, 220, 255, 0.8);
           border-radius: 12px;
           transition: all 0.3s ease;
+          box-shadow: 0 0 20px rgba(0, 220, 255, 0.4), inset 0 0 15px rgba(0, 200, 255, 0.08);
         }
         .trust-card:hover {
-          border-color: rgba(0,220,255,0.6);
-          box-shadow: 0 0 24px rgba(0,220,255,0.2);
+          border-color: rgba(0, 255, 255, 1);
+          box-shadow: 0 0 32px rgba(0, 220, 255, 0.7), inset 0 0 20px rgba(0, 200, 255, 0.12);
           transform: translateY(-2px);
+        }
+        .trust-card h4 {
+          font-weight: 900;
+          letter-spacing: 0.3px;
         }
         .verification-badge {
           display: inline-flex;
           align-items: center;
           gap: 4px;
-          background: rgba(0,200,150,0.2);
-          border: 1px solid rgba(0,200,150,0.5);
+          background: rgba(0, 220, 200, 0.12);
+          border: 1.5px solid rgba(0, 220, 200, 0.9);
           padding: 4px 8px;
           border-radius: 4px;
           font-size: 11px;
-          font-weight: bold;
-          color: #00d4aa;
+          font-weight: 900;
+          color: #00ffd4;
           text-transform: uppercase;
           letter-spacing: 0.5px;
+          text-shadow: 0 0 8px rgba(0, 220, 200, 0.6);
         }
       `}</style>
 
@@ -175,7 +181,7 @@ export default function TrustProofSection() {
               <div key={i} className="trust-card p-5">
                 <div className="flex justify-between items-start gap-3 mb-3">
                   <div className="flex-1 min-w-0">
-                    <h4 className="text-white font-bold text-sm mb-1 leading-snug">{pub.title}</h4>
+                    <h4 className="text-white font-black text-sm mb-1 leading-snug">{pub.title}</h4>
                     <p className="text-gray-400 text-xs">{pub.authors}</p>
                   </div>
                   {pub.verified && (
@@ -185,10 +191,10 @@ export default function TrustProofSection() {
                     </div>
                   )}
                 </div>
-                <div className="bg-gray-950/60 rounded-lg p-3 mb-3">
-                  <p className="text-gray-300 text-xs mb-1"><span className="text-gray-500">Journal:</span> {pub.journal} ({pub.year})</p>
-                  <p className="text-gray-300 text-xs"><span className="text-gray-500">Citations:</span> {pub.citations.toLocaleString()}</p>
-                </div>
+                <div className="bg-gray-900 rounded-lg p-3 mb-3 border border-gray-700">
+                   <p className="text-gray-200 text-xs font-semibold mb-1"><span className="text-cyan-300">Journal:</span> {pub.journal} ({pub.year})</p>
+                   <p className="text-gray-200 text-xs font-semibold"><span className="text-cyan-300">Citations:</span> {pub.citations.toLocaleString()}</p>
+                 </div>
                 <a
                   href={`https://doi.org/${pub.doi}`}
                   target="_blank"
@@ -219,18 +225,18 @@ export default function TrustProofSection() {
                 <div className="flex justify-between items-start gap-3 mb-3">
                   <div className="flex-1 min-w-0">
                     <p className="text-green-400 font-black text-xs uppercase tracking-widest mb-1">{patent.number}</p>
-                    <h4 className="text-white font-bold text-sm mb-2 leading-snug">{patent.title}</h4>
+                    <h4 className="text-white font-black text-sm mb-2 leading-snug">{patent.title}</h4>
                   </div>
                   <span className="text-xs font-bold px-2 py-1 rounded-full bg-green-900/40 border border-green-700 text-green-300 flex-shrink-0 whitespace-nowrap">
                     {patent.status}
                   </span>
                 </div>
-                <div className="bg-gray-950/60 rounded-lg p-3 mb-3 space-y-1">
-                  <p className="text-gray-300 text-xs"><span className="text-gray-500">Inventor:</span> {patent.inventor}</p>
-                  <p className="text-gray-300 text-xs"><span className="text-gray-500">Filed:</span> {patent.filed} • <span className="text-gray-500">Granted:</span> {patent.granted}</p>
-                  <p className="text-gray-300 text-xs"><span className="text-gray-500">Claims:</span> {patent.claims}</p>
-                  <p className="text-cyan-400 text-xs italic mt-2">{patent.relevance}</p>
-                </div>
+                <div className="bg-gray-900 rounded-lg p-3 mb-3 space-y-1 border border-gray-700">
+                   <p className="text-gray-200 text-xs font-semibold"><span className="text-green-300">Inventor:</span> {patent.inventor}</p>
+                   <p className="text-gray-200 text-xs font-semibold"><span className="text-green-300">Filed:</span> {patent.filed} • <span className="text-green-300">Granted:</span> {patent.granted}</p>
+                   <p className="text-gray-200 text-xs font-semibold"><span className="text-green-300">Claims:</span> {patent.claims}</p>
+                   <p className="text-cyan-300 text-xs font-semibold italic mt-2">{patent.relevance}</p>
+                 </div>
                 <a
                   href={`https://patents.google.com/patent/${patent.number}`}
                   target="_blank"
@@ -261,17 +267,17 @@ export default function TrustProofSection() {
                 <div className="flex justify-between items-start gap-3 mb-3">
                   <div className="flex-1 min-w-0">
                     <p className="text-purple-400 font-black text-xs uppercase tracking-widest mb-1">{report.reportID}</p>
-                    <h4 className="text-white font-bold text-sm mb-2 leading-snug">{report.title}</h4>
+                    <h4 className="text-white font-black text-sm mb-2 leading-snug">{report.title}</h4>
                   </div>
                   <span className="text-xs font-bold px-2 py-1 rounded-full bg-purple-900/40 border border-purple-700 text-purple-300 flex-shrink-0 whitespace-nowrap">
                     {report.classification}
                   </span>
                 </div>
-                <div className="bg-gray-950/60 rounded-lg p-3 mb-3 space-y-1">
-                  <p className="text-gray-300 text-xs"><span className="text-gray-500">Agency:</span> {report.agency}</p>
-                  <p className="text-gray-300 text-xs"><span className="text-gray-500">Published:</span> {report.year} • <span className="text-gray-500">Pages:</span> {report.pages}</p>
-                  <p className="text-purple-400 text-xs italic mt-2">{report.relevance}</p>
-                </div>
+                <div className="bg-gray-900 rounded-lg p-3 mb-3 space-y-1 border border-gray-700">
+                   <p className="text-gray-200 text-xs font-semibold"><span className="text-purple-300">Agency:</span> {report.agency}</p>
+                   <p className="text-gray-200 text-xs font-semibold"><span className="text-purple-300">Published:</span> {report.year} • <span className="text-purple-300">Pages:</span> {report.pages}</p>
+                   <p className="text-purple-300 text-xs font-semibold italic mt-2">{report.relevance}</p>
+                 </div>
                 <div className="text-purple-400 hover:text-purple-300 text-xs font-bold flex items-center gap-1 transition-colors cursor-default">
                   <Lock size={10} />
                   Archive verified
@@ -282,14 +288,14 @@ export default function TrustProofSection() {
         </div>
 
         {/* Credibility Statement */}
-        <div className="mt-16 bg-gradient-to-r from-cyan-950/30 to-purple-950/30 border border-cyan-700/40 rounded-2xl p-8 text-center">
-          <p className="text-gray-300 text-sm mb-4">
-            <span className="font-black text-white">Complete Institutional Verification.</span> Every research entry is traceable to its primary source. All patents indexed against USPTO records. All government reports authenticated against OSTI.gov and declassification archives.
-          </p>
-          <p className="text-gray-500 text-xs">
-            No speculation. No secondary interpretation. Institutional-grade research verified across 6+ countries.
-          </p>
-        </div>
+         <div className="mt-16 bg-gray-900 border-2 border-cyan-500 rounded-2xl p-8 text-center" style={{ boxShadow: "0 0 28px rgba(0, 220, 255, 0.5), inset 0 0 20px rgba(0, 200, 255, 0.1)" }}>
+           <p className="text-gray-100 text-sm mb-4 font-semibold">
+             <span className="font-black text-white text-lg drop-shadow-[0_0_12px_rgba(0,220,255,0.8)]">Complete Institutional Verification.</span> Every research entry is traceable to its primary source. All patents indexed against USPTO records. All government reports authenticated against OSTI.gov and declassification archives.
+           </p>
+           <p className="text-gray-300 text-xs font-semibold">
+             No speculation. No secondary interpretation. Institutional-grade research verified across 6+ countries.
+           </p>
+         </div>
       </div>
     </section>
   );
