@@ -121,10 +121,10 @@ export default function ZaraAlienMascot() {
               </g>
 
               {/* Smaller, realistic pupil */}
-              <circle cx="50" cy="50" r="8" fill="#1a1a1a" style={{ animation: 'pupilGaze 8s ease-in-out infinite' }} />
+              <circle cx="50" cy="50" r="8" fill="#1a1a1a" />
 
               {/* Pupil rim */}
-              <circle cx="50" cy="50" r="8" fill="none" stroke="rgba(255,255,255,0.2)" strokeWidth="1" style={{ animation: 'pupilGaze 8s ease-in-out infinite' }} />
+              <circle cx="50" cy="50" r="8" fill="none" stroke="rgba(255,255,255,0.2)" strokeWidth="1" />
 
               {/* Large primary highlight */}
               <circle cx="38" cy="38" r="8" fill="url(#highlight)" opacity="0.92" />
