@@ -217,7 +217,7 @@ export default function ResearchMembership() {
         {/* Tiers */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
           {/* Researcher Basic Tier */}
-          <div className="neon-card-default rounded-2xl p-8 hover:border-cyan-500/70 transition-all">
+          <div className="rounded-2xl p-8 transition-all" style={{ background: "rgb(8,10,22)", border: "2px solid rgba(80,160,240,0.8)", boxShadow: "0 0 28px rgba(60,130,240,0.4), inset 0 0 30px rgba(60,100,200,0.08)" }}>
             <h3 className="text-white font-black text-2xl mb-2">Researcher</h3>
             <p className="text-gray-400 text-sm mb-6">For curious individuals getting started</p>
 
@@ -278,7 +278,7 @@ export default function ResearchMembership() {
           </div>
 
           {/* Builder Tier */}
-          <div className="neon-card-cyan rounded-2xl p-8 relative transition-all">
+          <div className="rounded-2xl p-8 relative transition-all neon-card-cyan">
             <h3 className="text-white font-black text-2xl mb-2">Builder</h3>
             <p className="text-gray-500 text-sm mb-6">For engineers actively building systems</p>
 
@@ -344,7 +344,7 @@ export default function ResearchMembership() {
 
 
           {/* Pro Tier */}
-          <div className="neon-card-purple rounded-2xl p-8 relative transition-all">
+          <div className="rounded-2xl p-8 relative transition-all neon-card-purple">
             <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-gradient-to-r from-purple-600 to-pink-600 text-white text-xs font-black whitespace-nowrap">
               🔥 MOST POWERFUL
             </div>

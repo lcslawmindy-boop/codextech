@@ -298,58 +298,58 @@ export default function Landing() {
       </section>
 
       {/* Pricing */}
-      <section id="pricing" className="px-6 py-16 border-b border-white/10 solid-section">
+      <section id="pricing" className="px-6 py-16 border-b border-white/10" style={{ background: "rgb(5, 6, 14)" }}>
        <div className="max-w-6xl mx-auto">
          <h2 className="text-3xl font-black mb-12 text-center text-white drop-shadow-[0_0_20px_rgba(0,220,255,0.5)]">Membership Tiers</h2>
          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
            {/* Researcher */}
-           <div className="neon-card-default rounded-2xl p-8">
-             <h3 className="text-lg font-black mb-2 text-white">Researcher</h3>
-             <p className="text-gray-300 text-sm mb-6">Get started</p>
-             <div className="text-3xl font-black mb-1 text-cyan-300 drop-shadow-[0_0_10px_rgba(0,220,255,0.6)]">$49<span className="text-sm">/mo</span></div>
-             <p className="text-gray-400 text-xs mb-6">Core archive access</p>
-             <ul className="space-y-2 text-sm text-gray-100 mb-6 font-semibold">
+           <div className="neon-card-default rounded-2xl p-8" style={{ background: "rgb(8,10,22)", border: "2px solid rgba(80,160,240,0.8)", boxShadow: "0 0 24px rgba(60,130,240,0.4), inset 0 0 30px rgba(60,100,200,0.08)" }}>
+             <h3 className="text-xl font-black mb-2 text-white" style={{ textShadow: "0 0 12px rgba(80,180,255,0.5)" }}>Researcher</h3>
+             <p className="text-gray-200 text-sm mb-6 font-bold">Get started</p>
+             <div className="text-4xl font-black mb-1 text-cyan-300" style={{ textShadow: "0 0 18px rgba(0,220,255,0.9)" }}>$49<span className="text-base">/mo</span></div>
+             <p className="text-gray-300 text-xs mb-6 font-semibold">Core archive access</p>
+             <ul className="space-y-2.5 text-sm text-white mb-6 font-bold">
                <li>✓ 3 courses included</li>
                <li>✓ 3 build plans included</li>
                <li>✓ Core research archive</li>
                <li>✓ Monthly content drops</li>
              </ul>
-             <Link to="/research-membership" className="w-full py-2 rounded-lg bg-slate-700 hover:bg-slate-600 text-white font-bold text-sm transition-colors text-center block border border-slate-500">
+             <Link to="/research-membership" className="w-full py-2.5 rounded-lg bg-slate-700 hover:bg-slate-600 text-white font-black text-sm transition-colors text-center block border-2 border-blue-400/60" style={{ boxShadow: "0 0 12px rgba(80,160,255,0.3)" }}>
                Learn More
              </Link>
            </div>
 
            {/* Builder */}
            <div className="neon-card-cyan rounded-2xl p-8 relative">
-             <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 bg-cyan-500 rounded-full text-xs font-black text-black shadow-[0_0_12px_rgba(0,220,255,0.8)]">
+             <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 bg-cyan-500 rounded-full text-xs font-black text-black" style={{ boxShadow: "0 0 20px rgba(0,220,255,1)" }}>
                MOST POPULAR
              </div>
-             <h3 className="text-lg font-black mb-2 text-white">Builder</h3>
-             <p className="text-cyan-200 text-sm mb-6 font-semibold">For engineers building</p>
-             <div className="text-3xl font-black mb-1 text-cyan-300 drop-shadow-[0_0_14px_rgba(0,220,255,0.8)]">$99<span className="text-sm">/mo</span></div>
-             <p className="text-cyan-200/70 text-xs mb-6">Full engineering toolkit</p>
-             <ul className="space-y-2 text-sm text-white mb-6 font-semibold">
+             <h3 className="text-xl font-black mb-2 text-white" style={{ textShadow: "0 0 14px rgba(0,220,255,0.7)" }}>Builder</h3>
+             <p className="text-cyan-100 text-sm mb-6 font-bold">For engineers building</p>
+             <div className="text-4xl font-black mb-1 text-cyan-300" style={{ textShadow: "0 0 22px rgba(0,230,255,1)" }}>$99<span className="text-base">/mo</span></div>
+             <p className="text-cyan-200 text-xs mb-6 font-semibold">Full engineering toolkit</p>
+             <ul className="space-y-2.5 text-sm text-white mb-6 font-bold">
                <li>✓ All courses & build plans</li>
                <li>✓ 10 Invention Dossier rolls/mo</li>
                <li>✓ Patent analyses & FTO tools</li>
                <li>✓ Expert support (48hr response)</li>
                <li>✓ 20% EMF shop discount</li>
              </ul>
-             <Link to="/research-membership" className="w-full py-2 rounded-lg bg-cyan-500 hover:bg-cyan-400 text-black font-black text-sm transition-colors text-center block shadow-[0_0_16px_rgba(0,220,255,0.5)]">
+             <Link to="/research-membership" className="w-full py-2.5 rounded-lg bg-cyan-500 hover:bg-cyan-400 text-black font-black text-sm transition-colors text-center block" style={{ boxShadow: "0 0 24px rgba(0,220,255,0.8)" }}>
                Join Now
              </Link>
            </div>
 
            {/* Pro */}
            <div className="neon-card-purple rounded-2xl p-8 relative">
-             <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 bg-purple-500 rounded-full text-xs font-black text-white shadow-[0_0_12px_rgba(160,60,255,0.8)]">
+             <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 bg-purple-500 rounded-full text-xs font-black text-white" style={{ boxShadow: "0 0 20px rgba(180,80,255,1)" }}>
                🔥 FULL SUITE
              </div>
-             <h3 className="text-lg font-black mb-2 text-white">Pro</h3>
-             <p className="text-purple-200 text-sm mb-6 font-semibold">Complete platform</p>
-             <div className="text-3xl font-black mb-1 text-purple-300 drop-shadow-[0_0_14px_rgba(180,80,255,0.8)]">$199<span className="text-sm">/mo</span></div>
-             <p className="text-purple-200/70 text-xs mb-6">Everything included</p>
-             <ul className="space-y-2 text-sm text-white mb-6 font-semibold">
+             <h3 className="text-xl font-black mb-2 text-white" style={{ textShadow: "0 0 14px rgba(190,90,255,0.7)" }}>Pro</h3>
+             <p className="text-purple-100 text-sm mb-6 font-bold">Complete platform</p>
+             <div className="text-4xl font-black mb-1 text-purple-300" style={{ textShadow: "0 0 22px rgba(190,90,255,1)" }}>$199<span className="text-base">/mo</span></div>
+             <p className="text-purple-100 text-xs mb-6 font-semibold">Everything included</p>
+             <ul className="space-y-2.5 text-sm text-white mb-6 font-bold">
                <li>✓ All Builder features</li>
                <li>✓ 25 Invention Dossier rolls/mo</li>
                <li>✓ AI Patent Attorney tool</li>
@@ -357,7 +357,7 @@ export default function Landing() {
                <li>✓ Commercialization roadmap</li>
                <li>✓ Priority support</li>
              </ul>
-             <Link to="/research-membership" className="w-full py-2 rounded-lg bg-purple-500 hover:bg-purple-400 text-white font-black text-sm transition-colors text-center block shadow-[0_0_16px_rgba(160,60,255,0.5)]">
+             <Link to="/research-membership" className="w-full py-2.5 rounded-lg bg-purple-500 hover:bg-purple-400 text-white font-black text-sm transition-colors text-center block" style={{ boxShadow: "0 0 24px rgba(180,80,255,0.8)" }}>
                Upgrade Pro
              </Link>
            </div>
