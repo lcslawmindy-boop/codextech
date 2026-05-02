@@ -69,7 +69,6 @@ export default function MobileLayout() {
           background: "transparent",
         }}
       >
-        <TopLogoHeader />
         {/* Mobile Sidebar Toggle */}
         <div className="md:hidden">
           <SidebarNav />

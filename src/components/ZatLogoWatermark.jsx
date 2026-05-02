@@ -10,7 +10,7 @@ export default function ZatLogoWatermark() {
   }, [logoUrl]);
 
   return (
-    <div className="fixed bottom-6 right-6 z-[9990] pointer-events-none flex flex-col items-center gap-3">
+    <div className="fixed top-4 right-6 z-[9990] pointer-events-none flex flex-col items-center gap-3">
       {/* Neon Sphere */}
       <div
         className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
