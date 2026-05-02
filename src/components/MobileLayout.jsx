@@ -1,17 +1,14 @@
 import { Outlet, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 import BottomTabBar from "./BottomTabBar";
-import TopNav from "./TopNav";
+import SidebarNav from "./SidebarNav";
 import { useTrial } from "@/lib/TrialContext";
 import { AnimatePresence, motion } from "framer-motion";
 import ZenithApexBackground from "./backgrounds/ZenithApexBackground";
 import SolidLogoBackground from "./backgrounds/SolidLogoBackground";
 import SubduedEquationsBackground from "./backgrounds/SubduedEquationsBackground";
-import ZenithInteractiveController from "./ZenithInteractiveController";
-import ZenithThemeSwitcher from "./ZenithThemeSwitcher";
-import BackgroundModeControl, { useBackgroundMode } from "./BackgroundModeControl";
-import ZatLogoWatermark from "./ZatLogoWatermark";
-import ZenithAIMascot from "./ZenithAIMascot";
+import { useBackgroundMode } from "./BackgroundModeControl";
+import InteractiveZatLogo from "./InteractiveZatLogo";
 import SiteSearchBar from "./SiteSearchBar";
 
 // Pages that should NOT show the bottom tab bar
@@ -50,40 +47,48 @@ export default function MobileLayout() {
                   IMMERSIVE_ROUTES.some(r => pathname.startsWith(r));
 
   return (
-    <div
-      className="flex flex-col w-full"
-      style={{
-        minHeight: "100dvh",
-        paddingTop: "env(safe-area-inset-top)",
-        paddingBottom: hideTab ? "env(safe-area-inset-bottom)" : "calc(env(safe-area-inset-bottom) + 64px)",
-        overscrollBehavior: "none",
-        background: "transparent",
-      }}
-    >
-      {renderBackground()}
-      <TopNav />
-      {isTrial && <div className="h-[34px] bg-yellow-900/20 border-b border-yellow-700 flex items-center px-4"><span className="text-xs font-bold text-yellow-300">Trial Mode</span></div>}
-      <BackgroundModeControl mode={mode} setMode={setMode} />
-      <ZatLogoWatermark />
-      <ZenithAIMascot />
-      {mode === 'interactive' && <ZenithInteractiveController />}
-      {mode === 'interactive' && <ZenithThemeSwitcher />}
-      <SiteSearchBar />
-      <div className="flex-1 relative overflow-hidden" style={{ zIndex: 1 }}>
-        <AnimatePresence mode="wait" initial={false}>
-          <motion.div
-            key={pathname}
-            variants={slideVariants}
-            initial="initial"
-            animate="animate"
-            exit="exit"
-            className="absolute inset-0 overflow-y-auto"
-          >
-            <Outlet />
-          </motion.div>
-        </AnimatePresence>
+    <div className="flex w-full" style={{ minHeight: "100dvh" }}>
+      {/* Sidebar */}
+      <div className="hidden md:block w-64 flex-shrink-0">
+        <SidebarNav />
       </div>
-      {!hideTab && <BottomTabBar />}
+
+      {/* Main Content */}
+      <div
+        className="flex flex-col flex-1"
+        style={{
+          paddingTop: "env(safe-area-inset-top)",
+          paddingBottom: hideTab ? "env(safe-area-inset-bottom)" : "calc(env(safe-area-inset-bottom) + 64px)",
+          overscrollBehavior: "none",
+          background: "transparent",
+        }}
+      >
+        {/* Mobile Sidebar Toggle */}
+        <div className="md:hidden">
+          <SidebarNav />
+        </div>
+
+        {renderBackground()}
+        {isTrial && <div className="h-[34px] bg-yellow-900/20 border-b border-yellow-700 flex items-center px-4"><span className="text-xs font-bold text-yellow-300">Trial Mode</span></div>}
+        <SiteSearchBar />
+        <InteractiveZatLogo />
+
+        <div className="flex-1 relative overflow-hidden" style={{ zIndex: 1 }}>
+          <AnimatePresence mode="wait" initial={false}>
+            <motion.div
+              key={pathname}
+              variants={slideVariants}
+              initial="initial"
+              animate="animate"
+              exit="exit"
+              className="absolute inset-0 overflow-y-auto"
+            >
+              <Outlet />
+            </motion.div>
+          </AnimatePresence>
+        </div>
+        {!hideTab && <BottomTabBar />}
+      </div>
     </div>
   );
 }
