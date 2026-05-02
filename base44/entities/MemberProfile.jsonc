@@ -1,0 +1,98 @@
+{
+  "name": "MemberProfile",
+  "type": "object",
+  "properties": {
+    "user_email": {
+      "type": "string"
+    },
+    "profile_type": {
+      "type": "string",
+      "enum": [
+        "inventor",
+        "investor",
+        "both"
+      ],
+      "default": "inventor"
+    },
+    "display_name": {
+      "type": "string"
+    },
+    "anonymous_alias": {
+      "type": "string",
+      "description": "Public name shown in marketplace (not real name)"
+    },
+    "bio": {
+      "type": "string"
+    },
+    "profile_verified": {
+      "type": "boolean",
+      "default": false
+    },
+    "verified_date": {
+      "type": "string"
+    },
+    "expertise_areas": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "investment_range_min": {
+      "type": "number"
+    },
+    "investment_range_max": {
+      "type": "number"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "suspended",
+        "inactive"
+      ],
+      "default": "active"
+    },
+    "communications_encrypted": {
+      "type": "boolean",
+      "default": true
+    },
+    "bank_account_last4": {
+      "type": "string",
+      "description": "Last 4 digits of verified bank account (for commission payout)"
+    },
+    "tax_id_verified": {
+      "type": "boolean",
+      "default": false
+    },
+    "kyc_status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "verified",
+        "rejected"
+      ],
+      "default": "pending"
+    },
+    "total_commissions_earned": {
+      "type": "number",
+      "default": 0
+    },
+    "active_deals": {
+      "type": "integer",
+      "default": 0
+    },
+    "completed_deals": {
+      "type": "integer",
+      "default": 0
+    },
+    "created_date": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "user_email",
+    "profile_type",
+    "display_name",
+    "anonymous_alias"
+  ]
+}

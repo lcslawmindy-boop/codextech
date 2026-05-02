@@ -1,0 +1,83 @@
+{
+  "name": "EscrowTransaction",
+  "type": "object",
+  "properties": {
+    "deal_id": {
+      "type": "string"
+    },
+    "inventor_email": {
+      "type": "string"
+    },
+    "inventor_alias": {
+      "type": "string"
+    },
+    "investor_email": {
+      "type": "string"
+    },
+    "investor_alias": {
+      "type": "string"
+    },
+    "transaction_amount": {
+      "type": "number"
+    },
+    "zat_commission_5pct": {
+      "type": "number"
+    },
+    "inventor_receives": {
+      "type": "number"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending_approval",
+        "funds_received",
+        "escrow_held",
+        "completed",
+        "disputed",
+        "refunded"
+      ],
+      "default": "pending_approval"
+    },
+    "stripe_payment_intent_id": {
+      "type": "string"
+    },
+    "milestone_deliverables": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "completed": {
+            "type": "boolean"
+          },
+          "verified_date": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "dispute_reason": {
+      "type": "string"
+    },
+    "created_date": {
+      "type": "string"
+    },
+    "completion_date": {
+      "type": "string"
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "deal_id",
+    "inventor_email",
+    "investor_email",
+    "transaction_amount"
+  ]
+}
