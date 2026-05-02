@@ -6,7 +6,7 @@ import { base44 } from '@/api/base44Client';
 export default function ZenithAIMascot() {
   const [open, setOpen] = useState(false);
   const [messages, setMessages] = useState([
-    { role: 'assistant', content: 'Hey! I\'m ZETA, your Zenith Apex research assistant. Need help navigating the platform or have questions about electromagnetics?' }
+    { role: 'assistant', content: 'Hey! I\'m ZARA, your Zenith Apex research assistant. Need help navigating the platform or have questions about electromagnetics?' }
   ]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
@@ -31,7 +31,7 @@ export default function ZenithAIMascot() {
 
     try {
       const response = await base44.integrations.Core.InvokeLLM({
-        prompt: `You are ZETA, a friendly AI mascot for Zenith Apex Technology. You help users navigate the research platform, explain electromagnetic concepts, and provide guidance on features. Keep responses concise and helpful. User asks: ${userMsg}`,
+        prompt: `You are ZARA, a friendly AI mascot for Zenith Apex Technology. You help users navigate the research platform, explain electromagnetic concepts, and provide guidance on features. Keep responses concise and helpful. User asks: ${userMsg}`,
         add_context_from_internet: false,
       });
 
@@ -59,7 +59,7 @@ export default function ZenithAIMascot() {
         >
           <div className="flex items-center justify-between p-3 border-b border-cyan-700/30">
             <div>
-              <h3 className="font-black text-cyan-300 text-sm">ZETA Assistant</h3>
+              <h3 className="font-black text-cyan-300 text-sm">ZARA Assistant</h3>
               <p className="text-xs text-gray-500">Zenith Research AI</p>
             </div>
             <button
@@ -98,7 +98,7 @@ export default function ZenithAIMascot() {
               type="text"
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              placeholder="Ask ZETA..."
+              placeholder="Ask ZARA..."
               className="flex-1 px-2 py-1 rounded text-xs bg-gray-900 border border-cyan-700/30 text-cyan-100 placeholder-gray-600 focus:outline-none focus:border-cyan-500"
               disabled={loading}
             />
