@@ -627,36 +627,123 @@ export default function ZenithApexBackground() {
       ctx.stroke();
       ctx.restore();
 
-      // ── Sun ──
+      // ── Sun orbit parameters ──
       const sunAngle = t * 1.2;
-      const sunOrbitR = globeR * 0.22;
-      const sunX = globeX + Math.sin(sunAngle) * sunOrbitR;
-      const sunY = (globeY - globeR) + 30 + Math.cos(sunAngle) * sunOrbitR * 0.35;
-      const sunRadius = 18;
+      const sunOrbitRx = globeR * 0.52;   // horizontal orbit radius
+      const sunOrbitRy = globeR * 0.18;   // vertical (flattened ellipse)
+      const sunOrbitCX = globeX;
+      const sunOrbitCY = (globeY - globeR) + 38;
+      const sunX = sunOrbitCX + Math.cos(sunAngle) * sunOrbitRx;
+      const sunY = sunOrbitCY + Math.sin(sunAngle) * sunOrbitRy;
+      const sunRadius = 36; // much bigger
 
-      const corona = ctx.createRadialGradient(sunX, sunY, 0, sunX, sunY, sunRadius * 5);
-      corona.addColorStop(0, "rgba(255,220,80,0.45)"); corona.addColorStop(0.3, "rgba(255,160,30,0.20)");
-      corona.addColorStop(0.7, "rgba(255,100,0,0.07)"); corona.addColorStop(1, "rgba(255,60,0,0)");
-      ctx.beginPath(); ctx.arc(sunX, sunY, sunRadius * 5, 0, Math.PI * 2); ctx.fillStyle = corona; ctx.fill();
+      // ── Green laser orbit ring ──
+      ctx.save();
+      // Outer glow of the orbit ellipse (green laser)
+      for (let pass = 0; pass < 3; pass++) {
+        const lw = [6, 3, 1.2][pass];
+        const alpha = [0.18, 0.38, 0.75][pass];
+        ctx.beginPath();
+        ctx.ellipse(sunOrbitCX, sunOrbitCY, sunOrbitRx, sunOrbitRy, 0, 0, Math.PI * 2);
+        ctx.strokeStyle = `rgba(0,255,80,${alpha})`;
+        ctx.lineWidth = lw;
+        ctx.shadowColor = "rgba(0,255,80,1)";
+        ctx.shadowBlur = [22, 14, 6][pass];
+        ctx.stroke();
+      }
+      // Bright laser dashes travelling along the orbit
+      for (let d = 0; d < 4; d++) {
+        const dAngle = sunAngle + (Math.PI * 2 / 4) * d;
+        const dashLen = 0.18;
+        ctx.beginPath();
+        for (let step = 0; step <= 12; step++) {
+          const a = dAngle + dashLen * (step / 12);
+          const dx = sunOrbitCX + Math.cos(a) * sunOrbitRx;
+          const dy = sunOrbitCY + Math.sin(a) * sunOrbitRy;
+          step === 0 ? ctx.moveTo(dx, dy) : ctx.lineTo(dx, dy);
+        }
+        ctx.strokeStyle = "rgba(120,255,120,0.95)";
+        ctx.lineWidth = 2.5;
+        ctx.shadowColor = "rgba(0,255,60,1)";
+        ctx.shadowBlur = 18;
+        ctx.stroke();
+      }
+      ctx.restore();
 
-      const midGlow = ctx.createRadialGradient(sunX, sunY, 0, sunX, sunY, sunRadius * 2.2);
-      midGlow.addColorStop(0, "rgba(255,240,160,0.75)"); midGlow.addColorStop(0.5, "rgba(255,180,40,0.40)");
+      // ── Smoky ring around sun orbit ──
+      ctx.save();
+      // Draw a thick, layered smoke/dust torus along the orbit path
+      const smokeSamples = 120;
+      for (let s = 0; s < smokeSamples; s++) {
+        const a = (Math.PI * 2 / smokeSamples) * s;
+        const sx = sunOrbitCX + Math.cos(a) * sunOrbitRx;
+        const sy = sunOrbitCY + Math.sin(a) * sunOrbitRy;
+        const smokeR = 18 + 10 * Math.sin(a * 5 + t * 0.8);
+        const smokeAlpha = 0.04 + 0.03 * Math.sin(a * 3 + t * 1.2);
+        const smGrad = ctx.createRadialGradient(sx, sy, 0, sx, sy, smokeR);
+        smGrad.addColorStop(0, `rgba(255,180,60,${smokeAlpha * 2.5})`);
+        smGrad.addColorStop(0.4, `rgba(255,120,20,${smokeAlpha})`);
+        smGrad.addColorStop(1, "rgba(80,20,0,0)");
+        ctx.beginPath();
+        ctx.arc(sx, sy, smokeR, 0, Math.PI * 2);
+        ctx.fillStyle = smGrad;
+        ctx.fill();
+      }
+      // Extra outer smoke haze
+      for (let s = 0; s < 60; s++) {
+        const a = (Math.PI * 2 / 60) * s + t * 0.05;
+        const sx = sunOrbitCX + Math.cos(a) * sunOrbitRx;
+        const sy = sunOrbitCY + Math.sin(a) * sunOrbitRy;
+        const smokeR = 30 + 14 * Math.sin(a * 7 + t * 0.5);
+        const smGrad = ctx.createRadialGradient(sx, sy, 0, sx, sy, smokeR);
+        smGrad.addColorStop(0, "rgba(255,140,30,0.06)");
+        smGrad.addColorStop(1, "rgba(80,10,0,0)");
+        ctx.beginPath();
+        ctx.arc(sx, sy, smokeR, 0, Math.PI * 2);
+        ctx.fillStyle = smGrad;
+        ctx.fill();
+      }
+      ctx.restore();
+
+      // ── Sun body ──
+      // Huge outer corona
+      const corona = ctx.createRadialGradient(sunX, sunY, 0, sunX, sunY, sunRadius * 7);
+      corona.addColorStop(0, "rgba(255,220,80,0.55)");
+      corona.addColorStop(0.2, "rgba(255,160,30,0.30)");
+      corona.addColorStop(0.5, "rgba(255,100,0,0.12)");
+      corona.addColorStop(0.8, "rgba(255,60,0,0.04)");
+      corona.addColorStop(1, "rgba(255,60,0,0)");
+      ctx.beginPath(); ctx.arc(sunX, sunY, sunRadius * 7, 0, Math.PI * 2); ctx.fillStyle = corona; ctx.fill();
+
+      // Mid glow
+      const midGlow = ctx.createRadialGradient(sunX, sunY, 0, sunX, sunY, sunRadius * 3);
+      midGlow.addColorStop(0, "rgba(255,250,180,0.85)");
+      midGlow.addColorStop(0.4, "rgba(255,200,50,0.55)");
       midGlow.addColorStop(1, "rgba(255,120,0,0)");
-      ctx.beginPath(); ctx.arc(sunX, sunY, sunRadius * 2.2, 0, Math.PI * 2); ctx.fillStyle = midGlow; ctx.fill();
+      ctx.beginPath(); ctx.arc(sunX, sunY, sunRadius * 3, 0, Math.PI * 2); ctx.fillStyle = midGlow; ctx.fill();
 
-      const core = ctx.createRadialGradient(sunX - 3, sunY - 3, 1, sunX, sunY, sunRadius);
-      core.addColorStop(0, "rgba(255,255,220,1)"); core.addColorStop(0.3, "rgba(255,230,80,1)");
-      core.addColorStop(0.7, "rgba(255,160,20,1)"); core.addColorStop(1, "rgba(220,80,0,0.9)");
+      // Core
+      const core = ctx.createRadialGradient(sunX - 6, sunY - 6, 2, sunX, sunY, sunRadius);
+      core.addColorStop(0, "rgba(255,255,240,1)");
+      core.addColorStop(0.3, "rgba(255,235,100,1)");
+      core.addColorStop(0.7, "rgba(255,170,20,1)");
+      core.addColorStop(1, "rgba(220,80,0,0.95)");
       ctx.beginPath(); ctx.arc(sunX, sunY, sunRadius, 0, Math.PI * 2); ctx.fillStyle = core; ctx.fill();
 
+      // Solar rays
       ctx.save(); ctx.translate(sunX, sunY); ctx.rotate(t * 1.8);
-      for (let r = 0; r < 12; r++) {
-        const ra = (Math.PI * 2 / 12) * r;
-        const inn = sunRadius + 4, out = sunRadius + 18 + Math.sin(t * 3 + r) * 5;
+      for (let r = 0; r < 16; r++) {
+        const ra = (Math.PI * 2 / 16) * r;
+        const inn = sunRadius + 5;
+        const out = sunRadius + 30 + Math.sin(t * 3 + r) * 10;
         ctx.beginPath();
         ctx.moveTo(Math.cos(ra) * inn, Math.sin(ra) * inn);
         ctx.lineTo(Math.cos(ra) * out, Math.sin(ra) * out);
-        ctx.strokeStyle = `rgba(255,210,60,0.55)`; ctx.lineWidth = 2.5; ctx.stroke();
+        ctx.strokeStyle = `rgba(255,220,60,0.7)`;
+        ctx.lineWidth = 3;
+        ctx.shadowColor = "rgba(255,200,0,1)";
+        ctx.shadowBlur = 10;
+        ctx.stroke();
       }
       ctx.restore();
 
