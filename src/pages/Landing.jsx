@@ -32,7 +32,7 @@ export default function Landing() {
               <div className="absolute -top-3 -right-3 px-3 py-1.5 bg-orange-600 text-black text-xs font-black rounded" style={{ boxShadow: "0 0 16px rgba(255, 102, 0, 1)" }}>TOP SECRET</div>
             </div>
             <div>
-              <p className="text-green-400 font-black text-2xl tracking-[0.2em]">ZENITH APEX T.E.C.H</p>
+              <p className="text-green-400 font-black text-5xl tracking-[0.2em] leading-tight" style={{ textShadow: "0 0 0 2px white, 0 0 20px rgba(0, 255, 0, 0.8), 0 0 40px rgba(0, 255, 0, 0.6)" }}>ZENITH APEX T.E.C.H</p>
               <p className="text-green-600 text-sm font-bold">[ CLASSIFIED ACCESS ONLY ]</p>
               <p className="text-green-500 text-sm mt-1 italic">Members Granted Special Clearance</p>
             </div>
