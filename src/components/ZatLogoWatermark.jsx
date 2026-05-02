@@ -26,7 +26,7 @@ export default function ZatLogoWatermark() {
         T.E.C.H
       </div>
       <div className="font-black text-cyan-400 tracking-widest text-center opacity-75 whitespace-nowrap" style={{ fontSize: '8px', textShadow: '0 0 8px rgba(0, 220, 255, 0.6)', lineHeight: '1.2' }}>
-        TEACH · EVOLVE · CONSTRUCT · HARNESS
+        TEACH · EXPLORE · CONSTRUCT · HARNESS
       </div>
       <style>{`
         @keyframes zatPulse {
