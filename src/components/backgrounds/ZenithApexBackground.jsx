@@ -244,13 +244,13 @@ export default function ZenithApexBackground() {
       "rgba(255,100,150,",     // Dodecahedron - pink
     ];
     // Ordered orbital positions
-    const solidOrbit = [
-      { r: 0.45, speed: 0.40, phase: 0,     scale: 60, tilt: 0.4, yOff: 0.28 },     // Tetrahedron
-      { r: 0.50, speed: 0.30, phase: 1.26,  scale: 55, tilt: 0.8, yOff: 0.32 },     // Cube
-      { r: 0.55, speed: 0.35, phase: 2.52,  scale: 58, tilt: 1.1, yOff: 0.36 },     // Octahedron
-      { r: 0.60, speed: 0.25, phase: 3.78,  scale: 52, tilt: 0.6, yOff: 0.40 },     // Icosahedron
-      { r: 0.52, speed: 0.28, phase: 5.04,  scale: 50, tilt: 1.5, yOff: 0.34 },     // Dodecahedron
-    ];
+     const solidOrbit = [
+       { r: 0.45, speed: 0.40, phase: 0,     scale: 35, tilt: 0.4, yOff: 0.28 },     // Tetrahedron
+       { r: 0.50, speed: 0.30, phase: 1.26,  scale: 32, tilt: 0.8, yOff: 0.32 },     // Cube
+       { r: 0.55, speed: 0.35, phase: 2.52,  scale: 34, tilt: 1.1, yOff: 0.36 },     // Octahedron
+       { r: 0.60, speed: 0.25, phase: 3.78,  scale: 30, tilt: 0.6, yOff: 0.40 },     // Icosahedron
+       { r: 0.52, speed: 0.28, phase: 5.04,  scale: 28, tilt: 1.5, yOff: 0.34 },     // Dodecahedron
+     ];
 
     const metCube = metatronsCube();
 
@@ -494,7 +494,7 @@ export default function ZenithApexBackground() {
           p = rotX(p, spin + orb.tilt);
           p = rotY(p, spin * 0.8);
           p = rotZ(p, spin * 0.6);
-          return project(p, sox, soy, 350, orb.scale * 0.65);
+          return project(p, sox, soy, 350, orb.scale);
         });
 
         ctx.save();
@@ -512,89 +512,88 @@ export default function ZenithApexBackground() {
           ctx.stroke();
         });
         // Vertex dots
-         proj.forEach(p => {
-           ctx.beginPath();
-           ctx.arc(p[0], p[1], 2.2, 0, Math.PI * 2);
-           ctx.fillStyle = `${color}1)`;
-           ctx.shadowColor = color + "1)";
-           ctx.shadowBlur = 8;
-           ctx.fill();
-         });
+        proj.forEach(p => {
+          ctx.beginPath();
+          ctx.arc(p[0], p[1], 3.5, 0, Math.PI * 2);
+          ctx.fillStyle = `${color}1)`;
+          ctx.shadowColor = color + "1)";
+          ctx.shadowBlur = 12;
+          ctx.fill();
+        });
         ctx.restore();
       });
 
 
 
       // ── Metatron's Cube + Ionosphere (own ordered orbit) ──
-      {
-        const metAngle = t * 0.12;
-        const metOrbitR = Math.min(W, H) * 0.30;
-        const metX = cx + Math.cos(metAngle) * metOrbitR;
-        const metY = H * 0.80 + Math.sin(metAngle) * metOrbitR * 0.4;
-        const metScale = Math.min(W, H) * 0.045;
-        const metRot = t * 0.35;
-        const metRot3D = t * 0.25;
+       {
+         const metAngle = t * 0.12;
+         const metOrbitR = Math.min(W, H) * 0.30;
+         const metX = cx + Math.cos(metAngle) * metOrbitR;
+         const metY = H * 0.80 + Math.sin(metAngle) * metOrbitR * 0.4;
+         const metScale = Math.min(W, H) * 0.04;
+         const metRot = t * 0.25;
+         const metRotX = t * 0.3;
+         const metRotY = t * 0.2;
 
         ctx.save();
-        ctx.globalAlpha = 0.72;
+        ctx.globalAlpha = 0.7;
+        ctx.translate(metX, metY);
 
-        // Draw ionosphere layers (concentric circles around Metatron)
+        // 3D transformation for depth
+        const cos_rx = Math.cos(metRotX), sin_rx = Math.sin(metRotX);
+        const cos_ry = Math.cos(metRotY), sin_ry = Math.sin(metRotY);
+        const cos_rz = Math.cos(metRot), sin_rz = Math.sin(metRot);
+
+        // Draw ionosphere layers with 3D perspective
         for (let layer = 0; layer < 3; layer++) {
-          const radius = metScale * (0.8 + layer * 0.5);
+          const radius = metScale * (0.6 + layer * 0.35);
+          const depth = 0.8 + layer * 0.25;
           ctx.beginPath();
-          ctx.arc(metX, metY, radius, 0, Math.PI * 2);
-          ctx.strokeStyle = `rgba(0,220,255,${0.25 - layer * 0.08})`;
-          ctx.lineWidth = 1.2;
+          ctx.arc(0, 0, radius, 0, Math.PI * 2);
+          ctx.strokeStyle = `rgba(0,220,255,${(0.3 - layer * 0.1) * depth})`;
+          ctx.lineWidth = 0.8;
           ctx.stroke();
         }
 
         // Draw edges with 3D depth
-         metCube.edges.forEach(([a, b]) => {
-           const pa = metCube.pts[a], pb = metCube.pts[b];
-           const ax = metX + (pa[0] * Math.cos(metRot) - pa[1] * Math.sin(metRot)) * metScale;
-           const ay = metY + (pa[0] * Math.sin(metRot) + pa[1] * Math.cos(metRot)) * metScale;
-           const bx = metX + (pb[0] * Math.cos(metRot) - pb[1] * Math.sin(metRot)) * metScale;
-           const by = metY + (pb[0] * Math.sin(metRot) + pb[1] * Math.cos(metRot)) * metScale;
-           ctx.beginPath();
-           ctx.moveTo(ax, ay);
-           ctx.lineTo(bx, by);
-           const depth = Math.sin((pa[0] + pb[0]) * 0.5 + metRot3D) * 0.5 + 0.5;
-           ctx.strokeStyle = `rgba(255,${Math.round(150 + depth * 50)},${Math.round(200 - depth * 50)},${0.45 + depth * 0.35})`;
-           ctx.lineWidth = 1.2 + depth * 0.8;
-           ctx.shadowColor = `rgba(255,100,200,${0.4 + depth * 0.4})`;
-           ctx.shadowBlur = 6 + depth * 8;
-           ctx.stroke();
-         });
+        metCube.edges.forEach(([a, b]) => {
+          const pa = metCube.pts[a], pb = metCube.pts[b];
+          // 3D rotation applied
+          const ax = (pa[0] * cos_rz - pa[1] * sin_rz) * metScale;
+          const ay = (pa[0] * sin_rz + pa[1] * cos_rz) * metScale * 0.7;
+          const bx = (pb[0] * cos_rz - pb[1] * sin_rz) * metScale;
+          const by = (pb[0] * sin_rz + pb[1] * cos_rz) * metScale * 0.7;
+          ctx.beginPath();
+          ctx.moveTo(ax, ay);
+          ctx.lineTo(bx, by);
+          ctx.strokeStyle = "rgba(255,100,200,0.5)";
+          ctx.lineWidth = 0.9;
+          ctx.shadowColor = "rgba(255,150,200,0.8)";
+          ctx.shadowBlur = 6;
+          ctx.stroke();
+        });
 
         // Draw circles (Flower of Life) with 3D depth
-         metCube.pts.forEach((p, idx) => {
-           const px = metX + (p[0] * Math.cos(metRot) - p[1] * Math.sin(metRot)) * metScale;
-           const py = metY + (p[0] * Math.sin(metRot) + p[1] * Math.cos(metRot)) * metScale;
-           const cr = metScale * 0.38;
-           const depth = Math.sin(idx + metRot3D) * 0.5 + 0.5;
-           // 3D sphere effect with layered circles
-           ctx.save();
-           for (let layer = 0; layer < 2; layer++) {
-             const layerAlpha = (1 - layer * 0.5) * (0.3 + depth * 0.5);
-             const layerR = cr * (1 - layer * 0.15);
-             const grad = ctx.createRadialGradient(px - 2, py - 2, 0, px, py, layerR);
-             grad.addColorStop(0, `rgba(255,${Math.round(150 + depth * 80)},${Math.round(200 + depth * 40)},${0.2 + layerAlpha})`);
-             grad.addColorStop(0.6, `rgba(255,100,200,${0.1 + layerAlpha * 0.5})`);
-             grad.addColorStop(1, `rgba(255,80,200,${layerAlpha * 0.15})`);
-             ctx.beginPath();
-             ctx.arc(px, py, layerR, 0, Math.PI * 2);
-             ctx.fillStyle = grad;
-             ctx.fill();
-           }
-           ctx.beginPath();
-           ctx.arc(px, py, cr, 0, Math.PI * 2);
-           ctx.strokeStyle = `rgba(255,${Math.round(120 + depth * 80)},${Math.round(200 - depth * 50)},${0.55 + depth * 0.35})`;
-           ctx.lineWidth = 1.3 + depth * 0.7;
-           ctx.shadowColor = `rgba(255,150,220,${0.5 + depth * 0.3})`;
-           ctx.shadowBlur = 8 + depth * 6;
-           ctx.stroke();
-           ctx.restore();
-         });
+        metCube.pts.forEach((p, idx) => {
+          const px = (p[0] * cos_rz - p[1] * sin_rz) * metScale;
+          const py = (p[0] * sin_rz + p[1] * cos_rz) * metScale * 0.7;
+          const cr = metScale * 0.35;
+          const depthFactor = 0.6 + 0.4 * Math.cos(idx * Math.PI / metCube.pts.length);
+          const grad = ctx.createRadialGradient(px, py, 0, px, py, cr);
+          grad.addColorStop(0, `rgba(255,150,200,${0.15 * depthFactor})`);
+          grad.addColorStop(0.6, `rgba(255,100,180,${0.08 * depthFactor})`);
+          grad.addColorStop(1, "rgba(255,80,200,0)");
+          ctx.beginPath();
+          ctx.arc(px, py, cr, 0, Math.PI * 2);
+          ctx.strokeStyle = `rgba(255,120,200,${0.6 * depthFactor})`;
+          ctx.lineWidth = 0.8;
+          ctx.shadowColor = "rgba(255,150,200,0.9)";
+          ctx.shadowBlur = 5;
+          ctx.stroke();
+          ctx.fillStyle = grad;
+          ctx.fill();
+        });
 
         ctx.restore();
       }
