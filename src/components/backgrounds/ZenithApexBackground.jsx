@@ -8,6 +8,29 @@ const EQUATIONS = [
   "k = ω/c", "S = (1/μ₀)(E×B)", "∂²Φ/∂t² = c²∇²Φ",
   "U = ½ε₀E²", "∇×H = J + ∂D/∂t", "φ = (1+√5)/2",
   "r = a·e^(bθ)", "E = mc²", "iℏ∂Ψ/∂t = ĤΨ",
+  // Quantum & wave mechanics
+  "ΔxΔp ≥ ℏ/2", "[x̂,p̂] = iℏ", "E_n = -13.6/n² eV",
+  "p = ℏk", "E = ℏω", "∇²ψ + (2m/ℏ²)(E-V)ψ = 0",
+  "⟨A⟩ = ∫ψ*Âψ dτ", "c = λf", "n = c/v",
+  // Tensor & relativity
+  "G_μν = 8πG/c⁴ · T_μν", "ds² = -c²dt² + dx² + dy² + dz²",
+  "F_μν = ∂_μA_ν - ∂_νA_μ", "T^μν_;ν = 0",
+  "Γ^λ_μν = ½g^λσ(∂_μg_νσ + ∂_νg_μσ - ∂_σg_μν)",
+  // Scalar / vacuum energy
+  "ρ_vac = ℏc/l_P⁴", "L = ½(∂_μφ)² - V(φ)",
+  "□φ = -dV/dφ", "T_μν = ∂_μφ∂_νφ - g_μνL",
+  "S = ∫d⁴x√(-g)·R/16πG",
+  // Sacred geometry & number theory
+  "φ² = φ + 1", "F_n = F_{n-1} + F_{n-2}",
+  "e^(iπ) + 1 = 0", "ζ(s) = Σ n^(-s)",
+  "∇·(ε₀E) = ρ_free", "J_μ = (ρc, J)",
+  // Thermodynamics & information
+  "S = -k_B Σ p_i ln(p_i)", "dS ≥ δQ/T",
+  "ΔG = ΔH - TΔS", "PV = nRT",
+  // Additional EM
+  "Z₀ = √(μ₀/ε₀) ≈ 377Ω", "B = μ₀(H + M)",
+  "∇×B = μ₀J + μ₀ε₀∂E/∂t", "W = ½LI²",
+  "V = -N·dΦ/dt", "τ = RC", "f_r = 1/(2π√LC)",
 ];
 
 // --- 3D math helpers ---
@@ -157,7 +180,7 @@ export default function ZenithApexBackground() {
     }));
 
     // Equations
-    const equations = Array.from({ length: 20 }, (_, i) => ({
+    const equations = Array.from({ length: 35 }, (_, i) => ({
       text: EQUATIONS[i % EQUATIONS.length],
       x: Math.random(), y: Math.random(),
       speed: 0.00013 + Math.random() * 0.00015,
