@@ -15,23 +15,23 @@ export default function MashupLogoCanvas() {
     const cx = size / 2;
     const cy = size / 2;
 
-    // Background
-    ctx.fillStyle = "rgba(10, 20, 40, 0.9)";
+    // Background - dark gradient
+    ctx.fillStyle = "rgba(20, 5, 30, 0.95)";
     ctx.fillRect(0, 0, size, size);
 
-    // Globe sphere base
+    // Globe sphere base - dark purple-blue
     const globeR = 80;
     const grad = ctx.createRadialGradient(cx - 10, cy - 10, 0, cx, cy, globeR);
-    grad.addColorStop(0, "rgba(50, 100, 150, 0.8)");
-    grad.addColorStop(0.7, "rgba(20, 50, 100, 0.9)");
-    grad.addColorStop(1, "rgba(10, 30, 60, 1)");
+    grad.addColorStop(0, "rgba(80, 40, 120, 0.8)");
+    grad.addColorStop(0.7, "rgba(40, 15, 70, 0.9)");
+    grad.addColorStop(1, "rgba(20, 5, 40, 1)");
     ctx.beginPath();
     ctx.arc(cx, cy, globeR, 0, Math.PI * 2);
     ctx.fillStyle = grad;
     ctx.fill();
 
-    // Grid lines (from logo 1, 2, 3)
-    ctx.strokeStyle = "rgba(200, 220, 255, 0.4)";
+    // Grid lines - vibrant magenta
+    ctx.strokeStyle = "rgba(255, 100, 200, 0.5)";
     ctx.lineWidth = 1.2;
     
     // Latitude lines
@@ -51,8 +51,8 @@ export default function MashupLogoCanvas() {
       ctx.stroke();
     }
 
-    // Cyan network connections (from logo 4)
-    ctx.strokeStyle = "rgba(0, 200, 255, 0.5)";
+    // Neon pink network connections
+    ctx.strokeStyle = "rgba(255, 50, 150, 0.6)";
     ctx.lineWidth = 1;
     for (let i = 0; i < 6; i++) {
       const a1 = (Math.PI * 2 / 6) * i;
@@ -64,8 +64,8 @@ export default function MashupLogoCanvas() {
       ctx.stroke();
     }
 
-    // Green accent lines (from logo 4, 5)
-    ctx.strokeStyle = "rgba(100, 255, 120, 0.4)";
+    // Bright yellow accent lines
+    ctx.strokeStyle = "rgba(255, 220, 50, 0.5)";
     ctx.lineWidth = 1.5;
     for (let i = 0; i < 4; i++) {
       const a = (Math.PI * 2 / 4) * i + Math.PI / 8;
@@ -76,10 +76,10 @@ export default function MashupLogoCanvas() {
       ctx.stroke();
     }
 
-    // Network nodes (from logo 4)
-    ctx.fillStyle = "rgba(0, 220, 200, 0.8)";
-    ctx.shadowColor = "rgba(0, 220, 200, 1)";
-    ctx.shadowBlur = 8;
+    // Network nodes - hot pink
+    ctx.fillStyle = "rgba(255, 80, 200, 0.9)";
+    ctx.shadowColor = "rgba(255, 80, 200, 1)";
+    ctx.shadowBlur = 10;
     for (let i = 0; i < 8; i++) {
       const a = (Math.PI * 2 / 8) * i;
       const r = globeR * 0.75;
@@ -88,15 +88,15 @@ export default function MashupLogoCanvas() {
       ctx.fill();
     }
 
-    // Orbiting nodes ring (from logo 4)
-    ctx.strokeStyle = "rgba(0, 180, 255, 0.3)";
+    // Orbiting nodes ring - neon purple
+    ctx.strokeStyle = "rgba(200, 100, 255, 0.4)";
     ctx.lineWidth = 2;
     ctx.beginPath();
     ctx.ellipse(cx, cy, globeR * 1.3, globeR * 0.8, 0, 0, Math.PI * 2);
     ctx.stroke();
 
-    // Orbiting nodes
-    ctx.fillStyle = "rgba(0, 200, 255, 0.6)";
+    // Orbiting nodes - violet
+    ctx.fillStyle = "rgba(180, 100, 255, 0.7)";
     for (let i = 0; i < 6; i++) {
       const a = (Math.PI * 2 / 6) * i;
       const r = globeR * 1.3;
@@ -105,14 +105,14 @@ export default function MashupLogoCanvas() {
       ctx.fill();
     }
 
-    // Sun glow (from logo 3)
-    ctx.fillStyle = "rgba(255, 200, 80, 0.3)";
-    ctx.shadowColor = "rgba(255, 180, 60, 0.8)";
+    // Sun glow - bright white-yellow
+    ctx.fillStyle = "rgba(255, 255, 150, 0.4)";
+    ctx.shadowColor = "rgba(255, 240, 100, 0.9)";
     ctx.shadowBlur = 20;
     ctx.beginPath();
     ctx.arc(cx + 20, cy - 60, 15, 0, Math.PI * 2);
     ctx.fill();
-    ctx.fillStyle = "rgba(255, 220, 100, 0.7)";
+    ctx.fillStyle = "rgba(255, 255, 200, 0.8)";
     ctx.shadowBlur = 10;
     ctx.beginPath();
     ctx.arc(cx + 20, cy - 60, 8, 0, Math.PI * 2);
