@@ -9,6 +9,7 @@ import TrustSignals from "@/components/conversion/TrustSignals";
 import PricingComparison from "@/components/conversion/PricingComparison";
 import EnhancedResearchNavBar from "@/components/EnhancedResearchNavBar";
 import ClassifiedMatrixBackground from "@/components/backgrounds/ClassifiedMatrixBackground";
+import ZaraAlienMascot from "@/components/ZaraAlienMascot";
 
 export default function Landing() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -32,6 +33,7 @@ export default function Landing() {
   return (
     <div className="min-h-screen relative bg-black" style={{ fontFamily: "'Courier Prime', monospace", letterSpacing: "0.05em" }}>
       <ClassifiedMatrixBackground />
+      <ZaraAlienMascot />
       
 
 
