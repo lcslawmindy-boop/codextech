@@ -87,7 +87,7 @@ export default function FloatingWatermarkLogo() {
       >
         {/* Logo image */}
         <img
-          src="https://media.base44.com/images/public/69ccefebfea78b23498c66a8/6722a4c01_839284090_logo.png"
+          src="https://media.base44.com/images/public/69ccefebfea78b23498c66a8/14bae29c7_7e20287f0_logo.png"
           alt="Zenith Apex Tech"
           className="w-full h-full object-cover rounded-lg"
           draggable={false}
