@@ -23,7 +23,7 @@ export default function ZatLogoWatermark() {
         }}
       />
       <div className="font-black text-cyan-400 tracking-widest text-center opacity-75 whitespace-nowrap" style={{ fontSize: '8px', textShadow: '0 0 8px rgba(0, 220, 255, 0.6)', lineHeight: '1.2' }}>
-        TEACH · ENGINEER · CONSTRUCT · HARNESS
+        TEACH · ENGINEERS · CONSTRUCT · HARNESS
       </div>
       <div className="font-black text-cyan-400 tracking-widest text-center opacity-75 whitespace-nowrap" style={{ fontSize: '9px', textShadow: '0 0 8px rgba(0, 220, 255, 0.6)' }}>
         TRUST · EVOLVE · COMMUNITY · HONOR
