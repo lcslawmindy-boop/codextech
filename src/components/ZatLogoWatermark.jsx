@@ -22,16 +22,16 @@ export default function ZatLogoWatermark() {
           animation: 'zatPulse 3s ease-in-out infinite',
         }}
       />
-      <div className="font-black text-cyan-400 tracking-widest text-center opacity-75 whitespace-nowrap" style={{ fontSize: '18px', textShadow: '0 0 8px rgba(0, 220, 255, 0.6)', lineHeight: '1.2', letterSpacing: '3px' }}>
+      <div className="font-black text-cyan-300 tracking-widest text-center opacity-80 whitespace-nowrap" style={{ fontSize: '22px', textShadow: '0 0 12px rgba(0, 220, 255, 0.8)', lineHeight: '1.2', letterSpacing: '4px' }}>
         T.E.C.H
       </div>
       <div className="font-black text-cyan-400 tracking-widest text-center opacity-75 whitespace-nowrap" style={{ fontSize: '8px', textShadow: '0 0 8px rgba(0, 220, 255, 0.6)', lineHeight: '1.2' }}>
         TEACH · EXPLORE · CONSTRUCT · HARNESS
       </div>
-      <div className="font-black text-cyan-400 tracking-widest text-center opacity-75 whitespace-nowrap" style={{ fontSize: '8px', textShadow: '0 0 8px rgba(0, 220, 255, 0.6)', lineHeight: '1.2' }}>
+      <div className="font-bold text-cyan-300 tracking-widest text-center opacity-80 whitespace-nowrap" style={{ fontSize: '10px', textShadow: '0 0 10px rgba(0, 220, 255, 0.7)', lineHeight: '1.2', letterSpacing: '1px' }}>
         Transmit · Electromagnetics · Coherence · Harness
       </div>
-      <div className="font-light text-cyan-300 text-center opacity-60 whitespace-normal max-w-[180px]" style={{ fontSize: '7px', textShadow: '0 0 6px rgba(0, 220, 255, 0.4)', lineHeight: '1.3', marginTop: '4px' }}>
+      <div className="font-semibold text-cyan-200 text-center opacity-85 whitespace-normal max-w-[200px]" style={{ fontSize: '9px', textShadow: '0 0 8px rgba(0, 220, 255, 0.6)', lineHeight: '1.4', marginTop: '6px', letterSpacing: '0.5px' }}>
         Share advanced EM knowledge, unite inventors through coherent understanding, and help them build/patent real solutions.
       </div>
       <style>{`
