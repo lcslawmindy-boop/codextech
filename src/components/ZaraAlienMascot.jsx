@@ -40,106 +40,69 @@ export default function ZaraAlienMascot() {
         `}</style>
         <div className="flex flex-col items-center gap-3">
           <div className="relative w-80 h-80" style={{ animation: 'pupilGlow 4s ease-in-out infinite' }}>
-            {/* 3D Realistic Eyeball */}
-            <svg viewBox="0 0 100 100" className="w-full h-full" style={{ filter: 'drop-shadow(0 0 32px rgba(173, 216, 230, 0.9))' }}>
+            {/* Owl Head */}
+            <svg viewBox="0 0 100 100" className="w-full h-full" style={{ filter: 'drop-shadow(0 0 32px rgba(0, 220, 255, 0.9))' }}>
               <defs>
-                {/* Sclera with vein texture */}
-                <radialGradient id="eyeSphere" cx="30%" cy="30%">
-                  <stop offset="0%" style={{ stopColor: '#f5f5f5', stopOpacity: 1 }} />
-                  <stop offset="50%" style={{ stopColor: '#e8ecf0', stopOpacity: 1 }} />
-                  <stop offset="100%" style={{ stopColor: '#d8dfe8', stopOpacity: 1 }} />
+                <radialGradient id="owlHead" cx="40%" cy="30%">
+                  <stop offset="0%" style={{ stopColor: '#2a4a6a', stopOpacity: 1 }} />
+                  <stop offset="60%" style={{ stopColor: '#1a3a5a', stopOpacity: 1 }} />
+                  <stop offset="100%" style={{ stopColor: '#0a2a4a', stopOpacity: 1 }} />
                 </radialGradient>
-
-                {/* Light blue-grey iris */}
-                <radialGradient id="irisGradient" cx="45%" cy="40%">
-                  <stop offset="0%" style={{ stopColor: '#a8c9d9', stopOpacity: 1 }} />
-                  <stop offset="50%" style={{ stopColor: '#7aa9c4', stopOpacity: 1 }} />
-                  <stop offset="85%" style={{ stopColor: '#5a8fa8', stopOpacity: 1 }} />
-                </radialGradient>
-
-                {/* Iris 3D depth ring */}
-                <radialGradient id="irisRing" cx="50%" cy="50%">
-                  <stop offset="80%" style={{ stopColor: 'rgba(90, 143, 168, 0.2)', stopOpacity: 1 }} />
-                  <stop offset="100%" style={{ stopColor: 'rgba(65, 100, 140, 0.8)', stopOpacity: 1 }} />
-                </radialGradient>
-
-                {/* Royal blue outer ring */}
-                <radialGradient id="royalRing" cx="50%" cy="50%">
-                  <stop offset="0%" style={{ stopColor: 'rgba(65, 105, 225, 0)', stopOpacity: 0 }} />
-                  <stop offset="90%" style={{ stopColor: 'rgba(65, 105, 225, 0.3)', stopOpacity: 1 }} />
-                  <stop offset="100%" style={{ stopColor: 'rgba(25, 55, 155, 0.9)', stopOpacity: 1 }} />
-                </radialGradient>
-
-                {/* Premium highlight */}
-                <radialGradient id="highlight" cx="35%" cy="35%">
-                  <stop offset="0%" style={{ stopColor: '#ffffff', stopOpacity: 0.95 }} />
-                  <stop offset="50%" style={{ stopColor: '#ffffff', stopOpacity: 0.3 }} />
-                  <stop offset="100%" style={{ stopColor: '#ffffff', stopOpacity: 0 }} />
-                </radialGradient>
-
-                {/* Secondary shine */}
-                <radialGradient id="shine2" cx="40%" cy="40%">
-                  <stop offset="0%" style={{ stopColor: 'rgba(255,255,255,0.7)', stopOpacity: 1 }} />
-                  <stop offset="100%" style={{ stopColor: 'rgba(255,255,255,0)', stopOpacity: 0 }} />
+                <radialGradient id="owlEye" cx="40%" cy="40%">
+                  <stop offset="0%" style={{ stopColor: '#ffff00', stopOpacity: 1 }} />
+                  <stop offset="70%" style={{ stopColor: '#ffdd00', stopOpacity: 1 }} />
+                  <stop offset="100%" style={{ stopColor: '#ffaa00', stopOpacity: 1 }} />
                 </radialGradient>
               </defs>
 
-              {/* Main sclera with vein texture */}
-              <circle cx="50" cy="50" r="32" fill="url(#eyeSphere)" />
+              {/* Head circle */}
+              <circle cx="50" cy="55" r="35" fill="url(#owlHead)" />
 
-              {/* Subtle blood vessels */}
-              <path d="M 35 40 Q 40 50 38 65" stroke="rgba(200, 100, 100, 0.15)" strokeWidth="0.5" fill="none" opacity="0.6" />
-              <path d="M 65 35 Q 70 50 72 68" stroke="rgba(200, 100, 100, 0.12)" strokeWidth="0.4" fill="none" opacity="0.5" />
-              <path d="M 30 55 Q 45 52 62 60" stroke="rgba(180, 80, 80, 0.1)" strokeWidth="0.3" fill="none" opacity="0.4" />
+              {/* Left ear tuft */}
+              <ellipse cx="25" cy="20" rx="6" ry="15" fill="#1a3a5a" style={{ filter: 'drop-shadow(0 -2px 4px rgba(0,0,0,0.5))' }} />
 
-              {/* Depth shadow edge */}
-              <circle cx="50" cy="50" r="32" fill="none" stroke="rgba(0,0,0,0.12)" strokeWidth="2" />
+              {/* Right ear tuft */}
+              <ellipse cx="75" cy="20" rx="6" ry="15" fill="#1a3a5a" style={{ filter: 'drop-shadow(0 -2px 4px rgba(0,0,0,0.5))' }} />
 
-              {/* Inner sphere shading */}
-              <circle cx="50" cy="50" r="32" fill="rgba(0,0,0,0.03)" opacity="0.4" />
+              {/* Left eye white */}
+              <circle cx="35" cy="45" r="12" fill="#ffffff" />
+              <circle cx="35" cy="45" r="12" fill="none" stroke="rgba(0,0,0,0.1)" strokeWidth="1" />
 
-              {/* Light blue-grey iris */}
-              <circle cx="50" cy="50" r="20" fill="url(#irisGradient)" />
+              {/* Right eye white */}
+              <circle cx="65" cy="45" r="12" fill="#ffffff" />
+              <circle cx="65" cy="45" r="12" fill="none" stroke="rgba(0,0,0,0.1)" strokeWidth="1" />
 
-              {/* Iris 3D depth ring */}
-              <circle cx="50" cy="50" r="20" fill="url(#irisRing)" opacity="0.5" />
+              {/* Left iris */}
+              <circle cx="35" cy="45" r="9" fill="url(#owlEye)" />
 
-              {/* Royal blue outer iris line */}
-              <circle cx="50" cy="50" r="20" fill="none" stroke="url(#royalRing)" strokeWidth="2.5" />
+              {/* Right iris */}
+              <circle cx="65" cy="45" r="9" fill="url(#owlEye)" />
 
-              {/* Iris radial striations for depth */}
-              <g stroke="rgba(65, 105, 168, 0.15)" strokeWidth="0.3" opacity="0.5">
-                <line x1="50" y1="30" x2="50" y2="70" />
-                <line x1="50" y1="30" x2="50" y2="70" transform="rotate(20 50 50)" />
-                <line x1="50" y1="30" x2="50" y2="70" transform="rotate(40 50 50)" />
-                <line x1="50" y1="30" x2="50" y2="70" transform="rotate(60 50 50)" />
-                <line x1="50" y1="30" x2="50" y2="70" transform="rotate(80 50 50)" />
-                <line x1="50" y1="30" x2="50" y2="70" transform="rotate(100 50 50)" />
-                <line x1="50" y1="30" x2="50" y2="70" transform="rotate(120 50 50)" />
-                <line x1="50" y1="30" x2="50" y2="70" transform="rotate(140 50 50)" />
-                <line x1="50" y1="30" x2="50" y2="70" transform="rotate(160 50 50)" />
+              {/* Left pupil */}
+              <circle cx="35" cy="45" r="6" fill="#000000" />
+
+              {/* Right pupil */}
+              <circle cx="65" cy="45" r="6" fill="#000000" />
+
+              {/* Eye shine - left */}
+              <circle cx="33" cy="42" r="2" fill="#ffffff" opacity="0.9" />
+
+              {/* Eye shine - right */}
+              <circle cx="63" cy="42" r="2" fill="#ffffff" opacity="0.9" />
+
+              {/* Beak */}
+              <path d="M 50 55 L 48 63 L 52 63 Z" fill="#ff8800" />
+
+              {/* Face disc outline */}
+              <circle cx="50" cy="55" r="35" fill="none" stroke="rgba(0, 220, 255, 0.3)" strokeWidth="2" />
+
+              {/* Feather texture lines */}
+              <g stroke="rgba(0, 0, 0, 0.1)" strokeWidth="0.5" opacity="0.4">
+                <path d="M 35 75 Q 40 80 45 78" fill="none" />
+                <path d="M 55 78 Q 60 80 65 75" fill="none" />
+                <path d="M 30 70 Q 25 72 28 78" fill="none" />
+                <path d="M 70 70 Q 75 72 72 78" fill="none" />
               </g>
-
-              {/* Smaller, realistic pupil */}
-              <circle cx="50" cy="50" r="8" fill="#1a1a1a" />
-
-              {/* Pupil rim */}
-              <circle cx="50" cy="50" r="8" fill="none" stroke="rgba(255,255,255,0.2)" strokeWidth="1" />
-
-              {/* Large primary highlight */}
-              <circle cx="38" cy="38" r="8" fill="url(#highlight)" opacity="0.92" />
-
-              {/* Secondary highlight */}
-              <circle cx="62" cy="62" r="3" fill="url(#shine2)" opacity="0.75" />
-
-              {/* Micro shine */}
-              <circle cx="58" cy="45" r="1" fill="#ffffff" opacity="0.6" />
-
-              {/* Upper eyelid - subtle */}
-              <path d="M 18 50 Q 50 28 82 50 L 82 46 Q 50 24 18 46 Z" fill="rgba(30, 35, 45, 0.6)" opacity="0.7" style={{ animation: 'eyeClose 15s ease-in-out infinite' }} />
-
-              {/* Lower eyelid - subtle */}
-              <path d="M 18 50 Q 50 72 82 50 L 82 54 Q 50 76 18 54 Z" fill="rgba(30, 35, 45, 0.5)" opacity="0.6" style={{ animation: 'eyeClose 15s ease-in-out infinite' }} />
             </svg>
           </div>
             <div className="text-center">
@@ -172,38 +135,45 @@ export default function ZaraAlienMascot() {
         {/* Header */}
         <div className="flex items-start gap-3 mb-4">
           <div className="relative w-12 h-12 flex-shrink-0">
-            {/* 3D Realistic Eyeball */}
-             <svg viewBox="0 0 100 100" className="w-full h-full" style={{ filter: 'drop-shadow(0 0 12px rgba(173, 216, 230, 0.6))' }}>
-               <defs>
-                 <radialGradient id="eyeSphere2" cx="35%" cy="35%">
-                   <stop offset="0%" style={{ stopColor: '#ffffff', stopOpacity: 1 }} />
-                   <stop offset="70%" style={{ stopColor: '#f0f8ff', stopOpacity: 1 }} />
-                   <stop offset="100%" style={{ stopColor: '#e6f2ff', stopOpacity: 1 }} />
-                 </radialGradient>
-                 <radialGradient id="irisGradient2" cx="45%" cy="45%">
-                   <stop offset="0%" style={{ stopColor: '#87ceeb', stopOpacity: 1 }} />
-                   <stop offset="60%" style={{ stopColor: '#5dade2', stopOpacity: 1 }} />
-                   <stop offset="100%" style={{ stopColor: '#2e8bb3', stopOpacity: 1 }} />
-                 </radialGradient>
-                 <radialGradient id="highlight2" cx="40%" cy="40%">
-                   <stop offset="0%" style={{ stopColor: '#ffffff', stopOpacity: 0.9 }} />
-                   <stop offset="100%" style={{ stopColor: '#ffffff', stopOpacity: 0 }} />
-                 </radialGradient>
-               </defs>
-               {/* White sclera */}
-               <circle cx="50" cy="50" r="30" fill="url(#eyeSphere2)" />
-               <circle cx="50" cy="50" r="30" fill="none" stroke="rgba(0,0,0,0.1)" strokeWidth="1.5" />
-               {/* Light blue iris */}
-               <circle cx="50" cy="50" r="18" fill="url(#irisGradient2)" />
-               <circle cx="50" cy="50" r="18" fill="none" stroke="rgba(45, 139, 179, 0.3)" strokeWidth="0.8" opacity="0.5" />
-               {/* Pupil */}
-               <circle cx="50" cy="50" r="11" fill="#000000" />
-               <circle cx="50" cy="50" r="11" fill="none" stroke="rgba(255,255,255,0.2)" strokeWidth="0.8" />
-               {/* Highlights */}
-               <circle cx="42" cy="42" r="5" fill="url(#highlight2)" opacity="0.85" />
-               <circle cx="58" cy="58" r="2" fill="#ffffff" opacity="0.5" />
-               <circle cx="55" cy="46" r="1" fill="#ffffff" opacity="0.3" />
-             </svg>
+            {/* Owl Head */}
+            <svg viewBox="0 0 100 100" className="w-full h-full" style={{ filter: 'drop-shadow(0 0 12px rgba(0, 220, 255, 0.6))' }}>
+              <defs>
+                <radialGradient id="owlHead2" cx="40%" cy="30%">
+                  <stop offset="0%" style={{ stopColor: '#2a4a6a', stopOpacity: 1 }} />
+                  <stop offset="60%" style={{ stopColor: '#1a3a5a', stopOpacity: 1 }} />
+                  <stop offset="100%" style={{ stopColor: '#0a2a4a', stopOpacity: 1 }} />
+                </radialGradient>
+                <radialGradient id="owlEye2" cx="40%" cy="40%">
+                  <stop offset="0%" style={{ stopColor: '#ffff00', stopOpacity: 1 }} />
+                  <stop offset="70%" style={{ stopColor: '#ffdd00', stopOpacity: 1 }} />
+                  <stop offset="100%" style={{ stopColor: '#ffaa00', stopOpacity: 1 }} />
+                </radialGradient>
+              </defs>
+              {/* Head */}
+              <circle cx="50" cy="55" r="35" fill="url(#owlHead2)" />
+              {/* Left ear tuft */}
+              <ellipse cx="25" cy="20" rx="6" ry="15" fill="#1a3a5a" />
+              {/* Right ear tuft */}
+              <ellipse cx="75" cy="20" rx="6" ry="15" fill="#1a3a5a" />
+              {/* Left eye white */}
+              <circle cx="35" cy="45" r="12" fill="#ffffff" />
+              {/* Right eye white */}
+              <circle cx="65" cy="45" r="12" fill="#ffffff" />
+              {/* Left iris */}
+              <circle cx="35" cy="45" r="9" fill="url(#owlEye2)" />
+              {/* Right iris */}
+              <circle cx="65" cy="45" r="9" fill="url(#owlEye2)" />
+              {/* Left pupil */}
+              <circle cx="35" cy="45" r="6" fill="#000000" />
+              {/* Right pupil */}
+              <circle cx="65" cy="45" r="6" fill="#000000" />
+              {/* Eye shine - left */}
+              <circle cx="33" cy="42" r="1.5" fill="#ffffff" opacity="0.9" />
+              {/* Eye shine - right */}
+              <circle cx="63" cy="42" r="1.5" fill="#ffffff" opacity="0.9" />
+              {/* Beak */}
+              <path d="M 50 55 L 48 63 L 52 63 Z" fill="#ff8800" />
+            </svg>
           </div>
           <div className="flex-1">
             <h3 className="font-black text-blue-400 text-sm">ZARA 👁️</h3>
