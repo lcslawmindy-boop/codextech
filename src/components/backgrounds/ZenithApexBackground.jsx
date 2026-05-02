@@ -188,16 +188,6 @@ function metatronsCube() {
 
 const LOGO_URLS = [
   "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/75d43b957_df887ac44_logo.png",
-  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/a1d75a1f1_839284090_logo.png",
-  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/fc82e79c5_3fd362d3e_logo.png",
-];
-
-const MASHUP_LOGO_URLS = [
-  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/6842fcff1_13427a463_logo-Copy.png",
-  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/cc5b59fa1_df887ac44_logo.png",
-  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/2d630477b_839284090_logo-Copy.png",
-  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/4764eaaef_7e20287f0_logo.png",
-  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/b08ccb770_550172ad7_logo.png",
 ];
 
 export default function ZenithApexBackground() {
@@ -226,14 +216,6 @@ export default function ZenithApexBackground() {
       return img;
     });
 
-    // Preload mashup logos
-    const mashupLogos = MASHUP_LOGO_URLS.map(src => {
-      const img = new Image();
-      img.crossOrigin = "anonymous";
-      img.src = src;
-      return img;
-    });
-
     // Stars
     const stars = Array.from({ length: 200 }, () => ({
       x: Math.random(), y: Math.random(),
@@ -242,8 +224,8 @@ export default function ZenithApexBackground() {
       s: Math.random() * 0.4 + 0.1,
     }));
 
-    // Equations
-    const equations = Array.from({ length: 35 }, (_, i) => ({
+    // Equations (reduced count)
+    const equations = Array.from({ length: 12 }, (_, i) => ({
       text: EQUATIONS[i % EQUATIONS.length],
       x: Math.random(), y: Math.random(),
       speed: 0.00013 + Math.random() * 0.00015,
@@ -252,20 +234,22 @@ export default function ZenithApexBackground() {
       drift: (Math.random() - 0.5) * 0.00015,
     }));
 
-    const solids = [tetrahedron(), cube(), octahedron(), icosahedron(), dodecahedron(), starTetrahedron(), stellatedStarTetrahedron()];
+    // 5 Platonic solids: Tetrahedron, Cube, Octahedron, Icosahedron, Dodecahedron
+    const solids = [tetrahedron(), cube(), octahedron(), icosahedron(), dodecahedron()];
     const solidColors = [
-      "rgba(80,200,255,", "rgba(180,100,255,", "rgba(80,255,160,",
-      "rgba(255,180,60,", "rgba(255,80,160,", "rgba(100,255,200,", "rgba(255,150,100,"
+      "rgba(80,200,255,",      // Tetrahedron - cyan
+      "rgba(0,255,150,",       // Cube - green
+      "rgba(255,180,60,",      // Octahedron - orange
+      "rgba(180,100,255,",     // Icosahedron - purple
+      "rgba(255,100,150,",     // Dodecahedron - pink
     ];
-    // Each solid orbits at different radius/speed/phase — further out, pushed lower
+    // Ordered orbital positions
     const solidOrbit = [
-      { r: 0.52, speed: 0.4,  phase: 0,   scale: 58, tilt: 0.4, yOff: 0.32 },
-      { r: 0.56, speed: 0.28, phase: 1.2, scale: 52, tilt: 0.8, yOff: 0.35 },
-      { r: 0.48, speed: 0.55, phase: 2.4, scale: 56, tilt: 1.1, yOff: 0.30 },
-      { r: 0.62, speed: 0.22, phase: 3.7, scale: 48, tilt: 0.6, yOff: 0.38 },
-      { r: 0.58, speed: 0.33, phase: 5.0, scale: 46, tilt: 1.5, yOff: 0.34 },
-      { r: 0.54, speed: 0.45, phase: 1.8, scale: 50, tilt: 1.2, yOff: 0.33 },
-      { r: 0.60, speed: 0.25, phase: 4.2, scale: 44, tilt: 0.9, yOff: 0.36 },
+      { r: 0.45, speed: 0.40, phase: 0,     scale: 60, tilt: 0.4, yOff: 0.28 },     // Tetrahedron
+      { r: 0.50, speed: 0.30, phase: 1.26,  scale: 55, tilt: 0.8, yOff: 0.32 },     // Cube
+      { r: 0.55, speed: 0.35, phase: 2.52,  scale: 58, tilt: 1.1, yOff: 0.36 },     // Octahedron
+      { r: 0.60, speed: 0.25, phase: 3.78,  scale: 52, tilt: 0.6, yOff: 0.40 },     // Icosahedron
+      { r: 0.52, speed: 0.28, phase: 5.04,  scale: 50, tilt: 1.5, yOff: 0.34 },     // Dodecahedron
     ];
 
     const metCube = metatronsCube();
@@ -299,72 +283,23 @@ export default function ZenithApexBackground() {
       for (let y = 0; y < H; y += 60) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke(); }
       ctx.restore();
 
-      // ── Scalar waves ──
-      for (let i = 0; i < 14; i++) {
-        const phase = (t * 0.38 + i / 14) % 1;
-        const r = phase * Math.max(W, H) * 0.98;
-        const alpha = (1 - phase) * 0.42;
+      // ── Scalar waves (reduced) ──
+      for (let i = 0; i < 6; i++) {
+        const phase = (t * 0.35 + i / 6) % 1;
+        const r = phase * Math.max(W, H) * 0.95;
+        const alpha = (1 - phase) * 0.35;
         ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2);
         ctx.strokeStyle = `rgba(80,160,255,${alpha})`; ctx.lineWidth = 2; ctx.stroke();
       }
-      for (let i = 0; i < 8; i++) {
-        const phase = (t * 0.22 + i / 8) % 1;
-        const r = phase * Math.max(W, H) * 0.75;
-        const alpha = (1 - phase) * 0.28;
-        ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2);
-        ctx.strokeStyle = `rgba(255,200,80,${alpha})`; ctx.lineWidth = 1.5; ctx.stroke();
-      }
-      for (let i = 0; i < 5; i++) {
-        const phase = (t * 0.5 + i / 5) % 1;
-        const r = phase * Math.max(W, H) * 0.45;
-        const alpha = (1 - phase) * 0.5;
+      for (let i = 0; i < 4; i++) {
+        const phase = (t * 0.25 + i / 4) % 1;
+        const r = phase * Math.max(W, H) * 0.70;
+        const alpha = (1 - phase) * 0.25;
         ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2);
         ctx.strokeStyle = `rgba(120,210,255,${alpha})`; ctx.lineWidth = 1.5; ctx.stroke();
       }
 
-      // ── Quantum waves (spiral interference patterns) ──
-      for (let q = 0; q < 3; q++) {
-        ctx.save();
-        ctx.globalAlpha = 0.15 + 0.1 * Math.sin(t * 0.8 + q);
-        for (let angle = 0; angle < Math.PI * 2; angle += Math.PI / 12) {
-          const spiralPhase = t * 0.6 + q * Math.PI * 2 / 3 + angle * 0.5;
-          const samples = 180;
-          ctx.beginPath();
-          for (let s = 0; s < samples; s++) {
-            const progress = s / samples;
-            const r = progress * Math.max(W, H) * 0.8;
-            const twist = angle + spiralPhase * progress;
-            const qx = cx + Math.cos(twist) * r;
-            const qy = cy + Math.sin(twist) * r;
-            if (s === 0) ctx.moveTo(qx, qy);
-            else ctx.lineTo(qx, qy);
-          }
-          const hue = (120 + q * 60 + angle * 30) % 360;
-          ctx.strokeStyle = `hsla(${hue}, 100%, 50%, 0.3)`;
-          ctx.lineWidth = 0.8;
-          ctx.stroke();
-        }
-        ctx.restore();
-      }
 
-      // ── Quantum probability waves (radial ripples) ──
-      for (let qw = 0; qw < 4; qw++) {
-        const qwPhase = (t * 0.7 + qw * Math.PI / 2) % Math.PI * 2;
-        const qwR = Math.sin(qwPhase) * Math.max(W, H) * 0.35;
-        if (qwR > 0) {
-          ctx.save();
-          ctx.globalAlpha = 0.12 * Math.cos(qwPhase * 2);
-          for (let qwRings = 0; qwRings < 8; qwRings++) {
-            const ringR = qwR + qwRings * 12;
-            ctx.beginPath();
-            ctx.arc(cx, cy, ringR, 0, Math.PI * 2);
-            ctx.strokeStyle = `rgba(100,200,255,0.4)`;
-            ctx.lineWidth = 1;
-            ctx.stroke();
-          }
-          ctx.restore();
-        }
-      }
 
       // ── Floating equations (bright, 3D glowing) ──
       for (const eq of equations) {
@@ -394,41 +329,41 @@ export default function ZenithApexBackground() {
         ctx.restore();
       }
 
-      // ── Central Phi Ratio symbol — centered at 75% down the page ──
+      // ── Central Phi Ratio symbol — MUCH LARGER at center ──
       {
         const phiX = cx;
-        const phiY = H * 0.75;
+        const phiY = cy;
         const phiPulse = 0.7 + 0.3 * Math.sin(t * 1.1);
         ctx.save();
-        ctx.globalAlpha = 0.72 * phiPulse;
+        ctx.globalAlpha = 0.8 * phiPulse;
         // Outer glow ring
-        const phiGrad = ctx.createRadialGradient(phiX, phiY, 0, phiX, phiY, 90);
-        phiGrad.addColorStop(0, "rgba(255,215,0,0.18)");
-        phiGrad.addColorStop(0.5, "rgba(255,180,0,0.07)");
+        const phiGrad = ctx.createRadialGradient(phiX, phiY, 0, phiX, phiY, 180);
+        phiGrad.addColorStop(0, "rgba(255,215,0,0.25)");
+        phiGrad.addColorStop(0.5, "rgba(255,180,0,0.12)");
         phiGrad.addColorStop(1, "rgba(255,140,0,0)");
-        ctx.beginPath(); ctx.arc(phiX, phiY, 90, 0, Math.PI * 2);
+        ctx.beginPath(); ctx.arc(phiX, phiY, 180, 0, Math.PI * 2);
         ctx.fillStyle = phiGrad; ctx.fill();
         // Shadow/3D depth
-        ctx.font = "bold 72px serif";
+        ctx.font = "bold 180px serif";
         ctx.fillStyle = "rgba(0,0,0,0.7)";
         ctx.textAlign = "center"; ctx.textBaseline = "middle";
-        ctx.fillText("φ", phiX + 3, phiY + 4);
+        ctx.fillText("φ", phiX + 6, phiY + 8);
         ctx.fillStyle = "rgba(80,40,0,0.5)";
-        ctx.fillText("φ", phiX + 1.5, phiY + 2);
+        ctx.fillText("φ", phiX + 3, phiY + 4);
         // Glowing gold phi
         ctx.shadowColor = "rgba(255,200,0,1)";
-        ctx.shadowBlur = 28;
+        ctx.shadowBlur = 40;
         ctx.fillStyle = "rgba(255,220,60,1)";
         ctx.fillText("φ", phiX, phiY);
-        ctx.shadowBlur = 10;
-        ctx.fillStyle = "rgba(255,255,180,0.9)";
+        ctx.shadowBlur = 15;
+        ctx.fillStyle = "rgba(255,255,180,0.95)";
         ctx.fillText("φ", phiX, phiY);
         // Subtitle
         ctx.shadowBlur = 0;
-        ctx.font = "bold 13px monospace";
-        ctx.globalAlpha = 0.55 * phiPulse;
+        ctx.font = "bold 16px monospace";
+        ctx.globalAlpha = 0.65 * phiPulse;
         ctx.fillStyle = "rgba(255,210,80,1)";
-        ctx.fillText("φ = (1+√5)/2 ≈ 1.618033...", phiX, phiY + 52);
+        ctx.fillText("φ = (1+√5)/2 ≈ 1.618033...", phiX, phiY + 120);
         ctx.restore();
       }
 
@@ -527,97 +462,90 @@ export default function ZenithApexBackground() {
         ctx.restore();
       }
 
-      // ── Draw Platonic Solids orbital paths (thin glowing rings) ──
+      // ── Draw Platonic Solids orbital paths (ordered rings) ──
       solids.forEach((solid, si) => {
         const orb = solidOrbit[si];
         const orbitR = Math.min(W, H) * orb.r;
         ctx.save();
-        ctx.globalAlpha = 0.15 + 0.08 * Math.sin(t * 0.6 + si);
+        ctx.globalAlpha = 0.25 + 0.1 * Math.sin(t * 0.6 + si);
         ctx.translate(cx, cy + H * orb.yOff);
         ctx.beginPath();
-        ctx.ellipse(0, 0, orbitR, orbitR * 0.45, 0, 0, Math.PI * 2);
-        ctx.strokeStyle = `rgba(80,200,255,0.35)`;
-        ctx.lineWidth = 1.2;
+        ctx.ellipse(0, 0, orbitR, orbitR * 0.4, 0, 0, Math.PI * 2);
+        // Color match the solid
+        const color = solidColors[si];
+        ctx.strokeStyle = `${color}0.5)`;
+        ctx.lineWidth = 1.5;
         ctx.stroke();
         ctx.restore();
       });
 
-      // ── Platonic Solids orbiting (bigger, lower below sun) ──
+      // ── 5 Platonic Solids in ordered orbits ──
       solids.forEach((solid, si) => {
         const orb = solidOrbit[si];
         const orbitR = Math.min(W, H) * orb.r;
         const angle = t * orb.speed + orb.phase;
         const sox = cx + Math.cos(angle) * orbitR;
-        const soy = cy + H * orb.yOff + Math.sin(angle) * orbitR * 0.45;
-        const spin = t * (0.7 + si * 0.15);
+        const soy = cy + H * orb.yOff + Math.sin(angle) * orbitR * 0.4;
+        const spin = t * (0.5 + si * 0.08);
         const color = solidColors[si];
 
         const proj = solid.v.map(v => {
           let p = [...v];
-          p = rotX(p, spin * 0.7 + orb.tilt);
-          p = rotY(p, spin + si);
-          p = rotZ(p, spin * 0.4);
-          return project(p, sox, soy, 300, orb.scale);
+          p = rotX(p, spin + orb.tilt);
+          p = rotY(p, spin * 0.8);
+          p = rotZ(p, spin * 0.6);
+          return project(p, sox, soy, 350, orb.scale);
         });
 
         ctx.save();
-        ctx.globalAlpha = 0.88;
+        ctx.globalAlpha = 0.85;
         solid.e.forEach(([a, b]) => {
           const pa = proj[a], pb = proj[b];
-          const depth = Math.max(0, Math.min(1, (pa[2] + pb[2]) / 600));
+          const depth = Math.max(0, Math.min(1, (pa[2] + pb[2]) / 700));
           ctx.beginPath();
           ctx.moveTo(pa[0], pa[1]);
           ctx.lineTo(pb[0], pb[1]);
-          ctx.shadowColor = color + "1)";
-          ctx.shadowBlur = 8;
-          ctx.strokeStyle = `${color}${0.35 + depth * 0.65})`;
-          ctx.lineWidth = 1.8;
+          ctx.shadowColor = color + "0.9)";
+          ctx.shadowBlur = 10;
+          ctx.strokeStyle = `${color}${0.45 + depth * 0.55})`;
+          ctx.lineWidth = 2;
           ctx.stroke();
         });
         // Vertex dots
         proj.forEach(p => {
           ctx.beginPath();
-          ctx.arc(p[0], p[1], 3, 0, Math.PI * 2);
+          ctx.arc(p[0], p[1], 3.5, 0, Math.PI * 2);
           ctx.fillStyle = `${color}1)`;
           ctx.shadowColor = color + "1)";
-          ctx.shadowBlur = 10;
+          ctx.shadowBlur = 12;
           ctx.fill();
         });
         ctx.restore();
       });
 
-      // ── Orbiting mashup logos (rotating through 5 logos) ──
-      mashupLogos.forEach((img, li) => {
-        if (!img.complete || img.naturalWidth === 0) return;
-        
-        const logoOrbitR = Math.min(W, H) * 0.35;
-        const logoAngle = t * 0.15 + (Math.PI * 2 / 5) * li;
-        const logoX = cx + Math.cos(logoAngle) * logoOrbitR;
-        const logoY = cy + H * 0.65 + Math.sin(logoAngle) * logoOrbitR * 0.5;
-        const logoSize = Math.min(W, H) * 0.08;
-        
-        const pulse = 0.8 + 0.2 * Math.sin(t * 1.5 + li);
-        ctx.save();
-        ctx.globalAlpha = 0.75 * pulse;
-        ctx.translate(logoX, logoY);
-        ctx.rotate(t * 0.3);
-        ctx.shadowColor = "rgba(0, 220, 255, 0.8)";
-        ctx.shadowBlur = 16;
-        ctx.drawImage(img, -logoSize / 2, -logoSize / 2, logoSize, logoSize);
-        ctx.restore();
-      });
 
-      // ── Metatron's Cube (orbiting) ──
+
+      // ── Metatron's Cube + Ionosphere (own ordered orbit) ──
       {
-        const metAngle = t * 0.18 + 1.0;
-        const metOrbitR = Math.min(W, H) * 0.22;
+        const metAngle = t * 0.12;
+        const metOrbitR = Math.min(W, H) * 0.30;
         const metX = cx + Math.cos(metAngle) * metOrbitR;
-        const metY = cy + Math.sin(metAngle) * metOrbitR * 0.5;
-        const metScale = Math.min(W, H) * 0.055;
-        const metRot = t * 0.22;
+        const metY = H * 0.80 + Math.sin(metAngle) * metOrbitR * 0.4;
+        const metScale = Math.min(W, H) * 0.065;
+        const metRot = t * 0.25;
 
         ctx.save();
-        ctx.globalAlpha = 0.55;
+        ctx.globalAlpha = 0.65;
+
+        // Draw ionosphere layers (concentric circles around Metatron)
+        for (let layer = 0; layer < 3; layer++) {
+          const radius = metScale * (0.8 + layer * 0.5);
+          ctx.beginPath();
+          ctx.arc(metX, metY, radius, 0, Math.PI * 2);
+          ctx.strokeStyle = `rgba(0,220,255,${0.25 - layer * 0.08})`;
+          ctx.lineWidth = 1.2;
+          ctx.stroke();
+        }
 
         // Draw edges
         metCube.edges.forEach(([a, b]) => {
@@ -629,33 +557,29 @@ export default function ZenithApexBackground() {
           ctx.beginPath();
           ctx.moveTo(ax, ay);
           ctx.lineTo(bx, by);
-          ctx.strokeStyle = "rgba(255,180,255,0.22)";
-          ctx.lineWidth = 0.8;
+          ctx.strokeStyle = "rgba(255,150,200,0.35)";
+          ctx.lineWidth = 1;
           ctx.stroke();
         });
 
-        // Draw circles (Fruit of Life)
+        // Draw circles (Flower of Life)
         metCube.pts.forEach(p => {
           const px = metX + (p[0] * Math.cos(metRot) - p[1] * Math.sin(metRot)) * metScale;
           const py = metY + (p[0] * Math.sin(metRot) + p[1] * Math.cos(metRot)) * metScale;
-          const cr = metScale * 0.52;
+          const cr = metScale * 0.50;
           const grad = ctx.createRadialGradient(px, py, 0, px, py, cr);
-          grad.addColorStop(0, "rgba(255,180,255,0.0)");
-          grad.addColorStop(0.7, "rgba(255,120,255,0.10)");
-          grad.addColorStop(1, "rgba(200,80,255,0.18)");
+          grad.addColorStop(0, "rgba(255,150,200,0.0)");
+          grad.addColorStop(0.7, "rgba(255,100,180,0.12)");
+          grad.addColorStop(1, "rgba(255,80,200,0.20)");
           ctx.beginPath();
           ctx.arc(px, py, cr, 0, Math.PI * 2);
-          ctx.strokeStyle = "rgba(255,140,255,0.35)";
-          ctx.lineWidth = 0.9;
+          ctx.strokeStyle = "rgba(255,120,200,0.45)";
+          ctx.lineWidth = 1.1;
           ctx.stroke();
           ctx.fillStyle = grad;
           ctx.fill();
         });
 
-        // Label
-        ctx.font = "bold 9px monospace";
-        ctx.fillStyle = "rgba(255,180,255,0.5)";
-        ctx.fillText("METATRON", metX - 24, metY + metScale * 2.3);
         ctx.restore();
       }
 
@@ -942,67 +866,7 @@ export default function ZenithApexBackground() {
       core2.addColorStop(1, currentTheme.sunColor2Primary + "0.4)");
       ctx.beginPath(); ctx.arc(sunX2, sunY2, sunRadius2, 0, Math.PI * 2); ctx.fillStyle = core2; ctx.fill();
 
-      // ── Logo signature — bottom-left corner, ultra-bright neon ──
-      if (logos[0]?.complete && logos[0].naturalWidth > 0) {
-        const logoSize = Math.min(W, H) * 0.11;
-        const lx = 16;
-        const ly = H - logoSize - 48;
-        const pulse = 0.88 + 0.12 * Math.sin(t * 1.1);
-        ctx.save();
-        // Dark backing plate for contrast
-        ctx.fillStyle = "rgba(0,5,20,0.82)";
-        ctx.beginPath();
-        ctx.roundRect(lx - 8, ly - 8, logoSize + 16, logoSize + 36, 10);
-        ctx.fill();
-        // Neon border
-        ctx.strokeStyle = `rgba(0,230,255,${0.7 * pulse})`;
-        ctx.lineWidth = 1.5;
-        ctx.shadowColor = "rgba(0,220,255,1)";
-        ctx.shadowBlur = 18;
-        ctx.stroke();
-        // Big outer glow halo
-        const halo = ctx.createRadialGradient(lx + logoSize/2, ly + logoSize/2, 0, lx + logoSize/2, ly + logoSize/2, logoSize * 1.1);
-        halo.addColorStop(0, `rgba(0,200,255,${0.35 * pulse})`);
-        halo.addColorStop(0.5, `rgba(0,140,255,${0.12 * pulse})`);
-        halo.addColorStop(1, "rgba(0,80,200,0)");
-        ctx.fillStyle = halo;
-        ctx.beginPath();
-        ctx.arc(lx + logoSize/2, ly + logoSize/2, logoSize * 1.1, 0, Math.PI * 2);
-        ctx.fill();
-        // Logo image — full brightness
-        ctx.globalAlpha = 1.0 * pulse;
-        ctx.shadowColor = "rgba(0,240,255,1)";
-        ctx.shadowBlur = 40;
-        ctx.drawImage(logos[0], lx, ly, logoSize, logoSize);
-        // Second pass for extra brightness
-        ctx.shadowBlur = 15;
-        ctx.globalAlpha = 0.5 * pulse;
-        ctx.drawImage(logos[0], lx, ly, logoSize, logoSize);
-        // "ZENITH APEX TECH" text signature — large & bold
-        ctx.shadowBlur = 20;
-        ctx.globalAlpha = 1.0 * pulse;
-        ctx.font = "bold 11px monospace";
-        ctx.fillStyle = "rgba(255,255,255,1)";
-        ctx.textAlign = "left";
-        ctx.fillText("ZENITH APEX TECH", lx, ly + logoSize + 14);
-        // Tagline
-        ctx.shadowBlur = 10;
-        ctx.globalAlpha = 0.75 * pulse;
-        ctx.font = "bold 7px monospace";
-        ctx.fillStyle = "rgba(0,230,255,1)";
-        ctx.fillText("TEST · ENGINEER · CONSTRUCT", lx, ly + logoSize + 26);
-        ctx.restore();
-      }
 
-      // ── Central faint watermark ──
-      if (logos[1]?.complete && logos[1].naturalWidth > 0) {
-        const logoSize = Math.min(W, H) * 0.48;
-        ctx.save();
-        ctx.globalAlpha = 0.045 + 0.015 * Math.sin(t * 0.4);
-        ctx.translate(cx, cy * 0.72);
-        ctx.drawImage(logos[1], -logoSize / 2, -logoSize / 2, logoSize, logoSize);
-        ctx.restore();
-      }
 
       t += 0.007;
       animRef.current = requestAnimationFrame(draw);

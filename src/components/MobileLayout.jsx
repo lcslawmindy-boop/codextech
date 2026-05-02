@@ -3,8 +3,6 @@ import BottomTabBar from "./BottomTabBar";
 import { useTrial } from "@/lib/TrialContext";
 import { AnimatePresence, motion } from "framer-motion";
 import ZenithApexBackground from "./backgrounds/ZenithApexBackground";
-import FloatingLogos from "./FloatingLogos";
-import DraggableLogoSignature from "./DraggableLogoSignature";
 import ZenithInteractiveController from "./ZenithInteractiveController";
 import ZenithThemeSwitcher from "./ZenithThemeSwitcher";
 import FloatingWatermarkLogo from "./FloatingWatermarkLogo";
@@ -44,11 +42,8 @@ export default function MobileLayout() {
       }}
     >
       <ZenithApexBackground />
-      <FloatingLogos />
-      <DraggableLogoSignature />
       <ZenithInteractiveController />
       <ZenithThemeSwitcher />
-      <FloatingWatermarkLogo />
       <SiteSearchBar />
       <div className="flex-1 relative overflow-hidden" style={{ zIndex: 1 }}>
         <AnimatePresence mode="wait" initial={false}>
