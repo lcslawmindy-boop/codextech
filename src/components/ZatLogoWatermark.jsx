@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
 export default function ZatLogoWatermark() {
-  const [logoUrl] = useState('https://media.base44.com/images/public/69ccefebfea78b23498c66a8/6fd72442f_df887ac44_logo.png');
+  const [logoUrl] = useState('https://media.base44.com/images/public/69ccefebfea78b23498c66a8/bcf3bcb42_df887ac44_logo.png');
 
   useEffect(() => {
     // Preload logo
@@ -10,12 +10,14 @@ export default function ZatLogoWatermark() {
   }, [logoUrl]);
 
   return (
-    <div className="fixed bottom-6 left-6 z-[9990] pointer-events-none">
+    <div className="fixed bottom-6 right-6 z-[9990] pointer-events-none">
       <img
         src={logoUrl}
         alt="Zenith Apex Tech"
-        className="h-20 w-20 rounded-lg opacity-75 hover:opacity-100 transition-opacity"
+        className="rounded-lg opacity-75 hover:opacity-100 transition-opacity"
         style={{
+          width: '288px',
+          height: '288px',
           filter: 'drop-shadow(0 0 12px rgba(0, 220, 255, 0.8)) drop-shadow(0 0 24px rgba(0, 180, 255, 0.5))',
           animation: 'zatPulse 3s ease-in-out infinite',
         }}

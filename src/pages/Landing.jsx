@@ -17,7 +17,7 @@ export default function Landing() {
       <nav className="border-b border-white/10 px-6 py-4 sticky top-0 z-50" style={{ background: "rgba(10,10,26,0.85)", backdropFilter: "blur(12px)" }}>
         <div className="max-w-6xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <img src="https://media.base44.com/images/public/69ccefebfea78b23498c66a8/6722a4c01_839284090_logo.png" alt="Zenith Apex Tech" className="h-9 w-9 rounded-lg" />
+            <img src="https://media.base44.com/images/public/69ccefebfea78b23498c66a8/bcf3bcb42_df887ac44_logo.png" alt="Zenith Apex Tech" className="h-9 w-9 rounded-lg" />
             <div>
               <span className="font-black text-lg leading-none block">ZENITH APEX TECH</span>
               <span className="text-gray-500 text-xs tracking-widest">TEST · ENGINEER · CONSTRUCT · HARNESS</span>
