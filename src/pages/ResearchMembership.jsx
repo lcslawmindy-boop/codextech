@@ -156,8 +156,8 @@ export default function ResearchMembership() {
 
               <div className="bg-gray-900/60 border border-cyan-800 rounded-xl p-4">
                 <p className="text-cyan-400 font-black text-sm mb-2">🧠 AI IP Generator</p>
-                <p className="text-white font-bold text-lg mb-1">10 Invention Dossier Rolls</p>
-                <p className="text-gray-400 text-xs">Generate 10 full IP strategies with patent claims & commercialization plans</p>
+                <p className="text-white font-bold text-lg mb-1">3 Inventions per Dossier</p>
+                <p className="text-gray-400 text-xs">Create dossiers with up to 3 inventions per package with patent claims & commercialization plans</p>
               </div>
             </div>
 
@@ -302,7 +302,7 @@ export default function ResearchMembership() {
                 { feature: "40+ patent analyses with prosecution history", value: "$400" },
                 { feature: "Engineering documentation & sourcing guides", value: "$250" },
                 { feature: "Step-by-step build frameworks", value: "$200" },
-                { feature: "10 Invention Dossier Rolls (IP generator)", value: "$490" },
+                { feature: "10 Invention Dossier Rolls (up to 3 inventions per dossier)", value: "$490" },
                 { feature: "Bring-to-Market Commercialization Roadmap", value: "$199" },
                 { feature: "Direct expert support (48hr response)", value: "$300" },
                 { feature: "20% off EMF Protection Shop", value: "—" },
