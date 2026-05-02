@@ -21,6 +21,10 @@ export default function BackgroundModeControl({ mode, setMode }) {
     { id: 'off', label: 'Solid', icon: '⊙', desc: 'Logo background' },
     { id: 'subdued', label: 'Subdued', icon: '∿', desc: 'Equations (dim)' },
     { id: 'interactive', label: 'Interactive', icon: '◈', desc: 'Full effects' },
+    { id: 'defense', label: 'Defense', icon: '🛡️', desc: 'Military contractor' },
+    { id: 'researcher', label: 'Researcher', icon: '🔬', desc: 'Academic focus' },
+    { id: 'institutional', label: 'Institutional', icon: '🏛️', desc: 'Enterprise grade' },
+    { id: 'fun', label: 'Fun', icon: '🎨', desc: 'Playful vibes' },
   ];
 
   const ui = (
