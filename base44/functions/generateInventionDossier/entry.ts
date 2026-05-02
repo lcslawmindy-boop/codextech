@@ -62,7 +62,7 @@ Deno.serve(async (req) => {
     
     // Legal language
     doc.setFontSize(8);
-    const legalText = `ZENITH APEX TECHNOLOGY INTELLECTUAL PROPERTY RIGHTS DECLARATION: Zenith Apex Technology, Inc. asserts intellectual property rights to this invention as documented herein. By creating this dossier, the inventor grants Zenith Apex Technology a non-exclusive license to list and promote this invention on the IP Marketplace. This invention has been automatically registered on the Zenith Apex IP Marketplace for potential licensing, partnerships, and investor matching.`;
+    const legalText = `ZAT (ZENITH APEX TECHNOLOGY) INTELLECTUAL PROPERTY RIGHTS DECLARATION: ZAT asserts intellectual property rights to this invention as documented herein. By creating this dossier, the inventor grants ZAT a non-exclusive license to list and promote this invention on the IP Marketplace. This invention has been automatically registered on the ZAT IP Marketplace for potential licensing, partnerships, and investor matching.`;
     const legalLines = doc.splitTextToSize(legalText, pageWidth - 2 * margin);
     doc.text(legalLines, margin, yPosition);
     yPosition += legalLines.length * 3 + 10;

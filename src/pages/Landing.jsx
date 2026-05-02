@@ -254,13 +254,13 @@ export default function Landing() {
               <h3 className="text-2xl font-black mb-4 text-white flex items-center gap-2">
                 <Users size={24} className="text-green-400" /> IP Marketplace
               </h3>
-              <p className="text-gray-400 text-sm mb-6">Broker patents, inventions, and partnerships anonymously. Members create inventor and investor profiles. ZARP takes 5% commission on successful deals.</p>
+              <p className="text-gray-400 text-sm mb-6">Broker patents, inventions, and partnerships anonymously. Members create inventor and investor profiles. ZAT takes 5% commission on successful deals.</p>
               <ul className="space-y-2 text-sm text-gray-300 mb-6">
                 <li>✓ Anonymous inventor & investor profiles</li>
                 <li>✓ Smart matching algorithm</li>
                 <li>✓ VDR for due diligence docs</li>
                 <li>✓ Deal flow pipeline management</li>
-                <li>✓ 5% ZARP commission on closed deals</li>
+                <li>✓ 5% ZAT commission on closed deals</li>
               </ul>
               <Link to="/ip-marketplace" className="inline-flex items-center gap-2 text-green-400 hover:text-green-300 font-black text-sm">
                 Browse Marketplace →
@@ -295,7 +295,7 @@ export default function Landing() {
           </div>
           <div className="mt-8 bg-yellow-950/20 border border-yellow-700/50 rounded-xl p-6 text-center">
             <p className="text-yellow-300 text-sm font-bold flex items-center justify-center gap-2">
-              <Percent size={16} /> When a deal closes, Zenith Apex Tech takes 5% commission — transparent, fair, and focused on member success.
+              <Percent size={16} /> When a deal closes, ZAT (Zenith Apex Tech) takes 5% commission — transparent, fair, and focused on member success.
             </p>
           </div>
         </div>
@@ -395,7 +395,7 @@ export default function Landing() {
             </div>
           </div>
           <div className="border-t border-gray-800 pt-8 text-center">
-            <p className="text-gray-600 text-sm mb-4">Primary sources only. Institutional research. No speculation.</p>
+            <p className="text-gray-600 text-sm mb-4">Powered by ZAT (Zenith Apex Technology). Primary sources only. Institutional research. No speculation.</p>
             <div className="flex justify-center gap-6 text-gray-500 text-xs">
               <Link to="/terms" className="hover:text-gray-300">Terms</Link>
               <Link to="/privacy" className="hover:text-gray-300">Privacy</Link>
