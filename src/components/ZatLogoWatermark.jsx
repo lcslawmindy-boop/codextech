@@ -32,7 +32,7 @@ export default function ZatLogoWatermark() {
         TRUST · EVOLVE · COMMUNITY · HONOR
       </div>
       <div className="font-black text-cyan-400 tracking-widest text-center opacity-75 whitespace-nowrap" style={{ fontSize: '8px', textShadow: '0 0 8px rgba(0, 220, 255, 0.6)', lineHeight: '1.2' }}>
-        TODAY · EVERYONE · CAN · HELP
+        TODAY · EVERYONE · CONTRIBUTES · HELP
       </div>
       <style>{`
         @keyframes zatPulse {
