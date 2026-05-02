@@ -310,12 +310,12 @@ export default function InventionDossierPackage() {
         <div className="max-w-4xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {/* Builder Membership Option */}
-            <div className="bg-gray-900/60 border border-cyan-800 rounded-2xl p-6">
-              <p className="text-cyan-400 text-xs font-black uppercase tracking-widest mb-2">With Membership</p>
-              <h4 className="text-white font-black text-lg mb-2">Builder Tier — $99/month</h4>
-              <p className="text-gray-400 text-sm mb-4">
-                Includes 10 Invention Dossier IP generations per month. Create unlimited inventions documentation with patent strategy, commercialization roadmap, and optional PDF + video exports.
-              </p>
+                <div className="bg-gray-900/60 border border-cyan-800 rounded-2xl p-6">
+                  <p className="text-cyan-400 text-xs font-black uppercase tracking-widest mb-2">With Membership</p>
+                  <h4 className="text-white font-black text-lg mb-2">Builder Tier — $99/month</h4>
+                  <p className="text-gray-400 text-sm mb-4">
+                    Includes 10 Invention Dossier IP generations per month. Create up to 3 inventions per dossier with patent strategy, commercialization roadmap, and optional PDF + video exports.
+                  </p>
               <Link to="/research-membership" className="inline-flex items-center gap-2 text-cyan-300 hover:text-cyan-200 font-bold text-sm">
                 View Membership →
               </Link>
@@ -323,10 +323,10 @@ export default function InventionDossierPackage() {
 
             {/* One-Time Purchase Option */}
             <div className="bg-gray-900/60 border border-purple-800 rounded-2xl p-6">
-              <p className="text-purple-400 text-xs font-black uppercase tracking-widest mb-2">One-Time Purchase</p>
-              <h4 className="text-white font-black text-lg mb-2">Dossier IP Creation Package</h4>
+              <p className="text-purple-400 text-xs font-black uppercase tracking-widest mb-2">Pro Tier Dossier</p>
+              <h4 className="text-white font-black text-lg mb-2">5 Inventions + Bundled Exports</h4>
               <p className="text-gray-400 text-sm mb-4">
-                No membership required. Purchase above (1–5 inventions, $297–$997 + optional $49 PDF/video add-ons). Full IP framework delivered immediately.
+                Create 5-invention dossiers with PDF export & build videos included. Includes patent strategy, commercialization roadmap, all documentation. <span className="text-purple-300 font-bold">($1497 VALUE)</span>
               </p>
               <p className="text-purple-300 font-bold text-sm">
                 Scroll up to select inventions & purchase
