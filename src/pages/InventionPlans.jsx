@@ -62,7 +62,8 @@ const PATENTED_NOT_FOR_SALE = [
 
 const isPatentedNotForSale = (title) => PATENTED_NOT_FOR_SALE.some(p => p.toLowerCase() === title?.toLowerCase());
 
-const inventions = businessItems.filter(i => i.category === "Invention" && !isDefenseRestricted(i.title) && !isPatentedNotForSale(i.title));
+// Show ALL inventions in the sidebar — restricted ones get a stamp overlay
+const inventions = businessItems.filter(i => i.category === "Invention");
 
 function VisualExplainer({ visual }) {
   if (!visual) return null;
@@ -1573,7 +1574,7 @@ export default function InventionPlans() {
         </div>
         <div className="flex items-center gap-3">
           <span className="text-xs text-gray-500 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-gray-900 border border-gray-800">
-            <Package size={12} /> {inventions.length} inventions
+            <Package size={12} /> {inventions.filter(i => !isDefenseRestricted(i.title) && !isPatentedNotForSale(i.title)).length} available inventions
           </span>
           {isAdmin && (
             <button
@@ -1652,17 +1653,20 @@ export default function InventionPlans() {
             const isAdminLocked = adminOnly && !isAdmin;
             const isGovLocked = govClassified && !isAdmin && !tierHasGovAccess(tier);
             const memberLocked = isMembershipRequired(inv.title) && !isAdmin;
-            const patentedNotForSale = isPatentedNotForSale(inv.title);
+            const defenseRestricted = isDefenseRestricted(inv.title);
+            const patentedBlock = isPatentedNotForSale(inv.title);
+            const isPublicRestricted = (defenseRestricted || patentedBlock) && !isAdmin;
             // Trial users can only view the first invention (index 0)
             const trialLocked = isTrial && !isAdmin && i > 0;
             return (
               <button key={i} onClick={() => setSelected(inv)}
-                className={`w-full text-left px-4 py-3 border-b border-gray-800/60 transition-all flex items-start gap-3 ${
+                className={`w-full text-left px-4 py-3 border-b border-gray-800/60 transition-all flex items-start gap-3 relative ${
                   isSelected ? "bg-gray-800/80 border-l-2 border-l-yellow-500" : "hover:bg-gray-800/30"
-                }`}>
+                } ${isPublicRestricted ? "opacity-70" : ""}`}>
                 <span className="text-xl flex-shrink-0 mt-0.5">{inv.icon}</span>
                 <div className="flex-1 min-w-0">
                   <p className={`text-xs font-semibold leading-snug truncate ${
+                   isPublicRestricted ? "text-red-400" :
                    trialLocked ? "text-gray-600" :
                    isAdminLocked ? "text-red-900" :
                    isGovLocked ? "text-red-400" :
@@ -1670,19 +1674,24 @@ export default function InventionPlans() {
                    accessible ? "text-white" : "text-gray-600"
                   }`}>{inv.title}</p>
                   <p className="text-xs mt-0.5">
-                   {trialLocked ? <span className="text-cyan-700">⏱ Trial — upgrade to unlock</span> :
+                   {isPublicRestricted ? (
+                     defenseRestricted
+                       ? <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-red-950 border border-red-700 text-red-400 font-black text-xs tracking-widest">⛔ RESTRICTED</span>
+                       : <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-yellow-950 border border-yellow-700 text-yellow-400 font-black text-xs tracking-widest">⚠ CLASSIFIED</span>
+                   ) :
+                    trialLocked ? <span className="text-cyan-700">⏱ Trial — upgrade to unlock</span> :
                     isAdminLocked ? <span className="text-red-900">🔐 Admin Only</span> :
                     isGovLocked ? <span className="text-red-400">🏛 Gov/Defense Only</span> :
-                    patentedNotForSale ? <span className="text-gray-500">⚖️ Not for Sale</span> :
                     memberLocked ? <span className="text-indigo-500">🔒 Membership or Purchase</span> :
                     <span className="text-gray-600">{inv.price}</span>}
-                   {isDefenseRestricted(inv.title) && <span className="ml-1 px-1.5 py-0.5 rounded text-xs bg-red-900/40 border border-red-800 text-red-400">Defense Only</span>}
                   </p>
                 </div>
-                {trialLocked ? <Lock size={10} className="text-cyan-800 flex-shrink-0 mt-1" /> :
-                 isAdminLocked ? <Shield size={10} className="text-red-700 flex-shrink-0 mt-1" /> :
-                 isGovLocked ? <Shield size={10} className="text-red-400 flex-shrink-0 mt-1" /> :
-                 memberLocked ? <Lock size={10} className="text-indigo-600 flex-shrink-0 mt-1" /> : null}
+                {isPublicRestricted
+                  ? <Shield size={10} className="text-red-500 flex-shrink-0 mt-1" />
+                  : trialLocked ? <Lock size={10} className="text-cyan-800 flex-shrink-0 mt-1" /> :
+                    isAdminLocked ? <Shield size={10} className="text-red-700 flex-shrink-0 mt-1" /> :
+                    isGovLocked ? <Shield size={10} className="text-red-400 flex-shrink-0 mt-1" /> :
+                    memberLocked ? <Lock size={10} className="text-indigo-600 flex-shrink-0 mt-1" /> : null}
               </button>
             );
           })}
@@ -1710,6 +1719,53 @@ export default function InventionPlans() {
                    style={{ background: "linear-gradient(135deg, #0EA5E9, #10B981)" }}>
                    Access the Database
                 </Link>
+              </div>
+            </div>
+          ) : (isDefenseRestricted(selected.title) && !isAdmin) ? (
+            <div className="flex-1 flex items-center justify-center p-12">
+              <div className="max-w-md text-center">
+                {/* Big stamp */}
+                <div className="relative w-48 h-48 mx-auto mb-8 flex items-center justify-center">
+                  <div className="absolute inset-0 rounded-full border-8 border-red-600 opacity-80" />
+                  <div className="absolute inset-4 rounded-full border-4 border-red-700 opacity-50" />
+                  <div className="text-center">
+                    <Shield size={40} className="text-red-500 mx-auto mb-1" />
+                    <p className="text-red-500 font-black text-xl tracking-widest leading-tight">RESTRICTED</p>
+                    <p className="text-red-700 font-bold text-xs tracking-widest mt-1">ACCESS DENIED</p>
+                  </div>
+                </div>
+                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-red-950 border-2 border-red-700 mb-4">
+                  <Shield size={14} className="text-red-400" />
+                  <span className="text-red-400 font-black text-sm uppercase tracking-widest">Restricted — Not for Public Access</span>
+                </div>
+                <h2 className="text-white font-black text-xl mb-3">{selected.title}</h2>
+                <p className="text-gray-400 text-sm leading-relaxed mb-4">
+                  This build plan involves defense-adjacent technology, bioelectromagnetic treatment claims, or free energy systems subject to regulatory restrictions. Full specifications are not available to the public.
+                </p>
+                <p className="text-gray-600 text-xs border border-gray-800 rounded-lg px-4 py-3 bg-gray-900/40">For authorized research access, contact <span className="text-red-400">support@zenithapex.com</span></p>
+              </div>
+            </div>
+          ) : (isPatentedNotForSale(selected.title) && !isAdmin) ? (
+            <div className="flex-1 flex items-center justify-center p-12">
+              <div className="max-w-md text-center">
+                {/* Classified stamp */}
+                <div className="relative w-48 h-48 mx-auto mb-8 flex items-center justify-center">
+                  <div className="absolute inset-0 rounded-full border-8 border-yellow-600 opacity-80" style={{ transform: "rotate(-15deg)" }} />
+                  <div className="absolute inset-4 rounded-full border-4 border-yellow-700 opacity-50" style={{ transform: "rotate(-15deg)" }} />
+                  <div className="text-center" style={{ transform: "rotate(-10deg)" }}>
+                    <p className="text-yellow-500 font-black text-2xl tracking-widest leading-tight">CLASSIFIED</p>
+                    <p className="text-yellow-700 font-bold text-xs tracking-widest mt-1">PATENTED IP</p>
+                  </div>
+                </div>
+                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-yellow-950 border-2 border-yellow-700 mb-4">
+                  <Shield size={14} className="text-yellow-400" />
+                  <span className="text-yellow-400 font-black text-sm uppercase tracking-widest">Classified — Patented IP</span>
+                </div>
+                <h2 className="text-white font-black text-xl mb-3">{selected.title}</h2>
+                <p className="text-gray-400 text-sm leading-relaxed mb-4">
+                  This invention is protected under active patent law. Complete build plans are classified and not available for public purchase or distribution.
+                </p>
+                <p className="text-gray-600 text-xs border border-gray-800 rounded-lg px-4 py-3 bg-gray-900/40">For licensing inquiries, contact <span className="text-yellow-400">support@zenithapex.com</span></p>
               </div>
             </div>
           ) : (isAdminOnly(selected.title) && !isAdmin) ? (
