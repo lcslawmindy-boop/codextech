@@ -2,7 +2,7 @@ import { useState } from "react";
 import { ArrowRight, CheckCircle2, Users, Zap, Lock, BookOpen, Zap as ZapIcon } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import AdvancedInventionDossierGenerator from "@/components/AdvancedInventionDossierGenerator";
-import CircuitBoardBackground from "@/components/backgrounds/CircuitBoardBackground";
+import FloatingMissionBackground from "@/components/backgrounds/FloatingMissionBackground";
 
 function CheckoutButton({ title, price, priceInCents, description, billingPeriod = "monthly" }) {
   const [loading, setLoading] = useState(false);
@@ -47,7 +47,7 @@ export default function ResearchMembership() {
 
   return (
     <div className="min-h-screen bg-transparent text-white relative">
-      <CircuitBoardBackground />
+      <FloatingMissionBackground />
       {/* Header */}
       <div className="border-b border-gray-800 px-6 py-5 bg-gray-900/50">
         <div className="max-w-6xl mx-auto">
