@@ -23,86 +23,68 @@ export default function ZaraAlienMascot() {
         style={{ animation: 'eyeballBlink 3s ease-in-out infinite' }}
       >
         <style>{`
-          @keyframes pupilGaze {
-            0% { cx: 50; cy: 48; }
-            25% { cx: 55; cy: 45; }
-            50% { cx: 48; cy: 52; }
-            75% { cx: 52; cy: 46; }
-            100% { cx: 50; cy: 48; }
+          @keyframes neuronPulse {
+            0% { opacity: 0.4; r: 1.5; }
+            50% { opacity: 1; r: 2.5; }
+            100% { opacity: 0.4; r: 1.5; }
           }
-          @keyframes eyeClose {
-            0% { opacity: 1; }
-            40% { opacity: 1; }
-            50% { opacity: 0.3; }
-            60% { opacity: 1; }
-            100% { opacity: 1; }
+          @keyframes mouthTalk {
+            0% { ry: 3; }
+            25% { ry: 5; }
+            50% { ry: 3; }
+            75% { ry: 5; }
+            100% { ry: 3; }
           }
         `}</style>
         <div className="flex flex-col items-center gap-3">
           <div className="relative w-80 h-80" style={{ animation: 'pupilGlow 4s ease-in-out infinite' }}>
-            {/* Owl Head */}
+            {/* Talking Brain */}
             <svg viewBox="0 0 100 100" className="w-full h-full" style={{ filter: 'drop-shadow(0 0 32px rgba(0, 220, 255, 0.9))' }}>
               <defs>
-                <radialGradient id="owlHead" cx="40%" cy="30%">
-                  <stop offset="0%" style={{ stopColor: '#2a4a6a', stopOpacity: 1 }} />
-                  <stop offset="60%" style={{ stopColor: '#1a3a5a', stopOpacity: 1 }} />
-                  <stop offset="100%" style={{ stopColor: '#0a2a4a', stopOpacity: 1 }} />
-                </radialGradient>
-                <radialGradient id="owlEye" cx="40%" cy="40%">
-                  <stop offset="0%" style={{ stopColor: '#ffff00', stopOpacity: 1 }} />
-                  <stop offset="70%" style={{ stopColor: '#ffdd00', stopOpacity: 1 }} />
-                  <stop offset="100%" style={{ stopColor: '#ffaa00', stopOpacity: 1 }} />
+                <radialGradient id="brainGradient" cx="40%" cy="35%">
+                  <stop offset="0%" style={{ stopColor: '#ff6b9d', stopOpacity: 1 }} />
+                  <stop offset="50%" style={{ stopColor: '#c44569', stopOpacity: 1 }} />
+                  <stop offset="100%" style={{ stopColor: '#8b2f5e', stopOpacity: 1 }} />
                 </radialGradient>
               </defs>
 
-              {/* Head circle */}
-              <circle cx="50" cy="55" r="35" fill="url(#owlHead)" />
+              {/* Left hemisphere */}
+              <ellipse cx="35" cy="45" rx="22" ry="28" fill="url(#brainGradient)" />
 
-              {/* Left ear tuft */}
-              <ellipse cx="25" cy="20" rx="6" ry="15" fill="#1a3a5a" style={{ filter: 'drop-shadow(0 -2px 4px rgba(0,0,0,0.5))' }} />
+              {/* Right hemisphere */}
+              <ellipse cx="65" cy="45" rx="22" ry="28" fill="url(#brainGradient)" />
 
-              {/* Right ear tuft */}
-              <ellipse cx="75" cy="20" rx="6" ry="15" fill="#1a3a5a" style={{ filter: 'drop-shadow(0 -2px 4px rgba(0,0,0,0.5))' }} />
+              {/* Brain ridges - left */}
+              <path d="M 30 25 Q 35 30 30 35" stroke="rgba(0,0,0,0.2)" strokeWidth="1" fill="none" />
+              <path d="M 25 35 Q 30 40 25 48" stroke="rgba(0,0,0,0.2)" strokeWidth="1" fill="none" />
+              <path d="M 28 50 Q 33 55 28 62" stroke="rgba(0,0,0,0.2)" strokeWidth="1" fill="none" />
 
-              {/* Left eye white */}
-              <circle cx="35" cy="45" r="12" fill="#ffffff" />
-              <circle cx="35" cy="45" r="12" fill="none" stroke="rgba(0,0,0,0.1)" strokeWidth="1" />
+              {/* Brain ridges - right */}
+              <path d="M 70 25 Q 65 30 70 35" stroke="rgba(0,0,0,0.2)" strokeWidth="1" fill="none" />
+              <path d="M 75 35 Q 70 40 75 48" stroke="rgba(0,0,0,0.2)" strokeWidth="1" fill="none" />
+              <path d="M 72 50 Q 67 55 72 62" stroke="rgba(0,0,0,0.2)" strokeWidth="1" fill="none" />
 
-              {/* Right eye white */}
-              <circle cx="65" cy="45" r="12" fill="#ffffff" />
-              <circle cx="65" cy="45" r="12" fill="none" stroke="rgba(0,0,0,0.1)" strokeWidth="1" />
+              {/* Central fissure */}
+              <path d="M 50 15 Q 50 40 50 70" stroke="rgba(0,0,0,0.3)" strokeWidth="2" fill="none" />
 
-              {/* Left iris */}
-              <circle cx="35" cy="45" r="9" fill="url(#owlEye)" />
+              {/* Glowing synapses - left side */}
+              <circle cx="25" cy="30" r="2" fill="#00ff80" opacity="0.7" style={{ animation: 'neuronPulse 1.5s ease-in-out infinite' }} />
+              <circle cx="32" cy="55" r="2" fill="#00ff80" opacity="0.7" style={{ animation: 'neuronPulse 1.8s ease-in-out infinite' }} />
+              <circle cx="28" cy="65" r="2" fill="#00ff80" opacity="0.7" style={{ animation: 'neuronPulse 2s ease-in-out infinite' }} />
 
-              {/* Right iris */}
-              <circle cx="65" cy="45" r="9" fill="url(#owlEye)" />
+              {/* Glowing synapses - right side */}
+              <circle cx="75" cy="30" r="2" fill="#00ff80" opacity="0.7" style={{ animation: 'neuronPulse 1.7s ease-in-out infinite' }} />
+              <circle cx="68" cy="55" r="2" fill="#00ff80" opacity="0.7" style={{ animation: 'neuronPulse 1.9s ease-in-out infinite' }} />
+              <circle cx="72" cy="65" r="2" fill="#00ff80" opacity="0.7" style={{ animation: 'neuronPulse 2.1s ease-in-out infinite' }} />
 
-              {/* Left pupil */}
-              <circle cx="35" cy="45" r="6" fill="#000000" />
+              {/* Mouth - talking */}
+              <ellipse cx="50" cy="75" rx="8" ry="6" fill="#ff6b9d" stroke="rgba(0,0,0,0.3)" strokeWidth="1" style={{ animation: 'mouthTalk 1.2s ease-in-out infinite' }} />
 
-              {/* Right pupil */}
-              <circle cx="65" cy="45" r="6" fill="#000000" />
+              {/* Mouth inner */}
+              <ellipse cx="50" cy="75" rx="5" ry="3" fill="rgba(0,0,0,0.2)" style={{ animation: 'mouthTalk 1.2s ease-in-out infinite' }} />
 
-              {/* Eye shine - left */}
-              <circle cx="33" cy="42" r="2" fill="#ffffff" opacity="0.9" />
-
-              {/* Eye shine - right */}
-              <circle cx="63" cy="42" r="2" fill="#ffffff" opacity="0.9" />
-
-              {/* Beak */}
-              <path d="M 50 55 L 48 63 L 52 63 Z" fill="#ff8800" />
-
-              {/* Face disc outline */}
-              <circle cx="50" cy="55" r="35" fill="none" stroke="rgba(0, 220, 255, 0.3)" strokeWidth="2" />
-
-              {/* Feather texture lines */}
-              <g stroke="rgba(0, 0, 0, 0.1)" strokeWidth="0.5" opacity="0.4">
-                <path d="M 35 75 Q 40 80 45 78" fill="none" />
-                <path d="M 55 78 Q 60 80 65 75" fill="none" />
-                <path d="M 30 70 Q 25 72 28 78" fill="none" />
-                <path d="M 70 70 Q 75 72 72 78" fill="none" />
-              </g>
+              {/* Outer glow */}
+              <circle cx="50" cy="45" r="38" fill="none" stroke="rgba(0, 220, 255, 0.3)" strokeWidth="2" />
             </svg>
           </div>
             <div className="text-center">
@@ -135,44 +117,35 @@ export default function ZaraAlienMascot() {
         {/* Header */}
         <div className="flex items-start gap-3 mb-4">
           <div className="relative w-12 h-12 flex-shrink-0">
-            {/* Owl Head */}
+            {/* Talking Brain */}
             <svg viewBox="0 0 100 100" className="w-full h-full" style={{ filter: 'drop-shadow(0 0 12px rgba(0, 220, 255, 0.6))' }}>
               <defs>
-                <radialGradient id="owlHead2" cx="40%" cy="30%">
-                  <stop offset="0%" style={{ stopColor: '#2a4a6a', stopOpacity: 1 }} />
-                  <stop offset="60%" style={{ stopColor: '#1a3a5a', stopOpacity: 1 }} />
-                  <stop offset="100%" style={{ stopColor: '#0a2a4a', stopOpacity: 1 }} />
-                </radialGradient>
-                <radialGradient id="owlEye2" cx="40%" cy="40%">
-                  <stop offset="0%" style={{ stopColor: '#ffff00', stopOpacity: 1 }} />
-                  <stop offset="70%" style={{ stopColor: '#ffdd00', stopOpacity: 1 }} />
-                  <stop offset="100%" style={{ stopColor: '#ffaa00', stopOpacity: 1 }} />
+                <radialGradient id="brainGradient2" cx="40%" cy="35%">
+                  <stop offset="0%" style={{ stopColor: '#ff6b9d', stopOpacity: 1 }} />
+                  <stop offset="50%" style={{ stopColor: '#c44569', stopOpacity: 1 }} />
+                  <stop offset="100%" style={{ stopColor: '#8b2f5e', stopOpacity: 1 }} />
                 </radialGradient>
               </defs>
-              {/* Head */}
-              <circle cx="50" cy="55" r="35" fill="url(#owlHead2)" />
-              {/* Left ear tuft */}
-              <ellipse cx="25" cy="20" rx="6" ry="15" fill="#1a3a5a" />
-              {/* Right ear tuft */}
-              <ellipse cx="75" cy="20" rx="6" ry="15" fill="#1a3a5a" />
-              {/* Left eye white */}
-              <circle cx="35" cy="45" r="12" fill="#ffffff" />
-              {/* Right eye white */}
-              <circle cx="65" cy="45" r="12" fill="#ffffff" />
-              {/* Left iris */}
-              <circle cx="35" cy="45" r="9" fill="url(#owlEye2)" />
-              {/* Right iris */}
-              <circle cx="65" cy="45" r="9" fill="url(#owlEye2)" />
-              {/* Left pupil */}
-              <circle cx="35" cy="45" r="6" fill="#000000" />
-              {/* Right pupil */}
-              <circle cx="65" cy="45" r="6" fill="#000000" />
-              {/* Eye shine - left */}
-              <circle cx="33" cy="42" r="1.5" fill="#ffffff" opacity="0.9" />
-              {/* Eye shine - right */}
-              <circle cx="63" cy="42" r="1.5" fill="#ffffff" opacity="0.9" />
-              {/* Beak */}
-              <path d="M 50 55 L 48 63 L 52 63 Z" fill="#ff8800" />
+              {/* Left hemisphere */}
+              <ellipse cx="35" cy="45" rx="22" ry="28" fill="url(#brainGradient2)" />
+              {/* Right hemisphere */}
+              <ellipse cx="65" cy="45" rx="22" ry="28" fill="url(#brainGradient2)" />
+              {/* Brain ridges - left */}
+              <path d="M 30 25 Q 35 30 30 35" stroke="rgba(0,0,0,0.2)" strokeWidth="0.8" fill="none" />
+              <path d="M 25 35 Q 30 40 25 48" stroke="rgba(0,0,0,0.2)" strokeWidth="0.8" fill="none" />
+              {/* Brain ridges - right */}
+              <path d="M 70 25 Q 65 30 70 35" stroke="rgba(0,0,0,0.2)" strokeWidth="0.8" fill="none" />
+              <path d="M 75 35 Q 70 40 75 48" stroke="rgba(0,0,0,0.2)" strokeWidth="0.8" fill="none" />
+              {/* Central fissure */}
+              <path d="M 50 15 Q 50 40 50 70" stroke="rgba(0,0,0,0.3)" strokeWidth="1.5" fill="none" />
+              {/* Glowing synapses - left */}
+              <circle cx="25" cy="30" r="1.5" fill="#00ff80" opacity="0.7" style={{ animation: 'neuronPulse 1.5s ease-in-out infinite' }} />
+              <circle cx="32" cy="55" r="1.5" fill="#00ff80" opacity="0.7" style={{ animation: 'neuronPulse 1.8s ease-in-out infinite' }} />
+              {/* Glowing synapses - right */}
+              <circle cx="75" cy="30" r="1.5" fill="#00ff80" opacity="0.7" style={{ animation: 'neuronPulse 1.7s ease-in-out infinite' }} />
+              <circle cx="68" cy="55" r="1.5" fill="#00ff80" opacity="0.7" style={{ animation: 'neuronPulse 1.9s ease-in-out infinite' }} />
+              {/* Mouth - talking */}
+              <ellipse cx="50" cy="75" rx="6" ry="4" fill="#ff6b9d" stroke="rgba(0,0,0,0.3)" strokeWidth="0.8" style={{ animation: 'mouthTalk 1.2s ease-in-out infinite' }} />
             </svg>
           </div>
           <div className="flex-1">
