@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { createPortal } from 'react-dom';
-import { X, Send, Loader2 } from 'lucide-react';
+import { X, Send, Loader2, BookOpen, Zap, Lightbulb, Users } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { base44 } from '@/api/base44Client';
 
 export default function ZenithAIMascot() {
@@ -71,6 +72,16 @@ export default function ZenithAIMascot() {
           </div>
 
           <div className="flex-1 overflow-y-auto p-3 space-y-3">
+            {messages.length === 1 && (
+              <div className="space-y-2">
+                <div className="text-xs text-gray-400 font-semibold mb-3">Quick navigation:</div>
+                <NavLink to="/free-vault" icon={<BookOpen size={12} />} label="Research Archive" />
+                <NavLink to="/courses" icon={<Zap size={12} />} label="Courses" />
+                <NavLink to="/invention-plans" icon={<Lightbulb size={12} />} label="Build Plans" />
+                <NavLink to="/patent-attorney-chat" icon={<Zap size={12} />} label="Patent Tools" />
+                <NavLink to="/ip-marketplace" icon={<Users size={12} />} label="IP Marketplace" />
+              </div>
+            )}
             {messages.map((msg, i) => (
               <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
                 <div
@@ -129,4 +140,16 @@ export default function ZenithAIMascot() {
   );
 
   return createPortal(ui, document.body);
+}
+
+function NavLink({ to, icon, label }) {
+  return (
+    <Link
+      to={to}
+      className="flex items-center gap-2 px-3 py-2 rounded bg-cyan-950/40 hover:bg-cyan-900/60 border border-cyan-700/40 text-cyan-300 hover:text-cyan-100 transition-all text-xs font-semibold"
+    >
+      {icon}
+      {label}
+    </Link>
+  );
 }
