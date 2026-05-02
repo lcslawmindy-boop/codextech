@@ -22,29 +22,17 @@ export default function ZaraAlienMascot() {
         title="Chat with Zara"
       >
         <div className="relative w-16 h-16">
-          {/* 3D Bear head */}
-          <svg viewBox="0 0 100 100" className="w-full h-full drop-shadow-lg" style={{ filter: 'drop-shadow(0 0 16px rgba(139, 69, 19, 0.7))' }}>
-            {/* Head */}
-            <circle cx="50" cy="55" r="25" fill="#5c4033" />
-            {/* Ears */}
-            <circle cx="32" cy="30" r="10" fill="#5c4033" />
-            <circle cx="68" cy="30" r="10" fill="#5c4033" />
-            {/* Ear inner */}
-            <circle cx="32" cy="32" r="5" fill="#3e2723" />
-            <circle cx="68" cy="32" r="5" fill="#3e2723" />
-            {/* Face lighter tone */}
-            <ellipse cx="50" cy="60" rx="18" ry="20" fill="#795548" />
-            {/* Eyes */}
-            <circle cx="40" cy="50" r="4" fill="#000" />
-            <circle cx="60" cy="50" r="4" fill="#000" />
-            {/* Eye shine */}
-            <circle cx="41" cy="48" r="1.5" fill="#fff" />
-            <circle cx="61" cy="48" r="1.5" fill="#fff" />
-            {/* Nose */}
-            <ellipse cx="50" cy="62" rx="4" ry="3" fill="#000" />
-            {/* Mouth */}
-            <path d="M 50 62 Q 48 66 45 65" stroke="#000" strokeWidth="1.5" fill="none" />
-            <path d="M 50 62 Q 52 66 55 65" stroke="#000" strokeWidth="1.5" fill="none" />
+          {/* 3D Eyeball */}
+          <svg viewBox="0 0 100 100" className="w-full h-full drop-shadow-lg" style={{ filter: 'drop-shadow(0 0 16px rgba(100, 180, 255, 0.7))' }}>
+            {/* White of eye */}
+            <circle cx="50" cy="50" r="30" fill="#fff" />
+            {/* Iris */}
+            <circle cx="50" cy="50" r="18" fill="#4a90e2" />
+            {/* Pupil */}
+            <circle cx="50" cy="50" r="12" fill="#000" />
+            {/* Eye shine/reflection */}
+            <circle cx="44" cy="44" r="6" fill="#fff" opacity="0.8" />
+            <circle cx="54" cy="56" r="2" fill="#fff" opacity="0.6" />
           </svg>
         </div>
       </button>
@@ -57,55 +45,43 @@ export default function ZaraAlienMascot() {
       <div
         className="bg-gray-900 border-2 rounded-2xl p-5 shadow-2xl"
         style={{
-          borderColor: '#8b4513',
-          boxShadow: '0 0 24px rgba(139, 69, 19, 0.4), 0 0 12px rgba(139, 69, 19, 0.2)',
+          borderColor: '#4a90e2',
+          boxShadow: '0 0 24px rgba(74, 144, 226, 0.4), 0 0 12px rgba(74, 144, 226, 0.2)',
         }}
       >
         {/* Close Button */}
         <button
           onClick={() => setIsOpen(false)}
-          className="absolute -top-3 -right-3 w-8 h-8 bg-gray-900 border border-amber-700 rounded-full flex items-center justify-center hover:bg-gray-800 transition"
-        >
-          <X size={16} className="text-amber-600" />
+          className="absolute -top-3 -right-3 w-8 h-8 bg-gray-900 border border-blue-500 rounded-full flex items-center justify-center hover:bg-gray-800 transition"
+          >
+          <X size={16} className="text-blue-400" />
         </button>
 
         {/* Header */}
         <div className="flex items-start gap-3 mb-4">
           <div className="relative w-12 h-12 flex-shrink-0">
-            {/* 3D Bear Head */}
+            {/* 3D Eyeball */}
              <svg viewBox="0 0 100 100" className="w-full h-full drop-shadow-lg">
-               {/* Head */}
-               <circle cx="50" cy="55" r="25" fill="#5c4033" />
-               {/* Ears */}
-               <circle cx="32" cy="30" r="10" fill="#5c4033" />
-               <circle cx="68" cy="30" r="10" fill="#5c4033" />
-               {/* Ear inner */}
-               <circle cx="32" cy="32" r="5" fill="#3e2723" />
-               <circle cx="68" cy="32" r="5" fill="#3e2723" />
-               {/* Face lighter tone */}
-               <ellipse cx="50" cy="60" rx="18" ry="20" fill="#795548" />
-               {/* Eyes */}
-               <circle cx="40" cy="50" r="4" fill="#000" />
-               <circle cx="60" cy="50" r="4" fill="#000" />
-               {/* Eye shine */}
-               <circle cx="41" cy="48" r="1.5" fill="#fff" />
-               <circle cx="61" cy="48" r="1.5" fill="#fff" />
-               {/* Nose */}
-               <ellipse cx="50" cy="62" rx="4" ry="3" fill="#000" />
-               {/* Mouth */}
-               <path d="M 50 62 Q 48 66 45 65" stroke="#000" strokeWidth="1.5" fill="none" />
-               <path d="M 50 62 Q 52 66 55 65" stroke="#000" strokeWidth="1.5" fill="none" />
+               {/* White of eye */}
+               <circle cx="50" cy="50" r="30" fill="#fff" />
+               {/* Iris */}
+               <circle cx="50" cy="50" r="18" fill="#4a90e2" />
+               {/* Pupil */}
+               <circle cx="50" cy="50" r="12" fill="#000" />
+               {/* Eye shine/reflection */}
+               <circle cx="44" cy="44" r="6" fill="#fff" opacity="0.8" />
+               <circle cx="54" cy="56" r="2" fill="#fff" opacity="0.6" />
              </svg>
           </div>
           <div className="flex-1">
-            <h3 className="font-black text-amber-700 text-sm">ZARA 🐻</h3>
+            <h3 className="font-black text-blue-400 text-sm">ZARA 👁️</h3>
              <p className="text-xs text-gray-400">Your guide</p>
           </div>
         </div>
 
         {/* Welcome Message */}
         <p className="text-sm text-gray-300 mb-4 leading-relaxed">
-          Welcome, friend! I'm <span className="text-amber-700 font-bold">Zara</span> the Research Bear. I'm here to help you explore, learn, and build amazing things. What interests you? 🌟
+          Welcome, friend! I'm <span className="text-blue-400 font-bold">Zara</span> the All-Seeing Eye. I'm here to help you explore, learn, and build amazing things. What interests you? 🌟
         </p>
 
         {/* Suggested Prompts */}
