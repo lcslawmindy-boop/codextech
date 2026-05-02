@@ -28,7 +28,10 @@ export default function Landing() {
           {/* Logo & Mission - Classified Style - ENLARGED */}
           <div className="flex items-center gap-6 flex-1">
             <div style={{ animation: "zatPulse 2.5s ease-in-out infinite" }} className="relative">
-              <img src="https://media.base44.com/images/public/69ccefebfea78b23498c66a8/200cea9a1_generated_image.png" alt="Zenith Apex Tech" className="h-32 w-32 rounded-lg" style={{ filter: "drop-shadow(0 0 40px rgba(0, 255, 0, 1))", border: "4px solid rgba(0, 255, 0, 0.95)" }} />
+              <div className="relative group">
+                <img src="https://media.base44.com/images/public/69ccefebfea78b23498c66a8/0b2ba0d8e_generated_image.png" alt="Zenith Apex Tech" className="h-32 w-32 rounded-lg cursor-pointer hover:opacity-90 transition-opacity" style={{ filter: "drop-shadow(0 0 40px rgba(0, 255, 0, 1))", border: "4px solid rgba(0, 255, 0, 0.95)" }} />
+                <a href="https://media.base44.com/images/public/69ccefebfea78b23498c66a8/0b2ba0d8e_generated_image.png" download className="absolute -bottom-8 left-0 text-xs text-green-400 opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap font-bold hover:text-green-300">[ Download PDF ]</a>
+              </div>
               <div className="absolute -top-3 -right-3 px-3 py-1.5 bg-orange-600 text-black text-xs font-black rounded" style={{ boxShadow: "0 0 16px rgba(255, 102, 0, 1)" }}>TOP SECRET</div>
             </div>
             <div>
