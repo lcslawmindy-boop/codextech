@@ -275,28 +275,41 @@ export default function ZenithApexBackground() {
         ctx.fill();
       }
 
-      // ── Grid ──
+      // ── Grid with electricity running through it ──
       ctx.save();
-      ctx.strokeStyle = "rgba(80,140,255,0.07)";
+      ctx.strokeStyle = "rgba(80,140,255,0.08)";
       ctx.lineWidth = 0.6;
       for (let x = 0; x < W; x += 60) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke(); }
       for (let y = 0; y < H; y += 60) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke(); }
+      // Electricity pulses through grid
+      for (let x = 0; x < W; x += 120) {
+        const pulse = 0.15 + 0.12 * Math.sin(t * 2.5 + x * 0.002);
+        ctx.strokeStyle = `rgba(0,255,200,${pulse})`;
+        ctx.lineWidth = 1.8;
+        ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke();
+      }
+      for (let y = 0; y < H; y += 120) {
+        const pulse = 0.15 + 0.12 * Math.sin(t * 2.5 + y * 0.002);
+        ctx.strokeStyle = `rgba(0,255,200,${pulse})`;
+        ctx.lineWidth = 1.8;
+        ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke();
+      }
       ctx.restore();
 
-      // ── Scalar waves (reduced) ──
-      for (let i = 0; i < 6; i++) {
-        const phase = (t * 0.35 + i / 6) % 1;
+      // ── Quantum & Scalar waves (prominent) ──
+      for (let i = 0; i < 8; i++) {
+        const phase = (t * 0.4 + i / 8) % 1;
         const r = phase * Math.max(W, H) * 0.95;
+        const alpha = (1 - phase) * 0.45;
+        ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2);
+        ctx.strokeStyle = `rgba(80,180,255,${alpha})`; ctx.lineWidth = 2.5; ctx.stroke();
+      }
+      for (let i = 0; i < 6; i++) {
+        const phase = (t * 0.28 + i / 6) % 1;
+        const r = phase * Math.max(W, H) * 0.75;
         const alpha = (1 - phase) * 0.35;
         ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2);
-        ctx.strokeStyle = `rgba(80,160,255,${alpha})`; ctx.lineWidth = 2; ctx.stroke();
-      }
-      for (let i = 0; i < 4; i++) {
-        const phase = (t * 0.25 + i / 4) % 1;
-        const r = phase * Math.max(W, H) * 0.70;
-        const alpha = (1 - phase) * 0.25;
-        ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2);
-        ctx.strokeStyle = `rgba(120,210,255,${alpha})`; ctx.lineWidth = 1.5; ctx.stroke();
+        ctx.strokeStyle = `rgba(140,230,255,${alpha})`; ctx.lineWidth = 2; ctx.stroke();
       }
 
 
@@ -329,41 +342,32 @@ export default function ZenithApexBackground() {
         ctx.restore();
       }
 
-      // ── Central Phi Ratio symbol — MUCH LARGER at center ──
+      // ── Central Phi Ratio symbol (smaller, orbiting around watermark) ──
       {
-        const phiX = cx;
-        const phiY = cy;
+        const phiOrbitR = Math.min(W, H) * 0.08;
+        const phiAngle = t * 0.8;
+        const phiX = cx + Math.cos(phiAngle) * phiOrbitR;
+        const phiY = cy + Math.sin(phiAngle) * phiOrbitR;
         const phiPulse = 0.7 + 0.3 * Math.sin(t * 1.1);
         ctx.save();
-        ctx.globalAlpha = 0.8 * phiPulse;
+        ctx.globalAlpha = 0.7 * phiPulse;
         // Outer glow ring
-        const phiGrad = ctx.createRadialGradient(phiX, phiY, 0, phiX, phiY, 180);
-        phiGrad.addColorStop(0, "rgba(255,215,0,0.25)");
-        phiGrad.addColorStop(0.5, "rgba(255,180,0,0.12)");
+        const phiGrad = ctx.createRadialGradient(phiX, phiY, 0, phiX, phiY, 80);
+        phiGrad.addColorStop(0, "rgba(255,215,0,0.3)");
+        phiGrad.addColorStop(0.5, "rgba(255,180,0,0.15)");
         phiGrad.addColorStop(1, "rgba(255,140,0,0)");
-        ctx.beginPath(); ctx.arc(phiX, phiY, 180, 0, Math.PI * 2);
+        ctx.beginPath(); ctx.arc(phiX, phiY, 80, 0, Math.PI * 2);
         ctx.fillStyle = phiGrad; ctx.fill();
-        // Shadow/3D depth
-        ctx.font = "bold 180px serif";
-        ctx.fillStyle = "rgba(0,0,0,0.7)";
-        ctx.textAlign = "center"; ctx.textBaseline = "middle";
-        ctx.fillText("φ", phiX + 6, phiY + 8);
-        ctx.fillStyle = "rgba(80,40,0,0.5)";
-        ctx.fillText("φ", phiX + 3, phiY + 4);
         // Glowing gold phi
+        ctx.font = "bold 90px serif";
         ctx.shadowColor = "rgba(255,200,0,1)";
-        ctx.shadowBlur = 40;
+        ctx.shadowBlur = 30;
         ctx.fillStyle = "rgba(255,220,60,1)";
+        ctx.textAlign = "center"; ctx.textBaseline = "middle";
         ctx.fillText("φ", phiX, phiY);
-        ctx.shadowBlur = 15;
+        ctx.shadowBlur = 10;
         ctx.fillStyle = "rgba(255,255,180,0.95)";
         ctx.fillText("φ", phiX, phiY);
-        // Subtitle
-        ctx.shadowBlur = 0;
-        ctx.font = "bold 16px monospace";
-        ctx.globalAlpha = 0.65 * phiPulse;
-        ctx.fillStyle = "rgba(255,210,80,1)";
-        ctx.fillText("φ = (1+√5)/2 ≈ 1.618033...", phiX, phiY + 120);
         ctx.restore();
       }
 
@@ -574,22 +578,28 @@ export default function ZenithApexBackground() {
           ctx.stroke();
         });
 
-        // Draw circles (Flower of Life) with 3D depth
+        // Draw circles (Flower of Life) with color cycling
         metCube.pts.forEach((p, idx) => {
           const px = (p[0] * cos_rz - p[1] * sin_rz) * metScale;
           const py = (p[0] * sin_rz + p[1] * cos_rz) * metScale * 0.7;
           const cr = metScale * 0.35;
           const depthFactor = 0.6 + 0.4 * Math.cos(idx * Math.PI / metCube.pts.length);
+          // Color cycling based on index and time
+          const hueShift = (idx / metCube.pts.length + t * 0.3) % 1;
+          const colorValue = Math.sin(hueShift * Math.PI * 2);
+          const r = Math.round(200 + colorValue * 55);
+          const g = Math.round(100 + colorValue * 120);
+          const b = Math.round(150 + colorValue * 100);
           const grad = ctx.createRadialGradient(px, py, 0, px, py, cr);
-          grad.addColorStop(0, `rgba(255,150,200,${0.15 * depthFactor})`);
-          grad.addColorStop(0.6, `rgba(255,100,180,${0.08 * depthFactor})`);
+          grad.addColorStop(0, `rgba(${r},${g},${b},${0.2 * depthFactor})`);
+          grad.addColorStop(0.6, `rgba(${r},${g},${b},${0.1 * depthFactor})`);
           grad.addColorStop(1, "rgba(255,80,200,0)");
           ctx.beginPath();
           ctx.arc(px, py, cr, 0, Math.PI * 2);
-          ctx.strokeStyle = `rgba(255,120,200,${0.6 * depthFactor})`;
-          ctx.lineWidth = 0.8;
-          ctx.shadowColor = "rgba(255,150,200,0.9)";
-          ctx.shadowBlur = 5;
+          ctx.strokeStyle = `rgba(${r},${g},${b},${0.75 * depthFactor})`;
+          ctx.lineWidth = 1.2;
+          ctx.shadowColor = `rgba(${r},${g},${b},0.95)`;
+          ctx.shadowBlur = 8;
           ctx.stroke();
           ctx.fillStyle = grad;
           ctx.fill();
@@ -598,10 +608,10 @@ export default function ZenithApexBackground() {
         ctx.restore();
       }
 
-      // ── Neon Circuit Board Sphere with Lightning ──
-      const globeR = Math.min(W, H) * 0.42;
+      // ── Neon Circuit Board Sphere (hidden/background element) ──
+      const globeR = Math.min(W, H) * 0.25;
       const globeX = cx;
-      const globeY = H * 0.82;
+      const globeY = cy;
 
       ctx.save();
       ctx.beginPath();
@@ -716,12 +726,12 @@ export default function ZenithApexBackground() {
       ctx.stroke();
       ctx.restore();
 
-      // ── Dual Sun orbit parameters (with interactive controls) ──
-      const sunAngle = t * 1.2 * speedMult + skewAngle;
-      const sunOrbitRx = globeR * 0.52;
-      const sunOrbitRy = globeR * 0.18;
-      const sunOrbitCX = globeX + Math.cos(skewAngle) * 15;
-      const sunOrbitCY = (globeY - globeR) + 38 + Math.sin(skewAngle) * 12;
+      // ── Dual Sun orbit parameters (orbiting around center watermark) ──
+      const sunAngle = t * 0.8 * speedMult + skewAngle;
+      const sunOrbitRx = Math.min(W, H) * 0.35;
+      const sunOrbitRy = Math.min(W, H) * 0.15;
+      const sunOrbitCX = cx;
+      const sunOrbitCY = cy;
       
       // Sun 1 (bright primary)
       const sunX1 = sunOrbitCX + Math.cos(sunAngle) * sunOrbitRx;
@@ -733,33 +743,48 @@ export default function ZenithApexBackground() {
       const sunY2 = sunOrbitCY + Math.sin(sunAngle + Math.PI) * sunOrbitRy;
       const sunRadius2 = 24;
 
-      // ── Green laser axis (permanent, all scenes) ──
+      // ── 3D Rotating green XYZ laser axis (from center) ──
       ctx.save();
-      // Permanent vertical axis line
+      const axisRot = t * 0.5;
+      const axisRotX = t * 0.3;
+      const axisLen = Math.min(W, H) * 0.3;
+      // X axis (red) rotated
+      const xEnd = [axisLen * Math.cos(axisRot), axisLen * Math.sin(axisRot) * 0.5];
       ctx.beginPath();
-      ctx.moveTo(cx, 0);
-      ctx.lineTo(cx, H);
-      ctx.strokeStyle = "rgba(0,255,120,0.22)";
-      ctx.lineWidth = 1.5;
-      ctx.shadowColor = "rgba(0,255,120,0.8)";
+      ctx.moveTo(cx, cy);
+      ctx.lineTo(cx + xEnd[0], cy + xEnd[1]);
+      ctx.strokeStyle = "rgba(0,255,120,0.85)";
+      ctx.lineWidth = 2.5;
+      ctx.shadowColor = "rgba(0,255,120,1)";
+      ctx.shadowBlur = 15;
+      ctx.stroke();
+      // Y axis (green) rotated
+      const yEnd = [axisLen * Math.sin(axisRot) * 0.5, axisLen * Math.cos(axisRot)];
+      ctx.beginPath();
+      ctx.moveTo(cx, cy);
+      ctx.lineTo(cx + yEnd[0], cy + yEnd[1]);
+      ctx.strokeStyle = "rgba(0,200,255,0.75)";
+      ctx.lineWidth = 2.5;
+      ctx.shadowColor = "rgba(0,200,255,0.9)";
       ctx.shadowBlur = 12;
       ctx.stroke();
-      // Permanent horizontal axis line
+      // Z axis (blue) rotating
+      const zEnd = [axisLen * Math.sin(axisRotX), axisLen * Math.cos(axisRotX)];
       ctx.beginPath();
-      ctx.moveTo(0, cy);
-      ctx.lineTo(W, cy);
-      ctx.strokeStyle = "rgba(0,255,120,0.22)";
-      ctx.lineWidth = 1.5;
-      ctx.shadowColor = "rgba(0,255,120,0.8)";
+      ctx.moveTo(cx, cy);
+      ctx.lineTo(cx + zEnd[0] * 0.6, cy + zEnd[1] * 0.6);
+      ctx.strokeStyle = "rgba(255,100,150,0.7)";
+      ctx.lineWidth = 2.5;
+      ctx.shadowColor = "rgba(255,100,150,0.9)";
       ctx.shadowBlur = 12;
       ctx.stroke();
-      // Center crosshair
+      // Center point
       ctx.beginPath();
-      ctx.arc(cx, cy, 8, 0, Math.PI * 2);
-      ctx.strokeStyle = "rgba(0,255,120,0.45)";
-      ctx.lineWidth = 1;
-      ctx.shadowBlur = 8;
-      ctx.stroke();
+      ctx.arc(cx, cy, 6, 0, Math.PI * 2);
+      ctx.fillStyle = "rgba(0,255,200,0.95)";
+      ctx.shadowColor = "rgba(0,255,200,1)";
+      ctx.shadowBlur = 12;
+      ctx.fill();
       ctx.restore();
 
       // ── Green laser orbit ring (theme-dependent, around sun) ──
