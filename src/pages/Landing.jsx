@@ -8,12 +8,12 @@ export default function Landing() {
   const { themeId, setThemeId } = useBackgroundTheme();
 
   return (
-    <div className="min-h-screen text-white relative" style={{ background: "#0a0a1a" }}>
+    <div className="min-h-screen text-white relative" style={{ background: "transparent" }}>
       <ZenithApexBackground />
       <ActiveBackground themeId={themeId} />
       <BackgroundThemeSwitcher themeId={themeId} setThemeId={setThemeId} />
       {/* Nav */}
-      <nav className="border-b border-white/10 px-6 py-4 sticky top-0 z-50" style={{ background: "#0a0a1a" }}>
+      <nav className="border-b border-white/10 px-6 py-4 sticky top-0 z-50" style={{ background: "rgba(10,10,26,0.85)", backdropFilter: "blur(12px)" }}>
         <div className="max-w-6xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-3">
             <img src="https://media.base44.com/images/public/69ccefebfea78b23498c66a8/6722a4c01_839284090_logo.png" alt="Zenith Apex Tech" className="h-9 w-9 rounded-lg" />
@@ -30,7 +30,7 @@ export default function Landing() {
       </nav>
 
       {/* Hero */}
-      <section className="px-6 py-20 border-b border-white/10" style={{ background: "#0a0a1e", opacity: 1 }}>
+      <section className="px-6 py-20 border-b border-white/10" style={{ background: "rgba(10,10,30,0.55)" }}>
         <div className="max-w-4xl mx-auto text-center">
           <h1 className="text-5xl md:text-6xl font-black mb-6 leading-tight text-white drop-shadow-[0_0_30px_rgba(80,200,255,0.6)] tracking-tight">
             Institutional Research Intelligence for Advanced Electromagnetics
@@ -71,14 +71,14 @@ export default function Landing() {
       </section>
 
       {/* User Dashboard */}
-      <section className="px-6 py-12 border-b border-white/10" style={{ background: "#0d0d1f" }}>
+      <section className="px-6 py-12 border-b border-white/10" style={{ background: "rgba(13,13,31,0.6)" }}>
         <div className="max-w-4xl mx-auto">
           <UserDashboardSection />
         </div>
       </section>
 
       {/* What's Included */}
-      <section className="px-6 py-16 border-b border-white/10" style={{ background: "#0a0a1a" }}>
+      <section className="px-6 py-16 border-b border-white/10" style={{ background: "rgba(10,10,26,0.6)" }}>
         <div className="max-w-4xl mx-auto">
           <h2 className="text-3xl font-black mb-12 text-center">What You Get</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -103,7 +103,7 @@ export default function Landing() {
       </section>
 
       {/* How It Works */}
-      <section id="how-it-works" className="px-6 py-16 border-b border-white/10" style={{ background: "#080812" }}>
+      <section id="how-it-works" className="px-6 py-16 border-b border-white/10" style={{ background: "rgba(8,8,18,0.6)" }}>
         <div className="max-w-4xl mx-auto">
           <h2 className="text-3xl font-black mb-12 text-center text-white drop-shadow-[0_0_20px_rgba(80,200,255,0.4)]">How It Works</h2>
           <div className="space-y-4">
@@ -128,7 +128,7 @@ export default function Landing() {
       </section>
 
       {/* Build Plans Showcase */}
-      <section className="px-6 py-16 border-b border-white/10" style={{ background: "#0a0a1a" }}>
+      <section className="px-6 py-16 border-b border-white/10" style={{ background: "rgba(10,10,26,0.6)" }}>
         <div className="max-w-6xl mx-auto">
           <h2 className="text-3xl font-black mb-4 text-center">What Build Plans Look Like</h2>
           <p className="text-center text-gray-400 text-sm mb-12 max-w-2xl mx-auto">Each build plan includes complete BOM, schematics, step-by-step assembly, and video guides. From concept to working prototype.</p>
@@ -170,7 +170,7 @@ export default function Landing() {
       </section>
 
       {/* Invention Dossier Teaser */}
-      <section className="px-6 py-16 border-b border-white/10" style={{ background: "#0a0a1a" }}>
+      <section className="px-6 py-16 border-b border-white/10" style={{ background: "rgba(10,10,26,0.6)" }}>
         <div className="max-w-6xl mx-auto">
           <h2 className="text-3xl font-black mb-4 text-center">AI Invention Dossier IP Creation Suite</h2>
           <p className="text-center text-gray-400 text-sm mb-12 max-w-2xl mx-auto">Generate complete patent strategies, commercialization roadmaps, and IP valuations in minutes. Builder members get 10/month, Pro gets 25/month.</p>
@@ -197,7 +197,7 @@ export default function Landing() {
       </section>
 
       {/* Patent Drafter & Tools */}
-      <section className="px-6 py-16 border-b border-white/10" style={{ background: "#080812" }}>
+      <section className="px-6 py-16 border-b border-white/10" style={{ background: "rgba(8,8,18,0.6)" }}>
         <div className="max-w-6xl mx-auto">
           <h2 className="text-3xl font-black mb-4 text-center">Patent Drafting Tools</h2>
           <p className="text-center text-gray-400 text-sm mb-12 max-w-2xl mx-auto">AI-powered tools that replace $3K–$15K attorney work. FTO analysis, claim generation, and patent drafting in minutes.</p>
@@ -225,7 +225,7 @@ export default function Landing() {
       </section>
 
       {/* Bearden Database & IP Marketplace */}
-      <section className="px-6 py-16 border-b border-white/10" style={{ background: "#0a0a1a" }}>
+      <section className="px-6 py-16 border-b border-white/10" style={{ background: "rgba(10,10,26,0.6)" }}>
         <div className="max-w-6xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
             {/* Bearden Graph */}
@@ -267,7 +267,7 @@ export default function Landing() {
       </section>
 
       {/* Create Profile CTA */}
-      <section className="px-6 py-16 border-b border-white/10" style={{ background: "#080812" }}>
+      <section className="px-6 py-16 border-b border-white/10" style={{ background: "rgba(8,8,18,0.6)" }}>
         <div className="max-w-6xl mx-auto">
           <h2 className="text-3xl font-black mb-4 text-center">Ready to Broker Deals?</h2>
           <p className="text-center text-gray-400 text-sm mb-10 max-w-2xl mx-auto">Create an anonymous inventor or investor profile. Get matched with co-inventors, capital, licensing deals, and partnerships.</p>
@@ -298,7 +298,7 @@ export default function Landing() {
       </section>
 
       {/* Pricing */}
-      <section id="pricing" className="px-6 py-16 border-b border-white/10" style={{ background: "#0a0a1a" }}>
+      <section id="pricing" className="px-6 py-16 border-b border-white/10" style={{ background: "rgba(10,10,26,0.6)" }}>
        <div className="max-w-6xl mx-auto">
          <h2 className="text-3xl font-black mb-12 text-center">Membership Tiers</h2>
          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
@@ -374,7 +374,7 @@ export default function Landing() {
       </section>
 
       {/* Footer CTA */}
-      <section className="px-6 py-12 border-t border-white/10" style={{ background: "#060610" }}>
+      <section className="px-6 py-12 border-t border-white/10" style={{ background: "rgba(6,6,16,0.7)" }}>
         <div className="max-w-6xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
             <div className="text-center">
