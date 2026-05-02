@@ -273,6 +273,50 @@ export default function ZenithApexBackground() {
         ctx.strokeStyle = `rgba(120,210,255,${alpha})`; ctx.lineWidth = 1.5; ctx.stroke();
       }
 
+      // ── Quantum waves (spiral interference patterns) ──
+      for (let q = 0; q < 3; q++) {
+        ctx.save();
+        ctx.globalAlpha = 0.15 + 0.1 * Math.sin(t * 0.8 + q);
+        for (let angle = 0; angle < Math.PI * 2; angle += Math.PI / 12) {
+          const spiralPhase = t * 0.6 + q * Math.PI * 2 / 3 + angle * 0.5;
+          const samples = 180;
+          ctx.beginPath();
+          for (let s = 0; s < samples; s++) {
+            const progress = s / samples;
+            const r = progress * Math.max(W, H) * 0.8;
+            const twist = angle + spiralPhase * progress;
+            const qx = cx + Math.cos(twist) * r;
+            const qy = cy + Math.sin(twist) * r;
+            if (s === 0) ctx.moveTo(qx, qy);
+            else ctx.lineTo(qx, qy);
+          }
+          const hue = (120 + q * 60 + angle * 30) % 360;
+          ctx.strokeStyle = `hsla(${hue}, 100%, 50%, 0.3)`;
+          ctx.lineWidth = 0.8;
+          ctx.stroke();
+        }
+        ctx.restore();
+      }
+
+      // ── Quantum probability waves (radial ripples) ──
+      for (let qw = 0; qw < 4; qw++) {
+        const qwPhase = (t * 0.7 + qw * Math.PI / 2) % Math.PI * 2;
+        const qwR = Math.sin(qwPhase) * Math.max(W, H) * 0.35;
+        if (qwR > 0) {
+          ctx.save();
+          ctx.globalAlpha = 0.12 * Math.cos(qwPhase * 2);
+          for (let qwRings = 0; qwRings < 8; qwRings++) {
+            const ringR = qwR + qwRings * 12;
+            ctx.beginPath();
+            ctx.arc(cx, cy, ringR, 0, Math.PI * 2);
+            ctx.strokeStyle = `rgba(100,200,255,0.4)`;
+            ctx.lineWidth = 1;
+            ctx.stroke();
+          }
+          ctx.restore();
+        }
+      }
+
       // ── Floating equations (bright, 3D glowing) ──
       for (const eq of equations) {
         eq.y -= eq.speed; eq.x += eq.drift;
@@ -680,7 +724,36 @@ export default function ZenithApexBackground() {
       const sunY2 = sunOrbitCY + Math.sin(sunAngle + Math.PI) * sunOrbitRy;
       const sunRadius2 = 24;
 
-      // ── Green laser orbit ring ──
+      // ── Green laser axis (permanent, all scenes) ──
+      ctx.save();
+      // Permanent vertical axis line
+      ctx.beginPath();
+      ctx.moveTo(cx, 0);
+      ctx.lineTo(cx, H);
+      ctx.strokeStyle = "rgba(0,255,120,0.22)";
+      ctx.lineWidth = 1.5;
+      ctx.shadowColor = "rgba(0,255,120,0.8)";
+      ctx.shadowBlur = 12;
+      ctx.stroke();
+      // Permanent horizontal axis line
+      ctx.beginPath();
+      ctx.moveTo(0, cy);
+      ctx.lineTo(W, cy);
+      ctx.strokeStyle = "rgba(0,255,120,0.22)";
+      ctx.lineWidth = 1.5;
+      ctx.shadowColor = "rgba(0,255,120,0.8)";
+      ctx.shadowBlur = 12;
+      ctx.stroke();
+      // Center crosshair
+      ctx.beginPath();
+      ctx.arc(cx, cy, 8, 0, Math.PI * 2);
+      ctx.strokeStyle = "rgba(0,255,120,0.45)";
+      ctx.lineWidth = 1;
+      ctx.shadowBlur = 8;
+      ctx.stroke();
+      ctx.restore();
+
+      // ── Green laser orbit ring (theme-dependent, around sun) ──
       ctx.save();
       // Outer glow of the orbit ellipse (green laser)
       for (let pass = 0; pass < 3; pass++) {
