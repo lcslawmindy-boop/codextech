@@ -3,6 +3,7 @@ import BottomTabBar from "./BottomTabBar";
 import { useTrial } from "@/lib/TrialContext";
 import { AnimatePresence, motion } from "framer-motion";
 import ZenithApexBackground from "./backgrounds/ZenithApexBackground";
+import ZenithLogoCorner from "./ZenithLogoCorner";
 
 // Pages that should NOT show the bottom tab bar
 const HIDDEN_TAB_ROUTES = ["/legal", "/checkout", "/paywall", "/pricing", "/free-vault", "/"];
@@ -53,6 +54,7 @@ export default function MobileLayout() {
         </AnimatePresence>
       </div>
       {!hideTab && <BottomTabBar />}
+      <ZenithLogoCorner />
     </div>
   );
 }

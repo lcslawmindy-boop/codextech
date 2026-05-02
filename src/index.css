@@ -187,6 +187,35 @@ html[data-theme="steel"] {
 
 /* Solid text/info section backgrounds */
 .solid-section {
-  background: rgba(10, 12, 24, 0.96) !important;
-  backdrop-filter: blur(8px);
+  background: rgba(8, 10, 22, 0.97) !important;
+  backdrop-filter: blur(12px);
+}
+
+/* Force all cards, panels, info boxes to be opaque over the canvas */
+.bg-gray-900\/40, .bg-gray-900\/50, .bg-gray-900\/60 {
+  background-color: rgba(14, 16, 30, 0.97) !important;
+}
+.bg-cyan-950\/20, .bg-cyan-950\/30, .bg-cyan-950\/40 {
+  background-color: rgba(5, 20, 35, 0.97) !important;
+}
+.bg-purple-950\/20, .bg-purple-950\/30, .bg-purple-950\/40, .bg-purple-950\/60 {
+  background-color: rgba(12, 5, 28, 0.97) !important;
+}
+.bg-blue-950\/20, .bg-blue-950\/30, .bg-blue-950\/40 {
+  background-color: rgba(5, 10, 30, 0.97) !important;
+}
+.bg-green-950\/20, .bg-green-950\/30 {
+  background-color: rgba(5, 18, 12, 0.97) !important;
+}
+.bg-indigo-950\/30 {
+  background-color: rgba(8, 8, 28, 0.97) !important;
+}
+.bg-orange-950\/30 {
+  background-color: rgba(24, 10, 5, 0.97) !important;
+}
+.bg-yellow-950\/20 {
+  background-color: rgba(20, 15, 5, 0.97) !important;
+}
+.bg-teal-950\/20 {
+  background-color: rgba(5, 18, 18, 0.97) !important;
 }

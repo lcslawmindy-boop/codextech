@@ -761,33 +761,55 @@ export default function ZenithApexBackground() {
       }
       ctx.restore();
 
-      // ── Logo signature — bottom-left corner, bright & glowing ──
+      // ── Logo signature — bottom-left corner, ultra-bright neon ──
       if (logos[0]?.complete && logos[0].naturalWidth > 0) {
-        const logoSize = Math.min(W, H) * 0.13;
-        const lx = 18;
-        const ly = H - logoSize - 18;
-        const pulse = 0.82 + 0.18 * Math.sin(t * 1.1);
+        const logoSize = Math.min(W, H) * 0.11;
+        const lx = 16;
+        const ly = H - logoSize - 48;
+        const pulse = 0.88 + 0.12 * Math.sin(t * 1.1);
         ctx.save();
-        // Glow halo behind logo
-        const halo = ctx.createRadialGradient(lx + logoSize/2, ly + logoSize/2, 0, lx + logoSize/2, ly + logoSize/2, logoSize * 0.85);
-        halo.addColorStop(0, `rgba(0,220,255,${0.22 * pulse})`);
-        halo.addColorStop(1, "rgba(0,100,200,0)");
+        // Dark backing plate for contrast
+        ctx.fillStyle = "rgba(0,5,20,0.82)";
+        ctx.beginPath();
+        ctx.roundRect(lx - 8, ly - 8, logoSize + 16, logoSize + 36, 10);
+        ctx.fill();
+        // Neon border
+        ctx.strokeStyle = `rgba(0,230,255,${0.7 * pulse})`;
+        ctx.lineWidth = 1.5;
+        ctx.shadowColor = "rgba(0,220,255,1)";
+        ctx.shadowBlur = 18;
+        ctx.stroke();
+        // Big outer glow halo
+        const halo = ctx.createRadialGradient(lx + logoSize/2, ly + logoSize/2, 0, lx + logoSize/2, ly + logoSize/2, logoSize * 1.1);
+        halo.addColorStop(0, `rgba(0,200,255,${0.35 * pulse})`);
+        halo.addColorStop(0.5, `rgba(0,140,255,${0.12 * pulse})`);
+        halo.addColorStop(1, "rgba(0,80,200,0)");
         ctx.fillStyle = halo;
         ctx.beginPath();
-        ctx.arc(lx + logoSize/2, ly + logoSize/2, logoSize * 0.85, 0, Math.PI * 2);
+        ctx.arc(lx + logoSize/2, ly + logoSize/2, logoSize * 1.1, 0, Math.PI * 2);
         ctx.fill();
-        // Logo image
-        ctx.globalAlpha = 0.92 * pulse;
-        ctx.shadowColor = "rgba(0,220,255,1)";
-        ctx.shadowBlur = 28;
+        // Logo image — full brightness
+        ctx.globalAlpha = 1.0 * pulse;
+        ctx.shadowColor = "rgba(0,240,255,1)";
+        ctx.shadowBlur = 40;
         ctx.drawImage(logos[0], lx, ly, logoSize, logoSize);
-        // "ZENITH APEX TECH" text signature
-        ctx.shadowBlur = 14;
-        ctx.globalAlpha = 0.88 * pulse;
-        ctx.font = "bold 9px monospace";
-        ctx.fillStyle = "rgba(0,230,255,1)";
+        // Second pass for extra brightness
+        ctx.shadowBlur = 15;
+        ctx.globalAlpha = 0.5 * pulse;
+        ctx.drawImage(logos[0], lx, ly, logoSize, logoSize);
+        // "ZENITH APEX TECH" text signature — large & bold
+        ctx.shadowBlur = 20;
+        ctx.globalAlpha = 1.0 * pulse;
+        ctx.font = "bold 11px monospace";
+        ctx.fillStyle = "rgba(255,255,255,1)";
         ctx.textAlign = "left";
-        ctx.fillText("ZENITH APEX TECH", lx, ly + logoSize + 13);
+        ctx.fillText("ZENITH APEX TECH", lx, ly + logoSize + 14);
+        // Tagline
+        ctx.shadowBlur = 10;
+        ctx.globalAlpha = 0.75 * pulse;
+        ctx.font = "bold 7px monospace";
+        ctx.fillStyle = "rgba(0,230,255,1)";
+        ctx.fillText("TEST · ENGINEER · CONSTRUCT", lx, ly + logoSize + 26);
         ctx.restore();
       }
 
