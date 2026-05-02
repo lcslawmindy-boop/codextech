@@ -1,4 +1,4 @@
-import { ArrowRight, Lock, BookOpen, Zap, Brain, Lightbulb, TrendingUp, Users, Eye, FileText, BarChart3, Percent, Search } from "lucide-react";
+import { ArrowRight, Lock, BookOpen, Zap, Brain, Lightbulb, TrendingUp, Users, Eye, FileText, BarChart3, Percent, Search, Shield } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import UserDashboardSection from "@/components/UserDashboardSection";
@@ -7,45 +7,52 @@ import ConversionHero from "@/components/conversion/ConversionHero";
 import TrustSignals from "@/components/conversion/TrustSignals";
 import PricingComparison from "@/components/conversion/PricingComparison";
 import EnhancedResearchNavBar from "@/components/EnhancedResearchNavBar";
+import ClassifiedMatrixBackground from "@/components/backgrounds/ClassifiedMatrixBackground";
 
 export default function Landing() {
   const [searchQuery, setSearchQuery] = useState("");
 
   return (
-    <div className="min-h-screen text-white relative bg-black">
-      {/* Watermark - Bottom Left */}
-      <div className="fixed bottom-6 left-6 z-40 flex items-center gap-2" style={{ animation: "zatPulse 3s ease-in-out infinite" }}>
-        <img src="https://media.base44.com/images/public/69ccefebfea78b23498c66a8/bcf3bcb42_df887ac44_logo.png" alt="ZAT" className="h-16 w-16 rounded-lg" style={{ filter: "drop-shadow(0 0 16px rgba(0, 220, 255, 0.9))", border: "2px solid rgba(0, 220, 255, 0.8)" }} />
+    <div className="min-h-screen relative bg-black" style={{ fontFamily: "'Courier Prime', monospace", letterSpacing: "0.05em" }}>
+      <ClassifiedMatrixBackground />
+      
+      {/* Classified Document Watermark - Bottom Left */}
+      <div className="fixed bottom-6 left-6 z-40 flex flex-col items-start gap-2" style={{ animation: "zatPulse 3s ease-in-out infinite" }}>
+        <img src="https://media.base44.com/images/public/69ccefebfea78b23498c66a8/bcf3bcb42_df887ac44_logo.png" alt="ZAT" className="h-16 w-16 rounded-lg" style={{ filter: "drop-shadow(0 0 24px rgba(0, 255, 0, 0.8))", border: "3px solid rgba(0, 255, 0, 0.7)" }} />
+        <p className="text-xs text-green-400 font-bold tracking-widest">[ CLASSIFIED ]</p>
       </div>
 
       {/* Research Navigation Bar */}
       <EnhancedResearchNavBar />
 
-      {/* Enhanced Header with Bigger Neon Icon & Mission */}
-      <nav className="border-b border-white/10 px-6 py-6 sticky top-0 z-50" style={{ background: "rgba(10,10,26,0.95)", backdropFilter: "blur(12px)" }}>
-        <div className="max-w-6xl mx-auto flex items-center justify-between gap-6">
-          {/* Logo & Mission */}
+      {/* Enhanced Header with Clearance Warning */}
+      <nav className="border-b-4 px-6 py-6 sticky top-0 z-50 relative" style={{ background: "rgba(5, 5, 5, 0.98)", backdropFilter: "blur(12px)", borderColor: "#ff6600" }}>
+        <div className="absolute inset-0 pointer-events-none opacity-5" style={{ backgroundImage: "repeating-linear-gradient(0deg, transparent, transparent 2px, #00ff00 2px, #00ff00 4px)" }} />
+        <div className="max-w-6xl mx-auto flex items-center justify-between gap-6 relative z-10">
+          {/* Logo & Mission - Classified Style */}
           <div className="flex items-center gap-4 flex-1">
-            <div style={{ animation: "zatPulse 2.5s ease-in-out infinite" }}>
-              <img src="https://media.base44.com/images/public/69ccefebfea78b23498c66a8/bcf3bcb42_df887ac44_logo.png" alt="Zenith Apex Tech" className="h-16 w-16 rounded-lg" style={{ filter: "drop-shadow(0 0 20px rgba(0, 220, 255, 1))", border: "2.5px solid rgba(0, 220, 255, 0.9)" }} />
+            <div style={{ animation: "zatPulse 2.5s ease-in-out infinite" }} className="relative">
+              <img src="https://media.base44.com/images/public/69ccefebfea78b23498c66a8/bcf3bcb42_df887ac44_logo.png" alt="Zenith Apex Tech" className="h-16 w-16 rounded-lg" style={{ filter: "drop-shadow(0 0 24px rgba(0, 255, 0, 0.9))", border: "3px solid rgba(0, 255, 0, 0.8)" }} />
+              <div className="absolute -top-2 -right-2 px-2 py-1 bg-orange-600 text-black text-xs font-black rounded" style={{ boxShadow: "0 0 12px rgba(255, 102, 0, 0.8)" }}>TOP SECRET</div>
             </div>
             <div>
-              <p className="text-cyan-300 font-black text-xs tracking-widest">ZENITH APEX T.E.C.H</p>
-              <p className="text-gray-400 text-xs italic">Tethering · Electromagnetic · Consciousness · Hub</p>
+              <p className="text-green-400 font-black text-sm tracking-[0.2em]">ZENITH APEX T.E.C.H</p>
+              <p className="text-green-600 text-xs font-bold">[ CLASSIFIED ACCESS ONLY ]</p>
+              <p className="text-green-500 text-xs mt-1 italic">Members Granted Special Clearance</p>
             </div>
           </div>
 
-          {/* Search Bar - Neon Yellow Pulsing */}
+          {/* Search Bar - Orange Neon Classified Style */}
           <div className="hidden lg:flex items-center flex-1 max-w-xs" style={{ animation: "neonPulse 2s ease-in-out infinite" }}>
             <div className="w-full relative">
-              <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-yellow-400" />
+              <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-orange-500" />
               <input
                 type="text"
-                placeholder="Search research..."
+                placeholder="[ SEARCH DATABASE ]"
                 value={searchQuery}
                 onChange={e => setSearchQuery(e.target.value)}
-                className="w-full pl-9 pr-3 py-2 rounded-lg bg-yellow-950/20 border-2 border-yellow-400 text-yellow-300 placeholder-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-400 text-xs font-bold"
-                style={{ boxShadow: "0 0 12px rgba(250, 204, 21, 0.4)" }}
+                className="w-full pl-9 pr-3 py-2 rounded-none border-2 bg-black text-orange-500 placeholder-orange-700 focus:outline-none text-xs font-bold"
+                style={{ boxShadow: "0 0 16px rgba(255, 102, 0, 0.6), inset 0 0 8px rgba(255, 102, 0, 0.2)", borderColor: "#ff6600", fontFamily: "'Courier Prime', monospace", letterSpacing: "0.05em" }}
               />
             </div>
           </div>
@@ -60,12 +67,12 @@ export default function Landing() {
 
       <style>{`
         @keyframes zatPulse {
-          0%, 100% { opacity: 0.9; filter: drop-shadow(0 0 12px rgba(0,220,255,0.6)); }
-          50% { opacity: 1; filter: drop-shadow(0 0 24px rgba(0,220,255,1)); }
+          0%, 100% { opacity: 0.85; filter: drop-shadow(0 0 16px rgba(0, 255, 0, 0.6)); }
+          50% { opacity: 1; filter: drop-shadow(0 0 32px rgba(0, 255, 0, 1)); }
         }
         @keyframes neonPulse {
-          0%, 100% { box-shadow: 0 0 12px rgba(250, 204, 21, 0.4), inset 0 0 10px rgba(250, 204, 21, 0.1); }
-          50% { box-shadow: 0 0 20px rgba(250, 204, 21, 0.8), inset 0 0 15px rgba(250, 204, 21, 0.2); }
+          0%, 100% { box-shadow: 0 0 16px rgba(255, 102, 0, 0.5), inset 0 0 10px rgba(255, 102, 0, 0.1); }
+          50% { box-shadow: 0 0 24px rgba(255, 102, 0, 0.9), inset 0 0 15px rgba(255, 102, 0, 0.2); }
         }
       `}</style>
 

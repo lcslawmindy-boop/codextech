@@ -17,8 +17,8 @@ export default function EnhancedResearchNavBar() {
 
   return (
     <>
-      {/* Desktop Navigation Bar */}
-      <div className="hidden lg:flex fixed left-0 top-0 h-screen w-20 bg-gray-950 border-r border-gray-800 flex-col items-center py-6 gap-3 z-[100]" style={{ background: "linear-gradient(180deg, rgba(10,10,26,0.98) 0%, rgba(15,15,35,0.98) 100%)" }}>
+      {/* Desktop Navigation Bar - Classified Style */}
+      <div className="hidden lg:flex fixed left-0 top-0 h-screen w-20 flex-col items-center py-6 gap-3 z-[100]" style={{ background: "linear-gradient(180deg, rgba(5,5,5,0.98) 0%, rgba(10,10,10,0.98) 100%)", borderRight: "4px solid #ff6600" }}>
         {NAV_ITEMS.map((item, i) => {
           const Icon = item.icon;
           return (
@@ -26,16 +26,17 @@ export default function EnhancedResearchNavBar() {
               key={i}
               to={item.href}
               title={item.label}
-              className={`flex items-center justify-center h-14 w-14 rounded-xl border border-gray-700 hover:border-gray-600 transition-all group relative ${item.color}`}
+              className={`flex items-center justify-center h-14 w-14 rounded-none border-2 hover:border-orange-600 transition-all group relative ${item.color}`}
               style={{
-                background: "rgba(20,20,40,0.6)",
+                background: "rgba(10,10,10,0.7)",
+                borderColor: "#ff6600",
                 animation: "navItemPulse 3s ease-in-out infinite",
                 animationDelay: `${i * 0.1}s`
               }}
             >
               <Icon size={18} />
-              <div className="absolute left-full ml-2 bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-xs font-bold whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
-                {item.label}
+              <div className="absolute left-full ml-2 bg-black border-2 rounded-none px-3 py-2 text-xs font-bold whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none text-green-400" style={{ borderColor: "#ff6600", boxShadow: "0 0 8px rgba(255, 102, 0, 0.6)" }}>
+                [ {item.label} ]
               </div>
             </Link>
           );
@@ -53,7 +54,8 @@ export default function EnhancedResearchNavBar() {
       <div className="lg:hidden fixed left-4 top-4 z-[110]">
         <button
           onClick={() => setIsExpanded(!isExpanded)}
-          className="flex items-center justify-center h-10 w-10 rounded-lg bg-gray-900 border border-gray-700 text-cyan-400 hover:border-cyan-600 transition-all"
+          className="flex items-center justify-center h-10 w-10 rounded-none border-2 bg-black text-green-400 hover:text-orange-500 transition-all"
+          style={{ borderColor: "#ff6600", boxShadow: "0 0 12px rgba(255, 102, 0, 0.4)" }}
         >
           {isExpanded ? <X size={18} /> : <Menu size={18} />}
         </button>
@@ -61,7 +63,7 @@ export default function EnhancedResearchNavBar() {
 
       {/* Mobile Navigation */}
       {isExpanded && (
-        <div className="lg:hidden fixed left-0 top-14 w-64 bg-gray-950 border-r border-gray-800 z-[100] max-h-[calc(100vh-56px)] overflow-y-auto">
+        <div className="lg:hidden fixed left-0 top-14 w-64 bg-black border-r-4 z-[100] max-h-[calc(100vh-56px)] overflow-y-auto" style={{ borderRightColor: "#ff6600" }}>
           <div className="p-4 space-y-2">
             {NAV_ITEMS.map((item, i) => {
               const Icon = item.icon;
@@ -70,11 +72,11 @@ export default function EnhancedResearchNavBar() {
                   key={i}
                   to={item.href}
                   onClick={() => setIsExpanded(false)}
-                  className={`flex items-center gap-3 px-4 py-3 rounded-lg border border-gray-700 hover:border-gray-600 transition-all ${item.color}`}
-                  style={{ background: "rgba(20,20,40,0.6)" }}
+                  className={`flex items-center gap-3 px-4 py-3 rounded-none border-2 hover:border-orange-600 transition-all ${item.color}`}
+                  style={{ background: "rgba(10,10,10,0.7)", borderColor: "#ff6600" }}
                 >
                   <Icon size={18} />
-                  <span className="text-sm font-bold">{item.label}</span>
+                  <span className="text-sm font-bold">[ {item.label} ]</span>
                 </Link>
               );
             })}

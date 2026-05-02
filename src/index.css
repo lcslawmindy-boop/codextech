@@ -51,41 +51,43 @@ html[data-theme="steel"] {
   --surface-2: 210 20% 19%;
 }
 
+@import url('https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&display=swap');
+
 @layer base {
-  /* ── Dark mode (default — high-tech dark aesthetic) ── */
+  /* ── Classified Document Aesthetic: Green & Orange Neon ── */
   :root {
-    --background: 222 47% 11%;
-    --foreground: 0 0% 98%;
-    --card: 222 39% 16%;
-    --card-foreground: 0 0% 98%;
-    --popover: 222 39% 16%;
-    --popover-foreground: 0 0% 98%;
-    --primary: 0 0% 98%;
-    --primary-foreground: 0 0% 9%;
-    --secondary: 222 32% 20%;
-    --secondary-foreground: 0 0% 98%;
-    --muted: 222 32% 20%;
-    --muted-foreground: 215 20% 45%;
-    --accent: 199 89% 48%;
-    --accent-foreground: 0 0% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 222 28% 22%;
-    --input: 222 28% 22%;
-    --ring: 199 89% 48%;
-    --chart-1: 220 70% 50%;
-    --chart-2: 160 60% 45%;
-    --chart-3: 30 80% 55%;
-    --chart-4: 280 65% 60%;
-    --chart-5: 340 75% 55%;
-    --sidebar-background: 222 39% 13%;
-    --sidebar-foreground: 215 20% 75%;
-    --sidebar-primary: 199 89% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 222 32% 20%;
-    --sidebar-accent-foreground: 215 20% 75%;
-    --sidebar-border: 222 28% 22%;
-    --sidebar-ring: 199 89% 48%;
+    --background: 0 0% 4%;
+    --foreground: 120 100% 50%;
+    --card: 0 0% 8%;
+    --card-foreground: 120 100% 50%;
+    --popover: 0 0% 8%;
+    --popover-foreground: 120 100% 50%;
+    --primary: 120 100% 50%;
+    --primary-foreground: 0 0% 5%;
+    --secondary: 39 100% 50%;
+    --secondary-foreground: 0 0% 5%;
+    --muted: 0 0% 25%;
+    --muted-foreground: 0 0% 60%;
+    --accent: 39 100% 50%;
+    --accent-foreground: 0 0% 5%;
+    --destructive: 39 100% 50%;
+    --destructive-foreground: 0 0% 5%;
+    --border: 120 100% 30%;
+    --input: 0 0% 10%;
+    --ring: 120 100% 50%;
+    --chart-1: 120 100% 50%;
+    --chart-2: 39 100% 50%;
+    --chart-3: 120 80% 40%;
+    --chart-4: 39 80% 40%;
+    --chart-5: 120 60% 30%;
+    --sidebar-background: 0 0% 6%;
+    --sidebar-foreground: 120 100% 50%;
+    --sidebar-primary: 120 100% 50%;
+    --sidebar-primary-foreground: 0 0% 5%;
+    --sidebar-accent: 39 100% 50%;
+    --sidebar-accent-foreground: 0 0% 5%;
+    --sidebar-border: 120 100% 30%;
+    --sidebar-ring: 120 100% 50%;
   }
 
   /* ── Light mode — retains high-tech feel with light surfaces ── */
@@ -136,10 +138,12 @@ html[data-theme="steel"] {
 
   body {
     @apply text-foreground;
-    background: #0a0e1a;
+    background: #0a0a0a;
+    font-family: 'Courier Prime', monospace;
     font-size: 14px;
     -webkit-text-size-adjust: 100%;
     overscroll-behavior: none;
+    letter-spacing: 0.05em;
   }
 
   /* Minimum tap target size for mobile */
