@@ -28,6 +28,9 @@ export default function ZatLogoWatermark() {
       <div className="font-black text-cyan-400 tracking-widest text-center opacity-75 whitespace-nowrap" style={{ fontSize: '8px', textShadow: '0 0 8px rgba(0, 220, 255, 0.6)', lineHeight: '1.2' }}>
         TEACH · EXPLORE · CONSTRUCT · HARNESS
       </div>
+      <div className="font-black text-cyan-400 tracking-widest text-center opacity-75 whitespace-nowrap" style={{ fontSize: '8px', textShadow: '0 0 8px rgba(0, 220, 255, 0.6)', lineHeight: '1.2' }}>
+        TRUST · EVOLVE · COMMUNITY · HONOR
+      </div>
       <style>{`
         @keyframes zatPulse {
           0%, 100% { opacity: 0.75; filter: drop-shadow(0 0 12px rgba(0, 220, 255, 0.8)) drop-shadow(0 0 24px rgba(0, 180, 255, 0.5)); }
