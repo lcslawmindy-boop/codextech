@@ -192,6 +192,14 @@ const LOGO_URLS = [
   "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/fc82e79c5_3fd362d3e_logo.png",
 ];
 
+const MASHUP_LOGO_URLS = [
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/6842fcff1_13427a463_logo-Copy.png",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/cc5b59fa1_df887ac44_logo.png",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/2d630477b_839284090_logo-Copy.png",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/4764eaaef_7e20287f0_logo.png",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/b08ccb770_550172ad7_logo.png",
+];
+
 export default function ZenithApexBackground() {
   const canvasRef = useRef(null);
   const animRef = useRef(null);
@@ -212,6 +220,14 @@ export default function ZenithApexBackground() {
 
     // Preload logos
     const logos = LOGO_URLS.map(src => {
+      const img = new Image();
+      img.crossOrigin = "anonymous";
+      img.src = src;
+      return img;
+    });
+
+    // Preload mashup logos
+    const mashupLogos = MASHUP_LOGO_URLS.map(src => {
       const img = new Image();
       img.crossOrigin = "anonymous";
       img.src = src;
@@ -567,6 +583,27 @@ export default function ZenithApexBackground() {
           ctx.shadowBlur = 10;
           ctx.fill();
         });
+        ctx.restore();
+      });
+
+      // ── Orbiting mashup logos (rotating through 5 logos) ──
+      mashupLogos.forEach((img, li) => {
+        if (!img.complete || img.naturalWidth === 0) return;
+        
+        const logoOrbitR = Math.min(W, H) * 0.35;
+        const logoAngle = t * 0.15 + (Math.PI * 2 / 5) * li;
+        const logoX = cx + Math.cos(logoAngle) * logoOrbitR;
+        const logoY = cy + H * 0.65 + Math.sin(logoAngle) * logoOrbitR * 0.5;
+        const logoSize = Math.min(W, H) * 0.08;
+        
+        const pulse = 0.8 + 0.2 * Math.sin(t * 1.5 + li);
+        ctx.save();
+        ctx.globalAlpha = 0.75 * pulse;
+        ctx.translate(logoX, logoY);
+        ctx.rotate(t * 0.3);
+        ctx.shadowColor = "rgba(0, 220, 255, 0.8)";
+        ctx.shadowBlur = 16;
+        ctx.drawImage(img, -logoSize / 2, -logoSize / 2, logoSize, logoSize);
         ctx.restore();
       });
 
