@@ -23,8 +23,11 @@ export default function TopNav() {
       <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
         {/* Logo */}
         <Link to="/" className="flex items-center gap-2 flex-shrink-0">
-          <img src="https://media.base44.com/images/public/69ccefebfea78b23498c66a8/bcf3bcb42_df887ac44_logo.png" alt="Zenith Apex" className="h-8 w-8 rounded" />
-          <span className="font-black text-sm text-white hidden sm:block">ZENITH APEX</span>
+          <img src="https://media.base44.com/images/public/69ccefebfea78b23498c66a8/bcf3bcb42_df887ac44_logo.png" alt="ZAT" className="h-8 w-8 rounded" />
+          <div className="hidden sm:block">
+            <span className="font-black text-sm text-white block">ZAT</span>
+            <span className="text-xs text-gray-500 tracking-widest">TRUST · EVOLVE · COMMUNITY · HONOR</span>
+          </div>
         </Link>
 
         {/* Desktop Menu */}

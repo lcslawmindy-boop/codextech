@@ -20,7 +20,7 @@ export default function Landing() {
             <img src="https://media.base44.com/images/public/69ccefebfea78b23498c66a8/bcf3bcb42_df887ac44_logo.png" alt="Zenith Apex Tech" className="h-9 w-9 rounded-lg" />
             <div>
               <span className="font-black text-lg leading-none block">ZENITH APEX TECH</span>
-              <span className="text-gray-500 text-xs tracking-widest">TEST · ENGINEER · CONSTRUCT · HARNESS</span>
+              <span className="text-gray-500 text-xs tracking-widest">TRUST · EVOLVE · COMMUNITY · HONOR</span>
             </div>
           </div>
           <div className="flex items-center gap-4">

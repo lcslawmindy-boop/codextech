@@ -23,7 +23,7 @@ export default function ZatLogoWatermark() {
         }}
       />
       <div className="font-black text-cyan-400 tracking-widest text-center opacity-75 whitespace-nowrap" style={{ fontSize: '9px', textShadow: '0 0 8px rgba(0, 220, 255, 0.6)' }}>
-        ZAT · ZENITH APEX TECH
+        TRUST · EVOLVE · COMMUNITY · HONOR
       </div>
       <style>{`
         @keyframes zatPulse {
