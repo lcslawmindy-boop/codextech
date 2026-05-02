@@ -1,6 +1,7 @@
 import { ArrowRight, Lock, BookOpen, Zap, Brain, Lightbulb, TrendingUp, Users, Eye, FileText, BarChart3, Percent } from "lucide-react";
 import { Link } from "react-router-dom";
 import UserDashboardSection from "@/components/UserDashboardSection";
+import TrustProofSection from "@/components/TrustProofSection";
 import BackgroundThemeSwitcher, { ActiveBackground, useBackgroundTheme } from "@/components/BackgroundThemeSwitcher";
 import ZenithApexBackground from "@/components/backgrounds/ZenithApexBackground";
 
@@ -76,6 +77,9 @@ export default function Landing() {
           <UserDashboardSection />
         </div>
       </section>
+
+      {/* Trust & Proof Section */}
+      <TrustProofSection />
 
       {/* What's Included */}
       <section className="px-6 py-16 border-b border-white/10 solid-section">
