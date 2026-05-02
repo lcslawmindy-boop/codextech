@@ -427,6 +427,21 @@ export default function ZenithApexBackground() {
         ctx.restore();
       }
 
+      // ── Draw Platonic Solids orbital paths (thin glowing rings) ──
+      solids.forEach((solid, si) => {
+        const orb = solidOrbit[si];
+        const orbitR = Math.min(W, H) * orb.r;
+        ctx.save();
+        ctx.globalAlpha = 0.15 + 0.08 * Math.sin(t * 0.6 + si);
+        ctx.translate(cx, cy + H * orb.yOff);
+        ctx.beginPath();
+        ctx.ellipse(0, 0, orbitR, orbitR * 0.45, 0, 0, Math.PI * 2);
+        ctx.strokeStyle = `rgba(80,200,255,0.35)`;
+        ctx.lineWidth = 1.2;
+        ctx.stroke();
+        ctx.restore();
+      });
+
       // ── Platonic Solids orbiting (bigger, lower below sun) ──
       solids.forEach((solid, si) => {
         const orb = solidOrbit[si];
