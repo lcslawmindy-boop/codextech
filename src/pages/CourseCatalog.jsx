@@ -9,6 +9,7 @@ import { tierCanAccessCourse } from "../lib/tiers";
 import TierGate from "../components/TierGate";
 import { businessItems } from "../lib/businessItems";
 import { base44 } from "@/api/base44Client";
+import EarthGridBackground from "@/components/backgrounds/EarthGridBackground";
 
 const courses = businessItems.filter(i => i.category === "Course");
 const pdfs = businessItems.filter(i => i.category === "Book/PDF");
@@ -204,9 +205,10 @@ export default function CourseCatalog() {
   const purchasedProduct = params.get("product");
 
   return (
-    <div className="w-screen min-h-screen bg-gray-950 flex flex-col">
+    <div className="w-screen min-h-screen bg-gray-950 flex flex-col relative">
+      <EarthGridBackground />
       {/* Header */}
-      <div className="px-6 py-5 border-b border-gray-800 flex items-center justify-between bg-gray-900/50">
+      <div className="px-6 py-5 border-b border-gray-800 flex items-center justify-between bg-gray-900/50 relative z-10">
         <div className="flex items-center gap-4">
           <Link to="/" className="flex-shrink-0">
             <img src="https://media.base44.com/images/public/69ccefebfea78b23498c66a8/afb5ad292_CODEXTECHLOGO.png" alt="C.O.D.E.X.T.E.C.H." className="h-9 w-9 object-contain" />
@@ -232,7 +234,7 @@ export default function CourseCatalog() {
 
       {isSuccess && <SuccessBanner productName={purchasedProduct} />}
 
-      <div className="flex-1 overflow-y-auto px-6 py-8 max-w-7xl mx-auto w-full">
+      <div className="flex-1 overflow-y-auto px-6 py-8 max-w-7xl mx-auto w-full relative z-10">
         {!isSuccess && (
           <div className="mb-10 text-center max-w-3xl mx-auto">
             <h2 className="text-3xl font-bold text-white mb-3">Research Modules: Structured Analysis Framework</h2>
