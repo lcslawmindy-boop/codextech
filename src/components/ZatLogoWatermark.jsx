@@ -23,10 +23,10 @@ export default function ZatLogoWatermark() {
         }}
       />
       <div className="font-black text-cyan-400 tracking-widest text-center opacity-75 whitespace-nowrap" style={{ fontSize: '18px', textShadow: '0 0 8px rgba(0, 220, 255, 0.6)', lineHeight: '1.2', letterSpacing: '3px' }}>
-        T.E.C.H.
+        T.E.C.H. NEXED
       </div>
       <div className="font-black text-cyan-400 tracking-widest text-center opacity-75 whitespace-nowrap" style={{ fontSize: '8px', textShadow: '0 0 8px rgba(0, 220, 255, 0.6)', lineHeight: '1.2' }}>
-        TEACH · ENGINEERS · CONSTRUCT · HARNESS
+        TEST · EXPERIMENT · CONSTRUCT · HARNESS TO GO
       </div>
       <div className="font-black text-cyan-400 tracking-widest text-center opacity-75 whitespace-nowrap" style={{ fontSize: '9px', textShadow: '0 0 8px rgba(0, 220, 255, 0.6)' }}>
         TRUST · EVOLVE · COMMUNITY · HONOR
