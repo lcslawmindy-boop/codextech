@@ -1,19 +1,23 @@
-import { Menu, X } from 'lucide-react';
+import { Menu, X, BookOpen, Zap, Lightbulb, ShoppingCart, Gavel, Palette, Eye, EyeOff } from 'lucide-react';
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import { useBackgroundMode } from './BackgroundModeControl';
+import { useZenithTheme } from '@/lib/ZenithThemeContext';
 
 export default function TopNav() {
   const [open, setOpen] = useState(false);
   const location = useLocation();
+  const { mode, setMode } = useBackgroundMode();
+  const { currentTheme, themes, setCurrentTheme } = useZenithTheme();
 
   const navItems = [
-    { label: 'Home', path: '/' },
-    { label: 'Archive', path: '/free-vault' },
-    { label: 'Courses', path: '/courses' },
-    { label: 'Build Plans', path: '/invention-plans' },
-    { label: 'Patents', path: '/patent-attorney-chat' },
-    { label: 'Marketplace', path: '/ip-marketplace' },
-    { label: 'Pricing', path: '/pricing' },
+    { label: 'Home', path: '/', icon: <Zap size={16} /> },
+    { label: 'Archive', path: '/free-vault', icon: <BookOpen size={16} /> },
+    { label: 'Courses', path: '/courses', icon: <Lightbulb size={16} /> },
+    { label: 'Build Plans', path: '/invention-plans', icon: <ShoppingCart size={16} /> },
+    { label: 'Patents', path: '/patent-attorney-chat', icon: <Gavel size={16} /> },
+    { label: 'Marketplace', path: '/ip-marketplace', icon: <Zap size={16} /> },
+    { label: 'Pricing', path: '/pricing', icon: <Lightbulb size={16} /> },
   ];
 
   const isActive = (path) => location.pathname === path;
@@ -24,27 +28,54 @@ export default function TopNav() {
         {/* Logo */}
         <Link to="/" className="flex items-center gap-2 flex-shrink-0">
           <img src="https://media.base44.com/images/public/69ccefebfea78b23498c66a8/bcf3bcb42_df887ac44_logo.png" alt="ZAT" className="h-8 w-8 rounded" />
-          <div className="hidden sm:block">
-            <span className="text-xs text-gray-400 tracking-widest leading-tight">TEST · EXPERIMENT · CONSTRUCT · HARNESS</span>
-            <span className="text-xs text-gray-500 tracking-widest leading-tight">TRUST · EVOLVE · COMMUNITY · HONOR</span>
-          </div>
         </Link>
 
         {/* Desktop Menu */}
-        <div className="hidden md:flex items-center gap-6">
+        <div className="hidden md:flex items-center gap-4">
           {navItems.map(item => (
             <Link
               key={item.path}
               to={item.path}
-              className={`text-sm font-bold transition-colors ${
+              className={`flex items-center gap-1 text-xs font-bold transition-colors px-2 py-1 rounded ${
                 isActive(item.path)
-                  ? 'text-cyan-400'
-                  : 'text-gray-400 hover:text-white'
+                  ? 'text-cyan-300 bg-cyan-900/30'
+                  : 'text-gray-400 hover:text-white hover:bg-gray-900/50'
               }`}
             >
+              {item.icon}
               {item.label}
             </Link>
           ))}
+        </div>
+
+        {/* Theme & Background Controls */}
+        <div className="hidden md:flex items-center gap-3">
+          {/* Background Mode Toggle */}
+          <select
+            value={mode}
+            onChange={(e) => setMode(e.target.value)}
+            className="px-2 py-1 text-xs rounded bg-gray-900 border border-gray-700 text-gray-300 hover:text-white hover:border-cyan-600 transition-colors cursor-pointer"
+          >
+            <option value="off">Scene: Off</option>
+            <option value="subdued">Scene: Subdued</option>
+            <option value="interactive">Scene: Interactive</option>
+          </select>
+
+          {/* Theme Selector */}
+          <select
+            value={currentTheme.name}
+            onChange={(e) => {
+              const selected = themes.find(t => t.name === e.target.value);
+              if (selected) setCurrentTheme(selected);
+            }}
+            className="px-2 py-1 text-xs rounded bg-gray-900 border border-gray-700 text-gray-300 hover:text-white hover:border-cyan-600 transition-colors cursor-pointer"
+          >
+            {themes.map(theme => (
+              <option key={theme.name} value={theme.name}>
+                {theme.name}
+              </option>
+            ))}
+          </select>
         </div>
 
         {/* Mobile Menu Toggle */}
