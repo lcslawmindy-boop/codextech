@@ -1,6 +1,7 @@
 import { Outlet, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 import BottomTabBar from "./BottomTabBar";
+import TopNav from "./TopNav";
 import { useTrial } from "@/lib/TrialContext";
 import { AnimatePresence, motion } from "framer-motion";
 import ZenithApexBackground from "./backgrounds/ZenithApexBackground";
@@ -53,13 +54,15 @@ export default function MobileLayout() {
       className="flex flex-col w-full"
       style={{
         minHeight: "100dvh",
-        paddingTop: isTrial ? "calc(env(safe-area-inset-top) + 34px)" : "env(safe-area-inset-top)",
+        paddingTop: "env(safe-area-inset-top)",
         paddingBottom: hideTab ? "env(safe-area-inset-bottom)" : "calc(env(safe-area-inset-bottom) + 64px)",
         overscrollBehavior: "none",
         background: "transparent",
       }}
     >
       {renderBackground()}
+      <TopNav />
+      {isTrial && <div className="h-[34px] bg-yellow-900/20 border-b border-yellow-700 flex items-center px-4"><span className="text-xs font-bold text-yellow-300">Trial Mode</span></div>}
       <BackgroundModeControl mode={mode} setMode={setMode} />
       <ZatLogoWatermark />
       <ZenithAIMascot />
