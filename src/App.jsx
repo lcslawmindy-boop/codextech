@@ -189,6 +189,7 @@ import IoTDashboard from './pages/IoTDashboard';
 import MemberProfileSetup from './pages/MemberProfileSetup';
 import IPBrokeringGuide from './pages/IPBrokeringGuide';
 import DocumentDashboard from './pages/DocumentDashboard';
+import PatentTechGraph from './pages/PatentTechGraph';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -397,6 +398,7 @@ const AuthenticatedApp = () => {
           <Route path="/member-profile-setup" element={<MemberProfileSetup />} />
           <Route path="/ip-brokering-guide" element={<IPBrokeringGuide />} />
           <Route path="/document-dashboard" element={<DocumentDashboard />} />
+          <Route path="/patent-tech-graph" element={<PatentTechGraph />} />
 
           <Route path="*" element={<PageNotFound />} />
         </Route>
