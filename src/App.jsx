@@ -10,7 +10,7 @@ import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 // Add page imports here
 import ZarpLanding from './pages/ZarpLanding';
-import Landing from './pages/Landing';
+import Landing from './pages/Landing.jsx';
 import AlaCarteShop from './pages/AlaCarteShop';
 import VaultNDALanding from './pages/VaultNDALanding';
 import CodextechLanding from './pages/CodextechLanding';
