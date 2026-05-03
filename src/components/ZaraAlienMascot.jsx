@@ -31,19 +31,18 @@ function useZaraSpeech() {
     utter.pitch = 1.6;
     utter.volume = 1;
 
-    // Try to pick a robotic/electronic-sounding voice
+    // Try to pick a female Australian or Russian voice
     const voices = window.speechSynthesis.getVoices();
-    const electronic = voices.find(v =>
-      v.name.toLowerCase().includes('zira') ||
-      v.name.toLowerCase().includes('microsoft') ||
-      v.name.toLowerCase().includes('google') ||
-      v.name.toLowerCase().includes('android') ||
-      v.name.toLowerCase().includes('espeak') ||
-      v.name.toLowerCase().includes('alex') ||
-      v.name.toLowerCase().includes('fred') ||
-      v.name.toLowerCase().includes('junior')
+    const preferred = voices.find(v =>
+      v.name.toLowerCase().includes('karen') ||        // Australian female (macOS)
+      v.name.toLowerCase().includes('catherine') ||    // Australian female
+      v.name.toLowerCase().includes('lee') ||          // Australian female
+      v.name.toLowerCase().includes('google australian') ||
+      v.name.toLowerCase().includes('milena') ||       // Russian female
+      v.name.toLowerCase().includes('yuri') ||         // Russian
+      v.name.toLowerCase().includes('russian')
     );
-    if (electronic) utter.voice = electronic;
+    if (preferred) utter.voice = preferred;
 
     utter.onend = () => setSpeaking(false);
     utter.onerror = () => setSpeaking(false);
