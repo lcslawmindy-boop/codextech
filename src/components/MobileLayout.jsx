@@ -7,6 +7,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import ZenithApexBackground from "./backgrounds/ZenithApexBackground";
 import SolidLogoBackground from "./backgrounds/SolidLogoBackground";
 import SubduedEquationsBackground from "./backgrounds/SubduedEquationsBackground";
+import LibraryBackground from "./backgrounds/LibraryBackground";
 import { useBackgroundMode } from "./BackgroundModeControl";
 
 import TopLogoHeader from "./TopLogoHeader";
@@ -72,6 +73,7 @@ export default function MobileLayout() {
           <SidebarNav />
         </div>
 
+        <LibraryBackground />
         {renderBackground()}
         {isTrial && <div className="h-[34px] bg-yellow-900/20 border-b border-yellow-700 flex items-center px-4"><span className="text-xs font-bold text-yellow-300">Trial Mode</span></div>}
 
