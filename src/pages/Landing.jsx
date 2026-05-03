@@ -15,6 +15,7 @@ import PricingComparison from "@/components/conversion/PricingComparison";
 import UserDashboardSection from "@/components/UserDashboardSection";
 import { Link } from "react-router-dom";
 import { Percent } from "lucide-react";
+import ZaraAlienMascot from "@/components/ZaraAlienMascot";
 
 export default function Landing() {
   return (
@@ -23,6 +24,8 @@ export default function Landing() {
       style={{ fontFamily: "'Share Tech Mono', monospace", letterSpacing: "0.04em" }}
     >
       <LiveActivityTicker />
+
+      <ZaraAlienMascot />
 
       <div className="pt-16">
         <HeroSection />
