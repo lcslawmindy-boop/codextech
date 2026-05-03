@@ -12,17 +12,29 @@ export default function ClassifiedMatrixBackground() {
           backgroundSize: "cover",
           backgroundPosition: "center",
           backgroundRepeat: "no-repeat",
+          filter: "contrast(1.3) saturate(1.2) brightness(0.85)",
         }}
       />
-      {/* Dark overlay to keep text readable */}
+      {/* Deep vignette — very dark edges, lighter center for 3D depth */}
       <div
         className="absolute inset-0"
-        style={{ background: "rgba(0, 0, 0, 0.72)" }}
+        style={{
+          background: "radial-gradient(ellipse 60% 55% at 50% 50%, rgba(0,0,0,0.05) 0%, rgba(0,0,0,0.55) 60%, rgba(0,0,0,0.92) 100%)",
+        }}
       />
-      {/* Subtle green tint overlay for classified aesthetic */}
+      {/* Bottom dark fade */}
       <div
         className="absolute inset-0"
-        style={{ background: "rgba(0, 20, 0, 0.25)" }}
+        style={{
+          background: "linear-gradient(to bottom, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.1) 30%, rgba(0,0,0,0.1) 60%, rgba(0,0,0,0.85) 100%)",
+        }}
+      />
+      {/* Subtle warm amber depth glow from center */}
+      <div
+        className="absolute inset-0"
+        style={{
+          background: "radial-gradient(ellipse 40% 35% at 50% 48%, rgba(180,120,40,0.08) 0%, transparent 70%)",
+        }}
       />
     </div>
   );

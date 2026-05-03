@@ -44,19 +44,13 @@ export default function Landing() {
       <nav className="border-b-4 px-6 py-6 sticky top-0 z-50 relative" style={{ background: "rgba(5, 5, 5, 0.98)", backdropFilter: "blur(12px)", borderColor: "#ff6600" }}>
         <div className="absolute inset-0 pointer-events-none opacity-5" style={{ backgroundImage: "repeating-linear-gradient(0deg, transparent, transparent 2px, #00ff00 2px, #00ff00 4px)" }} />
         <div className="max-w-6xl mx-auto flex items-center justify-between gap-6 relative z-10">
-          {/* Logo & Mission - Classified Style - ENLARGED */}
-          <div className="flex items-center gap-6 flex-1">
+          {/* Logo only - minimal */}
+          <div className="flex items-center gap-4 flex-1">
             <div style={{ animation: "zatPulse 2.5s ease-in-out infinite" }} className="relative">
               <div className="relative group">
-                <img src="https://media.base44.com/images/public/69ccefebfea78b23498c66a8/b8b502123_generated_image.png" alt="Zenith Apex Tech" className="h-48 w-48 rounded-lg cursor-pointer hover:opacity-90 transition-opacity" style={{ filter: "drop-shadow(0 0 40px rgba(0, 255, 0, 1))", border: "4px solid rgba(0, 255, 0, 0.95)" }} />
-                <button onClick={handleLogoDownload} className="absolute -bottom-8 left-0 text-xs text-green-400 opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap font-bold hover:text-green-300">[ Download PDF ]</button>
+                <img src="https://media.base44.com/images/public/69ccefebfea78b23498c66a8/b8b502123_generated_image.png" alt="Zenith Apex Tech" className="h-16 w-16 rounded-lg cursor-pointer hover:opacity-90 transition-opacity" style={{ filter: "drop-shadow(0 0 16px rgba(0, 255, 0, 0.9))", border: "2px solid rgba(0, 255, 0, 0.8)" }} />
+                <button onClick={handleLogoDownload} className="absolute -bottom-6 left-0 text-xs text-green-400 opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap font-bold hover:text-green-300">[ Download PDF ]</button>
               </div>
-              <div className="absolute -top-3 -right-3 px-3 py-1.5 bg-orange-600 text-black text-xs font-black rounded" style={{ boxShadow: "0 0 16px rgba(255, 102, 0, 1)" }}>TOP SECRET</div>
-            </div>
-            <div>
-              <p className="text-white font-black text-7xl tracking-[0.3em] leading-tight" style={{ textShadow: "0 0 0 3px rgba(0, 255, 0, 0.9), 0 0 20px rgba(0, 255, 0, 1), 0 0 40px rgba(0, 255, 0, 0.8), 0 0 60px rgba(0, 255, 0, 0.5)" }}>ZENITH APEX T.E.C.H</p>
-              <p className="text-green-600 text-sm font-bold">[ CLASSIFIED ACCESS ONLY ]</p>
-              <p className="text-green-500 text-sm mt-1 italic">Members Granted Special Clearance</p>
             </div>
           </div>
 
@@ -96,8 +90,7 @@ export default function Landing() {
 
       {/* Content wrapper - offset for sidebar on desktop */}
       <div className="lg:ml-20">
-        {/* New Conversion Hero & Trust Signals */}
-        <ConversionHero />
+        {/* Trust Signals */}
         <TrustSignals />
 
       {/* User Dashboard */}
