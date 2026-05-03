@@ -8,9 +8,7 @@ import ZenithApexBackground from "./backgrounds/ZenithApexBackground";
 import SolidLogoBackground from "./backgrounds/SolidLogoBackground";
 import SubduedEquationsBackground from "./backgrounds/SubduedEquationsBackground";
 import { useBackgroundMode } from "./BackgroundModeControl";
-import InteractiveZatLogo from "./InteractiveZatLogo";
-import ZatLogoWatermark from "./ZatLogoWatermark";
-import SiteSearchBar from "./SiteSearchBar";
+
 import TopLogoHeader from "./TopLogoHeader";
 
 // Pages that should NOT show the bottom tab bar
@@ -76,9 +74,7 @@ export default function MobileLayout() {
 
         {renderBackground()}
         {isTrial && <div className="h-[34px] bg-yellow-900/20 border-b border-yellow-700 flex items-center px-4"><span className="text-xs font-bold text-yellow-300">Trial Mode</span></div>}
-        <SiteSearchBar />
-        <InteractiveZatLogo />
-        <ZatLogoWatermark />
+
 
         <div className="flex-1 relative overflow-hidden" style={{ zIndex: 1 }}>
           <AnimatePresence mode="wait" initial={false}>

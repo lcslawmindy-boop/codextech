@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { Flame, Users, Zap } from "lucide-react";
+import { useEffect, useState, useRef } from "react";
+import { Flame, Users, Zap, Search, X } from "lucide-react";
 
 const ACTIVITIES = [
   "🔥 Marcus R. just signed up for Builder Membership",
@@ -24,11 +24,30 @@ const ACTIVITIES = [
   "🔥 NEW DROP at 100 members — 2 spots remaining!",
 ];
 
+const SITE_INDEX = [
+  { title: "Free Preview", path: "/free-vault" },
+  { title: "Research Membership", path: "/research-membership" },
+  { title: "À La Carte Shop", path: "/alacarte" },
+  { title: "Courses", path: "/courses" },
+  { title: "Build Plans", path: "/invention-plans" },
+  { title: "Patent Tools", path: "/patent-drafting-wizard" },
+  { title: "IP Marketplace", path: "/ip-marketplace" },
+  { title: "Download Center", path: "/download-center" },
+  { title: "Device Graph", path: "/device-graph" },
+  { title: "Invention Dossier", path: "/invention-dossier" },
+  { title: "Community Forum", path: "/community" },
+  { title: "FTO Analysis", path: "/fto-analysis" },
+  { title: "AI Patent Attorney", path: "/patent-attorney-chat" },
+];
+
 const MEMBER_COUNT = 97; // drives urgency
 
 export default function LiveActivityTicker() {
   const [currentIdx, setCurrentIdx] = useState(0);
   const [visible, setVisible] = useState(true);
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const searchRef = useRef(null);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -40,6 +59,27 @@ export default function LiveActivityTicker() {
     }, 3500);
     return () => clearInterval(interval);
   }, []);
+
+  useEffect(() => {
+    const handleClick = (e) => {
+      if (searchRef.current && !searchRef.current.contains(e.target)) {
+        setSearchOpen(false);
+        setSearchQuery("");
+      }
+    };
+    window.addEventListener("click", handleClick);
+    return () => window.removeEventListener("click", handleClick);
+  }, []);
+
+  const filteredResults = searchQuery.trim().length > 0
+    ? SITE_INDEX.filter(i => i.title.toLowerCase().includes(searchQuery.toLowerCase()))
+    : [];
+
+  const handleSelect = (path) => {
+    window.location.href = path;
+    setSearchOpen(false);
+    setSearchQuery("");
+  };
 
   return (
     <div
@@ -86,6 +126,64 @@ export default function LiveActivityTicker() {
         >
           {ACTIVITIES[currentIdx]}
         </p>
+      </div>
+
+      {/* Search Bar */}
+      <div
+        ref={searchRef}
+        className="flex-shrink-0 flex items-center px-3 h-full relative"
+        style={{ borderLeft: "2px solid rgba(255,255,0,0.3)" }}
+      >
+        {searchOpen ? (
+          <div className="flex items-center gap-2 relative">
+            <input
+              autoFocus
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search..."
+              className="outline-none font-bold text-sm"
+              style={{
+                background: "#111",
+                border: "2px solid #ffff00",
+                borderRadius: "8px",
+                padding: "4px 12px",
+                color: "#fff",
+                width: "180px",
+                boxShadow: "0 0 12px rgba(255,255,0,0.4)",
+              }}
+            />
+            <button onClick={() => { setSearchOpen(false); setSearchQuery(""); }}>
+              <X size={16} style={{ color: "#888" }} />
+            </button>
+            {filteredResults.length > 0 && (
+              <div
+                className="absolute top-full left-0 mt-2 rounded-xl overflow-hidden shadow-2xl z-50"
+                style={{ background: "#111", border: "2px solid #ffff00", minWidth: "200px", boxShadow: "0 0 24px rgba(255,255,0,0.3)" }}
+              >
+                {filteredResults.map((r) => (
+                  <button
+                    key={r.path}
+                    onClick={() => handleSelect(r.path)}
+                    className="w-full text-left px-4 py-2 text-sm font-bold hover:bg-yellow-900/30 transition-colors"
+                    style={{ color: "#ffff00" }}
+                  >
+                    {r.title}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+        ) : (
+          <button
+            onClick={() => setSearchOpen(true)}
+            className="flex items-center gap-2 px-3 py-1.5 rounded-lg font-black text-sm transition-all hover:opacity-80"
+            style={{ background: "rgba(255,255,0,0.1)", border: "2px solid rgba(255,255,0,0.6)", color: "#ffff00" }}
+          >
+            <Search size={16} />
+            <span className="hidden sm:block" style={{ fontSize: "13px" }}>Search</span>
+          </button>
+        )}
       </div>
 
       {/* Right — member counter */}
