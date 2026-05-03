@@ -22,6 +22,11 @@ const LIBRARY_IMAGES = [
   "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/4ee09cb39_OIP.jpeg",
   "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/dec2fe662_How-to-Access-and-Read-the-Akashic-Records.jpg",
   "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/38badbc27_a-long-row-of-bookshelves-in-a-library-free-photo.jpg",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/b6f662621_Convert-One-of-the-Pre-existing-Hallways-into-a-Library-Copy.jpg",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/be158ee5a_1000_F_755228805_cGY4gZzDtaVC2GKBWaMzOtOPwnbV4ZIc.jpg",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/95e69bfed_modern-office-space-with-empty-bookshelves-and-clean-decor-generated-by-ai-photo.jpg",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/fc1690189_pngtree-blurred-empty-library-interior-with-bookshelves-and-white-floor-image_17084947.jpg",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/795966a39_6e9914fb6d6d4a305dd2fbe4c30e098d.jpg",
 ];
 
 export default function LibraryBackground() {
