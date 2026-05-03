@@ -27,23 +27,23 @@ function useZaraSpeech() {
     const utter = new SpeechSynthesisUtterance(
       "Hello, I'm Zara, your Zenith Apex Research Assistant. Here's what's on this page: " + text
     );
-    utter.rate = 0.82;
-    utter.pitch = 0.95;
+    utter.rate = 1.05;
+    utter.pitch = 1.6;
     utter.volume = 1;
 
-    // Try to pick a calm authoritative female voice
+    // Try to pick a robotic/electronic-sounding voice
     const voices = window.speechSynthesis.getVoices();
-    const female = voices.find(v =>
-      v.name.toLowerCase().includes('samantha') ||
-      v.name.toLowerCase().includes('karen') ||
-      v.name.toLowerCase().includes('victoria') ||
-      v.name.toLowerCase().includes('moira') ||
-      v.name.toLowerCase().includes('serena') ||
+    const electronic = voices.find(v =>
       v.name.toLowerCase().includes('zira') ||
-      v.name.toLowerCase().includes('female') ||
-      v.name.toLowerCase().includes('google us english')
+      v.name.toLowerCase().includes('microsoft') ||
+      v.name.toLowerCase().includes('google') ||
+      v.name.toLowerCase().includes('android') ||
+      v.name.toLowerCase().includes('espeak') ||
+      v.name.toLowerCase().includes('alex') ||
+      v.name.toLowerCase().includes('fred') ||
+      v.name.toLowerCase().includes('junior')
     );
-    if (female) utter.voice = female;
+    if (electronic) utter.voice = electronic;
 
     utter.onend = () => setSpeaking(false);
     utter.onerror = () => setSpeaking(false);
