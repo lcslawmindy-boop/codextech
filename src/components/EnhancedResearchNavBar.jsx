@@ -3,13 +3,13 @@ import { Link } from "react-router-dom";
 import { BookMarked, BarChart2, Database, Beaker, Users, Menu, X, GraduationCap, Home, TrendingUp } from "lucide-react";
 
 const NAV_ITEMS = [
-  { icon: Home, label: "Dashboard", href: "/member-dashboard", color: "text-blue-400" },
-  { icon: BookMarked, label: "Dossier", href: "/invention-dossier", color: "text-purple-400" },
+  { icon: Home, label: "Dashboard", href: "/member-dashboard", color: "text-green-400" },
+  { icon: BookMarked, label: "Dossier", href: "/invention-dossier", color: "text-orange-400" },
   { icon: GraduationCap, label: "Learning", href: "/my-learning", color: "text-green-400" },
-  { icon: BarChart2, label: "Bearden Graph", href: "/device-graph", color: "text-indigo-400" },
-  { icon: Database, label: "Research Tools", href: "/scalar-lab", color: "text-cyan-400" },
-  { icon: Beaker, label: "Peer Review", href: "/prior-art", color: "text-yellow-400" },
-  { icon: TrendingUp, label: "Patent Intelligence", href: "/patent-landscape", color: "text-pink-400" },
+  { icon: BarChart2, label: "Bearden Graph", href: "/device-graph", color: "text-orange-400" },
+  { icon: Database, label: "Research Tools", href: "/scalar-lab", color: "text-green-400" },
+  { icon: Beaker, label: "Peer Review", href: "/prior-art", color: "text-orange-400" },
+  { icon: TrendingUp, label: "Patent Intelligence", href: "/patent-landscape", color: "text-green-400" },
 ];
 
 export default function EnhancedResearchNavBar() {
