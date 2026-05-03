@@ -1,10 +1,8 @@
-import { ArrowRight, Lock, BookOpen, Zap, Brain, Lightbulb, TrendingUp, Users, Eye, FileText, BarChart3, Percent, Search, Shield } from "lucide-react";
+import { Brain, Lightbulb, TrendingUp, Users, FileText, BarChart3, Percent } from "lucide-react";
 import { Link } from "react-router-dom";
-import { useState } from "react";
-import { base44 } from "@/api/base44Client";
+
 import UserDashboardSection from "@/components/UserDashboardSection";
 import TrustProofSection from "@/components/TrustProofSection";
-import ConversionHero from "@/components/conversion/ConversionHero";
 import TrustSignals from "@/components/conversion/TrustSignals";
 import PricingComparison from "@/components/conversion/PricingComparison";
 import EnhancedResearchNavBar from "@/components/EnhancedResearchNavBar";
@@ -12,23 +10,7 @@ import ClassifiedMatrixBackground from "@/components/backgrounds/ClassifiedMatri
 import ZaraAlienMascot from "@/components/ZaraAlienMascot";
 
 export default function Landing() {
-  const [searchQuery, setSearchQuery] = useState("");
 
-  const handleLogoDownload = async () => {
-    try {
-      const response = await base44.functions.invoke('exportLogoPDF', {});
-      const blob = new Blob([response.data], { type: 'application/pdf' });
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'zenith-apex-tech-logo.pdf';
-      a.click();
-      window.URL.revokeObjectURL(url);
-    } catch (error) {
-      console.error('Download failed:', error);
-      alert('Failed to download PDF');
-    }
-  };
 
   return (
     <div className="min-h-screen relative bg-black" style={{ fontFamily: "'Courier Prime', monospace", letterSpacing: "0.05em" }}>
@@ -44,31 +26,6 @@ export default function Landing() {
       <nav className="border-b-4 px-6 py-6 sticky top-0 z-50 relative" style={{ background: "rgba(5, 5, 5, 0.98)", backdropFilter: "blur(12px)", borderColor: "#ff6600" }}>
         <div className="absolute inset-0 pointer-events-none opacity-5" style={{ backgroundImage: "repeating-linear-gradient(0deg, transparent, transparent 2px, #00ff00 2px, #00ff00 4px)" }} />
         <div className="max-w-6xl mx-auto flex items-center justify-between gap-6 relative z-10">
-          {/* Logo only - minimal */}
-          <div className="flex items-center gap-4 flex-1">
-            <div style={{ animation: "zatPulse 2.5s ease-in-out infinite" }} className="relative">
-              <div className="relative group">
-                <img src="https://media.base44.com/images/public/69ccefebfea78b23498c66a8/b8b502123_generated_image.png" alt="Zenith Apex Tech" className="h-16 w-16 rounded-lg cursor-pointer hover:opacity-90 transition-opacity" style={{ filter: "drop-shadow(0 0 16px rgba(0, 255, 0, 0.9))", border: "2px solid rgba(0, 255, 0, 0.8)" }} />
-                <button onClick={handleLogoDownload} className="absolute -bottom-6 left-0 text-xs text-green-400 opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap font-bold hover:text-green-300">[ Download PDF ]</button>
-              </div>
-            </div>
-          </div>
-
-          {/* Search Bar - Orange Neon Classified Style */}
-          <div className="hidden lg:flex items-center flex-1 max-w-xs" style={{ animation: "neonPulse 2s ease-in-out infinite" }}>
-            <div className="w-full relative">
-              <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-orange-500" />
-              <input
-                type="text"
-                placeholder="[ SEARCH DATABASE ]"
-                value={searchQuery}
-                onChange={e => setSearchQuery(e.target.value)}
-                className="w-full pl-9 pr-3 py-2 rounded-none border-2 bg-black text-orange-500 placeholder-orange-700 focus:outline-none text-xs font-bold"
-                style={{ boxShadow: "0 0 16px rgba(255, 102, 0, 0.6), inset 0 0 8px rgba(255, 102, 0, 0.2)", borderColor: "#ff6600", fontFamily: "'Courier Prime', monospace", letterSpacing: "0.05em" }}
-              />
-            </div>
-          </div>
-
           {/* Quick Links */}
           <div className="flex items-center gap-3">
             <a href="#how-it-works" className="text-xs text-gray-400 hover:text-white transition font-semibold">How it Works</a>
