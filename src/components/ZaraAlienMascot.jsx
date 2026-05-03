@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { X, ChevronUp } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
 
 const ZARA_IMG = "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/9c9743087_334dc76f54a01292d408e91651da000cd556da33_full.jpg";
 
@@ -18,9 +19,12 @@ export default function ZaraAlienMascot() {
 
   if (!isOpen) {
     return (
-      <button
+      <motion.button
+        drag
+        dragMomentum={false}
         onClick={() => setIsOpen(true)}
-        className="fixed bottom-6 right-6 z-40 flex flex-col items-center gap-2"
+        className="fixed bottom-6 right-6 z-40 flex flex-col items-center gap-2 cursor-grab active:cursor-grabbing"
+        style={{ touchAction: 'none' }}
         title="Chat with Zara"
       >
         <style>{`
@@ -53,12 +57,17 @@ export default function ZaraAlienMascot() {
           <p className="text-sm font-black text-amber-400 leading-tight tracking-widest">ZARA</p>
           <p className="text-purple-300 font-black" style={{ fontSize: '10px', letterSpacing: '0.12em' }}>ZENITH APEX RESEARCH ASSISTANT</p>
         </div>
-      </button>
+      </motion.button>
     );
   }
 
   return (
-    <div className="fixed bottom-6 right-6 z-50" style={{ width: '340px' }}>
+    <motion.div
+      drag
+      dragMomentum={false}
+      className="fixed bottom-6 right-6 z-50"
+      style={{ width: '340px', touchAction: 'none' }}
+    >
       <style>{`
         @keyframes zaraAura {
           0%, 100% { box-shadow: 0 0 30px rgba(255, 160, 50, 0.7), 0 0 60px rgba(100, 80, 255, 0.5); }
@@ -87,8 +96,13 @@ export default function ZaraAlienMascot() {
           <X size={16} className="text-purple-400" />
         </button>
 
+        {/* Drag handle hint */}
+        <div className="flex justify-center pt-2 pb-0 cursor-grab active:cursor-grabbing">
+          <div className="w-10 h-1 rounded-full bg-purple-700/60" />
+        </div>
+
         {/* Hero portrait area */}
-        <div className="relative flex flex-col items-center pt-6 pb-4 px-5"
+        <div className="relative flex flex-col items-center pt-4 pb-4 px-5"
           style={{ background: 'linear-gradient(180deg, rgba(124,77,255,0.15) 0%, transparent 100%)' }}
         >
           {/* Big portrait */}
@@ -143,6 +157,6 @@ export default function ZaraAlienMascot() {
           </p>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }
