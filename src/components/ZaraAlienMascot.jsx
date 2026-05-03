@@ -3,7 +3,7 @@ import { X, ChevronUp, Volume2, VolumeX, Square } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 
-const ZARA_IMG = "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/9c9743087_334dc76f54a01292d408e91651da000cd556da33_full.jpg";
+const ZARA_IMG = "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/788fdfafa_334dc76f54a01292d408e91651da000cd556da33_full.jpg";
 
 function useZaraSpeech() {
   const [speaking, setSpeaking] = useState(false);
