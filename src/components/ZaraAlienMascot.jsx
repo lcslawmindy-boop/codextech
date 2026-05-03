@@ -27,18 +27,20 @@ function useZaraSpeech() {
     const utter = new SpeechSynthesisUtterance(
       "Hello, I'm Zara, your Zenith Apex Research Assistant. Here's what's on this page: " + text
     );
-    utter.rate = 0.92;
-    utter.pitch = 1.1;
+    utter.rate = 0.82;
+    utter.pitch = 0.95;
     utter.volume = 1;
 
-    // Try to pick a female voice
+    // Try to pick a calm authoritative female voice
     const voices = window.speechSynthesis.getVoices();
     const female = voices.find(v =>
-      v.name.toLowerCase().includes('female') ||
       v.name.toLowerCase().includes('samantha') ||
       v.name.toLowerCase().includes('karen') ||
       v.name.toLowerCase().includes('victoria') ||
+      v.name.toLowerCase().includes('moira') ||
+      v.name.toLowerCase().includes('serena') ||
       v.name.toLowerCase().includes('zira') ||
+      v.name.toLowerCase().includes('female') ||
       v.name.toLowerCase().includes('google us english')
     );
     if (female) utter.voice = female;
