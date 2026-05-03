@@ -8,6 +8,7 @@ import PricingComparison from "@/components/conversion/PricingComparison";
 import EnhancedResearchNavBar from "@/components/EnhancedResearchNavBar";
 import ClassifiedMatrixBackground from "@/components/backgrounds/ClassifiedMatrixBackground";
 import ZaraAlienMascot from "@/components/ZaraAlienMascot";
+import ClassifiedEvidenceSection from "@/components/ClassifiedEvidenceSection";
 
 export default function Landing() {
 
@@ -22,33 +23,13 @@ export default function Landing() {
       {/* Research Navigation Bar */}
       <EnhancedResearchNavBar />
 
-      {/* Enhanced Header with Clearance Warning */}
-      <nav className="border-b-4 px-6 py-6 sticky top-0 z-50 relative" style={{ background: "rgba(5, 5, 5, 0.98)", backdropFilter: "blur(12px)", borderColor: "#ff6600" }}>
-        <div className="absolute inset-0 pointer-events-none opacity-5" style={{ backgroundImage: "repeating-linear-gradient(0deg, transparent, transparent 2px, #00ff00 2px, #00ff00 4px)" }} />
-        <div className="max-w-6xl mx-auto flex items-center justify-between gap-6 relative z-10">
-          {/* Quick Links */}
-          <div className="flex items-center gap-3">
-            <a href="#how-it-works" className="text-xs text-gray-400 hover:text-white transition font-semibold">How it Works</a>
-            <a href="#pricing" className="text-xs text-gray-400 hover:text-white transition font-semibold">Pricing</a>
-          </div>
-        </div>
-      </nav>
-
-      <style>{`
-        @keyframes zatPulse {
-          0%, 100% { opacity: 0.85; filter: drop-shadow(0 0 16px rgba(0, 255, 0, 0.6)); }
-          50% { opacity: 1; filter: drop-shadow(0 0 32px rgba(0, 255, 0, 1)); }
-        }
-        @keyframes neonPulse {
-          0%, 100% { box-shadow: 0 0 16px rgba(255, 102, 0, 0.5), inset 0 0 10px rgba(255, 102, 0, 0.1); }
-          50% { box-shadow: 0 0 24px rgba(255, 102, 0, 0.9), inset 0 0 15px rgba(255, 102, 0, 0.2); }
-        }
-      `}</style>
-
       {/* Content wrapper - offset for sidebar on desktop */}
       <div className="lg:ml-20">
         {/* Trust Signals */}
         <TrustSignals />
+
+        {/* Classified Evidence — Patents, POCs, Gov Docs */}
+        <ClassifiedEvidenceSection />
 
       {/* User Dashboard */}
       <section className="px-6 py-12 border-b border-white/10 solid-section">
