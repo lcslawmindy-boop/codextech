@@ -29,7 +29,7 @@ export default function Landing() {
       <EnhancedResearchNavBar />
 
       {/* Content wrapper - offset for sidebar on desktop, plus ticker height */}
-      <div className="lg:ml-20 pt-10">
+      <div className="lg:ml-20 pt-16">
         {/* Trust Signals */}
         <TrustSignals />
 

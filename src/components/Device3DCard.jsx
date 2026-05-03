@@ -37,12 +37,12 @@ export default function Device3DCard({ device, index }) {
         style={{
           transform: `rotateX(${rot.x}deg) rotateY(${rot.y}deg) ${hovered ? "scale(1.04)" : "scale(1)"}`,
           transition: "transform 0.15s ease",
-          background: "linear-gradient(135deg, #050505 0%, #0a0f0a 100%)",
-          border: `2px solid ${neonColor}`,
+          background: "#000",
+          border: `3px solid ${neonColor}`,
           borderRadius: "16px",
           boxShadow: hovered
-            ? `0 0 40px ${neonColor}99, 0 0 80px ${neonColor}44, 0 20px 60px rgba(0,0,0,0.8), inset 0 0 30px ${neonColor}11`
-            : `0 0 20px ${neonColor}55, 0 8px 30px rgba(0,0,0,0.6), inset 0 0 15px ${neonColor}08`,
+            ? `0 0 60px ${neonColor}99, 0 0 120px ${neonColor}44, 0 20px 60px rgba(0,0,0,0.95)`
+            : `0 0 30px ${neonColor}66, 0 0 60px ${neonColor}22, 0 8px 30px rgba(0,0,0,0.9)`,
           overflow: "hidden",
           position: "relative",
         }}
@@ -50,12 +50,12 @@ export default function Device3DCard({ device, index }) {
         {/* 3D Device Visual */}
         <div
           style={{
-            background: `radial-gradient(ellipse at 50% 40%, ${neonColor}22 0%, #000 70%)`,
+            background: "#000",
             height: "160px",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            borderBottom: `1px solid ${neonColor}44`,
+            borderBottom: `3px solid ${neonColor}`,
             position: "relative",
             overflow: "hidden",
           }}
@@ -98,17 +98,18 @@ export default function Device3DCard({ device, index }) {
           <div
             style={{
               position: "absolute",
-              top: "8px",
-              right: "8px",
-              background: `${neonColor}22`,
-              border: `1px solid ${neonColor}88`,
+              top: "10px",
+              right: "10px",
+              background: "#000",
+              border: `2px solid ${neonColor}`,
               borderRadius: "6px",
-              padding: "2px 8px",
-              fontSize: "9px",
+              padding: "3px 10px",
+              fontSize: "11px",
               fontWeight: "900",
               color: neonColor,
               letterSpacing: "0.1em",
-              textShadow: `0 0 8px ${neonColor}`,
+              textShadow: `0 0 10px ${neonColor}`,
+              boxShadow: `0 0 12px ${neonColor}66`,
             }}
           >
             {device.tag}
@@ -116,38 +117,38 @@ export default function Device3DCard({ device, index }) {
         </div>
 
         {/* Content */}
-        <div style={{ padding: "16px" }}>
+        <div style={{ padding: "18px 20px", background: "#000" }}>
           <h3
             style={{
               color: "#fff",
               fontWeight: "900",
-              fontSize: "14px",
-              marginBottom: "4px",
-              textShadow: `0 0 10px ${neonColor}55`,
+              fontSize: "17px",
+              marginBottom: "8px",
+              textShadow: `0 0 16px ${neonColor}66`,
             }}
           >
             {device.name}
           </h3>
-          <p style={{ color: "#aaa", fontSize: "11px", marginBottom: "10px", lineHeight: "1.5" }}>
+          <p style={{ color: "#bbb", fontSize: "13px", marginBottom: "12px", lineHeight: "1.6", fontWeight: "600" }}>
             {device.desc}
           </p>
 
           {/* Stats row */}
-          <div style={{ display: "flex", gap: "8px", marginBottom: "12px" }}>
+          <div style={{ display: "flex", gap: "8px", marginBottom: "14px" }}>
             {device.stats.map((s, i) => (
               <div
                 key={i}
                 style={{
                   flex: 1,
-                  background: "rgba(0,0,0,0.5)",
-                  border: `1px solid ${neonColor}33`,
-                  borderRadius: "6px",
-                  padding: "4px 6px",
+                  background: "#111",
+                  border: `2px solid ${neonColor}55`,
+                  borderRadius: "8px",
+                  padding: "6px 4px",
                   textAlign: "center",
                 }}
               >
-                <p style={{ color: neonColor, fontSize: "11px", fontWeight: "900" }}>{s.val}</p>
-                <p style={{ color: "#666", fontSize: "9px" }}>{s.label}</p>
+                <p style={{ color: neonColor, fontSize: "14px", fontWeight: "900" }}>{s.val}</p>
+                <p style={{ color: "#777", fontSize: "11px", fontWeight: "700" }}>{s.label}</p>
               </div>
             ))}
           </div>
@@ -158,19 +159,20 @@ export default function Device3DCard({ device, index }) {
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              gap: "6px",
-              padding: "8px",
-              borderRadius: "8px",
-              background: `linear-gradient(90deg, ${neonColor}22, ${neonOrange}22)`,
-              border: `1px solid ${neonColor}66`,
+              gap: "8px",
+              padding: "12px",
+              borderRadius: "10px",
+              background: "#000",
+              border: `2px solid ${neonColor}`,
               color: neonColor,
-              fontSize: "11px",
+              fontSize: "14px",
               fontWeight: "900",
               textDecoration: "none",
               letterSpacing: "0.05em",
+              boxShadow: `0 0 16px ${neonColor}44`,
             }}
           >
-            <Lock size={11} /> View Build Plan →
+            <Lock size={14} /> View Build Plan →
           </Link>
         </div>
       </div>

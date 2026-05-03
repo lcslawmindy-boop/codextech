@@ -100,69 +100,70 @@ function Course3DCard({ course }) {
         style={{
           transform: `rotateX(${rot.x}deg) rotateY(${rot.y}deg) ${hovered ? "translateZ(12px) scale(1.03)" : "scale(1)"}`,
           transition: "transform 0.15s ease",
-          background: "linear-gradient(135deg, #030803 0%, #080808 100%)",
-          border: `2px solid ${course.neon}`,
+          background: "#000",
+          border: `3px solid ${course.neon}`,
           borderRadius: "16px",
           overflow: "hidden",
           boxShadow: hovered
-            ? `0 0 50px ${course.neon}88, 0 20px 60px rgba(0,0,0,0.9), inset 0 0 40px ${course.neon}11`
-            : `0 0 20px ${course.neon}44, 0 8px 24px rgba(0,0,0,0.7)`,
+            ? `0 0 60px ${course.neon}99, 0 0 120px ${course.neon}44, 0 20px 60px rgba(0,0,0,0.95)`
+            : `0 0 30px ${course.neon}66, 0 0 60px ${course.neon}22, 0 8px 24px rgba(0,0,0,0.9)`,
           position: "relative",
         }}
       >
         {/* Top visual */}
         <div
           style={{
-            height: "100px",
-            background: `radial-gradient(ellipse at 40% 50%, ${course.neon}22 0%, #000 70%)`,
+            height: "120px",
+            background: `#000`,
+            borderBottom: `3px solid ${course.neon}`,
             display: "flex",
             alignItems: "center",
             gap: "16px",
             padding: "0 20px",
-            borderBottom: `1px solid ${course.neon}33`,
             position: "relative",
           }}
         >
           <div
             style={{
-              width: "56px",
-              height: "56px",
+              width: "64px",
+              height: "64px",
               borderRadius: "12px",
-              background: `${course.neon}22`,
-              border: `2px solid ${course.neon}`,
+              background: "#000",
+              border: `3px solid ${course.neon}`,
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              fontSize: "26px",
-              boxShadow: `0 0 20px ${course.neon}66`,
+              fontSize: "32px",
+              boxShadow: `0 0 24px ${course.neon}`,
               flexShrink: 0,
             }}
           >
             {course.icon}
           </div>
           <div>
-            <p style={{ color: "#888", fontSize: "10px", marginBottom: "2px" }}>{course.subtitle}</p>
+            <p style={{ color: "#aaa", fontSize: "12px", marginBottom: "4px", fontWeight: "700" }}>{course.subtitle}</p>
             <div style={{ display: "flex", gap: "6px", alignItems: "center" }}>
-              <Star size={10} style={{ color: "#ffcc00", fill: "#ffcc00" }} />
-              <span style={{ color: "#ffcc00", fontSize: "11px", fontWeight: "900" }}>{course.rating}</span>
-              <span style={{ color: "#555", fontSize: "10px" }}>· {course.level}</span>
+              <Star size={13} style={{ color: "#ffff00", fill: "#ffff00" }} />
+              <span style={{ color: "#ffff00", fontSize: "14px", fontWeight: "900" }}>{course.rating}</span>
+              <span style={{ color: "#888", fontSize: "12px" }}>· {course.level}</span>
             </div>
           </div>
           {/* Badge */}
           <div
             style={{
               position: "absolute",
-              top: "8px",
-              right: "8px",
-              background: `${course.neon}22`,
-              border: `1px solid ${course.neon}`,
+              top: "10px",
+              right: "10px",
+              background: "#000",
+              border: `2px solid ${course.neon}`,
               borderRadius: "6px",
-              padding: "2px 7px",
-              fontSize: "8px",
+              padding: "3px 10px",
+              fontSize: "11px",
               fontWeight: "900",
               color: course.neon,
               letterSpacing: "0.1em",
-              textShadow: `0 0 8px ${course.neon}`,
+              textShadow: `0 0 10px ${course.neon}`,
+              boxShadow: `0 0 12px ${course.neon}66`,
             }}
           >
             {course.badge}
@@ -170,32 +171,32 @@ function Course3DCard({ course }) {
         </div>
 
         {/* Content */}
-        <div style={{ padding: "14px 16px" }}>
-          <h3 style={{ color: "#fff", fontWeight: "900", fontSize: "14px", marginBottom: "8px" }}>
+        <div style={{ padding: "18px 20px", background: "#000" }}>
+          <h3 style={{ color: "#fff", fontWeight: "900", fontSize: "18px", marginBottom: "12px", textShadow: `0 0 20px ${course.neon}66` }}>
             {course.title}
           </h3>
 
           {/* Stats */}
-          <div style={{ display: "flex", gap: "8px", marginBottom: "10px" }}>
+          <div style={{ display: "flex", gap: "8px", marginBottom: "12px" }}>
             {[
               { val: course.lessons, label: "Lessons" },
               { val: course.hours, label: "Content" },
             ].map((s, i) => (
-              <div key={i} style={{ flex: 1, background: "rgba(0,0,0,0.5)", border: `1px solid ${course.neon}33`, borderRadius: "6px", padding: "4px 8px", textAlign: "center" }}>
-                <p style={{ color: course.neon, fontSize: "12px", fontWeight: "900" }}>{s.val}</p>
-                <p style={{ color: "#555", fontSize: "9px" }}>{s.label}</p>
+              <div key={i} style={{ flex: 1, background: "#111", border: `2px solid ${course.neon}55`, borderRadius: "8px", padding: "8px", textAlign: "center" }}>
+                <p style={{ color: course.neon, fontSize: "16px", fontWeight: "900" }}>{s.val}</p>
+                <p style={{ color: "#888", fontSize: "11px", fontWeight: "700" }}>{s.label}</p>
               </div>
             ))}
           </div>
 
           {/* Topics */}
-          <div style={{ marginBottom: "12px" }}>
+          <div style={{ marginBottom: "14px" }}>
             {course.topics.slice(0, 3).map((t, i) => (
-              <p key={i} style={{ color: "#888", fontSize: "10px", paddingLeft: "10px", position: "relative", marginBottom: "2px" }}>
-                <span style={{ position: "absolute", left: 0, color: course.neon }}>›</span> {t}
+              <p key={i} style={{ color: "#ccc", fontSize: "13px", paddingLeft: "14px", position: "relative", marginBottom: "4px", fontWeight: "600" }}>
+                <span style={{ position: "absolute", left: 0, color: course.neon, fontWeight: "900" }}>›</span> {t}
               </p>
             ))}
-            <p style={{ color: "#555", fontSize: "10px", paddingLeft: "10px" }}>+ more inside...</p>
+            <p style={{ color: "#666", fontSize: "12px", paddingLeft: "14px", fontWeight: "700" }}>+ more inside...</p>
           </div>
 
           <Link
@@ -204,18 +205,20 @@ function Course3DCard({ course }) {
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              gap: "6px",
-              padding: "8px",
-              borderRadius: "8px",
-              background: `linear-gradient(90deg, ${course.neon}22, rgba(0,0,0,0))`,
-              border: `1px solid ${course.neon}55`,
+              gap: "8px",
+              padding: "12px",
+              borderRadius: "10px",
+              background: "#000",
+              border: `2px solid ${course.neon}`,
               color: course.neon,
-              fontSize: "11px",
+              fontSize: "14px",
               fontWeight: "900",
               textDecoration: "none",
+              boxShadow: `0 0 16px ${course.neon}55`,
+              letterSpacing: "0.05em",
             }}
           >
-            <Lock size={11} /> Enroll — Members Only
+            <Lock size={14} /> Enroll — Members Only
           </Link>
         </div>
       </div>

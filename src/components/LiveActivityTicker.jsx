@@ -45,39 +45,43 @@ export default function LiveActivityTicker() {
     <div
       className="fixed top-0 left-0 right-0 z-[200] flex items-center overflow-hidden"
       style={{
-        background: "linear-gradient(90deg, #001a00 0%, #050505 40%, #1a0a00 100%)",
-        borderBottom: "2px solid #00ff66",
-        boxShadow: "0 0 24px rgba(0,255,100,0.5), 0 2px 40px rgba(255,120,0,0.2)",
-        height: "40px",
+        background: "#000",
+        border: "none",
+        borderBottom: "3px solid #ffff00",
+        boxShadow: "0 0 40px rgba(255,255,0,0.7), 0 0 80px rgba(0,255,100,0.4), 0 4px 60px rgba(255,255,0,0.3)",
+        height: "64px",
       }}
     >
       {/* Left badge */}
       <div
-        className="flex-shrink-0 flex items-center gap-2 px-4 h-full"
+        className="flex-shrink-0 flex items-center gap-2 px-5 h-full"
         style={{
-          background: "rgba(0,255,100,0.12)",
-          borderRight: "2px solid #00ff66",
+          background: "rgba(255,255,0,0.1)",
+          borderRight: "3px solid #ffff00",
+          minWidth: "110px",
         }}
       >
-        <Flame size={14} style={{ color: "#ff6600", filter: "drop-shadow(0 0 6px #ff6600)" }} />
-        <span className="text-xs font-black tracking-widest" style={{ color: "#00ff66", textShadow: "0 0 8px #00ff66" }}>
+        <Flame size={20} style={{ color: "#ff6600", filter: "drop-shadow(0 0 8px #ff6600)" }} />
+        <span className="font-black tracking-widest" style={{ color: "#ffff00", textShadow: "0 0 12px #ffff00", fontSize: "16px" }}>
           LIVE
         </span>
         <span
-          className="w-2 h-2 rounded-full animate-pulse"
-          style={{ background: "#00ff66", boxShadow: "0 0 8px #00ff66" }}
+          className="w-3 h-3 rounded-full animate-pulse"
+          style={{ background: "#00ff66", boxShadow: "0 0 12px #00ff66" }}
         />
       </div>
 
       {/* Scrolling message */}
-      <div className="flex-1 flex items-center justify-center overflow-hidden px-4">
+      <div className="flex-1 flex items-center justify-center overflow-hidden px-6">
         <p
-          className="text-xs font-bold tracking-wide transition-all duration-300 text-center"
+          className="font-black tracking-wide transition-all duration-300 text-center"
           style={{
             color: visible ? "#ffffff" : "transparent",
-            textShadow: "0 0 10px rgba(0,255,100,0.4)",
+            textShadow: "0 0 16px rgba(0,255,100,0.8), 0 0 30px rgba(255,255,0,0.4)",
             opacity: visible ? 1 : 0,
-            transform: visible ? "translateY(0)" : "translateY(-8px)",
+            transform: visible ? "translateY(0)" : "translateY(-10px)",
+            fontSize: "17px",
+            letterSpacing: "0.04em",
           }}
         >
           {ACTIVITIES[currentIdx]}
@@ -86,18 +90,19 @@ export default function LiveActivityTicker() {
 
       {/* Right — member counter */}
       <div
-        className="flex-shrink-0 flex items-center gap-2 px-4 h-full"
+        className="flex-shrink-0 flex items-center gap-3 px-5 h-full"
         style={{
-          background: "rgba(255,100,0,0.12)",
-          borderLeft: "2px solid #ff6600",
+          background: "rgba(0,255,100,0.1)",
+          borderLeft: "3px solid #00ff66",
+          minWidth: "160px",
         }}
       >
-        <Users size={13} style={{ color: "#ff6600" }} />
-        <span className="text-xs font-black" style={{ color: "#ff6600", textShadow: "0 0 8px #ff6600" }}>
+        <Users size={18} style={{ color: "#00ff66" }} />
+        <span className="font-black" style={{ color: "#00ff66", textShadow: "0 0 12px #00ff66", fontSize: "18px" }}>
           {MEMBER_COUNT}/100
         </span>
-        <Zap size={12} style={{ color: "#ffcc00" }} />
-        <span className="text-xs font-black hidden sm:block" style={{ color: "#ffcc00" }}>
+        <Zap size={16} style={{ color: "#ffff00" }} />
+        <span className="font-black hidden sm:block" style={{ color: "#ffff00", textShadow: "0 0 10px #ffff00", fontSize: "14px" }}>
           DROP SOON
         </span>
       </div>
