@@ -19,7 +19,7 @@ export default function Landing() {
 
 
   return (
-    <div className="min-h-screen relative bg-black" style={{ fontFamily: "'Courier Prime', monospace", letterSpacing: "0.05em" }}>
+    <div className="min-h-screen relative bg-black" style={{ fontFamily: "'Share Tech Mono', monospace", letterSpacing: "0.04em" }}>
       <LiveActivityTicker />
       <ClassifiedMatrixBackground />
       <ZaraAlienMascot />

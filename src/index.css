@@ -51,7 +51,7 @@ html[data-theme="steel"] {
   --surface-2: 210 20% 19%;
 }
 
-@import url('https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&display=swap');
 
 @layer base {
   /* ── Classified Document Aesthetic: Green & Orange Neon ── */
@@ -139,7 +139,7 @@ html[data-theme="steel"] {
   body {
     @apply text-foreground;
     background: #050505;
-    font-family: 'Courier Prime', monospace;
+    font-family: 'Share Tech Mono', monospace;
     font-size: 14px;
     -webkit-text-size-adjust: 100%;
     overscroll-behavior: none;
