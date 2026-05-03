@@ -4,11 +4,7 @@ import BottomTabBar from "./BottomTabBar";
 import SidebarNav from "./SidebarNav";
 import { useTrial } from "@/lib/TrialContext";
 import { AnimatePresence, motion } from "framer-motion";
-import ZenithApexBackground from "./backgrounds/ZenithApexBackground";
-import SolidLogoBackground from "./backgrounds/SolidLogoBackground";
-import SubduedEquationsBackground from "./backgrounds/SubduedEquationsBackground";
-import LibraryBackground from "./backgrounds/LibraryBackground";
-import { useBackgroundMode } from "./BackgroundModeControl";
+
 
 import TopLogoHeader from "./TopLogoHeader";
 
@@ -30,24 +26,6 @@ const slideVariants = {
 export default function MobileLayout() {
   const { pathname } = useLocation();
   const { isTrial } = useTrial();
-  const { mode, setMode } = useBackgroundMode();
-
-  const renderBackground = () => {
-    switch (mode) {
-      case 'off':
-        return <SolidLogoBackground />;
-      case 'subdued':
-      case 'defense':
-      case 'researcher':
-      case 'institutional':
-        return <SubduedEquationsBackground />;
-      case 'interactive':
-      case 'fun':
-      default:
-        return <ZenithApexBackground />;
-    }
-  };
-
   const hideTab = HIDDEN_TAB_ROUTES.some(r => pathname === r) ||
                   IMMERSIVE_ROUTES.some(r => pathname.startsWith(r));
 
@@ -73,8 +51,6 @@ export default function MobileLayout() {
           <SidebarNav />
         </div>
 
-        <LibraryBackground />
-        {renderBackground()}
         {isTrial && <div className="h-[34px] bg-yellow-900/20 border-b border-yellow-700 flex items-center px-4"><span className="text-xs font-bold text-yellow-300">Trial Mode</span></div>}
 
 

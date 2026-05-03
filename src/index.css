@@ -138,7 +138,7 @@ html[data-theme="steel"] {
 
   body {
     @apply text-foreground;
-    background: #0a0a0a;
+    background: #050505;
     font-family: 'Courier Prime', monospace;
     font-size: 14px;
     -webkit-text-size-adjust: 100%;
