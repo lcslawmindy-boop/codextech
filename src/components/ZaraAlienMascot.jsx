@@ -59,6 +59,134 @@ function useZaraSpeech() {
   return { speaking, readPage, stopReading };
 }
 
+function LightningBox() {
+  return (
+    <div style={{ position: 'relative', width: '100%', height: '100%' }}>
+      <style>{`
+        @keyframes liquidWave {
+          0% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
+          25% { border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%; }
+          50% { border-radius: 50% 40% 60% 30% / 40% 70% 50% 60%; }
+          75% { border-radius: 40% 60% 30% 70% / 60% 40% 70% 30%; }
+          100% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
+        }
+        @keyframes lightningFlash1 {
+          0%, 89%, 91%, 93%, 100% { opacity: 0; }
+          90%, 92% { opacity: 1; }
+        }
+        @keyframes lightningFlash2 {
+          0%, 74%, 76%, 79%, 100% { opacity: 0; }
+          75%, 78% { opacity: 1; }
+        }
+        @keyframes lightningFlash3 {
+          0%, 44%, 46%, 49%, 100% { opacity: 0; }
+          45%, 48% { opacity: 1; }
+        }
+        @keyframes neonPulse {
+          0%, 100% { 
+            box-shadow: 0 0 20px #4400ff, 0 0 40px #0088ff, 0 0 80px #4400ff, inset 0 0 30px rgba(68,0,255,0.3);
+          }
+          50% { 
+            box-shadow: 0 0 40px #0088ff, 0 0 80px #ffffff, 0 0 120px #4400ff, inset 0 0 60px rgba(0,136,255,0.5);
+          }
+        }
+        @keyndef sphereRoll {
+          0% { transform: translateX(-8px) translateY(4px) rotate(0deg); }
+          25% { transform: translateX(8px) translateY(-4px) rotate(90deg); }
+          50% { transform: translateX(4px) translateY(8px) rotate(180deg); }
+          75% { transform: translateX(-4px) translateY(-8px) rotate(270deg); }
+          100% { transform: translateX(-8px) translateY(4px) rotate(360deg); }
+        }
+        @keyframes sphereRoll {
+          0% { transform: translateX(-8px) translateY(4px) rotate(0deg); }
+          25% { transform: translateX(8px) translateY(-4px) rotate(90deg); }
+          50% { transform: translateX(4px) translateY(8px) rotate(180deg); }
+          75% { transform: translateX(-4px) translateY(-8px) rotate(270deg); }
+          100% { transform: translateX(-8px) translateY(4px) rotate(360deg); }
+        }
+        .zara-liquid-box {
+          animation: liquidWave 4s ease-in-out infinite, neonPulse 1.5s ease-in-out infinite;
+        }
+        .zara-sphere {
+          animation: sphereRoll 6s linear infinite;
+        }
+        .zara-lightning-1 { animation: lightningFlash1 3s linear infinite; }
+        .zara-lightning-2 { animation: lightningFlash2 2.7s linear infinite; }
+        .zara-lightning-3 { animation: lightningFlash3 4.1s linear infinite; }
+      `}</style>
+
+      {/* Outer liquid morphing neon box */}
+      <div
+        className="zara-liquid-box"
+        style={{
+          position: 'absolute',
+          inset: '-8px',
+          background: 'linear-gradient(135deg, rgba(68,0,255,0.15) 0%, rgba(0,100,255,0.2) 50%, rgba(68,0,255,0.15) 100%)',
+          border: '3px solid #4400ff',
+          zIndex: 0,
+        }}
+      />
+
+      {/* Rolling sphere inside */}
+      <div
+        className="zara-sphere"
+        style={{
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+          width: '40px',
+          height: '40px',
+          marginTop: '-20px',
+          marginLeft: '-20px',
+          borderRadius: '50%',
+          background: 'radial-gradient(circle at 35% 35%, rgba(255,255,255,0.9), rgba(0,136,255,0.6) 40%, rgba(68,0,255,0.4) 80%)',
+          boxShadow: '0 0 20px #0088ff, 0 0 40px #4400ff, 0 0 60px rgba(0,136,255,0.8)',
+          zIndex: 2,
+          pointerEvents: 'none',
+        }}
+      />
+
+      {/* Lightning bolt 1 */}
+      <div className="zara-lightning-1" style={{ position: 'absolute', inset: 0, zIndex: 3, pointerEvents: 'none' }}>
+        <svg width="100%" height="100%" style={{ position: 'absolute' }}>
+          <polyline points="20,0 35,35 25,35 45,80 30,80 55,130" stroke="#ffffff" strokeWidth="2.5" fill="none" filter="url(#glow)" opacity="0.9"/>
+          <defs>
+            <filter id="glow"><feGaussianBlur stdDeviation="3" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+          </defs>
+        </svg>
+      </div>
+
+      {/* Lightning bolt 2 */}
+      <div className="zara-lightning-2" style={{ position: 'absolute', inset: 0, zIndex: 3, pointerEvents: 'none' }}>
+        <svg width="100%" height="100%" style={{ position: 'absolute' }}>
+          <polyline points="80,10 65,50 75,50 55,100 70,100 45,145" stroke="#88aaff" strokeWidth="2" fill="none" opacity="0.85"/>
+        </svg>
+      </div>
+
+      {/* Lightning bolt 3 */}
+      <div className="zara-lightning-3" style={{ position: 'absolute', inset: 0, zIndex: 3, pointerEvents: 'none' }}>
+        <svg width="100%" height="100%" style={{ position: 'absolute' }}>
+          <polyline points="50,5 40,40 52,40 35,90 48,90 30,140" stroke="#ffffff" strokeWidth="1.5" fill="none" opacity="0.7"/>
+        </svg>
+      </div>
+
+      {/* Electric outline border flashing */}
+      <div
+        className="zara-lightning-1"
+        style={{
+          position: 'absolute',
+          inset: '-4px',
+          border: '2px solid #ffffff',
+          borderRadius: 'inherit',
+          boxShadow: '0 0 30px #ffffff, 0 0 60px #4400ff',
+          zIndex: 1,
+          pointerEvents: 'none',
+        }}
+      />
+    </div>
+  );
+}
+
 export default function ZaraAlienMascot() {
   const [isOpen, setIsOpen] = useState(true);
   const [showPrompts, setShowPrompts] = useState(true);
@@ -96,11 +224,11 @@ export default function ZaraAlienMascot() {
             50% { opacity: 0.9; transform: scale(1.06); }
           }
         `}</style>
-        <div
-          className="relative w-36 h-36 rounded-full overflow-hidden"
-          style={{ animation: 'zaraFloat 3s ease-in-out infinite, zaraAura 2.5s ease-in-out infinite', border: '4px solid #00ff66' }}
-        >
-          <img src={ZARA_IMG} alt="Zara" className="w-full h-full object-cover object-top" />
+        <div className="relative w-36 h-36" style={{ animation: 'zaraFloat 3s ease-in-out infinite' }}>
+          <LightningBox />
+          <div className="absolute inset-0 rounded-full overflow-hidden" style={{ border: '4px solid #4400ff', zIndex: 4, boxShadow: '0 0 30px #4400ff, 0 0 60px #0088ff' }}>
+            <img src={ZARA_IMG} alt="Zara" className="w-full h-full object-cover object-top" />
+          </div>
         </div>
         <div
           className="absolute top-0 left-0 w-36 h-36 rounded-full pointer-events-none"
@@ -161,16 +289,22 @@ export default function ZaraAlienMascot() {
 
         {/* Hero portrait area */}
         <div className="relative flex flex-col items-center pt-4 pb-4 px-5"
-          style={{ background: 'linear-gradient(180deg, rgba(0,255,100,0.08) 0%, transparent 100%)' }}
+          style={{ background: 'linear-gradient(180deg, rgba(68,0,255,0.12) 0%, transparent 100%)' }}
         >
           <div
-            className="relative w-32 h-32 rounded-full overflow-hidden mb-3"
-            style={{ animation: 'zaraFloat 3s ease-in-out infinite, zaraAura 2.5s ease-in-out infinite', border: '4px solid #00ff66' }}
+            className="relative w-32 h-32 mb-3"
+            style={{ animation: 'zaraFloat 3s ease-in-out infinite' }}
           >
-            <img src={ZARA_IMG} alt="Zara" className="w-full h-full object-cover object-top" />
+            <LightningBox />
+            <div
+              className="absolute inset-0 rounded-full overflow-hidden"
+              style={{ border: '4px solid #4400ff', zIndex: 4, boxShadow: '0 0 30px #4400ff, 0 0 60px #0088ff' }}
+            >
+              <img src={ZARA_IMG} alt="Zara" className="w-full h-full object-cover object-top" />
+            </div>
           </div>
 
-          <h3 className="font-black text-xl tracking-widest mb-0.5" style={{ color: '#00ff66', textShadow: '0 0 16px #00ff66' }}>ZARA 👁️</h3>
+          <h3 className="font-black text-xl tracking-widest mb-0.5" style={{ color: '#88aaff', textShadow: '0 0 16px #4400ff, 0 0 30px #0088ff' }}>ZARA 👁️</h3>
           <p className="font-black text-xs tracking-widest text-center" style={{ letterSpacing: '0.12em', color: '#ff6600', textShadow: '0 0 8px #ff6600' }}>
             ZENITH APEX RESEARCH ASSISTANT
           </p>
