@@ -5,9 +5,8 @@ import UserDashboardSection from "@/components/UserDashboardSection";
 import TrustProofSection from "@/components/TrustProofSection";
 import TrustSignals from "@/components/conversion/TrustSignals";
 import PricingComparison from "@/components/conversion/PricingComparison";
-import EnhancedResearchNavBar from "@/components/EnhancedResearchNavBar";
-import ClassifiedMatrixBackground from "@/components/backgrounds/ClassifiedMatrixBackground";
-import ZaraAlienMascot from "@/components/ZaraAlienMascot";
+
+
 import ClassifiedEvidenceSection from "@/components/ClassifiedEvidenceSection";
 import LiveActivityTicker from "@/components/LiveActivityTicker";
 import BuildDevicesCatalogue from "@/components/BuildDevicesCatalogue";
@@ -21,16 +20,12 @@ export default function Landing() {
   return (
     <div className="min-h-screen relative bg-black" style={{ fontFamily: "'Share Tech Mono', monospace", letterSpacing: "0.04em" }}>
       <LiveActivityTicker />
-      <ClassifiedMatrixBackground />
-      <ZaraAlienMascot />
+
       
 
 
-      {/* Research Navigation Bar */}
-      <EnhancedResearchNavBar />
-
-      {/* Content wrapper - offset for sidebar on desktop, plus ticker height */}
-      <div className="lg:ml-20 pt-16">
+      {/* Content wrapper */}
+      <div className="pt-16">
         {/* Trust Signals */}
         <TrustSignals />
 

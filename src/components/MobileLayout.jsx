@@ -26,15 +26,18 @@ const slideVariants = {
 export default function MobileLayout() {
   const { pathname } = useLocation();
   const { isTrial } = useTrial();
+  const isLanding = pathname === "/";
   const hideTab = HIDDEN_TAB_ROUTES.some(r => pathname === r) ||
                   IMMERSIVE_ROUTES.some(r => pathname.startsWith(r));
 
   return (
     <div className="flex w-full" style={{ minHeight: "100dvh" }}>
-      {/* Sidebar */}
-      <div className="hidden md:block w-64 flex-shrink-0">
-        <SidebarNav />
-      </div>
+      {/* Sidebar — hidden on landing page */}
+      {!isLanding && (
+        <div className="hidden md:block w-64 flex-shrink-0">
+          <SidebarNav />
+        </div>
+      )}
 
       {/* Main Content */}
       <div
@@ -46,10 +49,12 @@ export default function MobileLayout() {
           background: "transparent",
         }}
       >
-        {/* Mobile Sidebar Toggle */}
-        <div className="md:hidden">
-          <SidebarNav />
-        </div>
+        {/* Mobile Sidebar Toggle — hidden on landing page */}
+        {!isLanding && (
+          <div className="md:hidden">
+            <SidebarNav />
+          </div>
+        )}
 
         {isTrial && <div className="h-[34px] bg-yellow-900/20 border-b border-yellow-700 flex items-center px-4"><span className="text-xs font-bold text-yellow-300">Trial Mode</span></div>}
 
