@@ -276,38 +276,61 @@ export default function ZenithApexBackground() {
         const tw = 0.5 + 0.5 * Math.sin(t * s.s * 6 + s.tw);
         ctx.beginPath();
         ctx.arc(s.x * W, s.y * H, s.r * tw, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(200,220,255,${0.25 + tw * 0.55})`;
+        const starColors = ["255,80,200", "80,220,255", "255,220,60", "180,80,255"];
+        const sc = starColors[Math.floor(s.tw * starColors.length) % starColors.length];
+        ctx.fillStyle = `rgba(${sc},${0.4 + tw * 0.6})`;
+        ctx.shadowColor = `rgba(${sc},1)`;
+        ctx.shadowBlur = 6;
         ctx.fill();
+        ctx.shadowBlur = 0;
       }
 
-      // ── Grid with electricity running through it ──
+      // ── Neon perspective grid (3D floor vanishing point) ──
       ctx.save();
-      ctx.strokeStyle = "rgba(80,140,255,0.08)";
-      ctx.lineWidth = 0.6;
-      for (let x = 0; x < W; x += 60) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke(); }
-      for (let y = 0; y < H; y += 60) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke(); }
-      // Electricity pulses through grid
-      for (let x = 0; x < W; x += 120) {
-        const pulse = 0.15 + 0.12 * Math.sin(t * 2.5 + x * 0.002);
-        ctx.strokeStyle = `rgba(0,255,200,${pulse})`;
-        ctx.lineWidth = 1.8;
-        ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke();
+      const horizon = cy * 0.55;
+      const vp = { x: cx, y: horizon };
+      // Vertical lines fanning from vanishing point
+      for (let i = -18; i <= 18; i++) {
+        const bx = cx + i * (W / 16);
+        const alpha = 0.06 + 0.05 * Math.abs(Math.sin(t * 0.8 + i * 0.3));
+        ctx.beginPath();
+        ctx.moveTo(vp.x, vp.y);
+        ctx.lineTo(bx, H);
+        ctx.strokeStyle = `rgba(0,255,255,${alpha})`;
+        ctx.lineWidth = 0.8;
+        ctx.shadowColor = "rgba(0,255,255,0.8)";
+        ctx.shadowBlur = 4;
+        ctx.stroke();
       }
-      for (let y = 0; y < H; y += 120) {
-        const pulse = 0.15 + 0.12 * Math.sin(t * 2.5 + y * 0.002);
-        ctx.strokeStyle = `rgba(0,255,200,${pulse})`;
-        ctx.lineWidth = 1.8;
-        ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke();
+      // Horizontal recession lines
+      for (let i = 0; i < 12; i++) {
+        const frac = Math.pow(i / 12, 1.6);
+        const y = horizon + (H - horizon) * frac;
+        const pulse = 0.04 + 0.06 * Math.sin(t * 1.5 + i * 0.5);
+        ctx.beginPath();
+        ctx.moveTo(0, y);
+        ctx.lineTo(W, y);
+        ctx.strokeStyle = `rgba(0,255,255,${pulse})`;
+        ctx.lineWidth = 0.7;
+        ctx.shadowBlur = 3;
+        ctx.stroke();
       }
+      ctx.shadowBlur = 0;
       ctx.restore();
 
-      // ── Quantum waves (minimal) ──
-      for (let i = 0; i < 3; i++) {
-        const phase = (t * 0.3 + i / 3) % 1;
-        const r = phase * Math.max(W, H) * 0.85;
-        const alpha = (1 - phase) * 0.25;
+      // ── Neon shockwave rings ──
+      for (let i = 0; i < 4; i++) {
+        const phase = (t * 0.22 + i / 4) % 1;
+        const r = phase * Math.max(W, H) * 0.9;
+        const alpha = (1 - phase) * 0.45;
+        const ringColors = ["255,0,200", "0,220,255", "255,80,0", "140,0,255"];
         ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2);
-        ctx.strokeStyle = `rgba(80,180,255,${alpha})`; ctx.lineWidth = 2; ctx.stroke();
+        ctx.strokeStyle = `rgba(${ringColors[i]},${alpha})`;
+        ctx.lineWidth = 2.5;
+        ctx.shadowColor = `rgba(${ringColors[i]},1)`;
+        ctx.shadowBlur = 18;
+        ctx.stroke();
+        ctx.shadowBlur = 0;
       }
 
 
@@ -519,123 +542,98 @@ export default function ZenithApexBackground() {
         ctx.restore();
       }
 
-      // ── Neon Circuit Board Sphere (hidden/background element) ──
-      const globeR = Math.min(W, H) * 0.25;
-      const globeX = cx;
-      const globeY = cy;
+      // ── Neon 3D wireframe shapes scattered across screen ──
+      const neonShapes = [
+        { x: W * 0.12, y: H * 0.25, type: "cube",    scale: 55, color: "255,0,200",   speed: 0.38, phase: 0 },
+        { x: W * 0.85, y: H * 0.20, type: "pyramid", scale: 50, color: "0,220,255",   speed: 0.28, phase: 1.2 },
+        { x: W * 0.75, y: H * 0.72, type: "cube",    scale: 42, color: "255,80,0",    speed: 0.45, phase: 2.4 },
+        { x: W * 0.18, y: H * 0.70, type: "pyramid", scale: 48, color: "140,0,255",   speed: 0.32, phase: 3.6 },
+        { x: W * 0.50, y: H * 0.15, type: "cube",    scale: 36, color: "255,220,0",   speed: 0.52, phase: 0.8 },
+        { x: W * 0.92, y: H * 0.55, type: "pyramid", scale: 44, color: "0,255,120",   speed: 0.41, phase: 4.1 },
+        { x: W * 0.05, y: H * 0.50, type: "cube",    scale: 40, color: "255,60,120",  speed: 0.35, phase: 5.0 },
+      ];
 
-      ctx.save();
-      ctx.beginPath();
-      ctx.arc(globeX, globeY, globeR, 0, Math.PI * 2);
-      ctx.clip();
+      neonShapes.forEach(sh => {
+        const spin = t * sh.speed + sh.phase;
+        const tiltX = t * sh.speed * 0.6 + sh.phase;
+        const tiltZ = t * sh.speed * 0.4;
+        const shX = sh.x + Math.sin(t * 0.3 + sh.phase) * 18;
+        const shY = sh.y + Math.cos(t * 0.25 + sh.phase) * 12;
 
-      // Circuit board grid lines — neon cyan
-      const gridStep = 38;
-      ctx.lineWidth = 0.7;
-      for (let gx = globeX - globeR; gx < globeX + globeR; gx += gridStep) {
-        const pulse = 0.12 + 0.08 * Math.sin(t * 2.2 + gx * 0.04);
-        ctx.strokeStyle = `rgba(0,255,220,${pulse})`;
-        ctx.beginPath(); ctx.moveTo(gx, globeY - globeR); ctx.lineTo(gx, globeY + globeR); ctx.stroke();
-      }
-      for (let gy = globeY - globeR; gy < globeY + globeR; gy += gridStep) {
-        const pulse = 0.12 + 0.08 * Math.sin(t * 1.8 + gy * 0.04);
-        ctx.strokeStyle = `rgba(0,255,220,${pulse})`;
-        ctx.beginPath(); ctx.moveTo(globeX - globeR, gy); ctx.lineTo(globeX + globeR, gy); ctx.stroke();
-      }
+        let verts, edges;
+        if (sh.type === "cube") {
+          const s = 1;
+          verts = [[-s,-s,-s],[s,-s,-s],[s,s,-s],[-s,s,-s],[-s,-s,s],[s,-s,s],[s,s,s],[-s,s,s]];
+          edges = [[0,1],[1,2],[2,3],[3,0],[4,5],[5,6],[6,7],[7,4],[0,4],[1,5],[2,6],[3,7]];
+        } else {
+          // Pyramid
+          const b = 1, h = 1.5;
+          verts = [[-b,b,-b],[b,b,-b],[b,b,b],[-b,b,b],[0,-h,0]];
+          edges = [[0,1],[1,2],[2,3],[3,0],[0,4],[1,4],[2,4],[3,4]];
+        }
 
-      // Circuit nodes at intersections
-      for (let gx = globeX - globeR + gridStep; gx < globeX + globeR; gx += gridStep) {
-        for (let gy = globeY - globeR + gridStep; gy < globeY + globeR; gy += gridStep) {
-          const dx = gx - globeX, dy = gy - globeY;
-          if (dx*dx + dy*dy > globeR*globeR) continue;
-          if (Math.random() < 0.97) continue; // sparse nodes each frame
+        const proj = verts.map(v => {
+          let p = [...v];
+          p = rotX(p, tiltX);
+          p = rotY(p, spin);
+          p = rotZ(p, tiltZ);
+          return project(p, shX, shY, 280, sh.scale);
+        });
+
+        ctx.save();
+        ctx.globalAlpha = 0.9;
+        edges.forEach(([a, b]) => {
+          const pa = proj[a], pb = proj[b];
+          const depth = Math.max(0, Math.min(1, (pa[2] + pb[2]) / 560));
           ctx.beginPath();
-          ctx.arc(gx, gy, 2.5, 0, Math.PI * 2);
-          ctx.fillStyle = "rgba(0,255,200,0.9)";
-          ctx.shadowColor = "rgba(0,255,200,1)";
-          ctx.shadowBlur = 8;
+          ctx.moveTo(pa[0], pa[1]);
+          ctx.lineTo(pb[0], pb[1]);
+          ctx.strokeStyle = `rgba(${sh.color},${0.55 + depth * 0.45})`;
+          ctx.lineWidth = 2.2;
+          ctx.shadowColor = `rgba(${sh.color},1)`;
+          ctx.shadowBlur = 20;
+          ctx.stroke();
+        });
+        // Glowing vertex dots
+        proj.forEach(p => {
+          ctx.beginPath();
+          ctx.arc(p[0], p[1], 4, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(${sh.color},1)`;
+          ctx.shadowColor = `rgba(${sh.color},1)`;
+          ctx.shadowBlur = 16;
           ctx.fill();
-          ctx.shadowBlur = 0;
-        }
-      }
-
-      // Lightning bolt pulses along grid lines
-      const numBolts = 5;
-      for (let b = 0; b < numBolts; b++) {
-        const bPhase = (t * 0.9 + b / numBolts) % 1;
-        if (bPhase > 0.18) continue; // only flash briefly
-        const bAlpha = (0.18 - bPhase) / 0.18;
-        // pick a random-ish horizontal line inside globe
-        const lineY = globeY - globeR * 0.7 + (b / numBolts) * globeR * 1.4;
-        const lineX0 = globeX - globeR * 0.8;
-        const lineX1 = globeX + globeR * 0.8;
-        ctx.save();
-        ctx.globalAlpha = bAlpha * 0.85;
-        ctx.lineWidth = 1.5 + bAlpha * 2;
-        ctx.shadowColor = "rgba(80,220,255,1)";
-        ctx.shadowBlur = 18;
-        ctx.strokeStyle = "rgba(160,240,255,1)";
-        ctx.beginPath();
-        ctx.moveTo(lineX0, lineY);
-        // jagged lightning path
-        const segs = 14;
-        for (let s = 1; s <= segs; s++) {
-          const lx = lineX0 + (lineX1 - lineX0) * (s / segs);
-          const jag = (s % 2 === 0 ? 1 : -1) * (4 + Math.sin(t * 20 + b * 3 + s) * 8);
-          ctx.lineTo(lx, lineY + jag);
-        }
-        ctx.stroke();
-        // vertical branch
-        const branchX = lineX0 + (lineX1 - lineX0) * (0.3 + (b % 3) * 0.2);
-        ctx.beginPath();
-        ctx.moveTo(branchX, lineY);
-        ctx.lineTo(branchX + 12, lineY + 22);
-        ctx.lineTo(branchX + 6, lineY + 38);
-        ctx.strokeStyle = "rgba(200,255,255,0.8)";
-        ctx.lineWidth = 1;
-        ctx.stroke();
+        });
         ctx.restore();
-      }
+      });
 
-      // Vertical lightning bolts
-      for (let b = 0; b < numBolts; b++) {
-        const bPhase = (t * 0.7 + (b + 0.5) / numBolts) % 1;
-        if (bPhase > 0.15) continue;
-        const bAlpha = (0.15 - bPhase) / 0.15;
-        const lineX = globeX - globeR * 0.6 + (b / numBolts) * globeR * 1.2;
-        const lineY0 = globeY - globeR * 0.75;
-        const lineY1 = globeY + globeR * 0.75;
-        ctx.save();
-        ctx.globalAlpha = bAlpha * 0.7;
-        ctx.lineWidth = 1.2 + bAlpha * 1.5;
-        ctx.shadowColor = "rgba(120,80,255,1)";
-        ctx.shadowBlur = 14;
-        ctx.strokeStyle = "rgba(180,120,255,1)";
-        ctx.beginPath();
-        ctx.moveTo(lineX, lineY0);
-        const segs2 = 12;
-        for (let s = 1; s <= segs2; s++) {
-          const ly = lineY0 + (lineY1 - lineY0) * (s / segs2);
-          const jag = (s % 2 === 0 ? 1 : -1) * (3 + Math.sin(t * 15 + b * 5 + s) * 6);
-          ctx.lineTo(lineX + jag, ly);
+      // ── Neon lightning bolts (standalone, full screen) ──
+      {
+        const numBolts = 5;
+        for (let b = 0; b < numBolts; b++) {
+          const bPhase = (t * 0.7 + b / numBolts) % 1;
+          if (bPhase > 0.12) continue;
+          const bAlpha = (0.12 - bPhase) / 0.12;
+          const boltColors = ["255,0,200","0,220,255","255,80,0","140,0,255","255,220,0"];
+          const lx0 = W * (0.1 + (b / numBolts) * 0.8);
+          const ly0 = 0;
+          const ly1 = H;
+          ctx.save();
+          ctx.globalAlpha = bAlpha * 0.8;
+          ctx.lineWidth = 1.5 + bAlpha * 2.5;
+          ctx.shadowColor = `rgba(${boltColors[b]},1)`;
+          ctx.shadowBlur = 22;
+          ctx.strokeStyle = `rgba(${boltColors[b]},1)`;
+          ctx.beginPath();
+          ctx.moveTo(lx0, ly0);
+          for (let s = 1; s <= 16; s++) {
+            const lx = lx0 + (s % 2 === 0 ? 1 : -1) * (6 + Math.sin(t * 20 + b * 4 + s) * 14);
+            const ly = ly0 + (ly1 - ly0) * (s / 16);
+            ctx.lineTo(lx, ly);
+          }
+          ctx.stroke();
+          ctx.restore();
         }
-        ctx.stroke();
-        ctx.restore();
       }
-
-      ctx.restore();
-
-      // Neon sphere outline
-      ctx.save();
-      ctx.globalAlpha = 0.35 + 0.1 * Math.sin(t * 1.5);
-      ctx.beginPath();
-      ctx.arc(globeX, globeY, globeR, 0, Math.PI * 2);
-      ctx.shadowColor = "rgba(0,255,200,1)";
-      ctx.shadowBlur = 20;
-      ctx.strokeStyle = "rgba(0,255,200,0.7)";
-      ctx.lineWidth = 2.5;
-      ctx.stroke();
-      ctx.restore();
       
       // Sun 1 (bright primary)
       const sunX1 = cx + Math.cos(sunAngle) * sunOrbitRx;
@@ -649,47 +647,32 @@ export default function ZenithApexBackground() {
 
       // (sun orbit params already declared earlier)
 
-      // ── 3D Rotating green XYZ laser axis (from center) ──
+      // ── 3D Rotating neon XYZ laser axis (from center) ──
       ctx.save();
       const axisRot = t * 0.5;
       const axisRotX = t * 0.3;
       const axisLen = Math.min(W, H) * 0.3;
-      // X axis (red) rotated
-      const xEnd = [axisLen * Math.cos(axisRot), axisLen * Math.sin(axisRot) * 0.5];
+      const axisDefs = [
+        { end: [axisLen * Math.cos(axisRot), axisLen * Math.sin(axisRot) * 0.5], color: "255,0,200" },
+        { end: [axisLen * Math.sin(axisRot) * 0.5, axisLen * Math.cos(axisRot)], color: "0,220,255" },
+        { end: [axisLen * Math.sin(axisRotX) * 0.6, axisLen * Math.cos(axisRotX) * 0.6], color: "255,160,0" },
+      ];
+      axisDefs.forEach(ax => {
+        ctx.beginPath();
+        ctx.moveTo(cx, cy);
+        ctx.lineTo(cx + ax.end[0], cy + ax.end[1]);
+        ctx.strokeStyle = `rgba(${ax.color},0.95)`;
+        ctx.lineWidth = 3;
+        ctx.shadowColor = `rgba(${ax.color},1)`;
+        ctx.shadowBlur = 22;
+        ctx.stroke();
+      });
+      // Center pulse dot
       ctx.beginPath();
-      ctx.moveTo(cx, cy);
-      ctx.lineTo(cx + xEnd[0], cy + xEnd[1]);
-      ctx.strokeStyle = "rgba(0,255,120,0.85)";
-      ctx.lineWidth = 2.5;
-      ctx.shadowColor = "rgba(0,255,120,1)";
-      ctx.shadowBlur = 15;
-      ctx.stroke();
-      // Y axis (green) rotated
-      const yEnd = [axisLen * Math.sin(axisRot) * 0.5, axisLen * Math.cos(axisRot)];
-      ctx.beginPath();
-      ctx.moveTo(cx, cy);
-      ctx.lineTo(cx + yEnd[0], cy + yEnd[1]);
-      ctx.strokeStyle = "rgba(0,200,255,0.75)";
-      ctx.lineWidth = 2.5;
-      ctx.shadowColor = "rgba(0,200,255,0.9)";
-      ctx.shadowBlur = 12;
-      ctx.stroke();
-      // Z axis (blue) rotating
-      const zEnd = [axisLen * Math.sin(axisRotX), axisLen * Math.cos(axisRotX)];
-      ctx.beginPath();
-      ctx.moveTo(cx, cy);
-      ctx.lineTo(cx + zEnd[0] * 0.6, cy + zEnd[1] * 0.6);
-      ctx.strokeStyle = "rgba(255,100,150,0.7)";
-      ctx.lineWidth = 2.5;
-      ctx.shadowColor = "rgba(255,100,150,0.9)";
-      ctx.shadowBlur = 12;
-      ctx.stroke();
-      // Center point
-      ctx.beginPath();
-      ctx.arc(cx, cy, 6, 0, Math.PI * 2);
-      ctx.fillStyle = "rgba(0,255,200,0.95)";
-      ctx.shadowColor = "rgba(0,255,200,1)";
-      ctx.shadowBlur = 12;
+      ctx.arc(cx, cy, 7, 0, Math.PI * 2);
+      ctx.fillStyle = "rgba(255,255,255,1)";
+      ctx.shadowColor = "rgba(255,255,255,1)";
+      ctx.shadowBlur = 20;
       ctx.fill();
       ctx.restore();
 
