@@ -165,10 +165,22 @@ function useZaraSpeech() {
     const nodes = Array.from(document.querySelectorAll('h1,h2,h3,h4,p,.solid-section p'));
     const text = nodes.map(n => n.innerText?.trim()).filter(t => t && t.length > 3).slice(0, 40).join('. ');
     if (!text) return;
-    const utter = new SpeechSynthesisUtterance("Hello, I'm Zara, your Zenith Apex Research Assistant. Here's what's on this page: " + text);
-    utter.rate = 1.05; utter.pitch = 1.6; utter.volume = 1;
+    const utter = new SpeechSynthesisUtterance("Hello. I'm Zara... your Zenith Apex Research Assistant. Let me guide you through what's here: " + text);
+    utter.rate = 0.88;
+    utter.pitch = 1.85;
+    utter.volume = 1;
     const voices = window.speechSynthesis.getVoices();
-    const preferred = voices.find(v => ['karen','catherine','lee','google australian','milena','yuri','russian'].some(k => v.name.toLowerCase().includes(k)));
+    // Priority: Samantha (macOS), Google UK English Female, Zira, Victoria, Fiona — smooth & feminine
+    const preferred = voices.find(v =>
+      v.name.toLowerCase().includes('samantha') ||
+      v.name.toLowerCase().includes('google uk english female') ||
+      v.name.toLowerCase().includes('zira') ||
+      v.name.toLowerCase().includes('victoria') ||
+      v.name.toLowerCase().includes('fiona') ||
+      v.name.toLowerCase().includes('tessa') ||
+      (v.name.toLowerCase().includes('female') && v.lang.startsWith('en'))
+    ) || voices.find(v => v.lang === 'en-GB' && v.name.toLowerCase().includes('google'))
+      || voices.find(v => v.lang.startsWith('en') && !v.name.toLowerCase().includes('male'));
     if (preferred) utter.voice = preferred;
     utter.onend = () => setSpeaking(false);
     utter.onerror = () => setSpeaking(false);
