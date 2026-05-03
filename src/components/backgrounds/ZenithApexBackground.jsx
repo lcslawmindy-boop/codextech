@@ -437,49 +437,7 @@ export default function ZenithApexBackground() {
         ctx.restore();
       }
 
-      // ── All Platonic Solids on same sun orbit ──
-      solids.forEach((solid, si) => {
-        const orbitAngle = sunAngle + (Math.PI * 2 / 5) * si; // Evenly spaced around orbit
-        const sox = cx + Math.cos(orbitAngle) * sunOrbitRx;
-        const soy = cy + Math.sin(orbitAngle) * sunOrbitRy;
-        const spin = t * (0.5 + si * 0.08);
-        const color = solidColors[si];
-        const scale = 28 + si * 2;
-        const tilt = 0.4 + si * 0.2;
 
-        const proj = solid.v.map(v => {
-          let p = [...v];
-          p = rotX(p, spin + tilt);
-          p = rotY(p, spin * 0.8);
-          p = rotZ(p, spin * 0.6);
-          return project(p, sox, soy, 350, scale);
-        });
-
-        ctx.save();
-        ctx.globalAlpha = 0.85;
-        solid.e.forEach(([a, b]) => {
-          const pa = proj[a], pb = proj[b];
-          const depth = Math.max(0, Math.min(1, (pa[2] + pb[2]) / 700));
-          ctx.beginPath();
-          ctx.moveTo(pa[0], pa[1]);
-          ctx.lineTo(pb[0], pb[1]);
-          ctx.shadowColor = color + "0.9)";
-          ctx.shadowBlur = 10;
-          ctx.strokeStyle = `${color}${0.45 + depth * 0.55})`;
-          ctx.lineWidth = 2;
-          ctx.stroke();
-        });
-        // Vertex dots
-        proj.forEach(p => {
-          ctx.beginPath();
-          ctx.arc(p[0], p[1], 3.5, 0, Math.PI * 2);
-          ctx.fillStyle = `${color}1)`;
-          ctx.shadowColor = color + "1)";
-          ctx.shadowBlur = 12;
-          ctx.fill();
-        });
-        ctx.restore();
-      });
 
 
 
@@ -735,38 +693,7 @@ export default function ZenithApexBackground() {
       ctx.fill();
       ctx.restore();
 
-      // ── Green laser orbit ring (around center watermark) ──
-      ctx.save();
-      // Outer glow of the orbit ellipse (green laser)
-      for (let pass = 0; pass < 3; pass++) {
-        const lw = [6, 3, 1.2][pass];
-        const alpha = [0.22, 0.45, 0.85][pass];
-        ctx.beginPath();
-        ctx.ellipse(cx, cy, sunOrbitRx, sunOrbitRy, 0, 0, Math.PI * 2);
-        ctx.strokeStyle = `rgba(0,255,80,${alpha})`;
-        ctx.lineWidth = lw;
-        ctx.shadowColor = "rgba(0,255,80,1)";
-        ctx.shadowBlur = [22, 14, 6][pass];
-        ctx.stroke();
-      }
-      // Bright laser dashes travelling along the orbit
-      for (let d = 0; d < 4; d++) {
-        const dAngle = sunAngle + (Math.PI * 2 / 4) * d;
-        const dashLen = 0.18;
-        ctx.beginPath();
-        for (let step = 0; step <= 12; step++) {
-          const a = dAngle + dashLen * (step / 12);
-          const dx = cx + Math.cos(a) * sunOrbitRx;
-          const dy = cy + Math.sin(a) * sunOrbitRy;
-          step === 0 ? ctx.moveTo(dx, dy) : ctx.lineTo(dx, dy);
-        }
-        ctx.strokeStyle = "rgba(120,255,120,0.95)";
-        ctx.lineWidth = 2.5;
-        ctx.shadowColor = "rgba(0,255,60,1)";
-        ctx.shadowBlur = 18;
-        ctx.stroke();
-      }
-      ctx.restore();
+
 
       // ── Smoky ring around sun orbit ──
       ctx.save();
