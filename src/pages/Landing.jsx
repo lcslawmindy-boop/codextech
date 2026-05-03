@@ -9,12 +9,17 @@ import EnhancedResearchNavBar from "@/components/EnhancedResearchNavBar";
 import ClassifiedMatrixBackground from "@/components/backgrounds/ClassifiedMatrixBackground";
 import ZaraAlienMascot from "@/components/ZaraAlienMascot";
 import ClassifiedEvidenceSection from "@/components/ClassifiedEvidenceSection";
+import LiveActivityTicker from "@/components/LiveActivityTicker";
+import BuildDevicesCatalogue from "@/components/BuildDevicesCatalogue";
+import CourseCatalogue3D from "@/components/CourseCatalogue3D";
+import ConversionFunnel from "@/components/ConversionFunnel";
 
 export default function Landing() {
 
 
   return (
     <div className="min-h-screen relative bg-black" style={{ fontFamily: "'Courier Prime', monospace", letterSpacing: "0.05em" }}>
+      <LiveActivityTicker />
       <ClassifiedMatrixBackground />
       <ZaraAlienMascot />
       
@@ -23,13 +28,22 @@ export default function Landing() {
       {/* Research Navigation Bar */}
       <EnhancedResearchNavBar />
 
-      {/* Content wrapper - offset for sidebar on desktop */}
-      <div className="lg:ml-20">
+      {/* Content wrapper - offset for sidebar on desktop, plus ticker height */}
+      <div className="lg:ml-20 pt-10">
         {/* Trust Signals */}
         <TrustSignals />
 
         {/* Classified Evidence — Patents, POCs, Gov Docs */}
         <ClassifiedEvidenceSection />
+
+        {/* Build Devices Catalogue — 3D cards */}
+        <BuildDevicesCatalogue />
+
+        {/* Course Catalogue — 3D rendered */}
+        <CourseCatalogue3D />
+
+        {/* Conversion Funnel — value path + testimonials + CTA */}
+        <ConversionFunnel />
 
       {/* User Dashboard */}
       <section className="px-6 py-12 border-b border-white/10 solid-section">
