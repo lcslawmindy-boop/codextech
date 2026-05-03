@@ -53,105 +53,7 @@ function project(p, cx, cy, fov, scale) {
   return [cx + p[0] * f * scale, cy + p[1] * f * scale, z];
 }
 
-// Platonic solid vertices & edges
-function tetrahedron() {
-  const s = 1;
-  const v = [
-    [s, s, s], [-s, -s, s], [-s, s, -s], [s, -s, -s]
-  ];
-  const e = [[0,1],[0,2],[0,3],[1,2],[1,3],[2,3]];
-  return { v, e };
-}
-function cube() {
-  const s = 0.8;
-  const v = [
-    [-s,-s,-s],[s,-s,-s],[s,s,-s],[-s,s,-s],
-    [-s,-s, s],[s,-s, s],[s,s, s],[-s,s, s]
-  ];
-  const e = [
-    [0,1],[1,2],[2,3],[3,0],[4,5],[5,6],[6,7],[7,4],
-    [0,4],[1,5],[2,6],[3,7]
-  ];
-  return { v, e };
-}
-function octahedron() {
-  const s = 1;
-  const v = [
-    [s,0,0],[-s,0,0],[0,s,0],[0,-s,0],[0,0,s],[0,0,-s]
-  ];
-  const e = [
-    [0,2],[0,3],[0,4],[0,5],[1,2],[1,3],[1,4],[1,5],
-    [2,4],[2,5],[3,4],[3,5]
-  ];
-  return { v, e };
-}
-function icosahedron() {
-  const t = (1 + Math.sqrt(5)) / 2;
-  const v = [
-    [-1,t,0],[1,t,0],[-1,-t,0],[1,-t,0],
-    [0,-1,t],[0,1,t],[0,-1,-t],[0,1,-t],
-    [t,0,-1],[t,0,1],[-t,0,-1],[-t,0,1]
-  ].map(p => { const l = Math.sqrt(p[0]**2+p[1]**2+p[2]**2); return p.map(c=>c/l); });
-  const e = [
-    [0,11],[0,5],[0,1],[0,7],[0,10],
-    [1,5],[1,9],[1,8],[1,7],
-    [2,3],[2,4],[2,11],[2,6],[2,10],
-    [3,4],[3,9],[3,8],[3,6],
-    [4,5],[4,9],[4,11],
-    [5,11],[6,7],[6,8],[6,10],
-    [7,8],[8,9],[9,5],[10,11]
-  ];
-  return { v, e };
-}
-function dodecahedron() {
-  const phi = (1 + Math.sqrt(5)) / 2;
-  const inv = 1 / phi;
-  const v = [
-    [1,1,1],[1,1,-1],[1,-1,1],[1,-1,-1],
-    [-1,1,1],[-1,1,-1],[-1,-1,1],[-1,-1,-1],
-    [0,inv,phi],[0,inv,-phi],[0,-inv,phi],[0,-inv,-phi],
-    [inv,phi,0],[inv,-phi,0],[-inv,phi,0],[-inv,-phi,0],
-    [phi,0,inv],[phi,0,-inv],[-phi,0,inv],[-phi,0,-inv]
-  ].map(p => { const l = Math.sqrt(p[0]**2+p[1]**2+p[2]**2); return p.map(c=>c/l); });
-  const e = [
-    [0,8],[0,12],[0,16],[1,9],[1,12],[1,17],[2,10],[2,13],[2,16],
-    [3,11],[3,13],[3,17],[4,8],[4,14],[4,18],[5,9],[5,14],[5,19],
-    [6,10],[6,15],[6,18],[7,11],[7,15],[7,19],[8,10],[9,11],
-    [12,14],[13,15],[16,17],[18,19]
-  ];
-  return { v, e };
-}
-function starTetrahedron() {
-  // Stella octangula - compound of two tetrahedra
-  const s = 1;
-  const tet1 = [[s,s,s], [-s,-s,s], [-s,s,-s], [s,-s,-s]];
-  const tet2 = [[-s,-s,-s], [s,s,-s], [s,-s,s], [-s,s,s]];
-  const v = [...tet1, ...tet2].map(p => { const l = Math.sqrt(p[0]**2+p[1]**2+p[2]**2); return p.map(c=>c/l); });
-  const e = [
-    [0,1],[0,2],[0,3],[1,2],[1,3],[2,3],
-    [4,5],[4,6],[4,7],[5,6],[5,7],[6,7],
-    [0,4],[1,5],[2,6],[3,7]
-  ];
-  return { v, e };
-}
-function stellatedStarTetrahedron() {
-  // Star tetrahedron with extended points
-  const s = 1.2;
-  const inner = [[s,s,s], [-s,-s,s], [-s,s,-s], [s,-s,-s]];
-  const outer = [[s,s,s], [-s,-s,s], [-s,s,-s], [s,-s,-s]].map(p => {
-    const l = Math.sqrt(p[0]**2+p[1]**2+p[2]**2);
-    const scale = 1.8 / (l || 1);
-    return [p[0]*scale, p[1]*scale, p[2]*scale];
-  });
-  const v = [...inner, ...outer].map(p => { const l = Math.sqrt(p[0]**2+p[1]**2+p[2]**2); return p.map(c=>c/l); });
-  const e = [
-    [0,1],[0,2],[0,3],[1,2],[1,3],[2,3],
-    [4,5],[4,6],[4,7],[5,6],[5,7],[6,7],
-    [0,4],[1,5],[2,6],[3,7],
-    [0,5],[0,6],[1,4],[1,7],[2,4],[2,7],[3,5],[3,6]
-  ];
-  return { v, e };
-}
+
 
 // Metatron's Cube — Fruit of Life + connecting lines
 function metatronsCube() {
@@ -234,23 +136,7 @@ export default function ZenithApexBackground() {
       drift: (Math.random() - 0.5) * 0.00015,
     }));
 
-    // 5 Platonic solids: Tetrahedron, Cube, Octahedron, Icosahedron, Dodecahedron
-    const solids = [tetrahedron(), cube(), octahedron(), icosahedron(), dodecahedron()];
-    const solidColors = [
-      "rgba(80,200,255,",      // Tetrahedron - cyan
-      "rgba(0,255,150,",       // Cube - green
-      "rgba(255,180,60,",      // Octahedron - orange
-      "rgba(180,100,255,",     // Icosahedron - purple
-      "rgba(255,100,150,",     // Dodecahedron - pink
-    ];
-    // Ordered orbital positions
-     const solidOrbit = [
-       { r: 0.45, speed: 0.40, phase: 0,     scale: 35, tilt: 0.4, yOff: 0.28 },     // Tetrahedron
-       { r: 0.50, speed: 0.30, phase: 1.26,  scale: 32, tilt: 0.8, yOff: 0.32 },     // Cube
-       { r: 0.55, speed: 0.35, phase: 2.52,  scale: 34, tilt: 1.1, yOff: 0.36 },     // Octahedron
-       { r: 0.60, speed: 0.25, phase: 3.78,  scale: 30, tilt: 0.6, yOff: 0.40 },     // Icosahedron
-       { r: 0.52, speed: 0.28, phase: 5.04,  scale: 28, tilt: 1.5, yOff: 0.34 },     // Dodecahedron
-     ];
+
 
     const metCube = metatronsCube();
 
@@ -261,15 +147,7 @@ export default function ZenithApexBackground() {
       const cx = W / 2;
       const cy = H / 2;
 
-      // Get interactive controls if available
-      const controls = window.__zenithControls || { sunSpeedMultiplier: 1, orbitSkew: 0 };
-      const speedMult = controls.sunSpeedMultiplier || 1;
-      const skewAngle = controls.orbitSkew || 0;
 
-      // ── Dual Sun orbit parameters (declare early for all uses) ──
-      const sunAngle = t * 0.6 * speedMult + skewAngle;
-      const sunOrbitRx = Math.min(W, H) * 0.32;
-      const sunOrbitRy = Math.min(W, H) * 0.12;
 
       // ── Stars ──
       for (const s of stars) {
@@ -464,11 +342,10 @@ export default function ZenithApexBackground() {
 
 
 
-      // ── Metatron's Cube (orbiting on same path as sun/solids) ──
+      // ── Metatron's Cube (floating at center) ──
        {
-         const metAngle = t * 0.6 * speedMult + Math.PI; // Opposite side of sun
-         const metX = cx + Math.cos(metAngle) * sunOrbitRx * 0.9;
-         const metY = cy + Math.sin(metAngle) * sunOrbitRy * 0.9;
+         const metX = cx;
+         const metY = cy;
          const metScale = Math.min(W, H) * 0.035;
          const metRot = t * 0.25;
          const metRotX = t * 0.3;
@@ -635,18 +512,6 @@ export default function ZenithApexBackground() {
         }
       }
       
-      // Sun 1 (bright primary)
-      const sunX1 = cx + Math.cos(sunAngle) * sunOrbitRx;
-      const sunY1 = cy + Math.sin(sunAngle) * sunOrbitRy;
-      const sunRadius1 = 32;
-      
-      // Sun 2 (dim secondary, opposite side)
-      const sunX2 = cx + Math.cos(sunAngle + Math.PI) * sunOrbitRx;
-      const sunY2 = cy + Math.sin(sunAngle + Math.PI) * sunOrbitRy;
-      const sunRadius2 = 20;
-
-      // (sun orbit params already declared earlier)
-
       // ── 3D Rotating neon XYZ laser axis (from center) ──
       ctx.save();
       const axisRot = t * 0.5;
@@ -678,91 +543,7 @@ export default function ZenithApexBackground() {
 
 
 
-      // ── Smoky ring around sun orbit ──
-      ctx.save();
-      // Draw a thick, layered smoke/dust torus along the orbit path
-      const smokeSamples = 120;
-      for (let s = 0; s < smokeSamples; s++) {
-        const a = (Math.PI * 2 / smokeSamples) * s;
-        const sx = cx + Math.cos(a) * sunOrbitRx;
-        const sy = cy + Math.sin(a) * sunOrbitRy;
-        const smokeR = 18 + 10 * Math.sin(a * 5 + t * 0.8);
-        const smokeAlpha = 0.04 + 0.03 * Math.sin(a * 3 + t * 1.2);
-        const smGrad = ctx.createRadialGradient(sx, sy, 0, sx, sy, smokeR);
-        smGrad.addColorStop(0, `rgba(255,180,60,${smokeAlpha * 2.5})`);
-        smGrad.addColorStop(0.4, `rgba(255,120,20,${smokeAlpha})`);
-        smGrad.addColorStop(1, "rgba(80,20,0,0)");
-        ctx.beginPath();
-        ctx.arc(sx, sy, smokeR, 0, Math.PI * 2);
-        ctx.fillStyle = smGrad;
-        ctx.fill();
-      }
-      // Extra outer smoke haze
-      for (let s = 0; s < 60; s++) {
-        const a = (Math.PI * 2 / 60) * s + t * 0.05;
-        const sx = cx + Math.cos(a) * sunOrbitRx;
-        const sy = cy + Math.sin(a) * sunOrbitRy;
-        const smokeR = 30 + 14 * Math.sin(a * 7 + t * 0.5);
-        const smGrad = ctx.createRadialGradient(sx, sy, 0, sx, sy, smokeR);
-        smGrad.addColorStop(0, "rgba(255,140,30,0.06)");
-        smGrad.addColorStop(1, "rgba(80,10,0,0)");
-        ctx.beginPath();
-        ctx.arc(sx, sy, smokeR, 0, Math.PI * 2);
-        ctx.fillStyle = smGrad;
-        ctx.fill();
-      }
-      ctx.restore();
 
-      // ── Primary Sun (bright) ──
-      const corona1 = ctx.createRadialGradient(sunX1, sunY1, 0, sunX1, sunY1, sunRadius1 * 7);
-      corona1.addColorStop(0, currentTheme.sunColor1Primary + "0.55)");
-      corona1.addColorStop(0.2, currentTheme.sunColor1Primary + "0.30)");
-      corona1.addColorStop(0.5, currentTheme.sunColor1Mid + "0.12)");
-      corona1.addColorStop(0.8, currentTheme.sunColor1Mid + "0.04)");
-      corona1.addColorStop(1, currentTheme.sunColor1Mid + "0)");
-      ctx.beginPath(); ctx.arc(sunX1, sunY1, sunRadius1 * 7, 0, Math.PI * 2); ctx.fillStyle = corona1; ctx.fill();
-
-      const midGlow1 = ctx.createRadialGradient(sunX1, sunY1, 0, sunX1, sunY1, sunRadius1 * 3);
-      midGlow1.addColorStop(0, currentTheme.sunColor1Primary + "0.85)");
-      midGlow1.addColorStop(0.4, currentTheme.sunColor1Mid + "0.55)");
-      midGlow1.addColorStop(1, currentTheme.sunColor1Mid + "0)");
-      ctx.beginPath(); ctx.arc(sunX1, sunY1, sunRadius1 * 3, 0, Math.PI * 2); ctx.fillStyle = midGlow1; ctx.fill();
-
-      const core1 = ctx.createRadialGradient(sunX1 - 6, sunY1 - 6, 2, sunX1, sunY1, sunRadius1);
-      core1.addColorStop(0, currentTheme.sunColor1Primary + "1)");
-      core1.addColorStop(0.3, currentTheme.sunColor1Primary + "0.9)");
-      core1.addColorStop(0.7, currentTheme.sunColor1Mid + "0.8)");
-      core1.addColorStop(1, currentTheme.sunColor1Mid + "0.95)");
-      ctx.beginPath(); ctx.arc(sunX1, sunY1, sunRadius1, 0, Math.PI * 2); ctx.fillStyle = core1; ctx.fill();
-
-      ctx.save(); ctx.translate(sunX1, sunY1); ctx.rotate(t * 1.8);
-      for (let r = 0; r < 16; r++) {
-        const ra = (Math.PI * 2 / 16) * r;
-        const inn = sunRadius1 + 5;
-        const out = sunRadius1 + 30 + Math.sin(t * 3 + r) * 10;
-        ctx.beginPath();
-        ctx.moveTo(Math.cos(ra) * inn, Math.sin(ra) * inn);
-        ctx.lineTo(Math.cos(ra) * out, Math.sin(ra) * out);
-        ctx.strokeStyle = `rgba(255,220,60,0.7)`;
-        ctx.lineWidth = 3;
-        ctx.shadowColor = "rgba(255,200,0,1)";
-        ctx.shadowBlur = 10;
-        ctx.stroke();
-      }
-      ctx.restore();
-
-      // ── Secondary Sun (dim) ──
-      const corona2 = ctx.createRadialGradient(sunX2, sunY2, 0, sunX2, sunY2, sunRadius2 * 6);
-      corona2.addColorStop(0, currentTheme.sunColor2Primary + "0.3)");
-      corona2.addColorStop(0.5, currentTheme.sunColor2Primary + "0.08)");
-      corona2.addColorStop(1, currentTheme.sunColor2Primary + "0)");
-      ctx.beginPath(); ctx.arc(sunX2, sunY2, sunRadius2 * 6, 0, Math.PI * 2); ctx.fillStyle = corona2; ctx.fill();
-
-      const core2 = ctx.createRadialGradient(sunX2 - 4, sunY2 - 4, 1, sunX2, sunY2, sunRadius2);
-      core2.addColorStop(0, currentTheme.sunColor2Primary + "0.8)");
-      core2.addColorStop(0.5, currentTheme.sunColor2Primary + "0.6)");
-      core2.addColorStop(1, currentTheme.sunColor2Primary + "0.4)");
-      ctx.beginPath(); ctx.arc(sunX2, sunY2, sunRadius2, 0, Math.PI * 2); ctx.fillStyle = core2; ctx.fill();
 
 
 
