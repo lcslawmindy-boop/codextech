@@ -13,6 +13,7 @@ import LiveActivityTicker from "@/components/LiveActivityTicker";
 import BuildDevicesCatalogue from "@/components/BuildDevicesCatalogue";
 import CourseCatalogue3D from "@/components/CourseCatalogue3D";
 import ConversionFunnel from "@/components/ConversionFunnel";
+import DeclassifiedPatents from "@/components/DeclassifiedPatents";
 
 export default function Landing() {
 
@@ -32,6 +33,9 @@ export default function Landing() {
       <div className="lg:ml-20 pt-16">
         {/* Trust Signals */}
         <TrustSignals />
+
+        {/* TOP 3 Declassified Patents — Men in Black manila folder style */}
+        <DeclassifiedPatents />
 
         {/* Classified Evidence — Patents, POCs, Gov Docs */}
         <ClassifiedEvidenceSection />
