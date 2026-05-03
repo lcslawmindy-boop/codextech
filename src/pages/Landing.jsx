@@ -20,8 +20,15 @@ import ZaraAlienMascot from "@/components/ZaraAlienMascot";
 export default function Landing() {
   return (
     <div
-      className="min-h-screen relative bg-black"
-      style={{ fontFamily: "'Share Tech Mono', monospace", letterSpacing: "0.04em" }}
+      className="min-h-screen relative"
+      style={{
+        fontFamily: "'Share Tech Mono', monospace",
+        letterSpacing: "0.04em",
+        backgroundImage: "url('https://media.base44.com/images/public/69ccefebfea78b23498c66a8/311240c02_solomon-temple-inner.jpg')",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundAttachment: "fixed",
+      }}
     >
       <LiveActivityTicker />
 
