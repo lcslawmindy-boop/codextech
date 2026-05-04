@@ -309,8 +309,9 @@ export default function ZaraAlienMascot() {
       const reply = typeof res === 'string' ? res : (res?.text || res?.content || "Hmm, my circuits are tingling but the words aren't coming out. Try asking me again? 💜");
       setMessages(prev => [...prev, { role: 'zara', content: reply }]);
       speak(reply);
-    } catch {
-      const fallback = "My neural net just hiccuped. Very unladylike. Try again? 🤖💜";
+    } catch (error) {
+      // Gracefully handle auth or other errors
+      const fallback = "My neural net just hiccuped. Very unladylike. Try one of the quick actions instead? 🤖💜";
       setMessages(prev => [...prev, { role: 'zara', content: fallback }]);
       speak(fallback);
     }
