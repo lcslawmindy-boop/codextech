@@ -64,6 +64,23 @@ export default function AutismBed3DVisualization() {
     containerRef.current.appendChild(renderer.domElement);
     rendererRef.current = renderer;
 
+    // ── Load and add Aurawell logo ──
+    const textureLoader = new THREE.TextureLoader();
+    let logoMesh;
+    
+    textureLoader.load('https://media.base44.com/images/public/69ccefebfea78b23498c66a8/26b54a91b_Aurawell10.png', (texture) => {
+      const logoGeometry = new THREE.PlaneGeometry(2.5, 1.2);
+      const logoMaterial = new THREE.MeshBasicMaterial({ 
+        map: texture, 
+        transparent: true,
+        side: THREE.DoubleSide 
+      });
+      logoMesh = new THREE.Mesh(logoGeometry, logoMaterial);
+      logoMesh.position.set(0, 0.5, -2.5);
+      logoMesh.rotation.z = 0;
+      scene.add(logoMesh);
+    });
+
     // ── Build the Bed ──
     const bedGroup = new THREE.Group();
 
@@ -188,6 +205,11 @@ export default function AutismBed3DVisualization() {
 
       if (isAutoRotate) {
         bedGroup.rotation.y += 0.002;
+      }
+
+      // Rotate Aurawell logo
+      if (logoMesh) {
+        logoMesh.rotation.z += 0.008;
       }
 
       // Pulsing glow on dome
