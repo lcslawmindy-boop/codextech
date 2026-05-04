@@ -16,20 +16,15 @@ import UserDashboardSection from "@/components/UserDashboardSection";
 import { Link } from "react-router-dom";
 import { Percent } from "lucide-react";
 import ZaraAlienMascot from "@/components/ZaraAlienMascot";
+import LibraryBackground from "@/components/backgrounds/LibraryBackground";
 
 export default function Landing() {
   return (
     <div
       className="min-h-screen relative"
-      style={{
-        fontFamily: "'Share Tech Mono', monospace",
-        letterSpacing: "0.04em",
-        backgroundImage: "url('https://media.base44.com/images/public/69ccefebfea78b23498c66a8/f3795dd20_a8838d6e6380e3cc2ddff672d7c0883b-Copy-Copy.jpg')",
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-        backgroundAttachment: "fixed",
-      }}
+      style={{ fontFamily: "'Share Tech Mono', monospace", letterSpacing: "0.04em" }}
     >
+      <LibraryBackground />
       <LiveActivityTicker />
 
       <ZaraAlienMascot />
