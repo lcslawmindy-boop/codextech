@@ -572,26 +572,7 @@ export default function LibraryBackground() {
       
 
       
-      // Platonic solids orbiting with sacred geometry
-      const geometryOrbitRadius = 220;
-      const platonic1Angle = timeRef.current * 0.005;
-      const platonic2Angle = timeRef.current * 0.006 + Math.PI * 0.66;
-      const platonic3Angle = timeRef.current * 0.0045 + Math.PI * 1.33;
-      
-      // Tetrahedron (royal indigo)
-      drawOrbitingTetrahedron(ctx, centerX, centerY, geometryOrbitRadius, platonic1Angle, timeRef.current, '#6C3AFF');
-      
-      // Cube (fluorescent blue)
-      drawOrbitingCube(ctx, centerX, centerY, geometryOrbitRadius, platonic2Angle, timeRef.current, '#00AAFF');
-      
-      // Octahedron (light cyan)
-      drawOrbitingOctahedron(ctx, centerX, centerY, geometryOrbitRadius, platonic3Angle, timeRef.current, '#00FFFF');
-      
-      // Flower of Life orbiting
-      drawFlowerOfLife(ctx, centerX + Math.cos(timeRef.current * 0.004) * 300, centerY + Math.sin(timeRef.current * 0.004) * 300, 35, timeRef.current, '#00FFFF');
-      
-      // Metatron's Cube orbiting
-      drawMetatronsCube(ctx, centerX + Math.cos(timeRef.current * 0.0035 + Math.PI) * 320, centerY + Math.sin(timeRef.current * 0.0035 + Math.PI) * 320, 40, timeRef.current, '#6C3AFF');
+
       
       ctx.globalAlpha = 1;
 requestAnimationFrame(animateMatrix);
