@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 
-const MATRIX_CHARS = "ｦｧｨｩｪｫｬｭｮｯﾀﾁﾂﾃﾄﾅﾆﾇﾈﾉﾊﾋﾌﾍﾎﾏﾐﾑﾒﾓﾔﾕﾗﾘﾜﾝ0123456789";
+const MATRIX_CHARS = "ｦｧｨｩｪｫｬｭｮｯﾀﾁﾂﾃﾄﾅﾆﾇﾈﾉﾊﾋﾌﾍﾎﾏﾐﾑﾒﾓﾔﾕﾗﾘﾜﾝ0123456789☆✦✧◇◈◆★✪✫✬✭✮✯✡♦♣♠♥☯☸☹☺☻♻∞§¶†‡※⁂⁎⁺⁻⁼⁄∀∃∅∇∈∉∋∎∏∐∑−∗√∛∜∝∞∠∧∨∩∪∫∴∵∶∷≈≠≡≤≥⊂⊃⊄⊥";
 
 const LIBRARY_IMAGES = [
   "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/879bbe3f2_generated_image.png",
@@ -70,17 +70,19 @@ export default function LibraryBackground() {
     const drops = new Array(cols).fill(1);
 
     const animateMatrix = () => {
-      ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+      ctx.fillStyle = "rgba(0, 0, 0, 0.08)";
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      ctx.fillStyle = "#00ff99";
-      ctx.font = `${fontSize}px monospace`;
+      ctx.fillStyle = "#ffffff";
+      ctx.shadowColor = "rgba(255, 255, 255, 0.8)";
+      ctx.shadowBlur = 12;
+      ctx.font = `bold ${fontSize}px monospace`;
 
       for (let i = 0; i < drops.length; i++) {
         const text = MATRIX_CHARS[Math.floor(Math.random() * MATRIX_CHARS.length)];
         ctx.fillText(text, i * fontSize, drops[i] * fontSize);
 
-        if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+        if (drops[i] * fontSize > canvas.height && Math.random() > 0.97) {
           drops[i] = 0;
         }
         drops[i]++;
@@ -144,8 +146,9 @@ export default function LibraryBackground() {
         style={{
           position: "absolute",
           inset: 0,
-          opacity: 0.15,
+          opacity: 0.45,
           pointerEvents: "none",
+          mixBlendMode: "screen",
         }}
       />
 
@@ -154,10 +157,23 @@ export default function LibraryBackground() {
         style={{
           position: "absolute",
           inset: 0,
-          background: "radial-gradient(ellipse at center, rgba(0,220,255,0.4) 0%, transparent 70%)",
-          animation: "electricalSurge 2.5s ease-in-out infinite",
+          background: "radial-gradient(ellipse at center, rgba(255,255,255,0.5) 0%, transparent 60%)",
+          animation: "electricalSurge 1.8s ease-in-out infinite",
           pointerEvents: "none",
           mixBlendMode: "screen",
+        }}
+      />
+
+      {/* Secondary electrical pulse */}
+      <div
+        style={{
+          position: "absolute",
+          inset: 0,
+          background: "radial-gradient(ellipse at 30% 40%, rgba(255,255,255,0.4) 0%, transparent 50%)",
+          animation: "electricalSurge 2.2s ease-in-out infinite",
+          pointerEvents: "none",
+          mixBlendMode: "screen",
+          animationDelay: "0.6s",
         }}
       />
 
