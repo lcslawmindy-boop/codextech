@@ -204,10 +204,6 @@ export default function LibraryBackground() {
       ctx.restore();
       
       // Draw large realistic clock in center with twilight zone flashing
-      const now = new Date();
-      const hours = now.getHours() % 12;
-      const minutes = now.getMinutes();
-      const seconds = now.getSeconds() + time / 1000;
       const clockRadius = 70;
       
       // Twilight zone flash effect (rapid pulse)
@@ -251,8 +247,8 @@ export default function LibraryBackground() {
       ctx.fillText("6", centerX, centerY + clockRadius - 20);
       ctx.fillText("9", centerX - clockRadius + 20, centerY);
       
-      // Hour hand (thick, short)
-      const hourAngle = ((hours + minutes / 60) * Math.PI) / 6 - Math.PI / 2;
+      // Hour hand - spinning continuously
+      const hourAngle = time * 0.0001 - Math.PI / 2;
       ctx.strokeStyle = `rgba(255, 100, 0, ${0.95 * flashPulse})`;
       ctx.lineWidth = 5;
       ctx.lineCap = "round";
@@ -261,8 +257,8 @@ export default function LibraryBackground() {
       ctx.lineTo(centerX + Math.cos(hourAngle) * clockRadius * 0.45, centerY + Math.sin(hourAngle) * clockRadius * 0.45);
       ctx.stroke();
       
-      // Minute hand (medium, longer)
-      const minuteAngle = ((minutes + seconds / 60) * Math.PI) / 30 - Math.PI / 2;
+      // Minute hand - spinning continuously (faster)
+      const minuteAngle = time * 0.002 - Math.PI / 2;
       ctx.strokeStyle = `rgba(150, 50, 255, ${0.95 * flashPulse})`;
       ctx.lineWidth = 3;
       ctx.beginPath();
@@ -270,8 +266,8 @@ export default function LibraryBackground() {
       ctx.lineTo(centerX + Math.cos(minuteAngle) * clockRadius * 0.65, centerY + Math.sin(minuteAngle) * clockRadius * 0.65);
       ctx.stroke();
       
-      // Second hand (thin, very long)
-      const secondAngle = (seconds * Math.PI) / 30 - Math.PI / 2;
+      // Second hand - spinning continuously (fastest)
+      const secondAngle = time * 0.01 - Math.PI / 2;
       ctx.strokeStyle = `rgba(100, 255, 150, ${0.8 * flashPulse})`;
       ctx.lineWidth = 1;
       ctx.beginPath();
