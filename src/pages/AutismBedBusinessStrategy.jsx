@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { BarChart, Bar, LineChart, Line, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { Download, FileText, TrendingUp, Users, DollarSign, Target } from 'lucide-react';
-import LibraryBackground from '@/components/backgrounds/LibraryBackground';
 import jsPDF from 'jspdf';
 
 const ROI_DATA = [
@@ -82,9 +81,8 @@ export default function AutismBedBusinessStrategy() {
   };
 
   return (
-    <div className="min-h-screen relative" style={{ fontFamily: "'Share Tech Mono', monospace" }}>
-      <LibraryBackground />
-      <div className="relative z-10">
+    <div className="min-h-screen bg-gray-950 relative" style={{ fontFamily: "'Share Tech Mono', monospace" }}>
+      <div>
         {/* Header */}
         <div className="border-b border-white/10 bg-black/60 backdrop-blur px-6 py-6">
           <div className="max-w-6xl mx-auto flex items-center justify-between flex-wrap gap-4">
