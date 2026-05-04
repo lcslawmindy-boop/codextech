@@ -235,8 +235,14 @@ export default function ZaraAlienMascot() {
           border: '2px solid #4400ff',
           boxShadow: '0 0 40px rgba(68,0,255,0.7), 0 0 80px rgba(0,100,255,0.4)',
           background: '#000',
+          position: 'relative',
         }}
       >
+        {/* Full-card Matrix Rain — behind everything */}
+        <div style={{ position: 'absolute', inset: 0, zIndex: 0 }}>
+          <MatrixRain width={360} height={showPrompts ? 620 : 440} />
+        </div>
+
         {/* Close */}
         <button
           onClick={() => setIsOpen(false)}
@@ -247,12 +253,12 @@ export default function ZaraAlienMascot() {
         </button>
 
         {/* Drag handle */}
-        <div className="flex justify-center pt-2 cursor-grab active:cursor-grabbing">
+        <div className="flex justify-center pt-2 cursor-grab active:cursor-grabbing" style={{ position: 'relative', zIndex: 2 }}>
           <div className="w-10 h-1 rounded-full" style={{ background: '#4400ff', opacity: 0.8 }} />
         </div>
 
         {/* Portrait */}
-        <div className="flex flex-col items-center pt-4 pb-4 px-5" style={{ background: 'rgba(0,0,20,0.95)' }}>
+        <div className="flex flex-col items-center pt-4 pb-4 px-5" style={{ position: 'relative', zIndex: 2 }}>
           <LightningAvatar />
           <h3 className="font-black text-xl tracking-widest mt-3 mb-0.5" style={{ color: '#88aaff', textShadow: '0 0 16px #4400ff, 0 0 30px #0088ff' }}>
             ZARA 👁️
@@ -277,10 +283,8 @@ export default function ZaraAlienMascot() {
           </button>
         </div>
 
-        {/* Body — Matrix rain background */}
-        <div style={{ position: 'relative', background: '#000' }}>
-          <MatrixRain width={360} height={showPrompts ? 260 : 80} />
-
+        {/* Body content */}
+        <div style={{ position: 'relative', zIndex: 2 }}>
           {/* Content over matrix */}
           <div style={{ position: 'relative', zIndex: 2, padding: '16px 20px 20px' }}>
             {/* Welcome */}
