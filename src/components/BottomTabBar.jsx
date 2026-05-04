@@ -1,30 +1,55 @@
 import { Link, useLocation } from "react-router-dom";
-import { Vault, Wrench, Zap } from "lucide-react";
+import { BookOpen, Wrench, Zap, LayoutDashboard, Home } from "lucide-react";
+import { useAuth } from "@/lib/AuthContext";
 
-const TABS = [
+const PUBLIC_TABS = [
   {
-    label: "Vault",
-    path: "/free-vault",
-    icon: Vault,
-    match: (p) => ["/free-vault", "/", "/vault", "/prior-art", "/invention-library", "/courses", "/my-learning"].includes(p),
+    label: "Home",
+    path: "/codextech",
+    icon: Home,
+    match: (p) => p === "/codextech" || p === "/",
   },
   {
-    label: "Builds",
-    path: "/invention-plans",
-    icon: Wrench,
-    match: (p) => ["/invention-plans", "/inventor-forge", "/build-supplies-shop", "/download-center", "/scalar-lab", "/lab"].includes(p),
+    label: "Research",
+    path: "/codextech-database",
+    icon: BookOpen,
+    match: (p) => p === "/codextech-database",
   },
   {
     label: "Upgrade",
-    path: "/paywall",
+    path: "/codextech-pricing",
     icon: Zap,
-    match: (p) => ["/paywall", "/pricing", "/checkout"].includes(p),
+    match: (p) => p === "/codextech-pricing",
     highlight: true,
+  },
+];
+
+const MEMBER_TABS = [
+  {
+    label: "Dashboard",
+    path: "/dashboard",
+    icon: LayoutDashboard,
+    match: (p) => p === "/dashboard" || p === "/member-dashboard",
+  },
+  {
+    label: "Research",
+    path: "/codextech-database",
+    icon: BookOpen,
+    match: (p) => p === "/codextech-database",
+  },
+  {
+    label: "Builds",
+    path: "/build-plans",
+    icon: Wrench,
+    match: (p) => p === "/build-plans",
   },
 ];
 
 export default function BottomTabBar() {
   const { pathname } = useLocation();
+  const { isAuthenticated } = useAuth();
+
+  const TABS = isAuthenticated ? MEMBER_TABS : PUBLIC_TABS;
 
   return (
     <div

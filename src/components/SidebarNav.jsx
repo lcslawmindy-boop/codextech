@@ -1,22 +1,29 @@
-import { Menu, X, BookOpen, Zap, Lightbulb, ShoppingCart, Gavel } from 'lucide-react';
+import { Menu, X, BookOpen, Zap, Wrench, Shield, Home, DollarSign, LayoutDashboard, User, LogIn } from 'lucide-react';
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import { useAuth } from '@/lib/AuthContext';
 
+const PUBLIC_NAV = [
+  { label: 'Home', path: '/codextech', icon: <Home size={18} /> },
+  { label: 'Research', path: '/codextech-database', icon: <BookOpen size={18} /> },
+  { label: 'Pricing', path: '/codextech-pricing', icon: <DollarSign size={18} /> },
+  { label: 'Login', path: '/login', icon: <LogIn size={18} /> },
+];
+
+const MEMBER_NAV = [
+  { label: 'Dashboard', path: '/dashboard', icon: <LayoutDashboard size={18} /> },
+  { label: 'Research', path: '/codextech-database', icon: <BookOpen size={18} /> },
+  { label: 'Build Plans', path: '/build-plans', icon: <Wrench size={18} /> },
+  { label: 'Patent Intelligence', path: '/patent-intelligence', icon: <Shield size={18} /> },
+  { label: 'Account', path: '/account', icon: <User size={18} /> },
+];
 
 export default function SidebarNav() {
   const [open, setOpen] = useState(false);
   const location = useLocation();
+  const { isAuthenticated } = useAuth();
 
-  const navItems = [
-    { label: 'Home', path: '/', icon: <Zap size={18} /> },
-    { label: 'Archive', path: '/free-vault', icon: <BookOpen size={18} /> },
-    { label: 'Courses', path: '/courses', icon: <Lightbulb size={18} /> },
-    { label: 'Build Plans', path: '/invention-plans', icon: <ShoppingCart size={18} /> },
-    { label: 'Patents', path: '/patent-attorney-chat', icon: <Gavel size={18} /> },
-    { label: 'Marketplace', path: '/ip-marketplace', icon: <Zap size={18} /> },
-    { label: 'Pricing', path: '/pricing', icon: <Lightbulb size={18} /> },
-  ];
-
+  const navItems = isAuthenticated ? MEMBER_NAV : PUBLIC_NAV;
   const isActive = (path) => location.pathname === path;
 
   return (
@@ -38,7 +45,7 @@ export default function SidebarNav() {
       >
         {/* Logo Section */}
         <div className="p-4 border-b border-gray-700">
-          <Link to="/" className="flex items-center gap-2">
+          <Link to="/codextech" className="flex items-center gap-2" onClick={() => setOpen(false)}>
             <img
               src="https://media.base44.com/images/public/69ccefebfea78b23498c66a8/bcf3bcb42_df887ac44_logo.png"
               alt="ZAT"
@@ -69,8 +76,6 @@ export default function SidebarNav() {
             </Link>
           ))}
         </nav>
-
-
       </div>
 
       {/* Mobile Overlay */}
