@@ -86,7 +86,7 @@ export default function LibraryBackground() {
       x: Math.random() * canvas.width,
       y: Math.random() * canvas.height - canvas.height,
       speed: Math.random() * 1.5 + 1,
-      color: ['#00ffff', '#ff00ff', '#00ff99', '#ffff00', '#ff0099'][Math.floor(Math.random() * 5)],
+      color: ['#4d4dff', '#ffffff', '#ffff00', '#ff8800', '#ff0000'][Math.floor(Math.random() * 5)],
     }));
 
     let time = 0;
@@ -148,13 +148,65 @@ export default function LibraryBackground() {
 
         ctx.fillStyle = stream.color;
         ctx.shadowColor = stream.color;
-        ctx.shadowBlur = 12;
+        ctx.shadowBlur = 16;
         ctx.font = `bold 12px monospace`;
         for (let i = 0; i < 8; i++) {
           const binary = Math.random() > 0.5 ? '1' : '0';
           ctx.fillText(binary, stream.x, stream.y + i * 16);
         }
       });
+
+      // Draw Metatron Cube (swirling from center)
+      const centerX = canvas.width / 2;
+      const centerY = canvas.height / 2;
+      const scale = 80 + Math.sin(time * 0.02) * 40;
+      const rotation = time * 0.003;
+      
+      ctx.save();
+      ctx.translate(centerX, centerY);
+      ctx.rotate(rotation);
+      
+      // Golden ratio proportions for Metatron
+      const phi = 1.618;
+      const baseSize = scale;
+      
+      // Draw outer hexagon
+      ctx.strokeStyle = `rgba(255, 215, 0, ${0.3 + Math.sin(time * 0.015) * 0.15})`;
+      ctx.lineWidth = 2;
+      ctx.globalAlpha = 0.4 + Math.sin(time * 0.015) * 0.2;
+      
+      for (let i = 0; i < 6; i++) {
+        const angle = (i * Math.PI * 2) / 6;
+        const x = Math.cos(angle) * baseSize;
+        const y = Math.sin(angle) * baseSize;
+        if (i === 0) ctx.beginPath();
+        if (i === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      }
+      ctx.closePath();
+      ctx.stroke();
+      
+      // Draw inner circles and connecting lines
+      for (let r = 1; r < 4; r++) {
+        ctx.beginPath();
+        ctx.arc(0, 0, (baseSize / phi) * r, 0, Math.PI * 2);
+        ctx.strokeStyle = `rgba(255, 215, 0, ${0.25 + Math.sin(time * 0.02 + r) * 0.12})`;
+        ctx.stroke();
+      }
+      
+      // Draw radiating lines
+      for (let i = 0; i < 12; i++) {
+        const angle = (i * Math.PI) / 6;
+        ctx.beginPath();
+        ctx.moveTo(0, 0);
+        ctx.lineTo(Math.cos(angle) * baseSize * 1.2, Math.sin(angle) * baseSize * 1.2);
+        ctx.strokeStyle = `rgba(255, 215, 0, ${0.2 + Math.sin(time * 0.025 + i) * 0.1})`;
+        ctx.lineWidth = 1;
+        ctx.stroke();
+      }
+      
+      ctx.restore();
+      ctx.globalAlpha = 1;
 
       time++;
       requestAnimationFrame(animateMatrix);
