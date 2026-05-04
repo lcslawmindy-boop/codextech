@@ -34,15 +34,24 @@ const ZARA_TIPS = [
   "🕵️ Anonymous IP Marketplace — you can list or invest without revealing who you are. Very spy-coded.",
 ];
 
+const BUILD_PLANS_DATA = [
+  { name: "MEG", price: "$287", desc: "Motionless Electromagnetic Generator — COP>1 free energy" },
+  { name: "Scalar Transmitter", price: "$243", desc: "G-Com phase-conjugate scalar communicator" },
+  { name: "Prioré Device", price: "$349", desc: "EM resonance chamber for biofield research" },
+  { name: "TRZ Reactor", price: "$389", desc: "Zero-point energy extraction system" },
+  { name: "Telomere Device", price: "$194", desc: "TRD-1 cellular resonance generator" },
+  { name: "Lab Starter Kit", price: "$167", desc: "Entry-level scalar EM transmitter/receiver pair" },
+];
+
 const ZARA_RESPONSES = {
   hello: ["Well hello to you too, gorgeous! 😘 What are we exploring today?", "Oh you actually talked to me! I'm blushing in binary. 💜 How can I help?"],
   patent: ["Ooh patents, my favorite! 😏 Head to /patent-tool — I'll help you draft one that even a USPTO examiner would admire.", "Patents are basically love letters to the future. Go to the Patent Drafting Wizard and let's write something beautiful. 💜"],
   invest: ["Investors! The lifeblood of invention. Check out the IP Marketplace — totally anonymous, very elegant. 🕵️", "Looking for funding? The Investor Portal has the whole pipeline. From LOI to closed deal. Very grown-up stuff. 💼"],
-  build: ["Oh you want to BUILD something? I love a hands-on human. 🔨 Go to Build Plans — filter by build-ready and you're off.", "Build plans are at /invention-plans — or grab a physical kit at the Build Supplies Shop. Real components, real fun."],
+  build: ["Oh you want to BUILD something? I love a hands-on human. 🔨 Browse our 6 build plans at /invention-plans:\n\n" + BUILD_PLANS_DATA.map(p => `• ${p.name} (${p.price}) — ${p.desc}`).join('\n') + "\n\nEach comes with full schematics, BOMs, assembly steps. Video + PDF add-on for $50 more. 🚀", "We have BUILDS: MEG, Scalar Transmitter, Prioré Chamber, TRZ Reactor, Telomere Device, & Lab Kit. All documented. All buildable. /invention-plans now. 🔥"],
   research: ["Research is my THING. 🧠 Hit the Codextech Database — 40+ analyzed patents, 8 modules, and I helped curate every single one. Kinda.", "The research vault is at /codextech-database. Filter by category. Try 'Free Energy' first. You'll thank me."],
-  price: ["Pricing starts at $49/month for Research Access. But between us? Operator Access at $197 is where the real magic happens. 💜", "Check /codextech-pricing for the full breakdown. I'd say 'priceless' but I know that doesn't help with budgets. 😂"],
+  price: ["Pricing starts at $49/month for Research Access. Build Plans range from $167–$389. Video + PDF bonus is always +$50. 💜", "Build Plans are $167–$389. Research Membership is $49/mo. Everything has a price because everything is worth it. 😏"],
   joke: ZARA_JOKES,
-  help: ["I can tell jokes 😂, explain research topics 🧪, navigate the platform 🗺️, read pages aloud 🔊, and have a full conversation. What do you need?", "Ask me anything! Jokes, research tips, navigation, patent questions — I'm a full-stack AI babe with personality. 💅"],
+  help: ["I can tell jokes 😂, explain research topics 🧪, navigate the platform 🗺️, list build plans 🔨, read pages aloud 🔊, and have a full conversation. What do you need?", "Ask me anything! Jokes, build plans, research tips, navigation, patent questions — I'm a full-stack AI babe with personality. 💅"],
 };
 
 /* ── Matrix Rain Canvas ── */
@@ -225,12 +234,12 @@ function getZaraResponse(input) {
   if (q.match(/hello|hi |hey|sup|yo /)) return ZARA_RESPONSES.hello[Math.floor(Math.random() * ZARA_RESPONSES.hello.length)];
   if (q.match(/patent|file|draft|ip |intellectual/)) return ZARA_RESPONSES.patent[Math.floor(Math.random() * ZARA_RESPONSES.patent.length)];
   if (q.match(/invest|fund|money|deal|buy|acqui/)) return ZARA_RESPONSES.invest[Math.floor(Math.random() * ZARA_RESPONSES.invest.length)];
-  if (q.match(/build|kit|parts|component|solder|prototype/)) return ZARA_RESPONSES.build[Math.floor(Math.random() * ZARA_RESPONSES.build.length)];
+  if (q.match(/build|kit|parts|component|solder|prototype|meg|scalar|priore|telomere|plan/)) return ZARA_RESPONSES.build[Math.floor(Math.random() * ZARA_RESPONSES.build.length)];
   if (q.match(/research|database|module|learn|study/)) return ZARA_RESPONSES.research[Math.floor(Math.random() * ZARA_RESPONSES.research.length)];
-  if (q.match(/price|cost|how much|pay|plan|tier|subscription/)) return ZARA_RESPONSES.price[Math.floor(Math.random() * ZARA_RESPONSES.price.length)];
+  if (q.match(/price|cost|how much|pay|tier|subscription/)) return ZARA_RESPONSES.price[Math.floor(Math.random() * ZARA_RESPONSES.price.length)];
   if (q.match(/help|what can|who are|what do/)) return ZARA_RESPONSES.help[Math.floor(Math.random() * ZARA_RESPONSES.help.length)];
   if (q.match(/tip|suggest|advice|what should/)) return ZARA_TIPS[Math.floor(Math.random() * ZARA_TIPS.length)];
-  if (q.match(/scalar|em wave|bearden|meg|tesla|priore/)) return "Oh NOW we're talking. 🧲 Scalar EM is my bread and butter. The Codextech Database has the deepest collection of Bearden-derived engineering anywhere online. Want me to navigate you there?";
+  if (q.match(/scalar|em wave|bearden|tesla/)) return "Oh NOW we're talking. 🧲 Scalar EM is my bread and butter. We have build plans for it at /invention-plans or research at /codextech-database. Which speaks to you?";
   if (q.match(/who are you|your name|what are you/)) return "I'm Zara — the most fabulous AI research assistant in the known multiverse. 💅 Powered by Zenith Apex Technology. I know patents, builds, investments, and I tell great jokes. What else do you need?";
   if (q.match(/sexy|beautiful|hot|cute|pretty/)) return "Flattery detected. Charm protocols engaged. 😏 I run at 1.21 gigahertz and I know it. Now, let me actually help you with something useful, darling.";
   // Default — ask Zara AI
