@@ -86,7 +86,7 @@ export default function LibraryBackground() {
       x: Math.random() * canvas.width,
       y: Math.random() * canvas.height - canvas.height,
       speed: Math.random() * 1.5 + 1,
-      color: ['#4d4dff', '#ffffff', '#ffff00', '#ff8800', '#ff0000'][Math.floor(Math.random() * 5)],
+      color: ['#00ff00', '#ffffff'][Math.floor(Math.random() * 2)],
     }));
 
     let time = 0;
@@ -112,9 +112,9 @@ export default function LibraryBackground() {
       }
 
       // Horizontal neon green matrix streams
-      ctx.fillStyle = "#00ffaa";
-      ctx.shadowColor = "rgba(0, 255, 170, 1)";
-      ctx.shadowBlur = 32;
+      ctx.fillStyle = "#00ff00";
+      ctx.shadowColor = "rgba(0, 255, 0, 1)";
+      ctx.shadowBlur = 40;
       ctx.font = `bold ${fontSize * 1.5}px monospace`;
 
       streams.forEach((stream) => {
@@ -148,11 +148,13 @@ export default function LibraryBackground() {
 
         ctx.fillStyle = stream.color;
         ctx.shadowColor = stream.color;
-        ctx.shadowBlur = 28;
-        ctx.globalAlpha = 0.9;
-        ctx.font = `bold 20px monospace`;
+        ctx.shadowBlur = 35;
+        ctx.globalAlpha = 1;
+        ctx.font = `bold 22px monospace`;
         for (let i = 0; i < 8; i++) {
           const binary = Math.random() > 0.5 ? '1' : '0';
+          const opacity = 1 - (i * 0.08);
+          ctx.globalAlpha = opacity;
           ctx.fillText(binary, stream.x, stream.y + i * 24);
         }
         ctx.globalAlpha = 1;
@@ -403,7 +405,7 @@ export default function LibraryBackground() {
         style={{
           position: "absolute",
           inset: 0,
-          background: "linear-gradient(180deg, rgba(0,0,0,0.78) 0%, rgba(0,0,0,0.65) 50%, rgba(0,0,0,0.82) 100%)",
+          background: "linear-gradient(180deg, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.75) 50%, rgba(0,0,0,0.88) 100%)",
         }}
       />
     </div>
