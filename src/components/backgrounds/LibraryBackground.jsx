@@ -288,6 +288,30 @@ const CONSCIOUSNESS_IMAGES = [
   { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/979ebd292_047.jpg", depth: 0.7, scale: 1.1, angle: 1.3 }, // Diagram 047
   { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/2f8f1a247_050.jpg", depth: 0.5, scale: 0.95, angle: 1.8 }, // Diagram 050
   { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/d2498cd9d_051.jpg", depth: 0.9, scale: 1.3, angle: 2.3 }, // Diagram 051
+  { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/34205452b_efv_po2.jpg", depth: 0.8, scale: 1.2, angle: 0.1, speed: 8 }, // EFV Po2
+  { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/ecf00e22c_frontcover280w.jpg", depth: 0.6, scale: 0.9, angle: 0.6, speed: 8 }, // Energy Vacuum Cover
+  { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/ba362bda7_cover2dvd.jpg", depth: 0.7, scale: 1.1, angle: 1.1, speed: 8 }, // DVD Cover
+  { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/53764ae19_coverback.jpg", depth: 0.5, scale: 0.95, angle: 1.6, speed: 8 }, // Cover Back
+  { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/82296d5ed_f24.jpg", depth: 0.9, scale: 1.3, angle: 2.1, speed: 8 }, // Fig24
+  { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/91086aaf9_f25a.jpg", depth: 0.65, scale: 1.0, angle: 2.6, speed: 8 }, // Fig25a
+  { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/693f15de8_f25b.jpg", depth: 0.4, scale: 0.85, angle: 3.1, speed: 8 }, // Fig25b
+  { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/60d01d14d_f25c.jpg", depth: 0.75, scale: 1.15, angle: 3.6, speed: 8 }, // Fig25c
+  { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/a2821583f_fig3.jpg", depth: 0.8, scale: 1.2, angle: 0.2, speed: 8 }, // Fig3
+  { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/b5e1fa65d_fig4.jpg", depth: 0.6, scale: 0.9, angle: 0.7, speed: 8 }, // Fig4
+  { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/7f2c02099_fig4a.jpg", depth: 0.7, scale: 1.1, angle: 1.2, speed: 8 }, // Fig4a
+  { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/6283ae595_fig5.jpg", depth: 0.5, scale: 0.95, angle: 1.7, speed: 8 }, // Fig5
+  { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/2753d2359_fig6.jpg", depth: 0.9, scale: 1.3, angle: 2.2, speed: 8 }, // Fig6
+  { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/31c9bf2fb_fig7.jpg", depth: 0.65, scale: 1.0, angle: 2.7, speed: 8 }, // Fig7
+  { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/92a2a7e57_fig8a.jpg", depth: 0.4, scale: 0.85, angle: 3.2, speed: 8 }, // Fig8a
+  { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/01e1b4426_fig9.jpg", depth: 0.75, scale: 1.15, angle: 3.7, speed: 8 }, // Fig9
+  { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/f6c38590b_fig9a.jpg", depth: 0.8, scale: 1.2, angle: 0.3, speed: 8 }, // Fig9a
+  { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/bd05455eb_fig10.jpg", depth: 0.6, scale: 0.9, angle: 0.8, speed: 8 }, // Fig10
+  { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/793ccd320_fig10a.jpg", depth: 0.7, scale: 1.1, angle: 1.3, speed: 8 }, // Fig10a
+  { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/e7e39d332_moray01.jpg", depth: 0.5, scale: 0.95, angle: 1.8, speed: 8 }, // Moray01
+  { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/26424f009_moray01a.jpg", depth: 0.9, scale: 1.3, angle: 2.3, speed: 8 }, // Moray01a
+  { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/ae92d929e_moray02.jpg", depth: 0.65, scale: 1.0, angle: 2.8, speed: 8 }, // Moray02
+  { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/c9c11fb43_moray02a.jpg", depth: 0.4, scale: 0.85, angle: 3.3, speed: 8 }, // Moray02a
+  { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/9e94b015c_moray03.jpg", depth: 0.75, scale: 1.15, angle: 3.8, speed: 8 }, // Moray03
 ];
 
 export default function LibraryBackground() {
@@ -644,7 +668,8 @@ requestAnimationFrame(animateMatrix);
       {/* 3D Consciousness/Library Image Layer */}
       <div style={{ position: "absolute", inset: 0, pointerEvents: "none", perspective: "1200px" }}>
         {CONSCIOUSNESS_IMAGES.map((img, idx) => {
-          const rotAngle = (timeRef.current * 0.0008 + img.angle) % (Math.PI * 2);
+          const speed = img.speed || 1;
+          const rotAngle = (timeRef.current * 0.0008 * speed + img.angle) % (Math.PI * 2);
           const orbitRadius = 280 + idx * 60;
           const x = Math.cos(rotAngle) * orbitRadius;
           const y = Math.sin(rotAngle) * orbitRadius * 0.6;
