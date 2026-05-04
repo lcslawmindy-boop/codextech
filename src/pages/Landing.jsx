@@ -4,8 +4,23 @@ import LibraryBackground from "@/components/backgrounds/LibraryBackground";
 import LiveActivityTicker from "@/components/LiveActivityTicker";
 import HeroSection from "@/components/landing/HeroSection";
 import ZaraAlienMascot from "@/components/ZaraAlienMascot";
+import LibrarySearch from "@/components/LibrarySearch";
+import { useState } from "react";
 
 
+
+const LIBRARY_ITEMS = [
+  { label: "MEG Replication Kit", description: "Free energy extraction system", tags: ['MEG', 'Free Energy', 'Technical'] },
+  { label: "Scalar Transmitter Specs", description: "Longitudinal wave transmission", tags: ['Scalar', 'Physics', 'Technical'] },
+  { label: "TRD-1 Telomere Device", description: "Bioelectromagnetic healing", tags: ['Telomere', 'Bioelectromagnetics', 'Technical'] },
+  { label: "Bearden Briefing Consciousness", description: "Mind-matter interaction diagrams", tags: ['Bearden', 'Consciousness', 'Diagrams'] },
+  { label: "Fig. 24 Life and Death", description: "Living systems framework", tags: ['Bearden', 'Consciousness', 'Diagrams'] },
+  { label: "Fig. 25 Consciousness Intent", description: "Time and consciousness mechanics", tags: ['Consciousness', 'Physics', 'Diagrams'] },
+  { label: "Prioré Device Components", description: "EM chamber assembly guide", tags: ['Bioelectromagnetics', 'Technical', 'Briefing'] },
+  { label: "Energy from Vacuum Theory", description: "Zero-point extraction methods", tags: ['Free Energy', 'Physics', 'Diagrams'] },
+  { label: "Scalar Field Dynamics", description: "Advanced EM theory documentation", tags: ['Scalar', 'Physics', 'Technical'] },
+  { label: "Bearden Patent Analysis", description: "MEG device engineering breakdown", tags: ['MEG', 'Bearden', 'Technical'] },
+];
 
 const MODULES = [
   { title: "MEG System", category: "Free Energy", tag: "US 6,362,718", locked: false, img: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/b177d065d_generated_image.png", href: "/research-module?module=meg-system" },
@@ -21,11 +36,14 @@ const EVIDENCE = [
 ];
 
 export default function Landing() {
+  const [searchOpen, setSearchOpen] = useState(false);
+
   return (
     <div className="min-h-screen relative" style={{ fontFamily: "'Share Tech Mono', monospace", letterSpacing: "0.03em" }}>
       <LibraryBackground />
       <LiveActivityTicker />
       <ZaraAlienMascot />
+      <LibrarySearch items={LIBRARY_ITEMS} onSearch={setSearchOpen} />
 
       <div className="pt-16">
         {/* ── Hero ── */}
