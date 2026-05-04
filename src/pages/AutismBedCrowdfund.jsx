@@ -108,6 +108,54 @@ export default function AutismBedCrowdfund() {
           </div>
         </section>
 
+        {/* Research Vision Section */}
+        <section className="px-6 py-20 border-t border-white/10">
+          <div className="max-w-4xl mx-auto">
+            <div className="text-center mb-12">
+              <p className="text-pink-400 text-xs font-black uppercase tracking-widest mb-3">The Research Vision</p>
+              <h2 className="text-3xl md:text-4xl font-black text-white mb-6">Why This Matters</h2>
+            </div>
+
+            <div className="space-y-6">
+              <div className="bg-gray-900/60 border border-gray-800 rounded-xl p-6 backdrop-blur">
+                <h3 className="text-white font-black text-lg mb-3 flex items-center gap-2">
+                  <span className="text-2xl">🧠</span> The Challenge
+                </h3>
+                <p className="text-gray-300 text-base leading-relaxed">
+                  Children on the autism spectrum often experience sensory overload and anxiety that can escalate into meltdowns within minutes. Early detection is critical — but current tools require expensive clinical equipment or subjective observation. There's a gap: no accessible device exists that simultaneously monitors physiological stress markers AND delivers adaptive multi-modal calming interventions in a child-safe environment.
+                </p>
+              </div>
+
+              <div className="bg-gray-900/60 border border-cyan-900/40 rounded-xl p-6 backdrop-blur">
+                <h3 className="text-white font-black text-lg mb-3 flex items-center gap-2">
+                  <span className="text-2xl">💡</span> Our Response
+                </h3>
+                <p className="text-gray-300 text-base leading-relaxed">
+                  A sensory regulation bed that continuously monitors Heart Rate Variability (HRV), Galvanic Skin Response (GSR), EEG alpha waves, and oxygen saturation. When anxiety precursors are detected, the bed activates multi-modal calming responses: gentle vibration, color therapy, binaural beats, scent diffusion, and PEMF relaxation fields. Simple. Non-invasive. Data-driven.
+                </p>
+              </div>
+
+              <div className="bg-gray-900/60 border border-purple-900/40 rounded-xl p-6 backdrop-blur">
+                <h3 className="text-white font-black text-lg mb-3 flex items-center gap-2">
+                  <span className="text-2xl">👨‍👩‍👧</span> For Families & Specialists
+                </h3>
+                <p className="text-gray-300 text-base leading-relaxed">
+                  A secure caregiver dashboard visualizes 24/7 biometric patterns. Parents and therapists can identify triggers, track intervention effectiveness, spot daily rhythms, and export longitudinal reports. The data stays encrypted and private — no medical claims, purely a research tool for understanding what calms and what triggers each child.
+                </p>
+              </div>
+
+              <div className="bg-gray-900/60 border border-green-900/40 rounded-xl p-6 backdrop-blur">
+                <h3 className="text-white font-black text-lg mb-3 flex items-center gap-2">
+                  <span className="text-2xl">🔬</span> Impact
+                </h3>
+                <p className="text-gray-300 text-base leading-relaxed">
+                  Early intervention in sensory dysregulation can prevent behavioral escalation and reduce trauma. This prototype generates the first longitudinal dataset on real-time anxiety detection in autistic children — valuable for future clinical research, personalized therapeutic protocols, and next-generation sensory devices. We're building research infrastructure that will help thousands.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* Why This Matters */}
         <section className="px-6 py-16 border-t border-white/10">
           <div className="max-w-4xl mx-auto">
@@ -207,15 +255,24 @@ export default function AutismBedCrowdfund() {
           </div>
         </section>
 
-        {/* Caregiver Dashboard Link */}
-        <section className="px-6 py-10 border-t border-white/10">
-          <div className="max-w-4xl mx-auto">
+        {/* Caregiver Dashboard + Shop */}
+        <section className="px-6 py-12 border-t border-white/10">
+          <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="bg-gray-900/70 border border-cyan-900/40 rounded-2xl p-8 backdrop-blur">
               <p className="text-cyan-400 text-xs font-black uppercase tracking-widest mb-3">For Active Users</p>
               <h3 className="text-2xl font-black text-white mb-3">Caregiver Portal</h3>
               <p className="text-gray-400 text-sm mb-6">Parents and caregivers using the prototype can access real-time biometric visualization, daily rhythm analysis, and PDF export to share with specialists.</p>
               <Link to="/caregiver-dashboard" className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-black text-sm transition-all">
-                Access Caregiver Dashboard <ArrowRight size={14} />
+                Access Dashboard <ArrowRight size={14} />
+              </Link>
+            </div>
+
+            <div className="bg-gray-900/70 border border-pink-900/40 rounded-2xl p-8 backdrop-blur">
+              <p className="text-pink-400 text-xs font-black uppercase tracking-widest mb-3">Component Shop</p>
+              <h3 className="text-2xl font-black text-white mb-3">Source Parts Yourself</h3>
+              <p className="text-gray-400 text-sm mb-6">DIY builders can source individual prototype components or full kits from our verified supplier network. Full BOM available to research backers.</p>
+              <Link to="/alacarte" className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-pink-600 hover:bg-pink-500 text-white font-black text-sm transition-all">
+                Browse Component Shop <ArrowRight size={14} />
               </Link>
             </div>
           </div>

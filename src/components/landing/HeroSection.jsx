@@ -63,6 +63,15 @@ export default function HeroSection() {
         <span className="text-white font-bold">Primary sources. Verified patents. Build-ready specifications.</span>
       </p>
 
+      {/* Autism Sensory Bed Note */}
+      <p
+        className="text-sm md:text-base text-center max-w-xl mb-6 relative z-10 leading-relaxed italic"
+        style={{ color: "rgba(200,150,255,0.75)" }}
+      >
+        Right now, we're funding a prototype multi-modal sensory regulation bed for autistic children. Real-time biometric monitoring. Anxiety detection. Adaptive calming response. Caregiver portal. Research-backed. Non-medical. {" "}
+        <span className="text-white font-bold">Join us in bringing this to market.</span>
+      </p>
+
       <p
         className="text-sm text-center mb-10 relative z-10 font-bold"
         style={{ color: "rgba(0,200,255,0.85)", letterSpacing: "0.04em" }}
