@@ -186,29 +186,6 @@ export default function LibraryBackground() {
           background: "linear-gradient(180deg, rgba(0,0,0,0.78) 0%, rgba(0,0,0,0.65) 50%, rgba(0,0,0,0.82) 100%)",
         }}
       />
-
-      <style>{`
-        @keyframes cyanPulse {
-          0%, 100% { opacity: 0.1; }
-          50% { opacity: 0.35; }
-        }
-        @keyframes codeFlow {
-          0% { transform: translateY(-100%); }
-          100% { transform: translateY(100%); }
-        }
-        @keyframes waveShift {
-          0%, 100% { transform: translateY(0px); opacity: 0.4; }
-          50% { transform: translateY(20px); opacity: 0.7; }
-        }
-        @keyframes breatheGlow {
-          0%, 100% { transform: scale(0.95); opacity: 0.5; }
-          50% { transform: scale(1.05); opacity: 0.85; }
-        }
-        @keyframes scanlines {
-          0% { transform: translateY(0px); }
-          100% { transform: translateY(12px); }
-        }
-      `}</style>
     </div>
   );
 }

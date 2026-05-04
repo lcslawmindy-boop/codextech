@@ -132,6 +132,27 @@ html[data-theme="steel"] {
 
 
 @layer base {
+  @keyframes cyanPulse {
+    0%, 100% { opacity: 0.1; }
+    50% { opacity: 0.35; }
+  }
+  @keyframes codeFlow {
+    0% { transform: translateY(-100%); }
+    100% { transform: translateY(100%); }
+  }
+  @keyframes waveShift {
+    0%, 100% { transform: translateY(0px); opacity: 0.4; }
+    50% { transform: translateY(20px); opacity: 0.7; }
+  }
+  @keyframes breatheGlow {
+    0%, 100% { transform: scale(0.95); opacity: 0.5; }
+    50% { transform: scale(1.05); opacity: 0.85; }
+  }
+  @keyframes scanlines {
+    0% { transform: translateY(0px); }
+    100% { transform: translateY(12px); }
+  }
+
   * {
     @apply border-border outline-ring/50;
   }
