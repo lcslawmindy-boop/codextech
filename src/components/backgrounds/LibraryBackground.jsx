@@ -1,10 +1,15 @@
 import { useState, useEffect } from "react";
 
 const LIBRARY_IMAGES = [
-  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/38badbc27_a-long-row-of-bookshelves-in-a-library-free-photo.jpg",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/005cbd380_a-long-row-of-bookshelves-in-a-library-free-photo.jpg",
   "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/aefb1105a_modern-office-space-with-empty-bookshelves-and-clean-decor-generated-by-ai-photo.jpg",
-  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/f5bf13206_pngtree-blurred-empty-library-interior-with-bookshelves-and-white-floor-image_17084947.jpg",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/904504196_pngtree-blurred-empty-library-interior-with-bookshelves-and-white-floor-image_17084947-Copy.jpg",
   "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/94e727492_6e9914fb6d6d4a305dd2fbe4c30e098d.jpg",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/822e46d05_maxresdefault.jpg",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/163c6d198_WDggFNBBCjgKpzuFC2Txph-1200-80.jpg",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/0e90ebf0d_solomon-temple-inner.jpg",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/4b8e4bd44_Gold-in-Solomons-Temple-1-1024x585.jpg",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/0aab30b73_How-to-Access-and-Read-the-Akashic-Records.jpg",
   "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/84dc95843_1000_F_971892795_RX3cpf8xMUbbE4vJ2MnOerElgOeodidS.jpg",
   "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/eba4e64a4_atom-big-crop-2048x1097.jpg",
 ];

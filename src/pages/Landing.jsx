@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { ArrowRight, Database, Wrench, Shield, FlaskConical, TrendingUp, CheckCircle2, Lock } from "lucide-react";
-import Neon3DBackground from "@/components/backgrounds/Neon3DBackground";
+import LibraryBackground from "@/components/backgrounds/LibraryBackground";
 import LiveActivityTicker from "@/components/LiveActivityTicker";
 import HeroSection from "@/components/landing/HeroSection";
 import ZaraAlienMascot from "@/components/ZaraAlienMascot";
@@ -23,7 +23,7 @@ const EVIDENCE = [
 export default function Landing() {
   return (
     <div className="min-h-screen relative" style={{ fontFamily: "'Share Tech Mono', monospace", letterSpacing: "0.03em" }}>
-      <Neon3DBackground />
+      <LibraryBackground />
       <LiveActivityTicker />
       <ZaraAlienMascot />
 
