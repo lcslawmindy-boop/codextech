@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 
-const MATRIX_CHARS = "ｦｧｨｩｪｫｬｭｮｯﾀﾁﾂﾃﾄﾅﾆﾇﾈﾉﾊﾋﾌﾍﾎﾏﾐﾑﾒﾓﾔﾕﾗﾘﾜﾝ0123456789☆✦✧◇◈◆★✪✫✬✭✮✯✡♦♣♠♥☯☸☹☺☻♻∞§¶†‡※⁂⁎⁺⁻⁼⁄∀∃∅∇∈∉∋∎∏∐∑−∗√∛∜∝∞∠∧∨∩∪∫∴∵∶∷≈≠≡≤≥⊂⊃⊄⊥";
+const MATRIX_CHARS = "0123456789";
+const MATRIX_SYMBOLS = "☆✦✧◇◈◆★✪✫✬✭✮✯✡♦♣♠♥☯☸☹☺☻♻∞§¶†‡※⁂⁎";
 
 const LIBRARY_IMAGES = [
   "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/879bbe3f2_generated_image.png",
@@ -56,7 +57,7 @@ export default function LibraryBackground() {
     return () => clearInterval(timer);
   }, [currentIdx]);
 
-  // Matrix rain effect
+  // Matrix and circuit board effects
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -65,29 +66,62 @@ export default function LibraryBackground() {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
-    const fontSize = 16;
-    const cols = Math.floor(canvas.width / fontSize);
-    const drops = new Array(cols).fill(1);
+    const fontSize = 14;
+    const gridSize = 40;
+    const rows = Math.ceil(canvas.height / gridSize);
+    const cols = Math.ceil(canvas.width / gridSize);
+    const horizontalLines = Math.ceil(canvas.height / 60);
+    
+    // Horizontal matrix streams
+    const streams = Array.from({ length: horizontalLines }, () => ({
+      y: Math.random() * canvas.height,
+      speed: Math.random() * 0.5 + 0.3,
+      x: 0,
+    }));
+
+    let time = 0;
 
     const animateMatrix = () => {
-      ctx.fillStyle = "rgba(0, 0, 0, 0.08)";
+      ctx.fillStyle = "rgba(0, 0, 0, 0.06)";
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      ctx.fillStyle = "#ffffff";
-      ctx.shadowColor = "rgba(255, 255, 255, 0.8)";
-      ctx.shadowBlur = 12;
-      ctx.font = `bold ${fontSize}px monospace`;
-
-      for (let i = 0; i < drops.length; i++) {
-        const text = MATRIX_CHARS[Math.floor(Math.random() * MATRIX_CHARS.length)];
-        ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-
-        if (drops[i] * fontSize > canvas.height && Math.random() > 0.97) {
-          drops[i] = 0;
-        }
-        drops[i]++;
+      // Circuit board grid
+      ctx.strokeStyle = `rgba(0, 255, 100, ${0.08 + Math.sin(time * 0.01) * 0.04})`;
+      ctx.lineWidth = 1;
+      for (let i = 0; i < rows; i++) {
+        ctx.beginPath();
+        ctx.moveTo(0, i * gridSize);
+        ctx.lineTo(canvas.width, i * gridSize);
+        ctx.stroke();
+      }
+      for (let i = 0; i < cols; i++) {
+        ctx.beginPath();
+        ctx.moveTo(i * gridSize, 0);
+        ctx.lineTo(i * gridSize, canvas.height);
+        ctx.stroke();
       }
 
+      // Horizontal neon green matrix streams
+      ctx.fillStyle = "#00ff99";
+      ctx.shadowColor = "rgba(0, 255, 153, 0.9)";
+      ctx.shadowBlur = 10;
+      ctx.font = `bold ${fontSize}px monospace`;
+
+      streams.forEach((stream) => {
+        stream.x += stream.speed;
+        if (stream.x > canvas.width) {
+          stream.x = -100;
+          stream.y = Math.random() * canvas.height;
+          stream.speed = Math.random() * 0.5 + 0.3;
+        }
+
+        for (let i = 0; i < 20; i++) {
+          const text = MATRIX_CHARS[Math.floor(Math.random() * MATRIX_CHARS.length)];
+          ctx.fillText(text, stream.x + i * fontSize, stream.y);
+        }
+      });
+
+      time++;
       requestAnimationFrame(animateMatrix);
     };
 
@@ -188,13 +222,13 @@ export default function LibraryBackground() {
         }}
       />
 
-      {/* Cascading green Matrix code rain */}
+      {/* Pulsing scalar wave overlay */}
       <div
         style={{
           position: "absolute",
           inset: 0,
-          background: "repeating-linear-gradient(90deg, transparent 0px, rgba(0,255,150,0.15) 2px, transparent 4px)",
-          animation: "codeFlow 4s linear infinite",
+          background: "repeating-radial-gradient(circle at 50% 50%, rgba(0,255,100,0.12) 0px, transparent 40px, rgba(0,255,100,0.12) 80px)",
+          animation: "scalarWavePulse 3s ease-in-out infinite",
           pointerEvents: "none",
         }}
       />
@@ -204,7 +238,7 @@ export default function LibraryBackground() {
         style={{
           position: "absolute",
           inset: 0,
-          background: "linear-gradient(180deg, rgba(0,220,255,0.2) 0%, rgba(0,255,150,0.15) 50%, rgba(0,220,255,0.2) 100%)",
+          background: "linear-gradient(180deg, rgba(0,220,255,0.15) 0%, rgba(0,255,150,0.2) 50%, rgba(0,220,255,0.15) 100%)",
           animation: "waveShift 5s ease-in-out infinite",
           pointerEvents: "none",
         }}
