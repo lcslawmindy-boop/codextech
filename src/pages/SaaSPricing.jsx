@@ -6,8 +6,6 @@ import { base44 } from "@/api/base44Client";
 const FEATURES = [
   "Full research database (40+ patents analyzed)",
   "8 structured research modules (80+ hours)",
-  "Build-ready engineering specifications",
-  "Complete BOM frameworks",
   "AI Patent Drafting Tool",
   "Prior Art Archive (200+ entries)",
   "Scalar EM Lab Simulator",
@@ -16,7 +14,7 @@ const FEATURES = [
   "Monthly research updates",
   "Community forum access",
   "Email support",
-  "Buy courses & build plans at 20-30% discount",
+  "Buy courses at 20-30% discount",
 ];
 
 const FAQS = [

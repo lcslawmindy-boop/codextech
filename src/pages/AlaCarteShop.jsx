@@ -146,7 +146,7 @@ export default function AlaCarteShop() {
         <div className="max-w-6xl mx-auto space-y-8">
           <div className="text-center">
             <p className="text-gray-500 text-sm mb-4">
-              Want it all? Join the membership and get unlimited access to all 10+ courses and 10+ build plans, plus 1 new item every 2 weeks.
+              Want unlimited courses? Join the membership and get full access to all 10+ research courses, plus get 20-30% off all à la carte purchases.
             </p>
             <Link to="/pricing"
               className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white font-black text-sm transition-colors">
