@@ -191,6 +191,7 @@ import IPBrokeringGuide from './pages/IPBrokeringGuide';
 import DocumentDashboard from './pages/DocumentDashboard';
 import PatentTechGraph from './pages/PatentTechGraph';
 import MasterLaunchDoc from './pages/MasterLaunchDoc';
+import BackgroundImagePicker from './pages/BackgroundImagePicker';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -401,6 +402,7 @@ const AuthenticatedApp = () => {
           <Route path="/document-dashboard" element={<DocumentDashboard />} />
           <Route path="/patent-tech-graph" element={<PatentTechGraph />} />
           <Route path="/master-launch-doc" element={<MasterLaunchDoc />} />
+          <Route path="/bg-picker" element={<BackgroundImagePicker />} />
           <Route path="/dashboard" element={<MemberDashboard />} />
 
           <Route path="*" element={<PageNotFound />} />
