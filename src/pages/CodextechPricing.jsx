@@ -183,10 +183,14 @@ export default function CodextechPricing() {
             </ul>
             <button onClick={() => handleCheckout({ title: "Engineering Systems Bundle", priceInCents: 99700, oneTime: true })}
               disabled={loadingTier === "Engineering Systems Bundle"}
-              className="w-full py-3 rounded-lg bg-gray-900 text-white font-bold hover:bg-gray-800 transition-colors disabled:opacity-50 flex items-center justify-center gap-2">
+              className="w-full py-3 rounded-lg bg-gray-900 text-white font-bold hover:bg-gray-800 transition-colors disabled:opacity-50 flex items-center justify-center gap-2 mb-3">
               {loadingTier === "Engineering Systems Bundle" ? <Loader2 size={14} className="animate-spin" /> : null}
-              Get Full Bundle — $997
+              Start Membership — $997
             </button>
+            <Link to="/engineering-systems-bundle"
+              className="block w-full py-2.5 rounded-lg border border-gray-300 text-gray-700 font-bold text-sm text-center hover:bg-gray-50 transition-colors">
+              View Bundle →
+            </Link>
           </div>
         </div>
       </section>

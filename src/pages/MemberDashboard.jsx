@@ -15,8 +15,8 @@ const KITS = [
 ];
 
 const QUICK_LINKS = [
-  { label: "Build Plans", href: "/invention-plans", icon: <Wrench size={16} />, color: "text-orange-400", desc: "10+ systems" },
-  { label: "Courses", href: "/courses", icon: <BookOpen size={16} />, color: "text-blue-400", desc: "20+ courses" },
+  { label: "Continue Research", href: "/codextech-database", icon: <BookOpen size={16} />, color: "text-blue-400", desc: "Full database" },
+  { label: "Build Ready Systems", href: "/codextech-database?tag=build-ready", icon: <Wrench size={16} />, color: "text-orange-400", desc: "Build-ready" },
   { label: "AI Patent Tool", href: "/patent-tool", icon: <Shield size={16} />, color: "text-green-400", desc: "Draft in minutes" },
   { label: "Prior Art Archive", href: "/prior-art", icon: <Star size={16} />, color: "text-yellow-400", desc: "200+ entries" },
   { label: "Lab Simulator", href: "/scalar-lab", icon: <Zap size={16} />, color: "text-cyan-400", desc: "No hardware needed" },
@@ -134,18 +134,18 @@ export default function MemberDashboard() {
             {[
               {
                 step: 1,
-                title: "Pick Your First Build",
-                desc: "Start with the MEG — 23 components, peer-reviewed, 8 hours to assemble.",
-                cta: "Open Build Plans →",
-                href: "/invention-plans",
+                title: "Continue Research",
+                desc: "Start with the core database — structured modules, patents, and engineering frameworks.",
+                cta: "Open Research Database →",
+                href: "/codextech-database",
                 color: "#f97316",
               },
               {
                 step: 2,
-                title: "Understand the Physics",
-                desc: "Module 1: What Maxwell actually wrote. Why mainstream EM is truncated.",
-                cta: "Start Module 1 →",
-                href: "/courses",
+                title: "Build Ready Systems",
+                desc: "Filter to build-ready modules with full architecture docs and BOM frameworks.",
+                cta: "View Build-Ready Systems →",
+                href: "/codextech-database?tag=build-ready",
                 color: "#3b82f6",
               },
               {

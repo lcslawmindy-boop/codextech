@@ -87,10 +87,14 @@ export default function ResearchBriefLanding() {
               <div className="text-center py-6">
                 <CheckCircle2 size={40} className="text-green-400 mx-auto mb-3" />
                 <p className="text-green-300 font-bold mb-2">Download Started</p>
-                <p className="text-gray-400 text-sm mb-5">Check your email inbox. You'll also receive an institutional research brief sequence.</p>
+                <p className="text-gray-400 text-sm mb-3">Check your email inbox. You'll also receive an institutional research brief sequence.</p>
+                <a href="/research-brief-download"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-green-700 hover:bg-green-600 text-white font-black text-sm transition-all mb-3">
+                  Download Brief <ArrowRight size={14} />
+                </a>
                 <Link to="/technical-brief-pack"
                   className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-cyan-700 hover:bg-cyan-600 text-white font-black text-sm transition-all">
-                  Continue to Technical Brief Pack <ArrowRight size={14} />
+                  Continue to Tripwire <ArrowRight size={14} />
                 </Link>
               </div>
             ) : (
@@ -110,7 +114,7 @@ export default function ResearchBriefLanding() {
                 >
                   {loading ? "Processing..." : (
                     <>
-                      Get Research Brief <ArrowRight size={14} />
+                      Download Brief <ArrowRight size={14} />
                     </>
                   )}
                 </button>

@@ -198,9 +198,9 @@ export default function TechnicalBriefPack() {
           </p>
           <Link
             to="/codextech-pricing"
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-lg border border-cyan-700 text-cyan-300 hover:bg-cyan-700/10 transition-colors font-bold"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-cyan-700 hover:bg-cyan-600 text-white transition-colors font-black"
           >
-            Unlock Full Research Membership <ArrowRight size={14} />
+            Unlock Full System <ArrowRight size={14} />
           </Link>
         </section>
 
