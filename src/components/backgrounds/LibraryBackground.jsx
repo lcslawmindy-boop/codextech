@@ -318,8 +318,20 @@ export default function LibraryBackground() {
   const [currentIdx, setCurrentIdx] = useState(() => Math.floor(Math.random() * LIBRARY_IMAGES.length));
   const [nextIdx, setNextIdx] = useState(null);
   const [fading, setFading] = useState(false);
+  const [tick, setTick] = useState(0);
   const canvasRef = useRef(null);
   const timeRef = useRef(0);
+
+  // Drive React re-renders so consciousness images actually rotate
+  useEffect(() => {
+    let raf;
+    const update = () => {
+      setTick(timeRef.current);
+      raf = requestAnimationFrame(update);
+    };
+    raf = requestAnimationFrame(update);
+    return () => cancelAnimationFrame(raf);
+  }, []);
 
   useEffect(() => {
     const timer = setInterval(() => {
