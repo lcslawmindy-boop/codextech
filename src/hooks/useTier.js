@@ -1,11 +1,16 @@
 import { useState, useEffect, useCallback } from "react";
 import { base44 } from "@/api/base44Client";
+import { isMemberPlan } from "@/lib/tiers";
 
 /**
- * Single $49/mo membership model.
- * Returns { tier, loading, refetch }
+ * Unified tier hook — single $49/mo membership model.
+ * Returns { tier, loading, isMember, refetch }
  * tier: "free" | "member"
- * admin always returns "member"
+ *
+ * Access check priority:
+ * 1. user.role === "admin" → always member
+ * 2. user.subscription_status === "active" → member (set by Stripe webhook)
+ * 3. BetaApplication.plan_purchased / status fallback
  */
 export function useTier() {
   const [tier, setTier] = useState("free");
@@ -20,18 +25,17 @@ export function useTier() {
       // Admins always have full access
       if (user.role === "admin") { setTier("member"); setLoading(false); return; }
 
-      // Check BetaApplication for active membership
+      // Stripe webhook sets this directly — most reliable
+      if (user.subscription_status === "active") { setTier("member"); setLoading(false); return; }
+
+      // Fallback: check BetaApplication record
       const apps = await base44.entities.BetaApplication.filter({ email: user.email });
       const app = apps[0];
+      if (app && isMemberPlan(app.plan_purchased, app.status)) {
+        setTier("member"); setLoading(false); return;
+      }
 
-      if (!app) { setTier("free"); setLoading(false); return; }
-
-      const plan = (app.plan_purchased || "").toLowerCase();
-      const isActive = app.status === "converted" || app.status === "active" ||
-        plan.includes("member") || plan.includes("research") ||
-        plan.includes("pro") || plan.includes("starter") || plan.includes("elite");
-
-      setTier(isActive ? "member" : "free");
+      setTier("free");
     } catch {
       setTier("free");
     } finally {
@@ -41,5 +45,5 @@ export function useTier() {
 
   useEffect(() => { check(); }, [check]);
 
-  return { tier, loading, refetch: check };
+  return { tier, loading, isMember: tier === "member", refetch: check };
 }

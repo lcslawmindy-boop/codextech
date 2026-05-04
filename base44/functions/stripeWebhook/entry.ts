@@ -74,6 +74,21 @@ Deno.serve(async (req) => {
       } catch (e) {
         console.error("Error setting subscription_status:", e.message);
       }
+
+      // Trigger Day 0 welcome email for new subscriptions
+      if (email && session.subscription) {
+        try {
+          const name = session.customer_details?.name || "";
+          await base44.asServiceRole.functions.invoke("membershipWelcomeEmail", {
+            email,
+            name,
+            trigger: "day0",
+          });
+          console.log("Welcome email day0 triggered for:", email);
+        } catch (e) {
+          console.error("Error triggering welcome email:", e.message);
+        }
+      }
     }
   }
 

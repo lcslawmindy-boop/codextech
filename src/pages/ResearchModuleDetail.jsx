@@ -12,7 +12,7 @@ const MODULES = {
     patent: "US 6,362,718",
     authors: "Bearden, Hayes, Moore, Kenny, Patrick",
     journal: "Foundations of Physics Letters, Vol. 14, No. 1, 2001",
-    minTier: "starter",
+    minTier: "member",
     img: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/b177d065d_generated_image.png",
     summary: "The MEG is a solid-state energy conversion device based on Bearden's dipole theory. It uses a nanocrystalline core with multiple coils to extract usable electrical energy from the local vacuum, achieving COP>1 under controlled conditions.",
     keyPoints: [
@@ -37,7 +37,7 @@ const MODULES = {
     patent: "FR 1,342,772",
     authors: "Antoine Prioré",
     journal: "Multiple French government-funded clinical trials, 1960s–1970s",
-    minTier: "starter",
+    minTier: "member",
     img: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/4a992c230_generated_image.png",
     summary: "The Prioré device used a rotating magnetic plasma tube to produce complex EM fields that reversed cancer and trypanosomiasis in peer-reviewed animal studies, with French government funding and academic oversight.",
     keyPoints: [
@@ -61,7 +61,7 @@ const MODULES = {
     patent: "Multiple Bearden-derived patents",
     authors: "T.E. Bearden, E.T. Whittaker",
     journal: "Bearden: Solutions to Tesla's Secrets (1981); Whittaker: Phil. Trans. (1904)",
-    minTier: "pro",
+    minTier: "member",
     img: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/fc3cb2842_generated_image.png",
     summary: "Whittaker's 1904 decomposition of the electromagnetic potential shows that any scalar potential contains two counterpropagating EM waves. Bearden extended this into a practical transmitter/receiver architecture for longitudinal scalar waves.",
     keyPoints: [
@@ -81,18 +81,14 @@ const MODULES = {
   },
 };
 
-const TIER_ORDER = ["free", "starter", "pro", "elite"];
-
 export default function ResearchModuleDetail() {
   const location = useLocation();
   const params = new URLSearchParams(location.search);
   const slug = params.get("module") || "meg-system";
   const module = MODULES[slug] || MODULES["meg-system"];
 
-  const { tier } = useTier();
-  const userTierIdx = TIER_ORDER.indexOf(tier);
-  const requiredTierIdx = TIER_ORDER.indexOf(module.minTier);
-  const hasAccess = userTierIdx >= requiredTierIdx;
+  const { isMember } = useTier();
+  const hasAccess = isMember;
 
   const [activeSection, setActiveSection] = useState(0);
 
@@ -101,7 +97,7 @@ export default function ResearchModuleDetail() {
       {/* Header */}
       <div className="sticky top-0 z-30 border-b border-gray-800 bg-gray-900/95 backdrop-blur px-5 py-4">
         <div className="max-w-5xl mx-auto flex items-center gap-3">
-          <Link to="/codextech-database" className="flex items-center gap-1.5 text-gray-400 hover:text-white text-sm transition-colors">
+          <Link to="/codextech-database" className="flex items-center gap-1.5 text-gray-400 hover:text-white text-sm transition-colors" style={{ minHeight: 44 }}>
             <ArrowLeft size={16} /> Research Database
           </Link>
           <span className="text-gray-700">/</span>
@@ -180,8 +176,8 @@ export default function ResearchModuleDetail() {
                         <Lock size={24} className="text-yellow-400" />
                       </div>
                       <p className="text-gray-400 text-sm mb-4">This section requires a paid membership to access.</p>
-                      <Link to="/codextech-pricing" className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-cyan-700 hover:bg-cyan-600 text-white font-black text-sm transition-colors">
-                        <Zap size={14} /> Unlock Access
+                      <Link to="/pricing" className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-cyan-700 hover:bg-cyan-600 text-white font-black text-sm transition-colors">
+                        <Zap size={14} /> Join — $49/mo
                       </Link>
                     </div>
                   ) : (
@@ -198,8 +194,8 @@ export default function ResearchModuleDetail() {
           <div className="mt-10 bg-gradient-to-br from-cyan-950/30 to-gray-950 border border-cyan-800/40 rounded-2xl p-8 text-center">
             <h3 className="text-white font-black text-xl mb-2">Unlock the Full Module</h3>
             <p className="text-gray-400 text-sm mb-5">Get complete BOMs, assembly steps, measurement protocols, and source documents for every system in the vault.</p>
-            <Link to="/codextech-pricing" className="inline-flex items-center gap-2 px-7 py-3 rounded-xl bg-cyan-700 hover:bg-cyan-600 text-white font-black transition-colors">
-              View Membership Plans <ChevronRight size={14} />
+            <Link to="/pricing" className="inline-flex items-center gap-2 px-7 py-3 rounded-xl bg-cyan-700 hover:bg-cyan-600 text-white font-black transition-colors">
+              Join for $49/month <ChevronRight size={14} />
             </Link>
           </div>
         )}

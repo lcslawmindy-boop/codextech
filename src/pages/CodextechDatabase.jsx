@@ -26,13 +26,13 @@ export default function CodextechDatabase() {
       {/* Navigation */}
       <nav className="border-b border-gray-200 px-6 py-4 bg-white sticky top-0 z-40">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <Link to="/codextech" className="flex items-center gap-3 hover:opacity-80">
-            <div className="w-10 h-10 rounded-lg bg-gray-900 flex items-center justify-center text-white font-black text-xs">CX</div>
-            <span className="font-black text-sm">C.O.D.E.X.T.E.C.H.</span>
+          <Link to="/" className="flex items-center gap-3 hover:opacity-80">
+            <img src="https://media.base44.com/images/public/69ccefebfea78b23498c66a8/a90918e3c_ZARPlogo.png" alt="ZAT" className="h-8 w-8 object-contain rounded" />
+            <span className="font-black text-sm">Zenith Apex Research</span>
           </Link>
           <div className="flex items-center gap-4">
             <div className="text-sm text-gray-600">Research Database</div>
-            <Link to="/codextech-pricing" className="px-3 py-1.5 rounded-lg bg-gray-900 text-white text-xs font-black hover:bg-gray-800">Unlock Full Access</Link>
+            <Link to="/pricing" className="px-3 py-1.5 rounded-lg bg-gray-900 text-white text-xs font-black hover:bg-gray-800">Join — $49/mo</Link>
           </div>
         </div>
       </nav>
@@ -134,8 +134,8 @@ export default function CodextechDatabase() {
                     <div className="flex items-center justify-between pt-4 border-t border-gray-200 mt-auto">
                       <span className="text-xs text-gray-500">{entry.sourceType}</span>
                       {entry.accessLevel !== "Research" ? (
-                        <Link to="/codextech-pricing" className="text-yellow-600 hover:text-yellow-700 font-semibold text-sm flex items-center gap-1">
-                          <Lock size={12} /> Unlock Access
+                        <Link to="/pricing" className="text-cyan-600 hover:text-cyan-700 font-semibold text-sm flex items-center gap-1">
+                          <Lock size={12} /> Join — $49/mo
                         </Link>
                       ) : (
                         <button className="text-blue-600 hover:text-blue-700 font-semibold text-sm flex items-center gap-1">

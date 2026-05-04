@@ -1,106 +1,90 @@
 // ── TIER DEFINITIONS ──────────────────────────────────────────────────────────
-// plan_purchased values stored on BetaApplication.plan_purchased
+// Single $49/mo membership — all features unlocked.
+// "Research", "Builder", "Operator", "Bundle" are product/marketing labels
+// but all map to the same access level: "member".
+//
+// BetaApplication.plan_purchased values and User.subscription_status are both checked.
+// Stripe webhook sets User.subscription_status = "active" on checkout.session.completed.
+
 export const TIERS = {
   free: {
     id: "free",
     name: "Free Preview",
     price: 0,
     color: "#6b7280",
-    inventionsAllowed: 1,
-    coursesAllowed: 1,
     aiTools: false,
     patentTools: false,
-    investorTools: false,
-    govAccess: false,
+    buildPlans: false,
+    marketplace: false,
+    fullDatabase: false,
   },
-  starter: {
-    id: "starter",
-    name: "Starter",
-    price: 47,
-    type: "one_time",
-    color: "#f59e0b",
-    inventionsAllowed: 5,
-    coursesAllowed: 4,
-    aiTools: false,
-    patentTools: false,
-    investorTools: false,
-    govAccess: false,
-  },
-  researcher: {
-    id: "researcher",
-    name: "Researcher",
-    price: 97,
+  member: {
+    id: "member",
+    name: "Research Member",
+    price: 49,
     type: "subscription",
-    color: "#6366f1",
-    inventionsAllowed: 999,
-    coursesAllowed: 999,
+    interval: "month",
+    color: "#00ccff",
     aiTools: true,
     patentTools: true,
-    investorTools: false,
-    govAccess: false,
-    dossierRollsPerMonth: 3,
-  },
-  pro: {
-    id: "pro",
-    name: "Pro",
-    price: 247,
-    type: "subscription",
-    color: "#22c55e",
-    inventionsAllowed: 999,
-    coursesAllowed: 999,
-    aiTools: true,
-    patentTools: true,
-    investorTools: true,
-    govAccess: false,
-    dossierRollsPerMonth: 5,
-  },
-  government: {
-    id: "government",
-    name: "Government / Defense",
-    price: null, // negotiated
-    type: "contract",
-    color: "#dc2626",
-    inventionsAllowed: 999,
-    coursesAllowed: 999,
-    aiTools: true,
-    patentTools: true,
-    investorTools: true,
-    govAccess: true,  // unlocks classified defense inventions
+    buildPlans: true,
+    marketplace: true,
+    fullDatabase: true,
   },
 };
 
-export const TIER_ORDER = ["free", "starter", "researcher", "pro", "government"];
+// All paid plan labels (from BetaApplication or checkout metadata) that grant member access
+export const MEMBER_PLAN_KEYWORDS = [
+  "member", "research", "builder", "operator", "bundle",
+  "pro", "starter", "elite", "researcher", "converted", "active",
+];
 
-// Inventions tagged `classified: true` in businessItems are restricted to admin or government tier
+export function isMemberPlan(planStr = "", status = "") {
+  if (status === "active") return true;
+  const lower = (planStr || "").toLowerCase();
+  return MEMBER_PLAN_KEYWORDS.some(kw => lower.includes(kw));
+}
+
+export const TIER_ORDER = ["free", "member"];
+
+// Classified inventions — admin-only (no longer tier-gated for regular members)
 export const CLASSIFIED_INVENTION_IDS = [
   "Scalar Energy Bottle Interferometer (Research Prototype)",
-  "Quantum Potential EMI Detector (\"Fireflies Sensor\")",
-  "ELF Carrier Lock Detection System (\"Psychotronic Detector\")",
+  "Quantum Potential EMI Detector",
+  "ELF Carrier Lock Detection System",
   "Atmospheric Scalar EM Signature Recognition System (AI Edition)",
-  "Woodpecker Grid Standing Wave Detector (HF Scalar Signature Receiver)",
+  "Woodpecker Grid Standing Wave Detector",
   "Whittaker Wave Phase Conjugate Mirror (PCM) System",
   "Time-Reversal Zone Cold Fusion Reactor (TRZ-CFR)",
   "Portable Porthole Disease Treatment System (PPDTS)",
-  "T-Polarized EM Wave Transducer (Time-Domain EM Engineering System)",
+  "T-Polarized EM Wave Transducer",
 ];
 
+// Legacy compatibility exports — used by CourseCatalog and other pages
 export function tierCanAccessInvention(tier, index) {
-  return index < (TIERS[tier]?.inventionsAllowed ?? 1);
+  return tier === "member" || index === 0;
 }
 
 export function tierCanAccessCourse(tier, index) {
-  return index < (TIERS[tier]?.coursesAllowed ?? 1);
+  return tier === "member" || index === 0;
 }
 
 export function tierHasGovAccess(tier) {
-  return TIERS[tier]?.govAccess === true;
+  return tier === "admin";
+}
+
+export function tierUpgradeTo() {
+  return "member";
 }
 
 export function isClassifiedInvention(title) {
-  return CLASSIFIED_INVENTION_IDS.includes(title);
+  return CLASSIFIED_INVENTION_IDS.some(id => (title || "").includes(id.split("(")[0].trim()));
 }
 
-export function tierUpgradeTo(tier) {
-  const idx = TIER_ORDER.indexOf(tier);
-  return TIER_ORDER[idx + 1] || "government";
-}
+// Marketing tier labels → for display/copy only (not access control)
+export const MARKETING_TIERS = {
+  research: { name: "Research", price: 49, desc: "Full database, 8 modules, patent tools" },
+  builder:  { name: "Builder", price: 49, desc: "Everything in Research + build plans + kits" },
+  operator: { name: "Operator", price: 49, desc: "Full platform including IP marketplace" },
+  bundle:   { name: "Bundle",  price: 49, desc: "All of the above — one flat rate" },
+};

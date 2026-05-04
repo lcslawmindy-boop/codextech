@@ -77,7 +77,7 @@ export default function AlaCarteShop() {
             <ArrowLeft size={14} /> Back
           </Link>
           <h1 className="text-2xl font-black text-white">À La Carte Catalog</h1>
-          <p className="text-gray-500 text-sm mt-1">Buy individual courses and build plans at standard pricing. One-time payment, lifetime access. Builder members ($99/mo) get unlimited access to all courses, build plans, and 10 Invention Dossier generations monthly.</p>
+          <p className="text-gray-500 text-sm mt-1">Buy individual courses and build plans at standard pricing. One-time payment, lifetime access. Research Members ($49/mo) get full access to everything — no per-item fees.</p>
         </div>
       </div>
 
@@ -126,8 +126,8 @@ export default function AlaCarteShop() {
                   {item.category}
                 </div>
                 <div className="flex items-center gap-1">
-                  {item.included && <span className="text-xs font-black text-green-400 px-2 py-1 bg-green-950/50 rounded">✓ Included</span>}
-                  {item.popular && <span className="text-xs font-black text-cyan-400 px-2 py-1 bg-cyan-950/50 rounded">⭐ Popular</span>}
+                  {item.included && <span className="text-xs font-black text-green-400 px-2 py-1 bg-green-950/50 rounded border border-green-900">Included in Membership</span>}
+                  {item.popular && <span className="text-xs font-black text-cyan-400 px-2 py-1 bg-cyan-950/50 rounded border border-cyan-900">Popular</span>}
                 </div>
               </div>
               <h3 className="text-white font-black text-lg mb-2 leading-tight flex-1">{item.title}</h3>
@@ -148,16 +148,16 @@ export default function AlaCarteShop() {
             <p className="text-gray-500 text-sm mb-4">
               Want it all? Join the membership and get unlimited access to all 10+ courses and 10+ build plans, plus 1 new item every 2 weeks.
             </p>
-            <Link to="/research-membership"
+            <Link to="/pricing"
               className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white font-black text-sm transition-colors">
-              View Membership Plans
+              Join for $49/month — Everything Included
             </Link>
           </div>
 
-          <div className="bg-blue-950/30 border border-blue-700/50 rounded-xl p-5 text-center">
-            <p className="text-blue-300 text-xs font-black uppercase tracking-widest mb-2">💳 Membership Credits</p>
+          <div className="bg-cyan-950/30 border border-cyan-800/50 rounded-xl p-5 text-center">
+            <p className="text-cyan-300 text-xs font-black uppercase tracking-widest mb-2">Membership Credit</p>
             <p className="text-gray-300 text-sm">
-              Already bought à la carte items? Your purchases count as credit toward membership. Join Builder ($99/mo) and get everything else for $49 each going forward.
+              Already bought à la carte items? Your purchases count as credit toward membership. Join for $49/mo and get full access to everything — no per-item fees going forward.
             </p>
           </div>
         </div>
