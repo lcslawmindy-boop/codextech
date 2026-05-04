@@ -165,6 +165,7 @@ import CaregiversDashboard from './pages/CaregiversDashboard.jsx';
 import AdminAutismBedDashboard from './pages/AdminAutismBedDashboard.jsx';
 import AutismBedBusinessStrategy from './pages/AutismBedBusinessStrategy.jsx';
 import AutismBedVCPitchDeck from './pages/AutismBedVCPitchDeck.jsx';
+import MedBedCrowdfund from './pages/MedBedCrowdfund';
 
 // Admin
 import AdminHub from './pages/AdminHub';
@@ -374,6 +375,7 @@ const AuthenticatedApp = () => {
           <Route path="/autism-bed-vc-pitch" element={<AutismBedVCPitchDeck />} />
           <Route path="/admin-autism-bed" element={<AdminAutismBedDashboard />} />
           <Route path="/caregiver-dashboard" element={<CaregiversDashboard />} />
+          <Route path="/medbed-crowdfund" element={<MedBedCrowdfund />} />
 
           {/* ── Vault ── */}
           <Route path="/venture" element={<ScalarVentureHome />} />
