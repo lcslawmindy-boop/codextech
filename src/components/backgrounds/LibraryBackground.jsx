@@ -405,7 +405,7 @@ export default function LibraryBackground() {
         style={{
           position: "absolute",
           inset: 0,
-          background: "linear-gradient(180deg, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.75) 50%, rgba(0,0,0,0.88) 100%)",
+          background: "linear-gradient(180deg, rgba(0,0,0,0.92) 0%, rgba(0,0,0,0.88) 50%, rgba(0,0,0,0.94) 100%)",
         }}
       />
     </div>
