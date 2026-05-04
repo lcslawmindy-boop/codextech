@@ -146,7 +146,7 @@ export default function LibraryBackground() {
         ctx.globalAlpha = 1;
       });
 
-      // Draw Metatron Cube (swirling from center)
+      // Draw plasma spiral Metatron with sun orbit
       const centerX = canvas.width / 2;
       const centerY = canvas.height / 2;
       const scale = 80 + Math.sin(time * 0.02) * 40;
@@ -156,15 +156,19 @@ export default function LibraryBackground() {
       ctx.translate(centerX, centerY);
       ctx.rotate(rotation);
       
-      // Golden ratio proportions for Metatron
       const phi = 1.618;
       const baseSize = scale;
       
-      // Draw outer hexagon
-      ctx.strokeStyle = `rgba(255, 215, 0, ${0.3 + Math.sin(time * 0.015) * 0.15})`;
-      ctx.lineWidth = 2;
-      ctx.globalAlpha = 0.4 + Math.sin(time * 0.015) * 0.2;
+      // Plasma colors that cycle
+      const plasmaColors = [
+        `rgba(255, 100, 0, ${0.6 + Math.sin(time * 0.025) * 0.3})`,
+        `rgba(255, 0, 100, ${0.5 + Math.sin(time * 0.025 + 2) * 0.3})`,
+        `rgba(100, 0, 255, ${0.55 + Math.sin(time * 0.025 + 4) * 0.3})`,
+      ];
       
+      // Draw plasma outer hexagon with glow
+      ctx.strokeStyle = plasmaColors[0];
+      ctx.lineWidth = 3;
       for (let i = 0; i < 6; i++) {
         const angle = (i * Math.PI * 2) / 6;
         const x = Math.cos(angle) * baseSize;
@@ -176,26 +180,53 @@ export default function LibraryBackground() {
       ctx.closePath();
       ctx.stroke();
       
-      // Draw inner circles and connecting lines
+      // Draw plasma circles
       for (let r = 1; r < 4; r++) {
         ctx.beginPath();
         ctx.arc(0, 0, (baseSize / phi) * r, 0, Math.PI * 2);
-        ctx.strokeStyle = `rgba(255, 215, 0, ${0.25 + Math.sin(time * 0.02 + r) * 0.12})`;
+        ctx.strokeStyle = plasmaColors[r % 3];
+        ctx.lineWidth = 2;
         ctx.stroke();
       }
       
-      // Draw radiating lines
+      // Draw plasma radiating lines with spiral effect
       for (let i = 0; i < 12; i++) {
-        const angle = (i * Math.PI) / 6;
+        const angle = (i * Math.PI) / 6 + time * 0.01;
         ctx.beginPath();
         ctx.moveTo(0, 0);
         ctx.lineTo(Math.cos(angle) * baseSize * 1.2, Math.sin(angle) * baseSize * 1.2);
-        ctx.strokeStyle = `rgba(255, 215, 0, ${0.2 + Math.sin(time * 0.025 + i) * 0.1})`;
-        ctx.lineWidth = 1;
+        ctx.strokeStyle = plasmaColors[i % 3];
+        ctx.lineWidth = 1.5;
         ctx.stroke();
       }
       
       ctx.restore();
+      
+      // Draw sun orbit around center
+      const sunDistance = 150 + Math.sin(time * 0.01) * 30;
+      const sunAngle = time * 0.004;
+      const sunX = centerX + Math.cos(sunAngle) * sunDistance;
+      const sunY = centerY + Math.sin(sunAngle) * sunDistance;
+      
+      // Orbit path
+      ctx.strokeStyle = `rgba(255, 150, 0, 0.2)`;
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.arc(centerX, centerY, sunDistance, 0, Math.PI * 2);
+      ctx.stroke();
+      
+      // Sun glow
+      ctx.fillStyle = `rgba(255, 200, 50, 0.4)`;
+      ctx.beginPath();
+      ctx.arc(sunX, sunY, 25, 0, Math.PI * 2);
+      ctx.fill();
+      
+      // Sun core
+      ctx.fillStyle = `rgba(255, 255, 100, 0.8)`;
+      ctx.beginPath();
+      ctx.arc(sunX, sunY, 12, 0, Math.PI * 2);
+      ctx.fill();
+      
       ctx.globalAlpha = 1;
 
       time++;
