@@ -32,7 +32,7 @@ export default function HeroSection() {
       >
         <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
         <span className="text-xs font-black tracking-widest text-cyan-400">
-          ZARP ENGINEERING INTELLIGENCE PLATFORM
+          C.O.D.E.X.T.E.C.H. — ENGINEERING INTELLIGENCE PLATFORM
         </span>
       </div>
 
@@ -41,7 +41,7 @@ export default function HeroSection() {
         className="text-4xl md:text-6xl lg:text-7xl font-black text-center mb-6 leading-tight relative z-10"
         style={{ maxWidth: "960px" }}
       >
-        <span className="text-white">Engineering Intelligence</span>
+        <span className="text-white">Structured Research Intelligence</span>
         <br />
         <span
           style={{
@@ -50,7 +50,7 @@ export default function HeroSection() {
             WebkitTextFillColor: "transparent",
           }}
         >
-          For Advanced EM Research.
+          For Advanced EM Engineering.
         </span>
       </h1>
 
@@ -59,31 +59,31 @@ export default function HeroSection() {
         className="text-base md:text-lg text-center max-w-2xl mb-4 relative z-10 leading-relaxed"
         style={{ color: "rgba(255,255,255,0.65)" }}
       >
-        40+ granted US patents. 200+ peer-reviewed publications. Complete engineering build plans for advanced electromagnetic systems.{" "}
-        <span className="text-white font-bold">Primary sources only. Zero speculation.</span>
+        A systematic research database for engineers, inventors, and technical researchers working in electromagnetic systems, energy devices, and advanced physics.{" "}
+        <span className="text-white font-bold">Primary sources. Verified patents. Build-ready specifications.</span>
       </p>
 
       <p
         className="text-sm text-center mb-10 relative z-10 font-bold"
         style={{ color: "rgba(0,200,255,0.85)", letterSpacing: "0.04em" }}
       >
-        Used by engineers and researchers in 6+ countries. $49/month. Cancel anytime.
+        40+ granted US patents · 200+ peer-reviewed publications · 6 build systems · $49/month
       </p>
 
       {/* CTAs */}
       <div className="flex flex-col sm:flex-row gap-4 relative z-10 mb-16">
         <Link
-          to="/pricing"
+          to="/codextech-database"
           className="flex items-center justify-center gap-2 px-9 py-4 rounded-xl font-black text-base text-black transition-all hover:scale-105"
           style={{
             background: "linear-gradient(90deg, #00ccff, #00ff99)",
             boxShadow: "0 0 40px rgba(0,200,255,0.4), 0 8px 24px rgba(0,0,0,0.4)",
           }}
         >
-          Access the Platform — $49/mo <ArrowRight size={16} />
+          Access the Research Database <ArrowRight size={16} />
         </Link>
         <Link
-          to="/free-vault"
+          to="/pricing"
           className="flex items-center justify-center gap-2 px-8 py-4 rounded-xl font-black text-base transition-all hover:scale-105"
           style={{
             border: "1.5px solid rgba(255,255,255,0.2)",
@@ -91,7 +91,7 @@ export default function HeroSection() {
             color: "rgba(255,255,255,0.85)",
           }}
         >
-          <ShieldCheck size={16} /> Free Preview
+          <ShieldCheck size={16} /> View Membership Options
         </Link>
       </div>
 

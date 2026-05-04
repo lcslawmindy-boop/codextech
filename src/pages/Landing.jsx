@@ -5,32 +5,7 @@ import LiveActivityTicker from "@/components/LiveActivityTicker";
 import HeroSection from "@/components/landing/HeroSection";
 import ZaraAlienMascot from "@/components/ZaraAlienMascot";
 
-const WHAT_IS_IN = [
-  {
-    icon: <Database size={20} className="text-cyan-400" />,
-    title: "Patent Archive",
-    desc: "40+ US patents with full prosecution history, claims analysis, and engineering implications. Cross-referenced against USPTO. Every grant date, inventor, and assignee verified.",
-    items: ["MEG — US 6,362,718", "Tesla Longitudinal TX — US 1,119,732", "Gray Tube — US 3,913,004", "Kromrey Generator — US 4,151,431", "36+ more"],
-  },
-  {
-    icon: <FlaskConical size={20} className="text-green-400" />,
-    title: "Engineering Build Systems",
-    desc: "Complete build documentation for 6 electromagnetic systems. Not conceptual — actual BOMs with part numbers, assembly procedures, and measurement protocols.",
-    items: ["Motionless Electromagnetic Generator (MEG)", "Prioré EM Resonance Chamber", "G-Com Scalar Communicator", "TRZ Scalar Potential Extractor", "TRD-1 Telomere Resonance Device", "Scalar EM Lab Starter"],
-  },
-  {
-    icon: <Shield size={20} className="text-purple-400" />,
-    title: "AI Patent Tools",
-    desc: "Generate USPTO-compliant provisional patents, run prior art searches, build claims structure — in one session. No attorney required for a provisional.",
-    items: ["Provisional patent generator", "Claims structure builder", "FTO analysis framework", "Prior art archive (200+ entries)"],
-  },
-  {
-    icon: <TrendingUp size={20} className="text-orange-400" />,
-    title: "IP Marketplace",
-    desc: "List or invest in electromagnetic IP anonymously. Smart matching. Escrow-backed transactions. VDR for secure due diligence.",
-    items: ["Anonymous inventor/investor profiles", "AI-powered deal matching", "Secure VDR document room", "5% commission on closed deals only"],
-  },
-];
+
 
 const MODULES = [
   { title: "MEG System", category: "Free Energy", tag: "US 6,362,718", locked: false, img: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/b177d065d_generated_image.png", href: "/research-module?module=meg-system" },
@@ -56,24 +31,52 @@ export default function Landing() {
         {/* ── Hero ── */}
         <HeroSection />
 
-        {/* ── What's inside ── */}
+        {/* ── Section 2: What C.O.D.E.X.T.E.C.H. Is ── */}
+        <section className="px-6 py-20 border-b border-white/10 solid-section">
+          <div className="max-w-4xl mx-auto text-center">
+            <p className="text-cyan-400 text-xs font-black uppercase tracking-widest mb-3">The Platform</p>
+            <h2 className="text-3xl md:text-4xl font-black text-white mb-6">What C.O.D.E.X.T.E.C.H. Is</h2>
+            <div className="space-y-4 text-left max-w-3xl mx-auto">
+              <p className="text-gray-300 text-base leading-relaxed">
+                C.O.D.E.X.T.E.C.H. is a structured research intelligence system built for engineers, inventors, and technical researchers working at the boundary of conventional and advanced electromagnetic science.
+              </p>
+              <p className="text-gray-300 text-base leading-relaxed">
+                Every entry in the database is sourced from granted US patents, peer-reviewed academic publications, declassified government reports, and verified engineering documentation. No speculation. No secondary interpretations.
+              </p>
+              <p className="text-gray-300 text-base leading-relaxed">
+                The platform organizes fragmented knowledge into structured research modules — each covering theoretical foundations, system architecture, component specifications, assembly procedures, and primary source citations.
+              </p>
+              <p className="text-gray-300 text-base leading-relaxed">
+                C.O.D.E.X.T.E.C.H. is designed for discovery with intent: every research pathway leads toward actionable engineering output, whether that is a working prototype, a patent filing, or a commercialization strategy.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* ── Section 3: Research Categories ── */}
         <section className="px-6 py-20 border-b border-white/10 solid-section">
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-12">
-              <p className="text-cyan-400 text-xs font-black uppercase tracking-widest mb-3">Platform Overview</p>
-              <h2 className="text-3xl md:text-4xl font-black text-white mb-3">Platform Contents</h2>
-              <p className="text-gray-400 text-base max-w-xl mx-auto">Every entry is primary-source verified. Patents cross-referenced against USPTO. Publications checked against journal archives. No exceptions.</p>
+              <p className="text-green-400 text-xs font-black uppercase tracking-widest mb-3">Research Categories</p>
+              <h2 className="text-3xl md:text-4xl font-black text-white mb-3">Five Research Domains</h2>
+              <p className="text-gray-400 text-sm max-w-xl mx-auto">Each category contains primary-source research modules, engineering specifications, and cross-referenced patent documentation.</p>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {WHAT_IS_IN.map((section, i) => (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+              {[
+                { icon: <Database size={20} className="text-cyan-400" />, title: "Electromagnetics", desc: "Advanced EM field theory, longitudinal wave systems, scalar potential engineering, and Tesla-derived device architectures. Sourced from 40+ granted US patents.", items: ["Scalar EM theory", "Longitudinal wave devices", "Tesla patent archive", "Phase conjugation systems"] },
+                { icon: <FlaskConical size={20} className="text-green-400" />, title: "Bioelectromagnetics", desc: "EM field interaction with biological systems. Prioré device documentation, frequency-specific therapeutic protocols, and peer-reviewed clinical research.", items: ["Prioré device (FR 1,342,772)", "EM trigger window therapy", "TRD-1 telomere system", "Biofield measurement protocols"] },
+                { icon: <TrendingUp size={20} className="text-orange-400" />, title: "Energy Systems", desc: "Overunity device research, vacuum energy extraction theory, and documented COP>1 device specifications from peer-reviewed and patent literature.", items: ["MEG (US 6,362,718)", "Bedini SG systems", "Vacuum potential extraction", "Anenergy Phi-field circuits"] },
+                { icon: <Shield size={20} className="text-purple-400" />, title: "Atmospheric Systems", desc: "ELF/VLF propagation, ionospheric interaction, atmospheric EM signature detection, and scalar wave transmission through terrestrial waveguides.", items: ["ELF carrier detection", "Ionospheric resonance", "Atmospheric scalar signatures", "Tesla ground transmission"] },
+                { icon: <Shield size={20} className="text-yellow-400" />, title: "Patent Strategy", desc: "USPTO filing strategy, claims architecture, freedom-to-operate analysis, and IP commercialization frameworks specifically developed for EM inventors.", items: ["Provisional patent generation", "Prior art archive (200+ entries)", "Claims structure builder", "FTO analysis framework"] },
+              ].map((cat, i) => (
                 <div key={i} className="bg-gray-900/70 border border-gray-800 rounded-2xl p-6 backdrop-blur">
                   <div className="flex items-center gap-3 mb-3">
-                    {section.icon}
-                    <h3 className="text-white font-black text-lg">{section.title}</h3>
+                    {cat.icon}
+                    <h3 className="text-white font-black text-lg">{cat.title}</h3>
                   </div>
-                  <p className="text-gray-400 text-sm leading-relaxed mb-4">{section.desc}</p>
+                  <p className="text-gray-400 text-sm leading-relaxed mb-4">{cat.desc}</p>
                   <div className="space-y-1.5">
-                    {section.items.map((item, j) => (
+                    {cat.items.map((item, j) => (
                       <div key={j} className="flex items-start gap-2 text-xs text-gray-300">
                         <span className="text-cyan-500 mt-0.5 flex-shrink-0">→</span>
                         <span>{item}</span>
@@ -82,6 +85,48 @@ export default function Landing() {
                   </div>
                 </div>
               ))}
+              <div className="bg-gray-900/40 border border-gray-800/50 rounded-2xl p-6 backdrop-blur flex items-center justify-center">
+                <Link to="/codextech-database" className="text-center">
+                  <p className="text-gray-400 text-sm mb-3">Browse the full research database</p>
+                  <span className="inline-flex items-center gap-2 text-cyan-400 font-black text-sm hover:text-cyan-300 transition-colors">
+                    Open Research Database <ArrowRight size={14} />
+                  </span>
+                </Link>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ── Section 4: Why It Matters ── */}
+        <section className="px-6 py-20 border-b border-white/10 solid-section">
+          <div className="max-w-5xl mx-auto">
+            <div className="text-center mb-12">
+              <p className="text-orange-400 text-xs font-black uppercase tracking-widest mb-3">The Problem & Solution</p>
+              <h2 className="text-3xl md:text-4xl font-black text-white mb-3">Why Structured Research Matters</h2>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div className="bg-gray-900/60 border border-red-900/40 rounded-2xl p-6 backdrop-blur">
+                <h3 className="text-white font-black text-lg mb-4 flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-red-500" /> The Problem
+                </h3>
+                <p className="text-gray-400 text-sm leading-relaxed mb-3">
+                  Advanced electromagnetic research is scattered across thousands of patent filings, obscure academic journals, declassified government reports, and privately held engineering notes. Most researchers spend the majority of their time locating and validating sources rather than doing actual engineering work.
+                </p>
+                <p className="text-gray-400 text-sm leading-relaxed">
+                  Without structured organization, critical connections between related devices, patents, and theoretical frameworks go unnoticed. Inventors duplicate prior work. Promising engineering paths are abandoned due to incomplete information. IP is mismanaged or left unprotected.
+                </p>
+              </div>
+              <div className="bg-gray-900/60 border border-cyan-900/40 rounded-2xl p-6 backdrop-blur">
+                <h3 className="text-white font-black text-lg mb-4 flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-cyan-400" /> The C.O.D.E.X.T.E.C.H. Solution
+                </h3>
+                <p className="text-gray-400 text-sm leading-relaxed mb-3">
+                  C.O.D.E.X.T.E.C.H. aggregates, verifies, and structures the most significant electromagnetic research into a unified intelligence platform. Every entry traces to a primary source. Every module is engineered for actionable output — not passive reading.
+                </p>
+                <p className="text-gray-400 text-sm leading-relaxed">
+                  Members access a continuously updated database of patents, publications, and build specifications, organized into research modules with cross-referenced citation networks, AI patent tools, and direct pathways from research discovery to prototype development and IP filing.
+                </p>
+              </div>
             </div>
           </div>
         </section>
@@ -203,27 +248,29 @@ export default function Landing() {
           </div>
         </section>
 
-        {/* ── Pricing CTA ── */}
+        {/* ── Section 5: CTA Block ── */}
         <section className="px-6 py-24 border-b border-white/10 solid-section">
           <div className="max-w-2xl mx-auto text-center">
             <p className="text-cyan-400 text-xs font-black uppercase tracking-widest mb-4">Research Membership</p>
             <h2 className="text-4xl md:text-5xl font-black text-white mb-4">
-              Full Access.<br />
+              Everything You Need.<br />
               <span style={{ background: "linear-gradient(135deg, #00ccff, #00ff99)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
-                One Flat Rate.
+                One Membership.
               </span>
             </h2>
-            <p className="text-gray-400 text-base mb-2 max-w-lg mx-auto">Complete patent archive. All research modules. AI patent tools. IP marketplace. $49/month. Cancel anytime.</p>
-            <p className="text-gray-600 text-sm mb-10">No tiers. No per-item fees. Everything unlocked at $49.</p>
+            <p className="text-gray-400 text-base mb-2 max-w-lg mx-auto">
+              Full database access. All research modules. AI patent tools. Build plans. IP marketplace. $49/month. Cancel anytime.
+            </p>
+            <p className="text-gray-600 text-sm mb-10">No tiers. No per-item fees. Everything unlocked from day one.</p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link to="/pricing"
                 className="flex items-center justify-center gap-2 px-10 py-4 rounded-xl font-black text-base text-black transition-all hover:scale-105"
                 style={{ background: "linear-gradient(90deg, #00ccff, #00ff99)", boxShadow: "0 4px 32px rgba(0,200,255,0.3)" }}>
-                Join — $49/month <ArrowRight size={16} />
+                Start Membership — $49/mo <ArrowRight size={16} />
               </Link>
-              <Link to="/free-vault"
+              <Link to="/codextech-database"
                 className="flex items-center justify-center gap-2 px-8 py-4 rounded-xl font-black text-sm text-gray-300 border border-gray-700 hover:border-gray-500 transition-colors">
-                Free Access Preview
+                <Database size={15} /> Explore Research
               </Link>
             </div>
             <p className="text-gray-700 text-xs mt-5">Secured by Stripe · Cancel anytime · No contracts</p>
