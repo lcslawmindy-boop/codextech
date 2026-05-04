@@ -1,40 +1,45 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { base44 } from "@/api/base44Client";
 
 /**
- * Returns { tier, loading }
- * tier is one of: "free" | "starter" | "researcher" | "pro"
+ * Single $49/mo membership model.
+ * Returns { tier, loading, refetch }
+ * tier: "free" | "member"
+ * admin always returns "member"
  */
 export function useTier() {
   const [tier, setTier] = useState("free");
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const check = async () => {
-      try {
-        const user = await base44.auth.me();
-        if (!user) { setTier("free"); setLoading(false); return; }
-        if (user.role === "admin") { setTier("pro"); setLoading(false); return; }
+  const check = useCallback(async () => {
+    setLoading(true);
+    try {
+      const user = await base44.auth.me();
+      if (!user) { setTier("free"); setLoading(false); return; }
 
-        const apps = await base44.entities.BetaApplication.filter({ email: user.email });
-        const app = apps[0];
+      // Admins always have full access
+      if (user.role === "admin") { setTier("member"); setLoading(false); return; }
 
-        if (!app) { setTier("free"); setLoading(false); return; }
+      // Check BetaApplication for active membership
+      const apps = await base44.entities.BetaApplication.filter({ email: user.email });
+      const app = apps[0];
 
-        const plan = app.plan_purchased?.toLowerCase() || "";
+      if (!app) { setTier("free"); setLoading(false); return; }
 
-        if (plan.includes("elite")) { setTier("elite"); }
-        else if (plan.includes("pro") || plan.includes("researcher") || app.status === "converted") { setTier("pro"); }
-        else if (plan.includes("starter") || plan.includes("member")) { setTier("starter"); }
-        else { setTier("free"); }
-      } catch {
-        setTier("free");
-      } finally {
-        setLoading(false);
-      }
-    };
-    check();
+      const plan = (app.plan_purchased || "").toLowerCase();
+      const isActive = app.status === "converted" || app.status === "active" ||
+        plan.includes("member") || plan.includes("research") ||
+        plan.includes("pro") || plan.includes("starter") || plan.includes("elite");
+
+      setTier(isActive ? "member" : "free");
+    } catch {
+      setTier("free");
+    } finally {
+      setLoading(false);
+    }
   }, []);
 
-  return { tier, loading };
+  useEffect(() => { check(); }, [check]);
+
+  return { tier, loading, refetch: check };
 }

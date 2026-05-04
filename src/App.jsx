@@ -228,10 +228,10 @@ const AuthenticatedApp = () => {
           <Route path="/member-dashboard" element={<MemberDashboard />} />
           <Route path="/account" element={<AccountSettings />} />
           <Route path="/onboarding" element={<Onboarding />} />
-          <Route path="/trial-onboarding" element={<Onboarding />} />
           <Route path="/welcome" element={<Welcome />} />
           <Route path="/paywall" element={<PaywallPage />} />
           <Route path="/pricing" element={<SaaSPricing />} />
+          <Route path="/subscribe" element={<SaaSPricing />} />
           <Route path="/free-vault" element={<FreeVault />} />
 
           {/* ── Research & Database ── */}
@@ -247,6 +247,7 @@ const AuthenticatedApp = () => {
 
           {/* ── Build & Invention ── */}
           <Route path="/build-plans" element={<BuildPlansMarketplace />} />
+          <Route path="/invention-plans" element={<BuildPlansMarketplace />} />
           <Route path="/build/:id" element={<BuildDetail />} />
           <Route path="/build-supplies-shop" element={<BuildSuppliesShop />} />
           <Route path="/inventor-forge" element={<InventionForge />} />

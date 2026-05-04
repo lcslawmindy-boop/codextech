@@ -116,7 +116,7 @@ export default function EMFCrisisSection() {
           }}
         >
           <h3 className="text-2xl font-black text-white mb-2 text-center">
-            🌍 The 50-Year Plan If We Don't Switch to Scalar
+            The 50-Year Projection If We Don't Switch to Scalar
           </h3>
           <p className="text-center text-sm mb-8" style={{ color: "rgba(255,100,100,0.8)" }}>
             Projection based on current EMF exposure growth rates + WHO & IARC data. Not speculation — extrapolation.
@@ -169,7 +169,7 @@ export default function EMFCrisisSection() {
             }}
           >
             <p className="text-white font-black text-lg mb-2">
-              🌿 Scalar EM Technology Is The Antidote.
+              Scalar EM Technology Is The Antidote.
             </p>
             <p className="text-sm mb-5" style={{ color: "rgba(255,255,255,0.6)" }}>
               Scalar waves do not induce the same ionic disruption as transverse EM waves.
@@ -182,21 +182,21 @@ export default function EMFCrisisSection() {
                 className="px-6 py-3 rounded-xl font-black text-sm"
                 style={{ background: "rgba(255,50,100,0.15)", border: "2px solid #ff3366", color: "#ff3366" }}
               >
-                📊 Log Your EMF Exposure
+                Log Your EMF Exposure
               </Link>
               <Link
                 to="/emf-shop"
                 className="px-6 py-3 rounded-xl font-black text-sm"
                 style={{ background: "rgba(0,255,100,0.12)", border: "2px solid #00ff66", color: "#00ff66" }}
               >
-                🛡️ Shop EMF Protection
+                Shop EMF Protection
               </Link>
               <Link
                 to="/scalar-lab"
                 className="px-6 py-3 rounded-xl font-black text-sm"
                 style={{ background: "rgba(0,180,255,0.12)", border: "2px solid #00ccff", color: "#00ccff" }}
               >
-                ⚡ Enter the Scalar Lab
+                Enter the Scalar Lab
               </Link>
             </div>
           </div>

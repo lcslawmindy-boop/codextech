@@ -1,17 +1,16 @@
 import { Outlet, useLocation } from "react-router-dom";
-import { useState, useEffect } from "react";
-import BottomTabBar from "./BottomTabBar";
-import SidebarNav from "./SidebarNav";
 import { useTrial } from "@/lib/TrialContext";
 import { AnimatePresence, motion } from "framer-motion";
+import BottomTabBar from "./BottomTabBar";
+import SidebarNav from "./SidebarNav";
 
+// Pages where the bottom tab bar should be hidden
+const HIDDEN_TAB_ROUTES = [
+  "/", "/checkout", "/paywall", "/pricing", "/free-vault",
+  "/post-purchase", "/welcome", "/onboarding",
+];
 
-import TopLogoHeader from "./TopLogoHeader";
-
-// Pages that should NOT show the bottom tab bar
-const HIDDEN_TAB_ROUTES = ["/legal", "/checkout", "/paywall", "/pricing", "/free-vault", "/"];
-
-// Full-screen immersive tool pages — hide tab bar
+// Full-screen tool pages — hide tab bar
 const IMMERSIVE_ROUTES = [
   "/scalar-wave-sim", "/scalar-sim", "/scalar-lab", "/scalar-potential",
   "/lab", "/simulator", "/patent-tool", "/patent-wizard", "/inventor-forge",
@@ -27,19 +26,18 @@ export default function MobileLayout() {
   const { pathname } = useLocation();
   const { isTrial } = useTrial();
   const isLanding = pathname === "/";
-  const hideTab = HIDDEN_TAB_ROUTES.some(r => pathname === r) ||
+  const hideTab = HIDDEN_TAB_ROUTES.includes(pathname) ||
                   IMMERSIVE_ROUTES.some(r => pathname.startsWith(r));
 
   return (
     <div className="flex w-full" style={{ minHeight: "100dvh" }}>
-      {/* Sidebar — hidden on landing page */}
+      {/* Sidebar — desktop only, hidden on landing */}
       {!isLanding && (
         <div className="hidden md:block w-64 flex-shrink-0">
           <SidebarNav />
         </div>
       )}
 
-      {/* Main Content */}
       <div
         className="flex flex-col flex-1"
         style={{
@@ -49,15 +47,18 @@ export default function MobileLayout() {
           background: "transparent",
         }}
       >
-        {/* Mobile Sidebar Toggle — hidden on landing page */}
+        {/* Mobile sidebar toggle — hidden on landing */}
         {!isLanding && (
           <div className="md:hidden">
             <SidebarNav />
           </div>
         )}
 
-        {isTrial && <div className="h-[34px] bg-yellow-900/20 border-b border-yellow-700 flex items-center px-4"><span className="text-xs font-bold text-yellow-300">Trial Mode</span></div>}
-
+        {isTrial && (
+          <div className="h-[34px] bg-yellow-900/20 border-b border-yellow-700 flex items-center px-4">
+            <span className="text-xs font-bold text-yellow-300">Trial Mode</span>
+          </div>
+        )}
 
         <div className="flex-1 relative overflow-hidden" style={{ zIndex: 1 }}>
           <AnimatePresence mode="wait" initial={false}>
@@ -73,6 +74,7 @@ export default function MobileLayout() {
             </motion.div>
           </AnimatePresence>
         </div>
+
         {!hideTab && <BottomTabBar />}
       </div>
     </div>
