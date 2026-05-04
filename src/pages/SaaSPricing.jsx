@@ -16,6 +16,7 @@ const FEATURES = [
   "Monthly research updates",
   "Community forum access",
   "Email support",
+  "Buy courses & build plans at 20-30% discount",
 ];
 
 const FAQS = [
