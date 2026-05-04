@@ -268,6 +268,26 @@ const CONSCIOUSNESS_IMAGES = [
   { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/3db655367_Aurawelllogo6-Copy.png", depth: 0.4, scale: 0.85, angle: 2.9 }, // Aurawell 2
   { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/d4ddb6b18_Aurawelllogo-Copy.png", depth: 0.75, scale: 1.15, angle: 3.5 }, // Aurawell 3
   { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/faefe1c51_ZARPlogo-Copy.png", depth: 0.8, scale: 1.2, angle: 0.0 }, // ZARP logo
+  { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/b7dcb98ce_615817479_10162448496992399_3368752152586610283_n-Copy.jpg", depth: 0.6, scale: 0.9, angle: 0.4 }, // Enlightened figure
+  { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/d15c2c4f6_615224639_1183362507294312_8069412157456999405_n-Copy.jpg", depth: 0.7, scale: 1.1, angle: 0.9 }, // Spacetime vortex
+  { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/b3b19fcb5_front_cover_star_wars_now120215-440px.jpg", depth: 0.5, scale: 0.95, angle: 1.4 }, // Star Wars Bearden
+  { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/bc8074431_aidscover.jpg", depth: 0.9, scale: 1.3, angle: 1.9 }, // AIDS Biological Warfare
+  { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/f128a3ec2_bigcov1.jpg", depth: 0.65, scale: 1.0, angle: 2.4 }, // Cover 1
+  { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/8840823c2_025.jpg", depth: 0.4, scale: 0.85, angle: 2.9 }, // Diagram 025
+  { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/a04720225_026.jpg", depth: 0.75, scale: 1.15, angle: 3.4 }, // Diagram 026
+  { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/9bc2826cd_027.jpg", depth: 0.8, scale: 1.2, angle: 3.9 }, // Diagram 027
+  { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/45216f640_029.jpg", depth: 0.6, scale: 0.9, angle: 0.5 }, // Diagram 029
+  { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/64b4ea654_033.jpg", depth: 0.7, scale: 1.1, angle: 1.0 }, // Diagram 033
+  { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/330baaf97_034.jpg", depth: 0.5, scale: 0.95, angle: 1.5 }, // Diagram 034
+  { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/055839cc1_035.jpg", depth: 0.9, scale: 1.3, angle: 2.0 }, // Diagram 035
+  { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/b9d18218c_036.jpg", depth: 0.65, scale: 1.0, angle: 2.5 }, // Diagram 036
+  { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/55a87c735_040.jpg", depth: 0.4, scale: 0.85, angle: 3.0 }, // Diagram 040
+  { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/48228606f_041.jpg", depth: 0.75, scale: 1.15, angle: 3.5 }, // Diagram 041
+  { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/b29abc45b_043.jpg", depth: 0.8, scale: 1.2, angle: 0.3 }, // Diagram 043
+  { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/464b54faa_045.jpg", depth: 0.6, scale: 0.9, angle: 0.8 }, // Diagram 045
+  { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/979ebd292_047.jpg", depth: 0.7, scale: 1.1, angle: 1.3 }, // Diagram 047
+  { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/2f8f1a247_050.jpg", depth: 0.5, scale: 0.95, angle: 1.8 }, // Diagram 050
+  { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/d2498cd9d_051.jpg", depth: 0.9, scale: 1.3, angle: 2.3 }, // Diagram 051
 ];
 
 export default function LibraryBackground() {
