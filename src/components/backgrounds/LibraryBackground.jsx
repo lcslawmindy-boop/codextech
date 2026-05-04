@@ -669,7 +669,7 @@ requestAnimationFrame(animateMatrix);
       <div style={{ position: "absolute", inset: 0, pointerEvents: "none", perspective: "1200px" }}>
         {CONSCIOUSNESS_IMAGES.map((img, idx) => {
           const speed = img.speed || 1;
-          const rotAngle = (timeRef.current * 0.0008 * speed + img.angle) % (Math.PI * 2);
+          const rotAngle = (timeRef.current * 0.0025 * speed + img.angle) % (Math.PI * 2);
           const orbitRadius = 280 + idx * 60;
           const x = Math.cos(rotAngle) * orbitRadius;
           const y = Math.sin(rotAngle) * orbitRadius * 0.6;
