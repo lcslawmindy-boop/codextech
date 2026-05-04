@@ -217,11 +217,24 @@ const LIBRARY_IMAGES = [
   "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/f4fb93cfd_generated_image.png",
 ];
 
+// Enhanced 3D library consciousness images
+const CONSCIOUSNESS_IMAGES = [
+  { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/179c02c33_GWN3q.png", depth: 0.8, scale: 1.2, angle: 0 }, // Akashics Library
+  { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/394d5932e_1000_F_971892795_RX3cpf8xMUbbE4vJ2MnOerElgOeodidS.jpg", depth: 0.6, scale: 0.9, angle: Math.PI * 0.5 }, // Brain consciousness
+  { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/d9e99dbf9_modern-office-space-with-empty-bookshelves-and-clean-decor-generated-by-ai-photo.jpg", depth: 0.7, scale: 1.1, angle: Math.PI }, // Modern library
+  { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/0e1fff3d2_pngtree-blurred-empty-library-interior-with-bookshelves-and-white-floor-image_17084947-Copy.jpg", depth: 0.5, scale: 0.95, angle: Math.PI * 1.5 }, // Blurred library
+  { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/0cf0b1d3d_6e9914fb6d6d4a305dd2fbe4c30e098d-Copy.jpg", depth: 0.9, scale: 1.3, angle: 0.5 }, // Grand ceiling
+  { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/89ddb8038_maxresdefault.jpg", depth: 0.65, scale: 1.0, angle: 1.0 }, // Starry ceiling
+  { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/16ea6b61f_How-to-Access-and-Read-the-Akashic-Records.jpg", depth: 0.4, scale: 0.85, angle: 2.0 }, // Hand energy
+  { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/581300e53_a-long-row-of-bookshelves-in-a-library-free-photo.jpg", depth: 0.75, scale: 1.15, angle: 2.5 }, // Neon library
+];
+
 export default function LibraryBackground() {
   const [currentIdx, setCurrentIdx] = useState(() => Math.floor(Math.random() * LIBRARY_IMAGES.length));
   const [nextIdx, setNextIdx] = useState(null);
   const [fading, setFading] = useState(false);
   const canvasRef = useRef(null);
+  const timeRef = useRef(0);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -269,9 +282,8 @@ export default function LibraryBackground() {
       color: ['#00ff00', '#ffffff'][Math.floor(Math.random() * 2)],
     }));
 
-    let time = 0;
-
     const animateMatrix = () => {
+      timeRef.current++;
       ctx.fillStyle = "rgba(0, 0, 0, 0.06)";
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
@@ -526,9 +538,7 @@ export default function LibraryBackground() {
       drawMetatronsCube(ctx, centerX + Math.cos(time * 0.0035 + Math.PI) * 320, centerY + Math.sin(time * 0.0035 + Math.PI) * 320, 40, time, '#6C3AFF');
       
       ctx.globalAlpha = 1;
-
-      time++;
-      requestAnimationFrame(animateMatrix);
+requestAnimationFrame(animateMatrix);
     };
 
     animateMatrix();
@@ -569,6 +579,41 @@ export default function LibraryBackground() {
 
 
 
+
+      {/* 3D Consciousness/Library Image Layer */}
+      <div style={{ position: "absolute", inset: 0, pointerEvents: "none", perspective: "1200px" }}>
+        {CONSCIOUSNESS_IMAGES.map((img, idx) => {
+          const rotAngle = (timeRef.current * 0.0008 + img.angle) % (Math.PI * 2);
+          const orbitRadius = 280 + idx * 60;
+          const x = Math.cos(rotAngle) * orbitRadius;
+          const y = Math.sin(rotAngle) * orbitRadius * 0.6;
+          const scale = img.scale + Math.sin(timeRef.current * 0.003 + idx) * 0.15;
+          const opacity = 0.15 + Math.sin(timeRef.current * 0.004 + idx * 0.8) * 0.08;
+          
+          return (
+            <div
+              key={idx}
+              style={{
+                position: "absolute",
+                left: "50%",
+                top: "50%",
+                transform: `translate(calc(-50% + ${x}px), calc(-50% + ${y}px)) scale(${scale}) rotateZ(${rotAngle * 20}deg)`,
+                width: `${120 + idx * 20}px`,
+                height: `${120 + idx * 20}px`,
+                backgroundImage: `url('${img.url}')`,
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+                borderRadius: "8px",
+                opacity,
+                boxShadow: `0 0 40px rgba(100,150,255,${opacity * 0.5}), inset 0 0 30px rgba(0,200,255,${opacity * 0.3})`,
+                border: `2px solid rgba(100,200,255,${opacity * 0.4})`,
+                backdropFilter: "blur(2px)",
+                transition: "all 0.1s ease-out",
+              }}
+            />
+          );
+        })}
+      </div>
 
       {/* Dark overlay to keep text readable */}
       <div
