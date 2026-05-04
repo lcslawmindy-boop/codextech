@@ -71,6 +71,7 @@ export default function LibraryBackground() {
     const rows = Math.ceil(canvas.height / gridSize);
     const cols = Math.ceil(canvas.width / gridSize);
     const horizontalLines = Math.ceil(canvas.height / 60);
+    const binaryStreamCount = Math.ceil(canvas.width / 80);
     
     // Horizontal matrix streams (bidirectional)
     const streams = Array.from({ length: horizontalLines }, (_, i) => ({
@@ -78,6 +79,14 @@ export default function LibraryBackground() {
       speed: Math.random() * 0.5 + 0.3,
       x: i % 2 === 0 ? 0 : canvas.width,
       direction: i % 2 === 0 ? 1 : -1, // 1 = right, -1 = left
+    }));
+
+    // Falling binary code streams
+    const binaryStreams = Array.from({ length: binaryStreamCount }, () => ({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height - canvas.height,
+      speed: Math.random() * 1.5 + 1,
+      color: ['#00ffff', '#ff00ff', '#00ff99', '#ffff00', '#ff0099'][Math.floor(Math.random() * 5)],
     }));
 
     let time = 0;
@@ -125,6 +134,25 @@ export default function LibraryBackground() {
         for (let i = 0; i < 20; i++) {
           const text = MATRIX_CHARS[Math.floor(Math.random() * MATRIX_CHARS.length)];
           ctx.fillText(text, stream.x + i * fontSize * stream.direction, stream.y);
+        }
+      });
+
+      // Falling binary code
+      binaryStreams.forEach((stream) => {
+        stream.y += stream.speed;
+        if (stream.y > canvas.height) {
+          stream.y = -50;
+          stream.x = Math.random() * canvas.width;
+          stream.speed = Math.random() * 1.5 + 1;
+        }
+
+        ctx.fillStyle = stream.color;
+        ctx.shadowColor = stream.color;
+        ctx.shadowBlur = 12;
+        ctx.font = `bold 12px monospace`;
+        for (let i = 0; i < 8; i++) {
+          const binary = Math.random() > 0.5 ? '1' : '0';
+          ctx.fillText(binary, stream.x, stream.y + i * 16);
         }
       });
 
@@ -236,6 +264,17 @@ export default function LibraryBackground() {
           inset: 0,
           background: "repeating-radial-gradient(circle at 50% 50%, rgba(0,255,100,0.28) 0px, transparent 40px, rgba(0,255,100,0.28) 80px)",
           animation: "scalarWavePulse 3s ease-in-out infinite",
+          pointerEvents: "none",
+        }}
+      />
+
+      {/* Neon colored laylines */}
+      <div
+        style={{
+          position: "absolute",
+          inset: 0,
+          background: "linear-gradient(90deg, rgba(0,255,255,0.08) 0%, rgba(255,0,255,0.08) 25%, rgba(0,255,150,0.08) 50%, rgba(255,255,0,0.08) 75%, rgba(255,0,153,0.08) 100%)",
+          animation: "waveShift 8s ease-in-out infinite",
           pointerEvents: "none",
         }}
       />
