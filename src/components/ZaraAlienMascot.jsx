@@ -17,12 +17,12 @@ function MatrixRain({ width = 340, height = 200 }) {
     const chars = '01アイウエオカキクケコサシスセソタチツテトナニヌネノ∑∇∆Ψ∞Φ';
     let raf;
     const draw = () => {
-      ctx.fillStyle = 'rgba(0,0,0,0.15)';
+      ctx.fillStyle = 'rgba(0,0,0,0.08)';
       ctx.fillRect(0, 0, width, height);
       ctx.font = '13px monospace';
       drops.forEach((y, i) => {
         const char = chars[Math.floor(Math.random() * chars.length)];
-        const brightness = Math.random() > 0.9 ? '#ffffff' : '#00ff41';
+        const brightness = Math.random() > 0.85 ? '#ffffff' : Math.random() > 0.5 ? '#00ff41' : '#39ff6a';
         ctx.fillStyle = brightness;
         ctx.fillText(char, i * 14, y * 14);
         if (y * 14 > height && Math.random() > 0.975) drops[i] = 0;
@@ -33,7 +33,7 @@ function MatrixRain({ width = 340, height = 200 }) {
     draw();
     return () => cancelAnimationFrame(raf);
   }, [width, height]);
-  return <canvas ref={canvasRef} width={width} height={height} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', opacity: 0.55 }} />;
+  return <canvas ref={canvasRef} width={width} height={height} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', opacity: 0.9 }} />;
 }
 
 /* ── Lightning Avatar ── */
