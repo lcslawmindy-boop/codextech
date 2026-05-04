@@ -16,10 +16,9 @@ export default function CodextechHome() {
             <span className="font-black text-sm">C.O.D.E.X.T.E.C.H.</span>
           </div>
           <div className="flex items-center gap-8 text-sm">
-            <a href="#database" className="text-gray-600 hover:text-gray-900">Database</a>
-            <a href="#pillars" className="text-gray-600 hover:text-gray-900">Research</a>
-            <a href="#" className="text-gray-600 hover:text-gray-900">Patent Intelligence</a>
+            <Link to="/codextech-database" className="text-gray-600 hover:text-gray-900">Research</Link>
             <Link to="/codextech-pricing" className="text-gray-600 hover:text-gray-900">Pricing</Link>
+            <Link to="/research-brief-landing" className="text-gray-600 hover:text-gray-900">Free Brief</Link>
             <Link to="/codextech-pricing" className="px-4 py-2 rounded-lg bg-gray-900 text-white font-bold text-xs hover:bg-gray-800">
               Access Database
             </Link>
@@ -42,13 +41,13 @@ export default function CodextechHome() {
             A premium research database organizing patents, experimental literature, technical archives, and engineering frameworks into structured systems for serious builders, researchers, and technical founders.
           </p>
           <div className="flex gap-4 flex-wrap">
-            <Link to="/codextech-database"
+            <Link to="/research-brief-landing"
               className="px-8 py-4 rounded-lg bg-gray-900 text-white font-black hover:bg-gray-800 transition-colors flex items-center gap-2">
-              Access the Research Database <ArrowRight size={18} />
+              Get Free Research Brief <ArrowRight size={18} />
             </Link>
             <Link to="/codextech-pricing"
               className="px-8 py-4 rounded-lg border-2 border-gray-900 text-gray-900 font-black hover:bg-gray-50 transition-colors">
-              View Research Modules
+              View Pricing
             </Link>
           </div>
         </div>
@@ -147,10 +146,16 @@ export default function CodextechHome() {
         <div className="max-w-3xl mx-auto text-center">
           <p className="text-2xl font-black mb-4">Stop collecting scattered documents.</p>
           <p className="text-2xl font-black mb-12">Start using a structured research system.</p>
-          <Link to="/codextech-pricing"
-            className="px-8 py-4 rounded-lg bg-white text-gray-900 font-black hover:bg-gray-100 transition-colors inline-flex items-center gap-2">
-            Access C.O.D.E.X.T.E.C.H. <ArrowRight size={18} />
-          </Link>
+          <div className="flex gap-4 justify-center flex-wrap">
+            <Link to="/research-brief-landing"
+              className="px-8 py-4 rounded-lg bg-white text-gray-900 font-black hover:bg-gray-100 transition-colors inline-flex items-center gap-2">
+              Get Free Research Brief <ArrowRight size={18} />
+            </Link>
+            <Link to="/codextech-pricing"
+              className="px-8 py-4 rounded-lg border-2 border-white text-white font-black hover:bg-white hover:text-gray-900 transition-colors inline-flex items-center gap-2">
+              View Pricing
+            </Link>
+          </div>
         </div>
       </section>
 

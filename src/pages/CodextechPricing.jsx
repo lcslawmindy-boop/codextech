@@ -1,13 +1,32 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
-import { CheckCircle2, ArrowRight } from "lucide-react";
+import { CheckCircle2, ArrowRight, Loader2 } from "lucide-react";
+import { base44 } from "@/api/base44Client";
 
 export default function CodextechPricing() {
-  const handleCheckout = (priceId, tier) => {
+  const [loadingTier, setLoadingTier] = useState(null);
+
+  const handleCheckout = async ({ title, priceInCents, mode = "subscription", interval = "month", oneTime = false }) => {
     if (window.self !== window.top) {
-      alert("Checkout works only from the published app. Please visit the main platform.");
+      alert("Checkout works only from the published app. Please open in a full browser tab.");
       return;
     }
-    window.location.href = `/checkout?tier=${tier}`;
+    setLoadingTier(title);
+    const origin = window.location.origin;
+    const res = await base44.functions.invoke("createCheckoutSession", {
+      title,
+      priceInCents,
+      mode: oneTime ? "payment" : "subscription",
+      interval: oneTime ? undefined : interval,
+      successUrl: `${origin}/codextech-pricing?success=true&tier=${encodeURIComponent(title)}`,
+      cancelUrl: `${origin}/codextech-pricing`,
+    });
+    if (res.data?.url) {
+      window.location.href = res.data.url;
+    } else {
+      alert(res.data?.error || "Checkout failed. Please try again.");
+      setLoadingTier(null);
+    }
   };
 
   return (
@@ -19,9 +38,16 @@ export default function CodextechPricing() {
             <div className="w-10 h-10 rounded-lg bg-gray-900 flex items-center justify-center text-white font-black text-xs">CX</div>
             <span className="font-black text-sm">C.O.D.E.X.T.E.C.H.</span>
           </Link>
-          <a href="#" className="text-gray-600 hover:text-gray-900 font-semibold text-sm">← Back to Home</a>
+          <Link to="/codextech" className="text-gray-600 hover:text-gray-900 font-semibold text-sm">← Back to Home</Link>
         </div>
       </nav>
+
+      {/* Success banner */}
+      {new URLSearchParams(window.location.search).get("success") === "true" && (
+        <div className="px-6 py-4 bg-green-50 border-b border-green-200 text-center">
+          <p className="text-green-800 font-bold text-sm">✓ Payment successful! Welcome to C.O.D.E.X.T.E.C.H. — <Link to="/codextech-database" className="underline">Access your research dashboard →</Link></p>
+        </div>
+      )}
 
       {/* Hero */}
       <section className="px-6 py-16 border-b border-gray-200 bg-gray-50">
@@ -58,9 +84,11 @@ export default function CodextechPricing() {
                 </li>
               ))}
             </ul>
-            <button onClick={() => handleCheckout("research", "research")}
-              className="w-full py-3 rounded-lg bg-gray-900 text-white font-bold hover:bg-gray-800 transition-colors">
-              Start Research Access
+            <button onClick={() => handleCheckout({ title: "Research Access", priceInCents: 4900 })}
+              disabled={loadingTier === "Research Access"}
+              className="w-full py-3 rounded-lg bg-gray-900 text-white font-bold hover:bg-gray-800 transition-colors disabled:opacity-50 flex items-center justify-center gap-2">
+              {loadingTier === "Research Access" ? <Loader2 size={14} className="animate-spin" /> : null}
+              Start Research Access — $49/mo
             </button>
           </div>
 
@@ -86,9 +114,11 @@ export default function CodextechPricing() {
                 </li>
               ))}
             </ul>
-            <button onClick={() => handleCheckout("builder", "builder")}
-              className="w-full py-3 rounded-lg bg-gray-900 text-white font-bold hover:bg-gray-800 transition-colors">
-              Start Builder Access
+            <button onClick={() => handleCheckout({ title: "Builder Access", priceInCents: 9700 })}
+              disabled={loadingTier === "Builder Access"}
+              className="w-full py-3 rounded-lg bg-gray-900 text-white font-bold hover:bg-gray-800 transition-colors disabled:opacity-50 flex items-center justify-center gap-2">
+              {loadingTier === "Builder Access" ? <Loader2 size={14} className="animate-spin" /> : null}
+              Start Builder Access — $97/mo
             </button>
           </div>
 
@@ -118,9 +148,11 @@ export default function CodextechPricing() {
                 </li>
               ))}
             </ul>
-            <button onClick={() => handleCheckout("operator", "operator")}
-              className="w-full py-3 rounded-lg bg-white text-gray-900 font-black hover:bg-gray-100 transition-colors">
-              Start Operator Access
+            <button onClick={() => handleCheckout({ title: "Operator Access", priceInCents: 19700 })}
+              disabled={loadingTier === "Operator Access"}
+              className="w-full py-3 rounded-lg bg-white text-gray-900 font-black hover:bg-gray-100 transition-colors disabled:opacity-50 flex items-center justify-center gap-2">
+              {loadingTier === "Operator Access" ? <Loader2 size={14} className="animate-spin" /> : null}
+              Start Operator Access — $197/mo
             </button>
           </div>
 
@@ -149,9 +181,11 @@ export default function CodextechPricing() {
                 </li>
               ))}
             </ul>
-            <button onClick={() => handleCheckout("bundle", "bundle")}
-              className="w-full py-3 rounded-lg bg-gray-900 text-white font-bold hover:bg-gray-800 transition-colors">
-              Get Full Systems Bundle
+            <button onClick={() => handleCheckout({ title: "Engineering Systems Bundle", priceInCents: 99700, oneTime: true })}
+              disabled={loadingTier === "Engineering Systems Bundle"}
+              className="w-full py-3 rounded-lg bg-gray-900 text-white font-bold hover:bg-gray-800 transition-colors disabled:opacity-50 flex items-center justify-center gap-2">
+              {loadingTier === "Engineering Systems Bundle" ? <Loader2 size={14} className="animate-spin" /> : null}
+              Get Full Bundle — $997
             </button>
           </div>
         </div>

@@ -30,7 +30,10 @@ export default function CodextechDatabase() {
             <div className="w-10 h-10 rounded-lg bg-gray-900 flex items-center justify-center text-white font-black text-xs">CX</div>
             <span className="font-black text-sm">C.O.D.E.X.T.E.C.H.</span>
           </Link>
-          <div className="text-sm text-gray-600">Research Database</div>
+          <div className="flex items-center gap-4">
+            <div className="text-sm text-gray-600">Research Database</div>
+            <Link to="/codextech-pricing" className="px-3 py-1.5 rounded-lg bg-gray-900 text-white text-xs font-black hover:bg-gray-800">Unlock Full Access</Link>
+          </div>
         </div>
       </nav>
 
@@ -130,9 +133,15 @@ export default function CodextechDatabase() {
 
                     <div className="flex items-center justify-between pt-4 border-t border-gray-200 mt-auto">
                       <span className="text-xs text-gray-500">{entry.sourceType}</span>
-                      <button className="text-blue-600 hover:text-blue-700 font-semibold text-sm flex items-center gap-1">
-                        View <ArrowRight size={12} />
-                      </button>
+                      {entry.accessLevel !== "Research" ? (
+                        <Link to="/codextech-pricing" className="text-yellow-600 hover:text-yellow-700 font-semibold text-sm flex items-center gap-1">
+                          <Lock size={12} /> Unlock Access
+                        </Link>
+                      ) : (
+                        <button className="text-blue-600 hover:text-blue-700 font-semibold text-sm flex items-center gap-1">
+                          View <ArrowRight size={12} />
+                        </button>
+                      )}
                     </div>
                   </div>
                 ))}

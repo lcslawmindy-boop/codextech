@@ -401,6 +401,7 @@ const AuthenticatedApp = () => {
           <Route path="/document-dashboard" element={<DocumentDashboard />} />
           <Route path="/patent-tech-graph" element={<PatentTechGraph />} />
           <Route path="/master-launch-doc" element={<MasterLaunchDoc />} />
+          <Route path="/dashboard" element={<MemberDashboard />} />
 
           <Route path="*" element={<PageNotFound />} />
         </Route>
