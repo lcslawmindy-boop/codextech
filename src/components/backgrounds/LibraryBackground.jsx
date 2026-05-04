@@ -95,21 +95,7 @@ export default function LibraryBackground() {
       ctx.fillStyle = "rgba(0, 0, 0, 0.06)";
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      // Circuit board grid
-      ctx.strokeStyle = `rgba(0, 255, 100, ${0.25 + Math.sin(time * 0.01) * 0.15})`;
-      ctx.lineWidth = 1.5;
-      for (let i = 0; i < rows; i++) {
-        ctx.beginPath();
-        ctx.moveTo(0, i * gridSize);
-        ctx.lineTo(canvas.width, i * gridSize);
-        ctx.stroke();
-      }
-      for (let i = 0; i < cols; i++) {
-        ctx.beginPath();
-        ctx.moveTo(i * gridSize, 0);
-        ctx.lineTo(i * gridSize, canvas.height);
-        ctx.stroke();
-      }
+
 
       // Horizontal neon green matrix streams
       ctx.fillStyle = "#00ff00";
