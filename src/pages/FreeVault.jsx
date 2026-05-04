@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import ScalarWaveWatermark from "@/components/ScalarWaveWatermark";
-import { Zap, ChevronRight, Star, Download, Video, CheckCircle2, ShoppingCart, Loader2 } from "lucide-react";
+import { Zap, ChevronRight, CheckCircle2, ShoppingCart, Loader2 } from "lucide-react";
 import ZatLogoWatermark from "@/components/ZatLogoWatermark";
 
 const FREE_ITEMS = [
@@ -137,9 +137,9 @@ export default function FreeVault() {
       {/* Nav */}
       <div className="border-b border-gray-800 bg-gray-900/90 backdrop-blur px-5 py-4 flex items-center justify-between sticky top-0 z-40">
         <div />
-        <Link to="/vault"
+        <Link to="/pricing"
           className="px-4 py-2 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white text-sm font-bold transition-colors flex items-center gap-1.5">
-          <Video size={13} /> Access the Database
+          <Zap size={13} /> Join — $49/mo
         </Link>
       </div>
       <ZatLogoWatermark />
@@ -155,7 +155,7 @@ export default function FreeVault() {
             Explore 3 complete build systems from C.O.D.E.X.T.E.C.H. with full BOMs and specifications. Membership unlocks structured courses, build plans, and execution tools.
           </p>
           <p className="text-gray-500 text-sm max-w-xl mx-auto">
-            All systems sourced from granted US patents and peer-reviewed research. Upgrade to Pro ($199/month) for all structured courses, build plans, PDFs, video guides, and verified supplier sourcing.
+            All systems sourced from granted US patents and peer-reviewed research. Join the Research Membership ($49/month) for all structured courses, build plans, PDFs, video guides, and verified supplier sourcing.
           </p>
         </div>
 
@@ -202,9 +202,9 @@ export default function FreeVault() {
                         className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-cyan-700 hover:bg-cyan-600 text-white font-bold transition-colors">
                         View Full BOM & Specs <ChevronRight size={16} />
                       </Link>
-                      <Link to="/vault"
+                      <Link to="/pricing"
                         className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gray-800 hover:bg-gray-700 text-gray-200 font-bold transition-colors border border-gray-700">
-                        <Video size={16} /> Access Database
+                        <Zap size={16} /> Join Membership
                       </Link>
                     </div>
                   </div>
@@ -228,33 +228,37 @@ export default function FreeVault() {
 
         {/* What's in Pro */}
         <div className="bg-gradient-to-b from-cyan-950/30 to-blue-950/30 border border-cyan-800/40 rounded-2xl p-8 mb-16">
-          <h2 className="text-2xl font-black mb-6 flex items-center gap-2">
-             <Video size={20} className="text-cyan-400" /> Upgrade to Pro ($199/month)
-           </h2>
+          <h2 className="text-2xl font-black mb-2 flex items-center gap-2">
+            <Zap size={20} className="text-cyan-400" /> Unlock Full Membership — $49/month
+          </h2>
+          <p className="text-gray-400 text-sm mb-6">Everything. No tiers. No per-item fees. Cancel anytime.</p>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
             {[
-              { icon: "📄", title: "PDF Downloads", desc: "40–80 page technical documents for every build" },
-              { icon: "🎬", title: "Video Guides", desc: "3–12 hour assembly walkthroughs per device" },
-              { icon: "🔗", title: "Supplier Links", desc: "Verified part sources + current pricing" },
-              { icon: "💬", title: "Build Forum", desc: "Troubleshoot with 2,000+ active builders" },
-              { icon: "🧠", title: "25 Invention Dossiers/mo", desc: "AI IP creation suite with patent strategy & commercialization roadmap" },
-              { icon: "📋", title: "Upgraded PDF Export", desc: "Professional IP documentation with patent claims & market analysis" },
-              { icon: "🎥", title: "Upgraded Build Videos", desc: "Premium video guides with troubleshooting & measurement validation" },
-              { icon: "🎯", title: "All Courses & Build Plans", desc: "Unlimited access to every course, build plan, research brief & guide" },
+              { title: "PDF Downloads", desc: "40–80 page technical documents for every build" },
+              { title: "Video Guides", desc: "3–12 hour assembly walkthroughs per device" },
+              { title: "Verified Supplier Links", desc: "Sourced parts with current pricing" },
+              { title: "Build Forum Access", desc: "Troubleshoot with active builders" },
+              { title: "AI Patent Tool", desc: "Generate USPTO-compliant provisional patents" },
+              { title: "Prior Art Archive", desc: "200+ entries cross-referenced against USPTO" },
+              { title: "IP Marketplace", desc: "List or invest in electromagnetic IP anonymously" },
+              { title: "All Courses & Build Plans", desc: "8 structured modules, 6 build systems" },
             ].map((feature, i) => (
-              <div key={i} className="bg-gray-900 border border-gray-800 rounded-xl p-4">
-                <span className="text-2xl block mb-2">{feature.icon}</span>
-                <p className="font-bold text-white text-sm mb-1">{feature.title}</p>
-                <p className="text-gray-400 text-xs">{feature.desc}</p>
+              <div key={i} className="bg-gray-900 border border-gray-800 rounded-xl p-4 flex gap-3">
+                <CheckCircle2 size={14} className="text-cyan-400 flex-shrink-0 mt-0.5" />
+                <div>
+                  <p className="font-bold text-white text-sm mb-0.5">{feature.title}</p>
+                  <p className="text-gray-400 text-xs">{feature.desc}</p>
+                </div>
               </div>
             ))}
           </div>
           <div className="text-center">
-            <Link to="/vault"
-              className="inline-flex items-center gap-2 px-8 py-3 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-bold transition-all">
-              Access the Database <ChevronRight size={16} />
+            <Link to="/pricing"
+              className="inline-flex items-center gap-2 px-8 py-3 rounded-xl font-bold transition-all text-black"
+              style={{ background: "linear-gradient(90deg, #00ccff, #00ff99)", boxShadow: "0 4px 24px rgba(0,200,255,0.3)" }}>
+              Join — $49/month <ChevronRight size={16} />
             </Link>
-            <p className="text-gray-600 text-xs mt-3">$199/month annual billing · Cancel anytime · 30-day money-back guarantee</p>
+            <p className="text-gray-600 text-xs mt-3">Secured by Stripe · Cancel anytime · No contracts</p>
           </div>
         </div>
 
@@ -285,7 +289,7 @@ export default function FreeVault() {
         <p>© 2026 Zenith Apex LLC · C.O.D.E.X.T.E.C.H. · Engineering execution platform</p>
         <div className="flex justify-center gap-6 mt-3">
           <Link to="/terms" className="hover:text-gray-400">Terms</Link>
-          <Link to="/vault" className="hover:text-gray-400">Database</Link>
+          <Link to="/pricing" className="hover:text-gray-400">Membership</Link>
           <Link to="/" className="hover:text-gray-400">Home</Link>
         </div>
       </footer>
