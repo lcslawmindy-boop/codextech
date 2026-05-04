@@ -55,7 +55,7 @@ function StepWelcome({ onNext }) {
       <button
         onClick={onNext}
         className="w-full max-w-xs py-4 rounded-xl font-black text-white text-base transition-all hover:opacity-90 flex items-center justify-center gap-2"
-        style={{ background: "linear-gradient(135deg, #06b6d4, #3b82f6)", boxShadow: "0 4px 20px rgba(6,182,212,0.4)" }}
+        style={{ background: "linear-gradient(90deg, #00ccff, #00ff99)", boxShadow: "0 4px 20px rgba(0,200,255,0.4)" }}
       >
         Show Me What's Inside <ArrowRight size={16} />
       </button>
@@ -99,14 +99,14 @@ function StepValue({ onNext }) {
         </div>
         <div className="text-right">
           <p className="text-gray-500 text-xs mb-1">Your membership</p>
-          <p className="text-green-400 font-black text-2xl">From $29<span className="text-gray-500 text-sm font-normal">/month</span></p>
+          <p className="text-green-400 font-black text-2xl">$49<span className="text-gray-500 text-sm font-normal">/month</span></p>
         </div>
       </div>
 
       <button
         onClick={onNext}
         className="w-full py-4 rounded-xl font-black text-white text-base transition-all hover:opacity-90 flex items-center justify-center gap-2"
-        style={{ background: "linear-gradient(135deg, #8b5cf6, #4f46e5)", boxShadow: "0 4px 20px rgba(139,92,246,0.4)" }}
+        style={{ background: "linear-gradient(90deg, #00ccff, #00ff99)", boxShadow: "0 4px 20px rgba(0,200,255,0.4)" }}
       >
         Show Me a Real Build Plan <ArrowRight size={16} />
       </button>
@@ -181,11 +181,11 @@ function StepBuild({ onPaywall }) {
       <button
         onClick={onPaywall}
         className="w-full py-4 rounded-xl font-black text-white text-base transition-all hover:opacity-90 flex items-center justify-center gap-2"
-        style={{ background: "linear-gradient(135deg, #f59e0b, #d97706)", boxShadow: "0 4px 20px rgba(245,158,11,0.4)" }}
+        style={{ background: "linear-gradient(90deg, #00ccff, #00ff99)", boxShadow: "0 4px 20px rgba(0,200,255,0.4)" }}
       >
         Unlock the Full Build Plan <ChevronRight size={16} />
       </button>
-      <p className="text-center text-gray-700 text-xs mt-2">From $29/month · Cancel anytime</p>
+      <p className="text-center text-gray-700 text-xs mt-2">$49/month · Cancel anytime</p>
     </div>
   );
 }

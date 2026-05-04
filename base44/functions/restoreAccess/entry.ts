@@ -41,10 +41,9 @@ Deno.serve(async (req) => {
         
         if (subscriptions.data.length > 0) {
           active = true;
-          await base44.asServiceRole.entities.User.update(user.id, {
-            stripe_customer_id: customerId,
-            subscription_status: 'active'
-          });
+          const updatePayload = { stripe_customer_id: customerId, subscription_status: 'active' };
+          if (!user.subscription_activated_at) updatePayload.subscription_activated_at = new Date().toISOString();
+          await base44.asServiceRole.entities.User.update(user.id, updatePayload);
         } else {
           // Check one-time payments
           const sessions = await stripe.checkout.sessions.list({

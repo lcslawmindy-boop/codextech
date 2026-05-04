@@ -69,7 +69,7 @@ function Step1({ onNext }) {
       </div>
       <button onClick={() => selected && onNext(selected)} disabled={!selected}
         className="w-full py-4 rounded-xl font-black text-white text-base disabled:opacity-40 transition-all hover:opacity-90 flex items-center justify-center gap-2"
-        style={{ background: "linear-gradient(135deg, #06b6d4, #3b82f6)" }}>
+        style={{ background: "linear-gradient(90deg, #00ccff, #00ff99)" }}>
         Continue <ArrowRight size={16} />
       </button>
     </div>
@@ -99,7 +99,7 @@ function Step2({ onNext }) {
       </div>
       <button onClick={() => selected && onNext(selected)} disabled={!selected}
         className="w-full py-4 rounded-xl font-black text-white text-base disabled:opacity-40 transition-all hover:opacity-90 flex items-center justify-center gap-2"
-        style={{ background: "linear-gradient(135deg, #8b5cf6, #4f46e5)" }}>
+        style={{ background: "linear-gradient(90deg, #00ccff, #00ff99)" }}>
         Continue <ArrowRight size={16} />
       </button>
     </div>
@@ -127,7 +127,7 @@ function Step3({ goal, onFinish }) {
       </div>
       <button onClick={onFinish}
         className="w-full py-4 rounded-xl font-black text-white text-base transition-all hover:opacity-90 flex items-center justify-center gap-2"
-        style={{ background: "linear-gradient(135deg, #22c55e, #16a34a)" }}>
+        style={{ background: "linear-gradient(90deg, #00ccff, #00ff99)" }}>
         <Zap size={16} /> Enter the Platform
       </button>
     </div>

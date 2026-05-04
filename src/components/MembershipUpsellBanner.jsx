@@ -8,11 +8,11 @@ export default function MembershipUpsellBanner() {
         <div className="flex items-center gap-3">
           <TrendingUp size={18} className="text-cyan-400 flex-shrink-0" />
           <div>
-            <p className="text-white font-black text-sm">📦 Membership: $49/mo</p>
-            <p className="text-cyan-300 text-xs">3 courses + 3 build plans included, plus 1 new of each every month</p>
+            <p className="text-white font-black text-sm">Research Membership — $49/mo</p>
+            <p className="text-cyan-300 text-xs">Full database · 8 modules · AI patent tools · Cancel anytime</p>
           </div>
         </div>
-        <Link to="/research-membership"
+        <Link to="/pricing"
           className="flex items-center gap-2 px-4 py-2 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white font-black text-xs whitespace-nowrap transition-colors flex-shrink-0">
           Learn More <ArrowRight size={12} />
         </Link>
