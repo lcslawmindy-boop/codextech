@@ -102,57 +102,71 @@ export default function LibraryBackground() {
         }}
       />
 
-      {/* Animated electric field lines overlay */}
-      <svg
+      {/* Animated Matrix digital rain */}
+      <div
         style={{
           position: "absolute",
           inset: 0,
-          width: "100%",
-          height: "100%",
-          opacity: 0.15,
+          overflow: "hidden",
+          opacity: 0.4,
         }}
-        preserveAspectRatio="none"
       >
-        <defs>
-          <style>{`
-            @keyframes pulse {
-              0%, 100% { opacity: 0.06; }
-              50% { opacity: 0.12; }
-            }
-            @keyframes flowVertical {
-              0% { transform: translateY(-100%); }
-              100% { transform: translateY(100%); }
-            }
-            @keyframes flowHorizontal {
-              0% { transform: translateX(-100%); }
-              100% { transform: translateX(100%); }
-            }
-            @keyframes glowPulse {
-              0%, 100% { filter: drop-shadow(0 0 4px rgba(0,220,255,0.4)); }
-              50% { filter: drop-shadow(0 0 12px rgba(0,220,255,0.8)); }
-            }
-            .flow-line-v { animation: flowVertical 8s linear infinite; }
-            .flow-line-h { animation: flowHorizontal 6s linear infinite; }
-            .glow-element { animation: glowPulse 3s ease-in-out infinite; }
-          `}</style>
-        </defs>
-        
-        {/* Vertical flowing lines */}
-        <line x1="15%" y1="0" x2="15%" y2="100%" stroke="rgba(0,220,255,0.6)" strokeWidth="1.5" className="flow-line-v" />
-        <line x1="35%" y1="0" x2="35%" y2="100%" stroke="rgba(0,255,150,0.4)" strokeWidth="1" className="flow-line-v" style={{ animationDelay: "2s" }} />
-        <line x1="65%" y1="0" x2="65%" y2="100%" stroke="rgba(0,220,255,0.5)" strokeWidth="1.2" className="flow-line-v" style={{ animationDelay: "1s" }} />
-        <line x1="85%" y1="0" x2="85%" y2="100%" stroke="rgba(0,255,150,0.3)" strokeWidth="1" className="flow-line-v" style={{ animationDelay: "3s" }} />
-        
-        {/* Horizontal flowing lines */}
-        <line x1="0" y1="20%" x2="100%" y2="20%" stroke="rgba(0,220,255,0.3)" strokeWidth="1" className="flow-line-h" />
-        <line x1="0" y1="50%" x2="100%" y2="50%" stroke="rgba(0,255,150,0.25)" strokeWidth="1.2" className="flow-line-h" style={{ animationDelay: "1.5s" }} />
-        <line x1="0" y1="80%" x2="100%" y2="80%" stroke="rgba(0,220,255,0.3)" strokeWidth="1" className="flow-line-h" style={{ animationDelay: "2.5s" }} />
-        
-        {/* Glow nodes */}
-        <circle cx="20%" cy="30%" r="3" fill="none" stroke="rgba(0,220,255,0.8)" strokeWidth="2" className="glow-element" />
-        <circle cx="80%" cy="40%" r="2.5" fill="none" stroke="rgba(0,255,150,0.6)" strokeWidth="1.5" className="glow-element" style={{ animationDelay: "0.5s" }} />
-        <circle cx="50%" cy="70%" r="3.5" fill="none" stroke="rgba(0,220,255,0.7)" strokeWidth="2" className="glow-element" style={{ animationDelay: "1.5s" }} />
-      </svg>
+        <div
+          style={{
+            position: "absolute",
+            width: "100%",
+            height: "200%",
+            background: "linear-gradient(180deg, transparent 0%, rgba(0,255,150,0.1) 50%, transparent 100%)",
+            animation: "matrixRain 15s linear infinite",
+          }}
+        />
+      </div>
+
+      {/* Pulsing electric arc grid */}
+      <div
+        style={{
+          position: "absolute",
+          inset: 0,
+          background: `repeating-linear-gradient(
+            0deg,
+            rgba(0,220,255,0.08) 0px,
+            rgba(0,220,255,0.04) 2px,
+            rgba(0,255,150,0.06) 4px,
+            transparent 6px
+          )`,
+          animation: "gridPulse 3s ease-in-out infinite",
+          pointerEvents: "none",
+        }}
+      />
+
+      {/* Cyan neon corner glow spots */}
+      <div
+        style={{
+          position: "absolute",
+          top: "10%",
+          left: "8%",
+          width: "200px",
+          height: "200px",
+          background: "radial-gradient(circle, rgba(0,220,255,0.3) 0%, transparent 70%)",
+          filter: "blur(40px)",
+          animation: "glowFloat 6s ease-in-out infinite",
+          pointerEvents: "none",
+        }}
+      />
+      <div
+        style={{
+          position: "absolute",
+          bottom: "15%",
+          right: "12%",
+          width: "250px",
+          height: "250px",
+          background: "radial-gradient(circle, rgba(0,255,150,0.25) 0%, transparent 70%)",
+          filter: "blur(50px)",
+          animation: "glowFloat 8s ease-in-out infinite",
+          animationDelay: "1s",
+          pointerEvents: "none",
+        }}
+      />
 
       {/* Animated scanline effect for digital intensity */}
       <div
@@ -176,13 +190,17 @@ export default function LibraryBackground() {
       />
 
       <style>{`
-        @keyframes pulse {
-          0%, 100% { opacity: 0.06; }
-          50% { opacity: 0.12; }
+        @keyframes matrixRain {
+          0% { transform: translateY(-100%); }
+          100% { transform: translateY(100%); }
         }
-        @keyframes scanShift {
-          0% { transform: translateY(0); }
-          100% { transform: translateY(10px); }
+        @keyframes gridPulse {
+          0%, 100% { opacity: 0.3; }
+          50% { opacity: 0.7; }
+        }
+        @keyframes glowFloat {
+          0%, 100% { transform: translateY(0px) scale(1); opacity: 0.6; }
+          50% { transform: translateY(-20px) scale(1.1); opacity: 0.9; }
         }
       `}</style>
     </div>
