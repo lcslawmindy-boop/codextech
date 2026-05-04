@@ -57,6 +57,7 @@ import IPPortfolioHealth from './pages/IPPortfolioHealth';
 // IP Marketplace & Deals
 import IPMarketplace from './pages/IPMarketplace';
 import IPMarketplaceDashboard from './pages/IPMarketplaceDashboard';
+import InvestorMatchingDashboard from './pages/InvestorMatchingDashboard';
 import CoInventorMatching from './pages/CoInventorMatching';
 import IPBrokeringGuide from './pages/IPBrokeringGuide';
 import VDRPortal from './pages/VDRPortal';
@@ -285,6 +286,7 @@ const AuthenticatedApp = () => {
           {/* ── IP Marketplace ── */}
           <Route path="/ip-marketplace" element={<IPMarketplace />} />
           <Route path="/ip-marketplace/dashboard" element={<IPMarketplaceDashboard />} />
+          <Route path="/ip-marketplace/matching" element={<InvestorMatchingDashboard />} />
           <Route path="/co-inventor-matching" element={<CoInventorMatching />} />
           <Route path="/ip-brokering-guide" element={<IPBrokeringGuide />} />
           <Route path="/vdr/:token" element={<VDRPortal />} />
