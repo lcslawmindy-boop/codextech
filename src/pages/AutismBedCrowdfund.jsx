@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Heart, Brain, Activity, Zap, Shield, Music, Wind, Eye, ArrowRight, CheckCircle2, Users, Target, Clock, DollarSign } from "lucide-react";
 import LibraryBackground from "@/components/backgrounds/LibraryBackground";
+import AutismBed3DVisualization from "@/components/AutismBed3DVisualization";
 
 const MODALITIES = [
   { icon: <Activity size={18} className="text-blue-400" />, name: "HRV & Biometric Monitoring", desc: "Continuous heart rate variability, SpO2, and GSR tracking to detect anxiety onset and meltdown precursors in real time." },
@@ -179,6 +180,18 @@ export default function AutismBedCrowdfund() {
                 </p>
               </div>
             </div>
+          </div>
+        </section>
+
+        {/* 3D Visualization */}
+        <section className="px-6 py-16 border-t border-white/10">
+          <div className="max-w-5xl mx-auto">
+            <div className="text-center mb-8">
+              <p className="text-purple-400 text-xs font-black uppercase tracking-widest mb-3">Interactive 3D Model</p>
+              <h2 className="text-3xl font-black text-white">The Complete Autism Sensory Regulation Bed</h2>
+              <p className="text-gray-400 text-sm mt-2 max-w-xl mx-auto">All 8 sensory systems integrated into a single therapeutic environment. Drag to rotate, scroll to zoom.</p>
+            </div>
+            <AutismBed3DVisualization />
           </div>
         </section>
 
