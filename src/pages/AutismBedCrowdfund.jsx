@@ -207,6 +207,20 @@ export default function AutismBedCrowdfund() {
           </div>
         </section>
 
+        {/* Caregiver Dashboard Link */}
+        <section className="px-6 py-10 border-t border-white/10">
+          <div className="max-w-4xl mx-auto">
+            <div className="bg-gray-900/70 border border-cyan-900/40 rounded-2xl p-8 backdrop-blur">
+              <p className="text-cyan-400 text-xs font-black uppercase tracking-widest mb-3">For Active Users</p>
+              <h3 className="text-2xl font-black text-white mb-3">Caregiver Portal</h3>
+              <p className="text-gray-400 text-sm mb-6">Parents and caregivers using the prototype can access real-time biometric visualization, daily rhythm analysis, and PDF export to share with specialists.</p>
+              <Link to="/caregiver-dashboard" className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-black text-sm transition-all">
+                Access Caregiver Dashboard <ArrowRight size={14} />
+              </Link>
+            </div>
+          </div>
+        </section>
+
         {/* Pledge Tiers */}
         <section className="px-6 py-16 border-t border-white/10">
           <div className="max-w-5xl mx-auto">

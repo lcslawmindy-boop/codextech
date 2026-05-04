@@ -1,0 +1,68 @@
+{
+  "name": "BiometricReading",
+  "type": "object",
+  "properties": {
+    "child_id": {
+      "type": "string",
+      "description": "Unique identifier for the child (pseudonymous)"
+    },
+    "caregiver_email": {
+      "type": "string",
+      "description": "Email of the caregiver who owns this data"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO timestamp of the reading"
+    },
+    "hrv": {
+      "type": "number",
+      "description": "Heart Rate Variability (milliseconds, 0-200)"
+    },
+    "gsr": {
+      "type": "number",
+      "description": "Galvanic Skin Response (microsiemens, 0-50)"
+    },
+    "spo2": {
+      "type": "number",
+      "description": "Blood oxygen saturation (percentage, 90-100)"
+    },
+    "eeg_alpha": {
+      "type": "number",
+      "description": "EEG alpha waves (relaxation indicator, 0-100)"
+    },
+    "anxiety_level": {
+      "type": "number",
+      "description": "Computed anxiety score (0-100, where 0=calm, 100=high anxiety)"
+    },
+    "sensory_state": {
+      "type": "string",
+      "enum": [
+        "calm",
+        "baseline",
+        "elevated",
+        "high_alert",
+        "meltdown_precursor"
+      ],
+      "description": "AI-computed sensory state classification"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Optional caregiver notes about the reading or context"
+    },
+    "session_id": {
+      "type": "string",
+      "description": "Groups readings from a single bed session"
+    }
+  },
+  "required": [
+    "child_id",
+    "caregiver_email",
+    "timestamp",
+    "hrv",
+    "gsr",
+    "spo2",
+    "eeg_alpha",
+    "anxiety_level"
+  ]
+}
