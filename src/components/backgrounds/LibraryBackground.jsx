@@ -341,9 +341,9 @@ export default function LibraryBackground() {
       // Draw bright neon plasma spiral with indigo border
       const centerX = canvas.width / 2;
       const centerY = canvas.height / 2;
-      const scale = 80 + Math.sin(time * 0.02) * 40;
-      const rotation = time * 0.003;
-      const surgePulse = 0.8 + Math.sin(time * 0.03) * 0.4;
+      const scale = 80 + Math.sin(timeRef.current * 0.02) * 40;
+      const rotation = timeRef.current * 0.003;
+      const surgePulse = 0.8 + Math.sin(timeRef.current * 0.03) * 0.4;
       
       ctx.save();
       ctx.translate(centerX, centerY);
@@ -354,9 +354,9 @@ export default function LibraryBackground() {
       
       // Bright neon plasma colors with surge
       const plasmaColors = [
-        `rgba(255, 150, 0, ${(0.8 + Math.sin(time * 0.03) * 0.2) * surgePulse})`,
-        `rgba(255, 50, 150, ${(0.75 + Math.sin(time * 0.03 + 2) * 0.25) * surgePulse})`,
-        `rgba(150, 50, 255, ${(0.85 + Math.sin(time * 0.03 + 4) * 0.15) * surgePulse})`,
+        `rgba(255, 150, 0, ${(0.8 + Math.sin(timeRef.current * 0.03) * 0.2) * surgePulse})`,
+        `rgba(255, 50, 150, ${(0.75 + Math.sin(timeRef.current * 0.03 + 2) * 0.25) * surgePulse})`,
+        `rgba(150, 50, 255, ${(0.85 + Math.sin(timeRef.current * 0.03 + 4) * 0.15) * surgePulse})`,
       ];
       
       // Indigo border outer hexagon
@@ -384,7 +384,7 @@ export default function LibraryBackground() {
       
       // Bright neon surging radiating lines
       for (let i = 0; i < 12; i++) {
-        const angle = (i * Math.PI) / 6 + time * 0.01;
+        const angle = (i * Math.PI) / 6 + timeRef.current * 0.01;
         ctx.beginPath();
         ctx.moveTo(0, 0);
         ctx.lineTo(Math.cos(angle) * baseSize * 1.2, Math.sin(angle) * baseSize * 1.2);
@@ -399,7 +399,7 @@ export default function LibraryBackground() {
       const clockRadius = 120;
       
       // Twilight zone flash effect (rapid pulse)
-      const flashPulse = Math.abs(Math.sin(time * 0.15)) > 0.7 ? 1 : 0.3;
+      const flashPulse = Math.abs(Math.sin(timeRef.current * 0.15)) > 0.7 ? 1 : 0.3;
       
       // Clock outer ring with glow
       ctx.strokeStyle = `rgba(75, 0, 255, ${0.9 * flashPulse})`;
@@ -440,7 +440,7 @@ export default function LibraryBackground() {
       ctx.fillText("9", centerX - clockRadius + 25, centerY);
       
       // Hour hand - spinning continuously
-      const hourAngle = time * 0.0001 - Math.PI / 2;
+      const hourAngle = timeRef.current * 0.0001 - Math.PI / 2;
       ctx.strokeStyle = `rgba(255, 100, 0, ${0.95 * flashPulse})`;
       ctx.lineWidth = 5;
       ctx.lineCap = "round";
@@ -450,7 +450,7 @@ export default function LibraryBackground() {
       ctx.stroke();
       
       // Minute hand - spinning continuously (faster)
-      const minuteAngle = time * 0.002 - Math.PI / 2;
+      const minuteAngle = timeRef.current * 0.002 - Math.PI / 2;
       ctx.strokeStyle = `rgba(150, 50, 255, ${0.95 * flashPulse})`;
       ctx.lineWidth = 3;
       ctx.beginPath();
@@ -459,7 +459,7 @@ export default function LibraryBackground() {
       ctx.stroke();
       
       // Second hand - spinning continuously (fastest)
-      const secondAngle = time * 0.01 - Math.PI / 2;
+      const secondAngle = timeRef.current * 0.01 - Math.PI / 2;
       ctx.strokeStyle = `rgba(100, 255, 150, ${0.8 * flashPulse})`;
       ctx.lineWidth = 1;
       ctx.beginPath();
@@ -474,8 +474,8 @@ export default function LibraryBackground() {
       ctx.fill();
       
       // Draw realistic suns orbiting center
-      const sunDistance = 180 + Math.sin(time * 0.008) * 40;
-      const sunAngle = time * 0.003;
+      const sunDistance = 180 + Math.sin(timeRef.current * 0.008) * 40;
+      const sunAngle = timeRef.current * 0.003;
       const sunX = centerX + Math.cos(sunAngle) * sunDistance;
       const sunY = centerY + Math.sin(sunAngle) * sunDistance;
       
@@ -518,24 +518,24 @@ export default function LibraryBackground() {
       
       // Platonic solids orbiting with sacred geometry
       const geometryOrbitRadius = 220;
-      const platonic1Angle = time * 0.005;
-      const platonic2Angle = time * 0.006 + Math.PI * 0.66;
-      const platonic3Angle = time * 0.0045 + Math.PI * 1.33;
+      const platonic1Angle = timeRef.current * 0.005;
+      const platonic2Angle = timeRef.current * 0.006 + Math.PI * 0.66;
+      const platonic3Angle = timeRef.current * 0.0045 + Math.PI * 1.33;
       
       // Tetrahedron (royal indigo)
-      drawOrbitingTetrahedron(ctx, centerX, centerY, geometryOrbitRadius, platonic1Angle, time, '#6C3AFF');
+      drawOrbitingTetrahedron(ctx, centerX, centerY, geometryOrbitRadius, platonic1Angle, timeRef.current, '#6C3AFF');
       
       // Cube (fluorescent blue)
-      drawOrbitingCube(ctx, centerX, centerY, geometryOrbitRadius, platonic2Angle, time, '#00AAFF');
+      drawOrbitingCube(ctx, centerX, centerY, geometryOrbitRadius, platonic2Angle, timeRef.current, '#00AAFF');
       
       // Octahedron (light cyan)
-      drawOrbitingOctahedron(ctx, centerX, centerY, geometryOrbitRadius, platonic3Angle, time, '#00FFFF');
+      drawOrbitingOctahedron(ctx, centerX, centerY, geometryOrbitRadius, platonic3Angle, timeRef.current, '#00FFFF');
       
       // Flower of Life orbiting
-      drawFlowerOfLife(ctx, centerX + Math.cos(time * 0.004) * 300, centerY + Math.sin(time * 0.004) * 300, 35, time, '#00FFFF');
+      drawFlowerOfLife(ctx, centerX + Math.cos(timeRef.current * 0.004) * 300, centerY + Math.sin(timeRef.current * 0.004) * 300, 35, timeRef.current, '#00FFFF');
       
       // Metatron's Cube orbiting
-      drawMetatronsCube(ctx, centerX + Math.cos(time * 0.0035 + Math.PI) * 320, centerY + Math.sin(time * 0.0035 + Math.PI) * 320, 40, time, '#6C3AFF');
+      drawMetatronsCube(ctx, centerX + Math.cos(timeRef.current * 0.0035 + Math.PI) * 320, centerY + Math.sin(timeRef.current * 0.0035 + Math.PI) * 320, 40, timeRef.current, '#6C3AFF');
       
       ctx.globalAlpha = 1;
 requestAnimationFrame(animateMatrix);
