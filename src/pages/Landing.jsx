@@ -52,6 +52,44 @@ export default function Landing() {
           </div>
         </section>
 
+        {/* ── Autism Bed Crowdfund Feature ── */}
+        <section className="px-6 py-16 border-b border-white/10">
+          <div className="max-w-5xl mx-auto">
+            <div className="bg-gradient-to-br from-purple-950/60 to-blue-950/60 border border-purple-700/50 rounded-2xl p-8 backdrop-blur relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-64 h-64 rounded-full pointer-events-none"
+                style={{ background: "radial-gradient(circle, rgba(139,92,246,0.12) 0%, transparent 70%)" }} />
+              <div className="relative z-10">
+                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full mb-5 border border-pink-500/40 bg-pink-950/30">
+                  <span className="w-2 h-2 rounded-full bg-pink-400 animate-pulse" />
+                  <span className="text-xs font-black tracking-widest text-pink-400 uppercase">Now Raising — Research Crowdfund</span>
+                </div>
+                <h2 className="text-3xl md:text-4xl font-black text-white mb-3">Autism Sensory Regulation Bed</h2>
+                <p className="text-gray-300 text-base mb-5 max-w-2xl leading-relaxed">
+                  A prototype multi-modal comfort bed for children on the autism spectrum. Measures HRV, EEG, and GSR to detect anxiety and meltdown precursors — then responds with gentle vibration, calming light, scent diffusion, and PEMF relaxation fields. <span className="text-white font-bold">Not a medical device.</span> A caregiver research tool.
+                </p>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-7">
+                  {[
+                    { val: "$75K", label: "Prototype Goal" },
+                    { val: "8", label: "Sensory Modalities" },
+                    { val: "EEG + HRV", label: "Biometric Sensors" },
+                    { val: "Phase 1", label: "Current Stage" },
+                  ].map((s, i) => (
+                    <div key={i} className="bg-gray-900/50 rounded-xl p-3 text-center border border-gray-800">
+                      <p className="text-lg font-black text-white">{s.val}</p>
+                      <p className="text-gray-500 text-xs">{s.label}</p>
+                    </div>
+                  ))}
+                </div>
+                <Link to="/autism-bed-crowdfund"
+                  className="inline-flex items-center gap-2 px-8 py-4 rounded-xl font-black text-sm transition-all hover:scale-105"
+                  style={{ background: "linear-gradient(90deg, #7c3aed, #3b82f6)", boxShadow: "0 4px 24px rgba(124,58,237,0.4)" }}>
+                  View Crowdfund & Pledge <ArrowRight size={15} />
+                </Link>
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* ── Section 2: What C.O.D.E.X.T.E.C.H. Is ── */}
         <section className="px-6 py-20 border-b border-white/10">
           <div className="max-w-3xl mx-auto text-center bg-gray-950/60 backdrop-blur-sm rounded-2xl p-8 border border-gray-800/50">

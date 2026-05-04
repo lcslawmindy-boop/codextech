@@ -159,6 +159,7 @@ import RefundPolicy from './pages/RefundPolicy';
 import ZenithApex from './pages/ZenithApex';
 import CoursePlan from './pages/CoursePlan';
 import MaterialSourcing from './pages/MaterialSourcing.jsx';
+import AutismBedCrowdfund from './pages/AutismBedCrowdfund.jsx';
 
 // Admin
 import AdminHub from './pages/AdminHub';
@@ -364,6 +365,7 @@ const AuthenticatedApp = () => {
           <Route path="/white-label-saas" element={<WhiteLabelSaaS />} />
           <Route path="/zenith-apex" element={<ZenithApex />} />
           <Route path="/material-sourcing" element={<MaterialSourcing />} />
+          <Route path="/autism-bed-crowdfund" element={<AutismBedCrowdfund />} />
 
           {/* ── Vault ── */}
           <Route path="/venture" element={<ScalarVentureHome />} />
