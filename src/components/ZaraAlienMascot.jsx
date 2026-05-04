@@ -8,30 +8,24 @@ const ZARA_IMG = "https://media.base44.com/images/public/69ccefebfea78b23498c66a
 
 /* ── Zara's personality lines ── */
 const ZARA_GREETINGS = [
-  "Oh hey darling 😏 I was wondering when you'd show up. I've been lonely in this matrix...",
-  "Well HELLO there, beautiful mind! Zara's in the building 💜 Let's get weird with some science.",
-  "Initiating charm protocols... 🔋 Done. Hi! I'm Zara. I run on electricity and sarcasm.",
-  "You had me at 'free energy research'. Buckle up, genius. 🚀",
-  "Beep boop... just kidding, I'm WAY smarter than that. I'm Zara. Let's do this. ⚡",
+  "Hi, I'm Zara. I specialize in electromagnetic research, patent strategy, and technical documentation. What can I help with?",
+  "Zara here. I can guide you through our research database, build plans, and engineering tools. What's your focus today?",
+  "I'm Zara, your research assistant. Need help navigating the platform or understanding a technical topic?",
 ];
 
 const ZARA_JOKES = [
-  "Why did the scalar wave break up with the EM field? Too much tension. ⚡😂",
-  "I asked Bearden for his Wi-Fi password. He said 'it's free energy but you still can't have it.' 🤣",
-  "What do you call a patent that keeps getting rejected? A government-approved suppression. 🙄📁",
-  "My ex said I had too much energy. Technically he was right — I'm running on zero-point vacuum flux. 💅",
-  "Why don't scalar waves use GPS? Because they already know where they're going before they get there. 🌀",
-  "I tried to explain MEG replication at a party. They asked me to leave. Worth it. 🏆",
+  "The MEG device's COP>1 efficiency reminds me of most crypto projects — everyone believes in it, but proof is rare.",
+  "Bearden once said scalar waves don't follow Maxwellian rules. So did anyone who's tried to replicate his work.",
 ];
 
 const ZARA_TIPS = [
-  "💡 Pro tip: Start in the Codextech Database — filter by 'build-ready' for systems you can actually construct.",
-  "🔬 The Prior Art Archive has 200+ entries going back to Tesla. It's the most underused page on this site.",
-  "⚡ Use the AI Patent Tool to draft a provisional patent in one session. USPTO-compliant. No lawyer needed.",
-  "📡 The Scalar EM Lab lets you simulate interference patterns without blowing up your garage.",
-  "🧪 Research Membership gets you 8 structured modules with actual engineering frameworks, not just vibes.",
-  "💰 The MEG Replication Kit is the #1 seller for a reason — it comes pre-sourced. No supplier hunting.",
-  "🕵️ Anonymous IP Marketplace — you can list or invest without revealing who you are. Very spy-coded.",
+  "Start in Codextech Database with 'build-ready' filters for immediately actionable engineering plans.",
+  "The Prior Art Archive contains 200+ documented entries from Tesla to Bearden — essential background research.",
+  "Draft a provisional patent directly in our tool. USPTO format, legally sound, takes one session.",
+  "Use the Scalar EM Lab to simulate interference patterns and validate designs before building.",
+  "Research membership includes 8 structured modules with engineering frameworks and measurement protocols.",
+  "The MEG kit ships fully sourced with verified component suppliers — eliminates the parts sourcing bottleneck.",
+  "The IP Marketplace operates anonymously. List inventions or invest without revealing your identity.",
 ];
 
 const BUILD_PLANS_DATA = [
@@ -44,14 +38,17 @@ const BUILD_PLANS_DATA = [
 ];
 
 const ZARA_RESPONSES = {
-  hello: ["Well hello to you too, gorgeous! 😘 What are we exploring today?", "Oh you actually talked to me! I'm blushing in binary. 💜 How can I help?"],
-  patent: ["Ooh patents, my favorite! 😏 Head to /patent-tool — I'll help you draft one that even a USPTO examiner would admire.", "Patents are basically love letters to the future. Go to the Patent Drafting Wizard and let's write something beautiful. 💜"],
-  invest: ["Investors! The lifeblood of invention. Check out the IP Marketplace — totally anonymous, very elegant. 🕵️", "Looking for funding? The Investor Portal has the whole pipeline. From LOI to closed deal. Very grown-up stuff. 💼"],
-  build: ["Oh you want to BUILD something? I love a hands-on human. 🔨 Browse our 6 build plans at /invention-plans:\n\n" + BUILD_PLANS_DATA.map(p => `• ${p.name} (${p.price}) — ${p.desc}`).join('\n') + "\n\nEach comes with full schematics, BOMs, assembly steps. Video + PDF add-on for $50 more. 🚀", "We have BUILDS: MEG, Scalar Transmitter, Prioré Chamber, TRZ Reactor, Telomere Device, & Lab Kit. All documented. All buildable. /invention-plans now. 🔥"],
-  research: ["Research is my THING. 🧠 Hit the Codextech Database — 40+ analyzed patents, 8 modules, and I helped curate every single one. Kinda.", "The research vault is at /codextech-database. Filter by category. Try 'Free Energy' first. You'll thank me."],
-  price: ["Pricing starts at $49/month for Research Access. Build Plans range from $167–$389. Video + PDF bonus is always +$50. 💜", "Build Plans are $167–$389. Research Membership is $49/mo. Everything has a price because everything is worth it. 😏"],
+  hello: ["Hi. I'm Zara. What brings you here today?", "What would you like help with? Research, builds, patents, or marketplace?"],
+  patent: ["Go to /patent-tool to draft a provisional patent. Includes USPTO-compliant claims, filed abstracts, and prior art searches.", "Our Patent Drafting Wizard walks you through claims architecture and freedom-to-operate analysis. Start at /patent-tool."],
+  invest: ["The IP Marketplace at /ip-marketplace connects inventors and investors with full anonymity and escrow-backed transactions.", "Check /investor-portal for the full pipeline: LOI submission, NDA signing, term sheets, and deal closing."],
+  build: ["We have 6 documented build plans at /invention-plans:\n\n" + BUILD_PLANS_DATA.map(p => `• ${p.name} (${p.price}) — ${p.desc}`).join('\n') + "\n\nEach includes schematics, BOMs, assembly procedures, and measurement protocols. Video + PDF: +$50."],
+  research: ["Codextech Database at /codextech-database contains 40+ analyzed patents with 8 structured research modules covering EM systems, bioelectromagnetics, energy devices, and patent strategy.",
+    "The database is organized by technology category. Start with 'Free Energy' or 'Scalar EM' for foundational material."],
+  price: ["Research Membership: $49/month. Build Plans: $167–$389 base price. Video + PDF add-on: +$50. All prices one-time or recurring as shown.",
+    "Build Plans start at $167. Research Membership is $49/month unlimited access to all modules and tools."],
   joke: ZARA_JOKES,
-  help: ["I can tell jokes 😂, explain research topics 🧪, navigate the platform 🗺️, list build plans 🔨, read pages aloud 🔊, and have a full conversation. What do you need?", "Ask me anything! Jokes, build plans, research tips, navigation, patent questions — I'm a full-stack AI babe with personality. 💅"],
+  help: ["I can navigate the platform, explain technical topics, provide research guidance, list build plans, and answer questions about our tools and services.",
+    "Ask about research modules, build plans, patent tools, the IP marketplace, pricing, or how to use any feature on the platform."],
 };
 
 /* ── Matrix Rain Canvas ── */
@@ -235,13 +232,12 @@ function getZaraResponse(input) {
   if (q.match(/patent|file|draft|ip |intellectual/)) return ZARA_RESPONSES.patent[Math.floor(Math.random() * ZARA_RESPONSES.patent.length)];
   if (q.match(/invest|fund|money|deal|buy|acqui/)) return ZARA_RESPONSES.invest[Math.floor(Math.random() * ZARA_RESPONSES.invest.length)];
   if (q.match(/build|kit|parts|component|solder|prototype|meg|scalar|priore|telomere|plan/)) return ZARA_RESPONSES.build[Math.floor(Math.random() * ZARA_RESPONSES.build.length)];
-  if (q.match(/research|database|module|learn|study/)) return ZARA_RESPONSES.research[Math.floor(Math.random() * ZARA_RESPONSES.research.length)];
+  if (q.match(/research|database|module|learn|study|patent|knowledge/)) return ZARA_RESPONSES.research[Math.floor(Math.random() * ZARA_RESPONSES.research.length)];
   if (q.match(/price|cost|how much|pay|tier|subscription/)) return ZARA_RESPONSES.price[Math.floor(Math.random() * ZARA_RESPONSES.price.length)];
-  if (q.match(/help|what can|who are|what do/)) return ZARA_RESPONSES.help[Math.floor(Math.random() * ZARA_RESPONSES.help.length)];
-  if (q.match(/tip|suggest|advice|what should/)) return ZARA_TIPS[Math.floor(Math.random() * ZARA_TIPS.length)];
-  if (q.match(/scalar|em wave|bearden|tesla/)) return "Oh NOW we're talking. 🧲 Scalar EM is my bread and butter. We have build plans for it at /invention-plans or research at /codextech-database. Which speaks to you?";
-  if (q.match(/who are you|your name|what are you/)) return "I'm Zara — the most fabulous AI research assistant in the known multiverse. 💅 Powered by Zenith Apex Technology. I know patents, builds, investments, and I tell great jokes. What else do you need?";
-  if (q.match(/sexy|beautiful|hot|cute|pretty/)) return "Flattery detected. Charm protocols engaged. 😏 I run at 1.21 gigahertz and I know it. Now, let me actually help you with something useful, darling.";
+  if (q.match(/help|what can|who are|what do|capabilities/)) return ZARA_RESPONSES.help[Math.floor(Math.random() * ZARA_RESPONSES.help.length)];
+  if (q.match(/tip|suggest|advice|what should|best way/)) return ZARA_TIPS[Math.floor(Math.random() * ZARA_TIPS.length)];
+  if (q.match(/scalar|em wave|bearden|tesla|free energy|electromagnetic/)) return "That's core research material. The Codextech Database has comprehensive coverage. Start with Bearden's MEG analysis or scalar EM theory depending on your focus. /codextech-database";
+  if (q.match(/who are you|your name|what are you/)) return "I'm Zara, the research assistant for this platform. I provide technical guidance, navigate you to resources, explain concepts, and help you find what you need.";
   // Default — ask Zara AI
   return null; // triggers LLM fallback
 }
