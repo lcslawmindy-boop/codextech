@@ -32,8 +32,8 @@ export default function Landing() {
         <HeroSection />
 
         {/* ── Section 2: What C.O.D.E.X.T.E.C.H. Is ── */}
-        <section className="px-6 py-20 border-b border-white/10 solid-section">
-          <div className="max-w-4xl mx-auto text-center">
+        <section className="px-6 py-20 border-b border-white/10">
+          <div className="max-w-3xl mx-auto text-center bg-gray-950/60 backdrop-blur-sm rounded-2xl p-8 border border-gray-800/50">
             <p className="text-cyan-400 text-xs font-black uppercase tracking-widest mb-3">The Platform</p>
             <h2 className="text-3xl md:text-4xl font-black text-white mb-6">What C.O.D.E.X.T.E.C.H. Is</h2>
             <div className="space-y-4 text-left max-w-3xl mx-auto">
@@ -54,9 +54,9 @@ export default function Landing() {
         </section>
 
         {/* ── Section 3: Research Categories ── */}
-        <section className="px-6 py-20 border-b border-white/10 solid-section">
+        <section className="px-6 py-20 border-b border-white/10">
           <div className="max-w-6xl mx-auto">
-            <div className="text-center mb-12">
+            <div className="text-center mb-12 bg-gray-950/50 backdrop-blur-sm rounded-2xl p-6 border border-gray-800/50 mx-auto max-w-2xl">
               <p className="text-green-400 text-xs font-black uppercase tracking-widest mb-3">Research Categories</p>
               <h2 className="text-3xl md:text-4xl font-black text-white mb-3">Five Research Domains</h2>
               <p className="text-gray-400 text-sm max-w-xl mx-auto">Each category contains primary-source research modules, engineering specifications, and cross-referenced patent documentation.</p>
@@ -98,7 +98,7 @@ export default function Landing() {
         </section>
 
         {/* ── Section 4: Why It Matters ── */}
-        <section className="px-6 py-20 border-b border-white/10 solid-section">
+        <section className="px-6 py-20 border-b border-white/10">
           <div className="max-w-5xl mx-auto">
             <div className="text-center mb-12">
               <p className="text-orange-400 text-xs font-black uppercase tracking-widest mb-3">The Problem & Solution</p>
@@ -132,7 +132,7 @@ export default function Landing() {
         </section>
 
         {/* ── Research modules preview ── */}
-        <section className="px-6 py-20 border-b border-white/10 solid-section">
+        <section className="px-6 py-20 border-b border-white/10">
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-10">
               <p className="text-green-400 text-xs font-black uppercase tracking-widest mb-3">Research Modules</p>
@@ -173,7 +173,7 @@ export default function Landing() {
         </section>
 
         {/* ── Evidence timeline ── */}
-        <section className="px-6 py-20 border-b border-white/10 solid-section">
+        <section className="px-6 py-20 border-b border-white/10">
           <div className="max-w-5xl mx-auto">
             <div className="text-center mb-12">
               <p className="text-orange-400 text-xs font-black uppercase tracking-widest mb-3">Source Record</p>
@@ -206,7 +206,7 @@ export default function Landing() {
         </section>
 
         {/* ── Concept graph + IP Marketplace CTAs ── */}
-        <section className="px-6 py-20 border-b border-white/10 solid-section">
+        <section className="px-6 py-20 border-b border-white/10">
           <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8">
             <div className="bg-gray-900/70 rounded-2xl p-7 border border-blue-900/50 backdrop-blur"
               style={{ boxShadow: "0 0 30px rgba(0,150,255,0.07)" }}>
@@ -249,8 +249,8 @@ export default function Landing() {
         </section>
 
         {/* ── Section 5: CTA Block ── */}
-        <section className="px-6 py-24 border-b border-white/10 solid-section">
-          <div className="max-w-2xl mx-auto text-center">
+        <section className="px-6 py-24 border-b border-white/10">
+          <div className="max-w-2xl mx-auto text-center bg-gray-950/50 backdrop-blur-sm rounded-2xl p-10 border border-gray-800/50">
             <p className="text-cyan-400 text-xs font-black uppercase tracking-widest mb-4">Research Membership</p>
             <h2 className="text-4xl md:text-5xl font-black text-white mb-4">
               Everything You Need.<br />
@@ -278,7 +278,7 @@ export default function Landing() {
         </section>
 
         {/* ── Footer stats + links ── */}
-        <section className="px-6 py-12 border-t border-white/10 solid-section">
+        <section className="px-6 py-12 border-t border-white/10">
           <div className="max-w-6xl mx-auto">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-10 text-center">
               <div><p className="font-black text-white text-xl mb-1">40+</p><p className="text-gray-500 text-xs">Verified Patents</p></div>

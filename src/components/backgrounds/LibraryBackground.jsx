@@ -204,7 +204,7 @@ export default function LibraryBackground() {
       ctx.restore();
       
       // Draw large realistic clock in center with twilight zone flashing
-      const clockRadius = 70;
+      const clockRadius = 120;
       
       // Twilight zone flash effect (rapid pulse)
       const flashPulse = Math.abs(Math.sin(time * 0.15)) > 0.7 ? 1 : 0.3;
