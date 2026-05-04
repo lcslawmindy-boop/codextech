@@ -86,8 +86,8 @@ export default function LibraryBackground() {
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
       // Circuit board grid
-      ctx.strokeStyle = `rgba(0, 255, 100, ${0.08 + Math.sin(time * 0.01) * 0.04})`;
-      ctx.lineWidth = 1;
+      ctx.strokeStyle = `rgba(0, 255, 100, ${0.25 + Math.sin(time * 0.01) * 0.15})`;
+      ctx.lineWidth = 1.5;
       for (let i = 0; i < rows; i++) {
         ctx.beginPath();
         ctx.moveTo(0, i * gridSize);
@@ -102,9 +102,9 @@ export default function LibraryBackground() {
       }
 
       // Horizontal neon green matrix streams
-      ctx.fillStyle = "#00ff99";
-      ctx.shadowColor = "rgba(0, 255, 153, 0.9)";
-      ctx.shadowBlur = 10;
+      ctx.fillStyle = "#00ffaa";
+      ctx.shadowColor = "rgba(0, 255, 170, 1)";
+      ctx.shadowBlur = 18;
       ctx.font = `bold ${fontSize}px monospace`;
 
       streams.forEach((stream) => {
@@ -227,7 +227,7 @@ export default function LibraryBackground() {
         style={{
           position: "absolute",
           inset: 0,
-          background: "repeating-radial-gradient(circle at 50% 50%, rgba(0,255,100,0.12) 0px, transparent 40px, rgba(0,255,100,0.12) 80px)",
+          background: "repeating-radial-gradient(circle at 50% 50%, rgba(0,255,100,0.28) 0px, transparent 40px, rgba(0,255,100,0.28) 80px)",
           animation: "scalarWavePulse 3s ease-in-out infinite",
           pointerEvents: "none",
         }}
