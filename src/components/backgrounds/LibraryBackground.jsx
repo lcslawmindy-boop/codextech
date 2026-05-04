@@ -168,14 +168,14 @@ export default function LibraryBackground() {
 
       {/* Animated scanline effect for digital intensity */}
       <div
-        style={{
-          position: "absolute",
-          inset: 0,
-          background: "repeating-linear-gradient(0deg, rgba(0,220,255,0.02) 0px, rgba(0,220,255,0.02) 1px, transparent 1px, transparent 2px)",
-          animation: "scanShift 8s linear infinite",
-          pointerEvents: "none",
-          opacity: 0.4,
-        }}
+       style={{
+         position: "absolute",
+         inset: 0,
+         background: "repeating-linear-gradient(0deg, rgba(0,220,255,0.02) 0px, rgba(0,220,255,0.02) 1px, transparent 1px, transparent 2px)",
+         animation: "scanlines 8s linear infinite",
+         pointerEvents: "none",
+         opacity: 0.4,
+       }}
       />
 
       {/* Dark overlay to keep text readable */}
