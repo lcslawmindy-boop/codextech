@@ -1,6 +1,19 @@
 import { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
-import { RotateCcw, Volume2, Sun, Wind, Activity } from 'lucide-react';
+import { RotateCcw, Volume2, Sun, Wind, Activity, ChevronLeft, ChevronRight } from 'lucide-react';
+
+const PROTOTYPE_IMAGES = [
+  { url: 'https://media.base44.com/images/public/69ccefebfea78b23498c66a8/76cb15d52_IMG_8294.jpg', label: 'Chromotherapy Dome Assembly' },
+  { url: 'https://media.base44.com/images/public/69ccefebfea78b23498c66a8/b8c535150_IMG_8303.jpg', label: 'LED Array Configuration' },
+  { url: 'https://media.base44.com/images/public/69ccefebfea78b23498c66a8/a4611c2f9_IMG_8295.jpg', label: 'Biometric Sensor Integration' },
+  { url: 'https://media.base44.com/images/public/69ccefebfea78b23498c66a8/e5af60f3d_IMG_8299.jpg', label: 'Control Panel Interface' },
+  { url: 'https://media.base44.com/images/public/69ccefebfea78b23498c66a8/af6dd9b5b_IMG_8297.jpg', label: 'Crystal Array & Sacred Geometry' },
+  { url: 'https://media.base44.com/images/public/69ccefebfea78b23498c66a8/d2ba5e546_IMG_83121.jpg', label: 'Photon Plasma Tubes' },
+  { url: 'https://media.base44.com/images/public/69ccefebfea78b23498c66a8/48bcc52c1_IMG_83131.jpg', label: 'Quantum Bioresonance Dome' },
+  { url: 'https://media.base44.com/images/public/69ccefebfea78b23498c66a8/2111cde68_IMG_8314.jpg', label: 'Complete Bed Assembly' },
+  { url: 'https://media.base44.com/images/public/69ccefebfea78b23498c66a8/a063f4696_IMG_83101.jpg', label: 'User Experience View' },
+  { url: 'https://media.base44.com/images/public/69ccefebfea78b23498c66a8/faed1471d_IMG_8329.jpg', label: 'Full System Integration' },
+];
 
 export default function AutismBed3DVisualization() {
   const containerRef = useRef(null);
@@ -9,6 +22,7 @@ export default function AutismBed3DVisualization() {
   const rendererRef = useRef(null);
   const bedsRef = useRef([]);
   const [isAutoRotate, setIsAutoRotate] = useState(true);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   useEffect(() => {
     if (!containerRef.current) return;
@@ -215,49 +229,109 @@ export default function AutismBed3DVisualization() {
     }
   };
 
+  const nextImage = () => {
+    setCurrentImageIndex((prev) => (prev + 1) % PROTOTYPE_IMAGES.length);
+  };
+
+  const prevImage = () => {
+    setCurrentImageIndex((prev) => (prev - 1 + PROTOTYPE_IMAGES.length) % PROTOTYPE_IMAGES.length);
+  };
+
   return (
-    <div className="w-full bg-gray-950 rounded-2xl overflow-hidden border border-gray-800">
-      <div ref={containerRef} style={{ width: '100%', height: '500px' }} />
-      
-      {/* Controls */}
-      <div className="bg-gray-900/70 border-t border-gray-800 px-6 py-4 flex items-center justify-between flex-wrap gap-4">
-        <div className="text-xs text-gray-400 font-bold uppercase tracking-widest">
-          Interactive 3D Model — Drag to rotate | Scroll to zoom
+    <div className="w-full space-y-4">
+      {/* 3D Model */}
+      <div className="bg-gray-950 rounded-2xl overflow-hidden border border-gray-800">
+        <div ref={containerRef} style={{ width: '100%', height: '500px' }} />
+        
+        {/* Controls */}
+        <div className="bg-gray-900/70 border-t border-gray-800 px-6 py-4 flex items-center justify-between flex-wrap gap-4">
+          <div className="text-xs text-gray-400 font-bold uppercase tracking-widest">
+            Interactive 3D Model — Drag to rotate | Scroll to zoom
+          </div>
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => setIsAutoRotate(!isAutoRotate)}
+              className={`flex items-center gap-2 px-4 py-2 rounded-lg font-black text-xs transition ${
+                isAutoRotate
+                  ? 'bg-cyan-600 text-white'
+                  : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
+              }`}
+            >
+              <RotateCcw size={12} /> {isAutoRotate ? 'Auto-Rotating' : 'Static'}
+            </button>
+            <button
+              onClick={resetView}
+              className="px-4 py-2 rounded-lg bg-gray-800 text-gray-300 hover:bg-gray-700 font-black text-xs transition"
+            >
+              Reset View
+            </button>
+          </div>
         </div>
-        <div className="flex items-center gap-3">
-          <button
-            onClick={() => setIsAutoRotate(!isAutoRotate)}
-            className={`flex items-center gap-2 px-4 py-2 rounded-lg font-black text-xs transition ${
-              isAutoRotate
-                ? 'bg-cyan-600 text-white'
-                : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
-            }`}
-          >
-            <RotateCcw size={12} /> {isAutoRotate ? 'Auto-Rotating' : 'Static'}
-          </button>
-          <button
-            onClick={resetView}
-            className="px-4 py-2 rounded-lg bg-gray-800 text-gray-300 hover:bg-gray-700 font-black text-xs transition"
-          >
-            Reset View
-          </button>
+
+        {/* Legend */}
+        <div className="bg-gray-900/50 px-6 py-4 grid grid-cols-2 md:grid-cols-5 gap-4 border-t border-gray-800">
+          {[
+            { icon: Sun, label: 'Chromotherapy Dome', color: '#00ffff' },
+            { icon: Activity, label: 'PEMF Coils', color: '#7c3aed' },
+            { icon: Volume2, label: 'Vibroacoustic', color: '#333333' },
+            { icon: Wind, label: 'Aromatherapy Vents', color: '#00ffaa' },
+            { icon: Activity, label: 'EEG/Biometric PCB', color: '#1a1a3a' },
+          ].map((item, i) => (
+            <div key={i} className="flex items-center gap-2 text-xs">
+              <item.icon size={12} style={{ color: item.color }} />
+              <span className="text-gray-400">{item.label}</span>
+            </div>
+          ))}
         </div>
       </div>
 
-      {/* Legend */}
-      <div className="bg-gray-900/50 px-6 py-4 grid grid-cols-2 md:grid-cols-5 gap-4 border-t border-gray-800">
-        {[
-          { icon: Sun, label: 'Chromotherapy Dome', color: '#00ffff' },
-          { icon: Activity, label: 'PEMF Coils', color: '#7c3aed' },
-          { icon: Volume2, label: 'Vibroacoustic', color: '#333333' },
-          { icon: Wind, label: 'Aromatherapy Vents', color: '#00ffaa' },
-          { icon: Activity, label: 'EEG/Biometric PCB', color: '#1a1a3a' },
-        ].map((item, i) => (
-          <div key={i} className="flex items-center gap-2 text-xs">
-            <item.icon size={12} style={{ color: item.color }} />
-            <span className="text-gray-400">{item.label}</span>
+      {/* Prototype Images Carousel */}
+      <div className="bg-gray-950 rounded-2xl overflow-hidden border border-gray-800">
+        <div className="relative">
+          <img
+            src={PROTOTYPE_IMAGES[currentImageIndex].url}
+            alt={PROTOTYPE_IMAGES[currentImageIndex].label}
+            className="w-full h-96 object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+          
+          {/* Image Label */}
+          <div className="absolute bottom-4 left-4 right-4">
+            <p className="text-white font-black text-lg">{PROTOTYPE_IMAGES[currentImageIndex].label}</p>
+            <p className="text-gray-400 text-xs mt-1">{currentImageIndex + 1} / {PROTOTYPE_IMAGES.length}</p>
           </div>
-        ))}
+
+          {/* Navigation Buttons */}
+          <button
+            onClick={prevImage}
+            className="absolute left-4 top-1/2 -translate-y-1/2 bg-gray-900/80 hover:bg-gray-800 border border-gray-700 rounded-full p-2 transition"
+          >
+            <ChevronLeft size={20} className="text-white" />
+          </button>
+          <button
+            onClick={nextImage}
+            className="absolute right-4 top-1/2 -translate-y-1/2 bg-gray-900/80 hover:bg-gray-800 border border-gray-700 rounded-full p-2 transition"
+          >
+            <ChevronRight size={20} className="text-white" />
+          </button>
+        </div>
+
+        {/* Thumbnail Strip */}
+        <div className="bg-gray-900/70 px-4 py-3 border-t border-gray-800 overflow-x-auto flex gap-2">
+          {PROTOTYPE_IMAGES.map((img, idx) => (
+            <button
+              key={idx}
+              onClick={() => setCurrentImageIndex(idx)}
+              className={`flex-shrink-0 w-20 h-20 rounded-lg border-2 overflow-hidden transition ${
+                idx === currentImageIndex
+                  ? 'border-cyan-500'
+                  : 'border-gray-700 hover:border-gray-600'
+              }`}
+            >
+              <img src={img.url} alt={img.label} className="w-full h-full object-cover" />
+            </button>
+          ))}
+        </div>
       </div>
     </div>
   );
