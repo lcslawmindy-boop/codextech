@@ -104,6 +104,40 @@ const LIBRARY_IMAGES = [
   "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/d9aa15432_th2.jpeg",
   "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/6b01a61ac_th1.jpeg",
   "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/87113fef8_th.jpeg",
+  // NEW — Solomon's Temple / Gold Interiors
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/ed9aa7874_Gold-in-Solomons-Temple-1-1024x585.jpg",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/3d3ecd562_777f7d648de806a2714c768c9b438bea.jpg",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/41261b0fb_29063b843e86cd58857bc3ce6b0c7c37.jpg",
+  // NEW — Classic library shelves
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/863f19ac0_e0549c739b2dfa66cf1ab3c09421a0ba--literature-university.jpg",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/09578f880_bookshelves-library-with-old-books_1131516-3.jpg",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/7940d5a4d_wonkhe-summer-library-2740x1541-Copy.jpg",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/7c9dcd558_1000_F_755228805_cGY4gZzDtaVC2GKBWaMzOtOPwnbV4ZIc-Copy.jpg",
+  // NEW — Modern white libraries
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/628f7b614_modern-office-space-with-empty-bookshelves-and-clean-decor-generated-by-ai-photo.jpg",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/904504196_pngtree-blurred-empty-library-interior-with-bookshelves-and-white-floor-image_17084947-Copy.jpg",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/5477a5d96_6e9914fb6d6d4a305dd2fbe4c30e098d-Copy.jpg",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/6d1ae6c45_aa61576b6b55d0946fa8f12a5a85663c-Copy.jpg",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/ba2d8211f_a8838d6e6380e3cc2ddff672d7c0883b-Copy-Copy.jpg",
+  // NEW — Royal Portuguese Reading Room
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/6db18eeec_f3284b7e2cb15ec3924f493483bea9fd.jpg",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/378d344f5_istockphoto-1238314211-612x612.jpg",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/4a0f4bacf_2b870fb1ca9d3e7d71c8fe87011dd168.jpg",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/20d248442_free-photo-of-royal-portuguese-reading-room-in-rio-de-janeiro.jpg",
+  // NEW — Grand ornate libraries (El Ateneo, Lello, Clementinum, Joanina)
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/2fd1a0ee9_9fe146a351ccd4bcd492f430436d858a.jpg",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/b35343ab5_5dc56a24808825ced53dd437d28360ff.jpg",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/4cf1cb9b9_photo4jpg.jpg",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/9d789bebc_R.jpeg",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/a5745fe29_1336-319x160.jpg",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/c5b0c4cb3_131bb054d4261b4f22ec2403f271f06a.jpg",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/407431505_OIP.jpeg",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/822e46d05_maxresdefault.jpg",
+  // NEW — Akashic / Cosmic / Spiritual
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/0aab30b73_How-to-Access-and-Read-the-Akashic-Records.jpg",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/005cbd380_a-long-row-of-bookshelves-in-a-library-free-photo.jpg",
+  // NEW — Atom / Science
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/eba4e64a4_atom-big-crop-2048x1097.jpg",
 ];
 
 export default function LibraryBackground() {
