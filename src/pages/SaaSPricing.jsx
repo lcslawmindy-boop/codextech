@@ -38,8 +38,8 @@ export default function SaaSPricing() {
     const origin = window.location.origin;
     const res = await base44.functions.invoke("createCheckoutSession", {
       title: "Research Membership",
-      priceInCents: 4900,
-      mode: "subscription",
+          priceInCents: 8900,
+          mode: "subscription",
       interval: "month",
       successUrl: `${origin}/post-purchase`,
       cancelUrl: `${origin}/pricing`,
@@ -85,7 +85,7 @@ export default function SaaSPricing() {
             <div className="text-center mb-8">
               <p className="text-gray-400 text-sm mb-2">Research Membership</p>
               <div className="flex items-end justify-center gap-2 mb-1">
-                <span className="text-6xl font-black text-white">$49</span>
+                <span className="text-6xl font-black text-white">$89</span>
                 <span className="text-gray-400 pb-2">/month</span>
               </div>
               <p className="text-gray-500 text-sm">Cancel anytime · Instant access</p>

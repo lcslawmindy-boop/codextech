@@ -77,7 +77,7 @@ export default function AlaCarteShop() {
             <ArrowLeft size={14} /> Back
           </Link>
           <h1 className="text-2xl font-black text-white">À La Carte Catalog</h1>
-          <p className="text-gray-500 text-sm mt-1">Buy individual courses and build plans at standard pricing. One-time payment, lifetime access. Research Members ($49/mo) get full access to everything PLUS 20-30% discounts on all à la carte purchases — no per-item fees.</p>
+          <p className="text-gray-500 text-sm mt-1">Buy individual courses and build plans at standard pricing. One-time payment, lifetime access. Research Members ($89/mo) get full access to everything PLUS 20-30% discounts on all à la carte purchases — no per-item fees.</p>
         </div>
       </div>
 
@@ -150,7 +150,7 @@ export default function AlaCarteShop() {
             </p>
             <Link to="/pricing"
               className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white font-black text-sm transition-colors">
-              Join for $49/month — Everything Included
+              Join for $89/month — Everything Included
             </Link>
           </div>
 
@@ -158,7 +158,7 @@ export default function AlaCarteShop() {
             <div className="bg-cyan-950/30 border border-cyan-800/50 rounded-xl p-5 text-center">
               <p className="text-cyan-300 text-xs font-black uppercase tracking-widest mb-2">Membership Benefits</p>
               <p className="text-gray-300 text-sm">
-                Join for $49/mo and get <strong>20-30% discounts on all courses & build plans</strong> — plus unlimited access to the full research database.
+                Join for $89/mo and get <strong>20-30% discounts on all courses & build plans</strong> — plus unlimited access to the full research database.
               </p>
             </div>
             <div className="bg-green-950/30 border border-green-800/50 rounded-xl p-5 text-center">

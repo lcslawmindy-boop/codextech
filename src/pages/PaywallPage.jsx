@@ -37,7 +37,7 @@ export default function PaywallPage() {
     const origin = window.location.origin;
     const res = await base44.functions.invoke("createCheckoutSession", {
       title: "Research Membership",
-      priceInCents: 4900,
+      priceInCents: 8900,
       mode: "subscription",
       interval: "month",
       successUrl: `${origin}/post-purchase`,

@@ -321,14 +321,14 @@ export default function Landing() {
               </span>
             </h2>
             <p className="text-gray-400 text-base mb-2 max-w-lg mx-auto">
-              Full database access. All research modules. AI patent tools. Build plans. IP marketplace. $49/month. Cancel anytime.
+              Full database access. All research modules. AI patent tools. Build plans. IP marketplace. $89/month. Cancel anytime.
             </p>
             <p className="text-gray-600 text-sm mb-10">No tiers. No per-item fees. Everything unlocked from day one.</p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link to="/pricing"
                 className="flex items-center justify-center gap-2 px-10 py-4 rounded-xl font-black text-base text-black transition-all hover:scale-105"
                 style={{ background: "linear-gradient(90deg, #00ccff, #00ff99)", boxShadow: "0 4px 32px rgba(0,200,255,0.3)" }}>
-                Start Membership — $49/mo <ArrowRight size={16} />
+                Start Membership — $89/mo <ArrowRight size={16} />
               </Link>
               <Link to="/codextech-database"
                 className="flex items-center justify-center gap-2 px-8 py-4 rounded-xl font-black text-sm text-gray-300 border border-gray-700 hover:border-gray-500 transition-colors">
