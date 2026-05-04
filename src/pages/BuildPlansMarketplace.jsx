@@ -1,14 +1,15 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { ShoppingCart, Play, ChevronDown, ChevronUp, Check, Loader2, FileText, Video, Package, AlertCircle } from "lucide-react";
+import { ShoppingCart, Play, ChevronDown, ChevronUp, Check, Loader2, FileText, Video, Package, Lock, Zap, Radio, FlaskConical, Cpu, Wrench } from "lucide-react";
 import { base44 } from "@/api/base44Client";
+import { useTier } from "@/hooks/useTier";
 
 const BUILD_PLANS = [
   {
     id: "meg",
     title: "Motionless Electromagnetic Generator (MEG)",
     category: "Free Energy",
-    icon: "⚡",
+    icon: <Zap size={20} className="text-yellow-400" />,
     basePriceCents: 28700,
     videoPdfPriceCents: 5000,
     tagline: "Replicate Bearden's COP>1 flux-coupled generator — the most documented over-unity device in patent history.",
@@ -40,7 +41,7 @@ const BUILD_PLANS = [
     id: "scalar-transmitter",
     title: "G-Com Scalar Communicator",
     category: "Communications",
-    icon: "📡",
+    icon: <Radio size={20} className="text-cyan-400" />,
     basePriceCents: 24300,
     videoPdfPriceCents: 5000,
     tagline: "Phase-conjugate scalar wave transmitter — non-Hertzian communications below standard EM detection thresholds.",
@@ -71,7 +72,7 @@ const BUILD_PLANS = [
     id: "priore-device",
     title: "Prioré EM Resonance Chamber",
     category: "Bio-Signal",
-    icon: "🧬",
+    icon: <FlaskConical size={20} className="text-green-400" />,
     basePriceCents: 34900,
     videoPdfPriceCents: 5000,
     tagline: "Replicate Antoine Prioré's French patent EM chamber — the most significant biofield experiment of the 20th century.",
@@ -102,7 +103,7 @@ const BUILD_PLANS = [
     id: "scalar-potential",
     title: "TRZ Scalar Potential Extractor",
     category: "Energy",
-    icon: "🌀",
+    icon: <Cpu size={20} className="text-purple-400" />,
     basePriceCents: 38900,
     videoPdfPriceCents: 5000,
     tagline: "Zero-point energy tap using scalar potential wells, time-varying EM gradients, and non-Hertzian wave coupling.",
@@ -132,7 +133,7 @@ const BUILD_PLANS = [
     id: "trd-telomere",
     title: "TRD-1 Telomere Resonance Device",
     category: "Bio-Tech",
-    icon: "🧬",
+    icon: <FlaskConical size={20} className="text-pink-400" />,
     basePriceCents: 19400,
     videoPdfPriceCents: 5000,
     tagline: "Kaznacheyev torsion-field generator for cellular communication research and bioelectric field mapping.",
@@ -163,7 +164,7 @@ const BUILD_PLANS = [
     id: "emf-starter",
     title: "Scalar EM Lab Starter Kit",
     category: "Lab Tools",
-    icon: "🔬",
+    icon: <Wrench size={20} className="text-orange-400" />,
     basePriceCents: 16700,
     videoPdfPriceCents: 5000,
     tagline: "Entry-level scalar EM test bench — build your first working scalar transmitter/receiver pair in a weekend.",
@@ -194,6 +195,8 @@ export default function BuildPlansMarketplace() {
   const [expanded, setExpanded] = useState(null);
   const [loading, setLoading] = useState({});
   const [orderSuccess, setOrderSuccess] = useState(null);
+  const { tier } = useTier();
+  const isMember = tier && tier !== "free";
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -238,12 +241,14 @@ export default function BuildPlansMarketplace() {
       <div className="border-b border-gray-800 bg-gray-900/80 backdrop-blur sticky top-0 z-40 px-6 py-5">
         <div className="max-w-5xl mx-auto flex items-center justify-between flex-wrap gap-3">
           <div>
-            <h1 className="text-2xl font-black">Build Plans — À La Carte</h1>
-            <p className="text-gray-400 text-sm mt-0.5">Step-by-step invention build plans. Viewable in-app. Optional: Video + PDF for +$50.</p>
+            <h1 className="text-2xl font-black">Build Plans</h1>
+            <p className="text-gray-400 text-sm mt-0.5">Step-by-step engineering build plans. Viewable in-app. Optional: Video + PDF for +$50.</p>
           </div>
-          <Link to="/invention-plans" className="text-xs text-cyan-400 hover:text-cyan-300 font-bold">
-            View All Inventions →
-          </Link>
+          {!isMember && (
+            <Link to="/pricing" className="flex items-center gap-1.5 text-xs text-cyan-400 hover:text-cyan-300 font-bold border border-cyan-800 px-3 py-1.5 rounded-lg bg-cyan-950/30">
+              <Lock size={11} /> Members get 20% off
+            </Link>
+          )}
         </div>
       </div>
 
@@ -271,7 +276,7 @@ export default function BuildPlansMarketplace() {
                 {/* Left: Info */}
                 <div>
                   <div className="flex items-start gap-3 mb-3">
-                    <span className="text-3xl">{plan.icon}</span>
+                    <div className="w-10 h-10 rounded-xl bg-gray-800 flex items-center justify-center flex-shrink-0">{plan.icon}</div>
                     <div>
                       <span className="text-xs font-bold text-cyan-400 uppercase tracking-widest">{plan.category}</span>
                       <h2 className="text-xl font-black text-white leading-tight">{plan.title}</h2>
