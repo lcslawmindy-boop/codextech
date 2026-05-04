@@ -5,6 +5,7 @@ import LiveActivityTicker from "@/components/LiveActivityTicker";
 import HeroSection from "@/components/landing/HeroSection";
 import ZaraAlienMascot from "@/components/ZaraAlienMascot";
 import LibrarySearch from "@/components/LibrarySearch";
+import Invention3DRotation from "@/components/Invention3DRotation";
 import { useState } from "react";
 
 
@@ -48,6 +49,13 @@ export default function Landing() {
       <div className="pt-16">
         {/* ── Hero ── */}
         <HeroSection />
+
+        {/* ── 3D Device Rotation ── */}
+        <section className="px-6 py-16 border-b border-white/10 bg-gray-950/40">
+          <div className="max-w-4xl mx-auto">
+            <Invention3DRotation title="C.O.D.E.X.T.E.C.H. Device Core" />
+          </div>
+        </section>
 
         {/* ── Section 2: What C.O.D.E.X.T.E.C.H. Is ── */}
         <section className="px-6 py-20 border-b border-white/10">
