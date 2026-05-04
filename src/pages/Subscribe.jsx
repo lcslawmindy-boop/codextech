@@ -31,6 +31,11 @@ export default function Subscribe() {
     const res = await base44.functions.invoke("createCheckoutSession", {
       successUrl: `${origin}/subscribe?success=true`,
       cancelUrl: `${origin}/subscribe`,
+      mode: "subscription",
+      title: "Premium Research Access",
+      description: "Full access to the Bearden Concept Network — cancel anytime",
+      priceInCents: 2900,
+      interval: "month",
     });
 
     if (res.data?.url) {
@@ -103,10 +108,10 @@ export default function Subscribe() {
                 className="w-full py-3.5 rounded-xl bg-indigo-700 hover:bg-indigo-600 text-white font-bold text-base transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
               >
                 {loading ? <Loader2 size={16} className="animate-spin" /> : <Lock size={16} />}
-                {loading ? "Redirecting to Stripe…" : "Subscribe Now"}
+                {loading ? "Redirecting to Stripe…" : "Buy Now — $29/mo"}
               </button>
               <p className="text-gray-600 text-xs text-center mt-3">
-                Secured by Stripe · Test mode: use card 4242 4242 4242 4242
+                Secured by Stripe · Cancel anytime
               </p>
             </div>
           </div>
