@@ -29,12 +29,7 @@ const MODULES = [
   { title: "Scalar Transmitter", category: "Scalar EM", tag: "Whittaker 1904", locked: true, img: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/fc3cb2842_generated_image.png", href: "/research-module?module=scalar-transmitter" },
 ];
 
-const EVIDENCE = [
-  { year: "1901", name: "Nikola Tesla", claim: "Demonstrated wireless power transmission at Colorado Springs. Measured standing scalar waves propagating through ground without Hertzian radiation.", source: "Colorado Springs Notes, 1899–1900" },
-  { year: "1966", name: "Antoine Prioré", claim: "Peer-reviewed tumor regression in animal models using rotating EM field device. Results published in Comptes Rendus, French Academy of Sciences.", source: "Pautrizel, Courrier et al., 1966–1977" },
-  { year: "2002", name: "T.E. Bearden et al.", claim: "COP>1 demonstrated in MEG device. Peer-reviewed in Foundations of Physics Letters. US Patent 6,362,718 granted.", source: "FPL Vol.14 No.1, 2001" },
-  { year: "1978", name: "Defense Intelligence Agency", claim: "Classified report documents Soviet scalar EM weapons program. Confirms theoretical and experimental basis for longitudinal wave weaponization.", source: "DIA Report DST-1810S-387-75 (declassified)" },
-];
+
 
 export default function Landing() {
   const [searchOpen, setSearchOpen] = useState(false);
@@ -198,38 +193,7 @@ export default function Landing() {
           </div>
         </section>
 
-        {/* ── Evidence timeline ── */}
-        <section className="px-6 py-20 border-b border-white/10">
-          <div className="max-w-5xl mx-auto">
-            <div className="text-center mb-12">
-              <p className="text-orange-400 text-xs font-black uppercase tracking-widest mb-3">Source Record</p>
-              <h2 className="text-3xl font-black text-white mb-3">Primary Source Documentation</h2>
-              <p className="text-gray-400 text-sm max-w-xl mx-auto">Every entry in the database traces to a verifiable primary source. Sample entries below.</p>
-            </div>
-            <div className="space-y-4">
-              {EVIDENCE.map((ev, i) => (
-                <div key={i} className="bg-gray-900/60 border border-gray-800 rounded-xl p-5 grid grid-cols-[auto_1fr] gap-4 backdrop-blur">
-                  <div className="text-center pt-0.5">
-                    <span className="text-cyan-400 font-black text-sm">{ev.year}</span>
-                  </div>
-                  <div>
-                    <div className="flex items-center gap-2 mb-1">
-                      <span className="text-white font-black text-sm">{ev.name}</span>
-                      <CheckCircle2 size={12} className="text-green-400" />
-                    </div>
-                    <p className="text-gray-300 text-sm leading-relaxed mb-2">{ev.claim}</p>
-                    <p className="text-gray-600 text-xs font-bold">Source: {ev.source}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-            <div className="mt-8 text-center">
-              <Link to="/source-documents" className="inline-flex items-center gap-2 text-gray-400 hover:text-white text-sm font-bold transition-colors">
-                Browse all 40+ source documents <ArrowRight size={14} />
-              </Link>
-            </div>
-          </div>
-        </section>
+
 
         {/* ── Concept graph + IP Marketplace CTAs ── */}
         <section className="px-6 py-20 border-b border-white/10">
