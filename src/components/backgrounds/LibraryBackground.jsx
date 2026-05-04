@@ -251,30 +251,7 @@ export default function LibraryBackground() {
         }}
       />
 
-      {/* Electrical surge pulses on light areas */}
-      <div
-        style={{
-          position: "absolute",
-          inset: 0,
-          background: "radial-gradient(ellipse at center, rgba(255,255,255,0.5) 0%, transparent 60%)",
-          animation: "electricalSurge 1.8s ease-in-out infinite",
-          pointerEvents: "none",
-          mixBlendMode: "screen",
-        }}
-      />
 
-      {/* Secondary electrical pulse */}
-      <div
-        style={{
-          position: "absolute",
-          inset: 0,
-          background: "radial-gradient(ellipse at 30% 40%, rgba(255,255,255,0.4) 0%, transparent 50%)",
-          animation: "electricalSurge 2.2s ease-in-out infinite",
-          pointerEvents: "none",
-          mixBlendMode: "screen",
-          animationDelay: "0.6s",
-        }}
-      />
 
       {/* Cyan pulse glow overlay */}
       <div
