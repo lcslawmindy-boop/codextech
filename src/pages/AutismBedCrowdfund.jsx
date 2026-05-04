@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Heart, Brain, Activity, Zap, Shield, Music, Wind, Eye, ArrowRight, CheckCircle2, Users, Target, Clock, DollarSign } from "lucide-react";
-import LibraryBackground from "@/components/backgrounds/LibraryBackground";
 import AutismBed3DVisualization from "@/components/AutismBed3DVisualization";
 
 const MODALITIES = [
@@ -59,10 +58,8 @@ export default function AutismBedCrowdfund() {
   };
 
   return (
-    <div className="min-h-screen relative" style={{ fontFamily: "'Share Tech Mono', monospace" }}>
-      <LibraryBackground />
-
-      <div className="relative z-10">
+    <div className="min-h-screen bg-gray-950 relative" style={{ fontFamily: "'Share Tech Mono', monospace" }}>
+      <div>
         {/* Header */}
         <div className="border-b border-white/10 bg-black/60 backdrop-blur px-6 py-4">
           <div className="max-w-5xl mx-auto flex items-center justify-between">
@@ -151,32 +148,6 @@ export default function AutismBedCrowdfund() {
                 </h3>
                 <p className="text-gray-300 text-base leading-relaxed">
                   Early intervention in sensory dysregulation can prevent behavioral escalation and reduce trauma. This prototype generates the first longitudinal dataset on real-time anxiety detection in autistic children — valuable for future clinical research, personalized therapeutic protocols, and next-generation sensory devices. We're building research infrastructure that will help thousands.
-                </p>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Why This Matters */}
-        <section className="px-6 py-16 border-t border-white/10">
-          <div className="max-w-4xl mx-auto">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              <div className="bg-gray-900/70 border border-gray-800 rounded-2xl p-7 backdrop-blur">
-                <h2 className="text-xl font-black text-white mb-4">The Problem</h2>
-                <p className="text-gray-400 text-sm leading-relaxed mb-3">
-                  Children with Autism Spectrum Disorder (ASD) frequently experience sensory overload and meltdowns that are difficult for caregivers to anticipate or de-escalate. Standard therapeutic tools are passive, static, and provide no biometric data.
-                </p>
-                <p className="text-gray-400 text-sm leading-relaxed">
-                  There is no existing device that simultaneously monitors physiological stress markers AND delivers adaptive multi-modal calming interventions in a child-safe, comfortable environment.
-                </p>
-              </div>
-              <div className="bg-gray-900/70 border border-purple-900/40 rounded-2xl p-7 backdrop-blur">
-                <h2 className="text-xl font-black text-white mb-4">The Prototype</h2>
-                <p className="text-gray-400 text-sm leading-relaxed mb-3">
-                  A sensory-safe bed environment that continuously reads the child's biometrics (HRV, EEG, galvanic skin response) and responds with gentle sensory interventions: soft vibration, light adjustment, scent diffusion, and EMF-shielded calm space.
-                </p>
-                <p className="text-gray-400 text-sm leading-relaxed">
-                  Data collected forms a longitudinal caregiver report — mapping what triggers anxiety, what reduces it, and how the child's baseline changes over time.
                 </p>
               </div>
             </div>
