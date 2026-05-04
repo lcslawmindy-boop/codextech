@@ -62,11 +62,16 @@ Deno.serve(async (req) => {
       try {
         const users = await base44.asServiceRole.entities.User.filter({ email });
         if (users.length > 0) {
-          await base44.asServiceRole.entities.User.update(users[0].id, {
+          const updateData = {
             subscription_status: "active",
             stripe_customer_id: session.customer,
             subscription_id: session.subscription || null,
-          });
+          };
+          // Stamp activation time only once (for drip targeting)
+          if (!users[0].subscription_activated_at) {
+            updateData.subscription_activated_at = new Date().toISOString();
+          }
+          await base44.asServiceRole.entities.User.update(users[0].id, updateData);
           console.log("subscription_status set to active for:", email);
         } else {
           console.warn("No User found for email:", email, "— user may not have registered yet. restoreAccess will sync on login.");

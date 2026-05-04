@@ -40,7 +40,7 @@ export default function PaywallPage() {
       priceInCents: 4900,
       mode: "subscription",
       interval: "month",
-      successUrl: `${origin}/member-dashboard?welcome=1`,
+      successUrl: `${origin}/post-purchase`,
       cancelUrl: `${origin}/paywall`,
     });
     if (res.data?.url) {
@@ -94,7 +94,7 @@ export default function PaywallPage() {
             onClick={handleCheckout}
             disabled={loading}
             className="inline-flex items-center gap-2 px-10 py-4 rounded-xl font-black text-white text-lg disabled:opacity-50 transition-all hover:opacity-90"
-            style={{ background: "linear-gradient(135deg, #06b6d4, #3b82f6)", boxShadow: "0 4px 32px rgba(6,182,212,0.35)" }}
+            style={{ background: "linear-gradient(90deg, #00ccff, #00ff99)", boxShadow: "0 4px 32px rgba(0,200,255,0.35)" }}
           >
             {loading ? <><Loader2 size={20} className="animate-spin" /> Processing...</> : <>Start Membership — $49/mo <ArrowRight size={18} /></>}
           </button>
@@ -155,7 +155,7 @@ export default function PaywallPage() {
               onClick={handleCheckout}
               disabled={loading}
               className="inline-flex items-center gap-2 px-8 py-4 rounded-xl font-black text-white text-base disabled:opacity-50 transition-all hover:opacity-90"
-              style={{ background: "linear-gradient(135deg, #06b6d4, #3b82f6)" }}
+              style={{ background: "linear-gradient(90deg, #00ccff, #00ff99)" }}
             >
               {loading ? <><Loader2 size={16} className="animate-spin" /> Processing...</> : <>Get Access Now — $49/mo <ArrowRight size={16} /></>}
             </button>

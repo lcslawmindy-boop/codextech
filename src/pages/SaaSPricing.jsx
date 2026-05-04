@@ -42,7 +42,7 @@ export default function SaaSPricing() {
       priceInCents: 4900,
       mode: "subscription",
       interval: "month",
-      successUrl: `${origin}/member-dashboard?welcome=1`,
+      successUrl: `${origin}/post-purchase`,
       cancelUrl: `${origin}/pricing`,
     });
     if (res.data?.url) {
@@ -105,7 +105,7 @@ export default function SaaSPricing() {
               onClick={handleCheckout}
               disabled={loading}
               className="w-full py-4 rounded-xl font-black text-white text-base disabled:opacity-50 transition-all hover:opacity-90 flex items-center justify-center gap-2"
-              style={{ background: "linear-gradient(135deg, #06b6d4, #3b82f6)", boxShadow: "0 4px 24px rgba(6,182,212,0.35)" }}
+              style={{ background: "linear-gradient(90deg, #00ccff, #00ff99)", boxShadow: "0 4px 24px rgba(0,200,255,0.35)" }}
             >
               {loading ? <><Loader2 size={18} className="animate-spin" /> Processing...</> : <>Start Membership — $49/mo <ArrowRight size={16} /></>}
             </button>
