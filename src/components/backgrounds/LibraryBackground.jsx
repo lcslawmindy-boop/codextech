@@ -114,8 +114,8 @@ export default function LibraryBackground() {
       // Horizontal neon green matrix streams
       ctx.fillStyle = "#00ffaa";
       ctx.shadowColor = "rgba(0, 255, 170, 1)";
-      ctx.shadowBlur = 18;
-      ctx.font = `bold ${fontSize}px monospace`;
+      ctx.shadowBlur = 32;
+      ctx.font = `bold ${fontSize * 1.5}px monospace`;
 
       streams.forEach((stream) => {
         stream.x += stream.speed * stream.direction;
@@ -148,12 +148,14 @@ export default function LibraryBackground() {
 
         ctx.fillStyle = stream.color;
         ctx.shadowColor = stream.color;
-        ctx.shadowBlur = 16;
-        ctx.font = `bold 12px monospace`;
+        ctx.shadowBlur = 28;
+        ctx.globalAlpha = 0.9;
+        ctx.font = `bold 20px monospace`;
         for (let i = 0; i < 8; i++) {
           const binary = Math.random() > 0.5 ? '1' : '0';
-          ctx.fillText(binary, stream.x, stream.y + i * 16);
+          ctx.fillText(binary, stream.x, stream.y + i * 24);
         }
+        ctx.globalAlpha = 1;
       });
 
       // Draw Metatron Cube (swirling from center)
