@@ -219,14 +219,55 @@ const LIBRARY_IMAGES = [
 
 // Enhanced 3D library consciousness images
 const CONSCIOUSNESS_IMAGES = [
-  { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/179c02c33_GWN3q.png", depth: 0.8, scale: 1.2, angle: 0 }, // Akashics Library
-  { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/394d5932e_1000_F_971892795_RX3cpf8xMUbbE4vJ2MnOerElgOeodidS.jpg", depth: 0.6, scale: 0.9, angle: Math.PI * 0.5 }, // Brain consciousness
-  { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/d9e99dbf9_modern-office-space-with-empty-bookshelves-and-clean-decor-generated-by-ai-photo.jpg", depth: 0.7, scale: 1.1, angle: Math.PI }, // Modern library
-  { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/0e1fff3d2_pngtree-blurred-empty-library-interior-with-bookshelves-and-white-floor-image_17084947-Copy.jpg", depth: 0.5, scale: 0.95, angle: Math.PI * 1.5 }, // Blurred library
-  { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/0cf0b1d3d_6e9914fb6d6d4a305dd2fbe4c30e098d-Copy.jpg", depth: 0.9, scale: 1.3, angle: 0.5 }, // Grand ceiling
-  { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/89ddb8038_maxresdefault.jpg", depth: 0.65, scale: 1.0, angle: 1.0 }, // Starry ceiling
-  { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/16ea6b61f_How-to-Access-and-Read-the-Akashic-Records.jpg", depth: 0.4, scale: 0.85, angle: 2.0 }, // Hand energy
-  { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/581300e53_a-long-row-of-bookshelves-in-a-library-free-photo.jpg", depth: 0.75, scale: 1.15, angle: 2.5 }, // Neon library
+  { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/c16fa3bd8_maxresdefault2-Copy.jpg", depth: 0.8, scale: 1.2, angle: 0 }, // Zero Point Energy
+  { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/1e9865769_7-100556825337-2-543-543-2026-side0-underlays-fl2146471123-ftpng-fs1-ptcp-x5000-y12100-w900-h758-recipe-d3effect111436-111-Copy.png", depth: 0.6, scale: 0.9, angle: Math.PI * 0.5 }, // Masonic
+  { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/668514fab_il_1588xN2075060493_83w4-Copy.jpg", depth: 0.7, scale: 1.1, angle: Math.PI }, // Dark figure ethereal
+  { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/e7c7865fd_il_1588xN7348955749_jmfr-Copy.jpg", depth: 0.5, scale: 0.95, angle: Math.PI * 1.5 }, // Chakras
+  { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/cfad6a294_5a9efa54-1732-426f-9f15-2281d076e774-Copy.jpg", depth: 0.9, scale: 1.3, angle: 0.5 }, // Book light
+  { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/57bbdc3e8_Gold-in-Solomons-Temple-1-1024x585-Copy.jpg", depth: 0.65, scale: 1.0, angle: 1.0 }, // Throne room
+  { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/afd171380_stock-photo-central-organ-of-human-nervous-system-brain-anatomy-d-1859779633-Copy.jpg", depth: 0.4, scale: 0.85, angle: 2.0 }, // Nervous system
+  { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/b3b91fc79_1000_F_971892795_RX3cpf8xMUbbE4vJ2MnOerElgOeodidS-Copy.jpg", depth: 0.75, scale: 1.15, angle: 2.5 }, // Brain head
+  { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/84207f901_wonkhe-summer-library-2740x1541-Copy-Copy.jpg", depth: 0.8, scale: 1.2, angle: 3.0 }, // Library aisle
+  { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/339f218ff_80df6c4979f8a455e66622179c4fa152--when-you-know-you-never-know-Copy.jpg", depth: 0.6, scale: 0.9, angle: 0.3 }, // Ethereal figure
+  { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/88ebb22b3_atom-big-crop-2048x1097-Copy.jpg", depth: 0.7, scale: 1.1, angle: 0.8 }, // Atom
+  { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/0369d77eb_334dc76f54a01292d408e91651da000cd556da33_full-Copy.jpg", depth: 0.5, scale: 0.95, angle: 1.5 }, // Third eye
+  { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/4e7bb4afd_b8b502123_generated_image-Copy.png", depth: 0.9, scale: 1.3, angle: 2.2 }, // ZARP logo 1
+  { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/4bcb21b14_2433d6fb5_logo-Copy.png", depth: 0.65, scale: 1.0, angle: 2.8 }, // Logo 2
+  { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/1f0d9fc81_5e2a7178c_logo-Copy.png", depth: 0.4, scale: 0.85, angle: 3.5 }, // Logo 3
+  { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/668a311eb_52c03d0b4_logo-Copy.png", depth: 0.75, scale: 1.15, angle: 4.0 }, // Logo 4
+  { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/16686739c_8a6ade5fb_logo-Copy.png", depth: 0.8, scale: 1.2, angle: 0.6 }, // Logo 5
+  { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/a3266fe77_31757b83a_logo-Copy.png", depth: 0.6, scale: 0.9, angle: 1.2 }, // Logo 6
+  { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/cdca903c4_e3ef10354_logo-Copy.png", depth: 0.7, scale: 1.1, angle: 1.8 }, // Logo 7
+  { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/981ab3d22_H-Copy.png", depth: 0.5, scale: 0.95, angle: 2.4 }, // H logo
+  { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/e28d11e68_0492796ac_logo-Copy.png", depth: 0.9, scale: 1.3, angle: 3.0 }, // Logo 8
+  { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/ba894b357_fc9458e04_logo-Copy.png", depth: 0.65, scale: 1.0, angle: 3.6 }, // Logo 9
+  { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/9f06811f9_7e20287f0_logo-Copy-Copy.png", depth: 0.4, scale: 0.85, angle: 0.2 }, // Logo 10
+  { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/cee5e3113_df887ac44_logo-Copy.png", depth: 0.75, scale: 1.15, angle: 0.7 }, // Logo 11
+  { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/356494f6b_c5bb763a8_logo-Copy2.png", depth: 0.8, scale: 1.2, angle: 1.4 }, // Logo 12
+  { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/0e807454b_839284090_logo-Copy-Copy.png", depth: 0.6, scale: 0.9, angle: 2.0 }, // Logo 13
+  { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/67c834dc4_2bfb1748c_logo-Copy.png", depth: 0.7, scale: 1.1, angle: 2.6 }, // Logo 14
+  { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/57495b63c_b5b5b761f_logo-Copy.png", depth: 0.5, scale: 0.95, angle: 3.2 }, // Logo 15
+  { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/806e24093_09fdccc22_logo-Copy.png", depth: 0.9, scale: 1.3, angle: 3.8 }, // Logo 16
+  { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/2b4fdaf2a_40e84fd2f_logo-Copy.png", depth: 0.65, scale: 1.0, angle: 0.4 }, // Logo 17
+  { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/1ebca720a_20a10157b_logo-Copy.png", depth: 0.4, scale: 0.85, angle: 1.0 }, // Logo 18
+  { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/7fe7c67eb_63ef02ea7_logo-Copy.png", depth: 0.75, scale: 1.15, angle: 1.6 }, // Logo 19
+  { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/f6e3721a9_95c51f67d_logo-Copy.png", depth: 0.8, scale: 1.2, angle: 2.2 }, // Logo 20
+  { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/69d82b1da_e6d85433b_logo-Copy.png", depth: 0.6, scale: 0.9, angle: 2.8 }, // Logo 21
+  { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/156eb3686_44c59f626_logo-Copy.png", depth: 0.7, scale: 1.1, angle: 3.4 }, // Logo 22
+  { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/5c536ce91_b62859dc7_logo-Copy.png", depth: 0.5, scale: 0.95, angle: 0.1 }, // Logo 23
+  { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/6e24a87fe_afe72c95c_logo-Copy.png", depth: 0.9, scale: 1.3, angle: 0.9 }, // Logo 24
+  { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/bad773a1a_b94e5fb67_logo-Copy.png", depth: 0.65, scale: 1.0, angle: 1.5 }, // Logo 25
+  { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/d6881391f_176f1f3cd_logo-Copy.png", depth: 0.4, scale: 0.85, angle: 2.1 }, // Logo 26
+  { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/182d08eb9_679227369_4409825352573578_7846461325788386335_n-Copy.jpg", depth: 0.75, scale: 1.15, angle: 2.7 }, // Logo 27
+  { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/b8c58514c_CODEXTECHLOGO-Copy.png", depth: 0.8, scale: 1.2, angle: 3.3 }, // CODEXTECH
+  { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/bb69359ba_24f72aabf_logo-Copy.png", depth: 0.6, scale: 0.9, angle: 3.9 }, // Logo 28
+  { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/0fa81d059_540037b58_logo-Copy.png", depth: 0.7, scale: 1.1, angle: 0.5 }, // Logo 29
+  { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/7a0852711_8a413d0c1_logo-Copy.png", depth: 0.5, scale: 0.95, angle: 1.1 }, // Logo 30
+  { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/273ae9b33_9e573794d_logo-Copy.png", depth: 0.9, scale: 1.3, angle: 1.7 }, // Logo 31
+  { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/83963ba0e_Aurawell10-Copy.png", depth: 0.65, scale: 1.0, angle: 2.3 }, // Aurawell 1
+  { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/3db655367_Aurawelllogo6-Copy.png", depth: 0.4, scale: 0.85, angle: 2.9 }, // Aurawell 2
+  { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/d4ddb6b18_Aurawelllogo-Copy.png", depth: 0.75, scale: 1.15, angle: 3.5 }, // Aurawell 3
+  { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/faefe1c51_ZARPlogo-Copy.png", depth: 0.8, scale: 1.2, angle: 0.0 }, // ZARP logo
 ];
 
 export default function LibraryBackground() {
