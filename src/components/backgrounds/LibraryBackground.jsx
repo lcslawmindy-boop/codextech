@@ -91,6 +91,81 @@ export default function LibraryBackground() {
         />
       )}
 
+      {/* Animated neon glow pulse */}
+      <div
+        style={{
+          position: "absolute",
+          inset: 0,
+          background: "radial-gradient(ellipse at center, rgba(0,220,255,0.08) 0%, transparent 70%)",
+          animation: "pulse 4s ease-in-out infinite",
+          pointerEvents: "none",
+        }}
+      />
+
+      {/* Animated electric field lines overlay */}
+      <svg
+        style={{
+          position: "absolute",
+          inset: 0,
+          width: "100%",
+          height: "100%",
+          opacity: 0.15,
+        }}
+        preserveAspectRatio="none"
+      >
+        <defs>
+          <style>{`
+            @keyframes pulse {
+              0%, 100% { opacity: 0.06; }
+              50% { opacity: 0.12; }
+            }
+            @keyframes flowVertical {
+              0% { transform: translateY(-100%); }
+              100% { transform: translateY(100%); }
+            }
+            @keyframes flowHorizontal {
+              0% { transform: translateX(-100%); }
+              100% { transform: translateX(100%); }
+            }
+            @keyframes glowPulse {
+              0%, 100% { filter: drop-shadow(0 0 4px rgba(0,220,255,0.4)); }
+              50% { filter: drop-shadow(0 0 12px rgba(0,220,255,0.8)); }
+            }
+            .flow-line-v { animation: flowVertical 8s linear infinite; }
+            .flow-line-h { animation: flowHorizontal 6s linear infinite; }
+            .glow-element { animation: glowPulse 3s ease-in-out infinite; }
+          `}</style>
+        </defs>
+        
+        {/* Vertical flowing lines */}
+        <line x1="15%" y1="0" x2="15%" y2="100%" stroke="rgba(0,220,255,0.6)" strokeWidth="1.5" className="flow-line-v" />
+        <line x1="35%" y1="0" x2="35%" y2="100%" stroke="rgba(0,255,150,0.4)" strokeWidth="1" className="flow-line-v" style={{ animationDelay: "2s" }} />
+        <line x1="65%" y1="0" x2="65%" y2="100%" stroke="rgba(0,220,255,0.5)" strokeWidth="1.2" className="flow-line-v" style={{ animationDelay: "1s" }} />
+        <line x1="85%" y1="0" x2="85%" y2="100%" stroke="rgba(0,255,150,0.3)" strokeWidth="1" className="flow-line-v" style={{ animationDelay: "3s" }} />
+        
+        {/* Horizontal flowing lines */}
+        <line x1="0" y1="20%" x2="100%" y2="20%" stroke="rgba(0,220,255,0.3)" strokeWidth="1" className="flow-line-h" />
+        <line x1="0" y1="50%" x2="100%" y2="50%" stroke="rgba(0,255,150,0.25)" strokeWidth="1.2" className="flow-line-h" style={{ animationDelay: "1.5s" }} />
+        <line x1="0" y1="80%" x2="100%" y2="80%" stroke="rgba(0,220,255,0.3)" strokeWidth="1" className="flow-line-h" style={{ animationDelay: "2.5s" }} />
+        
+        {/* Glow nodes */}
+        <circle cx="20%" cy="30%" r="3" fill="none" stroke="rgba(0,220,255,0.8)" strokeWidth="2" className="glow-element" />
+        <circle cx="80%" cy="40%" r="2.5" fill="none" stroke="rgba(0,255,150,0.6)" strokeWidth="1.5" className="glow-element" style={{ animationDelay: "0.5s" }} />
+        <circle cx="50%" cy="70%" r="3.5" fill="none" stroke="rgba(0,220,255,0.7)" strokeWidth="2" className="glow-element" style={{ animationDelay: "1.5s" }} />
+      </svg>
+
+      {/* Animated scanline effect for digital intensity */}
+      <div
+        style={{
+          position: "absolute",
+          inset: 0,
+          background: "repeating-linear-gradient(0deg, rgba(0,220,255,0.02) 0px, rgba(0,220,255,0.02) 1px, transparent 1px, transparent 2px)",
+          animation: "scanShift 8s linear infinite",
+          pointerEvents: "none",
+          opacity: 0.4,
+        }}
+      />
+
       {/* Dark overlay to keep text readable */}
       <div
         style={{
@@ -99,6 +174,17 @@ export default function LibraryBackground() {
           background: "linear-gradient(180deg, rgba(0,0,0,0.78) 0%, rgba(0,0,0,0.65) 50%, rgba(0,0,0,0.82) 100%)",
         }}
       />
+
+      <style>{`
+        @keyframes pulse {
+          0%, 100% { opacity: 0.06; }
+          50% { opacity: 0.12; }
+        }
+        @keyframes scanShift {
+          0% { transform: translateY(0); }
+          100% { transform: translateY(10px); }
+        }
+      `}</style>
     </div>
   );
 }
