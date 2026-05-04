@@ -72,11 +72,12 @@ export default function LibraryBackground() {
     const cols = Math.ceil(canvas.width / gridSize);
     const horizontalLines = Math.ceil(canvas.height / 60);
     
-    // Horizontal matrix streams
-    const streams = Array.from({ length: horizontalLines }, () => ({
+    // Horizontal matrix streams (bidirectional)
+    const streams = Array.from({ length: horizontalLines }, (_, i) => ({
       y: Math.random() * canvas.height,
       speed: Math.random() * 0.5 + 0.3,
-      x: 0,
+      x: i % 2 === 0 ? 0 : canvas.width,
+      direction: i % 2 === 0 ? 1 : -1, // 1 = right, -1 = left
     }));
 
     let time = 0;
@@ -108,16 +109,22 @@ export default function LibraryBackground() {
       ctx.font = `bold ${fontSize}px monospace`;
 
       streams.forEach((stream) => {
-        stream.x += stream.speed;
-        if (stream.x > canvas.width) {
+        stream.x += stream.speed * stream.direction;
+        
+        // Reset when off-screen
+        if (stream.direction === 1 && stream.x > canvas.width) {
           stream.x = -100;
+          stream.y = Math.random() * canvas.height;
+          stream.speed = Math.random() * 0.5 + 0.3;
+        } else if (stream.direction === -1 && stream.x < -200) {
+          stream.x = canvas.width + 100;
           stream.y = Math.random() * canvas.height;
           stream.speed = Math.random() * 0.5 + 0.3;
         }
 
         for (let i = 0; i < 20; i++) {
           const text = MATRIX_CHARS[Math.floor(Math.random() * MATRIX_CHARS.length)];
-          ctx.fillText(text, stream.x + i * fontSize, stream.y);
+          ctx.fillText(text, stream.x + i * fontSize * stream.direction, stream.y);
         }
       });
 
