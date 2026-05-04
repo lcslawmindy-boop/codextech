@@ -3,6 +3,186 @@ import { useState, useEffect, useRef } from "react";
 const MATRIX_CHARS = "0123456789";
 const MATRIX_SYMBOLS = "☆✦✧◇◈◆★✪✫✬✭✮✯✡♦♣♠♥☯☸☹☺☻♻∞§¶†‡※⁂⁎";
 
+// Sacred geometry drawing functions
+function drawOrbitingTetrahedron(ctx, centerX, centerY, radius, angle, time, color) {
+  const x = centerX + Math.cos(angle) * radius;
+  const y = centerY + Math.sin(angle) * radius;
+  const size = 20 + Math.sin(time * 0.02) * 3;
+  const rotation = time * 0.01;
+  
+  ctx.save();
+  ctx.translate(x, y);
+  ctx.rotate(rotation);
+  
+  ctx.strokeStyle = color;
+  ctx.shadowColor = color;
+  ctx.shadowBlur = 20;
+  ctx.lineWidth = 2;
+  
+  // Tetrahedron vertices
+  const h = size;
+  const base = size * 1.2;
+  const vertices = [
+    [0, -h], [base * 0.866, h * 0.5], [-base * 0.866, h * 0.5]
+  ];
+  
+  // Draw edges
+  for (let i = 0; i < 3; i++) {
+    ctx.beginPath();
+    ctx.moveTo(vertices[i][0], vertices[i][1]);
+    ctx.lineTo(vertices[(i + 1) % 3][0], vertices[(i + 1) % 3][1]);
+    ctx.stroke();
+  }
+  
+  ctx.restore();
+}
+
+function drawOrbitingCube(ctx, centerX, centerY, radius, angle, time, color) {
+  const x = centerX + Math.cos(angle) * radius;
+  const y = centerY + Math.sin(angle) * radius;
+  const size = 18 + Math.sin(time * 0.025) * 2;
+  const rotation = time * 0.012;
+  
+  ctx.save();
+  ctx.translate(x, y);
+  ctx.rotate(rotation);
+  
+  ctx.strokeStyle = color;
+  ctx.shadowColor = color;
+  ctx.shadowBlur = 20;
+  ctx.lineWidth = 2;
+  
+  // Cube faces
+  const s = size;
+  const corners = [
+    [-s, -s], [s, -s], [s, s], [-s, s]
+  ];
+  
+  for (let i = 0; i < 4; i++) {
+    ctx.beginPath();
+    ctx.moveTo(corners[i][0], corners[i][1]);
+    ctx.lineTo(corners[(i + 1) % 4][0], corners[(i + 1) % 4][1]);
+    ctx.stroke();
+  }
+  
+  ctx.restore();
+}
+
+function drawOrbitingOctahedron(ctx, centerX, centerY, radius, angle, time, color) {
+  const x = centerX + Math.cos(angle) * radius;
+  const y = centerY + Math.sin(angle) * radius;
+  const size = 22 + Math.sin(time * 0.018) * 3;
+  const rotation = time * 0.015;
+  
+  ctx.save();
+  ctx.translate(x, y);
+  ctx.rotate(rotation);
+  
+  ctx.strokeStyle = color;
+  ctx.shadowColor = color;
+  ctx.shadowBlur = 20;
+  ctx.lineWidth = 2;
+  
+  // Octahedron (diamond)
+  const vertices = [
+    [0, -size], [size * 0.707, 0], [0, size], [-size * 0.707, 0]
+  ];
+  
+  for (let i = 0; i < 4; i++) {
+    ctx.beginPath();
+    ctx.moveTo(vertices[i][0], vertices[i][1]);
+    ctx.lineTo(vertices[(i + 1) % 4][0], vertices[(i + 1) % 4][1]);
+    ctx.stroke();
+  }
+  
+  ctx.restore();
+}
+
+function drawFlowerOfLife(ctx, centerX, centerY, radius, time, color) {
+  ctx.save();
+  ctx.translate(centerX, centerY);
+  ctx.rotate(time * 0.005);
+  
+  ctx.strokeStyle = color;
+  ctx.shadowColor = color;
+  ctx.shadowBlur = 15;
+  ctx.lineWidth = 1.5;
+  ctx.globalAlpha = 0.8;
+  
+  const r = radius;
+  const circleRadius = r / 2;
+  
+  // Center circle
+  ctx.beginPath();
+  ctx.arc(0, 0, circleRadius, 0, Math.PI * 2);
+  ctx.stroke();
+  
+  // Six petals around center
+  for (let i = 0; i < 6; i++) {
+    const angle = (i * Math.PI) / 3;
+    const cx = Math.cos(angle) * circleRadius;
+    const cy = Math.sin(angle) * circleRadius;
+    ctx.beginPath();
+    ctx.arc(cx, cy, circleRadius, 0, Math.PI * 2);
+    ctx.stroke();
+  }
+  
+  // Outer ring
+  ctx.beginPath();
+  ctx.arc(0, 0, r, 0, Math.PI * 2);
+  ctx.stroke();
+  
+  ctx.restore();
+}
+
+function drawMetatronsCube(ctx, centerX, centerY, size, time, color) {
+  ctx.save();
+  ctx.translate(centerX, centerY);
+  ctx.rotate(time * 0.008);
+  
+  ctx.strokeStyle = color;
+  ctx.shadowColor = color;
+  ctx.shadowBlur = 15;
+  ctx.lineWidth = 1.5;
+  ctx.globalAlpha = 0.75;
+  
+  const s = size;
+  
+  // Outer cube vertices
+  const outer = [
+    [-s, -s], [s, -s], [s, s], [-s, s]
+  ];
+  
+  // Inner vertices
+  const inner = outer.map(v => [v[0] * 0.5, v[1] * 0.5]);
+  
+  // Draw outer square
+  for (let i = 0; i < 4; i++) {
+    ctx.beginPath();
+    ctx.moveTo(outer[i][0], outer[i][1]);
+    ctx.lineTo(outer[(i + 1) % 4][0], outer[(i + 1) % 4][1]);
+    ctx.stroke();
+  }
+  
+  // Draw inner square
+  for (let i = 0; i < 4; i++) {
+    ctx.beginPath();
+    ctx.moveTo(inner[i][0], inner[i][1]);
+    ctx.lineTo(inner[(i + 1) % 4][0], inner[(i + 1) % 4][1]);
+    ctx.stroke();
+  }
+  
+  // Connect outer to inner
+  for (let i = 0; i < 4; i++) {
+    ctx.beginPath();
+    ctx.moveTo(outer[i][0], outer[i][1]);
+    ctx.lineTo(inner[i][0], inner[i][1]);
+    ctx.stroke();
+  }
+  
+  ctx.restore();
+}
+
 const LIBRARY_IMAGES = [
   "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/879bbe3f2_generated_image.png",
   "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/2dd3c3b1a_generated_image.png",
@@ -281,30 +461,69 @@ export default function LibraryBackground() {
       ctx.arc(centerX, centerY, 7, 0, Math.PI * 2);
       ctx.fill();
       
-      // Draw sun orbit around center
-      const sunDistance = 150 + Math.sin(time * 0.01) * 30;
-      const sunAngle = time * 0.004;
+      // Draw realistic suns orbiting center
+      const sunDistance = 180 + Math.sin(time * 0.008) * 40;
+      const sunAngle = time * 0.003;
       const sunX = centerX + Math.cos(sunAngle) * sunDistance;
       const sunY = centerY + Math.sin(sunAngle) * sunDistance;
       
-      // Orbit path
-      ctx.strokeStyle = `rgba(255, 150, 0, 0.2)`;
+      // Outer sun corona glow (realistic)
+      const coronaGradient = ctx.createRadialGradient(sunX, sunY, 0, sunX, sunY, 45);
+      coronaGradient.addColorStop(0, `rgba(255, 220, 100, 0.6)`);
+      coronaGradient.addColorStop(0.6, `rgba(255, 150, 50, 0.2)`);
+      coronaGradient.addColorStop(1, `rgba(255, 100, 0, 0)`);
+      ctx.fillStyle = coronaGradient;
+      ctx.beginPath();
+      ctx.arc(sunX, sunY, 45, 0, Math.PI * 2);
+      ctx.fill();
+      
+      // Middle photosphere layer
+      const photosphereGradient = ctx.createRadialGradient(sunX, sunY, 0, sunX, sunY, 28);
+      photosphereGradient.addColorStop(0, `rgba(255, 255, 150, 1)`);
+      photosphereGradient.addColorStop(0.8, `rgba(255, 200, 80, 0.9)`);
+      photosphereGradient.addColorStop(1, `rgba(255, 140, 20, 0.6)`);
+      ctx.fillStyle = photosphereGradient;
+      ctx.beginPath();
+      ctx.arc(sunX, sunY, 28, 0, Math.PI * 2);
+      ctx.fill();
+      
+      // Core bright center
+      ctx.fillStyle = `rgba(255, 255, 255, 1)`;
+      ctx.beginPath();
+      ctx.arc(sunX, sunY, 8, 0, Math.PI * 2);
+      ctx.fill();
+      
+      // Sun flare rays (realistic)
+      ctx.strokeStyle = `rgba(255, 220, 100, 0.4)`;
       ctx.lineWidth = 1;
-      ctx.beginPath();
-      ctx.arc(centerX, centerY, sunDistance, 0, Math.PI * 2);
-      ctx.stroke();
+      for (let i = 0; i < 8; i++) {
+        const rayAngle = (i * Math.PI) / 4;
+        ctx.beginPath();
+        ctx.moveTo(sunX + Math.cos(rayAngle) * 28, sunY + Math.sin(rayAngle) * 28);
+        ctx.lineTo(sunX + Math.cos(rayAngle) * 50, sunY + Math.sin(rayAngle) * 50);
+        ctx.stroke();
+      }
       
-      // Sun glow
-      ctx.fillStyle = `rgba(255, 200, 50, 0.4)`;
-      ctx.beginPath();
-      ctx.arc(sunX, sunY, 25, 0, Math.PI * 2);
-      ctx.fill();
+      // Platonic solids orbiting with sacred geometry
+      const geometryOrbitRadius = 220;
+      const platonic1Angle = time * 0.005;
+      const platonic2Angle = time * 0.006 + Math.PI * 0.66;
+      const platonic3Angle = time * 0.0045 + Math.PI * 1.33;
       
-      // Sun core
-      ctx.fillStyle = `rgba(255, 255, 100, 0.8)`;
-      ctx.beginPath();
-      ctx.arc(sunX, sunY, 12, 0, Math.PI * 2);
-      ctx.fill();
+      // Tetrahedron (royal indigo)
+      drawOrbitingTetrahedron(ctx, centerX, centerY, geometryOrbitRadius, platonic1Angle, time, '#6C3AFF');
+      
+      // Cube (fluorescent blue)
+      drawOrbitingCube(ctx, centerX, centerY, geometryOrbitRadius, platonic2Angle, time, '#00AAFF');
+      
+      // Octahedron (light cyan)
+      drawOrbitingOctahedron(ctx, centerX, centerY, geometryOrbitRadius, platonic3Angle, time, '#00FFFF');
+      
+      // Flower of Life orbiting
+      drawFlowerOfLife(ctx, centerX + Math.cos(time * 0.004) * 300, centerY + Math.sin(time * 0.004) * 300, 35, time, '#00FFFF');
+      
+      // Metatron's Cube orbiting
+      drawMetatronsCube(ctx, centerX + Math.cos(time * 0.0035 + Math.PI) * 320, centerY + Math.sin(time * 0.0035 + Math.PI) * 320, 40, time, '#6C3AFF');
       
       ctx.globalAlpha = 1;
 
