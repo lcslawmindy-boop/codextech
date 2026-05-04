@@ -237,15 +237,15 @@ export default function LibraryBackground() {
         ctx.stroke();
       }
       
-      // Clock numbers (12, 3, 6, 9)
-      ctx.fillStyle = `rgba(255, 150, 0, ${0.8 * flashPulse})`;
-      ctx.font = `bold 14px monospace`;
+      // Clock numbers (12, 3, 6, 9) - larger and brighter
+      ctx.fillStyle = `rgba(255, 200, 0, ${1 * flashPulse})`;
+      ctx.font = `bold 24px monospace`;
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
-      ctx.fillText("12", centerX, centerY - clockRadius + 20);
-      ctx.fillText("3", centerX + clockRadius - 20, centerY);
-      ctx.fillText("6", centerX, centerY + clockRadius - 20);
-      ctx.fillText("9", centerX - clockRadius + 20, centerY);
+      ctx.fillText("12", centerX, centerY - clockRadius + 25);
+      ctx.fillText("3", centerX + clockRadius - 25, centerY);
+      ctx.fillText("6", centerX, centerY + clockRadius - 25);
+      ctx.fillText("9", centerX - clockRadius + 25, centerY);
       
       // Hour hand - spinning continuously
       const hourAngle = time * 0.0001 - Math.PI / 2;
@@ -341,7 +341,7 @@ export default function LibraryBackground() {
         style={{
           position: "absolute",
           inset: 0,
-          opacity: 0.45,
+          opacity: 0.65,
           pointerEvents: "none",
           mixBlendMode: "screen",
         }}
@@ -356,7 +356,7 @@ export default function LibraryBackground() {
         style={{
           position: "absolute",
           inset: 0,
-          background: "linear-gradient(180deg, rgba(0,0,0,0.96) 0%, rgba(0,0,0,0.94) 50%, rgba(0,0,0,0.97) 100%)",
+          background: "linear-gradient(180deg, rgba(0,0,0,0.93) 0%, rgba(0,0,0,0.91) 50%, rgba(0,0,0,0.94) 100%)",
         }}
       />
     </div>
