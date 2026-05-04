@@ -151,6 +151,12 @@ html[data-theme="steel"] {
   0% { transform: translateY(0px); }
   100% { transform: translateY(12px); }
 }
+@keyframes electricalSurge {
+  0%, 100% { opacity: 0.1; }
+  25% { opacity: 0.6; }
+  50% { opacity: 0.15; }
+  75% { opacity: 0.5; }
+}
 
 @layer base {
 

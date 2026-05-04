@@ -1,4 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
+
+const MATRIX_CHARS = "ｦｧｨｩｪｫｬｭｮｯﾀﾁﾂﾃﾄﾅﾆﾇﾈﾉﾊﾋﾌﾍﾎﾏﾐﾑﾒﾓﾔﾕﾗﾘﾜﾝ0123456789";
 
 const LIBRARY_IMAGES = [
   "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/879bbe3f2_generated_image.png",
@@ -38,6 +40,7 @@ export default function LibraryBackground() {
   const [currentIdx, setCurrentIdx] = useState(() => Math.floor(Math.random() * LIBRARY_IMAGES.length));
   const [nextIdx, setNextIdx] = useState(null);
   const [fading, setFading] = useState(false);
+  const canvasRef = useRef(null);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -52,6 +55,50 @@ export default function LibraryBackground() {
     }, 12000);
     return () => clearInterval(timer);
   }, [currentIdx]);
+
+  // Matrix rain effect
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const ctx = canvas.getContext("2d");
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const fontSize = 16;
+    const cols = Math.floor(canvas.width / fontSize);
+    const drops = new Array(cols).fill(1);
+
+    const animateMatrix = () => {
+      ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      ctx.fillStyle = "#00ff99";
+      ctx.font = `${fontSize}px monospace`;
+
+      for (let i = 0; i < drops.length; i++) {
+        const text = MATRIX_CHARS[Math.floor(Math.random() * MATRIX_CHARS.length)];
+        ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+        if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+          drops[i] = 0;
+        }
+        drops[i]++;
+      }
+
+      requestAnimationFrame(animateMatrix);
+    };
+
+    animateMatrix();
+
+    const handleResize = () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   return (
     <div
@@ -90,6 +137,29 @@ export default function LibraryBackground() {
           }}
         />
       )}
+
+      {/* Matrix rain canvas */}
+      <canvas
+        ref={canvasRef}
+        style={{
+          position: "absolute",
+          inset: 0,
+          opacity: 0.15,
+          pointerEvents: "none",
+        }}
+      />
+
+      {/* Electrical surge pulses on light areas */}
+      <div
+        style={{
+          position: "absolute",
+          inset: 0,
+          background: "radial-gradient(ellipse at center, rgba(0,220,255,0.4) 0%, transparent 70%)",
+          animation: "electricalSurge 2.5s ease-in-out infinite",
+          pointerEvents: "none",
+          mixBlendMode: "screen",
+        }}
+      />
 
       {/* Cyan pulse glow overlay */}
       <div
