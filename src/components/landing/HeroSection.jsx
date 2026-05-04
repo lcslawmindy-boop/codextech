@@ -76,7 +76,7 @@ export default function HeroSection() {
         className="text-sm text-center mb-10 relative z-10 font-bold"
         style={{ color: "rgba(0,200,255,0.85)", letterSpacing: "0.04em" }}
       >
-        40+ granted US patents · 200+ peer-reviewed publications · 6 build systems · $49/month
+        40+ granted US patents · 200+ peer-reviewed publications · 6 build systems · $89/month
       </p>
 
       {/* CTAs */}
