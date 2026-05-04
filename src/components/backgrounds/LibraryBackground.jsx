@@ -312,7 +312,18 @@ const CONSCIOUSNESS_IMAGES = [
   { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/ae92d929e_moray02.jpg", depth: 0.65, scale: 1.0, angle: 2.8, speed: 8 }, // Moray02
   { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/c9c11fb43_moray02a.jpg", depth: 0.4, scale: 0.85, angle: 3.3, speed: 8 }, // Moray02a
   { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/9e94b015c_moray03.jpg", depth: 0.75, scale: 1.15, angle: 3.8, speed: 8 }, // Moray03
-];
+  { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/6d67a8e54_cover2.jpg", depth: 0.8, scale: 1.2, angle: 0.5, speed: 8 }, // Bearden Briefing Cover
+  { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/d8d46d637_cover2dvd.jpg", depth: 0.65, scale: 1.0, angle: 1.1, speed: 8 }, // Bearden DVD Cover
+  { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/7d0bde1f1_cover2sm.jpg", depth: 0.5, scale: 0.95, angle: 1.6, speed: 8 }, // Bearden Small Cover
+  { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/a9d76cba1_coverback.jpg", depth: 0.9, scale: 1.3, angle: 2.2, speed: 8 }, // Bearden Back Cover
+  { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/304caddc1_coversm.jpg", depth: 0.4, scale: 0.85, angle: 2.8, speed: 8 }, // Bearden Cover Small
+  { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/cc58bc7be_coversm1.jpg", depth: 0.75, scale: 1.15, angle: 3.4, speed: 8 }, // Bearden Cover Small 1
+  { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/66b79f3fd_f24.jpg", depth: 0.6, scale: 0.9, angle: 0.2, speed: 8 }, // Fig24 Bearden
+  { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/19d7ce6dd_f25a.jpg", depth: 0.7, scale: 1.1, angle: 0.9, speed: 8 }, // Fig25a Consciousness
+  { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/5191c10db_f25b.jpg", depth: 0.8, scale: 1.2, angle: 1.5, speed: 8 }, // Fig25b Life Intent
+  { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/007316483_f25c.jpg", depth: 0.65, scale: 1.0, angle: 2.0, speed: 8 }, // Fig25c Three Worlds
+  { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/1acfe8886_fig3.jpg", depth: 0.5, scale: 0.95, angle: 2.7, speed: 8 }, // Fig3 Bearden
+  ];
 
 export default function LibraryBackground() {
   const [currentIdx, setCurrentIdx] = useState(() => Math.floor(Math.random() * LIBRARY_IMAGES.length));
