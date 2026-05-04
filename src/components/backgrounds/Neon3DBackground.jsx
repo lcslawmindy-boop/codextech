@@ -65,9 +65,9 @@ export default function Neon3DBackground() {
             </feMerge>
           </filter>
           <linearGradient id="electricGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#00ff99" />
+            <stop offset="0%" stopColor="#00ccff" />
             <stop offset="50%" stopColor="#00ff99" />
-            <stop offset="100%" stopColor="#00ff99" />
+            <stop offset="100%" stopColor="#00ccff" />
           </linearGradient>
         </defs>
 
@@ -107,7 +107,7 @@ export default function Neon3DBackground() {
         />
       </svg>
 
-      {/* Matrix Numbers Rain — Neon Green */}
+      {/* Matrix Numbers Rain */}
       <div style={{ position: "absolute", inset: 0, overflow: "hidden" }}>
         {matrixChars.map((char) => (
           <div
@@ -117,12 +117,11 @@ export default function Neon3DBackground() {
               left: `${char.x}%`,
               top: "-20px",
               fontFamily: "monospace",
-              fontSize: "13px",
-              fontWeight: "900",
+              fontSize: "12px",
+              fontWeight: "bold",
               color: "#00ff99",
-              textShadow: "0 0 8px #00ff99, 0 0 16px #00ff99, 0 0 24px rgba(0,255,153,0.6), 0 0 40px rgba(0,255,153,0.3)",
-              opacity: 0.85,
-              letterSpacing: "0.1em",
+              textShadow: "0 0 10px #00ff99, 0 0 20px #00ccff",
+              opacity: 0.7,
               animation: `matrixFall ${char.duration}s linear ${char.delay}s infinite`,
             }}
           >
@@ -131,7 +130,7 @@ export default function Neon3DBackground() {
         ))}
       </div>
 
-      {/* Pulsing Neon Glow Zones — Neon Green */}
+      {/* Pulsing Neon Glow Zones */}
       <div
         style={{
           position: "absolute",
@@ -140,7 +139,7 @@ export default function Neon3DBackground() {
           width: "300px",
           height: "300px",
           borderRadius: "50%",
-          background: `radial-gradient(circle, rgba(0,255,153,${0.18 + pulseIntensity * 0.0012}) 0%, transparent 70%)`,
+          background: `radial-gradient(circle, rgba(0,200,255,${0.15 + pulseIntensity * 0.001}) 0%, transparent 70%)`,
           filter: "blur(60px)",
         }}
       />
@@ -152,32 +151,32 @@ export default function Neon3DBackground() {
           width: "400px",
           height: "400px",
           borderRadius: "50%",
-          background: `radial-gradient(circle, rgba(0,255,153,${0.15 + pulseIntensity * 0.001}) 0%, transparent 70%)`,
+          background: `radial-gradient(circle, rgba(0,255,150,${0.12 + pulseIntensity * 0.0008}) 0%, transparent 70%)`,
           filter: "blur(80px)",
         }}
       />
 
-      {/* Animated Neon Grid Overlay — Neon Green */}
+      {/* Animated Neon Grid Overlay */}
       <div
         style={{
           position: "absolute",
           inset: 0,
           backgroundImage: `
-            linear-gradient(0deg, transparent 24%, rgba(0,255,153,0.07) 25%, rgba(0,255,153,0.07) 26%, transparent 27%, transparent 74%, rgba(0,255,153,0.07) 75%, rgba(0,255,153,0.07) 76%, transparent 77%, transparent),
-            linear-gradient(90deg, transparent 24%, rgba(0,255,153,0.07) 25%, rgba(0,255,153,0.07) 26%, transparent 27%, transparent 74%, rgba(0,255,153,0.07) 75%, rgba(0,255,153,0.07) 76%, transparent 77%, transparent)
+            linear-gradient(0deg, transparent 24%, rgba(0,200,255,0.05) 25%, rgba(0,200,255,0.05) 26%, transparent 27%, transparent 74%, rgba(0,200,255,0.05) 75%, rgba(0,200,255,0.05) 76%, transparent 77%, transparent),
+            linear-gradient(90deg, transparent 24%, rgba(0,200,255,0.05) 25%, rgba(0,200,255,0.05) 26%, transparent 27%, transparent 74%, rgba(0,200,255,0.05) 75%, rgba(0,200,255,0.05) 76%, transparent 77%, transparent)
           `,
           backgroundSize: "50px 50px",
-          opacity: 0.5,
+          opacity: 0.4,
         }}
       />
 
-      {/* White Section Neon Pulsing Effect — Neon Green */}
+      {/* White Section Neon Pulsing Effect (will be layered over white content) */}
       <div
         style={{
           position: "absolute",
           inset: 0,
           pointerEvents: "none",
-          background: `linear-gradient(45deg, transparent 30%, rgba(0,255,153,${0.08 + pulseIntensity * 0.0008}) 50%, transparent 70%)`,
+          background: `linear-gradient(45deg, transparent 30%, rgba(0,255,150,${0.05 + pulseIntensity * 0.0006}) 50%, transparent 70%)`,
           animation: "neonElectricShimmer 2s ease-in-out infinite",
         }}
       />
