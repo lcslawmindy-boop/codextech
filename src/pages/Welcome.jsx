@@ -42,13 +42,13 @@ function StepWelcome({ onNext }) {
         </div>
         <h1 className="text-4xl font-black leading-tight mb-4">
           Welcome to<br />
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">ZARP Engineering Vault</span>
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-green-400">ZARP Engineering Platform</span>
         </h1>
         <p className="text-gray-400 text-base leading-relaxed mb-2">
-          40+ advanced engineering systems sourced from <strong className="text-white">granted US patents</strong>, <strong className="text-white">peer-reviewed journals</strong>, and <strong className="text-white">declassified government documents</strong>.
+          40+ advanced EM systems documented from <strong className="text-white">granted US patents</strong>, <strong className="text-white">peer-reviewed journals</strong>, and <strong className="text-white">primary engineering sources</strong>.
         </p>
         <p className="text-gray-500 text-sm leading-relaxed">
-          Full build plans. Complete BOMs. AI patent tools. Physical kit delivery. Every system is documented at the engineering level — not the theory level.
+          Full build plans. Complete BOMs. AI patent tools. Physical kit delivery. Every system documented at the engineering level — not the conceptual level.
         </p>
       </div>
 
@@ -73,7 +73,7 @@ function StepValue({ onNext }) {
           One Membership.<br />The Entire Vault.
         </h2>
         <p className="text-gray-400 text-sm leading-relaxed">
-          No other platform documents these systems at the engineering level. Primary sources. Real build specs. Everything.
+          Primary sources. Precise specifications. Engineering-grade documentation — not theory, not conjecture.
         </p>
       </div>
 
@@ -130,7 +130,7 @@ function StepBuild({ onPaywall }) {
       <div className="text-center mb-6">
         <p className="text-purple-400 text-xs font-black uppercase tracking-widest mb-2">Step 3 of 3 — Your First Build</p>
         <h2 className="text-3xl font-black mb-2">The MEG Build Plan</h2>
-        <p className="text-gray-500 text-sm">The most documented COP&gt;1 device in peer-reviewed literature.</p>
+        <p className="text-gray-500 text-sm">Peer-reviewed COP&gt;1 demonstration. US Patent 6,362,718. Foundations of Physics Letters.</p>
       </div>
 
       {/* Build card */}
@@ -176,14 +176,14 @@ function StepBuild({ onPaywall }) {
       </div>
 
       <p className="text-center text-gray-500 text-xs mb-4">
-        Click any locked item above — or go straight to the vault:
+        Click any locked field above — or access the full platform:
       </p>
       <button
         onClick={onPaywall}
         className="w-full py-4 rounded-xl font-black text-white text-base transition-all hover:opacity-90 flex items-center justify-center gap-2"
         style={{ background: "linear-gradient(90deg, #00ccff, #00ff99)", boxShadow: "0 4px 20px rgba(0,200,255,0.4)" }}
       >
-        Unlock the Full Build Plan <ChevronRight size={16} />
+        Access Full Platform <ChevronRight size={16} />
       </button>
       <p className="text-center text-gray-700 text-xs mt-2">$49/month · Cancel anytime</p>
     </div>

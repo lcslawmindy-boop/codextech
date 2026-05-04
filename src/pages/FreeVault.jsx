@@ -150,12 +150,12 @@ export default function FreeVault() {
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-green-950/40 border border-green-800 text-green-300 text-xs font-bold mb-4">
             <CheckCircle2 size={13} /> 100% FREE — FULL BOM & SPECS FOR ALL BUILDS
           </div>
-          <h1 className="text-4xl font-black mb-3">Free Engineering Preview</h1>
+          <h1 className="text-4xl font-black mb-3">Engineering Preview</h1>
           <p className="text-gray-400 max-w-2xl mx-auto text-base leading-relaxed mb-4">
-            Explore 3 complete build systems from C.O.D.E.X.T.E.C.H. with full BOMs and specifications. Membership unlocks structured courses, build plans, and execution tools.
+            Three complete build systems with full BOMs and specifications — no account required. Membership unlocks the full research database, structured modules, and execution tools.
           </p>
           <p className="text-gray-500 text-sm max-w-xl mx-auto">
-            All systems sourced from granted US patents and peer-reviewed research. Join the Research Membership ($49/month) for all structured courses, build plans, PDFs, video guides, and verified supplier sourcing.
+            All systems sourced from granted US patents and peer-reviewed publications. Research Membership ($49/month) includes all modules, PDFs, video guides, AI patent tools, and verified supplier sourcing.
           </p>
         </div>
 
@@ -216,13 +216,13 @@ export default function FreeVault() {
 
         {/* Browse all */}
         <div className="text-center bg-gray-900 border border-gray-800 rounded-2xl p-8 mb-16">
-          <h2 className="text-2xl font-black mb-3">Browse Structured Courses & Build Plans</h2>
+          <h2 className="text-2xl font-black mb-3">Browse All Build Systems</h2>
           <p className="text-gray-400 mb-6 max-w-md mx-auto">
-            All builds include full BOMs, exact specifications, and assembly instructions. Completely free.
+            Full BOMs, component specifications, and assembly procedures. Sourced from primary engineering documentation.
           </p>
           <Link to="/invention-plans"
             className="inline-flex items-center gap-2 px-8 py-4 rounded-xl bg-gradient-to-r from-cyan-600 to-blue-700 hover:from-cyan-500 hover:to-blue-600 text-white font-black transition-all shadow-lg shadow-cyan-900/30">
-            Open Invention Library <ChevronRight size={18} />
+            Open Build Library <ChevronRight size={18} />
           </Link>
         </div>
 
@@ -264,8 +264,8 @@ export default function FreeVault() {
 
         {/* Email capture */}
         <div className="bg-gray-900 border border-gray-800 rounded-2xl p-8 text-center mb-12">
-          <h3 className="font-black text-white text-lg mb-2">Weekly Vault Drops</h3>
-          <p className="text-gray-500 text-sm mb-6">New builds, tips, and engineering insights delivered to your inbox. No spam. Unsubscribe anytime.</p>
+          <h3 className="font-black text-white text-lg mb-2">Research Updates</h3>
+          <p className="text-gray-500 text-sm mb-6">New builds, technical analysis, and engineering briefs. High signal, low frequency. Unsubscribe anytime.</p>
           {emailDone ? (
             <div className="flex items-center justify-center gap-2 text-green-400 font-bold">
               <CheckCircle2 size={18} /> Subscribed! Check your email.

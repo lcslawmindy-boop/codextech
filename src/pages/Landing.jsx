@@ -61,8 +61,8 @@ export default function Landing() {
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-12">
               <p className="text-cyan-400 text-xs font-black uppercase tracking-widest mb-3">Platform Overview</p>
-              <h2 className="text-3xl md:text-4xl font-black text-white mb-3">What's in the Database</h2>
-              <p className="text-gray-400 text-base max-w-xl mx-auto">Everything is primary-source verified. Patents cross-checked against USPTO. Publications checked against journal archives. No exceptions.</p>
+              <h2 className="text-3xl md:text-4xl font-black text-white mb-3">Platform Contents</h2>
+              <p className="text-gray-400 text-base max-w-xl mx-auto">Every entry is primary-source verified. Patents cross-referenced against USPTO. Publications checked against journal archives. No exceptions.</p>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {WHAT_IS_IN.map((section, i) => (
@@ -91,8 +91,8 @@ export default function Landing() {
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-10">
               <p className="text-green-400 text-xs font-black uppercase tracking-widest mb-3">Research Modules</p>
-              <h2 className="text-3xl font-black text-white mb-3">Structured Engineering Analysis</h2>
-              <p className="text-gray-400 text-sm max-w-xl mx-auto">Each module contains: theoretical basis, system architecture, BOM, assembly steps, measurement protocol, and source documents. The MEG module is free to preview.</p>
+              <h2 className="text-3xl font-black text-white mb-3">Research Modules</h2>
+              <p className="text-gray-400 text-sm max-w-xl mx-auto">Each module includes: theoretical basis, system architecture, full BOM, assembly procedures, measurement protocol, and primary source documents. The MEG module is free to access.</p>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-8">
               {MODULES.map((mod, i) => (
@@ -131,9 +131,9 @@ export default function Landing() {
         <section className="px-6 py-20 border-b border-white/10 solid-section">
           <div className="max-w-5xl mx-auto">
             <div className="text-center mb-12">
-              <p className="text-orange-400 text-xs font-black uppercase tracking-widest mb-3">Primary Source Record</p>
-              <h2 className="text-3xl font-black text-white mb-3">The Evidence Is in the Record</h2>
-              <p className="text-gray-400 text-sm max-w-xl mx-auto">Every claim in this database traces to a verifiable primary source. Here's a sample of what's documented.</p>
+              <p className="text-orange-400 text-xs font-black uppercase tracking-widest mb-3">Source Record</p>
+              <h2 className="text-3xl font-black text-white mb-3">Primary Source Documentation</h2>
+              <p className="text-gray-400 text-sm max-w-xl mx-auto">Every entry in the database traces to a verifiable primary source. Sample entries below.</p>
             </div>
             <div className="space-y-4">
               {EVIDENCE.map((ev, i) => (
@@ -208,22 +208,22 @@ export default function Landing() {
           <div className="max-w-2xl mx-auto text-center">
             <p className="text-cyan-400 text-xs font-black uppercase tracking-widest mb-4">Research Membership</p>
             <h2 className="text-4xl md:text-5xl font-black text-white mb-4">
-              One Plan.<br />
+              Full Access.<br />
               <span style={{ background: "linear-gradient(135deg, #00ccff, #00ff99)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
-                Everything Included.
+                One Flat Rate.
               </span>
             </h2>
-            <p className="text-gray-400 text-base mb-2 max-w-lg mx-auto">Full database access. All build modules. AI patent tools. IP marketplace. $49/month. Cancel anytime.</p>
-            <p className="text-gray-600 text-sm mb-10">No tiers. No hidden upgrades. Everything unlocked at $49.</p>
+            <p className="text-gray-400 text-base mb-2 max-w-lg mx-auto">Complete patent archive. All research modules. AI patent tools. IP marketplace. $49/month. Cancel anytime.</p>
+            <p className="text-gray-600 text-sm mb-10">No tiers. No per-item fees. Everything unlocked at $49.</p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link to="/pricing"
                 className="flex items-center justify-center gap-2 px-10 py-4 rounded-xl font-black text-base text-black transition-all hover:scale-105"
                 style={{ background: "linear-gradient(90deg, #00ccff, #00ff99)", boxShadow: "0 4px 32px rgba(0,200,255,0.3)" }}>
-                Start for $49/month <ArrowRight size={16} />
+                Join — $49/month <ArrowRight size={16} />
               </Link>
               <Link to="/free-vault"
                 className="flex items-center justify-center gap-2 px-8 py-4 rounded-xl font-black text-sm text-gray-300 border border-gray-700 hover:border-gray-500 transition-colors">
-                Free preview first
+                Free Access Preview
               </Link>
             </div>
             <p className="text-gray-700 text-xs mt-5">Secured by Stripe · Cancel anytime · No contracts</p>

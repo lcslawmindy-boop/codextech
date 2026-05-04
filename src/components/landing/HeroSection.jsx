@@ -32,7 +32,7 @@ export default function HeroSection() {
       >
         <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
         <span className="text-xs font-black tracking-widest text-cyan-400">
-          ELECTROMAGNETIC RESEARCH DATABASE — LIVE
+          ZARP ENGINEERING INTELLIGENCE PLATFORM
         </span>
       </div>
 
@@ -41,7 +41,7 @@ export default function HeroSection() {
         className="text-4xl md:text-6xl lg:text-7xl font-black text-center mb-6 leading-tight relative z-10"
         style={{ maxWidth: "960px" }}
       >
-        <span className="text-white">The Research Platform</span>
+        <span className="text-white">Engineering Intelligence</span>
         <br />
         <span
           style={{
@@ -50,7 +50,7 @@ export default function HeroSection() {
             WebkitTextFillColor: "transparent",
           }}
         >
-          Governments Don't Want You to Find.
+          For Advanced EM Research.
         </span>
       </h1>
 
@@ -59,13 +59,13 @@ export default function HeroSection() {
         className="text-base md:text-lg text-center max-w-2xl mb-4 relative z-10 leading-relaxed"
         style={{ color: "rgba(255,255,255,0.65)" }}
       >
-        40+ granted US patents. 200+ peer-reviewed publications. Complete engineering build plans for electromagnetic devices that the mainstream ignores.{" "}
+        40+ granted US patents. 200+ peer-reviewed publications. Complete engineering build plans for advanced electromagnetic systems.{" "}
         <span className="text-white font-bold">Primary sources only. Zero speculation.</span>
       </p>
 
       <p
         className="text-sm text-center mb-10 relative z-10 font-bold"
-        style={{ color: "rgba(255,180,0,0.9)", letterSpacing: "0.04em" }}
+        style={{ color: "rgba(0,200,255,0.85)", letterSpacing: "0.04em" }}
       >
         Used by engineers and researchers in 6+ countries. $49/month. Cancel anytime.
       </p>
@@ -80,7 +80,7 @@ export default function HeroSection() {
             boxShadow: "0 0 40px rgba(0,200,255,0.4), 0 8px 24px rgba(0,0,0,0.4)",
           }}
         >
-          Access the Database — $49/mo <ArrowRight size={16} />
+          Access the Platform — $49/mo <ArrowRight size={16} />
         </Link>
         <Link
           to="/free-vault"
