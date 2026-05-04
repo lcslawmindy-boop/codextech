@@ -146,11 +146,12 @@ export default function LibraryBackground() {
         ctx.globalAlpha = 1;
       });
 
-      // Draw plasma spiral Metatron with sun orbit
+      // Draw bright neon plasma spiral with indigo border
       const centerX = canvas.width / 2;
       const centerY = canvas.height / 2;
       const scale = 80 + Math.sin(time * 0.02) * 40;
       const rotation = time * 0.003;
+      const surgePulse = 0.8 + Math.sin(time * 0.03) * 0.4;
       
       ctx.save();
       ctx.translate(centerX, centerY);
@@ -159,16 +160,16 @@ export default function LibraryBackground() {
       const phi = 1.618;
       const baseSize = scale;
       
-      // Plasma colors that cycle
+      // Bright neon plasma colors with surge
       const plasmaColors = [
-        `rgba(255, 100, 0, ${0.6 + Math.sin(time * 0.025) * 0.3})`,
-        `rgba(255, 0, 100, ${0.5 + Math.sin(time * 0.025 + 2) * 0.3})`,
-        `rgba(100, 0, 255, ${0.55 + Math.sin(time * 0.025 + 4) * 0.3})`,
+        `rgba(255, 150, 0, ${(0.8 + Math.sin(time * 0.03) * 0.2) * surgePulse})`,
+        `rgba(255, 50, 150, ${(0.75 + Math.sin(time * 0.03 + 2) * 0.25) * surgePulse})`,
+        `rgba(150, 50, 255, ${(0.85 + Math.sin(time * 0.03 + 4) * 0.15) * surgePulse})`,
       ];
       
-      // Draw plasma outer hexagon with glow
-      ctx.strokeStyle = plasmaColors[0];
-      ctx.lineWidth = 3;
+      // Indigo border outer hexagon
+      ctx.strokeStyle = `rgba(75, 0, 255, ${0.9 * surgePulse})`;
+      ctx.lineWidth = 4;
       for (let i = 0; i < 6; i++) {
         const angle = (i * Math.PI * 2) / 6;
         const x = Math.cos(angle) * baseSize;
@@ -180,27 +181,75 @@ export default function LibraryBackground() {
       ctx.closePath();
       ctx.stroke();
       
-      // Draw plasma circles
+      // Bright neon inner circles
       for (let r = 1; r < 4; r++) {
         ctx.beginPath();
         ctx.arc(0, 0, (baseSize / phi) * r, 0, Math.PI * 2);
         ctx.strokeStyle = plasmaColors[r % 3];
-        ctx.lineWidth = 2;
+        ctx.lineWidth = 3;
         ctx.stroke();
       }
       
-      // Draw plasma radiating lines with spiral effect
+      // Bright neon surging radiating lines
       for (let i = 0; i < 12; i++) {
         const angle = (i * Math.PI) / 6 + time * 0.01;
         ctx.beginPath();
         ctx.moveTo(0, 0);
         ctx.lineTo(Math.cos(angle) * baseSize * 1.2, Math.sin(angle) * baseSize * 1.2);
         ctx.strokeStyle = plasmaColors[i % 3];
-        ctx.lineWidth = 1.5;
+        ctx.lineWidth = 2.5;
         ctx.stroke();
       }
       
       ctx.restore();
+      
+      // Draw clock in center
+      const now = new Date();
+      const hours = now.getHours() % 12;
+      const minutes = now.getMinutes();
+      const seconds = now.getSeconds();
+      const clockRadius = 40;
+      
+      // Clock circle
+      ctx.strokeStyle = `rgba(75, 0, 255, 0.8)`;
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.arc(centerX, centerY, clockRadius, 0, Math.PI * 2);
+      ctx.stroke();
+      
+      // Clock numbers (12, 3, 6, 9)
+      ctx.fillStyle = `rgba(200, 150, 255, 0.6)`;
+      ctx.font = `bold 12px monospace`;
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillText("12", centerX, centerY - clockRadius + 12);
+      ctx.fillText("3", centerX + clockRadius - 12, centerY);
+      ctx.fillText("6", centerX, centerY + clockRadius - 12);
+      ctx.fillText("9", centerX - clockRadius + 12, centerY);
+      
+      // Hour hand
+      const hourAngle = ((hours + minutes / 60) * Math.PI) / 6 - Math.PI / 2;
+      ctx.strokeStyle = `rgba(255, 150, 0, 0.9)`;
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.moveTo(centerX, centerY);
+      ctx.lineTo(centerX + Math.cos(hourAngle) * clockRadius * 0.5, centerY + Math.sin(hourAngle) * clockRadius * 0.5);
+      ctx.stroke();
+      
+      // Minute hand
+      const minuteAngle = ((minutes + seconds / 60) * Math.PI) / 30 - Math.PI / 2;
+      ctx.strokeStyle = `rgba(150, 50, 255, 0.9)`;
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(centerX, centerY);
+      ctx.lineTo(centerX + Math.cos(minuteAngle) * clockRadius * 0.75, centerY + Math.sin(minuteAngle) * clockRadius * 0.75);
+      ctx.stroke();
+      
+      // Center dot
+      ctx.fillStyle = `rgba(255, 150, 0, 1)`;
+      ctx.beginPath();
+      ctx.arc(centerX, centerY, 4, 0, Math.PI * 2);
+      ctx.fill();
       
       // Draw sun orbit around center
       const sunDistance = 150 + Math.sin(time * 0.01) * 30;
