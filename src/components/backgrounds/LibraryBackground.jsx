@@ -297,6 +297,17 @@ const CONSCIOUSNESS_IMAGES = [
   { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/5191c10db_f25b.jpg", depth: 0.8, scale: 1.2, angle: 1.5, speed: 8 }, // Fig25b Life Intent
   { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/007316483_f25c.jpg", depth: 0.65, scale: 1.0, angle: 2.0, speed: 8 }, // Fig25c Three Worlds
   { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/1acfe8886_fig3.jpg", depth: 0.5, scale: 0.95, angle: 2.7, speed: 8 }, // Fig3 Bearden
+  // MedBed Pro 2.0 Renders
+  { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/c61919fe5_IMG_8294.jpg", depth: 1.0, scale: 1.4, angle: 0.3, speed: 6 },
+  { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/da50ced19_IMG_8295.jpg", depth: 1.0, scale: 1.4, angle: 1.1, speed: 6 },
+  { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/3184e97ef_IMG_8299.jpg", depth: 1.0, scale: 1.4, angle: 1.9, speed: 6 },
+  { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/a1705ebe0_IMG_8297.jpg", depth: 1.0, scale: 1.4, angle: 2.7, speed: 6 },
+  { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/f7383fd9a_IMG_8314.jpg", depth: 1.0, scale: 1.4, angle: 3.5, speed: 6 },
+  { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/7a6a9b7fb_IMG_8255.jpeg", depth: 1.0, scale: 1.4, angle: 4.3, speed: 6 },
+  { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/cbcceb4be_IMG_8300.jpg", depth: 1.0, scale: 1.4, angle: 5.1, speed: 6 },
+  { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/147613025_IMG_8302.jpg", depth: 1.0, scale: 1.4, angle: 5.9, speed: 6 },
+  { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/dd3bb8544_IMG_8311.jpg", depth: 1.0, scale: 1.4, angle: 0.7, speed: 6 },
+  { url: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/0b2a0c740_IMG_83093.jpg", depth: 1.0, scale: 1.4, angle: 1.5, speed: 6 },
   ];
 
 export default function LibraryBackground() {
@@ -679,7 +690,10 @@ requestAnimationFrame(animateMatrix);
           const x = Math.cos(rotAngle) * orbitRadius;
           const y = Math.sin(rotAngle) * orbitRadius * 0.6;
           const scale = img.scale + Math.sin(timeRef.current * 0.003 + idx) * 0.15;
-          const opacity = 0.15 + Math.sin(timeRef.current * 0.004 + idx * 0.8) * 0.08;
+          const isMedBed = img.depth === 1.0;
+          const opacity = isMedBed
+            ? 0.55 + Math.sin(timeRef.current * 0.004 + idx * 0.8) * 0.15
+            : 0.30 + Math.sin(timeRef.current * 0.004 + idx * 0.8) * 0.12;
           
           return (
             <div
@@ -696,8 +710,13 @@ requestAnimationFrame(animateMatrix);
                 backgroundPosition: "center",
                 borderRadius: "8px",
                 opacity,
-                boxShadow: `0 0 40px rgba(100,150,255,${opacity * 0.5}), inset 0 0 30px rgba(0,200,255,${opacity * 0.3})`,
-                border: `2px solid rgba(100,200,255,${opacity * 0.4})`,
+                boxShadow: isMedBed
+                  ? `0 0 60px rgba(0,200,255,${opacity * 0.8}), 0 0 20px rgba(180,100,255,${opacity * 0.6})`
+                  : `0 0 40px rgba(100,150,255,${opacity * 0.5}), inset 0 0 30px rgba(0,200,255,${opacity * 0.3})`,
+                border: isMedBed
+                  ? `2px solid rgba(0,220,255,${opacity * 0.7})`
+                  : `2px solid rgba(100,200,255,${opacity * 0.4})`,
+                filter: isMedBed ? `brightness(1.4) saturate(1.2)` : "none",
                 backdropFilter: "blur(2px)",
                 transition: "all 0.1s ease-out",
               }}
