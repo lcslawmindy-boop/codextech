@@ -91,79 +91,77 @@ export default function LibraryBackground() {
         />
       )}
 
-      {/* Animated neon glow pulse */}
+      {/* Cyan pulse glow overlay */}
       <div
         style={{
           position: "absolute",
           inset: 0,
-          background: "radial-gradient(ellipse at center, rgba(0,220,255,0.08) 0%, transparent 70%)",
-          animation: "pulse 4s ease-in-out infinite",
+          background: "radial-gradient(ellipse at center, rgba(0,220,255,0.25) 0%, transparent 60%)",
+          animation: "cyanPulse 3.5s ease-in-out infinite",
           pointerEvents: "none",
         }}
       />
 
-      {/* Animated Matrix digital rain */}
+      {/* Cascading green Matrix code rain */}
       <div
         style={{
           position: "absolute",
           inset: 0,
-          overflow: "hidden",
-          opacity: 0.4,
+          background: "repeating-linear-gradient(90deg, transparent 0px, rgba(0,255,150,0.15) 2px, transparent 4px)",
+          animation: "codeFlow 4s linear infinite",
+          pointerEvents: "none",
         }}
-      >
-        <div
-          style={{
-            position: "absolute",
-            width: "100%",
-            height: "200%",
-            background: "linear-gradient(180deg, transparent 0%, rgba(0,255,150,0.1) 50%, transparent 100%)",
-            animation: "matrixRain 15s linear infinite",
-          }}
-        />
-      </div>
+      />
 
-      {/* Pulsing electric arc grid */}
+      {/* Electric field wave layer */}
       <div
         style={{
           position: "absolute",
           inset: 0,
-          background: `repeating-linear-gradient(
-            0deg,
-            rgba(0,220,255,0.08) 0px,
-            rgba(0,220,255,0.04) 2px,
-            rgba(0,255,150,0.06) 4px,
-            transparent 6px
-          )`,
-          animation: "gridPulse 3s ease-in-out infinite",
+          background: "linear-gradient(180deg, rgba(0,220,255,0.2) 0%, rgba(0,255,150,0.15) 50%, rgba(0,220,255,0.2) 100%)",
+          animation: "waveShift 5s ease-in-out infinite",
           pointerEvents: "none",
         }}
       />
 
-      {/* Cyan neon corner glow spots */}
+      {/* Left corner cyan glow — breathing */}
       <div
         style={{
           position: "absolute",
-          top: "10%",
-          left: "8%",
-          width: "200px",
-          height: "200px",
-          background: "radial-gradient(circle, rgba(0,220,255,0.3) 0%, transparent 70%)",
-          filter: "blur(40px)",
-          animation: "glowFloat 6s ease-in-out infinite",
+          top: "5%",
+          left: "5%",
+          width: "350px",
+          height: "350px",
+          background: "radial-gradient(circle, rgba(0,220,255,0.6) 0%, rgba(0,220,255,0.3) 30%, transparent 70%)",
+          filter: "blur(60px)",
+          animation: "breatheGlow 4s ease-in-out infinite",
           pointerEvents: "none",
         }}
       />
+
+      {/* Right corner green glow — breathing offset */}
       <div
         style={{
           position: "absolute",
-          bottom: "15%",
-          right: "12%",
-          width: "250px",
-          height: "250px",
-          background: "radial-gradient(circle, rgba(0,255,150,0.25) 0%, transparent 70%)",
-          filter: "blur(50px)",
-          animation: "glowFloat 8s ease-in-out infinite",
-          animationDelay: "1s",
+          bottom: "10%",
+          right: "8%",
+          width: "400px",
+          height: "400px",
+          background: "radial-gradient(circle, rgba(0,255,150,0.5) 0%, rgba(0,255,150,0.25) 35%, transparent 70%)",
+          filter: "blur(70px)",
+          animation: "breatheGlow 4s ease-in-out infinite",
+          animationDelay: "2s",
+          pointerEvents: "none",
+        }}
+      />
+
+      {/* Horizontal scan bands */}
+      <div
+        style={{
+          position: "absolute",
+          inset: 0,
+          background: "repeating-linear-gradient(0deg, rgba(0,220,255,0.12) 0px, rgba(0,220,255,0.12) 3px, transparent 3px, transparent 6px)",
+          animation: "scanlines 8s linear infinite",
           pointerEvents: "none",
         }}
       />
@@ -190,17 +188,25 @@ export default function LibraryBackground() {
       />
 
       <style>{`
-        @keyframes matrixRain {
+        @keyframes cyanPulse {
+          0%, 100% { opacity: 0.1; }
+          50% { opacity: 0.35; }
+        }
+        @keyframes codeFlow {
           0% { transform: translateY(-100%); }
           100% { transform: translateY(100%); }
         }
-        @keyframes gridPulse {
-          0%, 100% { opacity: 0.3; }
-          50% { opacity: 0.7; }
+        @keyframes waveShift {
+          0%, 100% { transform: translateY(0px); opacity: 0.4; }
+          50% { transform: translateY(20px); opacity: 0.7; }
         }
-        @keyframes glowFloat {
-          0%, 100% { transform: translateY(0px) scale(1); opacity: 0.6; }
-          50% { transform: translateY(-20px) scale(1.1); opacity: 0.9; }
+        @keyframes breatheGlow {
+          0%, 100% { transform: scale(0.95); opacity: 0.5; }
+          50% { transform: scale(1.05); opacity: 0.85; }
+        }
+        @keyframes scanlines {
+          0% { transform: translateY(0px); }
+          100% { transform: translateY(12px); }
         }
       `}</style>
     </div>
