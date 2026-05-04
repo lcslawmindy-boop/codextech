@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Heart, Brain, Activity, Zap, Shield, Music, Wind, Eye, ArrowRight, CheckCircle2, Users, Target, Clock, DollarSign } from "lucide-react";
-import LibraryBackground from "@/components/backgrounds/LibraryBackground";
+import AutismBedBackgroundCarousel from "@/components/AutismBedBackgroundCarousel";
 import AutismBed3DVisualization from "@/components/AutismBed3DVisualization";
+import AutismBedCommercializationDeck from "@/components/AutismBedCommercializationDeck";
 
 const MODALITIES = [
   { icon: <Activity size={18} className="text-blue-400" />, name: "HRV & Biometric Monitoring", desc: "Continuous heart rate variability, SpO2, and GSR tracking to detect anxiety onset and meltdown precursors in real time." },
@@ -60,7 +61,7 @@ export default function AutismBedCrowdfund() {
 
   return (
     <div className="min-h-screen relative" style={{ fontFamily: "'Share Tech Mono', monospace" }}>
-      <LibraryBackground />
+      <AutismBedBackgroundCarousel />
 
       <div className="relative z-10">
         {/* Header */}
@@ -182,6 +183,9 @@ export default function AutismBedCrowdfund() {
             </div>
           </div>
         </section>
+
+        {/* Commercialization Deck */}
+        <AutismBedCommercializationDeck />
 
         {/* 3D Visualization */}
         <section className="px-6 py-16 border-t border-white/10">
