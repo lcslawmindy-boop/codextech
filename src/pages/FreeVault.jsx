@@ -139,7 +139,7 @@ export default function FreeVault() {
         <div />
         <Link to="/pricing"
           className="px-4 py-2 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white text-sm font-bold transition-colors flex items-center gap-1.5">
-          <Zap size={13} /> Join — $49/mo
+          <Zap size={13} /> Join — $89/mo
         </Link>
       </div>
       <ZatLogoWatermark />
@@ -155,7 +155,7 @@ export default function FreeVault() {
             Three complete build systems with full BOMs and specifications — no account required. Membership unlocks the full research database, structured modules, and execution tools.
           </p>
           <p className="text-gray-500 text-sm max-w-xl mx-auto">
-            All systems sourced from granted US patents and peer-reviewed publications. Research Membership ($49/month) includes all modules, PDFs, video guides, AI patent tools, and verified supplier sourcing.
+            All systems sourced from granted US patents and peer-reviewed publications. Research Membership ($89/month) includes all modules, PDFs, video guides, AI patent tools, and verified supplier sourcing.
           </p>
         </div>
 
@@ -229,7 +229,7 @@ export default function FreeVault() {
         {/* What's in Pro */}
         <div className="bg-gradient-to-b from-cyan-950/30 to-blue-950/30 border border-cyan-800/40 rounded-2xl p-8 mb-16">
           <h2 className="text-2xl font-black mb-2 flex items-center gap-2">
-            <Zap size={20} className="text-cyan-400" /> Unlock Full Membership — $49/month
+            <Zap size={20} className="text-cyan-400" /> Unlock Full Membership — $89/month
           </h2>
           <p className="text-gray-400 text-sm mb-6">Everything. No tiers. No per-item fees. Cancel anytime.</p>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
@@ -256,7 +256,7 @@ export default function FreeVault() {
             <Link to="/pricing"
               className="inline-flex items-center gap-2 px-8 py-3 rounded-xl font-bold transition-all text-black"
               style={{ background: "linear-gradient(90deg, #00ccff, #00ff99)", boxShadow: "0 4px 24px rgba(0,200,255,0.3)" }}>
-              Join — $49/month <ChevronRight size={16} />
+              Join — $89/month <ChevronRight size={16} />
             </Link>
             <p className="text-gray-600 text-xs mt-3">Secured by Stripe · Cancel anytime · No contracts</p>
           </div>

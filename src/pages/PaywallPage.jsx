@@ -86,7 +86,7 @@ export default function PaywallPage() {
           </p>
 
           <div className="flex items-end justify-center gap-2 mb-6">
-            <span className="text-6xl font-black text-white">$49</span>
+            <span className="text-6xl font-black text-white">$89</span>
             <span className="text-gray-400 pb-2 text-xl">/month</span>
           </div>
 
@@ -96,7 +96,7 @@ export default function PaywallPage() {
             className="inline-flex items-center gap-2 px-10 py-4 rounded-xl font-black text-white text-lg disabled:opacity-50 transition-all hover:opacity-90"
             style={{ background: "linear-gradient(90deg, #00ccff, #00ff99)", boxShadow: "0 4px 32px rgba(0,200,255,0.35)" }}
           >
-            {loading ? <><Loader2 size={20} className="animate-spin" /> Processing...</> : <>Start Membership — $49/mo <ArrowRight size={18} /></>}
+            {loading ? <><Loader2 size={20} className="animate-spin" /> Processing...</> : <>Start Membership — $89/mo <ArrowRight size={18} /></>}
           </button>
           <p className="text-gray-600 text-xs mt-3">Secured by Stripe · Cancel anytime · Instant access</p>
         </div>
@@ -141,7 +141,7 @@ export default function PaywallPage() {
       {/* Features checklist */}
       <section className="px-6 py-16 border-b border-gray-800 bg-gray-900/20">
         <div className="max-w-2xl mx-auto">
-          <h2 className="text-3xl font-black text-center mb-8">Everything Included at $49/mo</h2>
+          <h2 className="text-3xl font-black text-center mb-8">Everything Included at $89/mo</h2>
           <div className="space-y-3">
             {FEATURES.map((f, i) => (
               <div key={i} className="flex items-center gap-3">
@@ -157,7 +157,7 @@ export default function PaywallPage() {
               className="inline-flex items-center gap-2 px-8 py-4 rounded-xl font-black text-white text-base disabled:opacity-50 transition-all hover:opacity-90"
               style={{ background: "linear-gradient(90deg, #00ccff, #00ff99)" }}
             >
-              {loading ? <><Loader2 size={16} className="animate-spin" /> Processing...</> : <>Get Access Now — $49/mo <ArrowRight size={16} /></>}
+              {loading ? <><Loader2 size={16} className="animate-spin" /> Processing...</> : <>Get Access Now — $89/mo <ArrowRight size={16} /></>}
             </button>
           </div>
         </div>
