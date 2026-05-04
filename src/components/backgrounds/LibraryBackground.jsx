@@ -203,52 +203,86 @@ export default function LibraryBackground() {
       
       ctx.restore();
       
-      // Draw clock in center
+      // Draw large realistic clock in center with twilight zone flashing
       const now = new Date();
       const hours = now.getHours() % 12;
       const minutes = now.getMinutes();
-      const seconds = now.getSeconds();
-      const clockRadius = 40;
+      const seconds = now.getSeconds() + time / 1000;
+      const clockRadius = 70;
       
-      // Clock circle
-      ctx.strokeStyle = `rgba(75, 0, 255, 0.8)`;
-      ctx.lineWidth = 2;
+      // Twilight zone flash effect (rapid pulse)
+      const flashPulse = Math.abs(Math.sin(time * 0.15)) > 0.7 ? 1 : 0.3;
+      
+      // Clock outer ring with glow
+      ctx.strokeStyle = `rgba(75, 0, 255, ${0.9 * flashPulse})`;
+      ctx.lineWidth = 4;
       ctx.beginPath();
       ctx.arc(centerX, centerY, clockRadius, 0, Math.PI * 2);
       ctx.stroke();
       
+      // Clock inner ring
+      ctx.strokeStyle = `rgba(150, 100, 255, ${0.6 * flashPulse})`;
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.arc(centerX, centerY, clockRadius - 8, 0, Math.PI * 2);
+      ctx.stroke();
+      
+      // Tick marks
+      ctx.strokeStyle = `rgba(200, 150, 255, ${0.7 * flashPulse})`;
+      ctx.lineWidth = 2;
+      for (let i = 0; i < 60; i++) {
+        const angle = (i * Math.PI) / 30 - Math.PI / 2;
+        const isHourMark = i % 5 === 0;
+        const innerR = isHourMark ? clockRadius - 16 : clockRadius - 12;
+        const outerR = clockRadius - 4;
+        ctx.beginPath();
+        ctx.moveTo(centerX + Math.cos(angle) * innerR, centerY + Math.sin(angle) * innerR);
+        ctx.lineTo(centerX + Math.cos(angle) * outerR, centerY + Math.sin(angle) * outerR);
+        ctx.stroke();
+      }
+      
       // Clock numbers (12, 3, 6, 9)
-      ctx.fillStyle = `rgba(200, 150, 255, 0.6)`;
-      ctx.font = `bold 12px monospace`;
+      ctx.fillStyle = `rgba(255, 150, 0, ${0.8 * flashPulse})`;
+      ctx.font = `bold 14px monospace`;
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
-      ctx.fillText("12", centerX, centerY - clockRadius + 12);
-      ctx.fillText("3", centerX + clockRadius - 12, centerY);
-      ctx.fillText("6", centerX, centerY + clockRadius - 12);
-      ctx.fillText("9", centerX - clockRadius + 12, centerY);
+      ctx.fillText("12", centerX, centerY - clockRadius + 20);
+      ctx.fillText("3", centerX + clockRadius - 20, centerY);
+      ctx.fillText("6", centerX, centerY + clockRadius - 20);
+      ctx.fillText("9", centerX - clockRadius + 20, centerY);
       
-      // Hour hand
+      // Hour hand (thick, short)
       const hourAngle = ((hours + minutes / 60) * Math.PI) / 6 - Math.PI / 2;
-      ctx.strokeStyle = `rgba(255, 150, 0, 0.9)`;
+      ctx.strokeStyle = `rgba(255, 100, 0, ${0.95 * flashPulse})`;
+      ctx.lineWidth = 5;
+      ctx.lineCap = "round";
+      ctx.beginPath();
+      ctx.moveTo(centerX, centerY);
+      ctx.lineTo(centerX + Math.cos(hourAngle) * clockRadius * 0.45, centerY + Math.sin(hourAngle) * clockRadius * 0.45);
+      ctx.stroke();
+      
+      // Minute hand (medium, longer)
+      const minuteAngle = ((minutes + seconds / 60) * Math.PI) / 30 - Math.PI / 2;
+      ctx.strokeStyle = `rgba(150, 50, 255, ${0.95 * flashPulse})`;
       ctx.lineWidth = 3;
       ctx.beginPath();
       ctx.moveTo(centerX, centerY);
-      ctx.lineTo(centerX + Math.cos(hourAngle) * clockRadius * 0.5, centerY + Math.sin(hourAngle) * clockRadius * 0.5);
+      ctx.lineTo(centerX + Math.cos(minuteAngle) * clockRadius * 0.65, centerY + Math.sin(minuteAngle) * clockRadius * 0.65);
       ctx.stroke();
       
-      // Minute hand
-      const minuteAngle = ((minutes + seconds / 60) * Math.PI) / 30 - Math.PI / 2;
-      ctx.strokeStyle = `rgba(150, 50, 255, 0.9)`;
-      ctx.lineWidth = 2;
+      // Second hand (thin, very long)
+      const secondAngle = (seconds * Math.PI) / 30 - Math.PI / 2;
+      ctx.strokeStyle = `rgba(100, 255, 150, ${0.8 * flashPulse})`;
+      ctx.lineWidth = 1;
       ctx.beginPath();
       ctx.moveTo(centerX, centerY);
-      ctx.lineTo(centerX + Math.cos(minuteAngle) * clockRadius * 0.75, centerY + Math.sin(minuteAngle) * clockRadius * 0.75);
+      ctx.lineTo(centerX + Math.cos(secondAngle) * clockRadius * 0.75, centerY + Math.sin(secondAngle) * clockRadius * 0.75);
       ctx.stroke();
       
-      // Center dot
-      ctx.fillStyle = `rgba(255, 150, 0, 1)`;
+      // Center hub
+      ctx.fillStyle = `rgba(255, 150, 0, ${1 * flashPulse})`;
       ctx.beginPath();
-      ctx.arc(centerX, centerY, 4, 0, Math.PI * 2);
+      ctx.arc(centerX, centerY, 7, 0, Math.PI * 2);
       ctx.fill();
       
       // Draw sun orbit around center
