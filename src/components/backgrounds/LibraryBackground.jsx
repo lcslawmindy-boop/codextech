@@ -237,33 +237,7 @@ export default function LibraryBackground() {
         overflow: "hidden",
       }}
     >
-      {/* Current image */}
-      <div
-        style={{
-          position: "absolute",
-          inset: 0,
-          backgroundImage: `url(${LIBRARY_IMAGES[currentIdx]})`,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          transition: "opacity 1.5s ease-in-out",
-          opacity: fading ? 0 : 1,
-        }}
-      />
 
-      {/* Next image (fades in) */}
-      {nextIdx !== null && (
-        <div
-          style={{
-            position: "absolute",
-            inset: 0,
-            backgroundImage: `url(${LIBRARY_IMAGES[nextIdx]})`,
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-            transition: "opacity 1.5s ease-in-out",
-            opacity: fading ? 1 : 0,
-          }}
-        />
-      )}
 
       {/* Matrix rain canvas */}
       <canvas
