@@ -1,4 +1,4 @@
-import { Menu, X, BookOpen, Wrench, Shield, Home, LayoutDashboard, User, Zap, Database, FileText } from 'lucide-react';
+import { Menu, X, Wrench, Shield, Home, LayoutDashboard, User, Zap, Database, LogIn } from 'lucide-react';
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '@/lib/AuthContext';
@@ -11,14 +11,14 @@ const PUBLIC_NAV = [
   { label: 'Home', path: '/', icon: <Home size={18} /> },
   { label: 'Research', path: '/codextech-database', icon: <Database size={18} /> },
   { label: 'Pricing', path: '/pricing', icon: <Zap size={18} /> },
+  { label: 'Login', path: '/account', icon: <LogIn size={18} /> },
 ];
 
 const MEMBER_NAV = [
   { label: 'Dashboard', path: '/dashboard', icon: <LayoutDashboard size={18} /> },
   { label: 'Research', path: '/codextech-database', icon: <Database size={18} /> },
   { label: 'Build Plans', path: '/build-plans', icon: <Wrench size={18} /> },
-  { label: 'Patent Tool', path: '/patent-tool', icon: <Shield size={18} /> },
-  { label: 'Source Docs', path: '/source-documents', icon: <FileText size={18} /> },
+  { label: 'Patent Intelligence', path: '/patent-tool', icon: <Shield size={18} /> },
   { label: 'Account', path: '/account', icon: <User size={18} /> },
 ];
 

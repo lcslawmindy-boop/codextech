@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import { BookOpen, Wrench, Zap, LayoutDashboard, Home, Database } from "lucide-react";
+import { Wrench, Shield, Zap, LayoutDashboard, Home, Database, LogIn } from "lucide-react";
 import { useAuth } from "@/lib/AuthContext";
 
 function useSafeAuth() {
@@ -10,12 +10,14 @@ const PUBLIC_TABS = [
   { label: "Home", path: "/", icon: Home, match: (p) => p === "/" },
   { label: "Research", path: "/codextech-database", icon: Database, match: (p) => p.startsWith("/codextech-database") },
   { label: "Join", path: "/pricing", icon: Zap, match: (p) => p === "/pricing", highlight: true },
+  { label: "Login", path: "/account", icon: LogIn, match: (p) => p === "/account" },
 ];
 
 const MEMBER_TABS = [
   { label: "Dashboard", path: "/dashboard", icon: LayoutDashboard, match: (p) => p === "/dashboard" || p === "/member-dashboard" },
   { label: "Research", path: "/codextech-database", icon: Database, match: (p) => p.startsWith("/codextech-database") },
   { label: "Builds", path: "/build-plans", icon: Wrench, match: (p) => p.startsWith("/build-plans") },
+  { label: "Patents", path: "/patent-tool", icon: Shield, match: (p) => p.startsWith("/patent") },
 ];
 
 export default function BottomTabBar() {

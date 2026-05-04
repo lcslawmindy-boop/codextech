@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { ArrowRight, Lock, CheckCircle2, Zap, FileText, Download, Star } from "lucide-react";
+import { ArrowRight, Lock, CheckCircle2, Zap, FileText } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 
 const TRIPWIRE_OFFER = {
@@ -62,8 +62,9 @@ export default function TripwirePage() {
   return (
     <div className="min-h-screen bg-gray-950 text-white">
       {/* Urgency bar */}
-      <div className="bg-gradient-to-r from-orange-900 to-red-900 border-b border-orange-800 px-5 py-2 text-center">
-        <p className="text-orange-200 text-xs font-bold">⚡ Limited Offer — The MEG Brief Pack is $7 today only (reg. $27)</p>
+      <div className="bg-gradient-to-r from-orange-900 to-red-900 border-b border-orange-800 px-5 py-2 text-center flex items-center justify-center gap-2">
+        <Zap size={12} className="text-orange-300" />
+        <p className="text-orange-200 text-xs font-bold">Limited Offer — The MEG Brief Pack is $7 today only (reg. $27)</p>
       </div>
 
       <div className="max-w-2xl mx-auto px-5 py-14">
@@ -110,17 +111,17 @@ export default function TripwirePage() {
             onClick={handleCheckout}
             disabled={loading}
             className="w-full py-4 rounded-xl font-black text-white text-lg transition-all hover:opacity-90 disabled:opacity-50 flex items-center justify-center gap-2"
-            style={{ background: "linear-gradient(135deg, #06b6d4, #3b82f6)", boxShadow: "0 4px 24px rgba(6,182,212,0.4)" }}
+            style={{ background: "linear-gradient(90deg, #00ccff, #00ff99)", boxShadow: "0 4px 24px rgba(0,200,255,0.4)" }}
           >
             {loading ? "Processing..." : (<>Get the Brief Pack — $7 <ArrowRight size={18} /></>)}
           </button>
-          <p className="text-gray-600 text-xs mt-3">🔒 Secured by Stripe · Instant PDF delivery</p>
+          <p className="text-gray-600 text-xs mt-3 flex items-center justify-center gap-1.5"><Lock size={10} /> Secured by Stripe · Instant PDF delivery</p>
         </div>
 
         {/* Social proof */}
         <div className="bg-gray-900 border border-gray-800 rounded-xl p-4 mb-8">
           <div className="flex items-center gap-1 mb-2">
-            {[...Array(5)].map((_, i) => <Star key={i} size={12} fill="#fbbf24" className="text-yellow-400" />)}
+            {[...Array(5)].map((_, i) => <span key={i} style={{color:"#fbbf24",fontSize:"12px"}}>★</span>)}
           </div>
           <p className="text-gray-300 text-sm italic">"Finally a proper technical brief on the MEG with actual citations. This is what the free YouTube content never gives you."</p>
           <p className="text-gray-600 text-xs mt-1">— Verified buyer, Electrical Engineer</p>
