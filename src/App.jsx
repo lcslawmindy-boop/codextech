@@ -192,6 +192,11 @@ import DocumentDashboard from './pages/DocumentDashboard';
 import PatentTechGraph from './pages/PatentTechGraph';
 import MasterLaunchDoc from './pages/MasterLaunchDoc';
 import BackgroundImagePicker from './pages/BackgroundImagePicker';
+import ResearchModuleDetail from './pages/ResearchModuleDetail';
+import PatentSourceDocuments from './pages/PatentSourceDocuments';
+import TripwirePage from './pages/TripwirePage';
+import LeadMagnetConfirm from './pages/LeadMagnetConfirm';
+import Onboarding from './pages/Onboarding';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -224,13 +229,13 @@ const AuthenticatedApp = () => {
       <Routes>
         <Route element={<MobileLayout />}>
           <Route path="/" element={<Landing />} />
-          <Route path="/zarp-landing" element={<ZarpLanding />} />
+          {/* ZarpLanding archived */}
           <Route path="/free-vault" element={<FreeVault />} />
           <Route path="/member-dashboard" element={<MemberDashboard />} />
           <Route path="/orders" element={<OrderTracking />} />
           <Route path="/business" element={<BusinessModels />} />
           <Route path="/pitch" element={<PitchBuilder />} />
-          <Route path="/market-deck" element={<MarketDeck />} />
+          {/* MarketDeck archived */}
           <Route path="/subscribe" element={<Subscribe />} />
           <Route path="/my-research" element={<MyResearch />} />
           <Route path="/courses" element={<CourseCatalog />} />
@@ -238,7 +243,7 @@ const AuthenticatedApp = () => {
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/my-learning" element={<MyLearning />} />
           <Route path="/lab" element={<LabSimulation />} />
-          <Route path="/invention-plans" element={<InventionPlans />} />
+          {/* InventionPlans archived — use /build-plans */}
           <Route path="/emf-impact" element={<EMFImpact />} />
           <Route path="/scalar-lab" element={<ScalarEMLab />} />
           <Route path="/patent-tool" element={<PatentDraftingTool />} />
@@ -263,7 +268,7 @@ const AuthenticatedApp = () => {
           <Route path="/heavy-metal-detox" element={<HeavyMetalDetox />} />
           <Route path="/health-analytics" element={<HealthAnalytics />} />
           <Route path="/investor-package" element={<InvestorPackage />} />
-          <Route path="/dark-timeline" element={<DarkTimeline />} />
+          {/* DarkTimeline archived */}
           <Route path="/inventor-forge" element={<InventionForge />} />
           <Route path="/provisional-patent" element={<ProvisionalPatent />} />
           <Route path="/scalar-potential" element={<ScalarPotentialMap />} />
@@ -318,9 +323,9 @@ const AuthenticatedApp = () => {
           <Route path="/vdr-nda" element={<VDRNdaSign />} />
           <Route path="/vdr-generator" element={<VDRDocumentGenerator />} />
           <Route path="/welcome" element={<Welcome />} />
-          <Route path="/trial-onboarding" element={<TrialOnboarding />} />
+          <Route path="/trial-onboarding" element={<Onboarding />} />
           <Route path="/checkout" element={<PostPurchaseOnboarding />} />
-          <Route path="/nda-onboarding" element={<PostNDAOnboarding />} />
+          {/* PostNDAOnboarding archived — NDA removed from public flow */}
           <Route path="/build-plans" element={<BuildPlansMarketplace />} />
           <Route path="/preview" element={<PublicPreview />} />
           <Route path="/acquire" element={<AcquisitionPitchDeck />} />
@@ -362,7 +367,7 @@ const AuthenticatedApp = () => {
             <Route path="/retention" element={<RetentionDashboard />} />
             <Route path="/upsell-engine" element={<UpsellEngine />} />
             <Route path="/lead-magnets" element={<LeadMagnetSystem />} />
-            <Route path="/ab-testing" element={<ABTestingDashboard />} />
+            {/* ABTestingDashboard archived */}
             <Route path="/revenue-audit" element={<RevenueAudit />} />
           </Route>
 
@@ -403,6 +408,11 @@ const AuthenticatedApp = () => {
           <Route path="/patent-tech-graph" element={<PatentTechGraph />} />
           <Route path="/master-launch-doc" element={<MasterLaunchDoc />} />
           <Route path="/bg-picker" element={<BackgroundImagePicker />} />
+          <Route path="/research-module" element={<ResearchModuleDetail />} />
+          <Route path="/source-documents" element={<PatentSourceDocuments />} />
+          <Route path="/tripwire" element={<TripwirePage />} />
+          <Route path="/lead-magnet-confirm" element={<LeadMagnetConfirm />} />
+          <Route path="/onboarding" element={<Onboarding />} />
           <Route path="/dashboard" element={<MemberDashboard />} />
 
           <Route path="*" element={<PageNotFound />} />
