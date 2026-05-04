@@ -106,7 +106,7 @@ export default function SaaSPricing() {
               className="w-full py-4 rounded-xl font-black text-white text-base disabled:opacity-50 transition-all hover:opacity-90 flex items-center justify-center gap-2"
               style={{ background: "linear-gradient(90deg, #00ccff, #00ff99)", boxShadow: "0 4px 24px rgba(0,200,255,0.35)" }}
             >
-              {loading ? <><Loader2 size={18} className="animate-spin" /> Processing...</> : <>Start Membership — $49/mo <ArrowRight size={16} /></>}
+              {loading ? <><Loader2 size={18} className="animate-spin" /> Processing...</> : <>Start Membership — $89/mo <ArrowRight size={16} /></>}
             </button>
             <p className="text-center text-gray-600 text-xs mt-3">Secured by Stripe · Cancel anytime</p>
           </div>
