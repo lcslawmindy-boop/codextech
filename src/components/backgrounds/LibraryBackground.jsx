@@ -99,8 +99,8 @@ export default function LibraryBackground() {
 
       // Horizontal neon green matrix streams
       ctx.fillStyle = "#00ff00";
-      ctx.shadowColor = "rgba(0, 255, 0, 1)";
-      ctx.shadowBlur = 40;
+      ctx.shadowColor = "transparent";
+      ctx.shadowBlur = 0;
       ctx.font = `bold ${fontSize * 1.5}px monospace`;
 
       streams.forEach((stream) => {
@@ -133,8 +133,8 @@ export default function LibraryBackground() {
         }
 
         ctx.fillStyle = stream.color;
-        ctx.shadowColor = stream.color;
-        ctx.shadowBlur = 35;
+        ctx.shadowColor = "transparent";
+        ctx.shadowBlur = 0;
         ctx.globalAlpha = 1;
         ctx.font = `bold 22px monospace`;
         for (let i = 0; i < 8; i++) {
