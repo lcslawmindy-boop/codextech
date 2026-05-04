@@ -60,6 +60,7 @@ import IPMarketplaceDashboard from './pages/IPMarketplaceDashboard';
 import CoInventorMatching from './pages/CoInventorMatching';
 import IPBrokeringGuide from './pages/IPBrokeringGuide';
 import VDRPortal from './pages/VDRPortal';
+import VDRAdmin from './pages/VDRAdmin';
 
 // Investor tools
 import InvestorPortal from './pages/InvestorPortal';
@@ -174,7 +175,6 @@ import AdminPromoBlast from './pages/AdminPromoBlast';
 import AdminBeta from './pages/AdminBeta';
 import AdminVideos from './pages/AdminVideos';
 import AdminDownloadCenter from './pages/AdminDownloadCenter';
-import VDRAdmin from './pages/VDRAdmin';
 import VirtualDataRoom from './pages/VirtualDataRoom';
 import VDRAuditLog from './pages/VDRAuditLog';
 import VDRDocumentGenerator from './pages/VDRDocumentGenerator';
