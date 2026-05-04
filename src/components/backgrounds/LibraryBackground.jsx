@@ -332,9 +332,33 @@ export default function LibraryBackground() {
   const [tick, setTick] = useState(0);
   const canvasRef = useRef(null);
   const timeRef = useRef(0);
+  const deviceMeshesRef = useRef([]);
 
-  // Drive React re-renders so consciousness images actually rotate
+  // Drive React re-renders and build 3D device meshes
   useEffect(() => {
+    // Import Three.js dynamically
+    import('three').then(THREE => {
+      const devices = [];
+      const geometries = [
+        { name: 'MEG', geom: new THREE.OctahedronGeometry(0.8, 2), color: 0x00ff99 },
+        { name: 'Prioré', geom: new THREE.SphereGeometry(0.9, 16, 16), color: 0x00ccff },
+        { name: 'Telomere', geom: new THREE.IcosahedronGeometry(0.7, 2), color: 0xff00ff },
+        { name: 'Scalar', geom: new THREE.TorusGeometry(0.8, 0.3, 16, 100), color: 0xffff00 },
+        { name: 'Bearden', geom: new THREE.ConeGeometry(0.7, 1.5, 16), color: 0xff6600 },
+      ];
+
+      geometries.forEach(g => {
+        const mesh = {
+          geometry: g.geom,
+          color: g.color,
+          name: g.name,
+          rotation: { x: Math.random() * Math.PI, y: Math.random() * Math.PI, z: 0 }
+        };
+        devices.push(mesh);
+      });
+      deviceMeshesRef.current = devices;
+    }).catch(err => console.log('Three.js load skipped for background'));
+
     let raf;
     const update = () => {
       setTick(timeRef.current);
@@ -628,8 +652,49 @@ requestAnimationFrame(animateMatrix);
 
 
 
-      {/* 3D Consciousness/Library Image Layer */}
+      {/* 3D Device + Consciousness/Library Image Layer */}
       <div style={{ position: "absolute", inset: 0, pointerEvents: "none", perspective: "1200px" }}>
+        {/* 3D Device Symbols */}
+        {deviceMeshesRef.current.map((device, idx) => {
+          const speed = 1.5;
+          const rotAngle = (timeRef.current * 0.002 * speed) % (Math.PI * 2);
+          const orbitRadius = 150 + idx * 40;
+          const x = Math.cos(rotAngle + idx) * orbitRadius;
+          const y = Math.sin(rotAngle + idx) * orbitRadius * 0.7;
+          const pulse = 0.7 + Math.sin(timeRef.current * 0.005 + idx) * 0.3;
+          const glow = Math.abs(Math.sin(timeRef.current * 0.003 + idx * 0.6));
+          
+          return (
+            <div
+              key={`device-${idx}`}
+              style={{
+                position: "absolute",
+                left: "50%",
+                top: "50%",
+                transform: `translate(calc(-50% + ${x}px), calc(-50% + ${y}px)) rotateX(${timeRef.current * 0.01}rad) rotateY(${timeRef.current * 0.015 + idx}rad) scale(${pulse})`,
+                width: "60px",
+                height: "60px",
+                borderRadius: "12px",
+                opacity: 0.25 + glow * 0.2,
+                boxShadow: `0 0 30px rgba(${Math.floor(device.color >> 16 & 255)}, ${Math.floor(device.color >> 8 & 255)}, ${Math.floor(device.color & 255)}, ${0.6 + glow * 0.4})`,
+                border: `2px solid rgba(${Math.floor(device.color >> 16 & 255)}, ${Math.floor(device.color >> 8 & 255)}, ${Math.floor(device.color & 255)}, 0.8)`,
+                background: `radial-gradient(circle, rgba(${Math.floor(device.color >> 16 & 255)}, ${Math.floor(device.color >> 8 & 255)}, ${Math.floor(device.color & 255)}, 0.3), transparent)`,
+                backdropFilter: "blur(4px)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                fontSize: "10px",
+                fontWeight: "900",
+                color: `rgb(${Math.floor(device.color >> 16 & 255)}, ${Math.floor(device.color >> 8 & 255)}, ${Math.floor(device.color & 255)})`,
+                textShadow: `0 0 10px rgba(${Math.floor(device.color >> 16 & 255)}, ${Math.floor(device.color >> 8 & 255)}, ${Math.floor(device.color & 255)}, 0.8)`,
+              }}
+            >
+              {device.name}
+            </div>
+          );
+        })}
+
+        {/* Consciousness/Library Images */}
         {CONSCIOUSNESS_IMAGES.map((img, idx) => {
           const speed = img.speed || 1;
           const rotAngle = (timeRef.current * 0.0025 * speed + img.angle) % (Math.PI * 2);
@@ -641,7 +706,7 @@ requestAnimationFrame(animateMatrix);
           
           return (
             <div
-              key={idx}
+              key={`img-${idx}`}
               style={{
                 position: "absolute",
                 left: "50%",
