@@ -62,6 +62,7 @@ export default function SocialMediaCommand() {
     setTiktokLoading(true);
     try {
       const res = await base44.functions.invoke("getTikTokAnalytics", {});
+      if (res.data?.error) throw new Error(res.data.error);
       setTiktokData(res.data);
       setTiktokConnected(true);
     } catch {
@@ -74,6 +75,7 @@ export default function SocialMediaCommand() {
     setLinkedinLoading(true);
     try {
       const res = await base44.functions.invoke("getLinkedInAnalytics", {});
+      if (res.data?.error) throw new Error(res.data.error);
       setLinkedinData(res.data);
       setLinkedinConnected(true);
     } catch {
