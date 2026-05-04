@@ -570,48 +570,7 @@ export default function LibraryBackground() {
       ctx.arc(centerX, centerY, 7, 0, Math.PI * 2);
       ctx.fill();
       
-      // Draw realistic suns orbiting center
-      const sunDistance = 180 + Math.sin(timeRef.current * 0.008) * 40;
-      const sunAngle = timeRef.current * 0.003;
-      const sunX = centerX + Math.cos(sunAngle) * sunDistance;
-      const sunY = centerY + Math.sin(sunAngle) * sunDistance;
-      
-      // Outer sun corona glow (realistic)
-      const coronaGradient = ctx.createRadialGradient(sunX, sunY, 0, sunX, sunY, 45);
-      coronaGradient.addColorStop(0, `rgba(255, 220, 100, 0.6)`);
-      coronaGradient.addColorStop(0.6, `rgba(255, 150, 50, 0.2)`);
-      coronaGradient.addColorStop(1, `rgba(255, 100, 0, 0)`);
-      ctx.fillStyle = coronaGradient;
-      ctx.beginPath();
-      ctx.arc(sunX, sunY, 45, 0, Math.PI * 2);
-      ctx.fill();
-      
-      // Middle photosphere layer
-      const photosphereGradient = ctx.createRadialGradient(sunX, sunY, 0, sunX, sunY, 28);
-      photosphereGradient.addColorStop(0, `rgba(255, 255, 150, 1)`);
-      photosphereGradient.addColorStop(0.8, `rgba(255, 200, 80, 0.9)`);
-      photosphereGradient.addColorStop(1, `rgba(255, 140, 20, 0.6)`);
-      ctx.fillStyle = photosphereGradient;
-      ctx.beginPath();
-      ctx.arc(sunX, sunY, 28, 0, Math.PI * 2);
-      ctx.fill();
-      
-      // Core bright center
-      ctx.fillStyle = `rgba(255, 255, 255, 1)`;
-      ctx.beginPath();
-      ctx.arc(sunX, sunY, 8, 0, Math.PI * 2);
-      ctx.fill();
-      
-      // Sun flare rays (realistic)
-      ctx.strokeStyle = `rgba(255, 220, 100, 0.4)`;
-      ctx.lineWidth = 1;
-      for (let i = 0; i < 8; i++) {
-        const rayAngle = (i * Math.PI) / 4;
-        ctx.beginPath();
-        ctx.moveTo(sunX + Math.cos(rayAngle) * 28, sunY + Math.sin(rayAngle) * 28);
-        ctx.lineTo(sunX + Math.cos(rayAngle) * 50, sunY + Math.sin(rayAngle) * 50);
-        ctx.stroke();
-      }
+
       
       // Platonic solids orbiting with sacred geometry
       const geometryOrbitRadius = 220;
