@@ -165,22 +165,21 @@ function useZaraSpeech() {
     const nodes = Array.from(document.querySelectorAll('h1,h2,h3,h4,p,.solid-section p'));
     const text = nodes.map(n => n.innerText?.trim()).filter(t => t && t.length > 3).slice(0, 40).join('. ');
     if (!text) return;
-    const utter = new SpeechSynthesisUtterance("Hello. I'm Zara... your Zenith Apex Research Assistant. Let me guide you through what's here: " + text);
-    utter.rate = 0.88;
-    utter.pitch = 1.85;
+    const utter = new SpeechSynthesisUtterance("Hello there... I'm Zara. Your Zenith Apex Research Assistant. Let me take you through what's waiting for you here... " + text);
+    utter.rate = 0.82;
+    utter.pitch = 1.2;
     utter.volume = 1;
     const voices = window.speechSynthesis.getVoices();
-    // Priority: Samantha (macOS), Google UK English Female, Zira, Victoria, Fiona — smooth & feminine
-    const preferred = voices.find(v =>
-      v.name.toLowerCase().includes('samantha') ||
-      v.name.toLowerCase().includes('google uk english female') ||
-      v.name.toLowerCase().includes('zira') ||
-      v.name.toLowerCase().includes('victoria') ||
-      v.name.toLowerCase().includes('fiona') ||
-      v.name.toLowerCase().includes('tessa') ||
-      (v.name.toLowerCase().includes('female') && v.lang.startsWith('en'))
-    ) || voices.find(v => v.lang === 'en-GB' && v.name.toLowerCase().includes('google'))
-      || voices.find(v => v.lang.startsWith('en') && !v.name.toLowerCase().includes('male'));
+    // Sexy, smooth, deep female voice — prefer Allison, Ava, Samantha, Google UK English Female
+    const preferred = voices.find(v => v.name.toLowerCase().includes('ava')) ||
+      voices.find(v => v.name.toLowerCase().includes('allison')) ||
+      voices.find(v => v.name.toLowerCase().includes('samantha')) ||
+      voices.find(v => v.name.toLowerCase().includes('google uk english female')) ||
+      voices.find(v => v.name.toLowerCase().includes('karen')) ||
+      voices.find(v => v.name.toLowerCase().includes('moira')) ||
+      voices.find(v => v.name.toLowerCase().includes('tessa')) ||
+      voices.find(v => v.lang === 'en-GB' && !v.name.toLowerCase().includes('male')) ||
+      voices.find(v => v.lang.startsWith('en') && !v.name.toLowerCase().includes('male'));
     if (preferred) utter.voice = preferred;
     utter.onend = () => setSpeaking(false);
     utter.onerror = () => setSpeaking(false);
