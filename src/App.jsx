@@ -161,6 +161,8 @@ import CoursePlan from './pages/CoursePlan';
 import MaterialSourcing from './pages/MaterialSourcing.jsx';
 import AutismBedCrowdfund from './pages/AutismBedCrowdfund.jsx';
 import CaregiversDashboard from './pages/CaregiversDashboard.jsx';
+import AdminAutismBedDashboard from './pages/AdminAutismBedDashboard.jsx';
+import AutismBedBusinessStrategy from './pages/AutismBedBusinessStrategy.jsx';
 
 // Admin
 import AdminHub from './pages/AdminHub';
@@ -367,6 +369,8 @@ const AuthenticatedApp = () => {
           <Route path="/zenith-apex" element={<ZenithApex />} />
           <Route path="/material-sourcing" element={<MaterialSourcing />} />
           <Route path="/autism-bed-crowdfund" element={<AutismBedCrowdfund />} />
+          <Route path="/autism-bed-business-strategy" element={<AutismBedBusinessStrategy />} />
+          <Route path="/admin-autism-bed" element={<AdminAutismBedDashboard />} />
           <Route path="/caregiver-dashboard" element={<CaregiversDashboard />} />
 
           {/* ── Vault ── */}

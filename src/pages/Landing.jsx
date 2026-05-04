@@ -42,7 +42,41 @@ export default function Landing() {
       <LibrarySearch items={LIBRARY_ITEMS} onSearch={setSearchOpen} />
 
       <div className="pt-16">
-        {/* ── Hero ── */}
+        {/* ── Autism Bed Hero (Primary Focus) ── */}
+        <section className="px-6 py-20 border-b border-white/10">
+          <div className="max-w-5xl mx-auto">
+            <div className="bg-gradient-to-br from-purple-950/60 to-blue-950/60 border border-purple-700/50 rounded-2xl p-10 backdrop-blur relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-64 h-64 rounded-full pointer-events-none"
+                style={{ background: "radial-gradient(circle, rgba(139,92,246,0.12) 0%, transparent 70%)" }} />
+              <div className="relative z-10">
+                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full mb-5 border border-pink-500/40 bg-pink-950/30">
+                  <span className="w-2 h-2 rounded-full bg-pink-400 animate-pulse" />
+                  <span className="text-xs font-black tracking-widest text-pink-400 uppercase">Now Raising — Research Crowdfund</span>
+                </div>
+                <h1 className="text-3xl md:text-4xl font-black text-white mb-3">The Autism Sensory Regulation Bed</h1>
+                <p className="text-gray-300 text-base mb-5 max-w-2xl leading-relaxed">
+                  Designed by a mother of an autistic child studying mechanical engineering and patent law. Real-time biometric monitoring. Anxiety detection. Adaptive calming response. For the 3.5M children on the spectrum who need this.
+                </p>
+                <p className="text-gray-400 text-sm mb-6 italic">
+                  <strong className="text-white">Not a medical device.</strong> A caregiver research tool with clinical rigor.
+                </p>
+                <div className="flex flex-col sm:flex-row gap-4">
+                  <Link to="/autism-bed-crowdfund"
+                    className="inline-flex items-center gap-2 px-8 py-4 rounded-xl font-black text-sm transition-all hover:scale-105"
+                    style={{ background: "linear-gradient(90deg, #7c3aed, #3b82f6)", boxShadow: "0 4px 24px rgba(124,58,237,0.4)" }}>
+                    View Crowdfund & Pledge <ArrowRight size={15} />
+                  </Link>
+                  <Link to="/autism-bed-business-strategy"
+                    className="inline-flex items-center gap-2 px-8 py-4 rounded-xl font-black text-sm text-white border border-cyan-500/50 hover:bg-cyan-950/30 transition">
+                    Business Strategy <ArrowRight size={15} />
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ── Hero (C.O.D.E.X.T.E.C.H. secondary) ── */}
         <HeroSection />
 
         {/* ── 3D Device Rotation ── */}
