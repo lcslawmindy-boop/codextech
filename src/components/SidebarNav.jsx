@@ -3,6 +3,14 @@ import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '@/lib/AuthContext';
 
+function useSafeAuth() {
+  try {
+    return useAuth();
+  } catch {
+    return { isAuthenticated: false };
+  }
+}
+
 const PUBLIC_NAV = [
   { label: 'Home', path: '/codextech', icon: <Home size={18} /> },
   { label: 'Research', path: '/codextech-database', icon: <BookOpen size={18} /> },
@@ -21,7 +29,7 @@ const MEMBER_NAV = [
 export default function SidebarNav() {
   const [open, setOpen] = useState(false);
   const location = useLocation();
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated } = useSafeAuth();
 
   const navItems = isAuthenticated ? MEMBER_NAV : PUBLIC_NAV;
   const isActive = (path) => location.pathname === path;

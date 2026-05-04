@@ -2,6 +2,14 @@ import { Link, useLocation } from "react-router-dom";
 import { BookOpen, Wrench, Zap, LayoutDashboard, Home } from "lucide-react";
 import { useAuth } from "@/lib/AuthContext";
 
+function useSafeAuth() {
+  try {
+    return useAuth();
+  } catch {
+    return { isAuthenticated: false };
+  }
+}
+
 const PUBLIC_TABS = [
   {
     label: "Home",
@@ -47,7 +55,7 @@ const MEMBER_TABS = [
 
 export default function BottomTabBar() {
   const { pathname } = useLocation();
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated } = useSafeAuth();
 
   const TABS = isAuthenticated ? MEMBER_TABS : PUBLIC_TABS;
 
