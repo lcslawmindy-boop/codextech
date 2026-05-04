@@ -183,38 +183,12 @@ function drawMetatronsCube(ctx, centerX, centerY, size, time, color) {
   ctx.restore();
 }
 
-const LIBRARY_IMAGES = [
-  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/879bbe3f2_generated_image.png",
-  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/2dd3c3b1a_generated_image.png",
-  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/e6b1f5a3d_generated_image.png",
-  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/2bac8c613_generated_image.png",
-  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/44d11338c_generated_image.png",
-  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/b650fcee0_generated_image.png",
-  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/fb3a895b6_generated_image.png",
-  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/7aa4f18af_generated_image.png",
-  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/b646110c5_generated_image.png",
-  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/d5232f7cb_generated_image.png",
-  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/13f15ca12_generated_image.png",
-  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/f08bd2930_generated_image.png",
-  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/b95d4c179_generated_image.png",
-  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/61de25458_generated_image.png",
-  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/f1c1aa2da_generated_image.png",
-  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/14cb245d4_generated_image.png",
-  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/cdfa04aeb_generated_image.png",
-  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/1a95c5bed_generated_image.png",
-  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/657318438_generated_image.png",
-  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/7b3a9a8ec_generated_image.png",
-  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/fb1f112c2_generated_image.png",
-  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/a7501387c_generated_image.png",
-  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/bfb6fb8e2_generated_image.png",
-  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/51fc058e5_generated_image.png",
-  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/e98f0452e_generated_image.png",
-  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/a6e56d2e1_generated_image.png",
-  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/eb7c7f679_generated_image.png",
-  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/1c36b2717_generated_image.png",
-  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/5a56ff89a_generated_image.png",
-  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/976caf105_generated_image.png",
-  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/f4fb93cfd_generated_image.png",
+const VAULT_BACKGROUNDS = [
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/0fa11a18f_modern-office-space-with-empty-bookshelves-and-clean-decor-generated-by-ai-photo.jpg",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/ededf95f3_pngtree-blurred-empty-library-interior-with-bookshelves-and-white-floor-image_17084947-Copy.jpg",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/3756c2cd4_6e9914fb6d6d4a305dd2fbe4c30e098d-Copy.jpg",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/96b761046_a8838d6e6380e3cc2ddff672d7c0883b-Copy.jpg",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/7b0f85b35_a-long-row-of-bookshelves-in-a-library-free-photo.jpg",
 ];
 
 // Enhanced 3D library consciousness images
@@ -326,9 +300,7 @@ const CONSCIOUSNESS_IMAGES = [
   ];
 
 export default function LibraryBackground() {
-  const [currentIdx, setCurrentIdx] = useState(() => Math.floor(Math.random() * LIBRARY_IMAGES.length));
-  const [nextIdx, setNextIdx] = useState(null);
-  const [fading, setFading] = useState(false);
+  const [currentIdx, setCurrentIdx] = useState(() => Math.floor(Math.random() * VAULT_BACKGROUNDS.length));
   const [tick, setTick] = useState(0);
   const canvasRef = useRef(null);
   const timeRef = useRef(0);
@@ -370,17 +342,10 @@ export default function LibraryBackground() {
 
   useEffect(() => {
     const timer = setInterval(() => {
-      const next = (currentIdx + 1) % LIBRARY_IMAGES.length;
-      setNextIdx(next);
-      setFading(true);
-      setTimeout(() => {
-        setCurrentIdx(next);
-        setNextIdx(null);
-        setFading(false);
-      }, 1500);
-    }, 12000);
+      setCurrentIdx((prev) => (prev + 1) % VAULT_BACKGROUNDS.length);
+    }, 15000);
     return () => clearInterval(timer);
-  }, [currentIdx]);
+  }, []);
 
   // Matrix and circuit board effects
   useEffect(() => {
@@ -634,7 +599,19 @@ requestAnimationFrame(animateMatrix);
         overflow: "hidden",
       }}
     >
-
+      {/* Vault background image */}
+      <div
+        style={{
+          position: "absolute",
+          inset: 0,
+          backgroundImage: `url('${VAULT_BACKGROUNDS[currentIdx]}')`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+          opacity: 0.85,
+          transition: "opacity 1.5s ease-in-out",
+        }}
+      />
 
       {/* Matrix rain canvas */}
       <canvas
@@ -642,7 +619,7 @@ requestAnimationFrame(animateMatrix);
         style={{
           position: "absolute",
           inset: 0,
-          opacity: 0.65,
+          opacity: 0.3,
           pointerEvents: "none",
           mixBlendMode: "screen",
         }}
@@ -734,7 +711,7 @@ requestAnimationFrame(animateMatrix);
         style={{
           position: "absolute",
           inset: 0,
-          background: "linear-gradient(180deg, rgba(0,0,0,0.93) 0%, rgba(0,0,0,0.91) 50%, rgba(0,0,0,0.94) 100%)",
+          background: "linear-gradient(180deg, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.82) 50%, rgba(0,0,0,0.88) 100%)",
         }}
       />
     </div>
