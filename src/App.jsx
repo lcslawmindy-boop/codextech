@@ -1,6 +1,7 @@
 import { Toaster } from "@/components/ui/toaster"
 import TrialBanner from './components/TrialBanner';
 import PageBackground from './components/PageBackground';
+import CodectechWatermark from './components/CodextechWatermark';
 import { TrialContext } from './lib/TrialContext';
 import { QueryClientProvider } from '@tanstack/react-query'
 import { queryClientInstance } from '@/lib/query-client'
@@ -417,6 +418,7 @@ function App() {
       <QueryClientProvider client={queryClientInstance}>
         <Router>
           <PageBackground />
+          <CodectechWatermark />
           <AuthenticatedApp />
         </Router>
         <Toaster />
