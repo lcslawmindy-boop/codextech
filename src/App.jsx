@@ -31,6 +31,7 @@ import MyLearning from './pages/MyLearning';
 import LabSimulation from './pages/LabSimulation';
 import InventionPlans from './pages/InventionPlans';
 import EMFImpact from './pages/EMFImpact';
+import EMFCrisisPitchDeck from './pages/EMFCrisisPitchDeck';
 import ScalarEMLab from './pages/ScalarEMLab';
 import PatentDraftingTool from './pages/PatentDraftingTool';
 import PatentClaimsGenerator from './pages/PatentClaimsGenerator';
@@ -251,6 +252,7 @@ const AuthenticatedApp = () => {
           <Route path="/lab" element={<LabSimulation />} />
           <Route path="/invention-plans" element={<InventionPlans />} />
           <Route path="/emf-impact" element={<EMFImpact />} />
+          <Route path="/emf-crisis" element={<EMFCrisisPitchDeck />} />
           <Route path="/scalar-lab" element={<ScalarEMLab />} />
           <Route path="/patent-tool" element={<PatentDraftingTool />} />
           <Route path="/patent-claims-generator" element={<PatentClaimsGenerator />} />
