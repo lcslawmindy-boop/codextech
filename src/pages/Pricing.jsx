@@ -131,7 +131,7 @@ export default function Pricing() {
       ? Math.round(tier.price * 10 * 100) // 10 months = 2 free
       : Math.round(tier.price * 100);
     const response = await base44.functions.invoke("createCheckoutSession", {
-      title: `C.O.D.E.X.T.E.C.H. ${tier.name} (${isAnnual ? "Annual" : "Monthly"})`,
+      title: `Aethon Apex IP ${tier.name} (${isAnnual ? "Annual" : "Monthly"})`,
       priceInCents,
       description: tier.description,
       category: "membership",
@@ -161,8 +161,8 @@ export default function Pricing() {
           </Link>
           <div className="w-px h-5 bg-gray-700" />
           <div className="flex items-center gap-3">
-            <img src="https://media.base44.com/images/public/69ccefebfea78b23498c66a8/afb5ad292_CODEXTECHLOGO.png" alt="C.O.D.E.X.T.E.C.H." className="h-11 w-11 object-contain" />
-            <h1 className="text-white font-black text-lg">C.O.D.E.X.T.E.C.H. Membership</h1>
+            <img src="https://media.base44.com/images/public/69ccefebfea78b23498c66a8/bce328987_a6e3bd669_logo.png" alt="Aethon Apex IP" className="h-11 w-11 object-contain" />
+            <h1 className="text-white font-black text-lg">Aethon Apex IP Membership</h1>
           </div>
         </div>
         <Link to="/referrals" className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-green-900/40 border border-green-700 text-green-300 hover:bg-green-900/60 text-xs font-bold transition-all">
@@ -319,7 +319,7 @@ export default function Pricing() {
 
       {/* Footer */}
       <footer className="border-t border-gray-800 px-6 py-8 text-center text-gray-600 text-xs">
-        <p>© 2026 Zenith Apex LLC · C.O.D.E.X.T.E.C.H. · Engineering execution platform</p>
+        <p>© 2026 Zenith Apex LLC · Aethon Apex IP · Intellectual property research platform</p>
         <div className="flex justify-center gap-6 mt-3">
           <Link to="/terms" className="hover:text-gray-400">Terms</Link>
           <Link to="/refund-policy" className="hover:text-gray-400">Refund Policy</Link>
