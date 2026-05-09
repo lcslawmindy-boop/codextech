@@ -206,7 +206,7 @@ export default function Pricing() {
             }`}
           >
             Annual
-            {billingMode === "annual" && <span className="text-xs bg-green-700 px-2 py-0.5 rounded-full">Save 2 months</span>}
+            {billingMode === "annual" && <span className="text-xs bg-green-700 px-2 py-0.5 rounded-full">Save 3 months</span>}
           </button>
         </div>
       </div>
@@ -216,7 +216,7 @@ export default function Pricing() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
           {TIERS.map((tier) => {
             const monthlyPrice = tier.price;
-            const annualMonths = 10; // 2 months free
+            const annualMonths = 9; // 3 months free
             const annualTotal = tier.price * annualMonths;
             const displayPrice = billingMode === "annual" ? (annualTotal / 12).toFixed(2) : monthlyPrice;
             const billingPeriod = billingMode === "annual" ? `Billed $${annualTotal.toFixed(2)} once/year` : `Billed monthly`;
