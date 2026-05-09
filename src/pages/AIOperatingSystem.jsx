@@ -140,6 +140,8 @@ export default function AIOperatingSystem() {
                   { label: "Create Invention", href: "/invention-forge", icon: "🧬" },
                   { label: "File Patent", href: "/patent-drafting-wizard", icon: "📜" },
                   { label: "IP Analysis", href: "/patent-intelligence", icon: "🔍" },
+                  { label: "Project Planner", href: "/project-planner", icon: "📋" },
+                  { label: "IP Network", href: "/ip-network", icon: "🌐" },
                   { label: "Build Tracker", href: "/build-tracker", icon: "🔧" }
                 ].map((a, i) => (
                   <Link key={i} to={a.href}
