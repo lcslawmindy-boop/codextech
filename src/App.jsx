@@ -419,7 +419,6 @@ function App() {
       <QueryClientProvider client={queryClientInstance}>
         <Router>
           <PageBackground />
-          <ZenithApexWatermark />
           <AuthenticatedApp />
         </Router>
         <Toaster />
