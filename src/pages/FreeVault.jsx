@@ -2,43 +2,18 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import ScalarWaveWatermark from "@/components/ScalarWaveWatermark";
-import { Zap, ChevronRight, Star, Download, Video, CheckCircle2 } from "lucide-react";
+import { Zap, ChevronRight, Video, CheckCircle2, Wrench, BookOpen, Network } from "lucide-react";
 
-const FREE_ITEMS = [
-  {
-    id: "emf-trigger",
-    title: "EM Trigger Window Therapy Device",
-    category: "Bioelectromagnetics",
-    badge: "100% FREE",
-    badgeColor: "bg-green-900/60 text-green-300 border-green-800",
-    img: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/4a992c230_generated_image.png",
-    hook: "Programmable EM pulse generator targeting verified biological trigger windows. Consumer wristband + clinical chamber versions.",
-    detail: `Frequency range: 0.5 Hz – 100 kHz programmable
-BOM: 11 components (DDS module, MOSFET driver, coil array)
-Build time: 6–8 hours
-Est. cost: ~$85 consumer / ~$340 clinical
-
-WHAT YOU GET FREE:
-✓ Full 11-component BOM with part numbers
-✓ Exact specifications & sourcing specs
-✓ Step-by-step assembly instructions
-
-UPGRADE TO PRO FOR:
-→ PDF download (40 pages)
-→ 8-hour video assembly guide
-→ Verified supplier links & pricing
-→ Private engineering forum`,
-    href: "/invention-plans",
-  },
-  {
-    id: "meg",
-    title: "MEG Replication Device",
-    category: "Free Energy",
-    badge: "100% FREE",
-    badgeColor: "bg-green-900/60 text-green-300 border-green-800",
-    img: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/b177d065d_generated_image.png",
-    hook: "US Patent 6,362,718. Peer-reviewed COP>1 device with complete engineering docs.",
-    detail: `BOM: 23 components
+const FREE_DEVICE = {
+  id: "meg",
+  type: "device",
+  title: "MEG Replication Device",
+  category: "Free Energy",
+  badge: "FREE DEVICE PLAN",
+  badgeColor: "bg-cyan-900/60 text-cyan-300 border-cyan-800",
+  img: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/b177d065d_generated_image.png",
+  hook: "US Patent 6,362,718. Peer-reviewed COP>1 device with complete engineering docs.",
+  detail: `BOM: 23 components
 Winding specs: Exact wire gauge, turn count, toroidal core geometry
 Power supply: 12V 30A regulated requirements
 Magnet placement: N52 neodymium positioning guide
@@ -48,22 +23,24 @@ WHAT YOU GET FREE:
 ✓ Winding specifications & core geometry
 ✓ Assembly order & magnet placement guide
 
-UPGRADE TO PRO FOR:
+UPGRADE TO MEMBER FOR:
 → PDF (60 pages with schematics)
 → 12-hour video assembly series
 → Verified supplier links & part costs
-→ Troubleshooting community`,
-    href: "/invention-plans",
-  },
-  {
-    id: "scalar",
-    title: "Scalar EM Fundamentals — Free Course",
-    category: "Course",
-    badge: "100% FREE",
-    badgeColor: "bg-green-900/60 text-green-300 border-green-800",
-    img: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/47da562a5_generated_image.png",
-    hook: "What Maxwell actually wrote vs what textbooks teach. The vacuum is not empty.",
-    detail: `Module 1 covers:
+→ All 40+ build plans + troubleshooting community`,
+  href: "/invention-plans",
+};
+
+const FREE_COURSE = {
+  id: "scalar",
+  type: "course",
+  title: "Scalar EM Fundamentals — Free Course",
+  category: "Course",
+  badge: "FREE COURSE",
+  badgeColor: "bg-purple-900/60 text-purple-300 border-purple-800",
+  img: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/47da562a5_generated_image.png",
+  hook: "What Maxwell actually wrote vs what textbooks teach. The vacuum is not empty.",
+  detail: `Module 1 covers:
 — Maxwell's original quaternion equations (pre-Heaviside truncation)
 — The Aharonov-Bohm effect: proof that potentials are real
 — Why E=0, B=0 does NOT mean no EM field is present
@@ -74,30 +51,56 @@ WHAT YOU GET FREE:
 ✓ Core concepts & Maxwell's equations
 ✓ Lab reference materials
 
-UPGRADE TO PRO FOR:
+UPGRADE TO MEMBER FOR:
 → Modules 2–12 (complete curriculum)
 → Video lectures with live explanations
 → Interactive problem sets & solutions
-→ Direct access to course instructor`,
-    href: "/courses",
-  },
-];
+→ All 40+ courses + direct forum access`,
+  href: "/courses",
+};
 
-const SAMPLE_LOCKED_ITEMS = [
-  { title: "Prioré Multichannel System", category: "Bioelectromagnetics", hook: "French govt funded, then suppressed", img: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/4a992c230_generated_image.png" },
-  { title: "Anenergy Pump Circuit", category: "Vacuum Energy", hook: "Phi-field extraction, 14 steps", img: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/0fed0468f_generated_image.png" },
-  { title: "Vacuum Potential Oscillator", category: "Energy Systems", hook: "Independent vacuum-ground shift", img: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/fc3cb2842_generated_image.png" },
-  { title: "TRD-1 Telomere Device", category: "Biotech", hook: "EM-triggered telomerase protocol", img: "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/53f9613a8_generated_image.png" },
-];
+
+
+function FreeItem({ item }) {
+  const [open, setOpen] = useState(false);
+  const isDevice = item.type === "device";
+  return (
+    <div className={`bg-gray-900 border rounded-2xl overflow-hidden transition-all ${open ? (isDevice ? "border-cyan-700 shadow-lg shadow-cyan-950/30" : "border-purple-700 shadow-lg shadow-purple-950/30") : "border-gray-800 hover:border-gray-600"}`}>
+      <button onClick={() => setOpen(o => !o)} className="w-full flex items-center gap-4 p-5 text-left hover:bg-gray-800/20 transition-colors">
+        <div className="w-16 h-16 rounded-lg overflow-hidden flex-shrink-0">
+          <img src={item.img} alt={item.title} className="w-full h-full object-cover" />
+        </div>
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-2 mb-1 flex-wrap">
+            <span className={`text-xs font-black px-2.5 py-1 rounded-full border ${item.badgeColor}`}>{item.badge}</span>
+            <span className="text-gray-500 text-xs">{item.category}</span>
+          </div>
+          <h3 className="text-white font-bold text-base">{item.title}</h3>
+          <p className="text-gray-400 text-sm mt-0.5">{item.hook}</p>
+        </div>
+        <ChevronRight size={18} className={`text-gray-600 flex-shrink-0 transition-transform ${open ? "rotate-90" : ""}`} />
+      </button>
+      {open && (
+        <div className="border-t border-gray-800 bg-gray-950/50 p-6">
+          <pre className="bg-gray-900 border border-gray-800 rounded-xl p-4 text-sm text-gray-300 leading-relaxed whitespace-pre-wrap font-sans mb-6 max-h-80 overflow-y-auto">{item.detail}</pre>
+          <div className="flex flex-col sm:flex-row gap-3">
+            <Link to={item.href} className={`inline-flex items-center gap-2 px-6 py-3 rounded-xl text-white font-bold transition-colors ${isDevice ? "bg-cyan-700 hover:bg-cyan-600" : "bg-purple-700 hover:bg-purple-600"}`}>
+              {isDevice ? <Wrench size={15} /> : <BookOpen size={15} />}
+              {isDevice ? "View Full Build Plan" : "Start Module 1"} <ChevronRight size={14} />
+            </Link>
+            <Link to="/pricing" className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gray-800 hover:bg-gray-700 text-gray-200 font-bold transition-colors border border-gray-700">
+              <Video size={14} /> Unlock All Access
+            </Link>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
 
 export default function FreeVault() {
-  const [expandedId, setExpandedId] = useState(null);
   const [email, setEmail] = useState("");
   const [emailDone, setEmailDone] = useState(false);
-
-  const handleExpand = (id) => {
-    setExpandedId(expandedId === id ? null : id);
-  };
 
   const handleEmailCapture = async () => {
     if (!email) return;
@@ -138,51 +141,52 @@ export default function FreeVault() {
           </p>
         </div>
 
-        {/* Free items */}
-        <div className="space-y-4 mb-16">
-          {FREE_ITEMS.map((item) => {
-            const isOpen = expandedId === item.id;
+        {/* 1 Device Plan + 1 Course */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+          <div>
+            <div className="flex items-center gap-2 mb-3">
+              <Wrench size={14} className="text-cyan-400" />
+              <span className="text-cyan-400 text-xs font-black uppercase tracking-wider">Free Device Build Plan</span>
+            </div>
+            <FreeItem item={FREE_DEVICE} />
+          </div>
+          <div>
+            <div className="flex items-center gap-2 mb-3">
+              <BookOpen size={14} className="text-purple-400" />
+              <span className="text-purple-400 text-xs font-black uppercase tracking-wider">Free Course — Module 1</span>
+            </div>
+            <FreeItem item={FREE_COURSE} />
+          </div>
+        </div>
 
-            return (
-              <div key={item.id}
-                className={`bg-gray-900 border rounded-2xl overflow-hidden transition-all ${isOpen ? "border-cyan-700 shadow-lg shadow-cyan-950/30" : "border-gray-800 hover:border-gray-600"}`}>
-
-                <button onClick={() => handleExpand(item.id)}
-                  className="w-full flex items-center gap-4 p-5 text-left hover:bg-gray-800/20 transition-colors">
-                  <div className="w-16 h-16 rounded-lg overflow-hidden flex-shrink-0">
-                    <img src={item.img} alt={item.title} className="w-full h-full object-cover" />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 mb-1 flex-wrap">
-                      <span className={`text-xs font-black px-2.5 py-1 rounded-full border ${item.badgeColor}`}>{item.badge}</span>
-                      <span className="text-gray-500 text-xs">{item.category}</span>
-                    </div>
-                    <h3 className="text-white font-bold text-base">{item.title}</h3>
-                    <p className="text-gray-400 text-sm mt-0.5 line-clamp-1">{item.hook}</p>
-                  </div>
-                  <ChevronRight size={18} className={`text-gray-600 flex-shrink-0 transition-transform ${isOpen ? "rotate-90 text-cyan-400" : ""}`} />
-                </button>
-
-                {isOpen && (
-                  <div className="border-t border-gray-800 bg-gray-950/50 p-6">
-                    <pre className="bg-gray-900 border border-gray-800 rounded-xl p-4 text-sm text-gray-300 leading-relaxed whitespace-pre-wrap font-sans mb-6 max-h-96 overflow-y-auto">
-                      {item.detail}
-                    </pre>
-                    <div className="flex flex-col sm:flex-row gap-3">
-                      <Link to={item.href}
-                        className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-cyan-700 hover:bg-cyan-600 text-white font-bold transition-colors">
-                        View Full BOM & Specs <ChevronRight size={16} />
-                      </Link>
-                      <Link to="/pricing"
-                        className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gray-800 hover:bg-gray-700 text-gray-200 font-bold transition-colors border border-gray-700">
-                        <Video size={16} /> Get Video Guide
-                      </Link>
-                    </div>
-                  </div>
-                )}
-              </div>
-            );
-          })}
+        {/* Concept Graph */}
+        <div className="mb-12 border border-gray-800 rounded-2xl overflow-hidden">
+          <div className="flex items-center justify-between px-5 py-4 bg-gray-900 border-b border-gray-800">
+            <div className="flex items-center gap-2">
+              <Network size={15} className="text-cyan-400" />
+              <span className="text-white font-black text-sm">Bearden Concept Graph — 100+ Research Nodes</span>
+              <span className="text-xs px-2 py-0.5 rounded-full bg-green-900/50 border border-green-800 text-green-400 font-bold">FREE</span>
+            </div>
+            <Link to="/" className="text-xs text-cyan-400 hover:text-cyan-300 font-bold flex items-center gap-1 transition-colors">
+              Open Full Graph <ChevronRight size={12} />
+            </Link>
+          </div>
+          <div className="bg-gray-950 p-4 text-center" style={{ height: 320 }}>
+            <iframe
+              src="/"
+              title="Concept Graph"
+              className="w-full h-full rounded-xl border border-gray-800 pointer-events-none"
+              style={{ minHeight: 288 }}
+            />
+            <div className="absolute inset-0 flex items-end justify-center pb-6 pointer-events-none">
+            </div>
+          </div>
+          <div className="px-5 py-3 bg-gray-900/50 flex items-center justify-between">
+            <p className="text-gray-500 text-xs">Explore 100+ interconnected nodes: scalar EM, vacuum energy, bioelectromagnetics, Tesla tech & more</p>
+            <Link to="/" className="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-gray-800 hover:bg-gray-700 border border-gray-700 text-gray-300 text-xs font-bold transition-all">
+              <Network size={11} /> Explore Graph
+            </Link>
+          </div>
         </div>
 
         {/* Browse all */}
