@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { ArrowLeft, Check, Lock, Gift, Flame, Clock, ChevronDown, ChevronUp, Wrench, BookOpen, Play, Package, Eye, ExternalLink } from "lucide-react";
+import { ArrowLeft, Check, Lock, Gift, Flame, Clock, ChevronDown, ChevronUp, Wrench, BookOpen, Play, Package, Eye, ExternalLink, Zap } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 
 // ── Countdown (48h sticky deadline) ──────────────────────────────────────────
@@ -24,27 +24,69 @@ function useCountdown() {
   return `${pad(h)}:${pad(m)}:${pad(s)}`;
 }
 
-const MEMBERSHIP = {
-  id: "member",
-  name: "Full Access Membership",
-  price: 199,
-  color: "#8b5cf6",
-  description: "All courses and all build plans, forever.",
-  cta: "Join Now — $199/mo",
-  features: [
-    { icon: <Wrench size={15} />, text: "40+ complete build plans — full BOM, schematics, assembly steps" },
-    { icon: <ExternalLink size={15} />, text: "Verified sourcing links — Digikey, Mouser, Amazon, specialist suppliers" },
-    { icon: <Play size={15} />, text: "Step-by-step build videos — 3–12 hours per device" },
-    { icon: <BookOpen size={15} />, text: "40+ structured courses from the archive" },
-    { icon: <Check size={15} />, text: "Prior Art Archive — 200+ documented systems" },
-    { icon: <Check size={15} />, text: "EM Lab simulator & scalar wave tools" },
-    { icon: <Check size={15} />, text: "Private community & troubleshooting forum" },
-    { icon: <Check size={15} />, text: "Cancel anytime — no contracts, no lock-in" },
-  ],
-  notIncluded: [
-    "PDF download of build plans (view-only in app)",
-  ],
-};
+const TIERS = [
+  {
+    id: "research",
+    name: "Research Access",
+    price: 9.99,
+    color: "#06b6d4",
+    badge: "STARTER",
+    description: "Bearden concept graph & prior art database",
+    features: [
+      { icon: <Eye size={15} />, text: "Interactive Bearden concept graph — 100+ nodes" },
+      { icon: <Package size={15} />, text: "Prior Art Archive — 200+ documented inventions" },
+      { icon: <Check size={15} />, text: "Historical patents & suppression patterns" },
+      { icon: <Check size={15} />, text: "Research library access" },
+    ],
+  },
+  {
+    id: "builder",
+    name: "Builder",
+    price: 49,
+    color: "#f97316",
+    badge: "POPULAR",
+    description: "5 rotating courses + 5 rotating builds",
+    features: [
+      { icon: <BookOpen size={15} />, text: "5 curated courses (rotate monthly)" },
+      { icon: <Wrench size={15} />, text: "5 build plans with full BOM & specs (rotate monthly)" },
+      { icon: <Check size={15} />, text: "25% off all additional courses & build plans" },
+      { icon: <Check size={15} />, text: "1 new course + 1 new build monthly drop" },
+      { icon: <Check size={15} />, text: "Build forum & community support" },
+    ],
+  },
+  {
+    id: "professional",
+    name: "Professional",
+    price: 99,
+    color: "#a855f7",
+    badge: "BEST VALUE",
+    description: "10 courses + 10 builds + patent suite",
+    features: [
+      { icon: <BookOpen size={15} />, text: "10 curated courses (rotating access)" },
+      { icon: <Wrench size={15} />, text: "10 build plans with full BOM & specs (rotating)" },
+      { icon: <Zap size={15} />, text: "5 Invention Forges per month" },
+      { icon: <Check size={15} />, text: "25% off all additional courses & build plans" },
+      { icon: <Check size={15} />, text: "1 new course + 1 new build monthly drop" },
+      { icon: <Check size={15} />, text: "AI Patent Suite — drafting, attorney chat, threat monitor" },
+      { icon: <Check size={15} />, text: "Build forum & patent support" },
+    ],
+  },
+  {
+    id: "forge",
+    name: "Invention Forge Creator",
+    price: 149,
+    color: "#ef4444",
+    badge: "PREMIUM",
+    description: "Unlimited hybrid invention generation",
+    features: [
+      { icon: <Zap size={15} />, text: "Unlimited hybrid invention generation" },
+      { icon: <Check size={15} />, text: "IP valuation estimation tool" },
+      { icon: <Check size={15} />, text: "Export to investor pitch decks & presentations" },
+      { icon: <Check size={15} />, text: "Commercialization pathway planning" },
+      { icon: <Check size={15} />, text: "Priority support" },
+    ],
+  },
+];
 
 const FAQS = [
   { q: "Is this real engineering or pseudoscience?", a: "Every build plan cites granted U.S. patents, peer-reviewed journals, and declassified government documents. The MEG (U.S. Patent 6,362,718) was co-authored by a PhD physicist and published in Foundations of Physics Letters." },
@@ -76,25 +118,21 @@ export default function Pricing() {
   const countdown = useCountdown();
   const [newsletterEmail, setNewsletterEmail] = useState("");
   const [newsletterStatus, setNewsletterStatus] = useState(null);
-  const [billingAnnual, setBillingAnnual] = useState(false);
 
-  const monthlyPrice = MEMBERSHIP.price;
-  const annualTotal = monthlyPrice * 12; // Annual upfront only
-  const displayPrice = monthlyPrice; // Always show $99
-
-  const handleCheckout = async () => {
+  const handleCheckout = async (tier) => {
     if (window !== window.top) {
       alert("Checkout only works from the published app. Please open the app directly.");
       return;
     }
     const baseUrl = window.location.origin;
+    const annualTotal = tier.price * 12;
     const response = await base44.functions.invoke("createCheckoutSession", {
-      title: "C.O.D.E.X.T.E.C.H. Full Access Membership (Annual)",
+      title: `C.O.D.E.X.T.E.C.H. ${tier.name} (Annual)`,
       priceInCents: annualTotal * 100,
-      description: MEMBERSHIP.description,
+      description: tier.description,
       category: "membership",
       mode: "payment",
-      successUrl: `${baseUrl}/checkout?success=true&product=member`,
+      successUrl: `${baseUrl}/checkout?success=true&product=${tier.id}`,
       cancelUrl: `${baseUrl}/pricing`,
       customerEmail: null,
     });
@@ -134,11 +172,11 @@ export default function Pricing() {
           <Clock size={12} /> Founding Member Rate — First 1,000 Only
         </div>
         <h1 className="text-4xl md:text-5xl font-black leading-tight mb-4">
-          One Plan.<br />
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-cyan-400">Everything Included.</span>
+          Choose Your Path.<br />
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-400">Start Building Today.</span>
         </h1>
         <p className="text-gray-400 text-lg max-w-xl mx-auto">
-          All 40+ courses and all 40+ build plans — complete BOMs, sourcing links, build videos, and everything in the vault for $199/month.
+          From research access to professional tools and invention creation — find the perfect tier for your journey.
         </p>
       </div>
 
@@ -150,86 +188,61 @@ export default function Pricing() {
         </div>
       </div>
 
-      {/* Single Membership Card */}
-      <div className="px-5 pb-16 max-w-lg mx-auto">
-        <div className="relative rounded-2xl overflow-hidden border-2 border-purple-500 shadow-2xl shadow-purple-900/40">
-          {/* Top badge */}
-          <div className="py-3 text-center text-xs font-black tracking-widest text-white bg-purple-600">
-             ALL 40+ COURSES — ALL 40+ BUILD PLANS
-           </div>
-
-          <div className="p-8 bg-gray-900">
-            <h3 className="text-white font-black text-2xl mb-1">{MEMBERSHIP.name}</h3>
-            <p className="text-gray-400 text-sm mb-6">{MEMBERSHIP.description}</p>
-
-            {/* Price */}
-            <div className="flex items-end gap-1 mb-1">
-              <span className="font-black text-6xl text-purple-400">${displayPrice}</span>
-              <span className="text-gray-500 mb-2 text-lg">/mo</span>
-            </div>
-            <p className="text-green-400 text-sm font-bold mb-1">Billed ${annualTotal} annually</p>
-            <p className="text-gray-600 text-xs mb-8">Annual commitment · Instant access · Secured by Stripe</p>
-
-            {/* CTA */}
-            <button
-              onClick={handleCheckout}
-              className="w-full py-4 rounded-xl font-black text-xl text-white transition-all hover:opacity-90 active:scale-[0.98] mb-2"
-              style={{ background: "linear-gradient(135deg, #7c3aed, #2563eb)", boxShadow: "0 6px 28px rgba(139,92,246,0.50)" }}
-            >
-              {MEMBERSHIP.cta} →
-            </button>
-            <p className="text-center text-purple-400/60 text-xs mb-8">🔒 Stripe · SSL · Cancel anytime</p>
-
-            {/* Features */}
-            <div className="space-y-3 mb-6">
-              {MEMBERSHIP.features.map((f, i) => (
-                <div key={i} className="flex items-start gap-3">
-                  <span className="text-purple-400 flex-shrink-0 mt-0.5">{f.icon}</span>
-                  <span className="text-gray-200 text-sm font-medium">{f.text}</span>
+      {/* Membership Tiers Grid */}
+      <div className="px-5 pb-16 max-w-6xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+          {TIERS.map((tier) => {
+            const annualTotal = tier.price * 12;
+            return (
+              <div key={tier.id} className="relative rounded-2xl overflow-hidden flex flex-col transition-all"
+                style={{ border: `2px solid ${tier.color}40`, background: tier.id === "professional" ? `${tier.color}10` : "transparent" }}>
+                {/* Badge */}
+                <div className="py-2 text-center text-xs font-black tracking-widest text-white" style={{ backgroundColor: tier.color }}>
+                  {tier.badge}
                 </div>
-              ))}
-            </div>
 
-            {/* Not included */}
-            <div className="border-t border-gray-800 pt-4">
-              <p className="text-gray-600 text-xs font-bold uppercase tracking-wider mb-2">Not included</p>
-              {MEMBERSHIP.notIncluded.map((f, i) => (
-                <div key={i} className="flex items-start gap-2.5 opacity-40 mb-1.5">
-                  <Lock size={12} className="flex-shrink-0 mt-0.5 text-gray-500" />
-                  <span className="text-gray-500 text-xs">{f}</span>
+                <div className="p-6 bg-gray-900 flex flex-col flex-1">
+                  <h3 className="text-white font-black text-xl mb-1">{tier.name}</h3>
+                  <p className="text-gray-400 text-xs mb-4">{tier.description}</p>
+
+                  {/* Price */}
+                  <div className="flex items-end gap-1 mb-1">
+                    <span className="font-black text-5xl" style={{ color: tier.color }}>${tier.price}</span>
+                    <span className="text-gray-500 mb-1 text-sm">/mo</span>
+                  </div>
+                  <p className="text-green-400 text-xs font-bold mb-1">Billed ${annualTotal.toFixed(2)} annually</p>
+                  <p className="text-gray-600 text-xs mb-6">Annual commitment · Instant access · Secured by Stripe</p>
+
+                  {/* CTA */}
+                  <button
+                    onClick={() => handleCheckout(tier)}
+                    className="w-full py-3 rounded-xl font-black text-sm text-white transition-all hover:opacity-90 active:scale-[0.98] mb-4"
+                    style={{ backgroundColor: tier.color }}
+                  >
+                    Join Now →
+                  </button>
+                  <p className="text-center text-gray-500 text-xs mb-5">🔒 Cancel anytime</p>
+
+                  {/* Features */}
+                  <div className="space-y-2.5">
+                    {tier.features.map((f, i) => (
+                      <div key={i} className="flex items-start gap-2.5">
+                        <span style={{ color: tier.color }} className="flex-shrink-0 mt-0.5">{f.icon}</span>
+                        <span className="text-gray-200 text-xs font-medium leading-relaxed">{f.text}</span>
+                      </div>
+                    ))}
+                  </div>
                 </div>
-              ))}
-            </div>
-          </div>
+              </div>
+            );
+          })}
         </div>
 
         {/* Free vault nudge */}
-        <p className="text-center text-gray-600 text-sm mt-5">
-          Not ready yet?{" "}
-          <Link to="/free-vault" className="text-cyan-400 hover:underline">Browse the free vault first →</Link>
+        <p className="text-center text-gray-600 text-sm mt-10">
+          Want to explore first?{" "}
+          <Link to="/free-vault" className="text-cyan-400 hover:underline">Browse the free vault →</Link>
         </p>
-      </div>
-
-      {/* What you get — visual breakdown */}
-      <div className="border-y border-gray-800 bg-gray-900/40 px-6 py-14">
-        <div className="max-w-4xl mx-auto">
-          <h2 className="text-2xl font-black text-center mb-10">All 40+ courses + all 40+ build plans</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-            {[
-              { icon: "🎓", title: "40+ Courses", desc: "Full structured curriculum from scalar EM fundamentals to patent strategy and investor frameworks", color: "#22c55e" },
-               { icon: "🔧", title: "40+ Build Plans", desc: "Every complete build plan in the vault with full BOM, schematics, and assembly guides", color: "#f97316" },
-               { icon: "📦", title: "Full BOM & Sourcing", desc: "Exact part numbers, specs, and verified supplier links for every component", color: "#06b6d4" },
-               { icon: "🎬", title: "Build Videos & Documentation", desc: "Step-by-step videos and technical schematics for hands-on assembly", color: "#a855f7" },
-            ].map((item, i) => (
-              <div key={i} className="bg-gray-900 border border-gray-800 rounded-2xl p-5 text-center"
-                style={{ borderTopColor: item.color, borderTopWidth: 3 }}>
-                <span className="text-4xl block mb-3">{item.icon}</span>
-                <p className="text-white font-black text-base mb-2" style={{ color: item.color }}>{item.title}</p>
-                <p className="text-gray-400 text-xs leading-relaxed">{item.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
       </div>
 
       <div className="px-5 pb-16 max-w-3xl mx-auto">
@@ -263,18 +276,17 @@ export default function Pricing() {
 
         {/* Final CTA */}
         <div className="text-center bg-gradient-to-b from-gray-900 to-gray-950 border border-purple-800/40 rounded-2xl p-10">
-          <h2 className="text-3xl font-black mb-3">Ready to Build?</h2>
+          <h2 className="text-3xl font-black mb-3">Questions?</h2>
           <p className="text-gray-400 mb-8 max-w-md mx-auto">
-            Join and get instant access to every build plan, BOM, sourcing guide, and build video in the vault.
+            Compare tiers above to find the right fit for your research or building needs.
           </p>
-          <button
-            onClick={handleCheckout}
-            className="px-12 py-4 rounded-xl font-black text-xl text-white transition-all hover:opacity-90 shadow-lg"
+          <Link to="/free-vault"
+            className="inline-flex items-center justify-center px-12 py-4 rounded-xl font-black text-xl text-white transition-all hover:opacity-90 shadow-lg"
             style={{ background: "linear-gradient(135deg, #7c3aed, #2563eb)", boxShadow: "0 4px 24px rgba(139,92,246,0.4)" }}
           >
-            Join Now — ${annualTotal}/year →
-          </button>
-          <p className="text-gray-600 text-xs mt-4">🔒 Secured by Stripe · Annual billing · Instant access</p>
+            Explore Free Vault →
+          </Link>
+          <p className="text-gray-600 text-xs mt-4">🔒 Secured by Stripe · Annual billing · Cancel anytime</p>
         </div>
       </div>
 
