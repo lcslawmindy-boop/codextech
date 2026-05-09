@@ -1,24 +1,30 @@
 import { Link, useLocation } from "react-router-dom";
-import { Vault, Wrench, Zap } from "lucide-react";
+import { Vault, Wrench, Zap, BookOpen, FlaskConical } from "lucide-react";
 
 const TABS = [
   {
-    label: "Vault",
+    label: "Research",
     path: "/free-vault",
     icon: Vault,
-    match: (p) => ["/free-vault", "/", "/vault", "/prior-art", "/invention-library", "/courses", "/my-learning"].includes(p),
+    match: (p) => ["/free-vault", "/", "/vault", "/prior-art", "/invention-library", "/my-learning"].includes(p),
   },
   {
-    label: "Builds",
-    path: "/invention-plans",
-    icon: Wrench,
-    match: (p) => ["/invention-plans", "/inventor-forge", "/build-supplies-shop", "/download-center", "/scalar-lab", "/lab"].includes(p),
+    label: "Courses",
+    path: "/course-catalogue",
+    icon: BookOpen,
+    match: (p) => ["/course-catalogue", "/courses", "/invention-plans"].includes(p),
   },
   {
-    label: "Upgrade",
-    path: "/paywall",
+    label: "Forge",
+    path: "/invention-forge",
+    icon: FlaskConical,
+    match: (p) => ["/invention-forge", "/device-catalogue", "/patent-hub", "/patent-intelligence"].includes(p),
+  },
+  {
+    label: "Join",
+    path: "/start",
     icon: Zap,
-    match: (p) => ["/paywall", "/pricing", "/checkout"].includes(p),
+    match: (p) => ["/start", "/pricing", "/checkout", "/paywall"].includes(p),
     highlight: true,
   },
 ];

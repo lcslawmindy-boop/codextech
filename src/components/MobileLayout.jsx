@@ -4,7 +4,7 @@ import { useTrial } from "@/lib/TrialContext";
 import { AnimatePresence, motion } from "framer-motion";
 
 // Pages that should NOT show the bottom tab bar
-const HIDDEN_TAB_ROUTES = ["/legal", "/checkout", "/paywall", "/pricing", "/free-vault", "/"];
+const HIDDEN_TAB_ROUTES = ["/legal", "/checkout", "/paywall", "/pricing", "/free-vault", "/", "/start"];
 
 // Full-screen immersive tool pages — hide tab bar
 const IMMERSIVE_ROUTES = [
