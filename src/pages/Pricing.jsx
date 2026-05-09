@@ -118,6 +118,7 @@ export default function Pricing() {
   const countdown = useCountdown();
   const [newsletterEmail, setNewsletterEmail] = useState("");
   const [newsletterStatus, setNewsletterStatus] = useState(null);
+  const [billingMode, setBillingMode] = useState("annual");
 
   const handleCheckout = async (tier) => {
     if (window !== window.top) {
@@ -125,13 +126,16 @@ export default function Pricing() {
       return;
     }
     const baseUrl = window.location.origin;
-    const annualTotal = tier.price * 12;
+    const isAnnual = billingMode === "annual";
+    const priceInCents = isAnnual 
+      ? Math.round(tier.price * 10 * 100) // 10 months = 2 free
+      : Math.round(tier.price * 100);
     const response = await base44.functions.invoke("createCheckoutSession", {
-      title: `C.O.D.E.X.T.E.C.H. ${tier.name} (Annual)`,
-      priceInCents: annualTotal * 100,
+      title: `C.O.D.E.X.T.E.C.H. ${tier.name} (${isAnnual ? "Annual" : "Monthly"})`,
+      priceInCents,
       description: tier.description,
       category: "membership",
-      mode: "payment",
+      mode: isAnnual ? "payment" : "subscription",
       successUrl: `${baseUrl}/checkout?success=true&product=${tier.id}`,
       cancelUrl: `${baseUrl}/pricing`,
       customerEmail: null,
@@ -180,11 +184,30 @@ export default function Pricing() {
         </p>
       </div>
 
-      {/* Annual Only Notice */}
+      {/* Billing Toggle */}
       <div className="flex justify-center mb-10">
-        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-yellow-900/40 border border-yellow-700">
-          <span className="text-yellow-300 text-sm font-bold">Annual Billing Only</span>
-          <span className="text-yellow-400 text-xs">Pay once per year</span>
+        <div className="inline-flex items-center gap-1 p-1 rounded-full bg-gray-900 border border-gray-800">
+          <button
+            onClick={() => setBillingMode("monthly")}
+            className={`px-6 py-2 rounded-full text-sm font-bold transition-all ${
+              billingMode === "monthly"
+                ? "bg-gray-800 text-white"
+                : "text-gray-500 hover:text-gray-300"
+            }`}
+          >
+            Monthly
+          </button>
+          <button
+            onClick={() => setBillingMode("annual")}
+            className={`px-6 py-2 rounded-full text-sm font-bold transition-all flex items-center gap-1.5 ${
+              billingMode === "annual"
+                ? "bg-green-900/60 border border-green-700 text-green-300"
+                : "text-gray-500 hover:text-gray-300"
+            }`}
+          >
+            Annual
+            {billingMode === "annual" && <span className="text-xs bg-green-700 px-2 py-0.5 rounded-full">Save 2 months</span>}
+          </button>
         </div>
       </div>
 
@@ -192,7 +215,11 @@ export default function Pricing() {
       <div className="px-5 pb-16 max-w-6xl mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
           {TIERS.map((tier) => {
-            const annualTotal = tier.price * 12;
+            const monthlyPrice = tier.price;
+            const annualMonths = 10; // 2 months free
+            const annualTotal = tier.price * annualMonths;
+            const displayPrice = billingMode === "annual" ? (annualTotal / 12).toFixed(2) : monthlyPrice;
+            const billingPeriod = billingMode === "annual" ? `Billed $${annualTotal.toFixed(2)} once/year` : `Billed monthly`;
             return (
               <div key={tier.id} className="relative rounded-2xl overflow-hidden flex flex-col transition-all"
                 style={{ border: `2px solid ${tier.color}40`, background: tier.id === "professional" ? `${tier.color}10` : "transparent" }}>
@@ -207,11 +234,11 @@ export default function Pricing() {
 
                   {/* Price */}
                   <div className="flex items-end gap-1 mb-1">
-                    <span className="font-black text-5xl" style={{ color: tier.color }}>${tier.price}</span>
+                    <span className="font-black text-5xl" style={{ color: tier.color }}>${displayPrice}</span>
                     <span className="text-gray-500 mb-1 text-sm">/mo</span>
                   </div>
-                  <p className="text-green-400 text-xs font-bold mb-1">Billed ${annualTotal.toFixed(2)} annually</p>
-                  <p className="text-gray-600 text-xs mb-6">Annual commitment · Instant access · Secured by Stripe</p>
+                  <p className="text-green-400 text-xs font-bold mb-1">{billingPeriod}</p>
+                  <p className="text-gray-600 text-xs mb-6">Instant access · Secured by Stripe</p>
 
                   {/* CTA */}
                   <button
