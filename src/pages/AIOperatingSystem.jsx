@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { ArrowLeft, Zap, Network, TrendingUp, Lock, AlertCircle, CheckCircle2, Clock, BarChart3, Target, FileText } from "lucide-react";
 import { base44 } from "@/api/base44Client";
+import ThreatNotificationFeed from "../components/ThreatNotificationFeed";
 
 export default function AIOperatingSystem() {
   const [activeTab, setActiveTab] = useState("overview");
@@ -171,11 +172,13 @@ export default function AIOperatingSystem() {
         )}
 
         {activeTab === "monitoring" && (
-          <div className="bg-slate-900/60 border border-slate-800 rounded-lg p-6">
-            <h2 className="text-white font-black text-lg mb-4 flex items-center gap-2">
-              <AlertCircle size={18} className="text-orange-400" /> Threat Monitoring
-            </h2>
-            <p className="text-slate-400 text-sm">Real-time suppression patterns, competing patents, and market threats.</p>
+          <div className="space-y-6">
+            <div>
+              <h2 className="text-white font-black text-lg mb-4 flex items-center gap-2">
+                <AlertCircle size={18} className="text-orange-400" /> Competitive Threat Feed
+              </h2>
+              <ThreatNotificationFeed />
+            </div>
           </div>
         )}
 
