@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { ArrowRight, CheckCircle2, Wrench, AlertCircle, FileText, Zap } from "lucide-react";
 import { base44 } from "@/api/base44Client";
-import Phase2BundleCard from "@/components/Phase2BundleCard";
 
 function CheckoutButton({ price, priceInCents }) {
   const [loading, setLoading] = useState(false);
@@ -168,7 +167,7 @@ export default function AdvancedEngineeringBundle() {
               <div className="mt-8 pt-6 border-t border-gray-700">
                 <p className="text-white font-bold text-sm mb-3">Prerequisite</p>
                 <p className="text-gray-400 text-xs">
-                  This bundle assumes you have Research Membership (you understand the theory). If you haven't joined yet, start with the Researcher ($49/mo), Builder ($99/mo), or Pro ($199/mo) plan.
+                  This bundle assumes you have Research Membership (you understand the theory). If you haven't joined yet, start with Technical Brief Pack or Membership.
                 </p>
               </div>
             </div>
@@ -252,53 +251,13 @@ export default function AdvancedEngineeringBundle() {
           </div>
         </section>
 
-        {/* Phase 2 Advanced Bundles */}
-        <section className="mb-14">
-          <div className="flex items-center gap-3 mb-3">
-            <div className="px-3 py-1 rounded-full bg-yellow-900/40 border border-yellow-700 text-yellow-300 text-xs font-black uppercase tracking-widest">Phase 2</div>
-            <h3 className="text-white font-black text-2xl">Advanced Specialization Bundles</h3>
-          </div>
-          <p className="text-gray-500 text-sm mb-8 max-w-2xl">For teams who've completed the core bundle and are ready to go deeper. Each bundle is a self-contained system focus with full documentation, sourcing, and measurement protocols.</p>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {[
-              {
-                title: "High-Voltage EM Engineering",
-                price: "$1,997",
-                priceInCents: 199700,
-                img: "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=600&q=80",
-                badge: "Most Advanced",
-                badgeColor: "bg-red-900/60 border-red-700 text-red-300",
-                teaser: "Tesla coil topology, spark gap discharge systems, and high-energy pulse circuits derived from Gray motor and Tesla patent analysis.",
-                teaserItems: ["Tesla Coil: toroidal secondary geometry & coupling ratios", "EV Gray Motor: pulse discharge topology + capacitor bank specs", "High-voltage pulse modulator: trigger circuits & safety interlocks"],
-                lockedItems: ["Complete HV wiring schematics (47 pages)", "Capacitor bank sizing & discharge calculations", "Arc suppression & safety interlock designs", "Real HV oscilloscope traces (6 waveform sets)"],
-              },
-              {
-                title: "Quantum Field Measurement Suite",
-                price: "$2,497",
-                priceInCents: 249700,
-                img: "https://images.unsplash.com/photo-1518770660439-4636190af475?w=600&q=80",
-                badge: "Institutional",
-                badgeColor: "bg-purple-900/60 border-purple-700 text-purple-300",
-                teaser: "Scalar field detection instrumentation, null-point anomaly logging, and laboratory measurement frameworks for non-classical EM phenomena.",
-                teaserItems: ["Scalar field detector: biconical antenna + shielded preamp specs", "Null-point anomaly logger: data acquisition + statistical framework", "Aharonov-Bohm verification bench: PCB layout + shielding requirements"],
-                lockedItems: ["49-page instrumentation manual with full BOM", "Lab setup photos & calibration sequences", "Anomaly log templates & analysis scripts", "4 complete measurement case studies"],
-              },
-              {
-                title: "Bioelectromagnetics Lab Bundle",
-                price: "$1,497",
-                priceInCents: 149700,
-                img: "https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?w=600&q=80",
-                badge: "Research Only",
-                badgeColor: "bg-green-900/60 border-green-700 text-green-300",
-                teaser: "Experimental bioelectromagnetics frameworks: frequency-window devices, biophoton detection systems, and UV coherence measurement setups.",
-                teaserItems: ["Frequency-window EM device: DDS-based driver + exposure chamber specs", "Biophoton detector: PMT circuit + photon counting framework", "UV coherence analyzer: Gurwitsch-derived setup specifications"],
-                lockedItems: ["38-page full build documentation per device", "IRB-compatible experimental protocols", "Supplier list for specialty PMT & UV optics", "Measurement data templates & safety protocols"],
-              },
-            ].map((bundle, i) => (
-              <Phase2BundleCard key={i} bundle={bundle} />
-            ))}
-          </div>
+        {/* Next Phase */}
+        <section className="bg-gray-900 border border-gray-800 rounded-2xl p-8 mb-8">
+          <h3 className="text-white font-black text-lg mb-4">Phase 2: Advanced Bundles ($1,997–$2,997)</h3>
+          <p className="text-gray-400 text-sm mb-4">
+            After completing this bundle, advanced teams move to specialized systems: High-Voltage Engineering ($1,997), Quantum Field Measurement ($2,497), and others. Available to members who've successfully completed builds from the core bundle.
+          </p>
+          <p className="text-gray-500 text-xs">Contact support to discuss advanced phase eligibility after your first build.</p>
         </section>
 
         {/* FAQ */}
@@ -308,7 +267,7 @@ export default function AdvancedEngineeringBundle() {
             {[
               {
                 q: "Do I need Research Membership first?",
-                a: "Yes. The bundle assumes you understand the theory. Get Membership ($49–$199/month) to understand the foundations before ordering this bundle."
+                a: "Yes. The bundle assumes you understand the theory. Get Membership ($97–$197/month) to understand the foundations before ordering this bundle."
               },
               {
                 q: "Can I get a refund if I realize building isn't for me?",

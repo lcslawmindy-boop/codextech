@@ -62,37 +62,17 @@ Deno.serve(async (req) => {
       try {
         const users = await base44.asServiceRole.entities.User.filter({ email });
         if (users.length > 0) {
-          const updateData = {
+          await base44.asServiceRole.entities.User.update(users[0].id, {
             subscription_status: "active",
             stripe_customer_id: session.customer,
             subscription_id: session.subscription || null,
-          };
-          // Stamp activation time only once (for drip targeting)
-          if (!users[0].subscription_activated_at) {
-            updateData.subscription_activated_at = new Date().toISOString();
-          }
-          await base44.asServiceRole.entities.User.update(users[0].id, updateData);
+          });
           console.log("subscription_status set to active for:", email);
         } else {
           console.warn("No User found for email:", email, "— user may not have registered yet. restoreAccess will sync on login.");
         }
       } catch (e) {
         console.error("Error setting subscription_status:", e.message);
-      }
-
-      // Trigger Day 0 welcome email for new subscriptions
-      if (email && session.subscription) {
-        try {
-          const name = session.customer_details?.name || "";
-          await base44.asServiceRole.functions.invoke("membershipWelcomeEmail", {
-            email,
-            name,
-            trigger: "day0",
-          });
-          console.log("Welcome email day0 triggered for:", email);
-        } catch (e) {
-          console.error("Error triggering welcome email:", e.message);
-        }
       }
     }
   }

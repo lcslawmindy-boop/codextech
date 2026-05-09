@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import { ArrowLeft, Search, Database, Zap, AlertTriangle, CheckCircle2, XCircle, ChevronDown, ChevronUp, Plus, Loader2, BookOpen, Target } from "lucide-react";
 import { PRIOR_ART_ARCHIVE, CATEGORIES, OUTCOMES, OUTCOME_COLORS } from "../lib/priorArtData";
 import { base44 } from "@/api/base44Client";
-import PatentSummaryButton from "@/components/PatentSummaryButton";
 
 // ── Cross-Reference Tool ───────────────────────────────────────────────
 function CrossRefTool({ archive }) {
@@ -242,12 +241,11 @@ function ArchiveCard({ entry, onSelect, selected }) {
             <p className="text-gray-500 text-xs font-bold uppercase tracking-wider mb-1">Source</p>
             <p className="text-gray-500 text-xs italic">{entry.source_document}</p>
           </div>
-          <div className="flex flex-wrap gap-1.5 mb-3">
+          <div className="flex flex-wrap gap-1.5">
             {(entry.tags || []).map((t, i) => (
               <span key={i} className="bg-gray-800 text-gray-500 text-xs px-2 py-0.5 rounded">{t}</span>
             ))}
           </div>
-          <PatentSummaryButton patent={entry} />
         </div>
       )}
     </div>

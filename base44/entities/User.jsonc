@@ -22,11 +22,6 @@
     "admin_access_granted": {
       "type": "boolean",
       "default": false
-    },
-    "subscription_activated_at": {
-      "type": "string",
-      "description": "ISO timestamp when subscription first became active \u2014 used for drip email targeting"
     }
-  },
-  "required": []
+  }
 }

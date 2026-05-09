@@ -1,49 +1,40 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
-import { isMemberPlan } from "@/lib/tiers";
 
 /**
- * Unified tier hook — single $49/mo membership model.
- * Returns { tier, loading, isMember, refetch }
- * tier: "free" | "member"
- *
- * Access check priority:
- * 1. user.role === "admin" → always member
- * 2. user.subscription_status === "active" → member (set by Stripe webhook)
- * 3. BetaApplication.plan_purchased / status fallback
+ * Returns { tier, loading }
+ * tier is one of: "free" | "starter" | "researcher" | "pro"
  */
 export function useTier() {
   const [tier, setTier] = useState("free");
   const [loading, setLoading] = useState(true);
 
-  const check = useCallback(async () => {
-    setLoading(true);
-    try {
-      const user = await base44.auth.me();
-      if (!user) { setTier("free"); setLoading(false); return; }
+  useEffect(() => {
+    const check = async () => {
+      try {
+        const user = await base44.auth.me();
+        if (!user) { setTier("free"); setLoading(false); return; }
+        if (user.role === "admin") { setTier("pro"); setLoading(false); return; }
 
-      // Admins always have full access
-      if (user.role === "admin") { setTier("member"); setLoading(false); return; }
+        const apps = await base44.entities.BetaApplication.filter({ email: user.email });
+        const app = apps[0];
 
-      // Stripe webhook sets this directly — most reliable
-      if (user.subscription_status === "active") { setTier("member"); setLoading(false); return; }
+        if (!app) { setTier("free"); setLoading(false); return; }
 
-      // Fallback: check BetaApplication record
-      const apps = await base44.entities.BetaApplication.filter({ email: user.email });
-      const app = apps[0];
-      if (app && isMemberPlan(app.plan_purchased, app.status)) {
-        setTier("member"); setLoading(false); return;
+        const plan = app.plan_purchased?.toLowerCase() || "";
+
+        if (plan.includes("elite")) { setTier("elite"); }
+        else if (plan.includes("pro") || plan.includes("researcher") || app.status === "converted") { setTier("pro"); }
+        else if (plan.includes("starter") || plan.includes("member")) { setTier("starter"); }
+        else { setTier("free"); }
+      } catch {
+        setTier("free");
+      } finally {
+        setLoading(false);
       }
-
-      setTier("free");
-    } catch {
-      setTier("free");
-    } finally {
-      setLoading(false);
-    }
+    };
+    check();
   }, []);
 
-  useEffect(() => { check(); }, [check]);
-
-  return { tier, loading, isMember: tier === "member", refetch: check };
+  return { tier, loading };
 }

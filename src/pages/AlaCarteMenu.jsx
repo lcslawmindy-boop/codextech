@@ -206,52 +206,9 @@ export default function AlaCarteMenu() {
       <div className="bg-gradient-to-r from-gray-900 to-gray-950 border-b border-gray-800 px-6 py-12">
         <div className="max-w-7xl mx-auto text-center">
           <h2 className="text-3xl font-black mb-3">Build Your Own Learning Path</h2>
-          <p className="text-gray-400 max-w-2xl mx-auto mb-4">
-            Buy individual courses and build plans at standard pricing. No membership required.
+          <p className="text-gray-400 max-w-2xl mx-auto">
+            No membership required. Buy exactly what you need. Every purchase includes a PDF download for offline access.
           </p>
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-cyan-950/50 border border-cyan-700 text-cyan-300 text-sm font-bold">
-            💡 Builder Members ($99/mo) get every course & build plan for just $49 each — <Link to="/research-membership" className="underline hover:text-cyan-200 ml-1">Join →</Link>
-          </div>
-        </div>
-      </div>
-
-      {/* Builder Tier Benefits Banner */}
-      <div className="bg-gradient-to-r from-cyan-950/40 to-blue-950/40 border-b border-cyan-800/50 px-6 py-8">
-        <div className="max-w-7xl mx-auto">
-          <div className="flex items-start gap-4 mb-4">
-            <div className="flex-shrink-0">
-              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-cyan-600 text-white text-xs font-black">
-                ⚡ BUILDER TIER ($99/month)
-              </span>
-            </div>
-            <Link to="/research-membership" className="ml-auto px-4 py-2 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white text-xs font-bold transition-colors">
-              Join Now →
-            </Link>
-          </div>
-          <h3 className="text-white font-black text-lg mb-3">Unlock Builder Benefits on Every Purchase</h3>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="flex gap-3">
-            <span className="text-cyan-400 font-black text-lg flex-shrink-0">💰</span>
-            <div>
-              <p className="text-white font-bold text-sm">All Courses & Build Plans: $49 each (members only)</p>
-              <p className="text-gray-400 text-xs">Standard prices apply at checkout. As a Builder member, you pay just $49 per course or plan — regardless of standard pricing</p>
-            </div>
-            </div>
-            <div className="flex gap-3">
-              <span className="text-cyan-400 font-black text-lg flex-shrink-0">🛡️</span>
-              <div>
-                <p className="text-white font-bold text-sm">20% Off EMF Protection Shop</p>
-                <p className="text-gray-400 text-xs">Builder members get exclusive discount on all EMF shielding and protection kits</p>
-              </div>
-            </div>
-            <div className="flex gap-3">
-              <span className="text-cyan-400 font-black text-lg flex-shrink-0">📋</span>
-              <div>
-                <p className="text-white font-bold text-sm">10-Part Invention Dossier IP Package</p>
-                <p className="text-gray-400 text-xs">Complete framework for patent drafting, commercialization roadmap & market launch strategy</p>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
 
@@ -317,7 +274,7 @@ export default function AlaCarteMenu() {
         <div className="max-w-4xl mx-auto text-center">
           <h3 className="text-2xl font-black mb-4">Want Everything?</h3>
           <p className="text-gray-400 mb-6 text-sm">
-            Builder Members ($99/mo) get every course and build plan for just $49 each — plus patent analyses, engineering docs, and expert support.
+            Get unlimited access to all {courses.length + buildPlans.length} courses and build plans with a membership.
           </p>
           <Link to="/pricing" className="inline-flex items-center gap-2 px-8 py-4 rounded-xl bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white font-black transition-all">
             View Membership Plans →

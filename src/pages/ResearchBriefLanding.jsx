@@ -1,8 +1,6 @@
 import { useState } from "react";
 import { ArrowRight, CheckCircle2, Lock, Zap, FileText, AlertCircle } from "lucide-react";
 import { base44 } from "@/api/base44Client";
-import FunnelUpsellBanner from "@/components/FunnelUpsellBanner";
-import { Link } from "react-router-dom";
 
 export default function ResearchBriefLanding() {
   const [email, setEmail] = useState("");
@@ -23,6 +21,10 @@ export default function ResearchBriefLanding() {
       });
       setSubmitted(true);
       setEmail("");
+      // Redirect to brief after 2 seconds
+      setTimeout(() => {
+        window.location.href = "/research-brief-download";
+      }, 2000);
     } catch (err) {
       console.error("Subscription error:", err);
     }
@@ -84,18 +86,10 @@ export default function ResearchBriefLanding() {
             </p>
 
             {submitted ? (
-              <div className="text-center py-6">
+              <div className="text-center py-8">
                 <CheckCircle2 size={40} className="text-green-400 mx-auto mb-3" />
                 <p className="text-green-300 font-bold mb-2">Download Started</p>
-                <p className="text-gray-400 text-sm mb-3">Check your email inbox. You'll also receive an institutional research brief sequence.</p>
-                <a href="/research-brief-download"
-                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-green-700 hover:bg-green-600 text-white font-black text-sm transition-all mb-3">
-                  Download Brief <ArrowRight size={14} />
-                </a>
-                <Link to="/technical-brief-pack"
-                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-cyan-700 hover:bg-cyan-600 text-white font-black text-sm transition-all">
-                  Continue to Tripwire <ArrowRight size={14} />
-                </Link>
+                <p className="text-gray-400 text-sm">Check your email inbox. You'll also receive an institutional research brief sequence (5 emails).</p>
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-3">
@@ -114,7 +108,7 @@ export default function ResearchBriefLanding() {
                 >
                   {loading ? "Processing..." : (
                     <>
-                      Download Brief <ArrowRight size={14} />
+                      Get Research Brief <ArrowRight size={14} />
                     </>
                   )}
                 </button>
@@ -224,19 +218,16 @@ export default function ResearchBriefLanding() {
         </div>
       </section>
 
-      {/* Funnel Upsell */}
-      <section className="px-6 max-w-4xl mx-auto">
-        <FunnelUpsellBanner variant="membership" />
-        <FunnelUpsellBanner variant="bundle" />
-      </section>
-
       {/* Footer CTA */}
       <section className="px-6 py-12 border-t border-gray-800 bg-gray-900/40">
-        <div className="max-w-4xl mx-auto text-center">
-          <p className="text-gray-400 text-sm mb-4">
-            After the research brief, continue to the <Link to="/technical-brief-pack" className="text-cyan-400 underline font-bold">Technical Brief Pack</Link> for the full engineering system.
-          </p>
-        </div>
+      <div className="max-w-4xl mx-auto text-center">
+        <p className="text-gray-400 text-sm mb-4">
+          After the research brief, you'll have access to our full institutional research sequence + special offers for members only.
+        </p>
+        <p className="text-gray-600 text-xs">
+          This brief is limited distribution. Designed for serious researchers and technical teams only.
+        </p>
+      </div>
       </section>
     </div>
   );

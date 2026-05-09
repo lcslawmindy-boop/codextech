@@ -1,6 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
-import { ArrowRight, Zap, BookOpen, Hammer, Network, Scroll, FileText, Sparkles, Layers, Video, X } from "lucide-react";
+import { ArrowRight, Zap, BookOpen, Hammer, Network, Scroll, FileText, Sparkles, Layers, Video } from "lucide-react";
 import { motion } from "framer-motion";
 
 const FEATURES = [
@@ -87,66 +87,9 @@ const STAT_CARDS = [
 
 export default function PostNDAOnboarding() {
   const [hoveredCard, setHoveredCard] = useState(null);
-  const [showAIWelcome, setShowAIWelcome] = useState(true);
-  const [countdown, setCountdown] = useState(10);
-
-  useEffect(() => {
-    if (!showAIWelcome) return;
-    const timer = setInterval(() => {
-      setCountdown(prev => {
-        if (prev <= 1) {
-          window.location.href = "/courses";
-          return 0;
-        }
-        return prev - 1;
-      });
-    }, 1000);
-    return () => clearInterval(timer);
-  }, [showAIWelcome]);
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-950 via-gray-900 to-gray-950 text-white overflow-hidden">
-      {/* ── AI Welcome Banner ── */}
-      {showAIWelcome && (
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -20 }}
-          className="bg-gradient-to-r from-cyan-900/60 to-blue-900/60 border-b border-cyan-700/50 px-6 py-6"
-        >
-          <div className="max-w-7xl mx-auto flex items-start justify-between gap-6">
-            <div className="flex items-start gap-4 flex-1">
-              <div className="w-12 h-12 rounded-lg bg-cyan-500/20 flex items-center justify-center flex-shrink-0 mt-1">
-                <span className="text-xl">🤖</span>
-              </div>
-              <div className="flex-1">
-                <h2 className="text-xl font-black text-white mb-2">Welcome to Your Research Vault</h2>
-                <p className="text-gray-300 text-sm leading-relaxed mb-4">
-                  Your NDA has been verified. You now have full access to 40+ build plans, 200+ courses, and the Bearden Research Network. Start with our Course Library to understand the theoretical framework, then explore the interconnected research nodes.
-                </p>
-                <div className="flex items-center gap-4">
-                  <Link
-                    to="/courses"
-                    className="inline-flex items-center gap-2 px-5 py-2 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white font-bold text-sm transition-colors"
-                  >
-                    Go to Courses <ArrowRight size={14} />
-                  </Link>
-                  <span className="text-xs font-bold text-cyan-300">
-                    Auto-redirecting in {countdown}s
-                  </span>
-                </div>
-              </div>
-            </div>
-            <button
-              onClick={() => setShowAIWelcome(false)}
-              className="text-gray-400 hover:text-white transition-colors flex-shrink-0 mt-1"
-            >
-              <X size={18} />
-            </button>
-          </div>
-        </motion.div>
-      )}
-
       {/* ── Header ── */}
       <div className="border-b border-gray-800 bg-gray-900/80 backdrop-blur px-6 py-6 sticky top-0 z-40">
         <div className="max-w-7xl mx-auto">
@@ -155,7 +98,9 @@ export default function PostNDAOnboarding() {
               <div className="w-3 h-3 rounded-full bg-green-400 animate-pulse" />
               <span className="text-green-400 text-xs font-black uppercase tracking-widest">NDA Verified</span>
             </div>
-
+            <Link to="/pricing" className="text-xs font-bold text-gray-400 hover:text-white transition-colors">
+              Skip to Pricing →
+            </Link>
           </div>
           <h1 className="text-4xl font-black mb-2">Your Research Vault is Open</h1>
           <p className="text-gray-400 max-w-2xl">
@@ -186,7 +131,7 @@ export default function PostNDAOnboarding() {
       {/* ── Feature Grid ── */}
       <section className="max-w-7xl mx-auto px-6 pb-20">
         <h2 className="text-3xl font-black mb-2">Everything You Can Access</h2>
-        <p className="text-gray-400 mb-12">Click any to explore all available research tools and resources.</p>
+        <p className="text-gray-400 mb-12">Click any to explore. Pricing unlocks advanced features and video assembly guides.</p>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {FEATURES.map((feature, i) => (
@@ -230,22 +175,69 @@ export default function PostNDAOnboarding() {
         </div>
       </section>
 
+      {/* ── Comparison Table ── */}
+      <section className="max-w-7xl mx-auto px-6 py-16 border-y border-gray-800">
+        <h2 className="text-3xl font-black mb-2">Free vs. Premium Access</h2>
+        <p className="text-gray-400 mb-8">All tools are visible and explorable. Premium membership adds video assembly, live sourcing, and advanced AI features.</p>
 
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="border-b border-gray-700">
+                <th className="text-left py-3 px-4 font-black">Feature</th>
+                <th className="text-center py-3 px-4 font-black">Browse Free</th>
+                <th className="text-center py-3 px-4 font-black">Premium Unlock</th>
+              </tr>
+            </thead>
+            <tbody>
+              {[
+                { feature: "40+ Build Plans (BOMs & Schematics)", free: "✓", premium: "✓ + Video Assembly" },
+                { feature: "200+ Course Modules", free: "✓ Titles & Descriptions", premium: "✓ Full Video Content" },
+                { feature: "Bearden Research Graph", free: "✓ Browse & Search", premium: "✓ Advanced Analytics" },
+                { feature: "Patent Drafting AI", free: "✓ Preview", premium: "✓ Generate & File" },
+                { feature: "Prior Art Database", free: "✓ Search", premium: "✓ Download PDFs" },
+                { feature: "Build Videos", free: "✗", premium: "✓ Step-by-Step Assembly" },
+                { feature: "Component Sourcing", free: "✗", premium: "✓ Verified Suppliers" },
+                { feature: "Invention Forge (Hybrid Merge)", free: "✓ Concept", premium: "✓ Full Patent Draft" },
+              ].map((row, i) => (
+                <tr key={i} className="border-b border-gray-800 hover:bg-gray-800/30 transition-colors">
+                  <td className="py-3 px-4 font-bold text-white">{row.feature}</td>
+                  <td className="py-3 px-4 text-center text-green-400 font-bold">{row.free}</td>
+                  <td className="py-3 px-4 text-center text-cyan-400 font-bold">{row.premium}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </section>
 
-      {/* ── Continue Exploring ── */}
+      {/* ── CTA Section ── */}
       <section className="max-w-4xl mx-auto px-6 py-20 text-center">
-        <h2 className="text-3xl font-black mb-4">Start Your Research</h2>
+        <h2 className="text-3xl font-black mb-4">Ready to Unlock Full Access?</h2>
         <p className="text-gray-400 mb-10 max-w-2xl mx-auto">
-          Explore the complete research vault with courses, build plans, patent tools, and the Bearden Research Network.
+          Explore the platform free. Upgrade when you're ready for video assembly, component sourcing, and advanced AI patent generation.
         </p>
 
-        <motion.a
-          href="/vault"
-          whileHover={{ scale: 1.05 }}
-          className="inline-flex items-center justify-center gap-2 px-10 py-4 rounded-xl bg-gradient-to-r from-cyan-600 to-blue-700 hover:from-cyan-500 hover:to-blue-600 text-white font-black shadow-lg shadow-cyan-900/50 transition-all"
-        >
-          <Zap size={18} /> Explore the Research Vault
-        </motion.a>
+        <div className="flex flex-col sm:flex-row gap-4 justify-center mb-6">
+          <motion.a
+            href="/vault"
+            whileHover={{ scale: 1.05 }}
+            className="px-10 py-4 rounded-xl bg-gray-800 hover:bg-gray-700 border border-gray-700 hover:border-gray-600 text-white font-black transition-all"
+          >
+            Continue Exploring Free
+          </motion.a>
+          <motion.a
+            href="/pricing"
+            whileHover={{ scale: 1.05 }}
+            className="px-10 py-4 rounded-xl bg-gradient-to-r from-cyan-600 to-blue-700 hover:from-cyan-500 hover:to-blue-600 text-white font-black shadow-lg shadow-cyan-900/50 transition-all flex items-center justify-center gap-2"
+          >
+            <Zap size={18} /> View Premium Plans
+          </motion.a>
+        </div>
+
+        <p className="text-gray-600 text-xs">
+          No commitments. Cancel anytime. All research tools remain free to explore.
+        </p>
       </section>
 
       {/* ── Footer ── */}

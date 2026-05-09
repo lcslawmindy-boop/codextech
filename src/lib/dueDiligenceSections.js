@@ -1,8 +1,6 @@
 // ─────────────────────────────────────────────────────────────────────────────
 // ZENITH APEX — 100-PAGE DUE DILIGENCE SECTION DATA
 // 12 major sections, 60+ subsections
-// VALUATION UPDATED: Q2 2026 — April 2026 public market multiples applied
-// Source: multiples.vc April 9, 2026 — Vertical AI: 3.6x, AI tools: 3.5–4.2x, Data Infra: 4.9x
 // ─────────────────────────────────────────────────────────────────────────────
 
 export const DD_SECTIONS = [
@@ -24,7 +22,7 @@ Mission: To commercialize the most comprehensive advanced electromagnetic IP por
         heading: "1.2  Core Investment Thesis — Five Converging Macro Trends",
         body: `The platform sits at the intersection of five converging macro trends, each independently sufficient to justify acquisition:
 
-(1) AI-ACCELERATED IP GENERATION: The cost of generating a defensible patent application has dropped from $15,000–$50,000 in attorney fees to approximately $0.80 in LLM API costs using this platform's Provisional Patent Drafter. This 99.99% cost reduction makes IP generation accessible to inventors, startups, and research institutions at a scale previously impossible. AI patent tools now trade at 3.5–4.2× NTM revenue (multiples.vc, April 2026).
+(1) AI-ACCELERATED IP GENERATION: The cost of generating a defensible patent application has dropped from $15,000–$50,000 in attorney fees to approximately $0.80 in LLM API costs using this platform's Provisional Patent Drafter. This 99.99% cost reduction makes IP generation accessible to inventors, startups, and research institutions at a scale previously impossible.
 
 (2) SCALAR EM TECHNOLOGY MATURATION: After 40+ years of documented suppression, the underlying physics has accumulated an independent body of peer-reviewed validation. The MEG device (US Patent 6,362,718) was peer-reviewed and published in Foundations of Physics Letters by 15 authors across 12 institutions including Boeing Phantom Works, Trinity College Dublin, and Alfvén Laboratory Stockholm — institutional validation, not fringe science.
 
@@ -35,134 +33,109 @@ Mission: To commercialize the most comprehensive advanced electromagnetic IP por
 (5) DEFENSE TECHNOLOGY DEMAND: Post-Ukraine, US DoD directed energy research budget exceeded $1.7B in FY2025. The platform's scalar EM sensing and communications IP (G-Com, Scalar Pulse Radar, ELF Detector) addresses this market with documented SBIR Phase II award precedent ($480,000 received).`
       },
       {
-        heading: "1.3  Platform Fair Market Valuation — Component-by-Component DCF (Updated Q2 2026)",
-        body: `Asset-by-asset valuation using discounted cash flow (DCF) methodology applied to comparable SaaS, IP portfolio, and research platform transactions. Multiples updated to reflect April 2026 public market benchmarks sourced from multiples.vc (April 9, 2026 public software comps): Vertical AI Applications 3.6x NTM revenue; Pure-Play AI Software 3.6x; Design & Engineering Software 4.2x; Data Infrastructure 4.9x. All figures represent conservative low-end and reasonable high-end estimates.
+        heading: "1.3  Platform Fair Market Valuation — Component-by-Component DCF",
+        body: `Asset-by-asset valuation using discounted cash flow (DCF) methodology applied to comparable SaaS, IP portfolio, and research platform transactions. All figures represent conservative low-end and reasonable high-end estimates.
 
 AI INVENTION FORGE ENGINE
-  Revenue basis: $0.80 marginal cost, $3,000–$10,000 enterprise license per cycle
-  Comparable: Anaqua Invention Disclosure $180/user/month; Specifio AI $500/claim; Harvey AI ($3B valuation)
-  April 2026 multiple applied: 3.6x (Vertical AI Applications)
-  Estimated value: $480,000 – $1,200,000
+  Revenue basis: $0.80 marginal cost, $2,500–$8,000 enterprise license per cycle
+  Comparable: Anaqua Invention Disclosure at $180/user/month; Specifio AI at $500/claim
+  Estimated value: $380,000 – $950,000
 
 AI MARKET RESEARCH SCANNER
-  Revenue basis: $500–$2,500 per report; subscription $1,500–$6,000/year
-  Comparable: PatSnap ($1.5B, SoftBank); Derwent Innovation ($800M–$1.2B, Clarivate)
-  April 2026 multiple applied: 3.6x NTM revenue
-  Estimated value: $290,000 – $720,000
+  Revenue basis: $500–$2,000 per report; subscription $1,200–$4,800/year
+  Comparable: PatSnap at $28,000/year enterprise; Derwent Innovation at $20,000/year
+  Estimated value: $220,000 – $580,000
 
 USPTO PROVISIONAL PATENT DRAFTER
-  Revenue basis: Replaces $3,000–$12,000 attorney provisional; charges $97–$597
-  Comparable: LexisNexis PatentAdvisor; Specifio AI (CPA Global, $6.8B acquisition)
-  April 2026 multiple applied: 4.2x (Design & Engineering Software — highest public bracket)
-  Estimated value: $210,000 – $520,000
+  Revenue basis: Replaces $2,500–$8,000 attorney provisional; charges $97–$497
+  Comparable: LexisNexis PatentAdvisor; Specifio AI drafting
+  Estimated value: $150,000 – $380,000
 
-VC PITCH DECK + INVESTOR PACKAGE ENGINE
-  Revenue basis: $750–$3,000 per generated deck; replaces $8,000–$30,000 consultant fee
-  Comparable: Beautiful.ai Enterprise; Canva for Enterprise
-  April 2026 multiple applied: 3.6x
-  Estimated value: $165,000 – $390,000
+VC PITCH DECK + BUILD VIDEO ENGINE
+  Revenue basis: $500–$2,000 per generated deck; replaces $5,000–$25,000 consultant fee
+  Comparable: Beautiful.ai Enterprise at $40/user/month
+  Estimated value: $120,000 – $280,000
 
 SCALAR WAVE / FIELD SIMULATORS (WebGL)
-  Revenue basis: Educational licensing $750–$3,000/institution/year
-  Comparable: COMSOL Multiphysics $10,000+/license; Ansys Academic
-  April 2026 multiple applied: 3.6x (Engineering Software)
-  Estimated value: $115,000 – $260,000
+  Revenue basis: Educational licensing $500–$2,000/institution/year
+  Comparable: COMSOL Multiphysics at $10,000+/license
+  Estimated value: $80,000 – $175,000
 
 BEARDEN KNOWLEDGE GRAPH (200+ annotated nodes)
-  Revenue basis: Research database licensing $4,000–$15,000/institution/year
-  Comparable: Elsevier ScienceDirect; IEEE Xplore institutional; LexisNexis
-  April 2026 multiple applied: 4.9x (Data Infrastructure — irreplaceable domain data moat)
-  Estimated value: $290,000 – $560,000
+  Revenue basis: Research database licensing $3,000–$12,000/institution/year
+  Comparable: Elsevier ScienceDirect; IEEE Xplore institutional
+  Estimated value: $220,000 – $420,000
 
 COURSE CATALOG (20+ courses, LMS integrated)
-  Revenue basis: $197–$497/course; site licenses $6,000–$18,000/year
-  Comparable: Coursera for Business $400/user; O'Reilly Learning $499/user/year
-  April 2026 multiple applied: 1.5x (Education Software — conservative per public comps)
-  Estimated value: $180,000 – $390,000
+  Revenue basis: $197–$397/course; site licenses $5,000–$15,000/year
+  Comparable: Coursera for Business at $400/user
+  Estimated value: $150,000 – $320,000
 
 INVENTION BUILD PLAN LIBRARY (26 devices)
-  Revenue basis: $590–$2,200/plan; kits at $1,500–$4,500
-  Domain-specific hardware instruction sets — no direct public comparable; strategic premium applied
-  Estimated value: $580,000 – $1,600,000
+  Revenue basis: $490–$1,800/plan; kits at $1,200–$3,500
+  Estimated value: $450,000 – $1,200,000
 
 ANNOTATED PRIMARY DOCUMENT ARCHIVE
-  Revenue basis: Research access $300–$750/month; institutional $6,000–$25,000/year
-  Comparable: JSTOR institutional; ProQuest Research Library; Elsevier Pure
-  April 2026 multiple applied: 4.9x (Data Infrastructure — government + peer-reviewed irreplaceable archive)
-  Estimated value: $175,000 – $420,000
+  Revenue basis: Research access $200–$500/month; institutional $5,000–$20,000/year
+  Comparable: JSTOR institutional; ProQuest Research Library
+  Estimated value: $120,000 – $280,000
 
 IP PORTFOLIO — CORE DEVICES (MEG, TRZ, TRD-1, Prioré, 22 additional)
-  Revenue basis: Licensing royalties 3–10% downstream; SBIR precedent ($630K received)
-  Comparable: WARF ($180M+/year licensing); Caltech ($260M/year); Intellectual Ventures
-  24 device architectures, 200+ claims across PPAs — valued independently of platform
-  Estimated value: $2,400,000 – $8,200,000
+  Revenue basis: Licensing royalties 2–8% downstream; acquisition premium
+  Comparable: WARF ($180M+/year licensing); Caltech licensing ($260M/year)
+  Estimated value: $1,800,000 – $6,500,000
 
 PRIOR ART ARCHIVE + PATENT AI CROSS-REFERENCING
-  Revenue basis: $200–$750/search; subscription $1,000–$4,000/month
-  Comparable: IP Checkups; Darts-ip (acquired $200M); Anaqua
-  April 2026 multiple applied: 3.6x NTM revenue
-  Estimated value: $130,000 – $320,000
+  Revenue basis: $150–$500/search; subscription $800–$3,000/month
+  Estimated value: $95,000 – $240,000
 
-KRCIC — KAZNACHEYEV REVERSAL CELL IMPRINTING CHAMBER (Q2 2026)
+KRCIC — KAZNACHEYEV REVERSAL CELL IMPRINTING CHAMBER (NEW — Q2 2026)
   Full 10-step build plan, dual-chamber UV-grade quartz architecture, biophoton imprinting
-  Revenue basis: Research instrument licensing $3,000–$10,000; build kit $1,500
-  Estimated value: $240,000 – $640,000
-
-UBDRS — UV BIOPHOTON DISEASE REVERSAL SYSTEM (Q2 2026)
-  Full build plan, UV emission spectroscopy, statistical monitoring protocols
   Revenue basis: Research instrument licensing $2,500–$8,000; build kit $1,200
-  Estimated value: $195,000 – $510,000
+  Estimated value: $180,000 – $480,000
 
-LEGAL COMPLIANCE INFRASTRUCTURE (Q2 2026)
+UBDRS — UV BIOPHOTON DISEASE REVERSAL SYSTEM (NEW — Q2 2026)
+  Full build plan, UV emission spectroscopy, statistical monitoring protocols
+  Revenue basis: Research instrument licensing $2,000–$6,000; build kit $950
+  Estimated value: $145,000 – $385,000
+
+LEGAL COMPLIANCE INFRASTRUCTURE (NEW — Q2 2026)
   Terms of Service, Research Disclaimers (medical/energy/bioelectromagnetics), Refund Policy,
   NDA gate architecture, copy protection — reduces regulatory liability across all content verticals
-  Estimated value: $60,000 – $160,000
+  Estimated value: $45,000 – $120,000
 
-INVESTOR CRM + VDR + MONITORING SUITE
-  Revenue basis: SaaS $75–$300/user/month; enterprise $15,000–$75,000/year
-  Comparable: Visible.vc; Allvue; Diligent Boards
-  April 2026 multiple applied: 2.6x (Professional Services Software)
-  Estimated value: $145,000 – $310,000
+HEALTH + CRM + MONITORING SUITE
+  Revenue basis: SaaS $50–$200/user/month; enterprise $10,000–$50,000/year
+  Estimated value: $110,000 – $220,000
 
-WHITE-LABEL SAAS + VALUATION API (B2B)
-  Revenue basis: $10,000–$50,000/yr per licensee; $0.50–$2.00/API call
-  Target: IP law firms, VCs, corporate R&D — $100K–$2M ARR at scale
-  April 2026 multiple applied: 3.6x (Vertical AI Applications)
-  Estimated value: $360,000 – $720,000
-
-─────────────────────────────────────────────
-PLATFORM TOTAL (conservative DCF, April 2026 multiples):  $8,515,000 – $18,470,000
-Strategic pre-public premium (35–100%):                    $11,495,000 – $36,940,000
-─────────────────────────────────────────────
-Valuation methodology updated Q2 2026.
-April 2026 public SaaS benchmarks: multiples.vc (April 9, 2026).
-Vertical AI Applications: 3.6x NTM revenue. AI-native tools: 3.5–4.2x. Data Infrastructure: 4.9x.
-All SaaS median: 2.5x NTM revenue. This platform commands premium due to AI-native architecture + irreplaceable data moat.`
+─────────────────────────────────────────────────────────────
+PLATFORM TOTAL (conservative DCF):    $5,770,000 – $13,540,000
+Strategic pre-public premium (40–120%):  $8,078,000 – $29,788,000
+─────────────────────────────────────────────────────────────`
       },
       {
         heading: "1.4  Acquisition Terms — Four Deal Structures Available",
         body: `STRUCTURE A — EXCLUSIVE FULL ACQUISITION (PREFERRED)
-  Price range: $12,000,000 – $28,000,000
+  Price range: $7,500,000 – $22,000,000
   Includes: Full codebase transfer, all IP assignments, primary source archive, database, brand, domain, subscriber list, all AI prompt architectures, and 90-day transition support.
   Timeline: LOI → due diligence → close within 60–90 days.
   Exclusivity: 30-day exclusive window for first buyer with executed NDA + proof of funds.
-  Valuation basis: Conservative component DCF $8.5M–$18.5M + strategic pre-public premium; April 2026 public market multiples applied (multiples.vc, April 9, 2026).
 
 STRUCTURE B — STRATEGIC LICENSING (ANNUAL)
-  Price range: $1,200,000 – $2,800,000/year
+  Price range: $750,000 – $1,800,000/year
   Includes: Platform white-label rights, AI module API access, course co-branding, ongoing development.
   Minimum term: 3 years. Renewal option at original price + CPI adjustment.
   Target licensees: IP law firms, defense contractors, university research offices.
 
 STRUCTURE C — AI MODULE WHITE-LABEL (PER LICENSEE SaaS)
-  Price range: $350,000 – $950,000/year per licensee
+  Price range: $280,000 – $750,000/year per licensee
   Includes: Invention Forge + Patent Drafter + Market Scanner as white-labeled SaaS modules.
   Target: Patent shops, VC due diligence teams, technology transfer offices, R&D departments.
 
 STRUCTURE D — STRATEGIC JOINT VENTURE
   Terms: Equity stake 15–40% (negotiable), co-development agreement, revenue share.
   Target: Defense prime contractors, biotech platforms, energy technology companies.
-  Requirements: Demonstrated domain expertise, institutional mandate, minimum $3M committed capital.
+  Requirements: Demonstrated domain expertise, institutional mandate, minimum $2M committed capital.
 
 PRESENTER NOTE: This opportunity is being presented to a maximum of six (6) qualified institutional buyers before public launch. All parties must execute an NDA before receiving technical disclosures. First executed NDA with proof of funds receives 30-day exclusive window.`
       },
@@ -176,7 +149,7 @@ REASON 2 — REGULATORY TAILWINDS FORMING: The USPTO AI Task Force (2025) is act
 
 REASON 3 — PEER REVIEW MOMENTUM: The post-COVID research environment has dramatically accelerated institutional investment in non-conventional physics. Replication of electromagnetic anomalous-energy phenomena (LENR, anomalous EM effects) is being funded at unprecedented levels by DARPA, ARPA-E, and DoE. The timing for advanced EM IP commercialization has never been better.
 
-REASON 4 — AI MODEL COST TRAJECTORY + MARKET REPRICING: As LLM costs decline (OpenAI prices dropped 99% from GPT-4 launch to GPT-5-mini), the platform's marginal cost per invention cycle approaches zero. Simultaneously, April 2026 public market data confirms AI-native vertical software now commands 3.5–4.2× NTM revenue multiples — up from 2.5× all-SaaS median. Acquiring now captures both the cost improvement trajectory and the expanding AI valuation premium.`
+REASON 4 — AI MODEL COST TRAJECTORY: As LLM costs decline (OpenAI prices dropped 99% from GPT-4 launch to GPT-5-mini), the platform's marginal cost per invention cycle approaches zero. The unit economics improve automatically as AI commoditizes. Acquiring now captures this trajectory — the platform becomes more profitable without additional investment.`
       }
     ]
   },
@@ -400,7 +373,7 @@ PORTABLE PORTHOLE DISEASE TREATMENT SYSTEM (PPDTS)
   Market: $12B pandemic preparedness market; post-COVID government procurement pathway.
 
 PSYCHOENERGETICS CELLULAR CONTROL SYSTEM
-  Stage: Research (2/5). Longevity biotech accelerator seed.
+  Stage: Research (2/5). Longevity biotech accelerator seed. 
   Popp biophoton master cell control frequencies + scalar interferometry. Dual-mode: Disease Remission and Enhancement protocols.
   Market: $85B longevity biotech.`
       },
@@ -529,7 +502,6 @@ PRIMARY MONOGRAPHS (all annotated, cross-referenced in knowledge graph):
   TAM: $14.2B (2025), 18.4% CAGR → $32.6B (2030). Source: Grand View Research.
   Drivers: USPTO patent volume +3.8%/year (WIPO 2024); AI legal adoption +42% YoY; AI patent filings 8× increase 2020–2025.
   Platform position: Only AI IP platform with suppressed EM physics domain data moat + integrated patent-to-market pipeline.
-  April 2026 valuation multiple: 3.5–4.2× NTM revenue (multiples.vc, April 9, 2026 — AI software comps).
 
 VERTICAL 2 — ALTERNATIVE/UNCONVENTIONAL ENERGY IP
   TAM: $8.7B (US government energy research FY2025) + $45B (private clean energy VC) = $53.7B ecosystem.
@@ -549,11 +521,10 @@ VERTICAL 4 — DEFENSE DIRECTED ENERGY
 VERTICAL 5 — ACADEMIC RESEARCH TOOLS
   TAM: $4.2B (scientific database licensing); $12B (research instrument market).
   Platform assets: Knowledge Graph, Prior Art Archive, Simulators, Course Catalog, Build Video Library.
-  April 2026 multiple: Data Infrastructure at 4.9× NTM revenue — platform's annotated archive qualifies.
 
 VERTICAL 6 — IP ANALYTICS & PATENT INTELLIGENCE
   TAM: $3.8B (2025), growing 12.7% CAGR. Source: MarketsandMarkets.
-  Comparable acquisitions: PatSnap ($1.5B, 28× ARR), CPA Global ($6.8B, 9× revenue), Anaqua ($650M).`
+  Comparable acquisitions: PatSnap ($1.5B), CPA Global ($6.8B), Anaqua ($650M).`
       },
       {
         heading: "5.2  Competitive Analysis & Defensible Moat",
@@ -594,7 +565,7 @@ PHASE 2 — PRODUCT EXPANSION (Q3 2026 → Q1 2027)
 
 PHASE 3 — B2B AI MODULE LICENSING (Q1 2027 → Q4 2027)
   Target: 3 AI module licensees (patent firms, VC due diligence, defense contractors)
-  Revenue per licensee: $350,000–$950,000/year
+  Revenue per licensee: $280,000–$750,000/year
   Channel: IP law conference networks, SBIR contractor databases, USPTO registered practitioner networks
 
 PHASE 4 — DEFENSE CHANNEL (Q4 2027 → Q2 2028)
@@ -604,9 +575,9 @@ PHASE 4 — DEFENSE CHANNEL (Q4 2027 → Q2 2028)
 
 PHASE 5 — STRATEGIC EXIT (Q2 2028)
   Target acquirers: Clarivate (IP analytics, $4B revenue), Elsevier (Reed RELX), defense prime contractors (Raytheon, L3Harris, Northrop Grumman), longevity biotech platforms
-  Exit multiple: 5–8× ARR (April 2026 Vertical AI benchmarks support 3.6× current; post-revenue with growth commands higher)
+  Exit multiple: 5–6× ARR
   Projected ARR at exit: $6.5M–$18M
-  Projected exit value: $32.5M–$144M`
+  Projected exit value: $32.5M–$108M`
       }
     ]
   },
@@ -625,37 +596,33 @@ PHASE 5 — STRATEGIC EXIT (Q2 2028)
   Gross margin: 88%
 
 STREAM 2 — COURSE CATALOG
-  Price: $197–$497/course; $1,497 full library bundle
+  Price: $197–$397/course; $1,497 full library bundle
   Projected: 500–1,200 sales/year
-  Revenue: $98,500–$596,400/year | Gross margin: 95%+
+  Revenue: $98,500–$476,400/year | Gross margin: 95%+
 
 STREAM 3 — INVENTION BUILD PLAN KITS
-  Price: $590–$2,200 per kit
+  Price: $490–$1,800 per kit
   Projected: 200–500 kits/year
-  Revenue: $118,000–$1,100,000/year | Gross margin: 92%
+  Revenue: $98,000–$900,000/year | Gross margin: 92%
 
 STREAM 4 — EMF PROTECTION SHOP
   20 SKUs, $24–$1,800, AOV $245
   Revenue: $61,250–$147,000/year | Gross margin: 45–65%
 
 STREAM 5 — AI MODULE LICENSING (B2B)
-  Price: $350,000–$950,000/year per licensee
-  Year 2 revenue (3 licensees): $1,050,000 | Year 3 (5 licensees): $2,625,000
+  Price: $280,000–$750,000/year per licensee
+  Year 2 revenue (3 licensees): $840,000 | Year 3 (5 licensees): $2,100,000
   Gross margin: 80–85%
 
 STREAM 6 — PLATFORM LICENSING / WHITE-LABEL
-  Price: $750,000–$1,800,000/year per licensee
-  Year 3 (1 licensee): $750,000 | Year 5 (3 licensees): $2,250,000–$5,400,000
+  Price: $650,000–$1,500,000/year per licensee
+  Year 3 (1 licensee): $650,000 | Year 5 (3 licensees): $1,950,000–$4,500,000
 
 STREAM 7 — GOVERNMENT GRANTS (SBIR/STTR, DoE, DARPA)
   Basis: Scalar Pulse Radar precedent ($630K received)
   Year 1: $150,000 | Year 2: $900,000 | Year 3: $1,500,000 (non-dilutive)
 
-STREAM 8 — VALUATION API (B2B)
-  Price: $0.50–$2.00/call | Law firms, VCs, corporate R&D
-  Year 2: $100,000 | Year 3: $400,000 | Year 4: $1,200,000 ARR at scale
-
-STREAM 9 — CONSULTING & CUSTOM BUILDS
+STREAM 8 — CONSULTING & CUSTOM BUILDS
   Rate: $250–$500/hour; project fees $5,000–$50,000
   Year 1: $60,000 | Year 2: $150,000 | Year 3: $250,000`
       },
@@ -666,44 +633,43 @@ STREAM 9 — CONSULTING & CUSTOM BUILDS
 YEAR 1 (2026–2027):
   Founding Member Subscriptions:      $875,527
   Course Catalog:                      $98,500
-  Build Plan Kits:                     $118,000
+  Build Plan Kits:                     $98,000
   EMF Shop:                            $61,250
   Government Grants (Phase I):         $150,000
   Consulting:                          $60,000
   ─────────────────────────────────────────────
-  TOTAL REVENUE:                       $1,363,277
-  COGS (blended 16%):                  $218,124
-  GROSS PROFIT (84%):                  $1,145,153
+  TOTAL REVENUE:                       $1,343,277
+  COGS (blended 16%):                  $214,924
+  GROSS PROFIT (84%):                  $1,128,353
   Operating Expenses:                  $650,000
-  EBITDA:                              $495,153   (36.3% margin)
+  EBITDA:                              $478,353   (35.6% margin)
 
 YEAR 2 (2027–2028):
   Subscriptions (349 members):         $1,459,212
-  Courses + kits + shop:               $650,850
-  AI Module Licensing (3 licensees):   $1,050,000
-  Valuation API:                       $100,000
+  Courses + kits + shop:               $540,850
+  AI Module Licensing (3 licensees):   $840,000
   Government Grants:                   $900,000
   Consulting:                          $150,000
   ─────────────────────────────────────────────
-  TOTAL REVENUE:                       $4,310,062
-  COGS (blended 14%):                  $603,409
-  GROSS PROFIT (86%):                  $3,706,653
+  TOTAL REVENUE:                       $3,890,062
+  COGS (blended 14%):                  $544,609
+  GROSS PROFIT (86%):                  $3,345,453
   Operating Expenses:                  $1,200,000
-  EBITDA:                              $2,506,653   (58.2% margin)
+  EBITDA:                              $2,145,453   (55.2% margin)
 
 YEAR 3 (2028–2029):
-  All streams scaled:                  $7,400,000
-  EBITDA (~56%):                       $4,144,000
+  All streams scaled:                  $6,600,000
+  EBITDA (~55%):                       $3,630,000
 
 YEAR 4 (2029–2030):
-  All streams:                         $10,800,000
-  EBITDA (~57%):                       $6,156,000
+  All streams:                         $9,800,000
+  EBITDA (~56%):                       $5,488,000
 
 YEAR 5 (2030–2031):
-  All streams at maturity:             $16,200,000
-  EBITDA (~59%):                       $9,558,000
-  Exit at 5× ARR:                      $81,000,000
-  Exit at 7× ARR (AI premium):         $113,400,000`
+  All streams at maturity:             $14,500,000
+  EBITDA (~58%):                       $8,410,000
+  Exit at 5× ARR:                      $72,500,000
+  Exit at 6× ARR:                      $87,000,000`
       },
       {
         heading: "6.3  Unit Economics & Comparable M&A Transactions",
@@ -712,10 +678,10 @@ YEAR 5 (2030–2031):
 Customer Acquisition Cost (CAC): $18–$45 (blended all channels)
 Founding member LTV: $349 × 24 months avg retention = $8,376
 LTV:CAC ratio: $8,376 ÷ $31 blended = 270× (median SaaS: 3–5×)
-B2B licensee LTV: $1,050,000–$2.85M over 3-year contract
+B2B licensee LTV: $840,000–$2.25M over 3-year contract
 Gross margin (blended): 84–88% (vs. 70–75% SaaS median)
 Monthly break-even MRR: $54,167 (covers $650K/year operating expenses)
-Months to break-even: ~4.4 months post-launch
+Months to break-even: ~4.7 months post-launch
 
 COMPARABLE M&A TRANSACTIONS:
 
@@ -729,20 +695,11 @@ Derwent Innovation — Thomson Reuters / Clarivate: Estimated standalone value $
 
 WARF (Wisconsin Alumni Research Foundation): $180M+/year licensing income from university IP portfolio.
 
-April 2026 AI SaaS Public Market Benchmarks (multiples.vc, April 9, 2026):
-  All AI software: 3.5× NTM revenue median
-  Vertical AI Applications: 3.6× NTM revenue
-  Design & Engineering Software: 4.2× NTM revenue (highest bracket)
-  Data Infrastructure: 4.9× NTM revenue
-
-VALUATION CONCLUSION (UPDATED Q2 2026):
-  Platform conservative DCF (April 2026 multiples): $8.5M–$18.5M
-  Asking price range: $12M–$28M
-  At $12M–$28M asking price, this platform is priced at:
-  — 0.008–0.019× of PatSnap acquisition value for a more capable platform
-  — 24–57× Year 1 EBITDA ($495,153) — justified by strategic pre-public position
-  — 3.5–8.2× Year 1 revenue — consistent with April 2026 AI software market multiples
-  — Deliberately set at bottom-third of strategic value range for rapid pre-launch execution.`
+VALUATION CONCLUSION:
+  At $7.5M–$22M asking price, this platform is priced at:
+  — 0.050× of PatSnap acquisition value for a more capable platform
+  — 4.4–12.3× Year 1 EBITDA ($478,353)
+  — Deliberately conservative for rapid execution before public launch.`
       }
     ]
   },
@@ -789,12 +746,12 @@ RISK L-3: NDA ENFORCEMENT
 
 RISK B-1: FOUNDING MEMBER CONVERSION SHORTFALL
   Probability: Medium. Impact: Contained.
-  50% shortfall scenario: Year 1 revenue drops from $1.36M to $0.98M — still EBITDA positive.
+  50% shortfall scenario: Year 1 revenue drops from $1.34M to $0.97M — still EBITDA positive.
   Mitigation: Self-selected beta applicants have high conversion intent; $349 is accessible price point for target audience. Residual risk: Low.
 
 RISK B-2: B2B LICENSING SALES CYCLE
   Probability: Medium. Impact: Revenue timing delay, not permanent loss.
-  Conservative projections assume 0 B2B revenue Year 1. Year 2 ($1.05M) requires only 3 licensees.
+  Conservative projections assume 0 B2B revenue Year 1. Year 2 ($840K) requires only 3 licensees.
   Residual risk: Low.
 
 RISK B-3: REGULATORY CHANGES TO AI IP TOOLS
@@ -803,11 +760,6 @@ RISK B-3: REGULATORY CHANGES TO AI IP TOOLS
 RISK B-4: COMPETITIVE AI ENTRY (OPENAI, GOOGLE)
   Probability: High (they will enter IP generation broadly). Impact on domain-specific platform: Low.
   General AI companies cannot replicate the Bearden domain data moat. They will serve the general IP market; this platform serves the specialized scalar EM IP market.
-  Residual risk: Low.
-
-RISK V-1: VALUATION MULTIPLE COMPRESSION
-  Probability: Low-Medium. April 2026 public market data shows AI software at 3.5–4.2× NTM revenue — historically elevated vs. 2.2× all-SaaS median. If multiples revert, strategic premium and EBITDA multiple buffers remain.
-  Mitigation: Platform priced conservatively within bottom-third of component DCF range. EBITDA multiple of 24–57× Year 1 provides cushion vs. strategic buyers who value IP portfolio independently.
   Residual risk: Low.`
       }
     ]
@@ -1055,11 +1007,11 @@ INFRASTRUCTURE: [ ] Domain name(s), [ ] All environment variables and secrets (S
 
 TRANSITION: [ ] 90-day founder support (15 hours/month), [ ] Full technical documentation, [ ] Introduction to key relationships
 
-PAYMENT STRUCTURES (Updated Q2 2026):
-  Full Cash Acquisition: 10% at term sheet + 40% at close + 30% at 90 days + 20% at 12 months
+PAYMENT STRUCTURES:
+  Cash Acquisition: 10% at term sheet + 40% at close + 30% at 90 days + 20% at 12 months
   Seller Note: 30% down, 70% financed at 8%, 36-month term
-  Annual Licensing: $250K–$700K upfront + $1,200,000–$2,800,000/year, 3-year minimum
-  Equity/JV: 15–40% stake, minimum $3M committed capital`
+  Annual Licensing: $150K–$500K upfront + $650K–$1.5M/year, 3-year minimum
+  Equity/JV: 15–40% stake, minimum $2M committed capital`
       }
     ]
   },
@@ -1110,9 +1062,9 @@ FINANCIAL PACKAGE (Available to credentialed institutional buyers):
   [  ] Google Analytics 12-month traffic data with source breakdown
   [  ] Beta application pipeline analytics (conversion funnel, demographics)
   [  ] Newsletter subscriber analytics (open/click rates)
-  [  ] Third-party DCF valuation letter with April 2026 public market multiples (2-week lead time)
+  [  ] Third-party DCF valuation letter (2-week lead time on request)
   [  ] SBIR award documentation (Phase I: $150K; Phase II: $480K)
-  [  ] Comparable M&A transaction analysis with April 2026 market data
+  [  ] Comparable M&A transaction analysis (detailed)
   [  ] Platform infrastructure cost breakdown (monthly operational costs)
   [  ] Outstanding liabilities disclosure (none known; platform is debt-free)
 
@@ -1147,8 +1099,6 @@ OPPORTUNITY STATUS AS OF Q2 2026:
   Current exclusive window active: None (first to execute NDA + proof of funds receives 30-day exclusive)
   Estimated platform close: 60–90 days from LOI
   Public launch date (if no acquisition): Q3 2026 (significantly increases acquisition price post-revenue)
-  Updated asking price (Q2 2026): $12,000,000 – $28,000,000
-  Valuation basis: April 2026 public AI SaaS multiples (3.5–4.9× NTM revenue) applied to component DCF
 
 CONFIDENTIALITY REMINDER:
   This document and all materials disclosed under the NDA are strictly confidential. Unauthorized disclosure, reproduction, photography, screenshotting, or transmission subjects the Receiving Party to liquidated damages of $2,500,000 (Two Million Five Hundred Thousand Dollars) per incident under the executed Non-Disclosure Agreement. This document may not be shared with any party without prior written consent from Zenith Apex Research Portfolio.
@@ -1156,12 +1106,11 @@ CONFIDENTIALITY REMINDER:
   This document is numbered and tracked. Each copy distributed is uniquely identified to the receiving party. Any unauthorized disclosure can be traced to its source.
 
 FINAL NOTE — WHY NOW:
-  The window for pre-revenue acquisition pricing closes at Q3 2026 public launch. Every month of delay means higher acquisition price, more competition for the asset, and less negotiating leverage for the buyer. April 2026 public market data confirms AI-native vertical SaaS commands 3.5–4.2× NTM revenue multiples — and this platform has not yet reached its revenue inflection point. Buyers who execute quickly lock in the most favorable terms. Time is the only non-recoverable resource in this transaction.
+  The window for pre-revenue acquisition pricing closes at Q3 2026 public launch. Every month of delay means higher acquisition price, more competition for the asset, and less negotiating leverage for the buyer. Buyers who execute quickly lock in the most favorable terms. Time is the only non-recoverable resource in this transaction.
 
 ─────────────────────────────────────────────────────────────────────
 END OF ZENITH APEX TECHNICAL DUE DILIGENCE PACKAGE — Q2 2026 (UPDATED)
-TOTAL SECTIONS: 12  ·  TOTAL SUBSECTIONS: 60+  ·  PLATFORM VALUE: $8.5M–$18.5M  ·  ASKING: $12M–$28M
-VALUATION METHODOLOGY: April 2026 public AI SaaS market multiples (multiples.vc, April 9, 2026)
+TOTAL SECTIONS: 12  ·  TOTAL SUBSECTIONS: 60+  ·  PLATFORM VALUE: $5.8M–$13.5M  ·  ASKING: $7.5M–$22M
 ─────────────────────────────────────────────────────────────────────`
       }
     ]

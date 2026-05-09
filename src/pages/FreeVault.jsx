@@ -2,8 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import ScalarWaveWatermark from "@/components/ScalarWaveWatermark";
-import { Zap, ChevronRight, CheckCircle2, ShoppingCart, Loader2 } from "lucide-react";
-import ZatLogoWatermark from "@/components/ZatLogoWatermark";
+import { Zap, ChevronRight, Star, Download, Video, CheckCircle2 } from "lucide-react";
 
 const FREE_ITEMS = [
   {
@@ -30,8 +29,6 @@ UPGRADE TO PRO FOR:
 → Verified supplier links & pricing
 → Private engineering forum`,
     href: "/invention-plans",
-    priceInCents: 9900,
-    priceLabel: "$99",
   },
   {
     id: "meg",
@@ -57,12 +54,10 @@ UPGRADE TO PRO FOR:
 → Verified supplier links & part costs
 → Troubleshooting community`,
     href: "/invention-plans",
-    priceInCents: 9900,
-    priceLabel: "$99",
   },
   {
     id: "scalar",
-    title: "Scalar EM Fundamentals — Full Course",
+    title: "Scalar EM Fundamentals — Free Course",
     category: "Course",
     badge: "100% FREE",
     badgeColor: "bg-green-900/60 text-green-300 border-green-800",
@@ -85,8 +80,6 @@ UPGRADE TO PRO FOR:
 → Interactive problem sets & solutions
 → Direct access to course instructor`,
     href: "/courses",
-    priceInCents: 19700,
-    priceLabel: "$197",
   },
 ];
 
@@ -101,28 +94,9 @@ export default function FreeVault() {
   const [expandedId, setExpandedId] = useState(null);
   const [email, setEmail] = useState("");
   const [emailDone, setEmailDone] = useState(false);
-  const [buyingId, setBuyingId] = useState(null);
 
   const handleExpand = (id) => {
     setExpandedId(expandedId === id ? null : id);
-  };
-
-  const handleBuyNow = async (item) => {
-    if (window.self !== window.top) {
-      alert("Checkout is only available from the published app.");
-      return;
-    }
-    setBuyingId(item.id);
-    const res = await base44.functions.invoke("createCheckoutSession", {
-      title: item.title,
-      priceInCents: item.priceInCents,
-      description: item.hook,
-      category: item.category,
-      successUrl: window.location.origin + "/my-learning?success=1",
-      cancelUrl: window.location.href,
-    });
-    if (res.data?.url) window.location.href = res.data.url;
-    setBuyingId(null);
   };
 
   const handleEmailCapture = async () => {
@@ -136,13 +110,18 @@ export default function FreeVault() {
       <ScalarWaveWatermark />
       {/* Nav */}
       <div className="border-b border-gray-800 bg-gray-900/90 backdrop-blur px-5 py-4 flex items-center justify-between sticky top-0 z-40">
-        <div />
+        <div className="flex items-center gap-3">
+          <Link to="/" className="flex items-center gap-3">
+            <img src="https://media.base44.com/images/public/69ccefebfea78b23498c66a8/afb5ad292_CODEXTECHLOGO.png" alt="C.O.D.E.X.T.E.C.H." className="h-11 w-11 object-contain" />
+            <span className="font-black text-lg">C.O.D.E.X.T.E.C.H.</span>
+          </Link>
+          <span className="text-xs text-green-600 border border-green-800 px-2 py-0.5 rounded font-bold">100% FREE</span>
+        </div>
         <Link to="/pricing"
           className="px-4 py-2 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white text-sm font-bold transition-colors flex items-center gap-1.5">
-          <Zap size={13} /> Join — $89/mo
+          <Video size={13} /> Get Video Assembly
         </Link>
       </div>
-      <ZatLogoWatermark />
 
       <div className="max-w-4xl mx-auto px-5 py-12">
         {/* Header */}
@@ -150,12 +129,12 @@ export default function FreeVault() {
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-green-950/40 border border-green-800 text-green-300 text-xs font-bold mb-4">
             <CheckCircle2 size={13} /> 100% FREE — FULL BOM & SPECS FOR ALL BUILDS
           </div>
-          <h1 className="text-4xl font-black mb-3">Engineering Preview</h1>
+          <h1 className="text-4xl font-black mb-3">Free Engineering Preview</h1>
           <p className="text-gray-400 max-w-2xl mx-auto text-base leading-relaxed mb-4">
-            Three complete build systems with full BOMs and specifications — no account required. Membership unlocks the full research database, structured modules, and execution tools.
+            Explore 3 complete build systems from C.O.D.E.X.T.E.C.H. with full BOMs and specifications. Membership unlocks 40+ systems, courses, and execution tools.
           </p>
           <p className="text-gray-500 text-sm max-w-xl mx-auto">
-            All systems sourced from granted US patents and peer-reviewed publications. Research Membership ($89/month) includes all modules, PDFs, video guides, AI patent tools, and verified supplier sourcing.
+            All systems sourced from granted US patents and peer-reviewed research. Upgrade to Pro ($199/month) for all 40+ builds, PDFs, video guides, and verified supplier sourcing.
           </p>
         </div>
 
@@ -190,21 +169,13 @@ export default function FreeVault() {
                       {item.detail}
                     </pre>
                     <div className="flex flex-col sm:flex-row gap-3">
-                      <button
-                        onClick={() => handleBuyNow(item)}
-                        disabled={buyingId === item.id}
-                        className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-green-700 hover:bg-green-600 disabled:opacity-50 text-white font-bold transition-colors"
-                      >
-                        {buyingId === item.id ? <Loader2 size={16} className="animate-spin" /> : <ShoppingCart size={16} />}
-                        {buyingId === item.id ? "Redirecting…" : `Buy Pro Access — ${item.priceLabel}`}
-                      </button>
                       <Link to={item.href}
                         className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-cyan-700 hover:bg-cyan-600 text-white font-bold transition-colors">
                         View Full BOM & Specs <ChevronRight size={16} />
                       </Link>
                       <Link to="/pricing"
                         className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gray-800 hover:bg-gray-700 text-gray-200 font-bold transition-colors border border-gray-700">
-                        <Zap size={16} /> Join Membership
+                        <Video size={16} /> Get Video Guide
                       </Link>
                     </div>
                   </div>
@@ -216,56 +187,48 @@ export default function FreeVault() {
 
         {/* Browse all */}
         <div className="text-center bg-gray-900 border border-gray-800 rounded-2xl p-8 mb-16">
-          <h2 className="text-2xl font-black mb-3">Browse All Build Systems</h2>
+          <h2 className="text-2xl font-black mb-3">Browse All 40+ Systems</h2>
           <p className="text-gray-400 mb-6 max-w-md mx-auto">
-            Full BOMs, component specifications, and assembly procedures. Sourced from primary engineering documentation.
+            All builds include full BOMs, exact specifications, and assembly instructions. Completely free.
           </p>
           <Link to="/invention-plans"
             className="inline-flex items-center gap-2 px-8 py-4 rounded-xl bg-gradient-to-r from-cyan-600 to-blue-700 hover:from-cyan-500 hover:to-blue-600 text-white font-black transition-all shadow-lg shadow-cyan-900/30">
-            Open Build Library <ChevronRight size={18} />
+            Open Invention Library <ChevronRight size={18} />
           </Link>
         </div>
 
         {/* What's in Pro */}
         <div className="bg-gradient-to-b from-cyan-950/30 to-blue-950/30 border border-cyan-800/40 rounded-2xl p-8 mb-16">
-          <h2 className="text-2xl font-black mb-2 flex items-center gap-2">
-            <Zap size={20} className="text-cyan-400" /> Unlock Full Membership — $89/month
-          </h2>
-          <p className="text-gray-400 text-sm mb-6">Everything. No tiers. No per-item fees. Cancel anytime.</p>
+          <h2 className="text-2xl font-black mb-6 flex items-center gap-2">
+             <Video size={20} className="text-cyan-400" /> Upgrade to Pro ($199/month)
+           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
             {[
-              { title: "PDF Downloads", desc: "40–80 page technical documents for every build" },
-              { title: "Video Guides", desc: "3–12 hour assembly walkthroughs per device" },
-              { title: "Verified Supplier Links", desc: "Sourced parts with current pricing" },
-              { title: "Build Forum Access", desc: "Troubleshoot with active builders" },
-              { title: "AI Patent Tool", desc: "Generate USPTO-compliant provisional patents" },
-              { title: "Prior Art Archive", desc: "200+ entries cross-referenced against USPTO" },
-              { title: "IP Marketplace", desc: "List or invest in electromagnetic IP anonymously" },
-              { title: "All Courses & Build Plans", desc: "8 structured modules, 6 build systems" },
+              { icon: "📄", title: "PDF Downloads", desc: "40–80 page technical documents for every build" },
+              { icon: "🎬", title: "Video Guides", desc: "3–12 hour assembly walkthroughs per device" },
+              { icon: "🔗", title: "Supplier Links", desc: "Verified part sources + current pricing" },
+              { icon: "💬", title: "Build Forum", desc: "Troubleshoot with 2,000+ active builders" },
             ].map((feature, i) => (
-              <div key={i} className="bg-gray-900 border border-gray-800 rounded-xl p-4 flex gap-3">
-                <CheckCircle2 size={14} className="text-cyan-400 flex-shrink-0 mt-0.5" />
-                <div>
-                  <p className="font-bold text-white text-sm mb-0.5">{feature.title}</p>
-                  <p className="text-gray-400 text-xs">{feature.desc}</p>
-                </div>
+              <div key={i} className="bg-gray-900 border border-gray-800 rounded-xl p-4">
+                <span className="text-2xl block mb-2">{feature.icon}</span>
+                <p className="font-bold text-white text-sm mb-1">{feature.title}</p>
+                <p className="text-gray-400 text-xs">{feature.desc}</p>
               </div>
             ))}
           </div>
           <div className="text-center">
             <Link to="/pricing"
-              className="inline-flex items-center gap-2 px-8 py-3 rounded-xl font-bold transition-all text-black"
-              style={{ background: "linear-gradient(90deg, #00ccff, #00ff99)", boxShadow: "0 4px 24px rgba(0,200,255,0.3)" }}>
-              Join — $89/month <ChevronRight size={16} />
+              className="inline-flex items-center gap-2 px-8 py-3 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-bold transition-all">
+              See All Pro Features <ChevronRight size={16} />
             </Link>
-            <p className="text-gray-600 text-xs mt-3">Secured by Stripe · Cancel anytime · No contracts</p>
+            <p className="text-gray-600 text-xs mt-3">$199/month annual billing · Cancel anytime · 30-day money-back guarantee</p>
           </div>
         </div>
 
         {/* Email capture */}
         <div className="bg-gray-900 border border-gray-800 rounded-2xl p-8 text-center mb-12">
-          <h3 className="font-black text-white text-lg mb-2">Research Updates</h3>
-          <p className="text-gray-500 text-sm mb-6">New builds, technical analysis, and engineering briefs. High signal, low frequency. Unsubscribe anytime.</p>
+          <h3 className="font-black text-white text-lg mb-2">Weekly Vault Drops</h3>
+          <p className="text-gray-500 text-sm mb-6">New builds, tips, and engineering insights delivered to your inbox. No spam. Unsubscribe anytime.</p>
           {emailDone ? (
             <div className="flex items-center justify-center gap-2 text-green-400 font-bold">
               <CheckCircle2 size={18} /> Subscribed! Check your email.
@@ -289,7 +252,7 @@ export default function FreeVault() {
         <p>© 2026 Zenith Apex LLC · C.O.D.E.X.T.E.C.H. · Engineering execution platform</p>
         <div className="flex justify-center gap-6 mt-3">
           <Link to="/terms" className="hover:text-gray-400">Terms</Link>
-          <Link to="/pricing" className="hover:text-gray-400">Membership</Link>
+          <Link to="/pricing" className="hover:text-gray-400">Pricing</Link>
           <Link to="/" className="hover:text-gray-400">Home</Link>
         </div>
       </footer>

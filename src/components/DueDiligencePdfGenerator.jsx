@@ -4,9 +4,8 @@ import { BookOpen, Loader2, Settings, CheckSquare, Square, ChevronDown, ChevronU
 import { DD_SECTIONS } from "../lib/dueDiligenceSections";
 
 // ── VERSION CONTROL ───────────────────────────────────────────────────────────
-const CURRENT_VERSION = "4.0.0";
+const CURRENT_VERSION = "3.2.0";
 const CHANGELOG = [
-  { version: "4.0.0", date: "2026-05-01", changes: ["Revalued platform using April 2026 public AI SaaS market multiples (multiples.vc, April 9 2026)", "Updated component DCF to $8.5M–$18.5M (was $5.8M–$13.5M)", "Asking price updated to $12M–$28M (was $7.5M–$22M)", "Added White-Label SaaS + Valuation API as separate valued asset", "Updated acquisition deal structures and licensing fees", "Updated B2B licensing revenue projections"] },
   { version: "3.2.0", date: "2026-04-13", changes: ["Added KRCIC and UBDRS biophysics device architectures", "Added legal compliance infrastructure asset", "Updated platform total valuation to $5.8M–$13.5M", "Expanded suppressed inventor archive to 7 researchers"] },
   { version: "3.1.0", date: "2026-03-15", changes: ["Added 26 device build plans with PDF/video export", "Updated 5-year P&L with B2B licensing streams", "Added SBIR Phase II award documentation ($480K)"] },
   { version: "3.0.0", date: "2026-02-01", changes: ["Added AI Module Architecture section (Section 2)", "Integrated AI Market Research Scanner documentation", "Added USPTO Provisional Patent Drafter specs"] },
@@ -220,7 +219,7 @@ function generateDueDiligencePDF(selectedSections, includeCharts, theme = PDF_TH
       doc.setFillColor(...GOLD);
       doc.rect(0, 285, pageW, 1, 'F');
       doc.setFontSize(6.5); doc.setFont('helvetica', 'normal'); doc.setTextColor(180, 190, 210);
-      doc.text('ZENITH APEX  ·  CONFIDENTIAL  ·  UNAUTHORIZED DISCLOSURE SUBJECT TO $2.5M LIQUIDATED DAMAGES  ·  VALUATION UPDATED Q2 2026', pageW / 2, 291, { align: 'center' });
+      doc.text('ZENITH APEX  ·  CONFIDENTIAL  ·  UNAUTHORIZED DISCLOSURE SUBJECT TO $2.5M LIQUIDATED DAMAGES', pageW / 2, 291, { align: 'center' });
       doc.text(`Page ${p} of ${total}`, pageW - margin, 291, { align: 'right' });
       doc.text(new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }), margin, 291);
     }
@@ -326,7 +325,7 @@ function generateDueDiligencePDF(selectedSections, includeCharts, theme = PDF_TH
   doc.text('Comprehensive Technical, IP, Financial & Market Analysis', pageW / 2, y, { align: 'center' });
   y += 8;
   doc.setFont('helvetica', 'normal'); doc.setFontSize(9); doc.setTextColor(100, 110, 130);
-  doc.text(`${selectedSections.length} of 12 Sections  ·  26 Device Architectures  ·  9 Revenue Streams  ·  April 2026 Valuation`, pageW / 2, y, { align: 'center' });
+  doc.text(`${selectedSections.length} of 12 Sections  ·  26 Device Architectures  ·  8 Revenue Streams`, pageW / 2, y, { align: 'center' });
   y += 14;
 
   // Valuation box
@@ -340,14 +339,14 @@ function generateDueDiligencePDF(selectedSections, includeCharts, theme = PDF_TH
   doc.text('PLATFORM FAIR MARKET VALUATION (Q2 2026)  ─  ASSET-BY-ASSET DCF', margin + 6, y + 8);
 
   doc.setFontSize(24); doc.setFont('helvetica', 'bold'); doc.setTextColor(...NAVY);
-  doc.text('$8.5M – $18.5M', margin + 6, y + 27);
+  doc.text('$5.8M – $13.5M', margin + 6, y + 27);
   doc.setFontSize(9); doc.setFont('helvetica', 'normal'); doc.setTextColor(90, 100, 120);
-  doc.text('Conservative DCF · April 2026 AI SaaS multiples (3.5–4.9× NTM) · 16 asset components', margin + 6, y + 36);
+  doc.text('Conservative DCF · 15 assets incl. KRCIC, UBDRS & legal compliance', margin + 6, y + 36);
 
   doc.setFontSize(18); doc.setFont('helvetica', 'bold'); doc.setTextColor(...GOLD);
-  doc.text('$12M – $28M', pageW - margin - 6, y + 27, { align: 'right' });
+  doc.text('$7.5M – $22M', pageW - margin - 6, y + 27, { align: 'right' });
   doc.setFontSize(8); doc.setFont('helvetica', 'normal'); doc.setTextColor(90, 100, 120);
-  doc.text('ACQUISITION ASKING PRICE (Updated Q2 2026)', pageW - margin - 6, y + 36, { align: 'right' });
+  doc.text('ACQUISITION ASKING PRICE', pageW - margin - 6, y + 36, { align: 'right' });
   y += 60;
 
   // Stats row

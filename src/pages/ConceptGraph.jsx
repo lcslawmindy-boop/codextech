@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import SearchPanel from "../components/SearchPanel";
 import ConceptNetworkGraph from "../components/ConceptNetworkGraph";
@@ -7,34 +7,17 @@ import TimelineView from "../components/TimelineView";
 import ClusterSummaryPanel from "../components/ClusterSummaryPanel";
 import TopConceptsPanel from "../components/TopConceptsPanel";
 import BusinessConceptGraph from "../components/BusinessConceptGraph";
-import BusinessItemsGraph from "../components/BusinessItemsGraph";
 import { groupColors, nodes } from "../lib/beardenData";
 import NewsletterSignup from "../components/NewsletterSignup";
 import MainNav from "../components/MainNav";
-import VaultBottomNav from "../components/VaultBottomNav";
 import { base44 } from "@/api/base44Client";
-import { Lock, X } from "lucide-react";
+import { useState as useAdminState, useEffect as useAdminEffect } from 'react';
 
 export default function ConceptGraph() {
-  const [isAdmin, setIsAdmin] = useState(false);
-  const [ndaAccepted, setNdaAccepted] = useState(false);
-  const [showPitchPrompt, setShowPitchPrompt] = useState(false);
-  
-  useEffect(() => {
+  const [isAdmin, setIsAdmin] = useAdminState(false);
+  useAdminEffect(() => {
     base44.auth.me().then(u => setIsAdmin(u?.role === 'admin')).catch(() => {});
-    const accepted = localStorage.getItem("bearden_nda_accepted");
-    if (accepted) setNdaAccepted(true);
   }, []);
-
-  useEffect(() => {
-    if (!ndaAccepted || isAdmin) return;
-    const hasWatchedPitch = localStorage.getItem("pitch_deck_watched");
-    if (hasWatchedPitch) return;
-    const timer = setTimeout(() => {
-      setShowPitchPrompt(true);
-    }, 5 * 60 * 1000); // 5 minutes
-    return () => clearTimeout(timer);
-  }, [ndaAccepted, isAdmin]);
   const [selectedNode, setSelectedNode] = useState(null);
   const [selectedLink, setSelectedLink] = useState(null);
   const [showSearch, setShowSearch] = useState(false);
@@ -61,17 +44,26 @@ export default function ConceptGraph() {
     }
   };
 
-
-
   return (
-    <div className="w-screen h-screen bg-gray-950 flex flex-col overflow-hidden pb-20">
-
+    <div className="w-screen h-screen bg-gray-950 flex flex-col overflow-hidden">
       {/* Header */}
+      {/* Bearden Attribution Banner */}
+      <div className="bg-gray-900/80 border-b border-yellow-900/40 px-6 py-1.5 flex items-center gap-3 flex-shrink-0">
+        <span className="text-yellow-500 text-xs font-bold uppercase tracking-widest flex-shrink-0">Attribution</span>
+        <span className="text-gray-400 text-xs leading-relaxed">
+          All concepts, theories, and source fragments are derived from and attributed to the published works of their original authors, including:{" "}
+          <span className="text-yellow-300 font-semibold">Lt. Col. T.E. Bearden</span> (Gravitobiology, Excalibur Briefing, Foundations of Physics Letters),{" "}
+          <span className="text-yellow-300 font-semibold">Nikola Tesla</span> (Colorado Springs Diary, Wardenclyffe patents — public domain),{" "}
+          <span className="text-yellow-300 font-semibold">Antoine Priore</span> (French Patent 1,342,772; ONR Report R-5-78),{" "}
+          <span className="text-yellow-300 font-semibold">R.R. Rife, W. Reich, V. Schauberger, W. Russell, R. Mills, P. LaViolette, E. Podkletnov, J. Hutchison, C. Bohren, T.H. Moray, C.H. Waddington, M.W. Evans et al., J.C. Maxwell</span>, and others.{" "}
+          All third-party works remain copyright of their respective authors/estates. Referenced under Fair Use (17 U.S.C. § 107) for educational &amp; research purposes. Zenith Apex LLC claims no ownership of any third-party source material.
+        </span>
+      </div>
       <div className="flex flex-col border-b border-gray-800 flex-shrink-0">
         <div className="flex items-center justify-between px-6 py-3">
         <div>
-          <h1 className="text-white font-bold text-lg tracking-tight">Advanced Electromagnetic Research Network</h1>
-          <p className="text-gray-500 text-xs">Interactive research network mapping 40+ patents, 200+ peer-reviewed sources, and government archives. Click nodes to view verified source material.</p>
+          <h1 className="text-white font-bold text-lg tracking-tight">Zenith Apex Research Portfolio (ZARP) — AI Operating System for Global R&D and Intellectual Property Creation</h1>
+          <p className="text-gray-500 text-xs">Click any node to explore source fragments · Drag to rearrange · Scroll to zoom</p>
         </div>
         <div className="flex items-center gap-2">
           {/* View toggle */}
@@ -99,14 +91,6 @@ export default function ConceptGraph() {
               }`}
             >
               Business
-            </button>
-            <button
-              onClick={() => setView("knowledge-graph")}
-              className={`px-3 py-1 rounded text-xs font-medium transition-colors ${
-                view === "knowledge-graph" ? "bg-gray-600 text-white" : "text-gray-400 hover:text-gray-200"
-              }`}
-            >
-              Knowledge Graph
             </button>
           </div>
           {view === "graph" && (
@@ -172,9 +156,7 @@ export default function ConceptGraph() {
           <img src="https://media.base44.com/images/public/69ccefebfea78b23498c66a8/a90918e3c_ZARPlogo.png" alt="ZARP" className="w-screen h-screen object-contain" />
         </div>
 
-        {view === "knowledge-graph" ? (
-          <BusinessItemsGraph />
-        ) : view === "business" ? (
+        {view === "business" ? (
           <BusinessConceptGraph />
         ) : view === "timeline" ? (
           <TimelineView
@@ -248,42 +230,6 @@ export default function ConceptGraph() {
           </>
         )}
       </div>
-      <VaultBottomNav />
-
-      {/* 5-minute pitch deck prompt */}
-      {showPitchPrompt && (
-        <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 px-4">
-          <div className="bg-gray-900 border border-cyan-700/60 rounded-2xl shadow-2xl max-w-md w-full p-6">
-            <div className="flex items-start justify-between mb-4">
-              <h2 className="text-white font-black text-lg">Watch the Overview</h2>
-              <button onClick={() => setShowPitchPrompt(false)} className="text-gray-400 hover:text-white">
-                <X size={20} />
-              </button>
-            </div>
-            <p className="text-gray-400 text-sm mb-6">
-              Get a rapid overview of the research platform, technology roadmap, and institutional licensing options in our pitch deck slideshow.
-            </p>
-            <div className="space-y-3">
-              <Link
-                to="/vision-fund-pitch"
-                onClick={() => {
-                  setShowPitchPrompt(false);
-                  localStorage.setItem("pitch_deck_watched", "true");
-                }}
-                className="flex items-center justify-center w-full py-3 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white font-bold text-sm transition-colors"
-              >
-                Watch Pitch Deck →
-              </Link>
-              <button
-                onClick={() => setShowPitchPrompt(false)}
-                className="flex items-center justify-center w-full py-2 rounded-lg bg-gray-800 hover:bg-gray-700 text-gray-300 font-semibold text-sm transition-colors"
-              >
-                Keep Exploring
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }

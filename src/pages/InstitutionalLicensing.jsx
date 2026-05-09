@@ -46,7 +46,7 @@ export default function InstitutionalLicensing() {
           {[
             {
               title: "University Lab License",
-              price: "$2,997/year",
+              price: "$5,000–$15,000/year",
               desc: "Full vault access for student lab use",
               features: [
                 "All 40 complete build systems",
@@ -64,7 +64,7 @@ export default function InstitutionalLicensing() {
             },
             {
               title: "Corporate R&D License",
-              price: "$9,997/year",
+              price: "$20,000–$50,000/year",
               desc: "Full vault + API + white-label",
               features: [
                 "Everything in University License",

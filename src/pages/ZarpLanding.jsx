@@ -15,7 +15,7 @@ const RESEARCH_DOMAINS = [
 const CONTENT_TYPES = [
   { type: "Granted Patents", count: "40+", note: "US & international" },
   { type: "Peer-Reviewed Papers", count: "200+", note: "IEEE, Physics Letters, Nature, etc." },
-  { type: "Technical Reports", count: "150+", note: "DARPA, DoE, declassified archives" },
+  { type: "Technical Reports", count: "150+", note: "DARPA, DoE, classified-then-declassified" },
   { type: "Engineering Specs", count: "25+", note: "Complete device documentation" },
 ];
 
@@ -107,8 +107,8 @@ export default function ZarpLanding() {
           <h2 className="text-3xl font-black text-center mb-10">Research Methodology</h2>
           <div className="space-y-4">
             {[
-              { title: "Primary Source Only", desc: "All entries are direct citations from granted patents, peer-reviewed journals, or declassified archives. No secondary interpretation or synthesis." },
-              { title: "Source Verification", desc: "Each patent is cross-referenced with USPTO records. Publications are verified against PubMed, IEEE, and arXiv. Technical reports are sourced from declassified archives." },
+              { title: "Primary Source Only", desc: "All entries are direct citations from granted patents, peer-reviewed journals, or declassified government documents. No secondary interpretation or synthesis." },
+              { title: "Source Verification", desc: "Each patent is cross-referenced with USPTO records. Publications are verified against PubMed, IEEE, and arXiv. Technical reports are sourced from official archives." },
               { title: "Engineering Focus", desc: "Content is curated for technical precision. Claims are supported by mathematical models, experimental data, or technical specifications." },
               { title: "No Speculation", desc: "The database contains documented research only. Hypothetical or untested theories are excluded." },
             ].map((s, i) => (
@@ -183,7 +183,7 @@ export default function ZarpLanding() {
       {/* ── Newsletter ── */}
       <section className="px-6 py-16 max-w-xl mx-auto text-center">
         <h2 className="text-2xl font-black mb-2">Research Updates</h2>
-        <p className="text-gray-400 text-sm mb-6">Monthly digest of new patents and publications added to the database.</p>
+        <p className="text-gray-400 text-sm mb-6">Monthly digest of new patents, publications, and technical reports added to the database.</p>
         {emailDone ? (
           <div className="flex items-center justify-center gap-2 text-green-400 font-bold">
             <CheckCircle2 size={18} /> Subscribed — check your inbox.

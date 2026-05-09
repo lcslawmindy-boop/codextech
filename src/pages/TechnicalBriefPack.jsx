@@ -1,8 +1,6 @@
 import { useState } from "react";
 import { ArrowRight, CheckCircle2, Lock, FileText, Shield } from "lucide-react";
 import { base44 } from "@/api/base44Client";
-import { Link } from "react-router-dom";
-import FunnelUpsellBanner from "@/components/FunnelUpsellBanner";
 
 function CheckoutButton({ price, priceInCents }) {
   const [loading, setLoading] = useState(false);
@@ -19,7 +17,7 @@ function CheckoutButton({ price, priceInCents }) {
         priceInCents,
         description: "3 System Architecture Documents + Complete Measurement Protocols",
         category: "Research",
-        successUrl: `${origin}/technical-brief-pack?success=true`,
+        successUrl: `${origin}/brief-pack-success`,
         cancelUrl: `${origin}/technical-brief-pack`
       });
 
@@ -53,17 +51,10 @@ function CheckoutButton({ price, priceInCents }) {
 export default function TechnicalBriefPack() {
   return (
     <div className="min-h-screen bg-gray-950 text-white">
-      {/* Success banner */}
-      {new URLSearchParams(window.location.search).get("success") === "true" && (
-        <div className="px-6 py-4 bg-green-950 border-b border-green-800 text-center">
-          <p className="text-green-300 font-bold text-sm">✓ Purchase complete! Your Brief Pack is ready. <Link to="/codextech-pricing" className="underline">Upgrade to full membership →</Link></p>
-        </div>
-      )}
-
       {/* Header */}
       <div className="border-b border-gray-800 px-6 py-5 bg-gray-900/50">
         <div className="max-w-6xl mx-auto">
-          <Link to="/research-brief-landing" className="text-xs text-gray-500 hover:text-gray-300 mb-4 inline-block">← Back to Research Brief</Link>
+          <a href="/" className="text-xs text-gray-500 hover:text-gray-300 mb-4 inline-block">← Back</a>
           <h1 className="text-2xl font-bold">Technical Brief Pack</h1>
           <p className="text-gray-500 text-sm mt-1">System Architecture + Measurement Protocols</p>
         </div>
@@ -196,18 +187,13 @@ export default function TechnicalBriefPack() {
           <p className="text-gray-400 mb-6">
             If these documents answer your questions and spark new ones, Research Membership ($97–$197/month) gives you everything: complete patent archive (40+ analyzed), 8 research modules (80+ hours), ongoing updates, and live quarterly sessions with institutional researchers.
           </p>
-          <Link
-            to="/codextech-pricing"
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-cyan-700 hover:bg-cyan-600 text-white transition-colors font-black"
+          <a
+            href="/research-membership"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-lg border border-cyan-700 text-cyan-300 hover:bg-cyan-700/10 transition-colors font-bold"
           >
-            Unlock Full System <ArrowRight size={14} />
-          </Link>
+            Explore Research Membership <ArrowRight size={14} />
+          </a>
         </section>
-
-        {/* Funnel Upsells */}
-        <FunnelUpsellBanner variant="membership" />
-        <FunnelUpsellBanner variant="operator" />
-        <FunnelUpsellBanner variant="bundle" />
 
         {/* FAQ */}
         <div className="mt-12">

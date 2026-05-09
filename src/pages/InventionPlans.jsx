@@ -17,8 +17,6 @@ import { jsPDF } from "jspdf";
 import ResearchDisclaimer from "../components/ResearchDisclaimer";
 import AttributionFooter from "../components/AttributionFooter";
 import { itemImages } from "../lib/itemImages";
-import InventionSimulator from "../components/InventionSimulator";
-import BOMSourcingPanel from "../components/BOMSourcingPanel";
 
 
 // Legacy admin-only gate (free energy / medical claims — still admin-only)
@@ -54,18 +52,7 @@ const DEFENSE_RESTRICTED = [
 
 const isDefenseRestricted = (title) => DEFENSE_RESTRICTED.some(d => d.toLowerCase() === title?.toLowerCase());
 
-// Patented inventions (owned by others, not for sale)
-const PATENTED_NOT_FOR_SALE = [
-  "Motionless Electromagnetic Generator (MEG) — Advanced Phase",
-  "Asymmetric Regauging Overunity Generator",
-  "Telomere Regeneration Device (TRD-1)",
-  "Prioré-Type Multichannel EM System",
-];
-
-const isPatentedNotForSale = (title) => PATENTED_NOT_FOR_SALE.some(p => p.toLowerCase() === title?.toLowerCase());
-
-// Show ALL inventions in the sidebar — restricted ones get a stamp overlay
-const inventions = businessItems.filter(i => i.category === "Invention");
+const inventions = businessItems.filter(i => i.category === "Invention" && !isDefenseRestricted(i.title));
 
 function VisualExplainer({ visual }) {
   if (!visual) return null;
@@ -1258,27 +1245,6 @@ async function generateMasterPDF(allInventions) {
 }
 
 function SpecsLockedGate({ invention }) {
-  const [loading, setLoading] = useState(false);
-
-  const handleBuy = async () => {
-    if (window.self !== window.top) {
-      alert("Checkout works best on the published app. Please visit the full website to complete your purchase.");
-      return;
-    }
-    setLoading(true);
-    const priceInCents = parseInt(String(invention?.price || "99").replace(/[^\d]/g, "")) * 100 || 9900;
-    const res = await base44.functions.invoke("createCheckoutSession", {
-      title: invention?.title,
-      priceInCents,
-      description: invention?.tagline || "",
-      category: "Invention",
-      successUrl: window.location.origin + "/invention-plans?success=1",
-      cancelUrl: window.location.href,
-    });
-    if (res.data?.url) window.location.href = res.data.url;
-    setLoading(false);
-  };
-
   return (
     <div className="flex-1 flex items-center justify-center p-12">
       <div className="max-w-md text-center">
@@ -1287,32 +1253,21 @@ function SpecsLockedGate({ invention }) {
         </div>
         <div className="flex items-center justify-center gap-2 mb-3">
           <Lock size={16} className="text-indigo-400" />
-          <span className="text-indigo-400 font-bold text-sm uppercase tracking-wider">Purchase to Unlock</span>
+          <span className="text-indigo-400 font-bold text-sm uppercase tracking-wider">Specs Hidden</span>
         </div>
         <h2 className="text-white font-black text-2xl mb-2">{invention?.title}</h2>
         <p className="text-gray-400 text-sm italic mb-4">{invention?.tagline}</p>
-        <p className="text-gray-500 text-sm leading-relaxed mb-4">
-          Purchase this build plan to unlock full technical specifications, bill of materials, step-by-step assembly instructions, and downloadable PDF.
+        <p className="text-gray-500 text-sm leading-relaxed mb-6">
+          To view technical specifications, bill of materials, and build instructions for this invention, you need a membership or purchase this plan individually.
         </p>
-        <div className="bg-gray-900 border border-gray-700 rounded-2xl p-4 mb-5 text-left space-y-2">
-          {["Step-by-step assembly instructions", "Full bill of materials (BOM)", "Schematics & technical specs", "Downloadable PDF plans", "Supplier sourcing guide"].map((item, i) => (
-            <div key={i} className="flex items-center gap-2 text-sm text-gray-300">
-              <CheckCircle2 size={13} className="text-green-500 flex-shrink-0" />{item}
-            </div>
-          ))}
-        </div>
-        <div className="space-y-2">
-          <button
-            onClick={handleBuy}
-            disabled={loading}
-            className="flex items-center justify-center gap-2 w-full py-3 rounded-xl font-black text-white text-sm bg-green-700 hover:bg-green-600 disabled:opacity-50 transition-all"
-          >
-            {loading ? <Loader2 size={14} className="animate-spin" /> : <ShoppingCart size={14} />}
-            {loading ? "Processing…" : `Buy Now — ${invention?.price || "See Pricing"}`}
+        <div className="space-y-2 mb-6">
+          <button onClick={() => window.location.href = '/pricing'}
+            className="flex items-center justify-center gap-2 w-full py-3 rounded-xl font-black text-white text-sm bg-indigo-700 hover:bg-indigo-600 transition-all">
+            View Membership Plans
           </button>
-          <button onClick={() => window.location.href = '/courses'}
-            className="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl font-bold text-gray-400 text-sm bg-gray-800 hover:bg-gray-700 transition-all">
-            Browse All Courses & Plans
+          <button onClick={() => window.location.href = '/pricing'}
+            className="flex items-center justify-center gap-2 w-full py-3 rounded-xl font-black text-sm border border-indigo-700 text-indigo-400 hover:bg-indigo-900/20 transition-all">
+            <ShoppingCart size={15} /> Buy This Plan — $49
           </button>
         </div>
       </div>
@@ -1381,9 +1336,9 @@ function MembershipGate({ invention }) {
             </div>
           ))}
         </div>
-        <Link to="/vault"
+        <Link to="/pricing"
          className="flex items-center justify-center gap-2 w-full py-3 rounded-xl font-black text-white text-sm bg-indigo-700 hover:bg-indigo-600 transition-all mb-3">
-         View Database
+         View Membership Plans
         </Link>
         <p className="text-gray-600 text-xs">Already a member? <Link to="/account" className="text-indigo-400 hover:underline">Check your account</Link></p>
       </div>
@@ -1412,27 +1367,6 @@ function ClassifiedGate() {
   );
 }
 
-function NotForSaleGate({ invention }) {
-  return (
-    <div className="flex-1 flex items-center justify-center p-12">
-      <div className="max-w-md text-center">
-        <div className="w-20 h-20 rounded-2xl bg-gray-800 border-2 border-gray-700 flex items-center justify-center text-4xl mx-auto mb-6">
-          ⚖️
-        </div>
-        <div className="flex items-center justify-center gap-2 mb-3">
-          <Shield size={16} className="text-gray-400" />
-          <span className="text-gray-400 font-bold text-sm uppercase tracking-wider">Patented — Not for Sale</span>
-        </div>
-        <h2 className="text-white font-black text-xl mb-3">{invention?.title}</h2>
-        <p className="text-gray-400 text-sm leading-relaxed mb-6">
-          This invention is patented and protected under intellectual property law. Complete build plans are not available for public purchase or distribution.
-        </p>
-        <p className="text-gray-500 text-xs">For licensing inquiries, contact support@zenithapex.com</p>
-      </div>
-    </div>
-  );
-}
-
 export default function InventionPlans() {
   const { tier } = useTier();
   const { isTrial } = useTrial();
@@ -1447,7 +1381,6 @@ export default function InventionPlans() {
   const [bomChecked, setBomChecked] = useState({});
   const [hasPurchased, setHasPurchased] = useState(false);
   const [checkingPurchase, setCheckingPurchase] = useState(true);
-  const [checkoutLoading, setCheckoutLoading] = useState(false);
 
   useEffect(() => {
     base44.auth.me().then(async (u) => {
@@ -1507,37 +1440,6 @@ export default function InventionPlans() {
     setGenerating(false);
   };
 
-  const handleBuyNow = async () => {
-    if (!selected || checkoutLoading) return;
-    
-    // Block checkout in iframe
-    if (window.self !== window.top) {
-      alert("Checkout works best on the published app. Please visit the full website to complete your purchase.");
-      return;
-    }
-
-    setCheckoutLoading(true);
-    try {
-      const priceInCents = parseInt(selected.price?.replace(/[^\d]/g, "")) * 100 || 9999; // Default $99.99
-      const res = await base44.functions.invoke("createCheckoutSession", {
-        title: selected.title,
-        priceInCents,
-        description: selected.tagline || selected.description,
-        category: "Invention",
-        successUrl: window.location.origin + "/invention-plans?success=1",
-        cancelUrl: window.location.href,
-      });
-
-      if (res.data?.url) {
-        window.location.href = res.data.url;
-      }
-    } catch (err) {
-      console.error("Checkout error:", err);
-      alert("Checkout failed. Please try again.");
-    }
-    setCheckoutLoading(false);
-  };
-
   const selectedIndex = inventions.findIndex(i => i.title === selected?.title);
   const canViewSelected = tierCanAccessInvention(tier, selectedIndex);
 
@@ -1576,7 +1478,7 @@ export default function InventionPlans() {
         </div>
         <div className="flex items-center gap-3">
           <span className="text-xs text-gray-500 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-gray-900 border border-gray-800">
-            <Package size={12} /> {inventions.filter(i => !isDefenseRestricted(i.title) && !isPatentedNotForSale(i.title)).length} available inventions
+            <Package size={12} /> {inventions.length} inventions
           </span>
           {isAdmin && (
             <button
@@ -1655,20 +1557,16 @@ export default function InventionPlans() {
             const isAdminLocked = adminOnly && !isAdmin;
             const isGovLocked = govClassified && !isAdmin && !tierHasGovAccess(tier);
             const memberLocked = isMembershipRequired(inv.title) && !isAdmin;
-            const defenseRestricted = isDefenseRestricted(inv.title);
-            const patentedBlock = isPatentedNotForSale(inv.title);
-            const isPublicRestricted = (defenseRestricted || patentedBlock) && !isAdmin;
             // Trial users can only view the first invention (index 0)
             const trialLocked = isTrial && !isAdmin && i > 0;
             return (
               <button key={i} onClick={() => setSelected(inv)}
-                className={`w-full text-left px-4 py-3 border-b border-gray-800/60 transition-all flex items-start gap-3 relative ${
+                className={`w-full text-left px-4 py-3 border-b border-gray-800/60 transition-all flex items-start gap-3 ${
                   isSelected ? "bg-gray-800/80 border-l-2 border-l-yellow-500" : "hover:bg-gray-800/30"
-                } ${isPublicRestricted ? "opacity-70" : ""}`}>
+                }`}>
                 <span className="text-xl flex-shrink-0 mt-0.5">{inv.icon}</span>
                 <div className="flex-1 min-w-0">
                   <p className={`text-xs font-semibold leading-snug truncate ${
-                   isPublicRestricted ? "text-red-400" :
                    trialLocked ? "text-gray-600" :
                    isAdminLocked ? "text-red-900" :
                    isGovLocked ? "text-red-400" :
@@ -1676,24 +1574,18 @@ export default function InventionPlans() {
                    accessible ? "text-white" : "text-gray-600"
                   }`}>{inv.title}</p>
                   <p className="text-xs mt-0.5">
-                   {isPublicRestricted ? (
-                     defenseRestricted
-                       ? <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-red-950 border border-red-700 text-red-400 font-black text-xs tracking-widest">⛔ RESTRICTED</span>
-                       : <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-yellow-950 border border-yellow-700 text-yellow-400 font-black text-xs tracking-widest">⚠ CLASSIFIED</span>
-                   ) :
-                    trialLocked ? <span className="text-cyan-700">⏱ Trial — upgrade to unlock</span> :
+                   {trialLocked ? <span className="text-cyan-700">⏱ Trial — upgrade to unlock</span> :
                     isAdminLocked ? <span className="text-red-900">🔐 Admin Only</span> :
                     isGovLocked ? <span className="text-red-400">🏛 Gov/Defense Only</span> :
                     memberLocked ? <span className="text-indigo-500">🔒 Membership or Purchase</span> :
                     <span className="text-gray-600">{inv.price}</span>}
+                   {isDefenseRestricted(inv.title) && <span className="ml-1 px-1.5 py-0.5 rounded text-xs bg-red-900/40 border border-red-800 text-red-400">Defense Only</span>}
                   </p>
                 </div>
-                {isPublicRestricted
-                  ? <Shield size={10} className="text-red-500 flex-shrink-0 mt-1" />
-                  : trialLocked ? <Lock size={10} className="text-cyan-800 flex-shrink-0 mt-1" /> :
-                    isAdminLocked ? <Shield size={10} className="text-red-700 flex-shrink-0 mt-1" /> :
-                    isGovLocked ? <Shield size={10} className="text-red-400 flex-shrink-0 mt-1" /> :
-                    memberLocked ? <Lock size={10} className="text-indigo-600 flex-shrink-0 mt-1" /> : null}
+                {trialLocked ? <Lock size={10} className="text-cyan-800 flex-shrink-0 mt-1" /> :
+                 isAdminLocked ? <Shield size={10} className="text-red-700 flex-shrink-0 mt-1" /> :
+                 isGovLocked ? <Shield size={10} className="text-red-400 flex-shrink-0 mt-1" /> :
+                 memberLocked ? <Lock size={10} className="text-indigo-600 flex-shrink-0 mt-1" /> : null}
               </button>
             );
           })}
@@ -1716,60 +1608,15 @@ export default function InventionPlans() {
                 <p className="text-gray-400 text-sm leading-relaxed mb-6">
                   Your trial pass includes access to the first invention build plan only. Upgrade to a paid plan to unlock all {inventions.length} invention build plans with full step-by-step instructions and downloadable PDFs.
                 </p>
-                <Link to="/vault"
-                   className="flex items-center justify-center gap-2 w-full py-3 rounded-xl font-black text-white text-sm transition-all"
-                   style={{ background: "linear-gradient(135deg, #0EA5E9, #10B981)" }}>
-                   Access the Database
+                <Link to="/pricing"
+                  className="flex items-center justify-center gap-2 w-full py-3 rounded-xl font-black text-white text-sm transition-all"
+                  style={{ background: "linear-gradient(135deg, #0EA5E9, #10B981)" }}>
+                  Upgrade for Full Access — from $47
                 </Link>
               </div>
             </div>
-          ) : (isDefenseRestricted(selected.title) && !isAdmin) ? (
-            <div className="flex-1 flex items-center justify-center p-12">
-              <div className="max-w-md text-center">
-                {/* Big stamp */}
-                <div className="relative w-48 h-48 mx-auto mb-8 flex items-center justify-center">
-                  <div className="absolute inset-0 rounded-full border-8 border-red-600 opacity-80" />
-                  <div className="absolute inset-4 rounded-full border-4 border-red-700 opacity-50" />
-                  <div className="text-center">
-                    <Shield size={40} className="text-red-500 mx-auto mb-1" />
-                    <p className="text-red-500 font-black text-xl tracking-widest leading-tight">RESTRICTED</p>
-                    <p className="text-red-700 font-bold text-xs tracking-widest mt-1">ACCESS DENIED</p>
-                  </div>
-                </div>
-                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-red-950 border-2 border-red-700 mb-4">
-                  <Shield size={14} className="text-red-400" />
-                  <span className="text-red-400 font-black text-sm uppercase tracking-widest">Restricted — Not for Public Access</span>
-                </div>
-                <h2 className="text-white font-black text-xl mb-3">{selected.title}</h2>
-                <p className="text-gray-400 text-sm leading-relaxed mb-4">
-                  This build plan involves defense-adjacent technology, bioelectromagnetic treatment claims, or free energy systems subject to regulatory restrictions. Full specifications are not available to the public.
-                </p>
-                <p className="text-gray-600 text-xs border border-gray-800 rounded-lg px-4 py-3 bg-gray-900/40">For authorized research access, contact <span className="text-red-400">support@zenithapex.com</span></p>
-              </div>
-            </div>
-          ) : (isPatentedNotForSale(selected.title) && !isAdmin) ? (
-            <div className="flex-1 flex items-center justify-center p-12">
-              <div className="max-w-md text-center">
-                {/* Classified stamp */}
-                <div className="relative w-48 h-48 mx-auto mb-8 flex items-center justify-center">
-                  <div className="absolute inset-0 rounded-full border-8 border-yellow-600 opacity-80" style={{ transform: "rotate(-15deg)" }} />
-                  <div className="absolute inset-4 rounded-full border-4 border-yellow-700 opacity-50" style={{ transform: "rotate(-15deg)" }} />
-                  <div className="text-center" style={{ transform: "rotate(-10deg)" }}>
-                    <p className="text-yellow-500 font-black text-2xl tracking-widest leading-tight">CLASSIFIED</p>
-                    <p className="text-yellow-700 font-bold text-xs tracking-widest mt-1">PATENTED IP</p>
-                  </div>
-                </div>
-                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-yellow-950 border-2 border-yellow-700 mb-4">
-                  <Shield size={14} className="text-yellow-400" />
-                  <span className="text-yellow-400 font-black text-sm uppercase tracking-widest">Classified — Patented IP</span>
-                </div>
-                <h2 className="text-white font-black text-xl mb-3">{selected.title}</h2>
-                <p className="text-gray-400 text-sm leading-relaxed mb-4">
-                  This invention is protected under active patent law. Complete build plans are classified and not available for public purchase or distribution.
-                </p>
-                <p className="text-gray-600 text-xs border border-gray-800 rounded-lg px-4 py-3 bg-gray-900/40">For licensing inquiries, contact <span className="text-yellow-400">support@zenithapex.com</span></p>
-              </div>
-            </div>
+          ) : (isMembershipRequired(selected.title) && !isAdmin) ? (
+            <SpecsLockedGate invention={selected} />
           ) : (isAdminOnly(selected.title) && !isAdmin) ? (
             <div className="flex-1 flex items-center justify-center p-12">
               <div className="max-w-md text-center">
@@ -1783,10 +1630,10 @@ export default function InventionPlans() {
                 <p className="text-gray-600 text-xs mt-4">Contact support@zenithapex.com for access inquiries.</p>
               </div>
             </div>
-          ) : (isPatentedNotForSale(selected.title)) ? (
-            <NotForSaleGate invention={selected} />
           ) : (isClassifiedInvention(selected.title) && !isAdmin && !tierHasGovAccess(tier)) ? (
             <GovClassifiedGate inventionTitle={selected.title} />
+          ) : !canViewSelected ? (
+            <SpecsLockedGate invention={selected} />
           ) : (
             <div className="max-w-3xl mx-auto">
               {/* ── Global Research Disclaimer ── */}
@@ -1814,112 +1661,64 @@ export default function InventionPlans() {
                   </div>
                 </div>
                 <p className="text-gray-300 text-sm leading-relaxed mt-3">{selected.description}</p>
-                {!isPatentedNotForSale(selected.title) && (
-                  <button
-                    onClick={handleBuyNow}
-                    disabled={checkoutLoading}
-                    className="mt-4 flex items-center justify-center gap-2 w-full py-3 rounded-xl bg-green-700 hover:bg-green-600 disabled:opacity-50 text-white font-black text-sm transition-all"
-                  >
-                    {checkoutLoading ? <Loader2 size={14} className="animate-spin" /> : <ShoppingCart size={14} />}
-                    {checkoutLoading ? "Processing..." : `Buy Now — ${selected.price || "$99.99"}`}
-                  </button>
-                )}
               </div>
 
               <VisualExplainer visual={visual} />
 
-              {/* Pre-Build Simulator */}
-              <InventionSimulator invention={data} />
-
               {data ? (
                 <>
-                  {/* Overview — always visible */}
+                  {/* Overview */}
                   <div className="bg-gray-900 border border-gray-800 rounded-2xl p-5 mb-4">
                     <p className="text-cyan-400 font-bold text-xs uppercase tracking-wider mb-2">Technical Overview</p>
                     <p className="text-gray-300 text-sm leading-relaxed">{data.overview}</p>
                   </div>
 
-                  {/* Blurred specs with buy overlay for non-purchasers */}
-                  {(!hasPurchased && !isAdmin) ? (
-                    <div className="relative rounded-2xl overflow-hidden mb-4">
-                      {/* Blurred content */}
-                      <div className="blur-sm opacity-40 pointer-events-none select-none space-y-4">
-                        {data.bom?.length > 0 && (
-                          <div className="bg-gray-900 border border-gray-800 rounded-2xl p-5">
-                            <p className="text-yellow-400 font-bold text-xs uppercase tracking-wider mb-3">Bill of Materials ({data.bom.length} items)</p>
-                            <BomChecklist bom={data.bom} checked={[]} onToggle={() => {}} onReset={() => {}} />
-                          </div>
-                        )}
-                        {data.steps?.length > 0 && (
-                          <div className="bg-gray-900 border border-gray-800 rounded-2xl p-5">
-                            <p className="text-green-400 font-bold text-xs uppercase tracking-wider mb-3">Assembly Steps ({data.steps.length})</p>
-                            <div className="space-y-2">
-                              {data.steps.slice(0, 3).map((step, i) => <StepCard key={i} step={step} index={i} />)}
-                            </div>
-                          </div>
-                        )}
-                        {data.notes && (
-                          <div className="bg-gray-900 border border-gray-800 rounded-2xl p-5">
-                            <p className="text-purple-400 font-bold text-xs uppercase tracking-wider mb-2">Technical Notes</p>
-                            <p className="text-gray-400 text-sm leading-relaxed">{data.notes}</p>
-                          </div>
-                        )}
-                      </div>
-                      {/* Buy overlay */}
-                      <div className="absolute inset-0 flex items-center justify-center bg-gray-950/70 backdrop-blur-[2px] z-10">
-                        <div className="bg-gray-900 border border-cyan-800/60 rounded-2xl p-8 text-center max-w-sm shadow-2xl mx-4">
-                          <Lock size={28} className="text-cyan-400 mx-auto mb-3" />
-                          <h3 className="text-white font-black text-lg mb-2">Full Specs Locked</h3>
-                          <p className="text-gray-400 text-sm mb-5">Purchase to unlock the complete BOM, step-by-step assembly instructions, and technical notes.</p>
-                          <button
-                            onClick={handleBuyNow}
-                            disabled={checkoutLoading}
-                            className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-green-700 hover:bg-green-600 disabled:opacity-50 text-white font-black text-sm transition-all"
-                          >
-                            {checkoutLoading ? <Loader2 size={14} className="animate-spin" /> : <ShoppingCart size={14} />}
-                            {checkoutLoading ? "Processing…" : `Buy Now — ${selected.price || "$99"}`}
-                          </button>
-                        </div>
-                      </div>
+                  {/* BOM */}
+                  {data.bom?.length > 0 && (
+                    <div className="bg-gray-900 border border-gray-800 rounded-2xl p-5 mb-4">
+                      <button onClick={() => setShowBom(b => !b)}
+                        className="flex items-center justify-between w-full mb-3">
+                        <p className="text-yellow-400 font-bold text-xs uppercase tracking-wider">
+                          Bill of Materials ({data.bom.length} items)
+                        </p>
+                        {showBom ? <ChevronUp size={14} className="text-gray-500" /> : <ChevronDown size={14} className="text-gray-500" />}
+                      </button>
+                      {showBom && (
+                        <BomChecklist
+                          bom={data.bom}
+                          checked={currentChecked}
+                          onToggle={handleBomToggle}
+                          onReset={handleBomReset}
+                        />
+                      )}
                     </div>
-                  ) : (
-                    <>
-                      {/* BOM */}
-                      {data.bom?.length > 0 && (
-                        <>
-                          <div className="bg-gray-900 border border-gray-800 rounded-2xl p-5 mb-4">
-                            <button onClick={() => setShowBom(b => !b)} className="flex items-center justify-between w-full mb-3">
-                              <p className="text-yellow-400 font-bold text-xs uppercase tracking-wider">Bill of Materials ({data.bom.length} items)</p>
-                              {showBom ? <ChevronUp size={14} className="text-gray-500" /> : <ChevronDown size={14} className="text-gray-500" />}
-                            </button>
-                            {showBom && <BomChecklist bom={data.bom} checked={currentChecked} onToggle={handleBomToggle} onReset={handleBomReset} />}
-                          </div>
-                          <BOMSourcingPanel
-                            bom={data.bom}
-                            checked={currentChecked}
-                            inventionTitle={selected?.title}
-                          />
-                        </>
-                      )}
-                      {/* Steps */}
-                      {data.steps?.length > 0 && (
-                        <div className="bg-gray-900 border border-gray-800 rounded-2xl p-5 mb-4">
-                          <button onClick={() => setShowSteps(s => !s)} className="flex items-center justify-between w-full mb-4">
-                            <p className="text-green-400 font-bold text-xs uppercase tracking-wider">Assembly Steps ({data.steps.length})</p>
-                            {showSteps ? <ChevronUp size={14} className="text-gray-500" /> : <ChevronDown size={14} className="text-gray-500" />}
-                          </button>
-                          {showSteps && <div className="space-y-2">{data.steps.map((step, i) => <StepCard key={i} step={step} index={i} />)}</div>}
-                        </div>
-                      )}
-                      {/* Notes */}
-                      {data.notes && (
-                        <div className="bg-gray-900 border border-gray-800 rounded-2xl p-5 mb-4">
-                          <p className="text-purple-400 font-bold text-xs uppercase tracking-wider mb-2">Technical Notes</p>
-                          <p className="text-gray-400 text-sm leading-relaxed">{data.notes}</p>
-                        </div>
-                      )}
-                    </>
                   )}
+
+                  {/* Steps */}
+                  {data.steps?.length > 0 && (
+                    <div className="bg-gray-900 border border-gray-800 rounded-2xl p-5 mb-4">
+                      <button onClick={() => setShowSteps(s => !s)}
+                        className="flex items-center justify-between w-full mb-4">
+                        <p className="text-green-400 font-bold text-xs uppercase tracking-wider">Assembly Steps ({data.steps.length})</p>
+                        {showSteps ? <ChevronUp size={14} className="text-gray-500" /> : <ChevronDown size={14} className="text-gray-500" />}
+                      </button>
+                      {showSteps && (
+                        <div className="space-y-2">
+                          {data.steps.map((step, i) => <StepCard key={i} step={step} index={i} />)}
+                        </div>
+                      )}
+                    </div>
+                  )}
+
+                  {/* Notes */}
+                  {data.notes && (
+                    <div className="bg-gray-900 border border-gray-800 rounded-2xl p-5 mb-4">
+                      <p className="text-purple-400 font-bold text-xs uppercase tracking-wider mb-2">Technical Notes</p>
+                      <p className="text-gray-400 text-sm leading-relaxed">{data.notes}</p>
+                    </div>
+                  )}
+
+                  
                 </>
               ) : (
                 <div className="bg-gray-900 border border-gray-800 rounded-2xl p-8 text-center">

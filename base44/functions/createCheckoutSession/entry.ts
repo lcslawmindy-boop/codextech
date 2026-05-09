@@ -23,7 +23,6 @@ Deno.serve(async (req) => {
       metadata: {
         base44_app_id: Deno.env.get('BASE44_APP_ID'),
         product_title: title || productName || '',
-        product_name: title || productName || '',
         product_category: category || '',
       },
     };
