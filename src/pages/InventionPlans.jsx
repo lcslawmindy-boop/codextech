@@ -1639,8 +1639,9 @@ export default function InventionPlans() {
         {/* Sidebar — invention list */}
         <div className="w-64 flex-shrink-0 border-r border-gray-800 overflow-y-auto bg-gray-900/40">
           {/* Access legend */}
-          <div className="px-3 py-2 border-b border-gray-800 bg-gray-900/60 space-y-1">
+          <div className="px-3 py-2 border-b border-gray-800 bg-gray-900/60 space-y-1.5">
             <div className="flex items-center gap-2 text-xs text-indigo-400"><Lock size={10} /> Available with membership or purchase</div>
+            <div className="flex items-center gap-2 text-xs text-red-400"><Shield size={10} /> Classified — Admin Only</div>
           </div>
           {inventions.map((inv, i) => {
             const accessible = tierCanAccessInvention(tier, i);
@@ -1708,23 +1709,23 @@ export default function InventionPlans() {
                 </Link>
               </div>
             </div>
-          ) : (isMembershipRequired(selected.title) && !isAdmin && !purchasedTitles.some(t => t.includes(selected.title?.toLowerCase().slice(0, 20)))) ? (
-            <SpecsLockedGate invention={selected} />
           ) : (isAdminOnly(selected.title) && !isAdmin) ? (
             <div className="flex-1 flex items-center justify-center p-12">
               <div className="max-w-md text-center">
                 <div className="w-20 h-20 rounded-2xl bg-red-950/40 border-2 border-red-800 flex items-center justify-center text-4xl mx-auto mb-6">🔐</div>
                 <div className="flex items-center justify-center gap-2 mb-3">
                   <Shield size={16} className="text-red-400" />
-                  <span className="text-red-400 font-black text-sm uppercase tracking-widest">Restricted — Admin Only</span>
+                  <span className="text-red-400 font-black text-sm uppercase tracking-widest">Classified — Admin Only</span>
                 </div>
-                <h2 className="text-white font-black text-xl mb-3">Restricted Research Content</h2>
-                <p className="text-gray-400 text-sm leading-relaxed">This device involves free energy or bioelectromagnetic treatment claims. Full build plans are restricted to platform administrators only.</p>
+                <h2 className="text-white font-black text-xl mb-3">Classified Research Content</h2>
+                <p className="text-gray-400 text-sm leading-relaxed">This invention build plan is classified and not available to the public. Access is restricted to platform administrators only.</p>
                 <p className="text-gray-600 text-xs mt-4">Contact support@zenithapex.com for access inquiries.</p>
               </div>
             </div>
           ) : (isClassifiedInvention(selected.title) && !isAdmin && !tierHasGovAccess(tier)) ? (
             <GovClassifiedGate inventionTitle={selected.title} />
+          ) : (isMembershipRequired(selected.title) && !isAdmin && !purchasedTitles.some(t => t.includes(selected.title?.toLowerCase().slice(0, 20)))) ? (
+            <SpecsLockedGate invention={selected} />
           ) : !canViewSelected ? (
             <SpecsLockedGate invention={selected} />
           ) : (
