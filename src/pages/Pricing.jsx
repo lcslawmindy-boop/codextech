@@ -86,6 +86,21 @@ const TIERS = [
       { icon: <Check size={15} />, text: "Priority support" },
     ],
   },
+  {
+    id: "forge-single",
+    name: "Single Invention Forge",
+    price: 29,
+    color: "#fbbf24",
+    badge: "ONE-TIME",
+    description: "One hybrid invention generation",
+    isOneTime: true,
+    features: [
+      { icon: <Zap size={15} />, text: "1 hybrid invention generation" },
+      { icon: <Check size={15} />, text: "IP valuation estimation" },
+      { icon: <Check size={15} />, text: "Patent claims & market analysis" },
+      { icon: <Check size={15} />, text: "Export to presentations" },
+    ],
+  },
 ];
 
 const FAQS = [
@@ -212,14 +227,15 @@ export default function Pricing() {
       </div>
 
       {/* Membership Tiers Grid */}
-      <div className="px-5 pb-16 max-w-6xl mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+      <div className="px-5 pb-16 max-w-7xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-5">
           {TIERS.map((tier) => {
+            const isOneTime = tier.isOneTime;
             const monthlyPrice = tier.price;
             const annualMonths = 9; // 3 months free
             const annualTotal = tier.price * annualMonths;
-            const displayPrice = billingMode === "annual" ? (annualTotal / 12).toFixed(2) : monthlyPrice;
-            const billingPeriod = billingMode === "annual" ? `Billed $${annualTotal.toFixed(2)} once/year` : `Billed monthly`;
+            const displayPrice = isOneTime || billingMode === "annual" ? (isOneTime ? tier.price : (annualTotal / 12).toFixed(2)) : monthlyPrice;
+            const billingPeriod = isOneTime ? "One-time payment" : billingMode === "annual" ? `Billed $${annualTotal.toFixed(2)} once/year` : `Billed monthly`;
             return (
               <div key={tier.id} className="relative rounded-2xl overflow-hidden flex flex-col transition-all"
                 style={{ border: `2px solid ${tier.color}40`, background: tier.id === "professional" ? `${tier.color}10` : "transparent" }}>
@@ -235,7 +251,7 @@ export default function Pricing() {
                   {/* Price */}
                   <div className="flex items-end gap-1 mb-1">
                     <span className="font-black text-5xl" style={{ color: tier.color }}>${displayPrice}</span>
-                    <span className="text-gray-500 mb-1 text-sm">/mo</span>
+                    {!isOneTime && <span className="text-gray-500 mb-1 text-sm">/mo</span>}
                   </div>
                   <p className="text-green-400 text-xs font-bold mb-1">{billingPeriod}</p>
                   <p className="text-gray-600 text-xs mb-6">Instant access · Secured by Stripe</p>
