@@ -34,10 +34,8 @@ export default function ZenithApexWatermark() {
       onMouseMove={handleMouseMove}
       onMouseUp={handleMouseUp}
       onMouseLeave={handleMouseUp}
-      className="fixed z-10 cursor-grab active:cursor-grabbing"
+      className="fixed z-10 cursor-grab active:cursor-grabbing bottom-6 right-6"
       style={{
-        right: `${Math.max(0, window.innerWidth - position.x - 120)}px`,
-        bottom: `${Math.max(0, window.innerHeight - position.y - 120)}px`,
         transform: position.x !== 0 || position.y !== 0 ? `translate(${position.x}px, ${position.y}px)` : 'none',
       }}
     >
