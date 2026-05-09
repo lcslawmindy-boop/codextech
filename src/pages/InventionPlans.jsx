@@ -1288,28 +1288,83 @@ function BuyNowButton({ invention }) {
 }
 
 function SpecsLockedGate({ invention }) {
+  const visual = inventionVisuals[invention?.title];
+  const image = itemImages[invention?.title];
+
   return (
-    <div className="flex-1 flex items-center justify-center p-12">
-      <div className="max-w-md text-center">
-        <div className="w-20 h-20 rounded-2xl bg-gray-800 border border-gray-700 flex items-center justify-center text-4xl mx-auto mb-6">
-          {invention?.icon || "📋"}
+    <div className="max-w-3xl mx-auto">
+      {/* Hero image / icon */}
+      {image ? (
+        <div className="w-full h-56 rounded-2xl overflow-hidden mb-5 relative">
+          <img src={image} alt={invention?.title} className="w-full h-full object-cover" />
+          <div className="absolute inset-0 bg-gradient-to-t from-gray-950 via-gray-950/40 to-transparent" />
+          <div className="absolute bottom-4 left-4 flex items-center gap-2">
+            <span className="text-3xl">{invention?.icon}</span>
+            <span className="text-white font-black text-xl drop-shadow">{invention?.title}</span>
+          </div>
         </div>
-        <div className="flex items-center justify-center gap-2 mb-3">
-          <Lock size={16} className="text-indigo-400" />
-          <span className="text-indigo-400 font-bold text-sm uppercase tracking-wider">Specs Hidden</span>
+      ) : (
+        <div className="flex items-center gap-3 mb-5">
+          <span className="text-4xl">{invention?.icon}</span>
+          <h2 className="text-white font-black text-2xl">{invention?.title}</h2>
         </div>
-        <h2 className="text-white font-black text-2xl mb-2">{invention?.title}</h2>
-        <p className="text-gray-400 text-sm italic mb-4">{invention?.tagline}</p>
-        <p className="text-gray-500 text-sm leading-relaxed mb-6">
-          To view technical specifications, bill of materials, and build instructions for this invention, you need a membership or purchase this plan individually.
-        </p>
-        <div className="space-y-2 mb-6">
-          <BuyNowButton invention={invention} />
-          <button onClick={() => window.location.href = '/pricing'}
-            className="flex items-center justify-center gap-2 w-full py-3 rounded-xl font-black text-sm border border-indigo-700 text-indigo-400 hover:bg-indigo-900/20 transition-all">
-            View Membership Plans
-          </button>
+      )}
+
+      <p className="text-gray-400 text-sm italic mb-2">{invention?.tagline}</p>
+      {invention?.description && (
+        <p className="text-gray-300 text-sm leading-relaxed mb-5">{invention?.description}</p>
+      )}
+
+      {/* What it is teaser */}
+      {visual?.whatItIs && (
+        <div className="bg-blue-950/30 border border-blue-900/40 rounded-xl p-4 mb-4">
+          <p className="text-blue-300 font-bold text-xs uppercase tracking-wider mb-1 flex items-center gap-1.5">
+            <Lightbulb size={11} /> What It Is
+          </p>
+          <p className="text-gray-300 text-sm leading-relaxed">{visual.whatItIs}</p>
         </div>
+      )}
+
+      {/* Key principle teaser */}
+      {visual?.keyPrinciple && (
+        <div className="bg-gray-900 border border-gray-800 rounded-xl p-4 mb-4">
+          <p className="text-cyan-400 font-bold text-xs uppercase tracking-wider mb-1">Key Principle</p>
+          <p className="text-gray-400 text-sm leading-relaxed italic">{visual.keyPrinciple}</p>
+        </div>
+      )}
+
+      {/* Blurred locked preview */}
+      <div className="relative bg-gray-900 border border-gray-800 rounded-2xl p-5 mb-5 overflow-hidden">
+        <div className="blur-sm pointer-events-none select-none space-y-3 opacity-50">
+          <p className="text-yellow-400 font-bold text-xs uppercase tracking-wider">Bill of Materials (locked)</p>
+          {["Component A — 4x ferrite cores", "Component B — copper winding", "Component C — capacitor bank", "Component D — signal generator"].map((item, i) => (
+            <div key={i} className="flex gap-3 text-xs text-gray-400">
+              <span className="text-cyan-500 font-bold w-6">—</span>
+              <span>{item}</span>
+            </div>
+          ))}
+        </div>
+        <div className="absolute inset-0 flex items-center justify-center bg-gray-950/60 backdrop-blur-[1px]">
+          <div className="text-center">
+            <Lock size={28} className="text-indigo-400 mx-auto mb-2" />
+            <p className="text-white font-bold text-sm">Full specs locked</p>
+            <p className="text-gray-400 text-xs">Purchase to reveal BOM, steps & schematics</p>
+          </div>
+        </div>
+      </div>
+
+      {/* CTA */}
+      <div className="bg-gray-900 border border-gray-800 rounded-2xl p-5 space-y-3">
+        <div className="flex items-center justify-between mb-1">
+          <p className="text-white font-black text-lg">{invention?.title}</p>
+          <p className="text-green-400 font-black text-xl">{invention?.price}</p>
+        </div>
+        <p className="text-gray-500 text-xs mb-3">Includes: full BOM, step-by-step assembly, schematics, technical notes</p>
+        <BuyNowButton invention={invention} />
+        <button onClick={() => window.location.href = '/pricing'}
+          className="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl font-bold text-sm border border-gray-700 text-gray-400 hover:bg-gray-800 transition-all">
+          View Membership Plans
+        </button>
       </div>
     </div>
   );
