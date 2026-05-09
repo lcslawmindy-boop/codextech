@@ -205,7 +205,7 @@ function PlanCard({ plan, isAnnual }) {
         : plan.priceInCents;
       const origin = window.location.origin;
       const res = await base44.functions.invoke("createCheckoutSession", {
-        title: `C.O.D.E.X.T.E.C.H. ${plan.name} Membership`,
+        title: `Aethon Apex IP ${plan.name} Membership`,
         priceInCents,
         description: plan.desc,
         category: "membership",
@@ -312,9 +312,9 @@ export default function FunnelHome() {
       {/* Nav */}
       <nav className="sticky top-0 z-40 bg-gray-950/95 backdrop-blur border-b border-gray-800 px-6 py-3 flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <img src="https://media.base44.com/images/public/69ccefebfea78b23498c66a8/afb5ad292_CODEXTECHLOGO.png" alt="" className="h-9 w-9 object-contain" />
+          <img src="https://media.base44.com/images/public/69ccefebfea78b23498c66a8/bce328987_a6e3bd669_logo.png" alt="" className="h-9 w-9 object-contain" />
           <div>
-            <span className="text-white font-black text-base tracking-tight">C.O.D.E.X.T.E.C.H.</span>
+            <span className="text-white font-black text-base tracking-tight">Aethon Apex IP</span>
             <span className="text-gray-600 text-xs ml-2 hidden sm:inline">Research Platform</span>
           </div>
         </div>
@@ -536,8 +536,8 @@ export default function FunnelHome() {
       {/* FOOTER */}
       <footer className="border-t border-gray-800 px-6 py-8 text-center text-gray-600 text-xs">
         <div className="flex items-center justify-center gap-2 mb-3">
-          <img src="https://media.base44.com/images/public/69ccefebfea78b23498c66a8/afb5ad292_CODEXTECHLOGO.png" alt="" className="h-6 w-6 object-contain" />
-          <span className="text-gray-500 font-bold">C.O.D.E.X.T.E.C.H. · Zenith Apex LLC</span>
+          <img src="https://media.base44.com/images/public/69ccefebfea78b23498c66a8/bce328987_a6e3bd669_logo.png" alt="" className="h-6 w-6 object-contain" />
+          <span className="text-gray-500 font-bold">Aethon Apex IP · Zenith Apex LLC</span>
         </div>
         <p className="mb-3">All content is for research and educational purposes only. Not legal or medical advice.</p>
         <div className="flex justify-center gap-6">
