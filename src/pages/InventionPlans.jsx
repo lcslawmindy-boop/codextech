@@ -1475,6 +1475,7 @@ export default function InventionPlans() {
   const [generatingMaster, setGeneratingMaster] = useState(false);
   const [bomChecked, setBomChecked] = useState({});
   const [hasPurchased, setHasPurchased] = useState(false);
+  const [purchasedTitles, setPurchasedTitles] = useState([]);
   const [checkingPurchase, setCheckingPurchase] = useState(true);
 
   useEffect(() => {
@@ -1498,15 +1499,12 @@ export default function InventionPlans() {
     base44.functions.invoke("getUserPurchases", {})
       .then(res => {
         const purchases = res?.data?.purchases || [];
-        const paid = purchases.some(p =>
-          p.category === "Invention" ||
-          p.title?.toLowerCase().includes("invention") ||
-          p.title?.toLowerCase().includes("plan") ||
-          p.title?.toLowerCase().includes("build")
-        );
+        // Store all purchased titles for per-invention checking
+        setPurchasedTitles(purchases.map(p => p.title?.toLowerCase() || ""));
+        const paid = purchases.some(p => p.category === "Invention");
         setHasPurchased(paid);
       })
-      .catch(() => setHasPurchased(false))
+      .catch(() => { setHasPurchased(false); setPurchasedTitles([]); })
       .finally(() => setCheckingPurchase(false));
   }, []);
 
@@ -1710,7 +1708,7 @@ export default function InventionPlans() {
                 </Link>
               </div>
             </div>
-          ) : (isMembershipRequired(selected.title) && !isAdmin) ? (
+          ) : (isMembershipRequired(selected.title) && !isAdmin && !purchasedTitles.some(t => t.includes(selected.title?.toLowerCase().slice(0, 20)))) ? (
             <SpecsLockedGate invention={selected} />
           ) : (isAdminOnly(selected.title) && !isAdmin) ? (
             <div className="flex-1 flex items-center justify-center p-12">
