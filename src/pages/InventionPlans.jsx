@@ -1247,6 +1247,11 @@ async function generateMasterPDF(allInventions) {
 function BuyNowButton({ invention }) {
   const [loading, setLoading] = useState(false);
 
+  // Parse price string like "$297" or "$1,097" into cents
+  const priceStr = invention?.price || "$97";
+  const priceInCents = Math.round(parseFloat(priceStr.replace(/[$,]/g, "")) * 100);
+  const priceDisplay = priceStr.replace(",", "");
+
   const handleBuy = async () => {
     if (window.self !== window.top) {
       alert("Checkout only works from the published app, not inside the editor.");
@@ -1257,7 +1262,7 @@ function BuyNowButton({ invention }) {
       const origin = window.location.origin;
       const res = await base44.functions.invoke("createCheckoutSession", {
         title: invention?.title || "Invention Build Plan",
-        priceInCents: 4900,
+        priceInCents,
         description: invention?.tagline || "Full invention build plan with step-by-step instructions and BOM",
         category: "Invention",
         successUrl: `${origin}/invention-plans`,
@@ -1277,7 +1282,7 @@ function BuyNowButton({ invention }) {
       className="flex items-center justify-center gap-2 w-full py-3 rounded-xl font-black text-white text-sm bg-green-700 hover:bg-green-600 disabled:opacity-50 transition-all"
     >
       {loading ? <Loader2 size={15} className="animate-spin" /> : <ShoppingCart size={15} />}
-      {loading ? "Processing..." : "Buy This Plan — $49"}
+      {loading ? "Processing..." : `Buy This Plan — ${priceDisplay}`}
     </button>
   );
 }
