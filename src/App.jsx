@@ -169,6 +169,7 @@ import PatentHub from './pages/PatentHub';
 import DeviceCatalogue from './pages/DeviceCatalogue';
 import CourseCatalogue2 from './pages/CourseCatalogue2';
 import InventionForge2 from './pages/InventionForge2';
+import AIOperatingSystem from './pages/AIOperatingSystem';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -395,6 +396,7 @@ const AuthenticatedApp = () => {
           <Route path="/device-catalogue" element={<DeviceCatalogue />} />
           <Route path="/course-catalogue" element={<CourseCatalogue2 />} />
           <Route path="/invention-forge" element={<InventionForge2 />} />
+          <Route path="/ai-os" element={<AIOperatingSystem />} />
 
           <Route path="*" element={<PageNotFound />} />
         </Route>
