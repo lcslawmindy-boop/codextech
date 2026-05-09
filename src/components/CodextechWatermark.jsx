@@ -1,6 +1,6 @@
 export default function CodextechWatermark() {
   return (
-    <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 pointer-events-none">
+    <div className="fixed top-6 left-1/2 -translate-x-1/2 z-20 pointer-events-none">
       <style>{`
         @keyframes glow-pulse {
           0%, 100% {
