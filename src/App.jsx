@@ -162,6 +162,9 @@ import ResearchMembership from './pages/ResearchMembership';
 import AdvancedEngineeringBundle from './pages/AdvancedEngineeringBundle';
 import ResearchDisclaimer from './pages/ResearchDisclaimer';
 import VaultHeroPage from './pages/VaultHeroPage';
+import DeviceCatalogue from './pages/DeviceCatalogue';
+import CourseCatalogue2 from './pages/CourseCatalogue2';
+import InventionForge2 from './pages/InventionForge2';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -382,6 +385,9 @@ const AuthenticatedApp = () => {
           <Route path="/advanced-engineering-bundle" element={<AdvancedEngineeringBundle />} />
           <Route path="/research-disclaimer" element={<ResearchDisclaimer />} />
           <Route path="/vault" element={<VaultHeroPage />} />
+          <Route path="/device-catalogue" element={<DeviceCatalogue />} />
+          <Route path="/course-catalogue" element={<CourseCatalogue2 />} />
+          <Route path="/invention-forge" element={<InventionForge2 />} />
 
           <Route path="*" element={<PageNotFound />} />
         </Route>

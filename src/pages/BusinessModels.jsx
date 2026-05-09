@@ -186,6 +186,24 @@ export default function BusinessModels() {
             🎓 Courses & PDFs
           </Link>
           <Link
+            to="/device-catalogue"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-red-900/40 hover:bg-red-800/50 border border-red-700 text-red-300 text-xs font-medium transition-colors"
+          >
+            ⚙️ Device Catalogue
+          </Link>
+          <Link
+            to="/course-catalogue"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-900/40 hover:bg-blue-800/50 border border-blue-700 text-blue-300 text-xs font-medium transition-colors"
+          >
+            🎓 Course Catalogue
+          </Link>
+          <Link
+            to="/invention-forge"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-yellow-900/40 hover:bg-yellow-800/50 border border-yellow-700 text-yellow-300 text-xs font-medium transition-colors"
+          >
+            ⚡ Invention Forge
+          </Link>
+          <Link
             to="/pitch"
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-purple-900/40 hover:bg-purple-800/50 border border-purple-700 text-purple-300 text-xs font-medium transition-colors"
           >
