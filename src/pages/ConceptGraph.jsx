@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { BookOpen, Wrench, Gavel, Zap, Gift, DollarSign } from "lucide-react";
 import SearchPanel from "../components/SearchPanel";
 import ConceptNetworkGraph from "../components/ConceptNetworkGraph";
 import NodePanel from "../components/NodePanel";
@@ -229,6 +230,28 @@ export default function ConceptGraph() {
             )}
           </>
         )}
+      </div>
+
+      {/* Bottom Tab Bar */}
+      <div className="flex-shrink-0 bg-gray-900 border-t border-gray-800 h-16 flex items-center px-4 gap-2 overflow-x-auto">
+        <Link to="/course-catalogue" className="flex items-center gap-2 px-4 py-2 rounded-lg border border-gray-700 hover:bg-gray-800 text-gray-300 text-xs font-semibold transition-all whitespace-nowrap">
+          <BookOpen size={13} /> Courses
+        </Link>
+        <Link to="/device-catalogue" className="flex items-center gap-2 px-4 py-2 rounded-lg border border-gray-700 hover:bg-gray-800 text-gray-300 text-xs font-semibold transition-all whitespace-nowrap">
+          <Wrench size={13} /> Invention Builds
+        </Link>
+        <Link to="/patent-hub" className="flex items-center gap-2 px-4 py-2 rounded-lg border border-gray-700 hover:bg-gray-800 text-gray-300 text-xs font-semibold transition-all whitespace-nowrap">
+          <Gavel size={13} /> Patent Suite
+        </Link>
+        <Link to="/invention-forge" className="flex items-center gap-2 px-4 py-2 rounded-lg border border-gray-700 hover:bg-gray-800 text-gray-300 text-xs font-semibold transition-all whitespace-nowrap">
+          <Zap size={13} /> Invention Forge
+        </Link>
+        <Link to="/member-portal" className="flex items-center gap-2 px-4 py-2 rounded-lg border border-gray-700 hover:bg-gray-800 text-gray-300 text-xs font-semibold transition-all whitespace-nowrap">
+          <Gift size={13} /> Membership
+        </Link>
+        <Link to="/pricing" className="flex items-center gap-2 px-4 py-2 rounded-lg border border-gray-700 hover:bg-gray-800 text-gray-300 text-xs font-semibold transition-all whitespace-nowrap">
+          <DollarSign size={13} /> Pricing
+        </Link>
       </div>
     </div>
   );
