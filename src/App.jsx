@@ -1,6 +1,7 @@
 import { Toaster } from "@/components/ui/toaster"
 import TrialBanner from './components/TrialBanner';
 import PageBackground from './components/PageBackground';
+import ZenithApexWatermark from './components/ZenithApexWatermark';
 
 import { TrialContext } from './lib/TrialContext';
 import { QueryClientProvider } from '@tanstack/react-query'
@@ -418,6 +419,7 @@ function App() {
       <QueryClientProvider client={queryClientInstance}>
         <Router>
           <PageBackground />
+          <ZenithApexWatermark />
           <AuthenticatedApp />
         </Router>
         <Toaster />
