@@ -2,7 +2,158 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import ScalarWaveWatermark from "@/components/ScalarWaveWatermark";
-import { Zap, ChevronRight, Video, CheckCircle2, Wrench, BookOpen, Network } from "lucide-react";
+import { ChevronRight, Video, CheckCircle2, Wrench, BookOpen, Network, Search, Lock, ShoppingCart, Loader2, GraduationCap, Package, Filter } from "lucide-react";
+import { businessItems } from "../lib/businessItems";
+import { itemImages } from "../lib/itemImages";
+import { inventionVisuals } from "../lib/inventionVisuals";
+
+const allInventions = businessItems.filter(i => i.category === "Invention");
+const allCourses = businessItems.filter(i => i.category === "Course");
+const allBooks = businessItems.filter(i => i.category === "Book/PDF");
+
+function getPriceNum(str) {
+  return Math.round(parseFloat((str || "$0").replace(/[$,]/g, "")));
+}
+
+function CatalogBuyButton({ item, category, returnPath }) {
+  const [loading, setLoading] = useState(false);
+  const handleBuy = async () => {
+    if (window.self !== window.top) { alert("Checkout only works from the published app."); return; }
+    setLoading(true);
+    try {
+      const res = await base44.functions.invoke("createCheckoutSession", {
+        title: item.title,
+        priceInCents: Math.round(getPriceNum(item.price) * 100),
+        description: item.tagline,
+        category,
+        successUrl: `${window.location.origin}${returnPath}`,
+        cancelUrl: `${window.location.origin}${returnPath}`,
+      });
+      if (res.data?.url) window.location.href = res.data.url;
+    } catch (e) { console.error(e); }
+    setLoading(false);
+  };
+  return (
+    <button onClick={handleBuy} disabled={loading}
+      className="flex items-center justify-center gap-2 w-full py-2 rounded-xl text-xs font-black text-white bg-green-700 hover:bg-green-600 disabled:opacity-50 transition-all">
+      {loading ? <Loader2 size={12} className="animate-spin" /> : <ShoppingCart size={12} />}
+      {loading ? "..." : item.price}
+    </button>
+  );
+}
+
+function InventionCatalog() {
+  const [search, setSearch] = useState("");
+  const filtered = allInventions.filter(inv =>
+    !search || inv.title.toLowerCase().includes(search.toLowerCase()) || inv.tagline?.toLowerCase().includes(search.toLowerCase())
+  );
+  return (
+    <div>
+      <div className="flex items-center gap-3 mb-4">
+        <div className="relative flex-1 max-w-sm">
+          <Search size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" />
+          <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search build plans..."
+            className="w-full pl-8 pr-3 py-2 rounded-lg bg-gray-900 border border-gray-700 text-white text-sm placeholder-gray-600 focus:outline-none focus:border-cyan-600" />
+        </div>
+        <span className="text-gray-600 text-xs">{filtered.length} plans</span>
+        <Link to="/invention-plans" className="ml-auto text-xs text-cyan-400 hover:underline flex items-center gap-1">
+          Full Library <ChevronRight size={11} />
+        </Link>
+      </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        {filtered.map((inv, i) => {
+          const image = itemImages[inv.title];
+          const visual = inventionVisuals[inv.title];
+          return (
+            <div key={i} className="bg-gray-900 border border-gray-800 hover:border-gray-600 rounded-2xl overflow-hidden flex flex-col transition-all">
+              {image ? (
+                <div className="relative h-36 overflow-hidden flex-shrink-0">
+                  <img src={image} alt={inv.title} className="w-full h-full object-cover" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-transparent to-transparent" />
+                  <div className="absolute bottom-2 left-3 flex items-center gap-2">
+                    <span className="text-xl">{inv.icon}</span>
+                    <span className="text-green-400 font-black text-base">{inv.price}</span>
+                  </div>
+                </div>
+              ) : (
+                <div className="h-14 bg-gray-800/60 flex items-center gap-3 px-4">
+                  <span className="text-2xl">{inv.icon}</span>
+                  <span className="text-green-400 font-black">{inv.price}</span>
+                </div>
+              )}
+              <div className="p-3 flex flex-col gap-2 flex-1">
+                <div>
+                  <h3 className="text-white font-black text-sm leading-snug">{inv.title}</h3>
+                  <p className="text-gray-500 text-xs italic mt-0.5 line-clamp-2">{inv.tagline}</p>
+                </div>
+                {visual?.whatItIs && <p className="text-gray-400 text-xs leading-relaxed line-clamp-2">{visual.whatItIs}</p>}
+                <div className="mt-auto pt-2 border-t border-gray-800 space-y-1.5">
+                  <CatalogBuyButton item={inv} category="Invention" returnPath="/free-vault" />
+                  <Link to="/invention-plans" className="flex items-center justify-center gap-1 w-full py-1.5 rounded-xl text-xs text-gray-500 border border-gray-800 hover:bg-gray-800 transition-all">
+                    <Lock size={10} /> View Full Specs
+                  </Link>
+                </div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+function CourseCatalog() {
+  const [tab, setTab] = useState("Courses");
+  const [search, setSearch] = useState("");
+  const items = tab === "Courses" ? allCourses : allBooks;
+  const filtered = items.filter(item =>
+    !search || item.title.toLowerCase().includes(search.toLowerCase()) || item.tagline?.toLowerCase().includes(search.toLowerCase())
+  );
+  return (
+    <div>
+      <div className="flex flex-wrap items-center gap-3 mb-4">
+        <div className="flex gap-1">
+          {["Courses", "Books & PDFs"].map(t => (
+            <button key={t} onClick={() => setTab(t)}
+              className={`px-3 py-1.5 rounded-full text-xs border transition-colors ${tab === t ? "bg-gray-700 border-gray-500 text-white" : "border-gray-700 text-gray-400 hover:border-gray-500"}`}>
+              {t === "Courses" ? `${allCourses.length} Courses` : `${allBooks.length} Books & PDFs`}
+            </button>
+          ))}
+        </div>
+        <div className="relative flex-1 max-w-sm">
+          <Search size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" />
+          <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search..."
+            className="w-full pl-8 pr-3 py-2 rounded-lg bg-gray-900 border border-gray-700 text-white text-sm placeholder-gray-600 focus:outline-none focus:border-purple-600" />
+        </div>
+        <span className="text-gray-600 text-xs">{filtered.length} results</span>
+        <Link to="/course-catalogue" className="ml-auto text-xs text-purple-400 hover:underline flex items-center gap-1">
+          Full Catalogue <ChevronRight size={11} />
+        </Link>
+      </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        {filtered.map((item, i) => (
+          <div key={i} className="bg-gray-900 border border-gray-800 hover:border-gray-600 rounded-2xl overflow-hidden flex flex-col transition-all"
+            style={{ borderTopColor: item.color, borderTopWidth: 3 }}>
+            <div className="p-4 flex flex-col gap-2 flex-1">
+              <div className="flex items-start gap-2">
+                <span className="text-2xl flex-shrink-0">{item.icon}</span>
+                <div>
+                  <span className="text-xs font-black px-1.5 py-0.5 rounded" style={{ backgroundColor: item.color + "22", color: item.color }}>{item.category}</span>
+                  <h3 className="text-white font-black text-sm leading-snug mt-1">{item.title}</h3>
+                  <p className="text-gray-500 text-xs italic mt-0.5 line-clamp-1">"{item.tagline}"</p>
+                </div>
+              </div>
+              <p className="text-gray-400 text-xs leading-relaxed line-clamp-3">{item.description}</p>
+              <div className="mt-auto pt-2 border-t border-gray-800">
+                <CatalogBuyButton item={item} category={item.category} returnPath="/free-vault" />
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
 
 const FREE_DEVICE = {
   id: "meg",
@@ -227,6 +378,34 @@ export default function FreeVault() {
             </Link>
             <p className="text-gray-600 text-xs mt-3">$199/month annual billing · Cancel anytime · 30-day money-back guarantee</p>
           </div>
+        </div>
+
+        {/* Invention Build Plans Catalog */}
+        <div className="mb-12">
+          <div className="flex items-center gap-3 mb-5">
+            <div className="w-9 h-9 rounded-xl bg-cyan-900/40 border border-cyan-800 flex items-center justify-center flex-shrink-0">
+              <Wrench size={16} className="text-cyan-400" />
+            </div>
+            <div>
+              <h2 className="text-white font-black text-xl">Invention Build Plans</h2>
+              <p className="text-gray-500 text-xs">{allInventions.length} complete device plans — BOM, schematics, step-by-step assembly</p>
+            </div>
+          </div>
+          <InventionCatalog />
+        </div>
+
+        {/* Course & Research Library */}
+        <div className="mb-12">
+          <div className="flex items-center gap-3 mb-5">
+            <div className="w-9 h-9 rounded-xl bg-purple-900/40 border border-purple-800 flex items-center justify-center flex-shrink-0">
+              <GraduationCap size={16} className="text-purple-400" />
+            </div>
+            <div>
+              <h2 className="text-white font-black text-xl">Course & Research Library</h2>
+              <p className="text-gray-500 text-xs">{allCourses.length} courses + {allBooks.length} books & PDFs — scalar EM, bioelectromagnetics, vacuum energy</p>
+            </div>
+          </div>
+          <CourseCatalog />
         </div>
 
         {/* Email capture */}
