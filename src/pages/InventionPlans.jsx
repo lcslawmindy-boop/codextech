@@ -1244,6 +1244,44 @@ async function generateMasterPDF(allInventions) {
   doc.save(`ZenithApex_MASTER_Build_Plans_${new Date().toISOString().slice(0, 10)}.pdf`);
 }
 
+function BuyNowButton({ invention }) {
+  const [loading, setLoading] = useState(false);
+
+  const handleBuy = async () => {
+    if (window.self !== window.top) {
+      alert("Checkout only works from the published app, not inside the editor.");
+      return;
+    }
+    setLoading(true);
+    try {
+      const origin = window.location.origin;
+      const res = await base44.functions.invoke("createCheckoutSession", {
+        title: invention?.title || "Invention Build Plan",
+        priceInCents: 4900,
+        description: invention?.tagline || "Full invention build plan with step-by-step instructions and BOM",
+        category: "Invention",
+        successUrl: `${origin}/invention-plans`,
+        cancelUrl: `${origin}/invention-plans`
+      });
+      if (res.data?.url) window.location.href = res.data.url;
+    } catch (err) {
+      console.error(err);
+    }
+    setLoading(false);
+  };
+
+  return (
+    <button
+      onClick={handleBuy}
+      disabled={loading}
+      className="flex items-center justify-center gap-2 w-full py-3 rounded-xl font-black text-white text-sm bg-green-700 hover:bg-green-600 disabled:opacity-50 transition-all"
+    >
+      {loading ? <Loader2 size={15} className="animate-spin" /> : <ShoppingCart size={15} />}
+      {loading ? "Processing..." : "Buy This Plan — $49"}
+    </button>
+  );
+}
+
 function SpecsLockedGate({ invention }) {
   return (
     <div className="flex-1 flex items-center justify-center p-12">
@@ -1261,13 +1299,10 @@ function SpecsLockedGate({ invention }) {
           To view technical specifications, bill of materials, and build instructions for this invention, you need a membership or purchase this plan individually.
         </p>
         <div className="space-y-2 mb-6">
-          <button onClick={() => window.location.href = '/pricing'}
-            className="flex items-center justify-center gap-2 w-full py-3 rounded-xl font-black text-white text-sm bg-indigo-700 hover:bg-indigo-600 transition-all">
-            View Membership Plans
-          </button>
+          <BuyNowButton invention={invention} />
           <button onClick={() => window.location.href = '/pricing'}
             className="flex items-center justify-center gap-2 w-full py-3 rounded-xl font-black text-sm border border-indigo-700 text-indigo-400 hover:bg-indigo-900/20 transition-all">
-            <ShoppingCart size={15} /> Buy This Plan — $49
+            View Membership Plans
           </button>
         </div>
       </div>
