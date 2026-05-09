@@ -53,9 +53,9 @@ export default function ZenithApexWatermark() {
         {/* Logo */}
         <div className="relative z-10 flex items-center justify-center">
           <img
-            src="https://media.base44.com/images/public/69ccefebfea78b23498c66a8/afb5ad292_CODEXTECHLOGO.png"
-            alt="Zenith Apex"
-            className="w-20 h-20 object-contain drop-shadow-lg"
+            src="https://media.base44.com/images/public/69ccefebfea78b23498c66a8/24360f82b_a6e3bd669_logo.png"
+            alt="Aethon Apex IP"
+            className="w-24 h-24 object-contain drop-shadow-lg"
             style={{
               filter: 'drop-shadow(0 0 12px rgba(6,182,212,0.8)) drop-shadow(0 0 24px rgba(6,182,212,0.4))',
             }}
