@@ -23,7 +23,7 @@ export default function PageBackground() {
     <div
       className="fixed inset-0 -z-10 bg-cover bg-center bg-fixed transition-all duration-1000"
       style={{
-        backgroundImage: `url('${BACKGROUND_IMAGES[currentImageIndex]}')`,
+        backgroundImage: `url("${BACKGROUND_IMAGES[currentImageIndex]}")`,
       }}
     >
       <div className="absolute inset-0 bg-black/60" />
