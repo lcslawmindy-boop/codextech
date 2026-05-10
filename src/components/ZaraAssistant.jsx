@@ -91,7 +91,7 @@ Respond in a friendly, helpful tone. Be specific about which platform feature so
           <div className="flex items-center justify-between px-5 py-4 bg-gradient-to-r from-cyan-600 to-purple-600 text-white">
             <div className="flex items-center gap-2">
               <img
-                src="https://media.base44.com/images/public/69ccefebfea78b23498c66a8/4f5eaa0a4_generated_image.png"
+                src="https://media.base44.com/images/public/69ccefebfea78b23498c66a8/dce6472fe_WS2-Copy-Copy-Copy.jpg"
                 alt="Zara"
                 className="w-8 h-8 rounded-full object-cover"
               />
