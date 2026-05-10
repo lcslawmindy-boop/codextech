@@ -152,7 +152,12 @@ export default function ConceptGraph() {
       </div>
 
       {/* Content area */}
-      <div className="flex-1 relative overflow-hidden bg-gray-950">
+      <div className="flex-1 relative overflow-hidden" style={{
+        backgroundImage: `linear-gradient(45deg, #111827 25%, transparent 25%), linear-gradient(-45deg, #111827 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #111827 75%), linear-gradient(-45deg, transparent 75%, #111827 75%)`,
+        backgroundSize: '40px 40px',
+        backgroundPosition: '0 0, 0 20px, 20px -20px, -20px 0px',
+        backgroundColor: '#0f172a'
+      }}>
 
         {view === "business" ? (
           <BusinessConceptGraph />
