@@ -1,4 +1,24 @@
+import { useState, useEffect } from "react";
+
+const LOGOS = [
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/b42114421_4ba64218b_logo.png",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/2bc4f8f10_b5b5b761f_logo-Copy-Copy.png",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/20790b964_CODEXTECHLOGO-Copy.png",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/03de7ba3c_1ca9f22db_logo-Copy.png",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/6cd1f2009_SCALERTECHLOGO.png",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/f76fd7695_Aurawell10-Copy.png",
+];
+
 export default function AnimatedNeonBackground() {
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentIndex((prev) => (prev + 1) % LOGOS.length);
+    }, 6000);
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
       {/* Background */}
@@ -20,14 +40,12 @@ export default function AnimatedNeonBackground() {
             </feMerge>
           </filter>
         </defs>
-        {/* Grid */}
         {[0, 1, 2, 3, 4].map((i) => (
           <line key={`h${i}`} x1="0" y1={`${(i + 1) * 20}%`} x2="100%" y2={`${(i + 1) * 20}%`} stroke="url(#neonGradient)" strokeWidth="1" filter="url(#glow)" />
         ))}
         {[0, 1, 2, 3, 4].map((i) => (
           <line key={`v${i}`} x1={`${(i + 1) * 20}%`} y1="0" x2={`${(i + 1) * 20}%`} y2="100%" stroke="url(#neonGradient)" strokeWidth="1" filter="url(#glow)" />
         ))}
-        {/* Circuit nodes */}
         {[...Array(16)].map((_, i) => {
           const x = Math.random() * 100;
           const y = Math.random() * 100;
@@ -69,13 +87,19 @@ export default function AnimatedNeonBackground() {
         })}
       </svg>
 
-      {/* Static Logo */}
+      {/* Rotating Logo Carousel */}
       <div className="absolute inset-0 flex items-center justify-center">
-        <img
-          src="https://media.base44.com/images/public/69ccefebfea78b23498c66a8/dcd83ec8f_a6e3bd669_logo.png"
-          alt="Aethon Apex IP"
-          className="w-[450px] h-[450px] object-contain opacity-25"
-        />
+        {LOGOS.map((logo, index) => (
+          <img
+            key={index}
+            src={logo}
+            alt="Platform Logo"
+            className="absolute w-[500px] h-[500px] object-contain transition-opacity duration-1500"
+            style={{
+              opacity: index === currentIndex ? 0.2 : 0,
+            }}
+          />
+        ))}
       </div>
 
       <style>{`
