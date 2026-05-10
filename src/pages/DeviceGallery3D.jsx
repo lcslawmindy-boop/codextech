@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { ArrowLeft, Search, X } from "lucide-react";
 import { businessItems } from "../lib/businessItems";
-import Device3DVisualization from "../components/Device3DVisualization";
+import { deviceImages } from "../lib/deviceImages";
 
 const inventions = businessItems.filter(i => i.category === "Invention");
 
@@ -50,9 +50,13 @@ export default function DeviceGallery3D() {
             return (
               <div key={i} className="bg-gray-900 border border-gray-800 rounded-xl overflow-hidden flex flex-col hover:border-gray-700 transition-all"
                 style={{ borderTopColor: color, borderTopWidth: 3 }}>
-                {/* 3D View */}
-                <div className="w-full h-48 bg-gradient-to-br from-gray-800 to-gray-700">
-                  <Device3DVisualization deviceName={inv.title} color={color} />
+                {/* Device Image */}
+                <div className="w-full h-48 bg-gradient-to-br from-gray-800 to-gray-700 flex items-center justify-center overflow-hidden">
+                  {deviceImages[inv.title] ? (
+                    <img src={deviceImages[inv.title]} alt={inv.title} className="w-full h-full object-cover" />
+                  ) : (
+                    <div className="text-gray-600 text-xs text-center">No image available</div>
+                  )}
                 </div>
 
                 {/* Info */}
