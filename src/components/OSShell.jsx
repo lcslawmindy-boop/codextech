@@ -21,10 +21,10 @@ const NAV_ITEMS = [
   { icon: Wrench, label: "Build Plans", href: "/device-catalogue", color: "#f97316", group: "build" },
   { icon: Target, label: "Project Planner", href: "/project-planner", color: "#14b8a6", group: "build" },
   { icon: BookOpen, label: "Courses", href: "/course-catalogue", color: "#22c55e", group: "build" },
+  { icon: Brain, label: "Intelligence Layer", href: "/intelligence", color: "#00E5FF", group: "intel" },
   { icon: Radar, label: "Threat Monitor", href: "/monitoring", color: "#ef4444", group: "intel" },
   { icon: TrendingUp, label: "IP Marketplace", href: "/ip-marketplace", color: "#06b6d4", group: "intel" },
   { icon: Activity, label: "Opportunity Monitor", href: "/opportunity-monitor", color: "#f59e0b", group: "intel" },
-  { icon: Brain, label: "Intelligence Layer", href: "/intelligence", color: "#a855f7", group: "intel" },
 ];
 
 const GROUP_LABELS = {

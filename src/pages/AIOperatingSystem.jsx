@@ -23,10 +23,10 @@ const MODULES = [
   { id: "build-plans", icon: Wrench, label: "Build Plans", sub: "40+ documented builds", color: "#f97316", href: "/device-catalogue", group: "Build" },
   { id: "project-planner", icon: Target, label: "Project Planner", sub: "AI milestones", color: "#14b8a6", href: "/project-planner", group: "Build" },
   { id: "courses", icon: BookOpen, label: "Courses", sub: "40+ engineering courses", color: "#22c55e", href: "/course-catalogue", group: "Build" },
+  { id: "intelligence", icon: Brain, label: "Intelligence Layer", sub: "5 AI modules live", color: "#00E5FF", href: "/intelligence", group: "Intelligence" },
   { id: "ip-network", icon: Network, label: "IP Network Graph", sub: "Relationship mapping", color: "#3b82f6", href: "/ip-network", group: "Intelligence" },
   { id: "monitoring", icon: Radar, label: "Threat Monitor", sub: "Patent alerts", color: "#ef4444", href: "/monitoring", group: "Intelligence" },
   { id: "ip-marketplace", icon: TrendingUp, label: "IP Marketplace", sub: "Opportunity cards", color: "#06b6d4", href: "/ip-marketplace", group: "Intelligence" },
-  { id: "intelligence", icon: Brain, label: "Intelligence Layer", sub: "Events · Clusters · Links", color: "#a855f7", href: "/intelligence", group: "Intelligence" },
 ];
 
 const WORKFLOW_STEPS = [

@@ -9,7 +9,6 @@ import {
 import { base44 } from "@/api/base44Client";
 import GraphCanvas from "@/components/intelligence/GraphCanvas";
 import NodeDetailPanel from "@/components/intelligence/NodeDetailPanel";
-import GraphToolbar from "@/components/intelligence/GraphToolbar";
 import GraphFilterPanel from "@/components/intelligence/GraphFilterPanel";
 import { buildGraphData } from "@/lib/graphDataBuilder";
 

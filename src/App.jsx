@@ -175,8 +175,8 @@ import AIOperatingSystem from './pages/AIOperatingSystem';
 import IPNetworkGraph from './pages/IPNetworkGraph';
 import ProjectPlanner from './pages/ProjectPlanner';
 import BuildPlanExplorer from './pages/BuildPlanExplorer';
-import IntelligenceLayer from './pages/IntelligenceLayer';
 import OSShell from './components/OSShell';
+import IntelligenceLayer from './pages/IntelligenceLayer';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
