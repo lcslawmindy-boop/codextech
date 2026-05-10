@@ -1,6 +1,7 @@
 import { useState } from "react";
-import { X } from "lucide-react";
+import { X, ChevronDown } from "lucide-react";
 import { businessItems } from "@/lib/businessItems";
+import BottomSheet from "@/components/BottomSheet";
 
 const inventionNames = businessItems
   .filter(i => i.category === "Invention")
@@ -18,6 +19,8 @@ const SENSOR_TYPES = [
   { value: "custom", label: "Custom / Other" },
 ];
 
+const INVENTION_OPTIONS = inventionNames.map(n => ({ value: n, label: n }));
+
 export default function ExperimentForm({ onSave, onCancel, initial }) {
   const [form, setForm] = useState(initial || {
     title: "",
@@ -30,6 +33,8 @@ export default function ExperimentForm({ onSave, onCancel, initial }) {
     status: "planned",
   });
   const [tagInput, setTagInput] = useState("");
+  const [inventionSheetOpen, setInventionSheetOpen] = useState(false);
+  const [sensorSheetOpen, setSensorSheetOpen] = useState(false);
 
   const set = (k, v) => setForm(f => ({ ...f, [k]: v }));
 
@@ -40,6 +45,8 @@ export default function ExperimentForm({ onSave, onCancel, initial }) {
   };
 
   const removeTag = (t) => set("tags", form.tags.filter(x => x !== t));
+
+  const selectedSensorLabel = SENSOR_TYPES.find(s => s.value === form.sensor_type)?.label || form.sensor_type;
 
   return (
     <div className="bg-gray-900 border border-gray-700 rounded-2xl p-6 space-y-5">
@@ -53,23 +60,49 @@ export default function ExperimentForm({ onSave, onCancel, initial }) {
           className="w-full px-4 py-2.5 rounded-lg bg-gray-800 border border-gray-700 text-white placeholder-gray-600 text-sm focus:outline-none focus:border-cyan-500" />
       </div>
 
-      {/* Invention */}
+      {/* Invention — BottomSheet picker */}
       <div>
         <label className="block text-xs font-bold text-gray-400 mb-1.5">Based on Invention *</label>
-        <select value={form.invention_name} onChange={e => set("invention_name", e.target.value)}
-          className="w-full px-4 py-2.5 rounded-lg bg-gray-800 border border-gray-700 text-white text-sm focus:outline-none focus:border-cyan-500">
-          {inventionNames.map(n => <option key={n} value={n}>{n}</option>)}
-        </select>
+        <button
+          type="button"
+          onClick={() => setInventionSheetOpen(true)}
+          className="w-full flex items-center justify-between px-4 py-2.5 rounded-lg bg-gray-800 border border-gray-700 text-white text-sm focus:outline-none focus:border-cyan-500 text-left"
+          style={{ minHeight: 44 }}
+        >
+          <span className="truncate">{form.invention_name || "Select invention…"}</span>
+          <ChevronDown size={14} className="text-gray-500 flex-shrink-0 ml-2" />
+        </button>
+        <BottomSheet
+          open={inventionSheetOpen}
+          onClose={() => setInventionSheetOpen(false)}
+          title="Select Invention"
+          options={INVENTION_OPTIONS}
+          value={form.invention_name}
+          onChange={(val) => set("invention_name", val)}
+        />
       </div>
 
       {/* Sensor type + unit */}
       <div className="grid grid-cols-2 gap-4">
         <div>
           <label className="block text-xs font-bold text-gray-400 mb-1.5">Primary Sensor Type</label>
-          <select value={form.sensor_type} onChange={e => set("sensor_type", e.target.value)}
-            className="w-full px-4 py-2.5 rounded-lg bg-gray-800 border border-gray-700 text-white text-sm focus:outline-none focus:border-cyan-500">
-            {SENSOR_TYPES.map(s => <option key={s.value} value={s.value}>{s.label}</option>)}
-          </select>
+          <button
+            type="button"
+            onClick={() => setSensorSheetOpen(true)}
+            className="w-full flex items-center justify-between px-4 py-2.5 rounded-lg bg-gray-800 border border-gray-700 text-white text-sm focus:outline-none focus:border-cyan-500 text-left"
+            style={{ minHeight: 44 }}
+          >
+            <span className="truncate text-xs">{selectedSensorLabel}</span>
+            <ChevronDown size={14} className="text-gray-500 flex-shrink-0 ml-1" />
+          </button>
+          <BottomSheet
+            open={sensorSheetOpen}
+            onClose={() => setSensorSheetOpen(false)}
+            title="Select Sensor Type"
+            options={SENSOR_TYPES}
+            value={form.sensor_type}
+            onChange={(val) => set("sensor_type", val)}
+          />
         </div>
         <div>
           <label className="block text-xs font-bold text-gray-400 mb-1.5">Unit Label (e.g. counts/sec)</label>

@@ -1,7 +1,6 @@
 import { Link, useLocation } from "react-router-dom";
 import { Vault, Wrench, Zap, BookOpen, FlaskConical } from "lucide-react";
 
-
 const TABS = [
   {
     label: "Home",
