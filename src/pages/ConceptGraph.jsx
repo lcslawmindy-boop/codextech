@@ -11,6 +11,7 @@ import BusinessConceptGraph from "../components/BusinessConceptGraph";
 import { groupColors, nodes } from "../lib/beardenData";
 import NewsletterSignup from "../components/NewsletterSignup";
 import MainNav from "../components/MainNav";
+import AnimatedNeonBackground from "../components/AnimatedNeonBackground";
 import { base44 } from "@/api/base44Client";
 import { useState as useAdminState, useEffect as useAdminEffect } from 'react';
 
@@ -152,10 +153,8 @@ export default function ConceptGraph() {
 
       {/* Content area */}
       <div className="flex-1 relative overflow-hidden">
-        {/* Aethon Apex IP logo background */}
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-20 z-0">
-          <img src="https://media.base44.com/images/public/69ccefebfea78b23498c66a8/9d4ba4f43_e81fda6df_logo-Copy2.png" alt="Aethon Apex IP" className="w-96 h-96 object-contain" />
-        </div>
+        {/* Animated neon background with rotating logos */}
+        <AnimatedNeonBackground />
 
         {view === "business" ? (
           <BusinessConceptGraph />
