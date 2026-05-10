@@ -402,6 +402,7 @@ export default function InventionLibrary() {
             />
             {search && <button onClick={() => setSearch("")} className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500"><X size={12} /></button>}
           </div>
+          <Link to="/device-gallery-3d" className="px-3 py-1.5 text-xs font-bold rounded-lg bg-cyan-900/40 border border-cyan-700 text-cyan-300">🎨 3D Gallery</Link>
           <Link to="/admin-videos" className="px-3 py-1.5 text-xs font-bold rounded-lg bg-purple-900/40 border border-purple-700 text-purple-300">🎬 Video Library</Link>
           <Link to="/invention-plans" className="px-3 py-1.5 text-xs font-bold rounded-lg bg-red-900/40 border border-red-700 text-red-300">📐 Build Plans</Link>
         </div>

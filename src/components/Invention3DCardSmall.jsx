@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import Device3DVisualization from "./Device3DVisualization";
 import * as THREE from "three";
 
 const DEVICE_GEOMETRIES = {

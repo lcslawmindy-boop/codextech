@@ -64,6 +64,7 @@ import AdminVideos from './pages/AdminVideos';
 import OpportunityMonitor from './pages/OpportunityMonitor';
 import AdminDownloadCenter from './pages/AdminDownloadCenter';
 import InventionLibrary from './pages/InventionLibrary';
+import DeviceGallery3D from './pages/DeviceGallery3D';
 import DownloadCenter from './pages/DownloadCenter';
 import InventionTimeline from './pages/InventionTimeline';
 import Pricing from './pages/Pricing';
@@ -292,6 +293,7 @@ const AuthenticatedApp = () => {
           <Route path="/provisional-patent" element={<ProvisionalPatent />} />
           <Route path="/scalar-potential" element={<ScalarPotentialMap />} />
           <Route path="/invention-library" element={<InventionLibrary />} />
+          <Route path="/device-gallery-3d" element={<DeviceGallery3D />} />
           <Route path="/download-center" element={<DownloadCenter />} />
           <Route path="/invention-timeline" element={<InventionTimeline />} />
           <Route path="/pricing" element={<Pricing />} />
