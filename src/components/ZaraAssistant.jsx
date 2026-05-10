@@ -3,14 +3,18 @@ import { X, MessageCircle, Send, Sparkles, HelpCircle } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 
 const ZARA_TIPS = [
-  { title: "Concept Graph", tip: "Start by exploring the interactive electromagnetic concept network — click nodes to drill into research." },
-  { title: "Prior Art Archive", tip: "Search our 200+ documented inventions by category (MEG, Priore, Tesla tech, scalar EM, etc.)" },
-  { title: "Invention Forge", tip: "Let AI generate hybrid invention concepts from two archived patents — complete with IP valuations." },
-  { title: "Patent Tools", tip: "Draft provisional patents, generate claims, and run FTO analysis — all AI-assisted with USPTO formatting." },
-  { title: "Build Plans", tip: "Access 40+ device build plans with full BOMs, circuit schematics, and step-by-step assembly guides." },
-  { title: "Courses", tip: "40+ engineering courses on scalar electromagnetics, free energy extraction, and advanced physics." },
-  { title: "Monitoring", tip: "Set up custom patent alerts to track competitive threats and new filings in your technology domain." },
-  { title: "Investor Tools", tip: "Generate pitch decks, term sheets, and due diligence packages — templates powered by AI." },
+  { title: "Concept Graph", tip: "Start by exploring the interactive electromagnetic concept network — click nodes to drill into research.", url: "/" },
+  { title: "Prior Art Archive", tip: "Search our 200+ documented inventions by category (MEG, Priore, Tesla tech, scalar EM, etc.)", url: "/prior-art" },
+  { title: "Invention Forge", tip: "Let AI generate hybrid invention concepts from two archived patents — complete with IP valuations.", url: "/invention-forge" },
+  { title: "Patent Tools", tip: "Draft provisional patents, generate claims, and run FTO analysis — all AI-assisted with USPTO formatting.", url: "/patent-hub" },
+  { title: "Build Plans", tip: "Access 40+ device build plans with full BOMs, circuit schematics, and step-by-step assembly guides.", url: "/device-catalogue" },
+  { title: "Courses", tip: "40+ engineering courses on scalar electromagnetics, free energy extraction, and advanced physics.", url: "/course-catalogue" },
+  { title: "Monitoring", tip: "Set up custom patent alerts to track competitive threats and new filings in your technology domain.", url: "/monitoring" },
+  { title: "Investor Tools", tip: "Generate pitch decks, term sheets, and due diligence packages — templates powered by AI.", url: "/investor-portal" },
+  { title: "IP Network Graph", tip: "Visualize relationships between inventions, patents, and competitive landscape with our AI mapping tool.", url: "/ip-network" },
+  { title: "Research Lab", tip: "Run simulations, access experimental data, and collaborate on electromagnetic research projects.", url: "/research-lab" },
+  { title: "Hybrid Portfolio", tip: "View AI-generated hybrid inventions, their IP valuations, and commercialization roadmaps.", url: "/hybrid-portfolio" },
+  { title: "AI Operating System", tip: "Access the full R&D workflow from discovery to patent filing — all integrated in one dashboard.", url: "/ai-os" },
 ];
 
 export default function ZaraAssistant() {
@@ -68,6 +72,12 @@ Respond in a friendly, helpful tone. Be specific about which platform feature so
       { role: "user", text: `Tell me about ${tip.title}` },
       { role: "assistant", text: tip.tip }
     ]);
+    // Navigate after brief delay for UX
+    setTimeout(() => {
+      if (tip.url) {
+        window.location.href = tip.url;
+      }
+    }, 600);
   };
 
   return (
@@ -136,18 +146,19 @@ Respond in a friendly, helpful tone. Be specific about which platform feature so
 
           {/* Quick tips */}
           {messages.length <= 1 && (
-            <div className="px-4 py-3 border-t border-slate-800 bg-slate-900/50 max-h-24 overflow-y-auto">
+            <div className="px-4 py-3 border-t border-slate-800 bg-slate-900/50 max-h-32 overflow-y-auto">
               <p className="text-[10px] text-slate-600 font-bold uppercase tracking-wider mb-2 flex items-center gap-1">
-                <HelpCircle size={11} /> Quick Tips
+                <HelpCircle size={11} /> Quick Navigation
               </p>
-              <div className="space-y-1">
-                {ZARA_TIPS.slice(0, 3).map((tip, i) => (
+              <div className="grid grid-cols-2 gap-1">
+                {ZARA_TIPS.map((tip, i) => (
                   <button
                     key={i}
                     onClick={() => handleTipClick(tip)}
-                    className="w-full text-left text-xs px-2 py-1.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-cyan-300 transition-colors"
+                    className="text-left text-[10px] px-2 py-1.5 rounded bg-slate-800 hover:bg-cyan-700 text-slate-300 hover:text-white transition-colors font-medium truncate"
+                    title={tip.tip}
                   >
-                    💡 {tip.title}
+                    → {tip.title}
                   </button>
                 ))}
               </div>
