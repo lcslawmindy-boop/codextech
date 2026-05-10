@@ -24,10 +24,13 @@ function BuyButton({ item }) {
     }
     setLoading(true);
     try {
-      const res = await base44.functions.invoke("createWixCheckout", {
-        productName: item.title,
+      const res = await base44.functions.invoke("createCheckoutSession", {
+        title: item.title,
         priceInCents,
         description: item.tagline,
+        category: "course",
+        successUrl: `${window.location.origin}/my-learning`,
+        cancelUrl: `${window.location.origin}/course-catalogue`,
       });
       if (res.data?.url) window.location.href = res.data.url;
     } catch (err) { console.error(err); }

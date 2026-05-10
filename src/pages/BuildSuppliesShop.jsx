@@ -203,10 +203,13 @@ function ProductCard({ product }) {
     }
     setLoading(true);
     try {
-      const response = await base44.functions.invoke("createWixCheckout", {
-        productName: product.name,
+      const response = await base44.functions.invoke("createCheckoutSession", {
+        title: product.name,
         priceInCents: Math.round(product.baseCostCents * 1.1),
         description: `Pre-sourced component kit for ${product.device} — verified parts, ready to order. Includes 10% sourcing & handling fee.`,
+        category: "kit",
+        successUrl: `${window.location.origin}/orders`,
+        cancelUrl: `${window.location.origin}/build-supplies-shop`,
       });
       if (response.data?.url) window.location.href = response.data.url;
     } catch (err) {
