@@ -146,6 +146,27 @@ export default function Pricing() {
     const price = isAnnual ? tier.annual : tier.monthly;
     const priceInCents = isAnnual ? Math.round(price * 12 * 100) : Math.round(price * 100);
 
+    // Fire GA4 conversion event for enterprise tier
+    if (typeof window.gtag !== 'undefined') {
+      window.gtag('event', 'purchase', {
+        event_category: 'engagement',
+        event_label: tier.id === 'enterprise' ? 'enterprise_signup' : 'tier_signup',
+        value: price,
+        currency: 'USD',
+        tier: tier.id,
+        billing_cycle: isAnnual ? 'annual' : 'monthly',
+      });
+
+      // Enterprise tier gets additional tracking
+      if (tier.id === 'enterprise') {
+        window.gtag('event', 'conversion', {
+          event_category: 'enterprise_tier',
+          event_label: 'enterprise_checkout_initiated',
+          value: priceInCents / 100,
+        });
+      }
+    }
+
     const res = await base44.functions.invoke("createCheckoutSession", {
       title: `Aethon Apex IP — ${tier.name} (${isAnnual ? "Annual" : "Monthly"})`,
       priceInCents,

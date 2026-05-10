@@ -68,6 +68,21 @@ Deno.serve(async (req) => {
             subscription_id: session.subscription || null,
           });
           console.log("subscription_status set to active for:", email);
+
+          // Post LinkedIn milestone for Enterprise tier signups
+          const productTitle = session.metadata?.product_title || productName || '';
+          if (productTitle.includes('Enterprise')) {
+            try {
+              await base44.asServiceRole.functions.invoke('shareLinkedInMilestone', {
+                milestoneName: 'New Enterprise Member Onboarded',
+                milestoneSummary: `A new researcher has joined Aethon Apex IP on the Enterprise tier. Advancing electromagnetic research collaboration and innovation.`,
+                inventionName: 'Aethon Apex IP Platform',
+              });
+              console.log('LinkedIn milestone posted for enterprise signup:', email);
+            } catch (linkedinErr) {
+              console.warn('Failed to post LinkedIn milestone:', linkedinErr.message);
+            }
+          }
         } else {
           console.warn("No User found for email:", email, "— user may not have registered yet. restoreAccess will sync on login.");
         }

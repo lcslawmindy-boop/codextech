@@ -178,6 +178,7 @@ import ProjectPlanner from './pages/ProjectPlanner';
 import BuildPlanExplorer from './pages/BuildPlanExplorer';
 import OSShell from './components/OSShell';
 import IntelligenceLayer from './pages/IntelligenceLayer';
+import ConversionAnalytics from './pages/ConversionAnalytics';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -380,6 +381,7 @@ const AuthenticatedApp = () => {
             <Route path="/lead-magnets" element={<LeadMagnetSystem />} />
             <Route path="/ab-testing" element={<ABTestingDashboard />} />
             <Route path="/revenue-audit" element={<RevenueAudit />} />
+            <Route path="/conversion-analytics" element={<ConversionAnalytics />} />
           </Route>
 
           {/* Scalar Venture Vault Routes */}
