@@ -1,10 +1,14 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { ArrowRight, ChevronDown, Zap, BookOpen, Wrench, Scale, Lightbulb, Star, Play, Shield, Database, Check, Users, Lock, Flame } from "lucide-react";
+import {
+  ArrowRight, Check, ChevronDown, ChevronUp, Zap, BookOpen, Wrench,
+  Shield, Database, Star, Users, Lock, Flame, FlaskConical, Radio,
+  Cpu, Activity, FileText, Award, Play, Globe, Mail
+} from "lucide-react";
 import { base44 } from "@/api/base44Client";
 
 // ── Countdown ──────────────────────────────────────────────────────────────────
-const DEADLINE_KEY = "zarp_founding_deadline";
+const DEADLINE_KEY = "apex_founding_deadline";
 function getDeadline() {
   let d = localStorage.getItem(DEADLINE_KEY);
   if (!d) { d = (Date.now() + 48 * 3600 * 1000).toString(); localStorage.setItem(DEADLINE_KEY, d); }
@@ -24,184 +28,161 @@ function useCountdown() {
   return `${pad(h)}:${pad(m)}:${pad(s)}`;
 }
 
-const FUNNEL_STEPS = [
-  {
-    step: 1,
-    icon: <Database size={22} className="text-cyan-400" />,
-    label: "Free Research Database",
-    sublabel: "Start here — no account needed",
-    color: "cyan",
-    desc: "Explore the Bearden concept graph: 100+ nodes of scalar EM, vacuum energy & bioelectromagnetics — all sourced from peer-reviewed journals, US patents, and declassified government docs.",
-    links: [
-      { label: "Concept Graph", to: "/" },
-      { label: "Prior Art Archive", to: "/prior-art" },
-      { label: "Free Vault", to: "/free-vault" },
-    ],
-    badge: "FREE",
-  },
-  {
-    step: 2,
-    icon: <BookOpen size={22} className="text-purple-400" />,
-    label: "Courses & Build Plans",
-    sublabel: "Structured learning + hands-on builds",
-    color: "purple",
-    desc: "40+ structured courses (scalar EM → bioelectromagnetics → free energy) plus 40+ complete device build plans with BOM, schematics, step-by-step assembly guides, and build videos.",
-    links: [
-      { label: "Course Catalogue", to: "/course-catalogue" },
-      { label: "Device Build Plans", to: "/device-catalogue" },
-      { label: "Build Videos", to: "/invention-plans" },
-    ],
-    badge: "MEMBER",
-  },
-  {
-    step: 3,
-    icon: <Scale size={22} className="text-indigo-400" />,
-    label: "Patent & IP Suite",
-    sublabel: "Attorney-grade tools, AI-powered",
-    color: "indigo",
-    desc: "AI patent attorney chat, novelty analysis, competitive landscape, USPTO-formatted patent drafting wizard, prior art cross-reference, and automated patent threat monitoring.",
-    links: [
-      { label: "Patent Hub", to: "/patent-hub" },
-      { label: "Patent Drafting Wizard", to: "/patent-drafting-wizard" },
-      { label: "Patent Monitoring", to: "/monitoring" },
-    ],
-    badge: "MEMBER",
-  },
-  {
-    step: 4,
-    icon: <Zap size={22} className="text-yellow-400" />,
-    label: "Invention Forge",
-    sublabel: "Mix technologies → create new IP",
-    color: "yellow",
-    desc: "Select 2–4 device technologies, forge a new hybrid invention concept using AI, and receive patent claims, IP valuation ($M range), and a full 5-year commercialization roadmap.",
-    links: [
-      { label: "Invention Forge", to: "/invention-forge" },
-      { label: "IP Portfolio", to: "/ip-portfolio-health" },
-      { label: "Hybrid Portfolio", to: "/hybrid-portfolio" },
-    ],
-    badge: "MEMBER",
-  },
+// ── Data ──────────────────────────────────────────────────────────────────────
+const RESEARCH_DOMAINS = [
+  { icon: <Radio size={20} />, label: "RF & Signal Systems", color: "#06b6d4" },
+  { icon: <Activity size={20} />, label: "Resonance Engineering", color: "#a855f7" },
+  { icon: <FlaskConical size={20} />, label: "EM Instrumentation", color: "#22c55e" },
+  { icon: <Cpu size={20} />, label: "FPGA & Embedded Systems", color: "#f97316" },
+  { icon: <Shield size={20} />, label: "EMI Shielding & Analysis", color: "#eab308" },
+  { icon: <Database size={20} />, label: "Historical Patent Research", color: "#ec4899" },
+  { icon: <FileText size={20} />, label: "Sensor & Measurement", color: "#8b5cf6" },
+  { icon: <Globe size={20} />, label: "Bioelectromagnetics", color: "#14b8a6" },
 ];
 
-const PLANS = [
+const MEMBERSHIP_PLANS = [
+  {
+    id: "starter",
+    name: "Starter",
+    price: 9.99,
+    color: "#06b6d4",
+    badge: "ENTRY",
+    desc: "Research archive & concept library",
+    features: [
+      "Interactive electromagnetic concept graph",
+      "Historical patent research archive (200+ entries)",
+      "Prior art analysis library",
+      "Engineering glossary & reference docs",
+    ],
+    locked: ["Build plan library", "Video training series", "AI patent tools"],
+  },
   {
     id: "research",
-    name: "Research Access",
-    price: 9.99,
-    period: "/mo",
-    color: "#06b6d4",
-    badge: "STARTER",
-    desc: "Bearden concept graph & prior art database.",
-    features: [
-      "Interactive Bearden concept graph — 100+ nodes",
-      "Prior Art Archive — 200+ documented inventions",
-      "Historical patents & suppression patterns",
-      "Research library access",
-    ],
-    locked: [
-      "40+ courses",
-      "40+ build plans",
-      "AI Patent Suite",
-      "Invention Forge",
-    ],
-    cta: "Start Research — $9.99/mo",
-    priceInCents: 999,
-    isCheckout: true,
-  },
-  {
-    id: "builder",
-    name: "Builder",
+    name: "Research Lab",
     price: 49,
-    period: "/mo",
-    color: "#f97316",
-    badge: "POPULAR",
-    desc: "5 rotating courses + 5 rotating builds.",
-    features: [
-      "5 curated courses (rotate monthly)",
-      "5 build plans with full BOM & specs (rotate monthly)",
-      "25% off all additional courses & build plans",
-      "1 new course + 1 new build monthly drop",
-      "Build forum & community support",
-    ],
-    locked: [
-      "10+ courses",
-      "10+ build plans",
-      "AI Patent Suite",
-      "Invention Forge",
-    ],
-    cta: "Start Building — $49/mo",
-    priceInCents: 4900,
-    isCheckout: true,
-  },
-  {
-    id: "professional",
-    name: "Professional",
-    price: 99,
-    period: "/mo",
     color: "#a855f7",
-    badge: "BEST VALUE",
-    desc: "10 courses + 10 builds + patent suite.",
+    badge: "POPULAR",
+    desc: "5 courses + 5 build plans, rotating monthly",
     features: [
-      "10 curated courses (rotating access)",
-      "10 build plans with full BOM & specs (rotating)",
-      "5 Invention Forges per month",
-      "25% off all additional courses & build plans",
-      "1 new course + 1 new build monthly drop",
-      "AI Patent Suite — drafting, attorney chat, threat monitor",
-      "Build forum & patent support",
+      "5 structured engineering courses (monthly rotation)",
+      "5 complete build plans with full BOM & schematics",
+      "25% discount on additional content",
+      "Monthly course & build drops",
+      "Community forum access",
     ],
-    locked: [],
-    cta: "Start Pro — $99/mo",
-    priceInCents: 9900,
-    isCheckout: true,
+    locked: ["AI Patent Suite", "Unlimited forges"],
     highlight: true,
   },
   {
-    id: "forge",
-    name: "Invention Forge Creator",
-    price: 149,
-    period: "/mo",
-    color: "#ef4444",
-    badge: "PREMIUM",
-    desc: "Unlimited hybrid invention generation.",
+    id: "pro",
+    name: "Pro Lab",
+    price: 99,
+    color: "#22c55e",
+    badge: "BEST VALUE",
+    desc: "Full platform: 10 courses + patent tools + forge",
     features: [
-      "Unlimited hybrid invention generation",
-      "IP valuation estimation tool",
-      "Export to investor pitch decks & presentations",
-      "Commercialization pathway planning",
-      "Priority support",
+      "10 structured engineering courses (rotating)",
+      "10 build plans with full BOM, schematics & sourcing",
+      "AI Patent Suite — drafting, analysis, threat monitoring",
+      "5 Invention Forge sessions/month",
+      "Priority forum & expert support",
+      "Early access to new content drops",
     ],
     locked: [],
-    cta: "Go Premium — $149/mo",
-    priceInCents: 14900,
-    isCheckout: true,
   },
 ];
+
+const STATS = [
+  { val: "200+", label: "Research Entries", sub: "Patent-sourced & peer-reviewed" },
+  { val: "40+", label: "Build Plans", sub: "Full BOM & assembly guides" },
+  { val: "40+", label: "Structured Courses", sub: "Beginner to advanced" },
+  { val: "5", label: "AI Patent Tools", sub: "Professional-grade analysis" },
+];
+
+const TRUST_PILLARS = [
+  {
+    icon: <Award size={22} className="text-cyan-400" />,
+    title: "Patent-Sourced Content",
+    desc: "Every build plan and research entry is traceable to a granted US patent, peer-reviewed publication, or declassified government document. Sources are cited inline.",
+  },
+  {
+    icon: <FlaskConical size={22} className="text-purple-400" />,
+    title: "Engineering Methodology",
+    desc: "All documentation follows standard engineering practices: calibrated specifications, measurement methodology, standardized BOM formatting, and safety protocols.",
+  },
+  {
+    icon: <Shield size={22} className="text-green-400" />,
+    title: "Educational Framework",
+    desc: "This is a research and educational platform. Content is designed for learning, experimentation, and academic study — not commercial deployment or medical application.",
+  },
+  {
+    icon: <Users size={22} className="text-yellow-400" />,
+    title: "Maker & Researcher Community",
+    desc: "Built for engineers, students, experimenters, and researchers who want access to advanced technical content not available in mainstream curricula.",
+  },
+];
+
+const COURSE_CATEGORIES = [
+  { emoji: "📡", name: "RF & Signal Systems", count: 6 },
+  { emoji: "🔬", name: "Resonance Engineering", count: 5 },
+  { emoji: "⚡", name: "EM Instrumentation", count: 7 },
+  { emoji: "🛡️", name: "EMI & Shielding", count: 4 },
+  { emoji: "💾", name: "FPGA & Embedded", count: 5 },
+  { emoji: "🧬", name: "Bioelectromagnetic Research", count: 4 },
+  { emoji: "📊", name: "Signal Analysis", count: 5 },
+  { emoji: "📁", name: "Historical Patent Archive", count: 8 },
+];
+
+const FAQS = [
+  {
+    q: "What exactly is in the research archive?",
+    a: "The archive contains 200+ research entries, each sourced from granted US patents, peer-reviewed scientific publications, or declassified government documents. Every entry includes the original source citation, technical analysis, key claims, and engineering notes.",
+  },
+  {
+    q: "Who is this platform designed for?",
+    a: "Advanced electronics hobbyists, RF experimenters, makers, engineering students, independent researchers, instrumentation enthusiasts, FPGA builders, signal analysis enthusiasts, and anyone serious about experimental electromagnetics.",
+  },
+  {
+    q: "Are these real, buildable devices?",
+    a: "Yes. Every build plan includes a complete Bill of Materials with part numbers, exact specifications, supplier recommendations, and step-by-step assembly instructions. Parts are sourced from standard electronics suppliers (Digikey, Mouser, Amazon).",
+  },
+  {
+    q: "What's the difference between tiers?",
+    a: "Starter gives you archive access. Research Lab adds 5 rotating courses + 5 build plans monthly. Pro Lab includes 10 courses, 10 builds, the full AI Patent Suite, and Invention Forge sessions.",
+  },
+  {
+    q: "Is there a free option to explore first?",
+    a: "Yes — the Free Vault gives you 1 complete build plan, 1 free course module, and access to the electromagnetic concept graph with no payment required.",
+  },
+  {
+    q: "What does the AI Patent Suite include?",
+    a: "The AI Patent Suite includes an attorney-grade patent drafting wizard, novelty analysis, freedom-to-operate research, competitive landscape mapping, prior art cross-reference, and automated patent threat monitoring.",
+  },
+];
+
+// ── Components ─────────────────────────────────────────────────────────────────
 
 function PlanCard({ plan, isAnnual }) {
   const [loading, setLoading] = useState(false);
   const displayPrice = isAnnual ? Math.round(plan.price * 0.8) : plan.price;
-  const annualSave = isAnnual && plan.price > 0;
 
   const handleCheckout = async () => {
-    if (!plan.isCheckout) return;
     if (window.self !== window.top) {
-      alert("Checkout only works from the published app, not inside the editor.");
+      alert("Checkout only works from the published app.");
       return;
     }
     setLoading(true);
     try {
       const priceInCents = isAnnual
-        ? Math.round(plan.priceInCents * 0.8 * 12)
-        : plan.priceInCents;
-      const origin = window.location.origin;
+        ? Math.round(plan.price * 0.8 * 12 * 100)
+        : Math.round(plan.price * 100);
       const res = await base44.functions.invoke("createCheckoutSession", {
-        title: `Aethon Apex IP ${plan.name} Membership`,
+        title: `Aethon Apex IP — ${plan.name} Membership`,
         priceInCents,
         description: plan.desc,
         category: "membership",
-        successUrl: `${origin}/member-dashboard`,
-        cancelUrl: `${origin}/pricing`,
+        successUrl: `${window.location.origin}/member-dashboard`,
+        cancelUrl: `${window.location.origin}/start`,
       });
       if (res.data?.url) window.location.href = res.data.url;
     } catch (e) { console.error(e); }
@@ -209,63 +190,45 @@ function PlanCard({ plan, isAnnual }) {
   };
 
   return (
-    <div className={`relative flex flex-col rounded-2xl border overflow-hidden transition-all ${
-      plan.highlight ? "border-2 shadow-2xl scale-[1.02]" : "border"
-    }`}
-      style={{
-        borderColor: plan.highlight ? plan.color : "#1f2937",
-        boxShadow: plan.highlight ? `0 0 40px ${plan.color}30` : undefined,
-      }}>
-      {plan.badge && (
-        <div className="py-2 text-center text-xs font-black tracking-widest text-white"
-          style={{ backgroundColor: plan.color }}>
-          {plan.badge}
-        </div>
-      )}
+    <div
+      className={`relative flex flex-col rounded-2xl overflow-hidden transition-all ${plan.highlight ? "ring-2 shadow-2xl scale-[1.02]" : "border border-gray-800"}`}
+      style={plan.highlight ? { ringColor: plan.color, boxShadow: `0 0 50px ${plan.color}25` } : {}}
+    >
+      <div className="py-2 text-center text-xs font-black tracking-widest text-white" style={{ backgroundColor: plan.color }}>
+        {plan.badge}
+      </div>
       <div className="p-6 bg-gray-900 flex flex-col flex-1">
         <h3 className="text-white font-black text-xl mb-1">{plan.name}</h3>
-        <p className="text-gray-400 text-xs leading-relaxed mb-4">{plan.desc}</p>
+        <p className="text-gray-400 text-xs mb-5">{plan.desc}</p>
+
         <div className="flex items-end gap-1 mb-1">
-          {plan.price === 0 ? (
-            <span className="text-5xl font-black text-white">Free</span>
-          ) : (
-            <>
-              <span className="text-5xl font-black" style={{ color: plan.color }}>${displayPrice}</span>
-              <span className="text-gray-500 mb-2">{plan.period}</span>
-            </>
-          )}
+          <span className="text-5xl font-black" style={{ color: plan.color }}>${displayPrice}</span>
+          <span className="text-gray-500 mb-2 text-sm">/mo</span>
         </div>
-        {annualSave && <p className="text-green-400 text-xs font-bold mb-1">Save 20% — billed annually</p>}
-        <p className="text-gray-600 text-xs mb-6">
-          {plan.price === 0 ? "No credit card" : isAnnual ? `$${displayPrice * 12}/year` : "Monthly billing"}
-        </p>
+        {isAnnual && <p className="text-green-400 text-xs font-bold mb-1">Save 20% — billed annually</p>}
+        <p className="text-gray-600 text-xs mb-6">{isAnnual ? `$${Math.round(displayPrice * 12)}/year` : "Monthly billing"}</p>
 
-        {plan.isCheckout ? (
-          <button onClick={handleCheckout} disabled={loading}
-            className="w-full py-3 rounded-xl font-black text-white text-sm transition-all hover:opacity-90 mb-6"
-            style={{ background: `linear-gradient(135deg, ${plan.color}, ${plan.color}99)` }}>
-            {loading ? "Processing..." : plan.cta}
-          </button>
-        ) : (
-          <Link to={plan.ctaLink || "/free-vault"}
-            className="flex items-center justify-center w-full py-3 rounded-xl font-black text-white text-sm transition-all mb-6 border-2"
-            style={{ borderColor: plan.color, color: plan.color }}>
-            {plan.cta}
-          </Link>
-        )}
+        <button
+          onClick={handleCheckout}
+          disabled={loading}
+          className="w-full py-3 rounded-xl font-black text-white text-sm transition-all hover:opacity-90 mb-5"
+          style={{ backgroundColor: plan.color }}
+        >
+          {loading ? "Processing..." : `Get ${plan.name} →`}
+        </button>
 
-        <div className="space-y-2 flex-1">
+        <div className="space-y-2.5 flex-1">
           {plan.features.map((f, i) => (
-            <div key={i} className="flex items-start gap-2 text-xs text-gray-300">
+            <div key={i} className="flex items-start gap-2 text-xs text-gray-200">
               <Check size={12} className="flex-shrink-0 mt-0.5" style={{ color: plan.color }} />
               {f}
             </div>
           ))}
           {plan.locked.length > 0 && (
             <>
-              <div className="border-t border-gray-800 my-3" />
+              <div className="border-t border-gray-800 my-2" />
               {plan.locked.map((f, i) => (
-                <div key={i} className="flex items-start gap-2 text-xs text-gray-600 opacity-50">
+                <div key={i} className="flex items-start gap-2 text-xs text-gray-600">
                   <Lock size={12} className="flex-shrink-0 mt-0.5" />
                   {f}
                 </div>
@@ -278,264 +241,516 @@ function PlanCard({ plan, isAnnual }) {
   );
 }
 
+function FaqItem({ f, i, open, setOpen }) {
+  return (
+    <div className="border border-gray-800 rounded-xl overflow-hidden">
+      <button
+        onClick={() => setOpen(open === i ? null : i)}
+        className="w-full flex items-center justify-between px-5 py-4 text-left hover:bg-gray-900/60 transition-colors"
+      >
+        <span className="text-white font-semibold text-sm">{f.q}</span>
+        {open === i
+          ? <ChevronUp size={15} className="text-cyan-400 flex-shrink-0 ml-3" />
+          : <ChevronDown size={15} className="text-gray-500 flex-shrink-0 ml-3" />}
+      </button>
+      {open === i && (
+        <div className="px-5 pb-4 text-gray-300 text-sm leading-relaxed border-t border-gray-800 pt-3">
+          {f.a}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ── Main Page ─────────────────────────────────────────────────────────────────
+
 export default function FunnelHome() {
   const countdown = useCountdown();
   const [isAnnual, setIsAnnual] = useState(false);
+  const [faqOpen, setFaqOpen] = useState(null);
   const [email, setEmail] = useState("");
   const [subscribed, setSubscribed] = useState(false);
 
   const handleSubscribe = async () => {
     if (!email) return;
-    await base44.entities.NewsletterSubscriber.create({ email: email.toLowerCase().trim(), source: "funnel_home", status: "active" });
+    await base44.entities.NewsletterSubscriber.create({
+      email: email.toLowerCase().trim(),
+      source: "funnel_home_v2",
+      status: "active",
+    });
     setSubscribed(true);
   };
 
   return (
     <div className="min-h-screen bg-gray-950 text-white">
-      {/* Urgency bar */}
-      <div className="bg-gradient-to-r from-red-900 to-orange-900 border-b border-red-800 px-4 py-2 flex flex-wrap items-center justify-center gap-2 text-sm">
-        <Flame size={13} className="text-orange-300 animate-pulse flex-shrink-0" />
-        <span className="text-orange-100 font-semibold">Founding rate expires in</span>
-        <span className="font-black text-white bg-black/40 px-3 py-0.5 rounded-lg font-mono tracking-widest">{countdown}</span>
-        <span className="text-orange-200 text-xs hidden sm:inline">— price increases after 1,000 members</span>
+
+      {/* ── URGENCY BAR ── */}
+      <div className="bg-gradient-to-r from-gray-900 to-gray-800 border-b border-gray-700 px-4 py-2 flex flex-wrap items-center justify-center gap-2 text-sm">
+        <Flame size={12} className="text-orange-400 flex-shrink-0" />
+        <span className="text-gray-300 text-xs">Founding member rate locks in <span className="font-black text-white font-mono">{countdown}</span> — price increases after 1,000 members</span>
       </div>
 
-      {/* Nav */}
-      <nav className="sticky top-0 z-40 bg-gray-950/95 backdrop-blur border-b border-gray-800 px-6 py-3 flex items-center justify-between">
+      {/* ── NAV ── */}
+      <nav className="sticky top-0 z-50 bg-gray-950/95 backdrop-blur border-b border-gray-800 px-6 py-3 flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <img src="https://media.base44.com/images/public/69ccefebfea78b23498c66a8/bce328987_a6e3bd669_logo.png" alt="" className="h-9 w-9 object-contain" />
+          <img
+            src="https://media.base44.com/images/public/69ccefebfea78b23498c66a8/bce328987_a6e3bd669_logo.png"
+            alt="Aethon Apex IP"
+            className="h-9 w-9 object-contain"
+          />
           <div>
-            <span className="text-white font-black text-base tracking-tight">Aethon Apex IP</span>
-            <span className="text-gray-600 text-xs ml-2 hidden sm:inline">Research Platform</span>
+            <div className="text-white font-black text-base tracking-tight leading-none">Aethon Apex IP</div>
+            <div className="text-gray-500 text-[10px] tracking-widest uppercase">Experimental Engineering Research</div>
           </div>
         </div>
         <div className="flex items-center gap-2">
-          <Link to="/free-vault" className="text-gray-400 hover:text-white text-xs font-semibold px-3 py-2 transition-colors">Free Vault</Link>
-          <Link to="/pricing" className="px-4 py-2 rounded-xl text-xs font-black text-white transition-all"
-            style={{ background: "linear-gradient(135deg, #7c3aed, #2563eb)" }}>
-            Join Now
+          <Link to="/free-vault" className="text-gray-400 hover:text-white text-xs font-semibold px-3 py-2 transition-colors hidden sm:block">
+            Free Vault
           </Link>
+          <Link to="/prior-art" className="text-gray-400 hover:text-white text-xs font-semibold px-3 py-2 transition-colors hidden sm:block">
+            Archive
+          </Link>
+          <a href="#pricing" className="px-4 py-2 rounded-lg text-xs font-black text-white transition-all"
+            style={{ background: "linear-gradient(135deg, #7c3aed, #2563eb)" }}>
+            Join Platform
+          </a>
         </div>
       </nav>
 
-      {/* HERO */}
-      <section className="relative px-6 pt-20 pb-16 text-center overflow-hidden">
+      {/* ── HERO ── */}
+      <section className="relative px-6 pt-24 pb-20 text-center overflow-hidden">
+        {/* bg glow */}
         <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] rounded-full bg-purple-900/10 blur-3xl" />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full bg-cyan-900/8 blur-3xl" />
+          <div className="absolute top-1/3 left-1/4 w-[400px] h-[400px] rounded-full bg-purple-900/8 blur-3xl" />
         </div>
+
         <div className="relative max-w-4xl mx-auto">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-cyan-950/60 border border-cyan-800/60 text-cyan-300 text-xs font-bold mb-6 uppercase tracking-wider">
-            <Star size={11} className="text-yellow-400" /> Peer-Reviewed · Patent-Sourced · Build-Ready
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-cyan-950/60 border border-cyan-800/50 text-cyan-300 text-xs font-bold mb-8 uppercase tracking-widest">
+            <Star size={10} className="text-yellow-400" /> Patent-Sourced · Peer-Reviewed · Engineering-Grade
           </div>
+
           <h1 className="text-5xl md:text-7xl font-black leading-none tracking-tight mb-6">
-            From<br />
-            <span className="bg-gradient-to-r from-cyan-400 via-purple-400 to-yellow-400 bg-clip-text text-transparent">
-              Research to Patent
-            </span><br />
-            to Market
+            The Research Vault for<br />
+            <span className="bg-gradient-to-r from-cyan-400 via-blue-400 to-purple-400 bg-clip-text text-transparent">
+              Serious Engineers
+            </span>
           </h1>
-          <p className="text-gray-400 text-xl leading-relaxed max-w-2xl mx-auto mb-10">
-            The world's first platform that takes you from the Bearden scalar EM research database through structured courses, hands-on device builds, AI patent tools, and an invention forge — all the way to IP you own.
+
+          <p className="text-gray-300 text-xl leading-relaxed max-w-2xl mx-auto mb-4">
+            A structured, citation-backed research platform for advanced electronics, RF systems, resonance engineering, and electromagnetic instrumentation — built for experimenters who demand rigor.
           </p>
-          <div className="flex flex-wrap items-center justify-center gap-4 mb-8">
-            <Link to="/free-vault"
-              className="flex items-center gap-2 px-8 py-4 rounded-2xl border border-cyan-700 text-cyan-300 hover:bg-cyan-900/20 font-black text-base transition-all">
-              <Database size={16} /> Explore Free Database
+          <p className="text-gray-500 text-sm max-w-xl mx-auto mb-10">
+            200+ research archive entries · 40+ documented build plans · 40+ structured courses · AI patent analysis suite
+          </p>
+
+          <div className="flex flex-wrap items-center justify-center gap-4 mb-10">
+            <Link
+              to="/free-vault"
+              className="flex items-center gap-2 px-7 py-3.5 rounded-xl border border-cyan-700 text-cyan-300 hover:bg-cyan-900/20 font-bold text-sm transition-all"
+            >
+              <Database size={15} /> Explore Free Archive
             </Link>
-            <a href="#pricing"
-              className="flex items-center gap-2 px-8 py-4 rounded-2xl font-black text-white text-base transition-all shadow-lg"
-              style={{ background: "linear-gradient(135deg, #7c3aed, #2563eb)", boxShadow: "0 6px 28px rgba(139,92,246,0.4)" }}>
-              View Membership Plans <ArrowRight size={16} />
+            <a
+              href="#pricing"
+              className="flex items-center gap-2 px-7 py-3.5 rounded-xl font-black text-white text-sm transition-all shadow-lg"
+              style={{ background: "linear-gradient(135deg, #7c3aed, #2563eb)", boxShadow: "0 6px 30px rgba(124,58,237,0.35)" }}
+            >
+              View Membership Plans <ArrowRight size={15} />
             </a>
           </div>
+
           <div className="flex flex-wrap items-center justify-center gap-6 text-xs text-gray-500">
-            <span className="flex items-center gap-1.5"><Check size={12} className="text-green-400" /> 100+ research nodes</span>
-            <span className="flex items-center gap-1.5"><Check size={12} className="text-green-400" /> 40+ device build plans</span>
-            <span className="flex items-center gap-1.5"><Check size={12} className="text-green-400" /> AI patent attorney</span>
-            <span className="flex items-center gap-1.5"><Check size={12} className="text-green-400" /> Invention Forge</span>
+            {["Patent-sourced documentation", "Calibrated engineering specs", "Full BOM with part numbers", "Active researcher community"].map((t, i) => (
+              <span key={i} className="flex items-center gap-1.5">
+                <Check size={11} className="text-green-400" /> {t}
+              </span>
+            ))}
           </div>
         </div>
-        {/* Scroll arrow */}
-        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 animate-bounce text-gray-700">
-          <ChevronDown size={20} />
-        </div>
       </section>
 
-      {/* FUNNEL STEPS */}
-      <section className="px-6 py-20 max-w-5xl mx-auto">
-        <div className="text-center mb-14">
-          <p className="text-gray-500 text-xs font-bold uppercase tracking-widest mb-2">The Full Journey</p>
-          <h2 className="text-3xl font-black text-white">From Graph Node to Patent-Protected IP</h2>
-        </div>
-
-        <div className="space-y-5">
-          {FUNNEL_STEPS.map((step, i) => {
-            const colorMap = {
-              cyan: { border: "border-cyan-800/50", bg: "bg-cyan-950/10", badge: "bg-cyan-900/50 text-cyan-300 border-cyan-700", num: "bg-cyan-900 text-cyan-300 border-cyan-700" },
-              purple: { border: "border-purple-800/50", bg: "bg-purple-950/10", badge: "bg-purple-900/50 text-purple-300 border-purple-700", num: "bg-purple-900 text-purple-300 border-purple-700" },
-              indigo: { border: "border-indigo-800/50", bg: "bg-indigo-950/10", badge: "bg-indigo-900/50 text-indigo-300 border-indigo-700", num: "bg-indigo-900 text-indigo-300 border-indigo-700" },
-              yellow: { border: "border-yellow-800/50", bg: "bg-yellow-950/10", badge: "bg-yellow-900/50 text-yellow-300 border-yellow-700", num: "bg-yellow-900 text-yellow-300 border-yellow-700" },
-            }[step.color];
-
-            return (
-              <div key={i} className={`border rounded-2xl p-6 flex flex-col md:flex-row gap-5 ${colorMap.border} ${colorMap.bg}`}>
-                {/* Left */}
-                <div className="flex-shrink-0 flex items-start gap-4 md:w-72">
-                  <div className={`w-10 h-10 rounded-full border flex items-center justify-center text-sm font-black flex-shrink-0 ${colorMap.num}`}>
-                    {step.step}
-                  </div>
-                  <div>
-                    <div className="flex items-center gap-2 mb-1">
-                      {step.icon}
-                      <span className={`text-xs px-2 py-0.5 rounded-full border font-black ${colorMap.badge}`}>{step.badge}</span>
-                    </div>
-                    <h3 className="text-white font-black text-lg leading-tight">{step.label}</h3>
-                    <p className="text-gray-500 text-xs">{step.sublabel}</p>
-                  </div>
-                </div>
-
-                {/* Middle */}
-                <div className="flex-1">
-                  <p className="text-gray-300 text-sm leading-relaxed mb-3">{step.desc}</p>
-                  <div className="flex flex-wrap gap-2">
-                    {step.links.map((l, j) => (
-                      <Link key={j} to={l.to}
-                        className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-gray-900 border border-gray-700 text-gray-300 hover:text-white text-xs font-semibold transition-all hover:border-gray-500">
-                        {l.label} <ArrowRight size={11} />
-                      </Link>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Right arrow */}
-                {i < FUNNEL_STEPS.length - 1 && (
-                  <div className="hidden md:flex items-center justify-center w-8 flex-shrink-0">
-                    <div className="w-px h-full bg-gray-700 relative">
-                      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 text-gray-600">▼</div>
-                    </div>
-                  </div>
-                )}
-              </div>
-            );
-          })}
-        </div>
-      </section>
-
-      {/* SOCIAL PROOF / STATS */}
-      <section className="border-y border-gray-800 bg-gray-900/40 py-12 px-6">
+      {/* ── STATS BAR ── */}
+      <section className="border-y border-gray-800 bg-gray-900/40 py-10 px-6">
         <div className="max-w-4xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-          {[
-            { val: "100+", label: "Research Nodes", sub: "Peer-reviewed & patent-sourced" },
-            { val: "40+", label: "Device Build Plans", sub: "Full BOM & assembly guides" },
-            { val: "40+", label: "Structured Courses", sub: "Scalar EM to IP strategy" },
-            { val: "5", label: "AI Patent Tools", sub: "Attorney-grade, Claude Sonnet" },
-          ].map((s, i) => (
+          {STATS.map((s, i) => (
             <div key={i}>
               <div className="text-4xl font-black text-white mb-1">{s.val}</div>
-              <div className="text-gray-300 font-bold text-sm mb-0.5">{s.label}</div>
-              <div className="text-gray-600 text-xs">{s.sub}</div>
+              <div className="text-gray-200 font-bold text-sm">{s.label}</div>
+              <div className="text-gray-600 text-xs mt-0.5">{s.sub}</div>
             </div>
           ))}
         </div>
       </section>
 
-      {/* WHAT'S IN THE VAULT */}
+      {/* ── RESEARCH DOMAINS ── */}
       <section className="px-6 py-20 max-w-5xl mx-auto">
         <div className="text-center mb-12">
-          <h2 className="text-3xl font-black mb-3">Everything Inside the Platform</h2>
-          <p className="text-gray-500 text-sm">A complete research-to-commercialization stack</p>
+          <p className="text-xs font-bold uppercase tracking-widest text-gray-500 mb-2">Research Coverage</p>
+          <h2 className="text-3xl font-black text-white mb-3">8 Core Engineering Domains</h2>
+          <p className="text-gray-400 text-sm max-w-lg mx-auto">
+            Structured content across the most underserved areas of advanced experimental electronics and electromagnetic research.
+          </p>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {[
-            { icon: "🕸️", title: "Bearden Concept Graph", desc: "100+ interconnected research nodes sourced from primary patents, peer-reviewed papers, and declassified docs", free: true },
-            { icon: "📚", title: "Prior Art Archive", desc: "76+ documented inventions with rejection risk scores, claim analysis, and differentiation strategies", free: true },
-            { icon: "🧪", title: "Scalar EM Simulators", desc: "Interactive scalar wave, scalar field, and EM lab simulations", free: true },
-            { icon: "🎓", title: "40+ Structured Courses", desc: "Scalar EM fundamentals, bioelectromagnetics, vacuum energy, free energy engineering, patent strategy", free: false },
-            { icon: "🔧", title: "40+ Device Build Plans", desc: "Full BOM, schematics, supplier links, step-by-step assembly, and build videos for every device", free: false },
-            { icon: "🎬", title: "Build Videos", desc: "3–12 hour step-by-step build video series for complex devices", free: false },
-            { icon: "⚖️", title: "AI Patent Attorney", desc: "Claude Sonnet-powered chat for claim drafting, FTO, prosecution strategy, and filing advice", free: false },
-            { icon: "📝", title: "Patent Drafting Wizard", desc: "Full USPTO-formatted application: title, abstract, claims, description, drawings — real-time validation", free: false },
-            { icon: "🛡️", title: "Patent Threat Monitor", desc: "Automated scanning for competitor filings, legal challenges, and suppression patterns", free: false },
-            { icon: "⚡", title: "Invention Forge", desc: "Mix 2–4 technologies → AI generates new hybrid IP with patent claims, valuation, and commercialization roadmap", free: false },
-            { icon: "💰", title: "IP Valuation", desc: "AI-powered IP valuation estimates with market sizing and bring-to-market roadmap", free: false },
-            { icon: "🤝", title: "Investor & VDR Tools", desc: "Investor CRM, Virtual Data Room, acquisition pitch deck, and co-inventor matching", free: false },
-          ].map((item, i) => (
-            <div key={i} className={`bg-gray-900 border rounded-xl p-4 flex gap-3 ${item.free ? "border-gray-700" : "border-gray-800"}`}>
-              <span className="text-2xl flex-shrink-0">{item.icon}</span>
-              <div>
-                <div className="flex items-center gap-2 mb-1">
-                  <p className="text-white font-bold text-sm">{item.title}</p>
-                  {item.free && <span className="text-xs px-1.5 py-0.5 rounded bg-cyan-900/50 border border-cyan-800 text-cyan-400 font-bold">FREE</span>}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          {RESEARCH_DOMAINS.map((d, i) => (
+            <div
+              key={i}
+              className="bg-gray-900 border border-gray-800 hover:border-gray-600 rounded-xl p-4 flex flex-col items-center text-center gap-2 transition-all cursor-default"
+            >
+              <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ backgroundColor: d.color + "20", color: d.color }}>
+                {d.icon}
+              </div>
+              <p className="text-white text-xs font-bold leading-snug">{d.label}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* ── WHAT YOU GET ── */}
+      <section className="border-y border-gray-800 bg-gray-900/20 px-6 py-20">
+        <div className="max-w-5xl mx-auto">
+          <div className="text-center mb-14">
+            <p className="text-xs font-bold uppercase tracking-widest text-gray-500 mb-2">Platform Contents</p>
+            <h2 className="text-3xl font-black text-white mb-3">Everything Inside the Platform</h2>
+            <p className="text-gray-400 text-sm max-w-lg mx-auto">A complete research-to-build ecosystem, from archive access to hands-on engineering documentation.</p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+            {[
+              {
+                icon: <Database size={22} className="text-cyan-400" />,
+                title: "Research Archive",
+                tag: "FREE",
+                tagColor: "bg-cyan-900/40 border-cyan-800 text-cyan-300",
+                items: [
+                  "200+ research entries with inline citations",
+                  "Historical patent analysis library",
+                  "Prior art cross-reference database",
+                  "Interactive electromagnetic concept graph",
+                  "Engineering glossary & reference docs",
+                ],
+              },
+              {
+                icon: <Wrench size={22} className="text-orange-400" />,
+                title: "Build Plan Library",
+                tag: "MEMBER",
+                tagColor: "bg-orange-900/40 border-orange-800 text-orange-300",
+                items: [
+                  "40+ complete device build plans",
+                  "Calibrated BOM with exact part numbers",
+                  "Verified supplier links & cost estimates",
+                  "Step-by-step assembly instructions",
+                  "Circuit schematics & wiring diagrams",
+                ],
+              },
+              {
+                icon: <BookOpen size={22} className="text-purple-400" />,
+                title: "Course Library",
+                tag: "MEMBER",
+                tagColor: "bg-purple-900/40 border-purple-800 text-purple-300",
+                items: [
+                  "40+ structured engineering courses",
+                  "RF systems, resonance, EM instrumentation",
+                  "FPGA, Arduino & embedded labs",
+                  "Signal analysis & measurement methodology",
+                  "Patent strategy & IP protection modules",
+                ],
+              },
+              {
+                icon: <Zap size={22} className="text-yellow-400" />,
+                title: "AI Patent Suite",
+                tag: "PRO",
+                tagColor: "bg-yellow-900/40 border-yellow-800 text-yellow-300",
+                items: [
+                  "USPTO-formatted patent drafting wizard",
+                  "AI patent attorney consultation",
+                  "Novelty & freedom-to-operate analysis",
+                  "Competitive landscape mapping",
+                  "Automated patent threat monitoring",
+                ],
+              },
+              {
+                icon: <FlaskConical size={22} className="text-green-400" />,
+                title: "Invention Forge",
+                tag: "PRO",
+                tagColor: "bg-green-900/40 border-green-800 text-green-300",
+                items: [
+                  "Hybrid concept generation engine",
+                  "IP valuation estimation tool",
+                  "Patent claim generation",
+                  "Commercialization roadmap",
+                  "Investor pitch deck export",
+                ],
+              },
+              {
+                icon: <Users size={22} className="text-blue-400" />,
+                title: "Researcher Community",
+                tag: "MEMBER",
+                tagColor: "bg-blue-900/40 border-blue-800 text-blue-300",
+                items: [
+                  "Active forum for experimenters",
+                  "Build troubleshooting threads",
+                  "Patent discussion & analysis",
+                  "Monthly community challenges",
+                  "Expert researcher Q&A sessions",
+                ],
+              },
+            ].map((block, i) => (
+              <div key={i} className="bg-gray-900 border border-gray-800 rounded-2xl p-5">
+                <div className="flex items-center gap-3 mb-4">
+                  {block.icon}
+                  <div>
+                    <p className="text-white font-black text-base">{block.title}</p>
+                    <span className={`text-xs px-2 py-0.5 rounded-full border font-bold ${block.tagColor}`}>{block.tag}</span>
+                  </div>
                 </div>
-                <p className="text-gray-400 text-xs leading-relaxed">{item.desc}</p>
+                <ul className="space-y-1.5">
+                  {block.items.map((item, j) => (
+                    <li key={j} className="flex items-start gap-2 text-xs text-gray-300">
+                      <Check size={11} className="flex-shrink-0 text-gray-500 mt-0.5" />
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── COURSE CATEGORIES ── */}
+      <section className="px-6 py-20 max-w-5xl mx-auto">
+        <div className="text-center mb-12">
+          <p className="text-xs font-bold uppercase tracking-widest text-gray-500 mb-2">Course Library</p>
+          <h2 className="text-3xl font-black text-white mb-3">Structured Learning Tracks</h2>
+          <p className="text-gray-400 text-sm">From RF fundamentals to advanced electromagnetic instrumentation — each track builds toward practical experimentation skills.</p>
+        </div>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+          {COURSE_CATEGORIES.map((c, i) => (
+            <div key={i} className="bg-gray-900 border border-gray-800 hover:border-gray-600 rounded-xl p-4 flex flex-col gap-2 transition-all">
+              <span className="text-2xl">{c.emoji}</span>
+              <p className="text-white font-bold text-sm leading-snug">{c.name}</p>
+              <p className="text-gray-600 text-xs">{c.count} courses</p>
+            </div>
+          ))}
+        </div>
+        <div className="text-center mt-8">
+          <Link to="/course-catalogue" className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-gray-700 text-gray-300 hover:bg-gray-800 text-sm font-semibold transition-all">
+            Browse Full Course Catalogue <ArrowRight size={14} />
+          </Link>
+        </div>
+      </section>
+
+      {/* ── TRUST PILLARS ── */}
+      <section className="border-y border-gray-800 bg-gray-900/20 px-6 py-20">
+        <div className="max-w-5xl mx-auto">
+          <div className="text-center mb-12">
+            <p className="text-xs font-bold uppercase tracking-widest text-gray-500 mb-2">Why Trust This Platform</p>
+            <h2 className="text-3xl font-black text-white mb-3">Built on Engineering Rigor</h2>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+            {TRUST_PILLARS.map((p, i) => (
+              <div key={i} className="bg-gray-900 border border-gray-800 rounded-2xl p-6 flex gap-4">
+                <div className="w-10 h-10 rounded-xl bg-gray-800 flex items-center justify-center flex-shrink-0">
+                  {p.icon}
+                </div>
+                <div>
+                  <p className="text-white font-black text-base mb-1">{p.title}</p>
+                  <p className="text-gray-400 text-sm leading-relaxed">{p.desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+          {/* Disclaimer */}
+          <div className="mt-6 bg-gray-900/60 border border-gray-800 rounded-xl px-5 py-4 text-xs text-gray-500 leading-relaxed text-center">
+            All content is provided for research, educational, and experimental purposes only. No device or system described on this platform has been approved by any regulatory authority for medical, therapeutic, or commercial application. Experimenters are responsible for compliance with local regulations and safety standards.
+          </div>
+        </div>
+      </section>
+
+      {/* ── BUILD PLANS PREVIEW ── */}
+      <section className="px-6 py-20 max-w-5xl mx-auto">
+        <div className="text-center mb-12">
+          <p className="text-xs font-bold uppercase tracking-widest text-gray-500 mb-2">Build Plan Library</p>
+          <h2 className="text-3xl font-black text-white mb-3">Engineering-Grade Build Plans</h2>
+          <p className="text-gray-400 text-sm max-w-lg mx-auto">
+            Every plan includes a calibrated BOM, verified specifications, circuit schematics, and step-by-step assembly instructions — sourced from granted patents and technical research.
+          </p>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+          {[
+            { emoji: "🔌", name: "MEG Replication Device", tag: "Electromagnetic Induction", specs: "23 components · Toroidal core geometry · 12V regulated" },
+            { emoji: "📡", name: "Scalar EM Lab System", tag: "RF Instrumentation", specs: "18 components · Phase conjugation · Signal generator req." },
+            { emoji: "🧲", name: "Resonance Test Bench", tag: "Resonance Engineering", specs: "31 components · Variable inductance · Oscilloscope req." },
+          ].map((b, i) => (
+            <div key={i} className="bg-gray-900 border border-gray-800 rounded-2xl p-5">
+              <div className="text-3xl mb-3">{b.emoji}</div>
+              <p className="text-white font-black text-sm mb-1">{b.name}</p>
+              <p className="text-cyan-400 text-xs font-bold mb-2">{b.tag}</p>
+              <p className="text-gray-500 text-xs">{b.specs}</p>
+              <div className="mt-3 pt-3 border-t border-gray-800">
+                <Link to="/invention-plans" className="flex items-center gap-1.5 text-xs text-gray-400 hover:text-white transition-colors font-semibold">
+                  <Lock size={10} /> Member access required
+                </Link>
               </div>
             </div>
           ))}
         </div>
+        <div className="text-center">
+          <Link to="/free-vault" className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-gray-700 text-gray-300 hover:bg-gray-800 text-sm font-semibold transition-all">
+            View Sample Build Plan (Free) <ArrowRight size={14} />
+          </Link>
+        </div>
       </section>
 
-      {/* PRICING */}
-      <section id="pricing" className="px-6 py-20 bg-gray-900/30 border-y border-gray-800">
-        <div className="max-w-6xl mx-auto">
+      {/* ── PRICING ── */}
+      <section id="pricing" className="border-y border-gray-800 bg-gray-900/30 px-6 py-20">
+        <div className="max-w-5xl mx-auto">
           <div className="text-center mb-10">
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-yellow-950/50 border border-yellow-800/60 text-yellow-300 text-xs font-bold mb-4 uppercase tracking-wider">
-              <Flame size={11} className="animate-pulse" /> Founding Rate · {countdown} remaining
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-yellow-950/50 border border-yellow-800/50 text-yellow-300 text-xs font-bold mb-4 uppercase tracking-wider">
+              <Flame size={10} /> Founding Rate · {countdown} remaining
             </div>
             <h2 className="text-4xl font-black mb-3">Choose Your Access Level</h2>
-            <p className="text-gray-400 max-w-xl mx-auto text-sm">Start free. Upgrade when you're ready to build, patent, and commercialize.</p>
-
+            <p className="text-gray-400 max-w-lg mx-auto text-sm">Start free. Upgrade when you're ready to go deeper.</p>
             {/* Billing toggle */}
             <div className="flex items-center justify-center gap-3 mt-6">
               <span className={`text-sm font-semibold ${!isAnnual ? "text-white" : "text-gray-500"}`}>Monthly</span>
-              <button onClick={() => setIsAnnual(a => !a)}
-                className={`w-12 h-6 rounded-full relative transition-colors ${isAnnual ? "bg-purple-600" : "bg-gray-700"}`}>
+              <button
+                onClick={() => setIsAnnual(a => !a)}
+                className={`w-12 h-6 rounded-full relative transition-colors ${isAnnual ? "bg-purple-600" : "bg-gray-700"}`}
+              >
                 <div className={`absolute top-1 w-4 h-4 bg-white rounded-full shadow transition-transform ${isAnnual ? "translate-x-7" : "translate-x-1"}`} />
               </button>
-              <span className={`text-sm font-semibold ${isAnnual ? "text-white" : "text-gray-500"}`}>Annual <span className="text-green-400 font-black">— Save 20%</span></span>
+              <span className={`text-sm font-semibold ${isAnnual ? "text-white" : "text-gray-500"}`}>
+                Annual <span className="text-green-400 font-black">— Save 20%</span>
+              </span>
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-5 items-stretch">
-            {PLANS.map((plan, i) => <PlanCard key={i} plan={plan} isAnnual={isAnnual} />)}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5 items-stretch">
+            {MEMBERSHIP_PLANS.map((plan) => <PlanCard key={plan.id} plan={plan} isAnnual={isAnnual} />)}
           </div>
 
-          <p className="text-center text-gray-600 text-xs mt-8">🔒 Secured by Stripe · Cancel anytime · Instant access</p>
+          {/* One-time forge */}
+          <div className="mt-5 bg-gray-900 border border-yellow-800/50 rounded-2xl p-6 flex flex-col md:flex-row items-center justify-between gap-4">
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 rounded-xl bg-yellow-900/30 border border-yellow-800 flex items-center justify-center">
+                <Zap size={22} className="text-yellow-400" />
+              </div>
+              <div>
+                <p className="text-white font-black text-lg">Single Invention Forge — One-Time</p>
+                <p className="text-gray-400 text-sm">Generate 1 hybrid invention concept with IP valuation, patent claims & market analysis</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-4 flex-shrink-0">
+              <span className="text-4xl font-black text-yellow-400">$29</span>
+              <Link
+                to="/invention-forge"
+                className="px-5 py-2.5 rounded-xl font-black text-sm text-black transition-all whitespace-nowrap"
+                style={{ backgroundColor: "#fbbf24" }}
+              >
+                Buy One Run →
+              </Link>
+            </div>
+          </div>
+
+          <p className="text-center text-gray-600 text-xs mt-6">🔒 Secured by Stripe · Cancel anytime · Instant access</p>
         </div>
       </section>
 
-      {/* EMAIL CAPTURE */}
-      <section className="px-6 py-16 max-w-2xl mx-auto text-center">
-        <h3 className="text-2xl font-black mb-2">Not Ready Yet?</h3>
-        <p className="text-gray-400 text-sm mb-6">Get a free course module + weekly research breakdowns — no credit card.</p>
-        {subscribed ? (
-          <div className="flex items-center justify-center gap-2 text-green-400 font-bold">
-            <Check size={18} /> You're in — check your inbox!
+      {/* ── FOUNDER STORY ── */}
+      <section className="px-6 py-20 max-w-3xl mx-auto text-center">
+        <div className="bg-gray-900 border border-gray-800 rounded-2xl p-10">
+          <div className="w-14 h-14 rounded-full bg-gradient-to-br from-cyan-700 to-purple-700 flex items-center justify-center text-2xl mx-auto mb-5">
+            🔬
           </div>
-        ) : (
-          <div className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
-            <input type="email" placeholder="your@email.com" value={email}
-              onChange={e => setEmail(e.target.value)}
-              className="flex-1 px-4 py-3 rounded-xl bg-gray-900 border border-gray-700 text-white placeholder-gray-600 text-sm focus:outline-none focus:border-cyan-500" />
-            <button onClick={handleSubscribe}
-              className="px-5 py-3 rounded-xl bg-cyan-700 hover:bg-cyan-600 text-white font-black text-sm whitespace-nowrap transition-all">
-              Get Free Preview
-            </button>
-          </div>
-        )}
+          <h2 className="text-2xl font-black mb-4">Why This Platform Exists</h2>
+          <p className="text-gray-300 text-base leading-relaxed mb-4">
+            After years of navigating fragmented research libraries, scattered patents, and inaccessible technical documentation — we built the platform we wished existed.
+          </p>
+          <p className="text-gray-400 text-sm leading-relaxed mb-4">
+            Aethon Apex IP is a structured knowledge vault for experimental engineering. Every resource is citation-backed, every build plan is calibrated to engineering standards, and every course is built to take you from concept to working prototype.
+          </p>
+          <p className="text-gray-400 text-sm leading-relaxed">
+            Whether you're replicating a historical patent, studying electromagnetic instrumentation, or developing original IP — this platform gives you the research infrastructure to move fast and work with precision.
+          </p>
+        </div>
       </section>
 
-      {/* FOOTER */}
-      <footer className="border-t border-gray-800 px-6 py-8 text-center text-gray-600 text-xs">
+      {/* ── FAQ ── */}
+      <section className="px-6 pb-20 max-w-3xl mx-auto">
+        <h2 className="text-3xl font-black text-center mb-8">Common Questions</h2>
+        <div className="space-y-2">
+          {FAQS.map((f, i) => (
+            <FaqItem key={i} f={f} i={i} open={faqOpen} setOpen={setFaqOpen} />
+          ))}
+        </div>
+      </section>
+
+      {/* ── EMAIL CAPTURE ── */}
+      <section className="border-t border-gray-800 bg-gray-900/30 px-6 py-16">
+        <div className="max-w-xl mx-auto text-center">
+          <Mail size={28} className="text-cyan-400 mx-auto mb-4" />
+          <h3 className="text-2xl font-black mb-2">Get a Free Course Module</h3>
+          <p className="text-gray-400 text-sm mb-6">Weekly engineering research breakdowns + a free introductory course module — no credit card required.</p>
+          {subscribed ? (
+            <div className="flex items-center justify-center gap-2 text-green-400 font-bold">
+              <Check size={18} /> You're in — check your inbox.
+            </div>
+          ) : (
+            <div className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
+              <input
+                type="email"
+                placeholder="your@email.com"
+                value={email}
+                onChange={e => setEmail(e.target.value)}
+                className="flex-1 px-4 py-3 rounded-xl bg-gray-900 border border-gray-700 text-white placeholder-gray-600 text-sm focus:outline-none focus:border-cyan-500"
+              />
+              <button
+                onClick={handleSubscribe}
+                className="px-5 py-3 rounded-xl bg-cyan-700 hover:bg-cyan-600 text-white font-black text-sm whitespace-nowrap transition-all"
+              >
+                Get Free Module
+              </button>
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* ── FINAL CTA ── */}
+      <section className="px-6 py-20 max-w-3xl mx-auto text-center">
+        <h2 className="text-4xl font-black mb-4">Start Your Research Today</h2>
+        <p className="text-gray-400 text-lg mb-8 max-w-xl mx-auto">
+          Free access to the archive. No credit card required. Upgrade when you're ready to build.
+        </p>
+        <div className="flex flex-wrap items-center justify-center gap-4">
+          <Link to="/free-vault"
+            className="flex items-center gap-2 px-7 py-3.5 rounded-xl border border-gray-700 text-gray-300 hover:bg-gray-800 font-bold text-sm transition-all">
+            <Database size={15} /> Enter Free Vault
+          </Link>
+          <a href="#pricing"
+            className="flex items-center gap-2 px-7 py-3.5 rounded-xl font-black text-white text-sm transition-all shadow-lg"
+            style={{ background: "linear-gradient(135deg, #7c3aed, #2563eb)", boxShadow: "0 4px 24px rgba(124,58,237,0.4)" }}>
+            View Membership Plans <ArrowRight size={15} />
+          </a>
+        </div>
+      </section>
+
+      {/* ── FOOTER ── */}
+      <footer className="border-t border-gray-800 px-6 py-10 text-center text-gray-600 text-xs">
         <div className="flex items-center justify-center gap-2 mb-3">
           <img src="https://media.base44.com/images/public/69ccefebfea78b23498c66a8/bce328987_a6e3bd669_logo.png" alt="" className="h-6 w-6 object-contain" />
           <span className="text-gray-500 font-bold">Aethon Apex IP · Zenith Apex LLC</span>
         </div>
-        <p className="mb-3">All content is for research and educational purposes only. Not legal or medical advice.</p>
-        <div className="flex justify-center gap-6">
-          <Link to="/terms" className="hover:text-gray-400">Terms</Link>
-          <Link to="/refund-policy" className="hover:text-gray-400">Refund Policy</Link>
-          <Link to="/free-vault" className="hover:text-gray-400">Free Vault</Link>
-          <Link to="/research-disclaimer" className="hover:text-gray-400">Research Disclaimer</Link>
+        <p className="mb-4">All content is for research and educational purposes only. Not legal, medical, or regulatory advice.</p>
+        <div className="flex flex-wrap justify-center gap-6">
+          <Link to="/terms" className="hover:text-gray-400 transition-colors">Terms</Link>
+          <Link to="/refund-policy" className="hover:text-gray-400 transition-colors">Refund Policy</Link>
+          <Link to="/research-disclaimer" className="hover:text-gray-400 transition-colors">Research Disclaimer</Link>
+          <Link to="/free-vault" className="hover:text-gray-400 transition-colors">Free Vault</Link>
+          <Link to="/prior-art" className="hover:text-gray-400 transition-colors">Archive</Link>
+          <Link to="/pricing" className="hover:text-gray-400 transition-colors">Pricing</Link>
         </div>
       </footer>
     </div>
