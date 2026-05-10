@@ -168,6 +168,7 @@ import AdvancedEngineeringBundle from './pages/AdvancedEngineeringBundle';
 import ResearchDisclaimer from './pages/ResearchDisclaimer';
 import VaultHeroPage from './pages/VaultHeroPage';
 import FunnelHome from './pages/FunnelHome';
+import CodexTechPremium from './pages/CodexTechPremium';
 import PatentHub from './pages/PatentHub';
 import DeviceCatalogue from './pages/DeviceCatalogue';
 import CourseCatalogue2 from './pages/CourseCatalogue2';
@@ -405,6 +406,7 @@ const AuthenticatedApp = () => {
           <Route path="/vault" element={<VaultHeroPage />} />
           <Route path="/patent-hub" element={<PatentHub />} />
           <Route path="/start" element={<FunnelHome />} />
+          <Route path="/premium" element={<CodexTechPremium />} />
           <Route path="/device-catalogue" element={<DeviceCatalogue />} />
           <Route path="/course-catalogue" element={<CourseCatalogue2 />} />
           <Route path="/invention-forge" element={<InventionForge2 />} />
