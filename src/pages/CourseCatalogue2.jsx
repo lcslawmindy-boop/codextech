@@ -24,14 +24,10 @@ function BuyButton({ item }) {
     }
     setLoading(true);
     try {
-      const origin = window.location.origin;
-      const res = await base44.functions.invoke("createCheckoutSession", {
-        title: item.title,
+      const res = await base44.functions.invoke("createWixCheckout", {
+        productName: item.title,
         priceInCents,
         description: item.tagline,
-        category: item.category,
-        successUrl: `${origin}/course-catalogue`,
-        cancelUrl: `${origin}/course-catalogue`,
       });
       if (res.data?.url) window.location.href = res.data.url;
     } catch (err) { console.error(err); }
