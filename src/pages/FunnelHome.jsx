@@ -7,16 +7,6 @@ import {
 } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 
-const HERO_BG_IMAGES = [
-  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/fee7eab82_sleek-mri-scanner-room-enhanced-holographic-displays-brain-scans-other-medical-data-embodying-cutting-edge-314416241.webp",
-  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/519380010_TES-Copy2.jpg",
-  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/b6c009336_6e9914fb6d6d4a305dd2fbe4c30e098d-Copy.jpg",
-  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/4bfd388fc_1000_F_755228805_cGY4gZzDtaVC2GKBWaMzOtOPwnbV4ZIc-Copy.jpg",
-  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/f48344490_a8838d6e6380e3cc2ddff672d7c0883b-Copy.jpg",
-  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/4476afbd4_a-long-row-of-bookshelves-in-a-library-free-photo.jpg",
-  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/4d7ca6875_modern-office-space-with-empty-bookshelves-and-clean-decor-generated-by-ai-photo.jpg",
-];
-
 // ── Countdown ──────────────────────────────────────────────────────────────────
 const DEADLINE_KEY = "apex_founding_deadline_v3";
 function getDeadline() {
@@ -142,32 +132,12 @@ const FAQS = [
 // ── Components ────────────────────────────────────────────────────────────────
 
 function HeroSection() {
-  const [bgIndex, setBgIndex] = useState(0);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setBgIndex(prev => (prev + 1) % HERO_BG_IMAGES.length);
-    }, 6000);
-    return () => clearInterval(interval);
-  }, []);
-
   return (
     <section className="relative px-6 pt-20 pb-16 text-center overflow-hidden min-h-[600px] flex items-center">
-      {/* Rotating background carousel */}
-      {HERO_BG_IMAGES.map((img, idx) => (
-        <div
-          key={idx}
-          className="absolute inset-0 transition-opacity duration-1500"
-          style={{ opacity: idx === bgIndex ? 1 : 0 }}
-        >
-          <img src={img} alt="research background" className="w-full h-full object-cover" />
-        </div>
-      ))}
-
-      {/* Dark overlay */}
-      <div className="absolute inset-0 bg-gradient-to-b from-slate-950/75 via-slate-950/60 to-slate-950/75" />
+      {/* Gradient background */}
+      <div className="absolute inset-0 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950" />
       
-      {/* Blur effect */}
+      {/* Accent glow */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] rounded-full bg-cyan-900/10 blur-3xl" />
       </div>
