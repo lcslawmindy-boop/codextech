@@ -1,36 +1,56 @@
-import { Link, useLocation } from "react-router-dom";
-import { Vault, Wrench, Zap, BookOpen, FlaskConical } from "lucide-react";
+import { useRef } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+import { Vault, Zap, BookOpen, FlaskConical } from "lucide-react";
 
 const TABS = [
   {
     label: "Research",
-    path: "/free-vault",
+    root: "/free-vault",
     icon: Vault,
     match: (p) => ["/free-vault", "/", "/vault", "/prior-art", "/invention-library", "/my-learning"].includes(p),
   },
   {
     label: "Courses",
-    path: "/course-catalogue",
+    root: "/course-catalogue",
     icon: BookOpen,
     match: (p) => ["/course-catalogue", "/courses", "/invention-plans"].includes(p),
   },
   {
     label: "Forge",
-    path: "/invention-forge",
+    root: "/invention-forge",
     icon: FlaskConical,
     match: (p) => ["/invention-forge", "/device-catalogue", "/patent-hub", "/patent-intelligence"].includes(p),
   },
   {
     label: "Join",
-    path: "/start",
+    root: "/start",
     icon: Zap,
     match: (p) => ["/start", "/pricing", "/checkout", "/paywall"].includes(p),
     highlight: true,
   },
 ];
 
+// Per-tab saved path (preserved when switching away)
+const tabHistory = {};
+
 export default function BottomTabBar() {
   const { pathname } = useLocation();
+  const navigate = useNavigate();
+
+  const handleTabPress = (tab) => {
+    const active = tab.match(pathname);
+    if (active) {
+      // Already on this tab — reset to root
+      navigate(tab.root, { replace: true });
+    } else {
+      // Save current path for the active tab before switching
+      const currentTab = TABS.find(t => t.match(pathname));
+      if (currentTab) tabHistory[currentTab.root] = pathname;
+      // Navigate to saved deep path or root
+      const dest = tabHistory[tab.root] || tab.root;
+      navigate(dest);
+    }
+  };
 
   return (
     <div
@@ -49,11 +69,11 @@ export default function BottomTabBar() {
 
           if (tab.highlight) {
             return (
-              <Link
-                key={tab.path}
-                to={tab.path}
+              <button
+                key={tab.root}
+                onClick={() => handleTabPress(tab)}
                 className="flex-1 flex flex-col items-center justify-center gap-1 relative"
-                style={{ minHeight: 44 }}
+                style={{ minHeight: 44, background: "none", border: "none", cursor: "pointer" }}
               >
                 <div className="flex flex-col items-center justify-center gap-1 px-4 py-1.5 rounded-xl mx-2"
                   style={{
@@ -65,16 +85,16 @@ export default function BottomTabBar() {
                   <Icon size={18} strokeWidth={2.2} style={{ color: "#fff" }} />
                   <span className="text-[10px] font-black tracking-wide text-white">Upgrade</span>
                 </div>
-              </Link>
+              </button>
             );
           }
 
           return (
-            <Link
-              key={tab.path}
-              to={tab.path}
+            <button
+              key={tab.root}
+              onClick={() => handleTabPress(tab)}
               className="flex-1 flex flex-col items-center justify-center gap-1 transition-all relative"
-              style={{ minHeight: 44 }}
+              style={{ minHeight: 44, background: "none", border: "none", cursor: "pointer" }}
             >
               {active && (
                 <div
@@ -93,7 +113,7 @@ export default function BottomTabBar() {
               >
                 {tab.label}
               </span>
-            </Link>
+            </button>
           );
         })}
       </div>

@@ -73,7 +73,11 @@ function BuyerDetail({ buyer, tierColor, crm, onChange, compact = false }) {
   const id = buyer.org;
   const record = crm[id] || { stage: "not_contacted", comms: [], reminder: "" };
 
-  const update = (patch) => { const u = { ...crm, [id]: { ...record, ...patch } }; onChange(u); };
+  // Optimistic update: calls onChange which immediately sets state + persists to localStorage
+  const update = (patch) => {
+    const updated = { ...crm, [id]: { ...record, ...patch } };
+    onChange(updated);
+  };
 
   const addComm = (type, text) => {
     if (!text.trim()) return;
@@ -211,12 +215,13 @@ function KanbanView({ crm, onChange }) {
   });
 
   const moveStage = (buyerOrg, newStage) => {
+    // Optimistic: update state immediately, persist synchronously
     const record = crm[buyerOrg] || { stage: "not_contacted", comms: [] };
     const oldStage = getStage(record.stage);
     const newS = getStage(newStage);
     const comm = { id: Date.now(), type: "Note", text: `Stage changed: ${oldStage.label} → ${newS.label}`, createdAt: new Date().toISOString() };
     const updated = { ...crm, [buyerOrg]: { ...record, stage: newStage, comms: [...(record.comms || []), comm] } };
-    onChange(updated);
+    onChange(updated); // setCRM + saveCRM called synchronously in handleChange
   };
 
   return (

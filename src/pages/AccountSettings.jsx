@@ -175,9 +175,16 @@ export default function AccountSettings() {
                 <AlertTriangle size={20} className="text-red-400 flex-shrink-0" />
                 <h3 className="text-white font-black text-base">Delete Account</h3>
               </div>
-              <p className="text-gray-400 text-sm leading-relaxed mb-4">
-                This will submit a deletion request for your account and all associated data. This action cannot be undone.
+              <p className="text-gray-400 text-sm leading-relaxed mb-3">
+                This will permanently remove your account and <span className="text-white font-semibold">all associated data</span>, including:
               </p>
+              <ul className="text-gray-500 text-xs space-y-1 mb-4 pl-3">
+                <li>• Your profile and login credentials</li>
+                <li>• All saved research, build plans, and course progress</li>
+                <li>• Favorites, notes, and CRM data</li>
+                <li>• Subscription and billing records</li>
+              </ul>
+              <p className="text-red-400 text-xs font-semibold mb-3">This action cannot be undone. A request will be sent to our team for processing within 48 hours.</p>
               <p className="text-gray-500 text-xs mb-2">Type <span className="text-red-400 font-mono font-bold">DELETE</span> to confirm:</p>
               <input
                 value={deleteInput}
