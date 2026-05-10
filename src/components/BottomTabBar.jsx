@@ -1,56 +1,43 @@
-import { useRef } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
-import { Vault, Zap, BookOpen, FlaskConical } from "lucide-react";
+import { Link, useLocation } from "react-router-dom";
+import { Vault, Wrench, Zap, BookOpen, FlaskConical } from "lucide-react";
+
 
 const TABS = [
   {
-    label: "Research",
-    root: "/free-vault",
+    label: "Home",
+    path: "/start",
     icon: Vault,
-    match: (p) => ["/free-vault", "/", "/vault", "/prior-art", "/invention-library", "/my-learning"].includes(p),
+    match: (p) => p === "/start",
   },
   {
-    label: "Courses",
-    root: "/course-catalogue",
+    label: "Research",
+    path: "/prior-art",
     icon: BookOpen,
-    match: (p) => ["/course-catalogue", "/courses", "/invention-plans"].includes(p),
+    match: (p) => ["/prior-art", "/free-vault", "/invention-library"].includes(p),
+  },
+  {
+    label: "Builds",
+    path: "/device-catalogue",
+    icon: Wrench,
+    match: (p) => ["/device-catalogue", "/invention-plans", "/build-plan-explorer"].includes(p),
   },
   {
     label: "Forge",
-    root: "/invention-forge",
+    path: "/invention-forge",
     icon: FlaskConical,
-    match: (p) => ["/invention-forge", "/device-catalogue", "/patent-hub", "/patent-intelligence"].includes(p),
+    match: (p) => ["/invention-forge", "/patent-hub", "/patent-intelligence"].includes(p),
   },
   {
     label: "Join",
-    root: "/start",
+    path: "/pricing",
     icon: Zap,
-    match: (p) => ["/start", "/pricing", "/checkout", "/paywall"].includes(p),
+    match: (p) => ["/pricing", "/checkout", "/paywall"].includes(p),
     highlight: true,
   },
 ];
 
-// Per-tab saved path (preserved when switching away)
-const tabHistory = {};
-
 export default function BottomTabBar() {
   const { pathname } = useLocation();
-  const navigate = useNavigate();
-
-  const handleTabPress = (tab) => {
-    const active = tab.match(pathname);
-    if (active) {
-      // Already on this tab — reset to root
-      navigate(tab.root, { replace: true });
-    } else {
-      // Save current path for the active tab before switching
-      const currentTab = TABS.find(t => t.match(pathname));
-      if (currentTab) tabHistory[currentTab.root] = pathname;
-      // Navigate to saved deep path or root
-      const dest = tabHistory[tab.root] || tab.root;
-      navigate(dest);
-    }
-  };
 
   return (
     <div
@@ -69,11 +56,11 @@ export default function BottomTabBar() {
 
           if (tab.highlight) {
             return (
-              <button
-                key={tab.root}
-                onClick={() => handleTabPress(tab)}
+              <Link
+                key={tab.path}
+                to={tab.path}
                 className="flex-1 flex flex-col items-center justify-center gap-1 relative"
-                style={{ minHeight: 44, background: "none", border: "none", cursor: "pointer" }}
+                style={{ minHeight: 44 }}
               >
                 <div className="flex flex-col items-center justify-center gap-1 px-4 py-1.5 rounded-xl mx-2"
                   style={{
@@ -85,16 +72,16 @@ export default function BottomTabBar() {
                   <Icon size={18} strokeWidth={2.2} style={{ color: "#fff" }} />
                   <span className="text-[10px] font-black tracking-wide text-white">Upgrade</span>
                 </div>
-              </button>
+              </Link>
             );
           }
 
           return (
-            <button
-              key={tab.root}
-              onClick={() => handleTabPress(tab)}
+            <Link
+              key={tab.path}
+              to={tab.path}
               className="flex-1 flex flex-col items-center justify-center gap-1 transition-all relative"
-              style={{ minHeight: 44, background: "none", border: "none", cursor: "pointer" }}
+              style={{ minHeight: 44 }}
             >
               {active && (
                 <div
@@ -113,7 +100,7 @@ export default function BottomTabBar() {
               >
                 {tab.label}
               </span>
-            </button>
+            </Link>
           );
         })}
       </div>
