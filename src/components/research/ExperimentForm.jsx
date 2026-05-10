@@ -19,8 +19,6 @@ const SENSOR_TYPES = [
   { value: "custom", label: "Custom / Other" },
 ];
 
-const INVENTION_OPTIONS = inventionNames.map(n => ({ value: n, label: n }));
-
 export default function ExperimentForm({ onSave, onCancel, initial }) {
   const [form, setForm] = useState(initial || {
     title: "",
@@ -33,8 +31,7 @@ export default function ExperimentForm({ onSave, onCancel, initial }) {
     status: "planned",
   });
   const [tagInput, setTagInput] = useState("");
-  const [inventionSheetOpen, setInventionSheetOpen] = useState(false);
-  const [sensorSheetOpen, setSensorSheetOpen] = useState(false);
+  const [sheetOpen, setSheetOpen] = useState(null); // "invention" | "sensor"
 
   const set = (k, v) => setForm(f => ({ ...f, [k]: v }));
 
@@ -45,8 +42,6 @@ export default function ExperimentForm({ onSave, onCancel, initial }) {
   };
 
   const removeTag = (t) => set("tags", form.tags.filter(x => x !== t));
-
-  const selectedSensorLabel = SENSOR_TYPES.find(s => s.value === form.sensor_type)?.label || form.sensor_type;
 
   return (
     <div className="bg-gray-900 border border-gray-700 rounded-2xl p-6 space-y-5">
@@ -65,20 +60,19 @@ export default function ExperimentForm({ onSave, onCancel, initial }) {
         <label className="block text-xs font-bold text-gray-400 mb-1.5">Based on Invention *</label>
         <button
           type="button"
-          onClick={() => setInventionSheetOpen(true)}
-          className="w-full flex items-center justify-between px-4 py-2.5 rounded-lg bg-gray-800 border border-gray-700 text-white text-sm focus:outline-none focus:border-cyan-500 text-left"
-          style={{ minHeight: 44 }}
+          onClick={() => setSheetOpen("invention")}
+          className="w-full flex items-center justify-between px-4 py-2.5 rounded-lg bg-gray-800 border border-gray-700 text-white text-sm hover:border-cyan-500 transition-colors text-left"
         >
           <span className="truncate">{form.invention_name || "Select invention…"}</span>
           <ChevronDown size={14} className="text-gray-500 flex-shrink-0 ml-2" />
         </button>
         <BottomSheet
-          open={inventionSheetOpen}
-          onClose={() => setInventionSheetOpen(false)}
-          title="Select Invention"
-          options={INVENTION_OPTIONS}
+          open={sheetOpen === "invention"}
+          onClose={() => setSheetOpen(null)}
+          title="Based on Invention"
+          options={inventionNames.map(n => ({ value: n, label: n }))}
           value={form.invention_name}
-          onChange={(val) => set("invention_name", val)}
+          onChange={(v) => set("invention_name", v)}
         />
       </div>
 
@@ -88,20 +82,19 @@ export default function ExperimentForm({ onSave, onCancel, initial }) {
           <label className="block text-xs font-bold text-gray-400 mb-1.5">Primary Sensor Type</label>
           <button
             type="button"
-            onClick={() => setSensorSheetOpen(true)}
-            className="w-full flex items-center justify-between px-4 py-2.5 rounded-lg bg-gray-800 border border-gray-700 text-white text-sm focus:outline-none focus:border-cyan-500 text-left"
-            style={{ minHeight: 44 }}
+            onClick={() => setSheetOpen("sensor")}
+            className="w-full flex items-center justify-between px-4 py-2.5 rounded-lg bg-gray-800 border border-gray-700 text-white text-sm hover:border-cyan-500 transition-colors text-left"
           >
-            <span className="truncate text-xs">{selectedSensorLabel}</span>
-            <ChevronDown size={14} className="text-gray-500 flex-shrink-0 ml-1" />
+            <span className="truncate">{SENSOR_TYPES.find(s => s.value === form.sensor_type)?.label || "Select…"}</span>
+            <ChevronDown size={14} className="text-gray-500 flex-shrink-0 ml-2" />
           </button>
           <BottomSheet
-            open={sensorSheetOpen}
-            onClose={() => setSensorSheetOpen(false)}
-            title="Select Sensor Type"
+            open={sheetOpen === "sensor"}
+            onClose={() => setSheetOpen(null)}
+            title="Primary Sensor Type"
             options={SENSOR_TYPES}
             value={form.sensor_type}
-            onChange={(val) => set("sensor_type", val)}
+            onChange={(v) => set("sensor_type", v)}
           />
         </div>
         <div>

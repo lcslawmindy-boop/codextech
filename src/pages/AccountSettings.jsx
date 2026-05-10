@@ -167,14 +167,27 @@ export default function AccountSettings() {
           </button>
         </div>
 
-        {/* Delete confirmation dialog */}
+        {/* Delete confirmation — bottom sheet for thumb-reachability on mobile */}
         {deleteConfirm && (
-          <div className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4">
-            <div className="bg-gray-900 border border-red-900 rounded-2xl p-6 max-w-sm w-full shadow-2xl">
+          <div
+            className="fixed inset-0 z-50 flex items-end"
+            onClick={(e) => { if (e.target === e.currentTarget) { setDeleteConfirm(false); setDeleteInput(""); } }}
+          >
+            <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" onClick={() => { setDeleteConfirm(false); setDeleteInput(""); }} />
+            <div
+              className="relative w-full bg-gray-900 border-t border-red-900/60 rounded-t-3xl z-10 px-5 pt-3 pb-8 shadow-2xl"
+              style={{ paddingBottom: "calc(2rem + env(safe-area-inset-bottom))" }}
+            >
+              {/* Handle */}
+              <div className="flex justify-center mb-4">
+                <div className="w-10 h-1 rounded-full bg-gray-700" />
+              </div>
+
               <div className="flex items-center gap-3 mb-4">
                 <AlertTriangle size={20} className="text-red-400 flex-shrink-0" />
                 <h3 className="text-white font-black text-base">Delete Account</h3>
               </div>
+
               <p className="text-gray-400 text-sm leading-relaxed mb-3">
                 This will permanently remove your account and <span className="text-white font-semibold">all associated data</span>, including:
               </p>
@@ -184,28 +197,30 @@ export default function AccountSettings() {
                 <li>• Favorites, notes, and CRM data</li>
                 <li>• Subscription and billing records</li>
               </ul>
-              <p className="text-red-400 text-xs font-semibold mb-3">This action cannot be undone. A request will be sent to our team for processing within 48 hours.</p>
+              <p className="text-red-400 text-xs font-semibold mb-4">This action cannot be undone. A request will be sent to our team for processing within 48 hours.</p>
+
               <p className="text-gray-500 text-xs mb-2">Type <span className="text-red-400 font-mono font-bold">DELETE</span> to confirm:</p>
               <input
                 value={deleteInput}
                 onChange={e => setDeleteInput(e.target.value)}
                 placeholder="DELETE"
+                autoCapitalize="none"
                 className="w-full px-4 py-3 rounded-lg bg-gray-800 border border-gray-700 text-white text-sm font-mono focus:outline-none focus:border-red-600 mb-4"
               />
               <div className="flex gap-3">
                 <button
                   onClick={() => { setDeleteConfirm(false); setDeleteInput(""); }}
-                  className="flex-1 py-3 rounded-lg bg-gray-800 hover:bg-gray-700 text-white text-sm font-bold transition-colors"
+                  className="flex-1 py-3.5 rounded-xl bg-gray-800 hover:bg-gray-700 text-white text-sm font-bold transition-colors"
                 >
                   Cancel
                 </button>
                 <button
                   onClick={handleDeleteAccount}
                   disabled={deleteInput !== "DELETE" || deleting}
-                  className="flex-1 py-3 rounded-lg bg-red-700 hover:bg-red-600 disabled:opacity-40 text-white text-sm font-bold transition-colors flex items-center justify-center gap-2"
+                  className="flex-1 py-3.5 rounded-xl bg-red-700 hover:bg-red-600 disabled:opacity-40 text-white text-sm font-bold transition-colors flex items-center justify-center gap-2"
                 >
                   {deleting ? <Loader2 size={14} className="animate-spin" /> : <Trash2 size={14} />}
-                  {deleting ? "Submitting…" : "Delete"}
+                  {deleting ? "Submitting…" : "Delete Account"}
                 </button>
               </div>
             </div>
