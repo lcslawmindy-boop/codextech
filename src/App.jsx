@@ -180,7 +180,7 @@ import BuildPlanExplorer from './pages/BuildPlanExplorer';
 import OSShell from './components/OSShell';
 import IntelligenceLayer from './pages/IntelligenceLayer';
 import ConversionAnalytics from './pages/ConversionAnalytics';
-import ZaraAssistant from './components/ZaraAssistant';
+
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -437,7 +437,6 @@ function App() {
           <PageBackground />
           <AuthenticatedApp />
         </Router>
-        <ZaraAssistant />
         <Toaster />
       </QueryClientProvider>
     </AuthProvider>
