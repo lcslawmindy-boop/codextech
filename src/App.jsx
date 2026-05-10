@@ -239,7 +239,7 @@ const AuthenticatedApp = () => {
   return (
     <TrialContext.Provider value={{ isTrial }}>
       <CopyProtection />
-      {isTrial && <TrialBanner />}
+
       <Routes>
         <Route element={<MobileLayout />}>
           <Route path="/" element={<ConceptGraph />} />
