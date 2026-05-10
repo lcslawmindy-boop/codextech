@@ -63,7 +63,7 @@ export default function ConceptGraph() {
       <div className="flex flex-col border-b border-gray-800 flex-shrink-0">
         <div className="flex items-center justify-between px-6 py-3">
         <div>
-          <h1 className="text-white font-bold text-lg tracking-tight">Zenith Apex Research Portfolio (ZARP) — AI Operating System for Global R&D and Intellectual Property Creation</h1>
+          <h1 className="text-white font-bold text-lg tracking-tight">Aethon Apex IP Holdings — AI Operating System for Global R&D and Intellectual Property Creation</h1>
           <p className="text-gray-500 text-xs">Click any node to explore source fragments · Drag to rearrange · Scroll to zoom</p>
         </div>
         <div className="flex items-center gap-2">
@@ -152,9 +152,9 @@ export default function ConceptGraph() {
 
       {/* Content area */}
       <div className="flex-1 relative overflow-hidden">
-        {/* ZARP logo background */}
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-15 z-0">
-          <img src="https://media.base44.com/images/public/69ccefebfea78b23498c66a8/a90918e3c_ZARPlogo.png" alt="ZARP" className="w-screen h-screen object-contain" />
+        {/* Aethon Apex IP logo background */}
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-20 z-0">
+          <img src="https://media.base44.com/images/public/69ccefebfea78b23498c66a8/9d4ba4f43_e81fda6df_logo-Copy2.png" alt="Aethon Apex IP" className="w-96 h-96 object-contain" />
         </div>
 
         {view === "business" ? (
