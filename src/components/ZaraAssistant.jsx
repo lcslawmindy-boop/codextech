@@ -87,20 +87,21 @@ Respond in a friendly, helpful tone. Be specific about which platform feature so
       {/* Chat panel */}
       {open && (
         <div className="fixed bottom-6 right-6 z-50 w-96 max-h-[600px] bg-slate-900 border border-slate-700 rounded-2xl shadow-2xl flex flex-col overflow-hidden">
-          {/* Header */}
-          <div className="flex items-center justify-between px-5 py-4 bg-gradient-to-r from-cyan-600 to-purple-600 text-white">
-            <div className="flex items-center gap-2">
+          {/* Header with Zara */}
+          <div className="flex items-stretch justify-between bg-gradient-to-r from-cyan-600 to-purple-600 text-white overflow-hidden">
+            <div className="flex items-center gap-3 px-5 py-3 flex-1">
               <img
                 src="https://media.base44.com/images/public/69ccefebfea78b23498c66a8/dce6472fe_WS2-Copy-Copy-Copy.jpg"
                 alt="Zara"
-                className="w-8 h-8 rounded-full object-cover"
+                className="w-16 h-16 rounded-lg object-cover shadow-lg border-2 border-white/30"
               />
               <div>
-                <p className="font-bold text-sm">Zara Assistant</p>
-                <p className="text-[10px] opacity-80">Research Guide</p>
+                <p className="font-bold text-base">Zara</p>
+                <p className="text-xs opacity-90">Research Guide</p>
+                <p className="text-[10px] opacity-70 mt-0.5">Ask me anything about the platform</p>
               </div>
             </div>
-            <button onClick={() => setOpen(false)} className="p-1 hover:bg-white/20 rounded-lg transition-colors">
+            <button onClick={() => setOpen(false)} className="px-4 hover:bg-white/20 transition-colors">
               <X size={16} />
             </button>
           </div>
