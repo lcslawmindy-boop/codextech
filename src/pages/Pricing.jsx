@@ -76,6 +76,25 @@ const TIERS = [
     ],
     locked: [],
   },
+  {
+    id: "enterprise",
+    name: "Enterprise",
+    monthly: 497,
+    annual: 397,
+    color: "#fbbf24",
+    badge: "INSTITUTIONAL",
+    desc: "White-label, multi-seat, VDR, licensing support",
+    features: [
+      { icon: <Shield size={14} />, text: "Everything in Pro Builder" },
+      { icon: <Check size={14} />, text: "Up to 10 team seats" },
+      { icon: <Check size={14} />, text: "White-label build documentation" },
+      { icon: <Check size={14} />, text: "Virtual Data Room (VDR) access" },
+      { icon: <Check size={14} />, text: "Institutional licensing inquiry support" },
+      { icon: <Zap size={14} />, text: "Unlimited Invention Forge sessions" },
+      { icon: <Check size={14} />, text: "Dedicated account manager" },
+    ],
+    locked: [],
+  },
 ];
 
 const FAQS = [
@@ -108,11 +127,21 @@ export default function Pricing() {
   const [email, setEmail] = useState("");
   const [emailDone, setEmailDone] = useState(false);
 
+  useEffect(() => {
+    base44.analytics.track({ eventName: "pricing_page_viewed", properties: { billing: "annual" } });
+  }, []);
+
   const handleCheckout = async (tier) => {
-    if (window !== window.top) {
+    if (window.self !== window.top) {
       alert("Checkout only works from the published app.");
       return;
     }
+    // Conversion tracking
+    base44.analytics.track({
+      eventName: "pricing_checkout_clicked",
+      properties: { tier: tier.id, billing: billingMode, monthly_price: tier.monthly }
+    });
+
     const isAnnual = billingMode === "annual";
     const price = isAnnual ? tier.annual : tier.monthly;
     const priceInCents = isAnnual ? Math.round(price * 12 * 100) : Math.round(price * 100);
@@ -165,7 +194,7 @@ export default function Pricing() {
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-400">Start Building Today.</span>
         </h1>
         <p className="text-slate-400 text-base max-w-xl mx-auto">
-          Three tiers for every level of researcher — from archive access to full professional tooling.
+          Four tiers for every level of researcher — from archive access to full institutional tooling.
         </p>
       </div>
 
@@ -194,7 +223,7 @@ export default function Pricing() {
 
       {/* Tiers */}
       <div className="px-5 pb-16 max-w-5xl mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-5">
           {TIERS.map((tier) => {
             const isAnnual = billingMode === "annual";
             const price = isAnnual ? tier.annual : tier.monthly;

@@ -175,6 +175,7 @@ import AIOperatingSystem from './pages/AIOperatingSystem';
 import IPNetworkGraph from './pages/IPNetworkGraph';
 import ProjectPlanner from './pages/ProjectPlanner';
 import BuildPlanExplorer from './pages/BuildPlanExplorer';
+import OSShell from './components/OSShell';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -401,12 +402,16 @@ const AuthenticatedApp = () => {
           <Route path="/device-catalogue" element={<DeviceCatalogue />} />
           <Route path="/course-catalogue" element={<CourseCatalogue2 />} />
           <Route path="/invention-forge" element={<InventionForge2 />} />
-          <Route path="/ai-os" element={<AIOperatingSystem />} />
-          <Route path="/ip-network" element={<IPNetworkGraph />} />
-          <Route path="/project-planner" element={<ProjectPlanner />} />
           <Route path="/build-plan-explorer" element={<BuildPlanExplorer />} />
 
           <Route path="*" element={<PageNotFound />} />
+        </Route>
+
+        {/* OS Shell routes — full-screen desktop layout, outside MobileLayout */}
+        <Route element={<OSShell />}>
+          <Route path="/ai-os" element={<AIOperatingSystem />} />
+          <Route path="/ip-network" element={<IPNetworkGraph />} />
+          <Route path="/project-planner" element={<ProjectPlanner />} />
         </Route>
       </Routes>
     </TrialContext.Provider>
