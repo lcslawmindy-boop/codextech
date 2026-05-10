@@ -106,21 +106,7 @@ export default function AnimatedNeonBackground() {
         ))}
       </div>
 
-      {/* Logo Outline/Border Glow */}
-      <svg className="absolute inset-0 w-full h-full pointer-events-none" style={{ background: "transparent" }}>
-        <defs>
-          <filter id="logoGlow">
-            <feGaussianBlur stdDeviation="4" result="coloredBlur" />
-            <feMerge>
-              <feMergeNode in="coloredBlur" />
-              <feMergeNode in="SourceGraphic" />
-            </feMerge>
-          </filter>
-        </defs>
-        {/* Circular outline around logo */}
-        <circle cx="50%" cy="50%" r="25%" fill="none" stroke="#00e5ff" strokeWidth="2" opacity="0.3" filter="url(#logoGlow)" />
-        <circle cx="50%" cy="50%" r="23%" fill="none" stroke="#a855f7" strokeWidth="1" opacity="0.2" />
-      </svg>
+
 
       <style>{`
         @keyframes flow {
