@@ -72,27 +72,6 @@ Respond in a friendly, helpful tone. Be specific about which platform feature so
 
   return (
     <>
-      {/* Matrix Digital Rain Background */}
-      <div className="fixed bottom-6 right-6 z-40 w-96 h-auto pointer-events-none">
-        {[...Array(8)].map((_, colIndex) => (
-          <div
-            key={colIndex}
-            className="absolute text-green-500 font-mono text-[10px] font-bold opacity-10"
-            style={{
-              left: `${colIndex * 12}%`,
-              animation: `matrixFall ${8 + Math.random() * 6}s linear infinite`,
-              animationDelay: `${Math.random() * 3}s`,
-              width: "16px",
-              textAlign: "center",
-            }}
-          >
-            {[...Array(40)]
-              .map(() => Math.floor(Math.random() * 2))
-              .join("\n")}
-          </div>
-        ))}
-      </div>
-
       {/* Floating button */}
       {!open && (
         <button
@@ -110,14 +89,6 @@ Respond in a friendly, helpful tone. Be specific about which platform feature so
         <div className="fixed bottom-6 right-6 z-50 w-96 max-h-[600px] bg-slate-900 border border-slate-700 rounded-2xl shadow-2xl flex flex-col overflow-hidden">
           {/* Header with Zara - Enhanced as person at computer */}
           <div className="flex items-stretch justify-between bg-gradient-to-r from-cyan-600 to-purple-600 text-white overflow-hidden relative">
-            {/* Matrix background in header */}
-            <div className="absolute inset-0 opacity-10 pointer-events-none overflow-hidden">
-              {[...Array(4)].map((_, i) => (
-                <span key={i} className="absolute text-green-400 font-mono text-xs opacity-20" style={{ left: `${i * 25}%`, top: 0 }}>
-                  1 0 1 0 1
-                </span>
-              ))}
-            </div>
             <div className="flex items-center gap-3 px-5 py-3 flex-1 relative z-10">
               <div className="relative">
                 <img
@@ -138,23 +109,8 @@ Respond in a friendly, helpful tone. Be specific about which platform feature so
             </button>
           </div>
 
-          {/* Messages with Matrix effect */}
+          {/* Messages */}
           <div className="flex-1 overflow-y-auto space-y-3 p-4 bg-slate-950 relative">
-            <div className="absolute inset-0 pointer-events-none opacity-5 overflow-hidden">
-              {[...Array(3)].map((_, i) => (
-                <div
-                  key={i}
-                  className="absolute text-green-500 font-mono text-[8px] whitespace-pre"
-                  style={{
-                    left: `${i * 30}%`,
-                    animation: `matrixFall ${6 + i * 2}s linear infinite`,
-                    animationDelay: `${i}s`,
-                  }}
-                >
-                  1 0 1 1 0 1 0 1 1 0
-                </div>
-              ))}
-            </div>
             {messages.map((msg, i) => (
               <div key={i} className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"} relative z-10`}>
                 <div
@@ -218,12 +174,7 @@ Respond in a friendly, helpful tone. Be specific about which platform feature so
         </div>
       )}
 
-      <style>{`
-        @keyframes matrixFall {
-          0% { transform: translateY(-100%); opacity: 1; }
-          100% { transform: translateY(600px); opacity: 0; }
-        }
-      `}</style>
+
     </>
   );
 }
