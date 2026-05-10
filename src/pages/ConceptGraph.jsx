@@ -166,10 +166,10 @@ export default function ConceptGraph() {
         ) : (
           <>
             <div className="absolute inset-0 z-0 pointer-events-none" style={{
-              backgroundImage: `linear-gradient(45deg, rgba(31,41,55,0.6) 25%, transparent 25%), linear-gradient(-45deg, rgba(31,41,55,0.6) 25%, transparent 25%), linear-gradient(45deg, transparent 75%, rgba(31,41,55,0.6) 75%), linear-gradient(-45deg, transparent 75%, rgba(31,41,55,0.6) 75%)`,
-              backgroundSize: '50px 50px',
-              backgroundPosition: '0 0, 0 25px, 25px -25px, -25px 0px',
-              backgroundColor: '#030712',
+              backgroundImage: `linear-gradient(45deg, rgba(55,65,81,0.9) 25%, transparent 25%), linear-gradient(-45deg, rgba(55,65,81,0.9) 25%, transparent 25%), linear-gradient(45deg, transparent 75%, rgba(55,65,81,0.9) 75%), linear-gradient(-45deg, transparent 75%, rgba(55,65,81,0.9) 75%)`,
+              backgroundSize: '40px 40px',
+              backgroundPosition: '0 0, 0 20px, 20px -20px, -20px 0px',
+              backgroundColor: '#0f172a',
             }} />
             {clusterMode && clusterNodes.length > 0 && (
               <ClusterSummaryPanel
