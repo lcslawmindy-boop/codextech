@@ -1,26 +1,4 @@
-import { useState, useEffect } from "react";
-
-const LOGOS = [
-  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/8006a5a02_a6e3bd669_logo.png",
-  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/3bba29976_e1995a4cb_logo-Copy.png",
-  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/cceab4405_fa52566da_logo.png",
-  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/2e74977ba_5e416fe39_logo.png",
-  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/9f061cd66_7e20287f0_logo-Copy-Copy.png",
-  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/e1ebd64da_13427a463_logo-Copy.png",
-  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/82c3da266_703606d05_logo.png",
-  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/b623bd74c_839284090_logo-Copy.png",
-];
-
 export default function AnimatedNeonBackground() {
-  const [currentIndex, setCurrentIndex] = useState(0);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentIndex((prev) => (prev + 1) % LOGOS.length);
-    }, 5000); // Change every 5 seconds
-    return () => clearInterval(interval);
-  }, []);
-
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
       {/* Background */}
@@ -91,29 +69,20 @@ export default function AnimatedNeonBackground() {
         })}
       </svg>
 
-      {/* Rotating Logos with Fade Transition */}
+      {/* Static Logo */}
       <div className="absolute inset-0 flex items-center justify-center">
-        {LOGOS.map((logo, index) => (
-          <img
-            key={index}
-            src={logo}
-            alt="Logo"
-            className="absolute w-[450px] h-[450px] object-contain transition-opacity duration-1000"
-            style={{
-              opacity: index === currentIndex ? 0.25 : 0,
-            }}
-          />
-        ))}
+        <img
+          src="https://media.base44.com/images/public/69ccefebfea78b23498c66a8/dcd83ec8f_a6e3bd669_logo.png"
+          alt="Aethon Apex IP"
+          className="w-[450px] h-[450px] object-contain opacity-25"
+        />
       </div>
-
-
 
       <style>{`
         @keyframes flow {
           0% { stroke-dashoffset: 0; }
           100% { stroke-dashoffset: 100; }
         }
-
       `}</style>
     </div>
   );
