@@ -174,6 +174,7 @@ import InventionForge2 from './pages/InventionForge2';
 import AIOperatingSystem from './pages/AIOperatingSystem';
 import IPNetworkGraph from './pages/IPNetworkGraph';
 import ProjectPlanner from './pages/ProjectPlanner';
+import BuildPlanExplorer from './pages/BuildPlanExplorer';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -403,6 +404,7 @@ const AuthenticatedApp = () => {
           <Route path="/ai-os" element={<AIOperatingSystem />} />
           <Route path="/ip-network" element={<IPNetworkGraph />} />
           <Route path="/project-planner" element={<ProjectPlanner />} />
+          <Route path="/build-plan-explorer" element={<BuildPlanExplorer />} />
 
           <Route path="*" element={<PageNotFound />} />
         </Route>
