@@ -1,23 +1,4 @@
-import { useState, useEffect } from "react";
-
-const LOGOS = [
-  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/b42114421_4ba64218b_logo.png",
-  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/2bc4f8f10_b5b5b761f_logo-Copy-Copy.png",
-  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/20790b964_CODEXTECHLOGO-Copy.png",
-  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/03de7ba3c_1ca9f22db_logo-Copy.png",
-  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/6cd1f2009_SCALERTECHLOGO.png",
-  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/f76fd7695_Aurawell10-Copy.png",
-];
-
 export default function AnimatedNeonBackground() {
-  const [currentIndex, setCurrentIndex] = useState(0);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentIndex((prev) => (prev + 1) % LOGOS.length);
-    }, 6000);
-    return () => clearInterval(interval);
-  }, []);
 
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
@@ -86,21 +67,6 @@ export default function AnimatedNeonBackground() {
           );
         })}
       </svg>
-
-      {/* Rotating Logo Carousel */}
-      <div className="absolute inset-0 flex items-center justify-center">
-        {LOGOS.map((logo, index) => (
-          <img
-            key={index}
-            src={logo}
-            alt="Platform Logo"
-            className="absolute w-[500px] h-[500px] object-contain transition-opacity duration-1500"
-            style={{
-              opacity: index === currentIndex ? 0.2 : 0,
-            }}
-          />
-        ))}
-      </div>
 
       <style>{`
         @keyframes flow {
