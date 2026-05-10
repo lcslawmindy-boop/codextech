@@ -7,6 +7,16 @@ import {
 } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 
+const HERO_BG_IMAGES = [
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/fee7eab82_sleek-mri-scanner-room-enhanced-holographic-displays-brain-scans-other-medical-data-embodying-cutting-edge-314416241.webp",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/519380010_TES-Copy2.jpg",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/b6c009336_6e9914fb6d6d4a305dd2fbe4c30e098d-Copy.jpg",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/4bfd388fc_1000_F_755228805_cGY4gZzDtaVC2GKBWaMzOtOPwnbV4ZIc-Copy.jpg",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/f48344490_a8838d6e6380e3cc2ddff672d7c0883b-Copy.jpg",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/4476afbd4_a-long-row-of-bookshelves-in-a-library-free-photo.jpg",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/4d7ca6875_modern-office-space-with-empty-bookshelves-and-clean-decor-generated-by-ai-photo.jpg",
+];
+
 // ── Countdown ──────────────────────────────────────────────────────────────────
 const DEADLINE_KEY = "apex_founding_deadline_v3";
 function getDeadline() {
@@ -130,6 +140,80 @@ const FAQS = [
 ];
 
 // ── Components ────────────────────────────────────────────────────────────────
+
+function HeroSection() {
+  const [bgIndex, setBgIndex] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setBgIndex(prev => (prev + 1) % HERO_BG_IMAGES.length);
+    }, 6000);
+    return () => clearInterval(interval);
+  }, []);
+
+  return (
+    <section className="relative px-6 pt-20 pb-16 text-center overflow-hidden min-h-[600px] flex items-center">
+      {/* Rotating background carousel */}
+      {HERO_BG_IMAGES.map((img, idx) => (
+        <div
+          key={idx}
+          className="absolute inset-0 transition-opacity duration-1500"
+          style={{ opacity: idx === bgIndex ? 1 : 0 }}
+        >
+          <img src={img} alt="research background" className="w-full h-full object-cover" />
+        </div>
+      ))}
+
+      {/* Dark overlay */}
+      <div className="absolute inset-0 bg-gradient-to-b from-slate-950/75 via-slate-950/60 to-slate-950/75" />
+      
+      {/* Blur effect */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] rounded-full bg-cyan-900/10 blur-3xl" />
+      </div>
+
+      <div className="relative max-w-4xl mx-auto w-full">
+        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-cyan-950/80 backdrop-blur border border-cyan-700/50 text-cyan-300 text-xs font-bold mb-8 uppercase tracking-widest">
+          <Star size={10} className="text-yellow-400" /> Patent-Sourced · Peer-Reviewed · Engineering-Grade
+        </div>
+
+        <h1 className="text-5xl md:text-6xl font-black leading-none tracking-tight mb-6">
+          The Research Platform for<br />
+          <span className="bg-gradient-to-r from-cyan-400 via-blue-400 to-purple-400 bg-clip-text text-transparent">
+            Serious Engineers
+          </span>
+        </h1>
+
+        <p className="text-slate-200 text-xl leading-relaxed max-w-2xl mx-auto mb-3">
+          A structured, citation-backed research platform for advanced electronics, RF systems, resonance engineering, and electromagnetic instrumentation.
+        </p>
+        <p className="text-slate-400 text-sm max-w-xl mx-auto mb-10">
+          200+ research entries · 40+ documented build plans · 40+ structured courses · AI patent suite
+        </p>
+
+        <div className="flex flex-wrap items-center justify-center gap-4 mb-10">
+          <Link to="/free-vault"
+            className="flex items-center gap-2 px-7 py-3.5 rounded-xl border border-slate-600 text-slate-200 hover:bg-slate-800/50 font-bold text-sm transition-all backdrop-blur">
+            <Database size={15} /> Explore Free Archive
+          </Link>
+          <a href="#pricing"
+            className="flex items-center gap-2 px-7 py-3.5 rounded-xl font-black text-white text-sm transition-all shadow-lg backdrop-blur"
+            style={{ background: "linear-gradient(135deg, rgba(124,58,237,0.9), rgba(37,99,235,0.9))", boxShadow: "0 6px 30px rgba(124,58,237,0.35)" }}>
+            View Membership Plans <ArrowRight size={15} />
+          </a>
+        </div>
+
+        <div className="flex flex-wrap items-center justify-center gap-6 text-xs text-slate-400">
+          {["Patent-sourced documentation", "Calibrated engineering specs", "Full BOM with part numbers", "Active researcher community"].map((t, i) => (
+            <span key={i} className="flex items-center gap-1.5">
+              <Check size={11} className="text-green-400" /> {t}
+            </span>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
 
 function TierCard({ tier, isAnnual }) {
   const [loading, setLoading] = useState(false);
@@ -286,51 +370,9 @@ export default function FunnelHome() {
       </nav>
 
       {/* ── Hero ── */}
-      <section className="relative px-6 pt-20 pb-16 text-center overflow-hidden">
-        <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] rounded-full bg-cyan-900/6 blur-3xl" />
-        </div>
+      <HeroSection />
 
-        <div className="relative max-w-4xl mx-auto">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-cyan-950/60 border border-cyan-800/50 text-cyan-300 text-xs font-bold mb-8 uppercase tracking-widest">
-            <Star size={10} className="text-yellow-400" /> Patent-Sourced · Peer-Reviewed · Engineering-Grade
-          </div>
 
-          <h1 className="text-5xl md:text-6xl font-black leading-none tracking-tight mb-6">
-            The Research Platform for<br />
-            <span className="bg-gradient-to-r from-cyan-400 via-blue-400 to-purple-400 bg-clip-text text-transparent">
-              Serious Engineers
-            </span>
-          </h1>
-
-          <p className="text-slate-300 text-xl leading-relaxed max-w-2xl mx-auto mb-3">
-            A structured, citation-backed research platform for advanced electronics, RF systems, resonance engineering, and electromagnetic instrumentation.
-          </p>
-          <p className="text-slate-500 text-sm max-w-xl mx-auto mb-10">
-            200+ research entries · 40+ documented build plans · 40+ structured courses · AI patent suite
-          </p>
-
-          <div className="flex flex-wrap items-center justify-center gap-4 mb-10">
-            <Link to="/free-vault"
-              className="flex items-center gap-2 px-7 py-3.5 rounded-xl border border-slate-700 text-slate-300 hover:bg-slate-800 font-bold text-sm transition-all">
-              <Database size={15} /> Explore Free Archive
-            </Link>
-            <a href="#pricing"
-              className="flex items-center gap-2 px-7 py-3.5 rounded-xl font-black text-white text-sm transition-all shadow-lg"
-              style={{ background: "linear-gradient(135deg, #7c3aed, #2563eb)", boxShadow: "0 6px 30px rgba(124,58,237,0.35)" }}>
-              View Membership Plans <ArrowRight size={15} />
-            </a>
-          </div>
-
-          <div className="flex flex-wrap items-center justify-center gap-6 text-xs text-slate-500">
-            {["Patent-sourced documentation", "Calibrated engineering specs", "Full BOM with part numbers", "Active researcher community"].map((t, i) => (
-              <span key={i} className="flex items-center gap-1.5">
-                <Check size={11} className="text-green-400" /> {t}
-              </span>
-            ))}
-          </div>
-        </div>
-      </section>
 
       {/* ── Stats Bar ── */}
       <section className="border-y border-slate-800 bg-slate-900/40 py-10 px-6">
