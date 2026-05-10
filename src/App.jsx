@@ -148,7 +148,7 @@ import CommunityForum from './pages/CommunityForum';
 import CreateCommunityPost from './pages/CreateCommunityPost';
 import ABTestingDashboard from './pages/ABTestingDashboard';
 import RevenueAudit from './pages/RevenueAudit';
-import AdminNdaSignatures from './pages/AdminNdaSignatures';
+// AdminNdaSignatures removed
 import AdminStripeCatalog from './pages/AdminStripeCatalog';
 import ScalarVentureHome from './pages/ScalarVentureHome';
 import VaultBrowser from './pages/VaultBrowser';
@@ -364,7 +364,7 @@ const AuthenticatedApp = () => {
             <Route path="/admin-shop-orders" element={<AdminShopOrders />} />
             <Route path="/admin-inventor-reviews" element={<AdminInventorReviews />} />
             <Route path="/admin-pdf-access" element={<AdminPdfAccess />} />
-            <Route path="/admin-nda-signatures" element={<AdminNdaSignatures />} />
+            {/* NDA signatures removed */}
             <Route path="/admin-stripe-catalog" element={<AdminStripeCatalog />} />
             <Route path="/email-funnel" element={<EmailFunnel />} />
             <Route path="/product-ladder" element={<ProductLadder />} />
