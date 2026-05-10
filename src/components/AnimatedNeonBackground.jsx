@@ -91,6 +91,26 @@ export default function AnimatedNeonBackground() {
         })}
       </svg>
 
+      {/* Matrix Digital Rain */}
+      <div className="absolute inset-0 overflow-hidden opacity-15">
+        {[...Array(20)].map((_, colIndex) => (
+          <div
+            key={colIndex}
+            className="absolute text-green-400 font-mono text-xs font-bold whitespace-pre-wrap break-words"
+            style={{
+              left: `${Math.random() * 100}%`,
+              animation: `matrixFall ${5 + Math.random() * 10}s linear infinite`,
+              animationDelay: `${Math.random() * 5}s`,
+              width: "20px",
+            }}
+          >
+            {[...Array(50)]
+              .map(() => Math.floor(Math.random() * 2))
+              .join("\n")}
+          </div>
+        ))}
+      </div>
+
       {/* Rotating Logos with Fade Transition */}
       <div className="absolute inset-0 flex items-center justify-center">
         {LOGOS.map((logo, index) => (
@@ -98,7 +118,7 @@ export default function AnimatedNeonBackground() {
             key={index}
             src={logo}
             alt="Logo"
-            className="absolute w-[600px] h-[600px] object-contain transition-opacity duration-1000"
+            className="absolute w-[450px] h-[450px] object-contain transition-opacity duration-1000"
             style={{
               opacity: index === currentIndex ? 0.25 : 0,
             }}
@@ -112,6 +132,10 @@ export default function AnimatedNeonBackground() {
         @keyframes flow {
           0% { stroke-dashoffset: 0; }
           100% { stroke-dashoffset: 100; }
+        }
+        @keyframes matrixFall {
+          0% { transform: translateY(-100%); }
+          100% { transform: translateY(100vh); }
         }
       `}</style>
     </div>
