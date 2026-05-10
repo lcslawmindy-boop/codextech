@@ -4,9 +4,9 @@ export default function AnimatedNeonBackground() {
     <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
       {/* Background Image */}
       <img 
-        src="https://media.base44.com/images/public/69ccefebfea78b23498c66a8/07f4882f0_615224639_1183362507294312_8069412157456999405_n.jpg"
-        alt="spacetime grid"
-        className="absolute inset-0 w-full h-full object-cover opacity-60"
+        src="https://media.base44.com/images/public/69ccefebfea78b23498c66a8/08828ac36_BBB.jpeg"
+        alt="library background"
+        className="absolute inset-0 w-full h-full object-cover opacity-50"
       />
       
       {/* Background overlay */}
