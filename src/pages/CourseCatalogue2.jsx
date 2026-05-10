@@ -39,66 +39,92 @@ function BuyButton({ item }) {
   };
 
   return (
-    <button
-      onClick={handleBuy}
-      disabled={loading}
-      className="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl text-sm font-black text-white bg-blue-700 hover:bg-blue-600 disabled:opacity-50 transition-all"
-    >
-      {loading ? <Loader2 size={14} className="animate-spin" /> : <ShoppingCart size={14} />}
-      {loading ? "Processing..." : `Enroll — ${item.price}`}
-    </button>
+    <>
+      <style>{`
+        @keyframes pulse-glow {
+          0%, 100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.4); }
+          50% { box-shadow: 0 0 0 8px rgba(59, 130, 246, 0); }
+        }
+        .pulse-btn {
+          animation: pulse-glow 2s infinite;
+        }
+      `}</style>
+      <button
+        onClick={handleBuy}
+        disabled={loading}
+        className="pulse-btn flex items-center justify-center gap-2 w-full py-3 rounded-xl text-sm font-black text-white bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-500 hover:to-blue-400 disabled:opacity-50 transition-all shadow-lg"
+      >
+        {loading ? <Loader2 size={14} className="animate-spin" /> : <ShoppingCart size={14} />}
+        {loading ? "Processing..." : `Enroll — ${item.price}`}
+      </button>
+    </>
   );
 }
 
 function ItemCard({ item }) {
   const [expanded, setExpanded] = useState(false);
   const isCourse = item.category === "Course";
-  const color = isCourse ? "blue" : "yellow";
 
   return (
-    <div className={`bg-gray-900 border border-gray-800 hover:border-gray-600 rounded-2xl overflow-hidden flex flex-col transition-all`}
-      style={{ borderTopColor: item.color, borderTopWidth: 3 }}>
-      <div className="p-5 flex flex-col gap-3 flex-1">
-        <div className="flex items-start gap-3">
-          <span className="text-3xl flex-shrink-0">{item.icon}</span>
-          <div>
-            <div className="flex items-center gap-2 mb-1">
-              <span className={`text-xs px-2 py-0.5 rounded font-semibold uppercase tracking-wider`}
-                style={{ backgroundColor: item.color + "22", color: item.color }}>
-                {item.category}
-              </span>
-              <span className="text-green-400 font-black text-sm">{item.price}</span>
+    <div className={`bg-gradient-to-br from-gray-900 to-gray-950 border border-gray-800 hover:border-gray-700 rounded-2xl overflow-hidden flex flex-col transition-all hover:shadow-xl`}
+      style={{ borderLeftColor: item.color, borderLeftWidth: 4 }}>
+      
+      {/* Header with Icon & Category */}
+      <div className="p-6 pb-4 border-b border-gray-800/50">
+        <div className="flex items-start justify-between gap-4">
+          <div className="flex items-start gap-4">
+            <span className="text-4xl flex-shrink-0">{item.icon}</span>
+            <div className="flex-1">
+              <div className="flex items-center gap-2 mb-2 flex-wrap">
+                <span className={`text-xs px-2.5 py-1 rounded-full font-bold uppercase tracking-wider`}
+                  style={{ backgroundColor: item.color + "22", color: item.color }}>
+                  {item.category}
+                </span>
+              </div>
+              <h3 className="text-white font-black text-base leading-snug">{item.title}</h3>
+              <p className="text-gray-400 text-xs italic mt-1">"{item.tagline}"</p>
             </div>
-            <h3 className="text-white font-black text-sm leading-snug">{item.title}</h3>
-            <p className="text-gray-400 text-xs italic mt-0.5">"{item.tagline}"</p>
+          </div>
+          <div className="flex-shrink-0 text-right">
+            <p className="text-gray-500 text-xs mb-1">Pricing</p>
+            <p className="text-2xl font-black" style={{ color: item.color }}>{item.price}</p>
           </div>
         </div>
+      </div>
 
-        <p className="text-gray-300 text-xs leading-relaxed">{item.description}</p>
+      {/* Main Content */}
+      <div className="p-6 flex flex-col gap-4 flex-1">
+        <p className="text-gray-300 text-sm leading-relaxed">{item.description}</p>
 
+        {/* Modules Section */}
         {item.modules?.length > 0 && (
-          <>
+          <div className="bg-gray-800/30 rounded-lg p-3.5 border border-gray-700/50">
             <button
               onClick={() => setExpanded(e => !e)}
-              className="flex items-center gap-1 text-xs text-cyan-400 hover:text-cyan-300 transition-colors"
+              className="flex items-center justify-between w-full text-xs text-cyan-400 hover:text-cyan-300 transition-colors font-semibold"
             >
-              {expanded ? <ChevronUp size={12} /> : <ChevronDown size={12} />}
-              {expanded ? "Hide" : "Show"} {item.modules.length} modules
+              <span className="flex items-center gap-2">
+                {expanded ? <ChevronUp size={13} /> : <ChevronDown size={13} />}
+                Curriculum ({item.modules.length} modules)
+              </span>
             </button>
             {expanded && (
-              <ol className="list-decimal list-inside space-y-1 pl-1">
+              <ol className="list-decimal list-inside space-y-2 pl-1 mt-3 text-gray-400 text-xs">
                 {item.modules.map((m, i) => (
-                  <li key={i} className="text-gray-400 text-xs leading-snug">{m}</li>
+                  <li key={i} className="leading-snug">{m}</li>
                 ))}
               </ol>
             )}
-          </>
+          </div>
         )}
 
-        <div className="text-gray-600 text-xs mt-auto pt-2 border-t border-gray-800">
-          <span className="text-gray-500 font-semibold">Source: </span>{item.source}
+        {/* Source Footer */}
+        <div className="text-gray-600 text-xs border-t border-gray-800/50 pt-3 mt-auto">
+          <span className="text-gray-500 font-semibold">Research Source: </span>
+          <span className="text-gray-400">{item.source}</span>
         </div>
 
+        {/* CTA Button */}
         <BuyButton item={item} />
       </div>
     </div>
