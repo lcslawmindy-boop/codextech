@@ -26,6 +26,7 @@ const MODULES = [
   { id: "ip-network", icon: Network, label: "IP Network Graph", sub: "Relationship mapping", color: "#3b82f6", href: "/ip-network", group: "Intelligence" },
   { id: "monitoring", icon: Radar, label: "Threat Monitor", sub: "Patent alerts", color: "#ef4444", href: "/monitoring", group: "Intelligence" },
   { id: "ip-marketplace", icon: TrendingUp, label: "IP Marketplace", sub: "Opportunity cards", color: "#06b6d4", href: "/ip-marketplace", group: "Intelligence" },
+  { id: "intelligence", icon: Brain, label: "Intelligence Layer", sub: "Events · Clusters · Links", color: "#a855f7", href: "/intelligence", group: "Intelligence" },
 ];
 
 const WORKFLOW_STEPS = [

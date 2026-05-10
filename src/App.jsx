@@ -175,6 +175,7 @@ import AIOperatingSystem from './pages/AIOperatingSystem';
 import IPNetworkGraph from './pages/IPNetworkGraph';
 import ProjectPlanner from './pages/ProjectPlanner';
 import BuildPlanExplorer from './pages/BuildPlanExplorer';
+import IntelligenceLayer from './pages/IntelligenceLayer';
 import OSShell from './components/OSShell';
 
 const AuthenticatedApp = () => {
@@ -412,6 +413,7 @@ const AuthenticatedApp = () => {
           <Route path="/ai-os" element={<AIOperatingSystem />} />
           <Route path="/ip-network" element={<IPNetworkGraph />} />
           <Route path="/project-planner" element={<ProjectPlanner />} />
+          <Route path="/intelligence" element={<IntelligenceLayer />} />
         </Route>
       </Routes>
     </TrialContext.Provider>

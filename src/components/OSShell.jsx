@@ -24,6 +24,7 @@ const NAV_ITEMS = [
   { icon: Radar, label: "Threat Monitor", href: "/monitoring", color: "#ef4444", group: "intel" },
   { icon: TrendingUp, label: "IP Marketplace", href: "/ip-marketplace", color: "#06b6d4", group: "intel" },
   { icon: Activity, label: "Opportunity Monitor", href: "/opportunity-monitor", color: "#f59e0b", group: "intel" },
+  { icon: Brain, label: "Intelligence Layer", href: "/intelligence", color: "#a855f7", group: "intel" },
 ];
 
 const GROUP_LABELS = {
