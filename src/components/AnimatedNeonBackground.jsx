@@ -1,16 +1,44 @@
+import { useState, useEffect } from "react";
+
+const BG_IMAGES = [
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/68ccbb554_BG1-Copy-Copy-Copy-Copy.jpeg",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/3fab485b2_JHKJK.jpeg",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/50a81680c_JJJ-Copy.jpeg",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/d2ef155a8_JJJJ.jpeg",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/36cfdae0c_MEDBEDLAB.jpeg",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/d21e1ebf8_MEDBEDLAB.jpg",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/a018fb943_MMMMMMM.jpeg",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/8b92c2559_mri-machine-medical-interior-design-with-lights_932514-2211.jpg",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/f4d0a58bf_NN.jpeg",
+];
+
 export default function AnimatedNeonBackground() {
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentIndex((prev) => (prev + 1) % BG_IMAGES.length);
+    }, 5000);
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
-      {/* Background Image */}
-      <img 
-        src="https://media.base44.com/images/public/69ccefebfea78b23498c66a8/08828ac36_BBB.jpeg"
-        alt="library background"
-        className="absolute inset-0 w-full h-full object-cover opacity-50"
-      />
+      {/* Background Images Carousel */}
+      {BG_IMAGES.map((img, index) => (
+        <img 
+          key={index}
+          src={img}
+          alt="background"
+          className="absolute inset-0 w-full h-full object-cover transition-opacity duration-1000"
+          style={{
+            opacity: index === currentIndex ? 0.6 : 0,
+          }}
+        />
+      ))}
       
       {/* Background overlay */}
-      <div className="absolute inset-0 bg-gray-950/40" />
+      <div className="absolute inset-0 bg-gray-950/30" />
 
       {/* Neon Grid Lines */}
       <svg className="absolute inset-0 w-full h-full opacity-20" style={{ background: "transparent" }}>
