@@ -152,9 +152,7 @@ export default function ConceptGraph() {
       </div>
 
       {/* Content area */}
-      <div className="flex-1 relative overflow-hidden">
-        {/* Animated neon background with rotating logos */}
-        <AnimatedNeonBackground />
+      <div className="flex-1 relative overflow-hidden bg-gray-950">
 
         {view === "business" ? (
           <BusinessConceptGraph />
