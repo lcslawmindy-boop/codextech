@@ -393,26 +393,29 @@ export default function FunnelHome() {
 
 
 {/* ── 3D Feature Cube ── */}
-      <section className="py-16 px-6 flex flex-col items-center">
-        <p className="text-xs font-bold uppercase tracking-widest text-slate-500 mb-2">Platform Overview</p>
-        <h2 className="text-3xl font-black text-white mb-2 text-center">Every Feature. One Platform.</h2>
-        <p className="text-slate-400 text-sm mb-10 text-center max-w-md">Drag the cube to explore all 6 core modules built into the research platform.</p>
-        <FeatureCube3D size={115} />
-        <div className="mt-8 grid grid-cols-3 gap-3 max-w-lg w-full">
-          {[
-            { color: "#a855f7", icon: "⚗️", label: "Invention Library" },
-            { color: "#f97316", icon: "📐", label: "Tech Specs & BOM" },
-            { color: "#06b6d4", icon: "📜", label: "Patent Suite" },
-            { color: "#22c55e", icon: "🕸️", label: "Concept Graph" },
-            { color: "#fbbf24", icon: "⚡", label: "Invention Forge" },
-            { color: "#ec4899", icon: "🔐", label: "VDR Room" },
-          ].map((f, i) => (
-            <div key={i} className="flex items-center gap-2 px-3 py-2 rounded-xl border text-xs font-bold" style={{ borderColor: f.color + "55", background: f.color + "10", color: f.color }}>
-              <span>{f.icon}</span> {f.label}
-            </div>
-          ))}
-        </div>
-      </section>
+<section className="py-16 px-6 flex flex-col items-center">
+  <p className="text-xs font-bold uppercase tracking-widest text-slate-500 mb-2">Platform Overview</p>
+  <h2 className="text-3xl font-black text-white mb-2 text-center">Every Feature. One Platform.</h2>
+  <p className="text-slate-400 text-sm mb-10 text-center max-w-md">Drag the cube to explore all 6 core modules built into the research platform.</p>
+  <FeatureCube3D size={115} />
+  <div className="mt-8 grid grid-cols-3 gap-3 max-w-lg w-full">
+    {[
+      { color: "#a855f7", icon: "⚗️", label: "Invention Library" },
+      { color: "#f97316", icon: "📐", label: "Tech Specs & BOM" },
+      { color: "#06b6d4", icon: "📜", label: "Patent Suite" },
+      { color: "#22c55e", icon: "🕸️", label: "Concept Graph" },
+      { color: "#fbbf24", icon: "⚡", label: "Invention Forge" },
+      { color: "#ec4899", icon: "🔐", label: "VDR Room" },
+    ].map((f, i) => (
+      <div key={i} className="flex items-center gap-2 px-3 py-2 rounded-xl border text-xs font-bold" style={{ borderColor: f.color + "55", background: f.color + "10", color: f.color }}>
+        <span>{f.icon}</span> {f.label}
+      </div>
+    ))}
+  </div>
+</section>
+
+{/* ── Patent Sources Horizontal Scroll ── */}
+<PatentSlideStrip />
 
       {/* ── Stats Bar ── */}
       <section className="border-y border-slate-800 bg-slate-900/40 py-10 px-6">

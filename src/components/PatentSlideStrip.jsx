@@ -39,14 +39,15 @@ export default function PatentSlideStrip() {
   const trackRef = useRef(null);
   const animRef = useRef(null);
   const posRef = useRef(0);
+  const CARD_W = 240;
 
   useEffect(() => {
-    const SPEED = 0.30;
-    const singleSetH = PATENT_IMAGES.length * CARD_H;
+    const SPEED = 0.35;
+    const singleSetW = PATENT_IMAGES.length * CARD_W;
     const step = () => {
-      posRef.current += SPEED;
-      if (posRef.current >= singleSetH) posRef.current -= singleSetH;
-      if (trackRef.current) trackRef.current.style.transform = `translateY(-${posRef.current}px)`;
+      posRef.current -= SPEED; // Right-to-left: negative direction
+      if (posRef.current <= -singleSetW) posRef.current += singleSetW;
+      if (trackRef.current) trackRef.current.style.transform = `translateX(${posRef.current}px)`;
       animRef.current = requestAnimationFrame(step);
     };
     animRef.current = requestAnimationFrame(step);
@@ -54,126 +55,75 @@ export default function PatentSlideStrip() {
   }, []);
 
   return (
-    <div
-      className="hidden lg:flex flex-col flex-shrink-0"
-      style={{ width: 200, height: "100vh", position: "sticky", top: 0, background: "#020c1a", borderRight: "1px solid #0f2744" }}
-    >
-      {/* Header badge */}
-      <div style={{ padding: "10px 8px 8px", borderBottom: "1px solid #0f2744", flexShrink: 0 }}>
-        <div style={{
-          display: "flex", alignItems: "center", gap: 6,
-          background: "linear-gradient(135deg, #0a1f3a, #051424)",
-          border: "1px solid #1e4080", borderRadius: 8, padding: "8px 10px",
-        }}>
-          <div style={{
-            width: 28, height: 28, borderRadius: 6, flexShrink: 0,
-            background: "linear-gradient(135deg, #1d4ed8, #06b6d4)",
-            display: "flex", alignItems: "center", justifyContent: "center",
-          }}>
-            <FileText size={14} color="#fff" />
-          </div>
+    <div className="w-full bg-slate-950 border-y border-slate-800 py-8 px-6">
+      <div className="max-w-6xl mx-auto">
+        {/* Header */}
+        <div className="mb-6 flex items-center justify-between">
           <div>
-            <div style={{ color: "#06b6d4", fontSize: 9, fontWeight: 900, letterSpacing: "0.12em", textTransform: "uppercase" }}>Patent-Sourced</div>
-            <div style={{ color: "#64748b", fontSize: 8, marginTop: 1 }}>200+ Research Entries</div>
+            <div className="text-xs font-black uppercase tracking-widest text-cyan-400 mb-1">Patent-Sourced Research</div>
+            <h3 className="text-xl font-black text-white">200+ Documented Patent Diagrams</h3>
+          </div>
+          <div className="text-right text-xs text-slate-500">
+            Scroll left to right
           </div>
         </div>
 
-        {/* Trust badges */}
-        <div style={{ marginTop: 8, display: "flex", flexDirection: "column", gap: 4 }}>
-          {TRUST_BADGES.map((b, i) => (
-            <div key={i} style={{
-              display: "flex", alignItems: "center", gap: 6,
-              padding: "4px 8px", borderRadius: 6,
-              background: "#040f1e", border: "1px solid #0e2540",
-            }}>
-              <span style={{ color: "#06b6d4", flexShrink: 0 }}>{b.icon}</span>
-              <span style={{ color: "#94a3b8", fontSize: 9, fontWeight: 700 }}>{b.label}</span>
-            </div>
-          ))}
-        </div>
-      </div>
+        {/* Horizontal scrolling strip */}
+        <div className="overflow-hidden relative rounded-xl">
+          {/* Left fade */}
+          <div className="absolute left-0 top-0 bottom-0 w-12 z-10 pointer-events-none"
+            style={{ background: "linear-gradient(to right, #0f172a, transparent)" }} />
+          {/* Right fade */}
+          <div className="absolute right-0 top-0 bottom-0 w-12 z-10 pointer-events-none"
+            style={{ background: "linear-gradient(to left, #0f172a, transparent)" }} />
 
-      {/* Scrolling patent diagrams */}
-      <div style={{ flex: 1, overflow: "hidden", position: "relative" }}>
-        {/* Top fade */}
-        <div style={{
-          position: "absolute", top: 0, left: 0, right: 0, height: 32, zIndex: 10, pointerEvents: "none",
-          background: "linear-gradient(to bottom, #020c1a, transparent)",
-        }} />
-        {/* Bottom fade */}
-        <div style={{
-          position: "absolute", bottom: 0, left: 0, right: 0, height: 32, zIndex: 10, pointerEvents: "none",
-          background: "linear-gradient(to top, #020c1a, transparent)",
-        }} />
-
-        <div ref={trackRef} style={{ willChange: "transform", paddingTop: 8 }}>
-          {ALL_SLIDES.map((slide, i) => (
-            <div key={i} style={{
-              margin: "0 6px 6px",
-              height: 214,
-              borderRadius: 8,
-              overflow: "hidden",
-              border: "1px solid #0e2540",
-              background: "#040f1e",
-              position: "relative",
-              flexShrink: 0,
-              boxShadow: "0 2px 12px rgba(6,182,212,0.08)",
-            }}>
-              {/* US Patent stamp */}
-              <div style={{
-                position: "absolute", top: 5, left: 5, zIndex: 5,
-                background: "rgba(6,182,212,0.9)", borderRadius: 3,
-                padding: "1px 5px",
-                fontSize: 7, fontWeight: 900, color: "#000", letterSpacing: "0.1em",
-                textTransform: "uppercase",
+          <div ref={trackRef} style={{ willChange: "transform", display: "flex", gap: 8, paddingLeft: 16, paddingRight: 16 }}>
+            {ALL_SLIDES.map((slide, i) => (
+              <div key={i} style={{
+                width: 224,
+                height: 150,
+                borderRadius: 8,
+                overflow: "hidden",
+                border: "1px solid #1e293b",
+                background: "#040f1e",
+                position: "relative",
+                flexShrink: 0,
+                boxShadow: "0 2px 12px rgba(6,182,212,0.08)",
               }}>
-                US Patent
-              </div>
-
-              {/* Image */}
-              <img
-                src={slide.url}
-                alt={slide.label}
-                style={{
-                  width: "100%", height: 170,
-                  objectFit: "contain",
-                  background: "#fff",
-                  display: "block",
-                }}
-              />
-
-              {/* Label */}
-              <div style={{ padding: "5px 7px", borderTop: "1px solid #0e2540" }}>
-                <p style={{
-                  color: "#94a3b8", fontSize: 8.5, lineHeight: 1.3, margin: 0,
-                  overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap",
+                {/* US Patent stamp */}
+                <div style={{
+                  position: "absolute", top: 4, left: 4, zIndex: 5,
+                  background: "rgba(6,182,212,0.9)", borderRadius: 2,
+                  padding: "1px 4px",
+                  fontSize: 6, fontWeight: 900, color: "#000", letterSpacing: "0.05em",
+                  textTransform: "uppercase",
                 }}>
-                  {slide.label}
-                </p>
+                  US Patent
+                </div>
+
+                {/* Image */}
+                <img
+                  src={slide.url}
+                  alt={slide.label}
+                  style={{
+                    width: "100%", height: 120,
+                    objectFit: "contain",
+                    background: "#fff",
+                    display: "block",
+                  }}
+                />
+
+                {/* Label */}
+                <div style={{ padding: "4px 6px", borderTop: "1px solid #1e293b" }}>
+                  <p style={{
+                    color: "#94a3b8", fontSize: 7.5, lineHeight: 1.2, margin: 0,
+                    overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap",
+                  }}>
+                    {slide.label}
+                  </p>
+                </div>
               </div>
-
-              {/* Neon bottom line */}
-              <div style={{
-                position: "absolute", bottom: 0, left: 0, right: 0, height: 1,
-                background: "linear-gradient(90deg, transparent, #06b6d4, transparent)",
-              }} />
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Footer CTA */}
-      <div style={{ padding: "8px", borderTop: "1px solid #0f2744", flexShrink: 0 }}>
-        <div style={{
-          background: "linear-gradient(135deg, #0a1f3a, #051424)",
-          border: "1px solid #1e4080",
-          borderRadius: 8, padding: "8px 10px", textAlign: "center",
-        }}>
-          <div style={{ color: "#06b6d4", fontSize: 8, fontWeight: 900, letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: 3 }}>
-            Full Archive Access
-          </div>
-          <div style={{ color: "#475569", fontSize: 8, lineHeight: 1.4 }}>
-            Members get 200+ entries with inline citations & schematics
+            ))}
           </div>
         </div>
       </div>
