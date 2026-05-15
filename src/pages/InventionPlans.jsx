@@ -1290,12 +1290,13 @@ function BuyNowButton({ invention }) {
 function SpecsLockedGate({ invention }) {
   const visual = inventionVisuals[invention?.title];
   const image = itemImages[invention?.title];
+  const data = inventionSteps[invention?.title];
 
   return (
     <div className="max-w-3xl mx-auto">
-      {/* Hero image / icon */}
+      {/* Hero image */}
       {image ? (
-        <div className="w-full h-56 rounded-2xl overflow-hidden mb-5 relative">
+        <div className="w-full h-52 rounded-2xl overflow-hidden mb-5 relative">
           <img src={image} alt={invention?.title} className="w-full h-full object-cover" />
           <div className="absolute inset-0 bg-gradient-to-t from-gray-950 via-gray-950/40 to-transparent" />
           <div className="absolute bottom-4 left-4 flex items-center gap-2">
@@ -1315,7 +1316,7 @@ function SpecsLockedGate({ invention }) {
         <p className="text-gray-300 text-sm leading-relaxed mb-5">{invention?.description}</p>
       )}
 
-      {/* What it is teaser */}
+      {/* Teasers — visible */}
       {visual?.whatItIs && (
         <div className="bg-blue-950/30 border border-blue-900/40 rounded-xl p-4 mb-4">
           <p className="text-blue-300 font-bold text-xs uppercase tracking-wider mb-1 flex items-center gap-1.5">
@@ -1324,8 +1325,6 @@ function SpecsLockedGate({ invention }) {
           <p className="text-gray-300 text-sm leading-relaxed">{visual.whatItIs}</p>
         </div>
       )}
-
-      {/* Key principle teaser */}
       {visual?.keyPrinciple && (
         <div className="bg-gray-900 border border-gray-800 rounded-xl p-4 mb-4">
           <p className="text-cyan-400 font-bold text-xs uppercase tracking-wider mb-1">Key Principle</p>
@@ -1333,22 +1332,88 @@ function SpecsLockedGate({ invention }) {
         </div>
       )}
 
-      {/* Blurred locked preview */}
-      <div className="relative bg-gray-900 border border-gray-800 rounded-2xl p-5 mb-5 overflow-hidden">
-        <div className="blur-sm pointer-events-none select-none space-y-3 opacity-50">
-          <p className="text-yellow-400 font-bold text-xs uppercase tracking-wider">Bill of Materials (locked)</p>
-          {["Component A — 4x ferrite cores", "Component B — copper winding", "Component C — capacitor bank", "Component D — signal generator"].map((item, i) => (
-            <div key={i} className="flex gap-3 text-xs text-gray-400">
-              <span className="text-cyan-500 font-bold w-6">—</span>
-              <span>{item}</span>
+      {/* ── BLURRED SPECS PREVIEW ── */}
+      <div className="relative rounded-2xl overflow-hidden mb-5 border border-gray-800">
+        {/* Real content — blurred */}
+        <div className="blur-md pointer-events-none select-none p-5 space-y-4 bg-gray-900">
+          {/* Technical Overview */}
+          {data?.overview && (
+            <div>
+              <p className="text-cyan-400 font-bold text-xs uppercase tracking-wider mb-2">Technical Overview</p>
+              <p className="text-gray-300 text-sm leading-relaxed">{data.overview}</p>
             </div>
-          ))}
+          )}
+
+          {/* BOM rows */}
+          {data?.bom?.length > 0 && (
+            <div>
+              <p className="text-yellow-400 font-bold text-xs uppercase tracking-wider mb-2">
+                Bill of Materials ({data.bom.length} items)
+              </p>
+              <table className="w-full text-xs border-collapse">
+                <thead>
+                  <tr className="border-b border-gray-700">
+                    <th className="text-left text-gray-500 py-1.5 pr-3 w-10">Qty</th>
+                    <th className="text-left text-gray-500 py-1.5 pr-4">Item</th>
+                    <th className="text-left text-gray-500 py-1.5 pr-4">Specification</th>
+                    <th className="text-left text-gray-500 py-1.5">Source</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {data.bom.slice(0, 6).map((row, i) => (
+                    <tr key={i} className={i % 2 === 0 ? "bg-gray-800/30" : ""}>
+                      <td className="py-1.5 pr-3 text-cyan-400 font-bold">{row.qty}</td>
+                      <td className="py-1.5 pr-4 text-gray-200">{row.item}</td>
+                      <td className="py-1.5 pr-4 text-gray-400">{row.spec}</td>
+                      <td className="py-1.5 text-gray-500">{row.source}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+
+          {/* Steps preview */}
+          {data?.steps?.length > 0 && (
+            <div>
+              <p className="text-green-400 font-bold text-xs uppercase tracking-wider mb-2">
+                Assembly Steps ({data.steps.length} steps)
+              </p>
+              <div className="space-y-2">
+                {data.steps.slice(0, 4).map((step, i) => (
+                  <div key={i} className="flex gap-3">
+                    <div className="w-6 h-6 rounded-full bg-gray-700 flex items-center justify-center text-xs font-bold text-white flex-shrink-0">{i + 1}</div>
+                    <div>
+                      <p className="text-white text-xs font-semibold">{step.title}</p>
+                      <p className="text-gray-400 text-xs">{step.detail?.slice(0, 80)}…</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Notes preview */}
+          {data?.notes && (
+            <div>
+              <p className="text-purple-400 font-bold text-xs uppercase tracking-wider mb-1">Technical Notes</p>
+              <p className="text-gray-400 text-sm">{data.notes?.slice(0, 120)}…</p>
+            </div>
+          )}
         </div>
-        <div className="absolute inset-0 flex items-center justify-center bg-gray-950/60 backdrop-blur-[1px]">
-          <div className="text-center">
-            <Lock size={28} className="text-indigo-400 mx-auto mb-2" />
-            <p className="text-white font-bold text-sm">Full specs locked</p>
-            <p className="text-gray-400 text-xs">Purchase to reveal BOM, steps & schematics</p>
+
+        {/* Lock overlay */}
+        <div className="absolute inset-0 flex flex-col items-center justify-center bg-gray-950/70 backdrop-blur-[2px]">
+          <div className="text-center px-6">
+            <div className="w-14 h-14 rounded-2xl bg-indigo-900/60 border border-indigo-600 flex items-center justify-center mx-auto mb-3">
+              <Lock size={24} className="text-indigo-300" />
+            </div>
+            <p className="text-white font-black text-base mb-1">Full Specs Locked</p>
+            <p className="text-gray-400 text-xs mb-4">Purchase this plan to reveal the complete BOM,<br />step-by-step instructions, and schematics.</p>
+            <div className="flex items-center justify-center gap-3 flex-wrap">
+              <span className="text-green-400 font-black text-xl">{invention?.price}</span>
+              <span className="text-gray-600 text-xs">one-time</span>
+            </div>
           </div>
         </div>
       </div>
@@ -1359,7 +1424,7 @@ function SpecsLockedGate({ invention }) {
           <p className="text-white font-black text-lg">{invention?.title}</p>
           <p className="text-green-400 font-black text-xl">{invention?.price}</p>
         </div>
-        <p className="text-gray-500 text-xs mb-3">Includes: full BOM, step-by-step assembly, schematics, technical notes</p>
+        <p className="text-gray-500 text-xs mb-3">Includes: full BOM, step-by-step assembly, schematics, technical notes & downloadable PDF</p>
         <BuyNowButton invention={invention} />
         <button onClick={() => window.location.href = '/pricing'}
           className="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl font-bold text-sm border border-gray-700 text-gray-400 hover:bg-gray-800 transition-all">
