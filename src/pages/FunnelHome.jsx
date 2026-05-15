@@ -10,6 +10,7 @@ import { base44 } from "@/api/base44Client";
 import DocumentSlideStrip from "../components/DocumentSlideStrip";
 import DeviceSlideStrip from "../components/DeviceSlideStrip";
 import FeatureCube3D from "../components/FeatureCube3D";
+import IPEmpireValueSection from "../components/IPEmpireValueSection";
 
 const HERO_BG_IMAGES = [
   "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/fee7eab82_sleek-mri-scanner-room-enhanced-holographic-displays-brain-scans-other-medical-data-embodying-cutting-edge-314416241.webp",
@@ -547,6 +548,11 @@ export default function FunnelHome() {
           </div>
         </div>
       </section>
+
+      {/* ── IP Empire Value Section ── */}
+      <div className="border-t border-slate-800">
+        <IPEmpireValueSection />
+      </div>
 
       {/* ── Trust Pillars ── */}
       <section className="px-6 py-20 max-w-5xl mx-auto">
