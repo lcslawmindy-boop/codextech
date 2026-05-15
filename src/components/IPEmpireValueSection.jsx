@@ -66,16 +66,16 @@ const EMPIRE_PILLARS = [
     value: "$500–$5,000 per filing",
     tag: "RESEARCH+",
     tagColor: "#fbbf24",
-    desc: "Attorney-grade patent tools powered by AI. Draft, analyze, monitor and protect your IP — without a $500/hr attorney.",
+    desc: "AI-assisted patent research tools. Draft, analyze, and monitor your IP landscape — at a fraction of traditional research costs. Not a substitute for licensed legal counsel.",
     bullets: [
       "USPTO-formatted patent drafting wizard (provisional & full utility)",
-      "AI patent attorney chat — get answers to IP strategy questions instantly",
+      "AI patent research assistant — explore IP strategy questions and prior art",
       "Novelty analysis — check if your idea is truly new before filing",
       "Freedom-to-Operate (FTO) research — find what you can build without infringing",
       "Automated patent threat monitoring — get alerted when competitors file near your IP",
       "Competitive landscape mapping & prior art cross-referencing",
     ],
-    why: "A single patent can be worth millions. The AI Patent Suite gives you a $5,000 filing toolkit for a fraction of the cost.",
+    why: "A single patent can be worth millions. The AI Patent Suite gives you a powerful research and drafting toolkit — always pair with a licensed patent attorney before filing.",
   },
   {
     icon: <Zap size={20} />,
@@ -281,17 +281,17 @@ export default function IPEmpireValueSection() {
           <p className="text-slate-400 text-sm mb-6">Get full access starting at</p>
           <div className="flex flex-wrap items-center justify-center gap-4">
             <div className="text-center">
-              <p className="text-cyan-400 font-black text-3xl">$29.99<span className="text-lg text-slate-500">/mo</span></p>
+              <p className="text-cyan-400 font-black text-3xl">$29<span className="text-lg text-slate-500">/mo</span></p>
               <p className="text-slate-500 text-xs mt-1">Explorer Tier</p>
             </div>
             <div className="text-slate-700 text-2xl font-black">→</div>
             <div className="text-center">
-              <p className="text-purple-400 font-black text-3xl">$69.99<span className="text-lg text-slate-500">/mo</span></p>
+              <p className="text-purple-400 font-black text-3xl">$49<span className="text-lg text-slate-500">/mo</span></p>
               <p className="text-slate-500 text-xs mt-1">Research Lab</p>
             </div>
             <div className="text-slate-700 text-2xl font-black">→</div>
             <div className="text-center">
-              <p className="text-orange-400 font-black text-3xl">$129.99<span className="text-lg text-slate-500">/mo</span></p>
+              <p className="text-orange-400 font-black text-3xl">$99<span className="text-lg text-slate-500">/mo</span></p>
               <p className="text-slate-500 text-xs mt-1">Pro Builder</p>
             </div>
           </div>

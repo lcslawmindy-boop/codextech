@@ -60,8 +60,8 @@ const TIERS = [
   {
     id: "research",
     name: "Research Lab",
-    monthly: 99,
-    annual: 79,
+    monthly: 49,
+    annual: 39,
     color: "#a855f7",
     badge: "MOST POPULAR",
     desc: "All courses · purchase up to 10 build plans · Forge & Patent credits",
@@ -85,8 +85,8 @@ const TIERS = [
   {
     id: "pro",
     name: "Pro Builder",
-    monthly: 199,
-    annual: 159,
+    monthly: 149,
+    annual: 119,
     color: "#f97316",
     badge: "BEST VALUE",
     desc: "All courses · unlimited build plan purchases · 10 Forge + 10 Patent credits",
@@ -100,7 +100,7 @@ const TIERS = [
       { icon: <BookOpen size={14} />, text: "All 40+ courses — full rotating access" },
       { icon: <Wrench size={14} />, text: "Unlimited build plan purchases — full catalogue unlocked" },
       { icon: <Zap size={14} />, text: "10 Invention Forge credits / month" },
-      { icon: <Shield size={14} />, text: "10 AI Patent Suite credits / month (drafting, FTO, monitoring)" },
+      { icon: <Shield size={14} />, text: "10 AI Patent Suite credits / month (drafting research, FTO, monitoring — not legal advice)" },
       { icon: <Check size={14} />, text: "Priority support & expert forum access" },
       { icon: <Check size={14} />, text: "Early access to all new content drops" },
     ],
@@ -452,6 +452,13 @@ export default function Pricing() {
           </Link>
           <p className="text-slate-600 text-xs mt-4">🔒 Secured by Stripe · Cancel anytime</p>
         </div>
+      </div>
+
+      {/* Legal compliance notice */}
+      <div className="bg-amber-950/20 border-t border-amber-900/30 px-6 py-4">
+        <p className="text-center text-amber-200/60 text-[11px] leading-relaxed max-w-3xl mx-auto">
+          <strong className="text-amber-300/80">Research & Educational Platform Only.</strong> All content is for educational and experimental study. No device described on this platform is approved by the FDA, FCC, or any regulatory authority. AI patent tools are research aids — consult a licensed USPTO patent attorney before filing. Nothing on this platform constitutes medical, legal, or investment advice. Results from experimental devices described in source literature cannot be guaranteed to be reproducible.
+        </p>
       </div>
 
       <footer className="border-t border-slate-800 px-6 py-8 text-center text-slate-600 text-xs">

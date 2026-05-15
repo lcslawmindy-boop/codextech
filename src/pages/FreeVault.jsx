@@ -88,10 +88,10 @@ function InventionCatalog() {
                 </div>
                 {visual?.whatItIs && <p className="text-gray-400 text-xs leading-relaxed line-clamp-2">{visual.whatItIs}</p>}
                 <div className="mt-auto pt-2 border-t border-gray-800 space-y-1.5">
-                  <CatalogBuyButton item={inv} category="Invention" returnPath="/free-vault" />
-                  <Link to="/invention-plans" className="flex items-center justify-center gap-1 w-full py-1.5 rounded-xl text-xs text-gray-500 border border-gray-800 hover:bg-gray-800 transition-all">
-                    <Lock size={10} /> View Full Specs
+                  <Link to="/pricing" className="flex items-center justify-center gap-2 w-full py-2 rounded-xl text-xs font-black text-white bg-purple-700 hover:bg-purple-600 transition-all">
+                    <Lock size={10} /> Unlock Full Plan
                   </Link>
+                  <p className="text-center text-gray-600 text-[10px]">Research Lab $49/mo · Cancel anytime</p>
                 </div>
               </div>
             </div>
@@ -145,7 +145,9 @@ function CourseCatalog() {
               </div>
               <p className="text-gray-400 text-xs leading-relaxed line-clamp-3">{item.description}</p>
               <div className="mt-auto pt-2 border-t border-gray-800">
-                <CatalogBuyButton item={item} category={item.category} returnPath="/free-vault" />
+                <Link to="/pricing" className="flex items-center justify-center gap-2 w-full py-2 rounded-xl text-xs font-black text-white bg-purple-700 hover:bg-purple-600 transition-all">
+                  <Lock size={10} /> Unlock Course
+                </Link>
               </div>
             </div>
           </div>
@@ -288,7 +290,7 @@ export default function FreeVault() {
             Explore 3 complete build systems from C.O.D.E.X.T.E.C.H. with full BOMs and specifications. Membership unlocks 40+ systems, courses, and execution tools.
           </p>
           <p className="text-gray-500 text-sm max-w-xl mx-auto">
-            All systems sourced from granted US patents and peer-reviewed research. Upgrade to Pro ($199/month) for all 40+ builds, PDFs, video guides, and verified supplier sourcing.
+            All systems sourced from granted US patents and peer-reviewed research. Membership unlocks 40+ full build plans, PDFs, video guides, and verified supplier sourcing — from $49/mo.
           </p>
         </div>
 
@@ -340,23 +342,27 @@ export default function FreeVault() {
           </div>
         </div>
 
-        {/* Browse all */}
+        {/* Browse all — gated CTA */}
         <div className="text-center bg-gray-900 border border-gray-800 rounded-2xl p-8 mb-16">
-          <h2 className="text-2xl font-black mb-3">Browse All 40+ Systems</h2>
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-950/50 border border-orange-800 text-orange-300 text-xs font-bold mb-4">
+            <Lock size={11} /> Member Access Required
+          </div>
+          <h2 className="text-2xl font-black mb-3">40+ Full Build Plans — Members Only</h2>
           <p className="text-gray-400 mb-6 max-w-md mx-auto">
-            All builds include full BOMs, exact specifications, and assembly instructions. Completely free.
+            Full schematics, 60–80 page PDFs, video assembly guides, and verified supplier links are unlocked with a Research Lab or Pro Builder membership.
           </p>
-          <Link to="/invention-plans"
-            className="inline-flex items-center gap-2 px-8 py-4 rounded-xl bg-gradient-to-r from-cyan-600 to-blue-700 hover:from-cyan-500 hover:to-blue-600 text-white font-black transition-all shadow-lg shadow-cyan-900/30">
-            Open Invention Library <ChevronRight size={18} />
+          <Link to="/pricing"
+            className="inline-flex items-center gap-2 px-8 py-4 rounded-xl bg-gradient-to-r from-purple-700 to-blue-700 hover:from-purple-600 hover:to-blue-600 text-white font-black transition-all shadow-lg shadow-purple-900/30">
+            Unlock Full Library — From $49/mo <ChevronRight size={18} />
           </Link>
+          <p className="text-gray-600 text-xs mt-3">Cancel anytime · Instant access · Secured by Stripe</p>
         </div>
 
         {/* What's in Pro */}
         <div className="bg-gradient-to-b from-cyan-950/30 to-blue-950/30 border border-cyan-800/40 rounded-2xl p-8 mb-16">
           <h2 className="text-2xl font-black mb-6 flex items-center gap-2">
-             <Video size={20} className="text-cyan-400" /> Upgrade to Pro ($199/month)
-           </h2>
+            <Video size={20} className="text-cyan-400" /> Unlock Full Access — From $49/mo
+          </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
             {[
               { icon: "📄", title: "PDF Downloads", desc: "40–80 page technical documents for every build" },
@@ -376,7 +382,7 @@ export default function FreeVault() {
               className="inline-flex items-center gap-2 px-8 py-3 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-bold transition-all">
               See All Pro Features <ChevronRight size={16} />
             </Link>
-            <p className="text-gray-600 text-xs mt-3">$199/month annual billing · Cancel anytime · 30-day money-back guarantee</p>
+            <p className="text-gray-600 text-xs mt-3">Research Lab $49/mo · Pro Builder $99/mo · Cancel anytime</p>
           </div>
         </div>
 
@@ -408,6 +414,49 @@ export default function FreeVault() {
           <CourseCatalog />
         </div>
 
+        {/* Upgrade upsell comparison */}
+        <div className="mb-12 rounded-2xl overflow-hidden border border-purple-800/40" style={{ background: "linear-gradient(160deg,#0d0a1e,#0a0d1a)" }}>
+          <div className="px-6 py-5 border-b border-purple-900/30">
+            <h2 className="text-white font-black text-xl mb-1">Free vs Member Access</h2>
+            <p className="text-gray-400 text-sm">Here's what's locked behind membership</p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-gray-800">
+            <div className="p-6">
+              <div className="flex items-center gap-2 mb-4">
+                <span className="text-xs font-black px-2 py-1 rounded-full bg-green-900/50 border border-green-700 text-green-300">FREE (You Are Here)</span>
+              </div>
+              {["1 free build plan (MEG overview)", "1 free course module", "Research graph access", "Prior art archive browsing"].map((f, i) => (
+                <div key={i} className="flex items-center gap-2 text-sm text-gray-300 mb-2">
+                  <span className="text-green-400 flex-shrink-0">✓</span> {f}
+                </div>
+              ))}
+            </div>
+            <div className="p-6">
+              <div className="flex items-center gap-2 mb-4">
+                <span className="text-xs font-black px-2 py-1 rounded-full bg-purple-900/50 border border-purple-700 text-purple-300">RESEARCH LAB — $49/mo</span>
+              </div>
+              {[
+                "All 40+ complete build plans (60–80 page PDFs)",
+                "All 40+ structured engineering courses",
+                "Video assembly walkthroughs (3–12 hrs each)",
+                "Verified supplier links + current pricing",
+                "2 Invention Forge AI credits/month",
+                "1 AI Patent Suite credit/month",
+                "Full community forum access",
+              ].map((f, i) => (
+                <div key={i} className="flex items-center gap-2 text-sm text-gray-300 mb-2">
+                  <span className="text-purple-400 flex-shrink-0">→</span> {f}
+                </div>
+              ))}
+              <Link to="/pricing"
+                className="inline-flex items-center gap-2 mt-4 px-6 py-2.5 rounded-xl text-white font-black text-sm transition-all"
+                style={{ background: "linear-gradient(135deg,#7c3aed,#2563eb)" }}>
+                Unlock Everything → $49/mo
+              </Link>
+            </div>
+          </div>
+        </div>
+
         {/* Email capture */}
         <div className="bg-gray-900 border border-gray-800 rounded-2xl p-8 text-center mb-12">
           <h3 className="font-black text-white text-lg mb-2">Weekly Vault Drops</h3>
@@ -431,10 +480,19 @@ export default function FreeVault() {
         </div>
       </div>
 
+      {/* Legal disclaimer */}
+      <div className="bg-amber-950/20 border-t border-amber-900/30 px-6 py-4 mt-4">
+        <p className="text-center text-amber-200/50 text-[11px] leading-relaxed max-w-3xl mx-auto">
+          <strong className="text-amber-300/70">Educational Platform Only.</strong> All content is for research and educational purposes. No device described herein is FDA, FCC, or regulatory authority approved. Nothing on this platform is medical, legal, or investment advice. Consult licensed professionals before constructing or filing patents.
+        </p>
+      </div>
+
       <footer className="border-t border-gray-800 px-6 py-8 text-center text-gray-700 text-xs">
         <p>© 2026 Zenith Apex LLC · Aethon Apex IP · Intellectual property research platform</p>
         <div className="flex justify-center gap-6 mt-3">
           <Link to="/terms" className="hover:text-gray-400">Terms</Link>
+          <Link to="/refund-policy" className="hover:text-gray-400">Refunds</Link>
+          <Link to="/research-disclaimer" className="hover:text-gray-400">Disclaimer</Link>
           <Link to="/pricing" className="hover:text-gray-400">Pricing</Link>
           <Link to="/" className="hover:text-gray-400">Home</Link>
         </div>

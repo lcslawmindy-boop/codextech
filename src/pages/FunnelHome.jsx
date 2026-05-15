@@ -63,8 +63,8 @@ const TIERS = [
   {
     id: "research",
     name: "Research Lab",
-    monthly: 99,
-    annual: 79,
+    monthly: 49,
+    annual: 39,
     color: "#a855f7",
     badge: "MOST POPULAR",
     desc: "All courses · purchase up to 10 build plans · Forge & Patent credits",
@@ -82,8 +82,8 @@ const TIERS = [
   {
     id: "pro",
     name: "Pro Builder",
-    monthly: 199,
-    annual: 159,
+    monthly: 149,
+    annual: 119,
     color: "#f97316",
     badge: "BEST VALUE",
     desc: "All courses · unlimited build plans · 10 Forge + 10 Patent credits",
@@ -132,7 +132,7 @@ const FAQS = [
   },
   {
     q: "What's included in the AI Patent Suite?",
-    a: "The suite includes a USPTO-formatted patent drafting wizard, novelty analysis, freedom-to-operate research, competitive landscape mapping, prior art cross-reference, and automated patent threat monitoring.",
+    a: "The suite includes a USPTO-formatted patent drafting wizard, novelty analysis, freedom-to-operate research, competitive landscape mapping, prior art cross-reference, and automated patent threat monitoring. AI-generated drafts are research tools — consult a registered patent attorney before filing.",
   },
   {
     q: "Can I cancel anytime?",
@@ -535,7 +535,7 @@ export default function FunnelHome() {
                 tagColor: "bg-yellow-900/40 border-yellow-800 text-yellow-300",
                 items: [
                   "USPTO-formatted patent drafting wizard",
-                  "AI patent attorney consultation",
+                  "AI patent research assistant (not legal advice)",
                   "Novelty & freedom-to-operate analysis",
                   "Automated patent threat monitoring",
                 ],
@@ -626,6 +626,30 @@ export default function FunnelHome() {
           All content is provided for research, educational, and experimental purposes only. No device described on this platform has been approved by any regulatory authority for medical, therapeutic, or commercial application.
         </div>
       </section>
+
+      {/* ── Social Proof Bar ── */}
+      <div className="bg-slate-900/60 border-y border-slate-800 py-4 px-6 overflow-hidden">
+        <div className="flex flex-wrap items-center justify-center gap-6 text-xs text-slate-400">
+          {[
+            { emoji: "⭐", text: "Patent-sourced documentation — every build cites a granted US patent" },
+            { emoji: "🔬", text: "200+ research entries from peer-reviewed journals & declassified docs" },
+            { emoji: "🔒", text: "NDA-protected — all member content behind secure login gate" },
+            { emoji: "✅", text: "Educational platform — not medical, not regulatory, not investment advice" },
+            { emoji: "🛡️", text: "Secured by Stripe · Cancel anytime · No hidden fees" },
+          ].map((item, i) => (
+            <span key={i} className="flex items-center gap-1.5 whitespace-nowrap">
+              <span>{item.emoji}</span> {item.text}
+            </span>
+          ))}
+        </div>
+      </div>
+
+      {/* ── Legal Compliance Notice ── */}
+      <div className="bg-amber-950/30 border-y border-amber-900/40 px-6 py-3">
+        <p className="text-center text-amber-200/70 text-[11px] leading-relaxed max-w-4xl mx-auto">
+          <strong className="text-amber-300">Research & Educational Platform Only:</strong> All content is for educational and experimental study. No device described herein is approved by the FDA, FCC, or any regulatory body for medical, therapeutic, or commercial deployment. AI patent tools are research aids — consult a licensed USPTO patent attorney before filing. Nothing on this platform constitutes medical, legal, or investment advice.
+        </p>
+      </div>
 
       {/* ── Pricing ── */}
       <section id="pricing" className="border-y border-slate-800 bg-slate-900/30 px-6 py-20">
@@ -719,8 +743,21 @@ export default function FunnelHome() {
         </div>
       </section>
 
+      {/* ── Sticky Bottom CTA ── */}
+      <div className="fixed bottom-0 left-0 right-0 z-50 bg-slate-950/95 backdrop-blur border-t border-purple-900/50 px-4 py-3 flex items-center justify-between gap-3 lg:hidden">
+        <div>
+          <p className="text-white font-black text-sm">Start from $29/mo</p>
+          <p className="text-slate-500 text-[10px]">Cancel anytime · Instant access</p>
+        </div>
+        <a href="#pricing"
+          className="flex-shrink-0 px-5 py-2.5 rounded-xl font-black text-white text-sm"
+          style={{ background: "linear-gradient(135deg, #7c3aed, #2563eb)" }}>
+          Join Now →
+        </a>
+      </div>
+
       {/* ── Footer ── */}
-      <footer className="border-t border-slate-800 px-6 py-10 text-center text-slate-600 text-xs">
+      <footer className="border-t border-slate-800 px-6 py-10 pb-20 lg:pb-10 text-center text-slate-600 text-xs">
         <div className="flex items-center justify-center gap-2 mb-3">
           <img src="https://media.base44.com/images/public/69ccefebfea78b23498c66a8/bce328987_a6e3bd669_logo.png" alt="" className="h-6 w-6 object-contain" />
           <span className="text-slate-500 font-bold">Aethon Apex IP · Zenith Apex LLC</span>
