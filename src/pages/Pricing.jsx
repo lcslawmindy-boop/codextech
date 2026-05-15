@@ -66,7 +66,12 @@ const TIERS = [
     badge: "MOST POPULAR",
     desc: "All courses · purchase up to 10 build plans · Forge & Patent credits",
     highlight: true,
-    valueNote: "$580+ value / mo",
+    valueNote: "$717+ retail value / mo",
+    valueBreakdown: [
+      { label: "40+ courses access", retail: "$197" },
+      { label: "Up to 10 build plans", retail: "$490" },
+      { label: "2 Forge + 1 Patent credit", retail: "$30" },
+    ],
     features: [
       { icon: <BookOpen size={14} />, text: "All 40+ structured engineering courses — full access" },
       { icon: <Wrench size={14} />, text: "Purchase up to 10 build plans / month (BOM, schematics, assembly)" },
@@ -85,7 +90,12 @@ const TIERS = [
     color: "#f97316",
     badge: "BEST VALUE",
     desc: "All courses · unlimited build plan purchases · 10 Forge + 10 Patent credits",
-    valueNote: "$1,400+ value / mo",
+    valueNote: "$1,373+ retail value / mo",
+    valueBreakdown: [
+      { label: "40+ courses access", retail: "$197" },
+      { label: "Unlimited build plans (~20 avg)", retail: "$980" },
+      { label: "10 Forge + 10 Patent credits", retail: "$196" },
+    ],
     features: [
       { icon: <BookOpen size={14} />, text: "All 40+ courses — full rotating access" },
       { icon: <Wrench size={14} />, text: "Unlimited build plan purchases — full catalogue unlocked" },
@@ -274,8 +284,24 @@ export default function Pricing() {
                   <h3 className="text-white font-black text-xl mb-1">{tier.name}</h3>
                   <p className="text-slate-400 text-xs mb-2">{tier.desc}</p>
                   {tier.valueNote && (
-                    <div className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-black mb-3 self-start" style={{ background: tier.color + "20", color: tier.color, border: `1px solid ${tier.color}40` }}>
-                      ✦ {tier.valueNote}
+                    <div className="mb-3">
+                      <div className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-black mb-2 self-start" style={{ background: tier.color + "20", color: tier.color, border: `1px solid ${tier.color}40` }}>
+                        ✦ {tier.valueNote}
+                      </div>
+                      {tier.valueBreakdown && (
+                        <div className="rounded-lg overflow-hidden border mb-1" style={{ borderColor: tier.color + "25", background: tier.color + "08" }}>
+                          {tier.valueBreakdown.map((row, ri) => (
+                            <div key={ri} className="flex items-center justify-between px-2.5 py-1 border-b last:border-0" style={{ borderColor: tier.color + "15" }}>
+                              <span className="text-[10px] text-slate-400">{row.label}</span>
+                              <span className="text-[10px] font-black line-through text-slate-600 mr-1">{row.retail}</span>
+                            </div>
+                          ))}
+                          <div className="flex items-center justify-between px-2.5 py-1.5 bg-black/20">
+                            <span className="text-[10px] font-black text-slate-300">Est. retail value</span>
+                            <span className="text-[11px] font-black" style={{ color: tier.color }}>{tier.valueNote.split(" ")[0]}</span>
+                          </div>
+                        </div>
+                      )}
                     </div>
                   )}
 
