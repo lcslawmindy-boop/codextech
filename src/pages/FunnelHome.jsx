@@ -8,7 +8,6 @@ import {
 import { base44 } from "@/api/base44Client";
 // ResearchSlideStrip removed — now using DocumentSlideStrip on both sides
 import DocumentSlideStrip from "../components/DocumentSlideStrip";
-import PatentSlideStrip from "../components/PatentSlideStrip";
 import HorizontalFeatureScroller from "../components/HorizontalFeatureScroller";
 import FeatureCube3D from "../components/FeatureCube3D";
 import IPEmpireValueSection from "../components/IPEmpireValueSection";
@@ -347,10 +346,8 @@ export default function FunnelHome() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 text-white flex">
-      <PatentSlideStrip />
-
-      <div className="flex-1 min-w-0">
+    <div className="min-h-screen bg-slate-950 text-white">
+      <div className="w-full">
       {/* ── Urgency Bar ── */}
       <div className="bg-slate-900 border-b border-slate-800 px-4 py-2 flex flex-wrap items-center justify-center gap-2">
         <Flame size={12} className="text-orange-400" />
@@ -414,8 +411,7 @@ export default function FunnelHome() {
   </div>
 </section>
 
-{/* ── Patent Sources Horizontal Scroll ── */}
-<PatentSlideStrip />
+
 
       {/* ── Investor Metrics Bar ── */}
       <section className="border-y border-slate-800 bg-gradient-to-r from-slate-900/60 via-purple-900/20 to-slate-900/60 py-10 px-6">
@@ -756,8 +752,6 @@ export default function FunnelHome() {
           <a href="mailto:info@zetithapex.io" className="hover:text-slate-400">Contact Investors</a>
         </div>
       </footer>
-      </div>
-
     </div>
   );
 }
