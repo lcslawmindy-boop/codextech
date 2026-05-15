@@ -163,7 +163,14 @@ export default function LegalAgreement() {
       const sigs = await base44.entities.NDASignature.filter({ email: email.toLowerCase(), accepted_terms: true });
       if (sigs && sigs.length > 0) {
         localStorage.setItem("nda_member_email", email);
-        localStorage.setItem("bearden_nda_accepted", JSON.stringify({ accepted: true, version: "1.0" }));
+        localStorage.setItem("apex_nda_accepted_v1", "true");
+        // Also persist on the user entity so it survives localStorage clears
+        try {
+          const authed = await base44.auth.isAuthenticated();
+          if (authed) {
+            await base44.auth.updateMe({ nda_accepted: true });
+          }
+        } catch { /* non-critical */ }
         window.location.href = "/";
       } else {
         setErrorMsg("No completed signature found for this email. Please check your DocuSign inbox.");
