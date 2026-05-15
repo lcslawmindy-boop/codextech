@@ -45,52 +45,56 @@ const TIERS = [
   {
     id: "explorer",
     name: "Explorer",
-    monthly: 29,
-    annual: 24,
+    monthly: 29.99,
+    annual: 24.99,
     color: "#06b6d4",
     badge: "STARTER",
-    desc: "Research archive & concept library access",
+    desc: "1 course + 1 build plan/month · Full research archive",
     features: [
-      "Interactive electromagnetic concept graph (100+ nodes)",
-      "Prior Art Archive — 200+ patent-sourced entries",
+      "1 new course drop every month",
+      "1 new invention build plan every month (full BOM & schematics)",
+      "Bearden concept graph — 100+ nodes, full interactive access",
+      "All patent source documents & prior art archive (200+ entries)",
       "Engineering glossary & reference library",
       "Community forum read access",
     ],
-    locked: ["Build plan library", "Structured courses", "AI patent tools"],
+    locked: ["Invention Forge sessions", "AI Patent Suite", "IP Marketplace"],
   },
   {
     id: "research",
     name: "Research Lab",
-    monthly: 49,
-    annual: 39,
+    monthly: 69.99,
+    annual: 57.99,
     color: "#a855f7",
     badge: "MOST POPULAR",
-    desc: "3 courses + 3 build plans + AI Patent Suite + 5 Forge sessions",
+    desc: "3 courses + 3 build plans + Forge + AI Patent credits monthly",
     features: [
-      "3 structured engineering courses (rotating monthly)",
-      "3 complete build plans with BOM & schematics",
-      "AI Patent Suite — drafting, analysis & monitoring",
+      "3 curated engineering courses (+ 1 new course every month)",
+      "3 complete build plans with BOM & schematics (+ 1 new build plan/month)",
+      "25% off à la carte menu of 20 individual build plans",
       "5 Invention Forge sessions per month",
-      "Community forum full access",
+      "2 AI Patent Suite credits per month (drafting & analysis)",
+      "Full community forum access",
     ],
-    locked: [],
+    locked: ["IP Marketplace", "Full AI Patent Suite", "40+ reserved build plans"],
     highlight: true,
   },
   {
     id: "pro",
     name: "Pro Builder",
-    monthly: 149,
-    annual: 119,
+    monthly: 129.99,
+    annual: 104.99,
     color: "#f97316",
     badge: "BEST VALUE",
-    desc: "6 courses + 6 build plans + AI Patent Suite + 20 Forge sessions",
+    desc: "6 courses + 6 build plans + full AI Patent Suite + IP Marketplace",
     features: [
-      "6 structured engineering courses (rotating)",
+      "6 curated engineering courses (rotating access)",
       "6 full build plans with BOM, schematics & sourcing",
-      "AI Patent Suite — drafting, analysis & threat monitoring",
+      "25% off à la carte menu — 40+ reserved build plans available",
+      "Full AI Patent Suite — drafting, attorney chat & threat monitoring",
       "20 Invention Forge sessions per month",
-      "Priority support & expert forum access",
-      "Early access to all new content drops",
+      "IP Marketplace access — list, license & sell your IP",
+      "Priority support & early access to all new content drops",
     ],
     locked: [],
   },
@@ -260,11 +264,11 @@ function TierCard({ tier, isAnnual }) {
         <p className="text-slate-400 text-xs mb-5">{tier.desc}</p>
 
         <div className="flex items-end gap-1 mb-1">
-          <span className="text-5xl font-black" style={{ color: tier.color }}>${price}</span>
+          <span className="text-5xl font-black" style={{ color: tier.color }}>${price.toFixed(2)}</span>
           <span className="text-slate-500 mb-2 text-sm">/mo</span>
         </div>
-        {isAnnual && <p className="text-green-400 text-xs font-bold mb-1">Save ${(tier.monthly - tier.annual) * 12}/year — billed annually</p>}
-        <p className="text-slate-600 text-xs mb-6">{isAnnual ? `$${tier.annual * 12}/year` : "Monthly billing, cancel anytime"}</p>
+        {isAnnual && <p className="text-green-400 text-xs font-bold mb-1">Save ${((tier.monthly - tier.annual) * 12).toFixed(0)}/year — billed annually</p>}
+        <p className="text-slate-600 text-xs mb-6">{isAnnual ? `$${(tier.annual * 12).toFixed(2)}/year` : "Monthly billing, cancel anytime"}</p>
 
         <button
           onClick={handleCheckout}
