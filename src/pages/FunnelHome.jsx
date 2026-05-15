@@ -6,7 +6,7 @@ import {
   Cpu, Activity, FileText, Mail, Play, Users, Award, Microscope
 } from "lucide-react";
 import { base44 } from "@/api/base44Client";
-import ResearchSlideStrip from "../components/ResearchSlideStrip";
+// ResearchSlideStrip removed — now using DocumentSlideStrip on both sides
 import DocumentSlideStrip from "../components/DocumentSlideStrip";
 
 const HERO_BG_IMAGES = [
@@ -338,7 +338,7 @@ export default function FunnelHome() {
 
   return (
     <div className="min-h-screen bg-slate-950 text-white flex">
-      <ResearchSlideStrip />
+      <DocumentSlideStrip reverse />
 
       <div className="flex-1 min-w-0">
       {/* ── Urgency Bar ── */}

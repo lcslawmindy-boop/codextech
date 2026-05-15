@@ -22,36 +22,60 @@ const DOC_SLIDES = [
 // Rendered page images via pdf.js CDN embed trick — use object/iframe per page
 // Since we can't render PDF pages as images directly, we'll show styled cards with doc info
 const CARD_DATA = [
-  { title: "AetherLink G-Node L1", subtitle: "Cover · Longitudinal-wave mesh comms", color: "#06b6d4", tag: "INVENTION" },
-  { title: "Technical Overview", subtitle: "Dual-conjugate bifilar coils, BST insert, TRZ protocol", color: "#06b6d4", tag: "TECH SPEC" },
-  { title: "The Problem", subtitle: "No compact through-earth mesh node exists", color: "#06b6d4", tag: "PROBLEM" },
-  { title: "Build Steps 1–5", subtitle: "HV safety → coil winding → BST insert → GaN pulser → FPGA", color: "#06b6d4", tag: "BUILD" },
-  { title: "Build Steps 6–10", subtitle: "Wiring → potting → TRZ calibration → emission mask test", color: "#06b6d4", tag: "BUILD" },
-  { title: "Bill of Materials", subtitle: "7 line items · Total BOM: $1,245", color: "#06b6d4", tag: "BOM" },
-  { title: "Derived Products", subtitle: "Plans $2,400 · License $18,000 · SBIR Package $5,500", color: "#06b6d4", tag: "PRODUCTS" },
-  { title: "AionFlux MCCS System", subtitle: "Cover · Telomeric Regeneration · $185K clinical system", color: "#a855f7", tag: "INVENTION" },
-  { title: "Technical Overview", subtitle: "Phase-conjugate pumps, Halbach bias, MCCS closed-loop", color: "#a855f7", tag: "TECH SPEC" },
-  { title: "The Problem", subtitle: "No device targets the EM blueprint layer of cellular aging", color: "#a855f7", tag: "PROBLEM" },
-  { title: "Build Steps 1–5", subtitle: "Medical chassis → resonator cores → pump coils → Halbach → RF drive", color: "#a855f7", tag: "BUILD" },
-  { title: "Bill of Materials", subtitle: "9 line items · Total BOM: $8,200", color: "#a855f7", tag: "BOM" },
-  { title: "Derived Products", subtitle: "Plans $4,500 · Protocol Bundle $2,500 · Clinical License $24K", color: "#a855f7", tag: "PRODUCTS" },
+  // ELF Carrier Lock Detection System
+  { title: "ELF Carrier Lock Detection System", subtitle: "Cover · Detect ELF brain-entrainment carriers in the 5–30 MHz band", color: "#06b6d4", tag: "INSTRUMENT" },
+  { title: "Product Overview & BOM", subtitle: "Dual RTL-SDR, GPS-disciplined OCXO, CCPCI Flask dashboard", color: "#06b6d4", tag: "TECH SPEC" },
+
+  // EM Trigger Window Therapy Device
+  { title: "EM Trigger Window Therapy Device", subtitle: "Cover · $599 consumer / $2,400 clinical · BOM $362", color: "#f97316", tag: "INVENTION" },
+  { title: "Technical Overview", subtitle: "47 verified trigger window frequencies · DDS synthesizer + Helmholtz coils", color: "#f97316", tag: "TECH SPEC" },
+  { title: "Build Steps 1–7", subtitle: "Freq library → DDS → Helmholtz coil → PA → wristband → software → calibrate", color: "#f97316", tag: "BUILD" },
+  { title: "Bill of Materials", subtitle: "6 line items · Total BOM: $362", color: "#f97316", tag: "BOM" },
+  { title: "Derived Products", subtitle: "Plans $599 · Protocol Sub $97/mo · Clinical License $4,800", color: "#f97316", tag: "PRODUCTS" },
+
+  // HeavisideGate APM-2K
+  { title: "HeavisideGate APM-2K", subtitle: "Cover · Solid-state vacuum-potential power booster · $18K prototype", color: "#a855f7", tag: "INVENTION" },
+  { title: "Technical Overview", subtitle: "Nanocrystalline Fe core, GaN half-bridge, FPGA adaptive phase-conjugate loop", color: "#a855f7", tag: "TECH SPEC" },
+  { title: "Assembly Steps 1–6", subtitle: "Lab safety → core fabrication → coil winding → GaN bridges → inverter → calibration", color: "#a855f7", tag: "BUILD" },
+  { title: "Bill of Materials", subtitle: "7 line items · Total BOM: $1,480", color: "#a855f7", tag: "BOM" },
+  { title: "Market & Course", subtitle: "Off-grid $340M · Edge power $4.8B · 5 training modules included", color: "#a855f7", tag: "PRODUCTS" },
+
+  // KRCIC
+  { title: "Kaznacheyev Cell Imprinting Chamber", subtitle: "Cover · KRCIC · $6,800 prototype / $1,400 plans · Market $16B", color: "#10b981", tag: "INVENTION" },
+  { title: "Technical Overview", subtitle: "Dual-chamber UV biophoton system · PMT monitoring · quartz optical path", color: "#10b981", tag: "TECH SPEC" },
+  { title: "Build Steps 1–10", subtitle: "Enclosure → quartz window → PMT → DDS UV driver → Peltier → cell culture → analysis", color: "#10b981", tag: "BUILD" },
+  { title: "Bill of Materials", subtitle: "11 line items · Total BOM: $2,604", color: "#10b981", tag: "BOM" },
+  { title: "Derived Products", subtitle: "Plans $1,400 · Replication Course $297 · Research License $4,500", color: "#10b981", tag: "PRODUCTS" },
+
+  // MEG Replication Kit
+  { title: "MEG Replication Kit", subtitle: "Cover · Motionless EM Generator · METGLAS 2605SC · COP>1", color: "#fbbf24", tag: "INVENTION" },
+  { title: "Description & BOM", subtitle: "850T bifilar primary / 1200T secondary · MOSFET H-bridge · Total $303.75", color: "#fbbf24", tag: "BOM" },
+  { title: "Assembly Steps 1–10", subtitle: "Core prep → bifilar wind → secondary → insulate → mount → magnets → H-bridge → test COP", color: "#fbbf24", tag: "BUILD" },
+
+  // Prioré-Type Multichannel EM Therapy
+  { title: "Prioré-Type Multichannel EM System", subtitle: "Cover · DDS implementation · $2,400 clinical / $599 research", color: "#ec4899", tag: "INVENTION" },
+  { title: "Technical Overview", subtitle: "3-channel AD9910 DDS · Artix-7 FPGA · 50W PA · Faraday cage chamber", color: "#ec4899", tag: "TECH SPEC" },
+  { title: "Build Steps 1–7", subtitle: "DDS arch → FPGA firmware → Helmholtz coils → Faraday cage → PA → protocols → validation", color: "#ec4899", tag: "BUILD" },
+  { title: "Bill of Materials", subtitle: "6 line items · Total BOM: $1,170", color: "#ec4899", tag: "BOM" },
+  { title: "Derived Products", subtitle: "Plans $599 · Protocol Library $197/yr · Clinical Build Package $2,400", color: "#ec4899", tag: "PRODUCTS" },
 ];
 
 const ALL_CARDS = [...CARD_DATA, ...CARD_DATA];
 
-export default function DocumentSlideStrip() {
+export default function DocumentSlideStrip({ reverse = false }) {
   const trackRef = useRef(null);
   const animRef = useRef(null);
   const posRef = useRef(0);
 
   useEffect(() => {
     const SPEED = 0.35;
-    const CARD_H = 170; // card height + gap
+    const CARD_H = 170;
     const singleSetHeight = CARD_DATA.length * CARD_H;
 
     const step = () => {
-      posRef.current += SPEED;
+      posRef.current += reverse ? -SPEED : SPEED;
       if (posRef.current >= singleSetHeight) posRef.current -= singleSetHeight;
+      if (posRef.current < 0) posRef.current += singleSetHeight;
       if (trackRef.current) trackRef.current.style.transform = `translateY(-${posRef.current}px)`;
       animRef.current = requestAnimationFrame(step);
     };
@@ -118,7 +142,7 @@ export default function DocumentSlideStrip() {
             <div style={{ display: "flex", alignItems: "center", gap: 6, marginTop: 8 }}>
               <div style={{ width: 6, height: 6, borderRadius: "50%", backgroundColor: card.color, flexShrink: 0 }} />
               <span style={{ color: "#475569", fontSize: 9, letterSpacing: "0.05em" }}>
-                {card.color === "#06b6d4" ? "AETHERLINK G-NODE L1" : "AIONFLUX MCCS"}
+                AETHON APEX IP — RESEARCH PLATFORM
               </span>
             </div>
           </div>
