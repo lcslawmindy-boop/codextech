@@ -9,7 +9,7 @@ import { base44 } from "@/api/base44Client";
 // ResearchSlideStrip removed — now using DocumentSlideStrip on both sides
 import DocumentSlideStrip from "../components/DocumentSlideStrip";
 import PatentSlideStrip from "../components/PatentSlideStrip";
-import PlatformOverviewCarousel from "../components/PlatformOverviewCarousel";
+import HorizontalFeatureScroller from "../components/HorizontalFeatureScroller";
 import FeatureCube3D from "../components/FeatureCube3D";
 import IPEmpireValueSection from "../components/IPEmpireValueSection";
 
@@ -587,10 +587,16 @@ export default function FunnelHome() {
         </div>
       </section>
 
+      {/* ── Everything Included horizontal scroller ── */}
+      <HorizontalFeatureScroller label="Everything Included" />
+
       {/* ── IP Empire Value Section ── */}
       <div className="border-t border-slate-800">
         <IPEmpireValueSection />
       </div>
+
+      {/* ── IP Empire Toolkit horizontal scroller ── */}
+      <HorizontalFeatureScroller label="Your IP Empire Toolkit" />
 
       {/* ── Trust Pillars ── */}
       <section className="px-6 py-20 max-w-5xl mx-auto">
@@ -730,7 +736,7 @@ export default function FunnelHome() {
         </div>
       </footer>
       </div>
-      <PlatformOverviewCarousel />
+
     </div>
   );
 }
