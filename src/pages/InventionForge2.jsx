@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { ArrowLeft, Zap, Plus, X, Loader2, TrendingUp, DollarSign, Map, ShoppingCart, RotateCcw, CheckCircle2, AlertTriangle } from "lucide-react";
+import { ArrowLeft, Zap, Plus, X, Loader2, TrendingUp, DollarSign, Map, ShoppingCart, RotateCcw, CheckCircle2, AlertTriangle, Download, BookOpen } from "lucide-react";
 import { businessItems } from "../lib/businessItems";
 import { base44 } from "@/api/base44Client";
+import { jsPDF } from "jspdf";
 
 const inventions = businessItems.filter(i => i.category === "Invention");
 
@@ -87,9 +88,11 @@ export default function InventionForge2() {
   const [selected, setSelected] = useState([]);
   const [mode, setMode] = useState("merge"); // merge | cross-pollinate
   const [result, setResult] = useState(null);
+  const [savedId, setSavedId] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [checkoutLoading, setCheckoutLoading] = useState(false);
+  const [pdfLoading, setPdfLoading] = useState(false);
 
   const toggle = (inv) => {
     if (selected.find(s => s.title === inv.title)) {
@@ -171,9 +174,9 @@ Generate a completely new invention concept that synthesizes these technologies.
         }
       });
 
-      // Save to HybridInvention entity
+      // Save to HybridInvention entity (build library)
       try {
-        await base44.entities.HybridInvention.create({
+        const saved = await base44.entities.HybridInvention.create({
           hybrid_concept: res.hybrid_concept,
           mechanism: res.mechanism,
           synergy_score: res.synergy_score,
@@ -189,6 +192,7 @@ Generate a completely new invention concept that synthesizes these technologies.
           market_sectors: res.market_sectors,
           status: "draft",
         });
+        setSavedId(saved?.id || null);
       } catch { /* non-critical */ }
 
       setResult(res);
@@ -197,6 +201,113 @@ Generate a completely new invention concept that synthesizes these technologies.
       console.error(e);
     }
     setLoading(false);
+  };
+
+  const handleExportPDF = () => {
+    if (!result) return;
+    setPdfLoading(true);
+    try {
+      const doc = new jsPDF({ orientation: "portrait", unit: "mm", format: "a4" });
+      const W = 210;
+      const margin = 20;
+      const cW = W - margin * 2;
+      let y = 0;
+
+      const addPage = () => {
+        if (y > 0) doc.addPage();
+        doc.setFillColor(10, 10, 10);
+        doc.rect(0, 0, W, 20, "F");
+        doc.setFontSize(8);
+        doc.setFont("helvetica", "bold");
+        doc.setTextColor(255, 255, 255);
+        doc.text("AETHON APEX IP HOLDINGS — HYBRID IP PACKAGE", margin, 13);
+        doc.text("CONFIDENTIAL", W - margin, 13, { align: "right" });
+        y = 30;
+      };
+
+      const check = (need = 14) => { if (y + need > 280) addPage(); };
+
+      const section = (txt) => {
+        check(16);
+        doc.setFillColor(20, 20, 20);
+        doc.rect(margin - 3, y - 3, cW + 6, 12, "F");
+        doc.setFontSize(10);
+        doc.setFont("helvetica", "bold");
+        doc.setTextColor(255, 255, 255);
+        doc.text(txt, margin, y + 5);
+        y += 15;
+      };
+
+      const body = (txt, size = 10) => {
+        doc.setFontSize(size);
+        doc.setFont("helvetica", "normal");
+        doc.setTextColor(20, 20, 20);
+        const lines = doc.splitTextToSize(txt || "—", cW);
+        lines.forEach(l => { check(8); doc.text(l, margin, y); y += 7; });
+        y += 3;
+      };
+
+      // Cover
+      addPage();
+      doc.setFontSize(18);
+      doc.setFont("helvetica", "bold");
+      doc.setTextColor(0, 0, 0);
+      const titleLines = doc.splitTextToSize(result.hybrid_concept || "Hybrid IP", cW);
+      titleLines.forEach(l => { doc.text(l, margin, y); y += 10; });
+      y += 3;
+
+      doc.setFontSize(10);
+      doc.setFont("helvetica", "normal");
+      doc.setTextColor(80, 80, 80);
+      doc.text(`Mode: ${mode === "merge" ? "Merged" : "Cross-Pollinated"} IP  |  Synergy Score: ${result.synergy_score}/100`, margin, y);
+      y += 7;
+      doc.text(`IP Valuation: $${result.ip_value_low}M – $${result.ip_value_high}M`, margin, y);
+      y += 7;
+      doc.text(`Input Technologies: ${selected.map(s => s.title).join(", ")}`, margin, y);
+      y += 7;
+      doc.text(`Market Sectors: ${(result.market_sectors || []).join(", ")}`, margin, y);
+      y += 12;
+
+      section("1. TECHNICAL MECHANISM");
+      body(result.mechanism);
+
+      section("2. PATENT CLAIMS (DRAFT — 3 INDEPENDENT)");
+      body(result.patent_claims);
+      doc.setFontSize(8);
+      doc.setFont("helvetica", "italic");
+      doc.setTextColor(120, 120, 120);
+      doc.text("⚠ Draft only — consult a patent attorney before filing", margin, y);
+      y += 10;
+
+      section("3. IP VALUATION");
+      body(result.ip_valuation);
+
+      section("4. MARKET APPLICATIONS");
+      body(result.market_applications);
+
+      section("5. REQUIRED COMPONENTS");
+      body(result.required_components);
+
+      section("6. SUGGESTED NEXT STEPS");
+      body(result.suggested_next_steps);
+
+      // Footer
+      const total = doc.getNumberOfPages();
+      for (let p = 1; p <= total; p++) {
+        doc.setPage(p);
+        doc.setFillColor(240, 240, 240);
+        doc.rect(0, 287, W, 10, "F");
+        doc.setFontSize(7);
+        doc.setFont("helvetica", "normal");
+        doc.setTextColor(100, 100, 100);
+        doc.text("Aethon Apex IP Holdings — Hybrid IP Package — CONFIDENTIAL", margin, 293);
+        doc.text(`Page ${p} of ${total}`, W - margin, 293, { align: "right" });
+      }
+
+      const fname = (result.hybrid_concept || "IP_Package").replace(/[^a-zA-Z0-9]/g, "_").slice(0, 40);
+      doc.save(`AethonApex_${fname}.pdf`);
+    } catch (e) { console.error(e); }
+    setPdfLoading(false);
   };
 
   const handleCheckout = async () => {
@@ -239,7 +350,7 @@ Generate a completely new invention concept that synthesizes these technologies.
         </div>
         <div className="flex items-center gap-2">
           {result && (
-            <button onClick={() => { setResult(null); setSelected([]); }}
+            <button onClick={() => { setResult(null); setSelected([]); setSavedId(null); }}
               className="flex items-center gap-1.5 px-3 py-2 rounded-lg border border-gray-700 text-gray-400 text-xs hover:bg-gray-800 transition-all">
               <RotateCcw size={13} /> New Forge
             </button>
@@ -366,6 +477,28 @@ Generate a completely new invention concept that synthesizes these technologies.
 
           {result && (
             <div className="max-w-3xl mx-auto space-y-5">
+
+              {/* Saved to library banner */}
+              <div className="flex items-center justify-between gap-3 bg-green-950/40 border border-green-800/60 rounded-xl px-4 py-3">
+                <div className="flex items-center gap-2">
+                  <CheckCircle2 size={15} className="text-green-400 flex-shrink-0" />
+                  <p className="text-green-300 text-sm font-semibold">Saved to Hybrid IP Portfolio</p>
+                </div>
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={handleExportPDF}
+                    disabled={pdfLoading}
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-gray-800 hover:bg-gray-700 border border-gray-700 text-gray-300 text-xs font-bold transition-all disabled:opacity-50">
+                    {pdfLoading ? <Loader2 size={12} className="animate-spin" /> : <Download size={12} />}
+                    Export Full PDF
+                  </button>
+                  <Link to="/hybrid-portfolio"
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-yellow-900/40 hover:bg-yellow-800/50 border border-yellow-700 text-yellow-300 text-xs font-bold transition-all">
+                    <BookOpen size={12} /> View Portfolio
+                  </Link>
+                </div>
+              </div>
+
               {/* Hero */}
               <div className="bg-gradient-to-br from-yellow-950/40 to-gray-900 border border-yellow-800/40 rounded-2xl p-6">
                 <div className="flex items-start justify-between gap-4 mb-4">

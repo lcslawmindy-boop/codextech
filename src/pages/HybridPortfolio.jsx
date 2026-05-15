@@ -1,6 +1,7 @@
 import { useState, useEffect, useMemo } from "react";
 import { Link } from "react-router-dom";
-import { ArrowLeft, FlaskConical, DollarSign, TrendingUp, BarChart2, Layers, Trash2, ExternalLink, RefreshCw, Loader2 } from "lucide-react";
+import { ArrowLeft, FlaskConical, DollarSign, TrendingUp, BarChart2, Layers, Trash2, ExternalLink, RefreshCw, Loader2, Download } from "lucide-react";
+import { jsPDF } from "jspdf";
 import { base44 } from "@/api/base44Client";
 import { RadarChart, PolarGrid, PolarAngleAxis, Radar, ResponsiveContainer, Tooltip, BarChart, Bar, XAxis, YAxis, Cell } from "recharts";
 
@@ -192,6 +193,99 @@ function SynergyRadar({ inventions }) {
   );
 }
 
+function exportInventionPDF(inv) {
+  const doc = new jsPDF({ orientation: "portrait", unit: "mm", format: "a4" });
+  const W = 210;
+  const margin = 20;
+  const cW = W - margin * 2;
+  let y = 0;
+
+  const addPage = () => {
+    if (y > 0) doc.addPage();
+    doc.setFillColor(10, 10, 10);
+    doc.rect(0, 0, W, 20, "F");
+    doc.setFontSize(8);
+    doc.setFont("helvetica", "bold");
+    doc.setTextColor(255, 255, 255);
+    doc.text("AETHON APEX IP HOLDINGS — HYBRID IP PACKAGE", margin, 13);
+    doc.text("CONFIDENTIAL", W - margin, 13, { align: "right" });
+    y = 30;
+  };
+
+  const check = (need = 14) => { if (y + need > 280) addPage(); };
+
+  const section = (txt) => {
+    check(16);
+    doc.setFillColor(20, 20, 20);
+    doc.rect(margin - 3, y - 3, cW + 6, 12, "F");
+    doc.setFontSize(10);
+    doc.setFont("helvetica", "bold");
+    doc.setTextColor(255, 255, 255);
+    doc.text(txt, margin, y + 5);
+    y += 15;
+  };
+
+  const body = (txt, size = 10) => {
+    doc.setFontSize(size);
+    doc.setFont("helvetica", "normal");
+    doc.setTextColor(20, 20, 20);
+    const lines = doc.splitTextToSize(txt || "—", cW);
+    lines.forEach(l => { check(8); doc.text(l, margin, y); y += 7; });
+    y += 3;
+  };
+
+  addPage();
+
+  doc.setFontSize(16);
+  doc.setFont("helvetica", "bold");
+  doc.setTextColor(0, 0, 0);
+  const titleLines = doc.splitTextToSize(inv.hybrid_concept || "Hybrid IP", cW);
+  titleLines.forEach(l => { doc.text(l, margin, y); y += 10; });
+  y += 3;
+
+  doc.setFontSize(10);
+  doc.setFont("helvetica", "normal");
+  doc.setTextColor(80, 80, 80);
+  doc.text(`Mode: ${inv.mode === "merge" ? "Merged" : "Cross-Pollinated"} | Synergy: ${inv.synergy_score}/100 | Status: ${inv.status}`, margin, y); y += 7;
+  doc.text(`IP Valuation: $${inv.ip_value_low || 0}M – $${inv.ip_value_high || 0}M`, margin, y); y += 7;
+  doc.text(`Input Technologies: ${(inv.input_nodes || []).map(n => n.label).join(", ")}`, margin, y); y += 7;
+  doc.text(`Market Sectors: ${(inv.market_sectors || []).join(", ")}`, margin, y); y += 12;
+
+  section("1. MECHANISM");
+  body(inv.mechanism);
+  section("2. PATENT CLAIMS (DRAFT)");
+  body(inv.patent_claims);
+  doc.setFontSize(8);
+  doc.setFont("helvetica", "italic");
+  doc.setTextColor(120, 120, 120);
+  check(8);
+  doc.text("⚠ Draft only — consult a patent attorney before filing", margin, y);
+  y += 10;
+  section("3. IP VALUATION JUSTIFICATION");
+  body(inv.ip_valuation);
+  section("4. MARKET APPLICATIONS");
+  body(inv.market_applications);
+  section("5. REQUIRED COMPONENTS");
+  body(inv.required_components);
+  section("6. SUGGESTED NEXT STEPS");
+  body(inv.suggested_next_steps);
+
+  const total = doc.getNumberOfPages();
+  for (let p = 1; p <= total; p++) {
+    doc.setPage(p);
+    doc.setFillColor(240, 240, 240);
+    doc.rect(0, 287, W, 10, "F");
+    doc.setFontSize(7);
+    doc.setFont("helvetica", "normal");
+    doc.setTextColor(100, 100, 100);
+    doc.text("Aethon Apex IP Holdings — Hybrid IP Package — CONFIDENTIAL", margin, 293);
+    doc.text(`Page ${p} of ${total}`, W - margin, 293, { align: "right" });
+  }
+
+  const fname = (inv.hybrid_concept || "IP").replace(/[^a-zA-Z0-9]/g, "_").slice(0, 40);
+  doc.save(`AethonApex_${fname}.pdf`);
+}
+
 // ── INVENTION CARD ──────────────────────────────────────────────────────────
 function InventionCard({ inv, onDelete, onStatusChange }) {
   const { low, high } = parseValuation(inv.ip_valuation);
@@ -214,9 +308,14 @@ function InventionCard({ inv, onDelete, onStatusChange }) {
             )}
           </div>
         </div>
-        <button onClick={() => onDelete(inv.id)} className="p-1.5 rounded-lg hover:bg-red-950/40 text-gray-700 hover:text-red-400 transition-all flex-shrink-0">
-          <Trash2 size={12} />
-        </button>
+        <div className="flex items-center gap-1 flex-shrink-0">
+          <button onClick={() => exportInventionPDF(inv)} className="p-1.5 rounded-lg hover:bg-gray-700 text-gray-600 hover:text-gray-200 transition-all" title="Export PDF">
+            <Download size={12} />
+          </button>
+          <button onClick={() => onDelete(inv.id)} className="p-1.5 rounded-lg hover:bg-red-950/40 text-gray-700 hover:text-red-400 transition-all" title="Delete">
+            <Trash2 size={12} />
+          </button>
+        </div>
       </div>
 
       {/* Metrics row */}
