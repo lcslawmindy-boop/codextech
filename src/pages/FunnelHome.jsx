@@ -46,8 +46,8 @@ const TIERS = [
   {
     id: "explorer",
     name: "Explorer",
-    monthly: 29.99,
-    annual: 24.99,
+    monthly: 49,
+    annual: 39,
     color: "#06b6d4",
     badge: "STARTER",
     desc: "1 course + 1 build plan/month · Full research archive",
@@ -64,8 +64,8 @@ const TIERS = [
   {
     id: "research",
     name: "Research Lab",
-    monthly: 69.99,
-    annual: 57.99,
+    monthly: 99,
+    annual: 49,
     color: "#a855f7",
     badge: "MOST POPULAR",
     desc: "3 courses + 3 build plans + Forge + AI Patent credits monthly",
@@ -83,8 +83,8 @@ const TIERS = [
   {
     id: "pro",
     name: "Pro Builder",
-    monthly: 129.99,
-    annual: 104.99,
+    monthly: 199,
+    annual: 149,
     color: "#f97316",
     badge: "BEST VALUE",
     desc: "6 courses + 6 build plans + full AI Patent Suite + IP Marketplace",
