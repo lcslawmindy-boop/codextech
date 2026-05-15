@@ -182,6 +182,7 @@ import BuildPlanExplorer from './pages/BuildPlanExplorer';
 import OSShell from './components/OSShell';
 import IntelligenceLayer from './pages/IntelligenceLayer';
 import ConversionAnalytics from './pages/ConversionAnalytics';
+import ValuationSlider from './pages/ValuationSlider';
 
 
 const AuthenticatedApp = () => {
@@ -388,6 +389,7 @@ const AuthenticatedApp = () => {
             <Route path="/ab-testing" element={<ABTestingDashboard />} />
             <Route path="/revenue-audit" element={<RevenueAudit />} />
             <Route path="/conversion-analytics" element={<ConversionAnalytics />} />
+          <Route path="/valuation-slider" element={<ValuationSlider />} />
           </Route>
 
           {/* Scalar Venture Vault Routes */}
