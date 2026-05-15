@@ -1,12 +1,37 @@
 import { useState } from "react";
-import { ShoppingCart, Loader2, ChevronDown, ChevronUp, Package, Zap, Wrench, Lightbulb } from "lucide-react";
+import { ShoppingCart, Loader2, Zap, Lock } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 
 function getPriceNum(priceStr) {
   return Math.round(parseFloat((priceStr || "$0").replace(/[$,]/g, "")));
 }
 
-function BuyButton({ invention }) {
+// Pick an accent color per invention based on its index/title hash
+function accentColor(title = "") {
+  const colors = ["#06b6d4", "#a855f7", "#f97316", "#22c55e", "#fbbf24", "#ec4899", "#3b82f6", "#10b981"];
+  let hash = 0;
+  for (let i = 0; i < title.length; i++) hash = title.charCodeAt(i) + ((hash << 5) - hash);
+  return colors[Math.abs(hash) % colors.length];
+}
+
+// Complexity badge
+function complexityBadge(complexity = "Intermediate") {
+  const map = {
+    Beginner:     { label: "Beginner",     bg: "#052e16", color: "#4ade80" },
+    Intermediate: { label: "Intermediate", bg: "#172554", color: "#60a5fa" },
+    Advanced:     { label: "Advanced",     bg: "#2d1b69", color: "#c084fc" },
+    Expert:       { label: "Expert",       bg: "#450a0a", color: "#f87171" },
+  };
+  const c = map[complexity] || map.Intermediate;
+  return (
+    <span className="text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full"
+      style={{ background: c.bg, color: c.color }}>
+      {c.label}
+    </span>
+  );
+}
+
+function BuyButton({ invention, color }) {
   const [loading, setLoading] = useState(false);
   const priceInCents = Math.round(getPriceNum(invention.price) * 100);
 
@@ -35,156 +60,110 @@ function BuyButton({ invention }) {
     <button
       onClick={handleBuy}
       disabled={loading}
-      className="w-full py-3 px-4 rounded-lg text-sm font-black text-white bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 disabled:opacity-50 transition-all flex items-center justify-center gap-2 shadow-lg"
+      className="w-full py-2.5 rounded-xl text-sm font-black text-white transition-all flex items-center justify-center gap-2 shadow-lg hover:opacity-90"
+      style={{ background: `linear-gradient(135deg, ${color}, ${color}99)` }}
     >
-      {loading ? <Loader2 size={14} className="animate-spin" /> : <ShoppingCart size={14} />}
-      {loading ? "Processing..." : `Get Build Plans — ${invention.price}`}
+      {loading ? <Loader2 size={13} className="animate-spin" /> : <ShoppingCart size={13} />}
+      {loading ? "Processing..." : `Get Plans — ${invention.price}`}
     </button>
   );
 }
 
 export default function Device3DCard({ invention, isHighlight }) {
-  const [expanded, setExpanded] = useState(false);
-  const priceNum = getPriceNum(invention.price);
+  const color = accentColor(invention.title);
+  const complexity = invention.complexity || "Intermediate";
 
-  // Device specs for display
-  const specs = [
-    { label: "Complexity", value: invention.complexity || "Intermediate" },
-    { label: "Build Time", value: invention.buildTime || "2-4 weeks" },
-    { label: "Cost Range", value: invention.price },
+  // Pick 3 key "what's included" bullets — concise
+  const bullets = invention.whatIncluded?.slice(0, 3) || [
+    "Full BOM & part numbers",
+    "Step-by-step assembly guide",
+    "Downloadable PDF schematics",
   ];
 
   return (
     <div
-      className={`group relative rounded-2xl overflow-hidden transition-all duration-300 ${
-        isHighlight
-          ? "md:col-span-2 md:row-span-2 shadow-2xl"
-          : "shadow-xl hover:shadow-2xl"
+      className={`group relative rounded-2xl overflow-hidden flex flex-col transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl ${
+        isHighlight ? "sm:col-span-2" : ""
       }`}
       style={{
-        background: "linear-gradient(135deg, rgba(15,23,42,0.95) 0%, rgba(30,41,59,0.95) 100%)",
-        border: "1px solid rgba(148,163,184,0.2)",
+        background: "linear-gradient(160deg, #0d1526 0%, #0a1020 100%)",
+        border: `1px solid ${color}40`,
+        boxShadow: `0 4px 24px ${color}18`,
       }}
     >
-      {/* 3D-style background effect */}
-      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-        <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 via-transparent to-blue-500/5" />
-      </div>
+      {/* ── Top color accent bar ── */}
+      <div className="h-1 w-full" style={{ background: `linear-gradient(90deg, transparent, ${color}, transparent)` }} />
 
-      {/* Header with Icon & Stats */}
-      <div className={`relative p-6 ${isHighlight ? "pb-8" : "pb-4"}`}>
-        <div className="flex items-start justify-between gap-4 mb-4">
-          <div className="flex items-start gap-4">
-            <div className="text-5xl flex-shrink-0">{invention.icon}</div>
-            <div className="flex-1">
-              <h3 className="text-white font-black text-lg md:text-xl leading-tight mb-1">{invention.title}</h3>
-              <p className="text-slate-400 text-xs italic">{invention.tagline}</p>
-              {isHighlight && invention.description && (
-                <p className="text-slate-300 text-sm mt-3 leading-relaxed">{invention.description}</p>
-              )}
-            </div>
+      {/* ── Glow on hover ── */}
+      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+        style={{ background: `radial-gradient(ellipse at 50% 0%, ${color}12, transparent 70%)` }} />
+
+      {/* ── Card Header ── */}
+      <div className="p-5 pb-3 relative">
+        <div className="flex items-start justify-between mb-3">
+          {/* Icon with glow */}
+          <div className="relative">
+            <div className="text-4xl leading-none">{invention.icon}</div>
+            <div className="absolute -inset-2 rounded-full blur-xl opacity-40"
+              style={{ background: color }} />
           </div>
-          <div className="flex-shrink-0 text-right">
-            <p className="text-slate-500 text-[10px] uppercase tracking-widest font-bold mb-1">PRICE</p>
-            <p className="text-3xl font-black bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent">
-              {invention.price}
-            </p>
+
+          {/* Price + complexity */}
+          <div className="text-right flex flex-col items-end gap-1">
+            <div className="text-2xl font-black" style={{ color }}>{invention.price}</div>
+            {complexityBadge(complexity)}
           </div>
         </div>
 
-        {/* Quick Stats */}
-        <div className={`flex flex-wrap gap-2 ${isHighlight ? "gap-3" : ""}`}>
-          {specs.map((spec, i) => (
-            <div key={i} className="px-3 py-1.5 rounded-lg bg-slate-800/50 border border-slate-700/50 text-[10px]">
-              <span className="text-slate-500 font-bold">{spec.label}:</span>
-              <span className="text-slate-300 ml-1">{spec.value}</span>
-            </div>
+        {/* Title */}
+        <h3 className="text-white font-black text-sm leading-snug mb-1">{invention.title}</h3>
+        <p className="text-slate-500 text-[11px] italic leading-snug">{invention.tagline}</p>
+      </div>
+
+      {/* ── Visual divider ── */}
+      <div className="mx-5 h-px" style={{ background: `linear-gradient(90deg, transparent, ${color}30, transparent)` }} />
+
+      {/* ── Quick stats row ── */}
+      <div className="px-5 py-3 grid grid-cols-3 gap-2">
+        {[
+          { label: "Build Time", val: invention.buildTime || "2–4 wks" },
+          { label: "Complexity", val: complexity },
+          { label: "Source", val: "US Patent" },
+        ].map((s, i) => (
+          <div key={i} className="text-center">
+            <div className="text-[10px] font-black" style={{ color }}>{s.val}</div>
+            <div className="text-[9px] text-slate-600 font-semibold mt-0.5">{s.label}</div>
+          </div>
+        ))}
+      </div>
+
+      {/* ── Visual divider ── */}
+      <div className="mx-5 h-px" style={{ background: `linear-gradient(90deg, transparent, ${color}20, transparent)` }} />
+
+      {/* ── What's included bullets ── */}
+      <div className="px-5 py-3 flex-1">
+        <p className="text-[9px] font-black uppercase tracking-widest mb-2" style={{ color }}>Included</p>
+        <ul className="space-y-1.5">
+          {bullets.map((b, i) => (
+            <li key={i} className="flex items-start gap-2 text-[11px] text-slate-300">
+              <span className="mt-0.5 flex-shrink-0" style={{ color }}>✓</span>
+              {b}
+            </li>
           ))}
+        </ul>
+      </div>
+
+      {/* ── CTA ── */}
+      <div className="px-5 pb-5 pt-2">
+        <BuyButton invention={invention} color={color} />
+        <div className="flex items-center justify-center gap-1.5 mt-2">
+          <Lock size={9} className="text-slate-700" />
+          <span className="text-[10px] text-slate-700">Secure checkout · Instant access</span>
         </div>
       </div>
 
-      {/* Main Content */}
-      <div className="relative px-6 pb-6 space-y-4 flex-1">
-        {/* What It Is */}
-        {invention.whatItIs && (
-          <div className="bg-gradient-to-r from-cyan-950/30 to-blue-950/30 border border-cyan-800/20 rounded-lg p-4">
-            <p className="text-slate-300 text-sm leading-relaxed">{invention.whatItIs}</p>
-          </div>
-        )}
-
-        {/* Problem & Solution Toggle */}
-        {(invention.problem || invention.beardenSolution) && (
-          <div className="space-y-2">
-            <button
-              onClick={() => setExpanded(!expanded)}
-              className="w-full flex items-center justify-between px-4 py-2.5 rounded-lg bg-slate-800/40 hover:bg-slate-800/60 border border-slate-700/50 transition-colors text-left"
-            >
-              <span className="text-xs font-bold text-cyan-400 uppercase tracking-wider">Details</span>
-              {expanded ? (
-                <ChevronUp size={14} className="text-cyan-400" />
-              ) : (
-                <ChevronDown size={14} className="text-slate-500" />
-              )}
-            </button>
-
-            {expanded && (
-              <div className="space-y-2.5">
-                {invention.problem && (
-                  <div className="bg-red-950/20 border border-red-900/30 rounded-lg p-3.5">
-                    <p className="text-red-400 font-bold text-xs uppercase tracking-wider mb-1.5">⚠ Problem</p>
-                    <p className="text-slate-300 text-sm leading-relaxed">{invention.problem}</p>
-                  </div>
-                )}
-                {invention.beardenSolution && (
-                  <div className="bg-blue-950/20 border border-blue-900/30 rounded-lg p-3.5">
-                    <p className="text-blue-400 font-bold text-xs uppercase tracking-wider mb-1.5">💡 Solution</p>
-                    <p className="text-slate-300 text-sm leading-relaxed">{invention.beardenSolution}</p>
-                  </div>
-                )}
-                {invention.market && (
-                  <div className="bg-green-950/20 border border-green-900/30 rounded-lg p-3.5">
-                    <p className="text-green-400 font-bold text-xs uppercase tracking-wider mb-1.5">📈 Market</p>
-                    <p className="text-slate-300 text-sm leading-relaxed">{invention.market}</p>
-                  </div>
-                )}
-              </div>
-            )}
-          </div>
-        )}
-
-        {/* What's Included */}
-        {invention.whatIncluded && (
-          <div className="bg-slate-800/30 border border-slate-700/50 rounded-lg p-4">
-            <p className="text-slate-500 text-[10px] font-bold uppercase tracking-widest mb-2.5">📦 Includes</p>
-            <ul className="space-y-1.5">
-              {invention.whatIncluded.map((item, i) => (
-                <li key={i} className="flex items-start gap-2 text-xs text-slate-300">
-                  <span className="text-cyan-400 mt-0.5">✓</span>
-                  {item}
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
-
-        {/* CTA Buttons */}
-        <div className="mt-6 space-y-2.5 pt-4 border-t border-slate-700/50">
-          <BuyButton invention={invention} />
-          <a
-            href="#specs"
-            className="w-full py-2.5 px-4 rounded-lg text-xs font-bold text-slate-300 border border-slate-700 hover:bg-slate-800/60 transition-all text-center"
-          >
-            View Full Specifications
-          </a>
-        </div>
-      </div>
-
-      {/* Glow effect on hover */}
-      <div className="absolute -inset-0.5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10 blur-xl"
-        style={{
-          background: "linear-gradient(135deg, rgba(0,229,255,0.1), rgba(59,130,246,0.1))",
-        }}
-      />
+      {/* ── Bottom accent line ── */}
+      <div className="h-px w-full" style={{ background: `linear-gradient(90deg, transparent, ${color}40, transparent)` }} />
     </div>
   );
 }
