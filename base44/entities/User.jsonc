@@ -11,7 +11,8 @@
       "default": "user"
     },
     "subscription_status": {
-      "type": "string"
+      "type": "string",
+      "description": "Set by Stripe webhook: active, canceled, past_due, etc."
     },
     "stripe_customer_id": {
       "type": "string"
@@ -22,6 +23,12 @@
     "admin_access_granted": {
       "type": "boolean",
       "default": false
+    },
+    "nda_accepted": {
+      "type": "boolean",
+      "default": false,
+      "description": "True once the user has signed and verified the NDA"
     }
-  }
+  },
+  "required": []
 }

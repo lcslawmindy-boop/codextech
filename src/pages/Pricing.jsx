@@ -23,6 +23,14 @@ function useCountdown() {
   return `${pad(h)}:${pad(m)}:${pad(s)}`;
 }
 
+// Real Stripe price IDs (subscription mode)
+const PRICE_IDS = {
+  explorer:   { monthly: "price_1TXTFLBkbCWuj2nHKPYdnfH0", annual: "price_1TXTFLBkbCWuj2nHlkPxvXC8" },
+  research:   { monthly: "price_1TXTFLBkbCWuj2nHbK0MpT7x", annual: "price_1TXTFLBkbCWuj2nH9LC0ABm0" },
+  pro:        { monthly: "price_1TXTFLBkbCWuj2nHHKfUYuoV", annual: "price_1TXTFLBkbCWuj2nHXEZn1hEc" },
+  enterprise: { monthly: "price_1TXTFLBkbCWuj2nHw8pspGy0", annual: "price_1TXTFLBkbCWuj2nHXyPYdCol" },
+};
+
 const TIERS = [
   {
     id: "explorer",
@@ -144,33 +152,21 @@ export default function Pricing() {
 
     const isAnnual = billingMode === "annual";
     const price = isAnnual ? tier.annual : tier.monthly;
-    const priceInCents = isAnnual ? Math.round(price * 12 * 100) : Math.round(price * 100);
+    const priceId = PRICE_IDS[tier.id]?.[isAnnual ? "annual" : "monthly"];
 
-    // Fire GA4 conversion event for enterprise tier
+    // Fire GA4 conversion event
     if (typeof window.gtag !== 'undefined') {
-      window.gtag('event', 'purchase', {
-        event_category: 'engagement',
-        event_label: tier.id === 'enterprise' ? 'enterprise_signup' : 'tier_signup',
-        value: price,
+      window.gtag('event', 'begin_checkout', {
         currency: 'USD',
-        tier: tier.id,
-        billing_cycle: isAnnual ? 'annual' : 'monthly',
+        value: price,
+        items: [{ item_id: tier.id, item_name: tier.name, price }],
       });
-
-      // Enterprise tier gets additional tracking
-      if (tier.id === 'enterprise') {
-        window.gtag('event', 'conversion', {
-          event_category: 'enterprise_tier',
-          event_label: 'enterprise_checkout_initiated',
-          value: priceInCents / 100,
-        });
-      }
     }
 
     const res = await base44.functions.invoke("createCheckoutSession", {
-      title: `Aethon Apex IP — ${tier.name} (${isAnnual ? "Annual" : "Monthly"})`,
-      priceInCents,
-      description: tier.desc,
+      title: `Aethon Apex IP — ${tier.name}`,
+      priceId,
+      mode: "subscription",
       category: "membership",
       successUrl: `${window.location.origin}/member-dashboard?checkout=success`,
       cancelUrl: `${window.location.origin}/pricing`,

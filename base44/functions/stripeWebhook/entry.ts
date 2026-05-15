@@ -69,6 +69,36 @@ Deno.serve(async (req) => {
           });
           console.log("subscription_status set to active for:", email);
 
+          // Send welcome email to new paying member
+          try {
+            await base44.asServiceRole.integrations.Core.SendEmail({
+              to: email,
+              subject: '🎉 Welcome to Aethon Apex IP — Your Access is Ready',
+              body: `Hi there,
+
+Welcome to the Aethon Apex IP Research Platform! Your payment was confirmed and your account is now active.
+
+You now have full access to:
+✓ 40+ Invention Build Plans with full BOMs and schematics
+✓ 40+ Engineering Courses — Scalar EM, Bioelectromagnetics, and more
+✓ AI Patent Suite — drafting wizard, FTO analysis, attorney chat
+✓ Invention Forge — AI-generated hybrid IP concepts
+✓ Prior Art Archive — 200+ documented research entries
+
+GET STARTED:
+1. Log in at https://zenithapex.com
+2. Visit your Member Dashboard for quick access to everything
+3. Pick a build plan or start with a course
+
+Questions? Reply to this email anytime.
+
+— The Aethon Apex IP Team`,
+            });
+            console.log('Welcome email sent to:', email);
+          } catch (emailErr) {
+            console.warn('Failed to send welcome email:', emailErr.message);
+          }
+
           // Post LinkedIn milestone for Enterprise tier signups
           const productTitle = session.metadata?.product_title || productName || '';
           if (productTitle.includes('Enterprise')) {

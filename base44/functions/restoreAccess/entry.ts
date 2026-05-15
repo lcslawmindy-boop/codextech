@@ -29,46 +29,52 @@ Deno.serve(async (req) => {
 
     // 2. Check by email to catch missing mappings or pre-signup purchases
     if (!active) {
-      const customers = await stripe.customers.list({ email: user.email, limit: 1 });
-      if (customers.data.length > 0) {
-        const customerId = customers.data[0].id;
-        
+      const customers = await stripe.customers.list({ email: user.email, limit: 5 });
+      
+      for (const customer of customers.data) {
+        if (active) break;
+        const customerId = customer.id;
+
+        // Check active subscriptions
         const subscriptions = await stripe.subscriptions.list({
           customer: customerId,
           status: 'active',
           limit: 1
         });
-        
         if (subscriptions.data.length > 0) {
+          active = true;
+          await base44.asServiceRole.entities.User.update(user.id, {
+            stripe_customer_id: customerId,
+            subscription_id: subscriptions.data[0].id,
+            subscription_status: 'active'
+          });
+          break;
+        }
+
+        // Check completed checkout sessions (subscriptions OR one-time)
+        const sessions = await stripe.checkout.sessions.list({
+          customer: customerId,
+          limit: 20
+        });
+        const paidSession = sessions.data.find(s =>
+          s.payment_status === 'paid' || s.status === 'complete'
+        );
+        if (paidSession) {
           active = true;
           await base44.asServiceRole.entities.User.update(user.id, {
             stripe_customer_id: customerId,
             subscription_status: 'active'
           });
-        } else {
-          // Check one-time payments
-          const sessions = await stripe.checkout.sessions.list({
-            customer_details: { email: user.email },
-            limit: 10
-          });
-          const paidSession = sessions.data.find(s => s.payment_status === 'paid');
-          
-          if (paidSession) {
-            active = true;
-            await base44.asServiceRole.entities.User.update(user.id, {
-              stripe_customer_id: customerId,
-              subscription_status: 'active'
-            });
-          }
         }
-      } else {
-        // No customer object, just check sessions by email directly
-        const sessions = await stripe.checkout.sessions.list({
-          customer_details: { email: user.email },
-          limit: 10
-        });
-        const paidSession = sessions.data.find(s => s.payment_status === 'paid');
-        
+      }
+
+      // Final fallback: search sessions by email directly (no customer record yet)
+      if (!active) {
+        const sessions = await stripe.checkout.sessions.list({ limit: 20 });
+        const paidSession = sessions.data.find(s =>
+          s.customer_details?.email === user.email &&
+          (s.payment_status === 'paid' || s.status === 'complete')
+        );
         if (paidSession) {
           active = true;
           await base44.asServiceRole.entities.User.update(user.id, {

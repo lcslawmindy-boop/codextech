@@ -27,12 +27,17 @@ Deno.serve(async (req) => {
       },
     };
 
-    // Attach email if provided (no auth required — public app)
+    // Attach email if provided
     if (customerEmail) {
       sessionParams.customer_email = customerEmail;
     }
 
-    if (isSubscription) {
+    if (isSubscription && priceId) {
+      // Subscription checkout using a real Stripe price ID
+      sessionParams.mode = 'subscription';
+      sessionParams.line_items = [{ price: priceId, quantity: 1 }];
+    } else if (isSubscription && priceInCents) {
+      // Subscription checkout using dynamic price data
       sessionParams.mode = 'subscription';
       sessionParams.line_items = [{
         price_data: {
@@ -44,12 +49,14 @@ Deno.serve(async (req) => {
         quantity: 1,
       }];
     } else if (priceId) {
+      // One-time payment using a real Stripe price ID (physical goods → collect shipping)
       sessionParams.mode = 'payment';
       sessionParams.shipping_address_collection = {
         allowed_countries: ['US', 'CA', 'GB', 'AU', 'DE', 'FR', 'NL', 'SE', 'NO', 'DK', 'FI', 'JP', 'SG', 'NZ']
       };
       sessionParams.line_items = [{ price: priceId, quantity: 1 }];
     } else {
+      // One-time payment using dynamic price data
       sessionParams.mode = 'payment';
       sessionParams.line_items = [{
         price_data: {
