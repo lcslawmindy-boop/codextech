@@ -1,6 +1,7 @@
 import { useState } from "react";
-import { ShoppingCart, Loader2, Zap, Lock } from "lucide-react";
+import { ShoppingCart, Loader2, Zap, Lock, Layers } from "lucide-react";
 import { base44 } from "@/api/base44Client";
+import InventionExplodedViewer from "./InventionExplodedViewer";
 
 function getPriceNum(priceStr) {
   return Math.round(parseFloat((priceStr || "$0").replace(/[$,]/g, "")));
@@ -70,6 +71,7 @@ function BuyButton({ invention, color }) {
 }
 
 export default function Device3DCard({ invention, isHighlight }) {
+  const [showViewer, setShowViewer] = useState(false);
   const color = accentColor(invention.title);
   const complexity = invention.complexity || "Intermediate";
 
@@ -154,13 +156,25 @@ export default function Device3DCard({ invention, isHighlight }) {
       </div>
 
       {/* ── CTA ── */}
-      <div className="px-5 pb-5 pt-2">
+      <div className="px-5 pb-5 pt-2 space-y-2">
+        {/* 3D Explore button */}
+        <button
+          onClick={() => setShowViewer(true)}
+          className="w-full py-2 rounded-xl text-xs font-black border transition-all flex items-center justify-center gap-2 hover:opacity-90"
+          style={{ borderColor: `${color}60`, color, background: `${color}12` }}
+        >
+          <Layers size={12} /> Explore 3D · Exploded View
+        </button>
         <BuyButton invention={invention} color={color} />
-        <div className="flex items-center justify-center gap-1.5 mt-2">
+        <div className="flex items-center justify-center gap-1.5">
           <Lock size={9} className="text-slate-700" />
           <span className="text-[10px] text-slate-700">Secure checkout · Instant access</span>
         </div>
       </div>
+
+      {showViewer && (
+        <InventionExplodedViewer invention={invention} onClose={() => setShowViewer(false)} />
+      )}
 
       {/* ── Bottom accent line ── */}
       <div className="h-px w-full" style={{ background: `linear-gradient(90deg, transparent, ${color}40, transparent)` }} />
