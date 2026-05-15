@@ -1340,8 +1340,8 @@ function SpecsLockedGate({ invention }) {
 
       {/* ── BLURRED SPECS PREVIEW ── */}
       <div className="relative rounded-2xl overflow-hidden mb-5 border border-gray-800">
-        {/* Real content — blurred */}
-        <div className="blur-md pointer-events-none select-none p-5 space-y-4 bg-gray-900">
+        {/* Real content — heavily blurred, nothing readable */}
+        <div className="blur-3xl pointer-events-none select-none p-5 space-y-4 bg-gray-900" style={{ filter: "blur(18px)", userSelect: "none" }}>
           {/* Technical Overview */}
           {data?.overview && (
             <div>
@@ -1408,8 +1408,8 @@ function SpecsLockedGate({ invention }) {
           )}
         </div>
 
-        {/* Lock overlay */}
-        <div className="absolute inset-0 flex flex-col items-center justify-center bg-gray-950/70 backdrop-blur-[2px]">
+        {/* Lock overlay — fully opaque, nothing visible underneath */}
+        <div className="absolute inset-0 flex flex-col items-center justify-center bg-gray-950/95">
           <div className="text-center px-6">
             <div className="w-14 h-14 rounded-2xl bg-indigo-900/60 border border-indigo-600 flex items-center justify-center mx-auto mb-3">
               <Lock size={24} className="text-indigo-300" />
@@ -1795,7 +1795,7 @@ export default function InventionPlans() {
             </div>
           ) : (isClassifiedInvention(selected.title) && !isAdmin && !tierHasGovAccess(tier)) ? (
             <GovClassifiedGate inventionTitle={selected.title} />
-          ) : (isMembershipRequired(selected.title) && !isAdmin && !purchasedTitles.some(t => t.includes(selected.title?.toLowerCase().slice(0, 20)))) ? (
+          ) : (isMembershipRequired(selected.title) && !isAdmin) ? (
             <SpecsLockedGate invention={selected} />
           ) : !canViewSelected ? (
             <SpecsLockedGate invention={selected} />
