@@ -47,56 +47,53 @@ const TIERS = [
   {
     id: "explorer",
     name: "Explorer",
-    monthly: 49,
-    annual: 39,
+    monthly: 29,
+    annual: 24,
     color: "#06b6d4",
     badge: "STARTER",
-    desc: "1 course + 1 build plan/month · Full research archive",
+    desc: "Research archive only — build plans locked",
     features: [
-      "1 new course drop every month",
-      "1 new invention build plan every month (full BOM & schematics)",
-      "Bearden concept graph — 100+ nodes, full interactive access",
-      "All patent source documents & prior art archive (200+ entries)",
+      "Electromagnetic concept graph — 100+ nodes",
+      "Prior Art Archive — 200+ patent-sourced entries",
       "Engineering glossary & reference library",
       "Community forum read access",
     ],
-    locked: ["Invention Forge sessions", "AI Patent Suite", "IP Marketplace"],
+    locked: ["Build plans (locked — Research Lab+)", "Structured courses", "Invention Forge", "AI Patent Suite"],
   },
   {
     id: "research",
     name: "Research Lab",
     monthly: 99,
-    annual: 49,
+    annual: 79,
     color: "#a855f7",
     badge: "MOST POPULAR",
-    desc: "3 courses + 3 build plans + Forge + AI Patent credits monthly",
+    desc: "All courses · purchase up to 10 build plans · Forge & Patent credits",
+    valueNote: "$580+ value / mo",
     features: [
-      "3 curated engineering courses (+ 1 new course every month)",
-      "3 complete build plans with BOM & schematics (+ 1 new build plan/month)",
-      "25% off à la carte menu of 20 individual build plans",
-      "5 Invention Forge sessions per month",
-      "2 AI Patent Suite credits per month (drafting & analysis)",
+      "All 40+ structured engineering courses — full access",
+      "Purchase up to 10 build plans / month (BOM, schematics, assembly)",
+      "2 Invention Forge credits / month (AI hybrid IP generation)",
+      "1 AI Patent Suite credit / month (drafting + analysis)",
       "Full community forum access",
     ],
-    locked: ["IP Marketplace", "Full AI Patent Suite", "40+ reserved build plans"],
+    locked: [],
     highlight: true,
   },
   {
     id: "pro",
     name: "Pro Builder",
     monthly: 199,
-    annual: 149,
+    annual: 159,
     color: "#f97316",
     badge: "BEST VALUE",
-    desc: "6 courses + 6 build plans + full AI Patent Suite + IP Marketplace",
+    desc: "All courses · unlimited build plans · 10 Forge + 10 Patent credits",
+    valueNote: "$1,400+ value / mo",
     features: [
-      "6 curated engineering courses (rotating access)",
-      "6 full build plans with BOM, schematics & sourcing",
-      "25% off à la carte menu — 40+ reserved build plans available",
-      "Full AI Patent Suite — drafting, attorney chat & threat monitoring",
-      "20 Invention Forge sessions per month",
-      "IP Marketplace access — list, license & sell your IP",
-      "Priority support & early access to all new content drops",
+      "All 40+ courses — full access",
+      "Unlimited build plan purchases — full catalogue unlocked",
+      "10 Invention Forge credits / month",
+      "10 AI Patent Suite credits / month",
+      "Priority support & early access to all new drops",
     ],
     locked: [],
   },
@@ -263,14 +260,19 @@ function TierCard({ tier, isAnnual }) {
       </div>
       <div className="p-6 bg-slate-900 flex flex-col flex-1">
         <h3 className="text-white font-black text-xl mb-1">{tier.name}</h3>
-        <p className="text-slate-400 text-xs mb-5">{tier.desc}</p>
+        <p className="text-slate-400 text-xs mb-2">{tier.desc}</p>
+        {tier.valueNote && (
+          <div className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-black mb-3 self-start" style={{ background: tier.color + "20", color: tier.color, border: `1px solid ${tier.color}40` }}>
+            ✦ {tier.valueNote}
+          </div>
+        )}
 
         <div className="flex items-end gap-1 mb-1">
           <span className="text-5xl font-black" style={{ color: tier.color }}>${price.toFixed(2)}</span>
           <span className="text-slate-500 mb-2 text-sm">/mo</span>
         </div>
         {isAnnual && <p className="text-green-400 text-xs font-bold mb-1">Save ${((tier.monthly - tier.annual) * 12).toFixed(0)}/year — billed annually</p>}
-        <p className="text-slate-600 text-xs mb-6">{isAnnual ? `$${(tier.annual * 12).toFixed(2)}/year` : "Monthly billing, cancel anytime"}</p>
+        <p className="text-slate-600 text-xs mb-5">{isAnnual ? `$${(tier.annual * 12).toFixed(2)}/year` : "Monthly billing, cancel anytime"}</p>
 
         <button
           onClick={handleCheckout}

@@ -31,6 +31,14 @@ const PRICE_IDS = {
   enterprise: { monthly: "price_1TXTFLBkbCWuj2nHw8pspGy0", annual: "price_1TXTFLBkbCWuj2nHXyPYdCol" },
 };
 
+// ── Add-on dossier pricing for standalone credits ────────────────────────────
+const DOSSIER_PACKS = [
+  { name: "Starter Pack", forge: 5, patent: 5, multiplier: "1×", price: 49, color: "#06b6d4" },
+  { name: "Builder Pack", forge: 25, patent: 25, multiplier: "5×", price: 197, color: "#a855f7", popular: true },
+  { name: "Power Pack",   forge: 50, patent: 50, multiplier: "10×", price: 349, color: "#f97316" },
+  { name: "Unlimited",   forge: "∞", patent: "∞", multiplier: "∞", price: 799, color: "#fbbf24" },
+];
+
 const TIERS = [
   {
     id: "explorer",
@@ -39,46 +47,50 @@ const TIERS = [
     annual: 24,
     color: "#06b6d4",
     badge: "STARTER",
-    desc: "Research archive & concept library",
+    desc: "Research archive & concept library — no build plans",
+    valueNote: null,
     features: [
       { icon: <Database size={14} />, text: "Interactive electromagnetic concept graph — 100+ nodes" },
       { icon: <BookOpen size={14} />, text: "Prior Art Archive — 200+ documented entries" },
       { icon: <Check size={14} />, text: "Engineering glossary & reference library" },
       { icon: <Check size={14} />, text: "Community forum read access" },
     ],
-    locked: ["Build plan library (40+ plans)", "Structured courses (40+ courses)", "AI Patent Suite"],
+    locked: ["Build plan library (build plans locked)", "Structured courses", "Invention Forge", "AI Patent Suite"],
   },
   {
     id: "research",
     name: "Research Lab",
-    monthly: 49,
-    annual: 39,
+    monthly: 99,
+    annual: 79,
     color: "#a855f7",
     badge: "MOST POPULAR",
-    desc: "3 courses + 3 build plans + AI Patent Suite + 5 Forge sessions",
+    desc: "All courses · purchase up to 10 build plans · Forge & Patent credits",
     highlight: true,
+    valueNote: "$580+ value / mo",
     features: [
-      { icon: <BookOpen size={14} />, text: "3 curated engineering courses (monthly rotation)" },
-      { icon: <Wrench size={14} />, text: "3 build plans with full BOM & specs (monthly rotation)" },
-      { icon: <Shield size={14} />, text: "AI Patent Suite — drafting, attorney chat, monitoring" },
-      { icon: <Zap size={14} />, text: "5 Invention Forge sessions per month" },
+      { icon: <BookOpen size={14} />, text: "All 40+ structured engineering courses — full access" },
+      { icon: <Wrench size={14} />, text: "Purchase up to 10 build plans / month (BOM, schematics, assembly)" },
+      { icon: <Zap size={14} />, text: "2 Invention Forge credits / month (AI hybrid IP generation)" },
+      { icon: <Shield size={14} />, text: "1 AI Patent Suite credit / month (drafting + analysis)" },
       { icon: <Check size={14} />, text: "Full community forum access" },
+      { icon: <Check size={14} />, text: "Prior Art Archive — 200+ entries" },
     ],
     locked: [],
   },
   {
     id: "pro",
     name: "Pro Builder",
-    monthly: 149,
-    annual: 119,
+    monthly: 199,
+    annual: 159,
     color: "#f97316",
     badge: "BEST VALUE",
-    desc: "6 courses + 6 build plans + AI Patent Suite + 20 Forge sessions",
+    desc: "All courses · unlimited build plan purchases · 10 Forge + 10 Patent credits",
+    valueNote: "$1,400+ value / mo",
     features: [
-      { icon: <BookOpen size={14} />, text: "6 curated courses (rotating access)" },
-      { icon: <Wrench size={14} />, text: "6 build plans with full BOM & specs (rotating)" },
-      { icon: <Shield size={14} />, text: "AI Patent Suite — drafting, attorney chat, monitoring" },
-      { icon: <Zap size={14} />, text: "20 Invention Forge sessions per month" },
+      { icon: <BookOpen size={14} />, text: "All 40+ courses — full rotating access" },
+      { icon: <Wrench size={14} />, text: "Unlimited build plan purchases — full catalogue unlocked" },
+      { icon: <Zap size={14} />, text: "10 Invention Forge credits / month" },
+      { icon: <Shield size={14} />, text: "10 AI Patent Suite credits / month (drafting, FTO, monitoring)" },
       { icon: <Check size={14} />, text: "Priority support & expert forum access" },
       { icon: <Check size={14} />, text: "Early access to all new content drops" },
     ],
@@ -91,14 +103,15 @@ const TIERS = [
     annual: 397,
     color: "#fbbf24",
     badge: "INSTITUTIONAL",
-    desc: "White-label, multi-seat, VDR, licensing support",
+    desc: "White-label, multi-seat, VDR, unlimited credits",
+    valueNote: "Unlimited everything",
     features: [
       { icon: <Shield size={14} />, text: "Everything in Pro Builder" },
       { icon: <Check size={14} />, text: "Up to 10 team seats" },
       { icon: <Check size={14} />, text: "White-label build documentation" },
       { icon: <Check size={14} />, text: "Virtual Data Room (VDR) access" },
       { icon: <Check size={14} />, text: "Institutional licensing inquiry support" },
-      { icon: <Zap size={14} />, text: "Unlimited Invention Forge sessions" },
+      { icon: <Zap size={14} />, text: "Unlimited Invention Forge & Patent Suite credits" },
       { icon: <Check size={14} />, text: "Dedicated account manager" },
     ],
     locked: [],
@@ -211,7 +224,7 @@ export default function Pricing() {
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-400">Start Building Today.</span>
         </h1>
         <p className="text-slate-400 text-base max-w-xl mx-auto">
-          Four tiers for every level of researcher — from archive access to full institutional tooling.
+          Four tiers for every level of researcher — from archive access to full build catalogue + AI patent tooling.
         </p>
       </div>
 
@@ -239,7 +252,7 @@ export default function Pricing() {
       </div>
 
       {/* Tiers */}
-      <div className="px-5 pb-16 max-w-5xl mx-auto">
+      <div className="px-5 pb-10 max-w-6xl mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-5">
           {TIERS.map((tier) => {
             const isAnnual = billingMode === "annual";
@@ -259,23 +272,28 @@ export default function Pricing() {
                 </div>
                 <div className="p-6 bg-slate-900 flex flex-col flex-1">
                   <h3 className="text-white font-black text-xl mb-1">{tier.name}</h3>
-                  <p className="text-slate-400 text-xs mb-4">{tier.desc}</p>
+                  <p className="text-slate-400 text-xs mb-2">{tier.desc}</p>
+                  {tier.valueNote && (
+                    <div className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-black mb-3 self-start" style={{ background: tier.color + "20", color: tier.color, border: `1px solid ${tier.color}40` }}>
+                      ✦ {tier.valueNote}
+                    </div>
+                  )}
 
                   <div className="flex items-end gap-1 mb-1">
                     <span className="font-black text-5xl" style={{ color: tier.color }}>${price}</span>
                     <span className="text-slate-500 mb-1 text-sm">/mo</span>
                   </div>
                   {isAnnual && <p className="text-green-400 text-xs font-bold mb-1">Save ${(tier.monthly - tier.annual) * 12}/year</p>}
-                  <p className="text-slate-600 text-xs mb-6">{isAnnual ? `$${tier.annual * 12} billed annually` : "Monthly billing"}</p>
+                  <p className="text-slate-600 text-xs mb-5">{isAnnual ? `$${tier.annual * 12} billed annually` : "Monthly billing"}</p>
 
                   <button
                     onClick={() => handleCheckout(tier)}
-                    className="w-full py-3 rounded-xl font-black text-sm text-white transition-all hover:opacity-90 active:scale-[0.98] mb-4"
+                    className="w-full py-3 rounded-xl font-black text-sm text-white transition-all hover:opacity-90 active:scale-[0.98] mb-3"
                     style={{ backgroundColor: tier.color }}
                   >
                     Get {tier.name} →
                   </button>
-                  <p className="text-center text-slate-500 text-xs mb-5">🔒 Cancel anytime</p>
+                  <p className="text-center text-slate-500 text-xs mb-4">🔒 Cancel anytime</p>
 
                   <div className="space-y-2.5 flex-1">
                     {tier.features.map((f, i) => (
@@ -303,9 +321,71 @@ export default function Pricing() {
         </div>
 
         <p className="text-center text-slate-600 text-xs mt-6">
-          Want to explore first?{" "}
-          <Link to="/free-vault" className="text-cyan-400 hover:underline">Browse the free vault →</Link>
+          Build plans are only accessible to Research Lab and above.{" "}
+          <Link to="/free-vault" className="text-cyan-400 hover:underline">Explore the free vault →</Link>
         </p>
+      </div>
+
+      {/* ── Add-on Dossier Credit Packs ── */}
+      <div className="px-5 pb-16 max-w-5xl mx-auto">
+        <div className="text-center mb-8 mt-4">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-slate-800 border border-slate-700 text-slate-300 text-xs font-black uppercase tracking-widest mb-3">
+            <Zap size={11} className="text-yellow-400" /> Add-On Credit Packs
+          </div>
+          <h2 className="text-2xl font-black text-white mb-2">Invention Forge & AI Patent Suite</h2>
+          <p className="text-slate-400 text-sm max-w-lg mx-auto">Purchase standalone credit bundles for Invention Forge sessions and AI Patent Suite dossiers. Each pack includes equal credits for both tools.</p>
+          <div className="flex flex-wrap justify-center gap-4 mt-3 text-xs text-slate-500">
+            <span>⚡ Forge credit = 1 AI hybrid IP generation session</span>
+            <span>📜 Patent credit = 1 full patent draft + FTO analysis</span>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
+          {DOSSIER_PACKS.map((pack) => (
+            <div key={pack.name}
+              className="relative rounded-2xl overflow-hidden flex flex-col"
+              style={{ border: `1px solid ${pack.color}50`, background: "linear-gradient(160deg,#0d1526,#0a1020)", boxShadow: pack.popular ? `0 0 30px ${pack.color}20` : "none" }}
+            >
+              {pack.popular && (
+                <div className="py-1.5 text-center text-[10px] font-black tracking-widest text-white" style={{ backgroundColor: pack.color }}>
+                  BEST VALUE
+                </div>
+              )}
+              <div className="p-5 flex flex-col flex-1">
+                <div className="flex items-center justify-between mb-3">
+                  <span className="text-xs font-black uppercase tracking-widest" style={{ color: pack.color }}>{pack.multiplier} Credits</span>
+                  <span className="text-[10px] bg-slate-800 px-2 py-0.5 rounded-full text-slate-400 font-mono">{pack.name}</span>
+                </div>
+                <div className="text-4xl font-black mb-1" style={{ color: pack.color }}>${pack.price}</div>
+                <p className="text-slate-500 text-xs mb-4">one-time purchase</p>
+                <div className="space-y-2 mb-5 flex-1">
+                  <div className="flex items-center gap-2 text-xs text-slate-300">
+                    <span style={{ color: pack.color }}>⚡</span>
+                    <span>{pack.forge === "∞" ? "Unlimited" : pack.forge} Invention Forge sessions</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-xs text-slate-300">
+                    <span style={{ color: pack.color }}>📜</span>
+                    <span>{pack.patent === "∞" ? "Unlimited" : pack.patent} AI Patent Suite credits</span>
+                  </div>
+                  {pack.multiplier !== "1×" && (
+                    <div className="flex items-center gap-2 text-xs text-green-400 font-bold mt-2">
+                      <span>✦</span>
+                      <span>Save vs individual @ ${Math.round(pack.price / (typeof pack.forge === "number" ? pack.forge : 1))}/credit</span>
+                    </div>
+                  )}
+                </div>
+                <button
+                  onClick={() => alert("Add-on packs coming soon — contact us to purchase.")}
+                  className="w-full py-2.5 rounded-xl text-sm font-black text-white transition-all hover:opacity-90"
+                  style={{ background: `linear-gradient(135deg, ${pack.color}, ${pack.color}99)` }}
+                >
+                  Get {pack.name} →
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+        <p className="text-center text-slate-600 text-xs mt-4">Credits never expire · Stack with any membership tier</p>
       </div>
 
       {/* Email Capture */}
