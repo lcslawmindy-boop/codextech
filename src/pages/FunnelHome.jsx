@@ -6,6 +6,7 @@ import {
   Cpu, Activity, FileText, Mail, Play, Users, Award, Microscope
 } from "lucide-react";
 import { base44 } from "@/api/base44Client";
+import ResearchSlideStrip from "../components/ResearchSlideStrip";
 
 const HERO_BG_IMAGES = [
   "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/fee7eab82_sleek-mri-scanner-room-enhanced-holographic-displays-brain-scans-other-medical-data-embodying-cutting-edge-314416241.webp",
@@ -335,8 +336,10 @@ export default function FunnelHome() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 text-white">
+    <div className="min-h-screen bg-slate-950 text-white flex">
+      <ResearchSlideStrip />
 
+      <div className="flex-1 min-w-0">
       {/* ── Urgency Bar ── */}
       <div className="bg-slate-900 border-b border-slate-800 px-4 py-2 flex flex-wrap items-center justify-center gap-2">
         <Flame size={12} className="text-orange-400" />
@@ -654,6 +657,7 @@ export default function FunnelHome() {
           <Link to="/pricing" className="hover:text-slate-400">Pricing</Link>
         </div>
       </footer>
+      </div>
     </div>
   );
 }
