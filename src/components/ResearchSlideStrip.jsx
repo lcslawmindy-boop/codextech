@@ -65,7 +65,7 @@ export default function ResearchSlideStrip() {
       if (!track) return;
 
       // Each image card: 220px height + 8px gap = 228px
-      const singleSetHeight = SLIDES.length * 228;
+      const singleSetHeight = SLIDES.length * 168;
       if (posRef.current >= singleSetHeight) {
         posRef.current -= singleSetHeight;
       }
@@ -81,7 +81,7 @@ export default function ResearchSlideStrip() {
   return (
     <div
       className="hidden lg:block flex-shrink-0 overflow-hidden relative"
-      style={{ width: 220, height: "100vh", position: "sticky", top: 0 }}
+      style={{ width: 160, height: "100vh", position: "sticky", top: 0 }}
     >
       {/* Top fade */}
       <div className="absolute top-0 left-0 right-0 h-16 z-10 pointer-events-none"
@@ -94,7 +94,7 @@ export default function ResearchSlideStrip() {
         {ALL_SLIDES.map((src, i) => (
           <div
             key={i}
-            style={{ marginBottom: 8, width: 220, height: 220, flexShrink: 0 }}
+            style={{ marginBottom: 8, width: 160, height: 160, flexShrink: 0 }}
             className="overflow-hidden rounded-lg border border-slate-800/60"
           >
             <img
