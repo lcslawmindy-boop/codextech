@@ -87,7 +87,7 @@ export default function DocumentSlideStrip({ reverse = false }) {
   return (
     <div
       className="hidden lg:block flex-shrink-0 overflow-hidden relative"
-      style={{ width: 180, height: "100vh", position: "sticky", top: 0 }}
+      style={{ width: 130, height: "100vh", position: "sticky", top: 0 }}
     >
       {/* Top fade */}
       <div className="absolute top-0 left-0 right-0 h-14 z-10 pointer-events-none"
@@ -101,10 +101,10 @@ export default function DocumentSlideStrip({ reverse = false }) {
           <div
             key={i}
             style={{
-              marginBottom: 7,
-              width: 170,
-              marginLeft: 5,
-              height: 118,
+              marginBottom: 5,
+              width: 122,
+              marginLeft: 4,
+              height: 90,
               border: `1px solid ${card.color}`,
               borderRadius: 7,
               padding: "8px 10px",

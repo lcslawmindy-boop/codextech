@@ -657,6 +657,7 @@ export default function DeviceSlideStrip({ reverse = false }) {
 
   useEffect(() => {
     const SPEED = 0.28;
+    const CARD_H = 154;
     const setH = DEVICES.length * CARD_H;
     const step = () => {
       posRef.current += reverse ? -SPEED : SPEED;
@@ -671,7 +672,7 @@ export default function DeviceSlideStrip({ reverse = false }) {
 
   return (
     <div className="hidden lg:block flex-shrink-0 overflow-hidden relative"
-      style={{ width: 190, height: "100vh", position: "sticky", top: 0 }}>
+      style={{ width: 140, height: "100vh", position: "sticky", top: 0 }}>
       <div className="absolute top-0 left-0 right-0 h-16 z-10 pointer-events-none"
         style={{ background: "linear-gradient(to bottom,#020617,transparent)" }} />
       <div className="absolute bottom-0 left-0 right-0 h-16 z-10 pointer-events-none"
@@ -682,7 +683,7 @@ export default function DeviceSlideStrip({ reverse = false }) {
           const c = device.color;
           return (
             <div key={i} style={{
-              marginBottom: 8, width: 178, marginLeft: 6, height: 182,
+              marginBottom: 6, width: 130, marginLeft: 5, height: 148,
               border: `1px solid ${c}`, borderRadius: 9, flexShrink: 0,
               background: "linear-gradient(160deg,#030c1a 60%,#010812 100%)",
               boxShadow: `0 0 16px ${c}38, inset 0 0 20px ${c}06`,
@@ -705,7 +706,7 @@ export default function DeviceSlideStrip({ reverse = false }) {
               </div>
               {/* 3D canvas */}
               <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", padding: "2px 0" }}>
-                <DeviceAnimation shape={device.shape} color={c} size={116} />
+                <DeviceAnimation shape={device.shape} color={c} size={84} />
               </div>
               {/* Title */}
               <div style={{ padding: "4px 8px 5px", borderTop: `1px solid ${c}18`, flexShrink: 0 }}>
