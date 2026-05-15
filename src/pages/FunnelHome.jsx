@@ -392,41 +392,7 @@ export default function FunnelHome() {
 
 
 
-      {/* ── 3D Exploded View Promo Banner ── */}
-      <section className="px-6 py-10 border-b border-slate-800 bg-gradient-to-r from-slate-900/60 via-slate-950 to-slate-900/60">
-        <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-center gap-6">
-          <div className="flex-1">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-950/60 border border-purple-800/50 text-purple-300 text-[10px] font-black uppercase tracking-widest mb-3">
-              <Layers size={10} /> New Feature
-            </div>
-            <h3 className="text-2xl font-black text-white mb-2 leading-tight">
-              Interactive 3D Exploded Views<br />
-              <span className="text-purple-400">Before You Buy the Plans</span>
-            </h3>
-            <p className="text-slate-400 text-sm leading-relaxed max-w-lg">
-              Every device in the catalogue now includes a fully interactive 3D model with an <strong className="text-white">Exploded View</strong> toggle — visually break apart the assembly layers, explore each component, and understand the construction process before purchasing the full build plans.
-            </p>
-          </div>
-          <div className="flex flex-col items-center gap-3 flex-shrink-0">
-            <div className="w-48 h-32 rounded-2xl border border-purple-700/50 bg-slate-950 flex items-center justify-center relative overflow-hidden">
-              <div className="absolute inset-0 bg-gradient-to-br from-purple-900/20 to-cyan-900/20" />
-              <div className="relative flex flex-col items-center gap-1.5">
-                {["#06b6d4","#a855f7","#f97316","#22c55e"].map((c,i) => (
-                  <div key={i} className="rounded-lg" style={{ width: 80 - i*8, height: 10, background: c, opacity: 0.85, boxShadow: `0 0 8px ${c}`, transform: `translateY(${i * (i % 2 === 0 ? -4 : 4)}px)` }} />
-                ))}
-                <p className="text-xs font-black text-purple-300 mt-2 flex items-center gap-1"><Layers size={10} /> Exploded View</p>
-              </div>
-            </div>
-            <Link to="/device-catalogue"
-              className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-black text-white transition-all"
-              style={{ background: "linear-gradient(135deg,#7c3aed,#2563eb)", boxShadow: "0 4px 20px rgba(124,58,237,0.35)" }}>
-              <Wrench size={13} /> Browse Devices →
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* ── 3D Feature Cube ── */}
+{/* ── 3D Feature Cube ── */}
       <section className="py-16 px-6 flex flex-col items-center">
         <p className="text-xs font-bold uppercase tracking-widest text-slate-500 mb-2">Platform Overview</p>
         <h2 className="text-3xl font-black text-white mb-2 text-center">Every Feature. One Platform.</h2>
