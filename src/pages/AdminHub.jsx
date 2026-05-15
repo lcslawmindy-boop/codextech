@@ -66,6 +66,7 @@ const ADMIN_SECTIONS = [
     category: "Build Operations",
     color: "#ec4899",
     items: [
+      { path: "/admin-forged-ip", icon: <Zap size={20} />, label: "Forged IP Library", desc: "All AI-forged hybrid inventions — PDF export, status management", badge: "⚡ NEW" },
       { path: "/build-tracker", icon: <Settings size={20} />, label: "Build Tracker", desc: "Track invention build projects, parts & milestones", badge: "Ops" },
       { path: "/material-sourcing", icon: <ShoppingCart size={20} />, label: "Material Sourcing", desc: "Order parts from all BOMs with vendor links & 10% commission tracking", badge: "NEW" },
       { path: "/trz-patent", icon: <FileText size={20} />, label: "TRZ Patent PPA", desc: "Provisional patent application management & figures", badge: "Patent" },
