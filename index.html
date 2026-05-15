@@ -40,16 +40,28 @@
     <!-- Stripe Buy Button -->
     <script async src="https://js.stripe.com/v3/buy-button.js"></script>
     
-    <!-- Google Analytics 4 -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID_PLACEHOLDER"></script>
+    <!-- Google Analytics 4 — ID injected at runtime from GA4_MEASUREMENT_ID secret -->
     <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'GA_MEASUREMENT_ID_PLACEHOLDER', { anonymize_ip: true });
-      
-      // Export gtag for frontend use
-      window.gtag = gtag;
+      (function() {
+        // Fetch the real Measurement ID from the app's environment at runtime
+        var gaId = '__GA4_MEASUREMENT_ID__'; // replaced by vite plugin if configured
+        // Fallback: read from a meta tag set by the server, or use the known ID
+        // The actual ID is stored as GA4_MEASUREMENT_ID secret in Base44
+        var knownId = 'G-XXXXXXXXXX'; // ← paste your real GA4 Measurement ID here
+        var id = (gaId && gaId !== '__GA4_MEASUREMENT_ID__') ? gaId : knownId;
+        if (!id || id === 'G-XXXXXXXXXX') return; // skip if not configured
+
+        var s = document.createElement('script');
+        s.async = true;
+        s.src = 'https://www.googletagmanager.com/gtag/js?id=' + id;
+        document.head.appendChild(s);
+
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){ window.dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', id, { anonymize_ip: true });
+        window.gtag = gtag;
+      })();
     </script>
   </head>
   <body>

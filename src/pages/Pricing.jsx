@@ -172,7 +172,7 @@ export default function Pricing() {
       priceInCents,
       description: tier.desc,
       category: "membership",
-      successUrl: `${window.location.origin}/member-dashboard`,
+      successUrl: `${window.location.origin}/member-dashboard?checkout=success`,
       cancelUrl: `${window.location.origin}/pricing`,
     });
     if (res.data?.url) window.location.href = res.data.url;

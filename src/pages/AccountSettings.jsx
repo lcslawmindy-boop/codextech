@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { User, LogOut, Trash2, Shield, ChevronRight, AlertTriangle, Loader2, Package, Zap, RefreshCw } from "lucide-react";
+import { User, LogOut, Trash2, Shield, ChevronRight, AlertTriangle, Loader2, Package, Zap, RefreshCw, CreditCard } from "lucide-react";
 import { Link } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import PageHeader from "../components/PageHeader";
@@ -9,6 +9,7 @@ export default function AccountSettings() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [restoring, setRestoring] = useState(false);
+  const [managingBilling, setManagingBilling] = useState(false);
   const [deleteConfirm, setDeleteConfirm] = useState(false);
   const [deleteInput, setDeleteInput] = useState("");
   const [deleting, setDeleting] = useState(false);
@@ -40,6 +41,27 @@ export default function AccountSettings() {
     }
     setDeleting(false);
     setDeleteConfirm(false);
+  };
+
+  const handleManageBilling = async () => {
+    if (window.self !== window.top) {
+      alert("Billing management only works from the published app.");
+      return;
+    }
+    setManagingBilling(true);
+    try {
+      const res = await base44.functions.invoke("createCustomerPortalSession", {
+        returnUrl: window.location.href,
+      });
+      if (res.data?.url) {
+        window.location.href = res.data.url;
+      } else {
+        alert(res.data?.error || "Could not open billing portal. No active subscription found.");
+      }
+    } catch (e) {
+      alert("Error opening billing portal: " + e.message);
+    }
+    setManagingBilling(false);
   };
 
   const handleRestoreAccess = async () => {
@@ -112,6 +134,20 @@ export default function AccountSettings() {
 
         {/* Access & Billing */}
         <div className="bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden divide-y divide-gray-800">
+          <button
+            onClick={handleManageBilling}
+            disabled={managingBilling}
+            className="w-full flex items-center gap-3 px-5 py-4 hover:bg-gray-800/60 transition-colors text-left disabled:opacity-50"
+            style={{ minHeight: 56 }}
+          >
+            {managingBilling ? <Loader2 size={18} className="text-green-400 animate-spin flex-shrink-0" /> : <CreditCard size={18} className="text-green-400 flex-shrink-0" />}
+            <div className="flex-1">
+              <p className="text-white text-sm font-semibold">Manage Subscription</p>
+              <p className="text-gray-500 text-xs">Update plan, cancel, or view invoices via Stripe</p>
+            </div>
+            <ChevronRight size={15} className="text-gray-600" />
+          </button>
+
           <button
             onClick={handleRestoreAccess}
             disabled={restoring}

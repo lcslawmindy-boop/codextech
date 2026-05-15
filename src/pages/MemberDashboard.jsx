@@ -53,6 +53,12 @@ export default function MemberDashboard() {
 
   useEffect(() => {
     base44.auth.me().then(u => setUser(u)).catch(() => {});
+
+    // If redirected here after a successful Stripe checkout, re-verify access
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("checkout") === "success") {
+      base44.functions.invoke("restoreAccess", {}).catch(() => {});
+    }
   }, []);
 
   const firstName = user?.full_name?.split(" ")[0] || "Researcher";
