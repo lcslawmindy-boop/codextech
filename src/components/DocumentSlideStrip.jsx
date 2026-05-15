@@ -69,7 +69,7 @@ export default function DocumentSlideStrip({ reverse = false }) {
 
   useEffect(() => {
     const SPEED = 0.35;
-    const CARD_H = 170;
+    const CARD_H = 125;
     const singleSetHeight = CARD_DATA.length * CARD_H;
 
     const step = () => {
@@ -87,13 +87,13 @@ export default function DocumentSlideStrip({ reverse = false }) {
   return (
     <div
       className="hidden lg:block flex-shrink-0 overflow-hidden relative"
-      style={{ width: 230, height: "100vh", position: "sticky", top: 0 }}
+      style={{ width: 180, height: "100vh", position: "sticky", top: 0 }}
     >
       {/* Top fade */}
-      <div className="absolute top-0 left-0 right-0 h-16 z-10 pointer-events-none"
+      <div className="absolute top-0 left-0 right-0 h-14 z-10 pointer-events-none"
         style={{ background: "linear-gradient(to bottom, #020617, transparent)" }} />
       {/* Bottom fade */}
-      <div className="absolute bottom-0 left-0 right-0 h-16 z-10 pointer-events-none"
+      <div className="absolute bottom-0 left-0 right-0 h-14 z-10 pointer-events-none"
         style={{ background: "linear-gradient(to top, #020617, transparent)" }} />
 
       <div ref={trackRef} style={{ willChange: "transform" }}>
@@ -101,50 +101,69 @@ export default function DocumentSlideStrip({ reverse = false }) {
           <div
             key={i}
             style={{
-              marginBottom: 10,
-              width: 220,
+              marginBottom: 7,
+              width: 170,
               marginLeft: 5,
-              height: 160,
-              border: `1px solid ${card.color}30`,
-              borderLeft: `3px solid ${card.color}`,
-              background: "linear-gradient(135deg, #0f172a 0%, #1e293b 100%)",
-              borderRadius: 8,
-              padding: "12px 14px",
+              height: 118,
+              border: `1px solid ${card.color}`,
+              borderRadius: 7,
+              padding: "8px 10px",
               display: "flex",
               flexDirection: "column",
               justifyContent: "space-between",
               flexShrink: 0,
+              background: "#050d1a",
+              boxShadow: `0 0 10px ${card.color}55, inset 0 0 12px ${card.color}10`,
+              position: "relative",
+              overflow: "hidden",
             }}
           >
+            {/* Neon top bar */}
+            <div style={{
+              position: "absolute", top: 0, left: 0, right: 0, height: 2,
+              background: `linear-gradient(90deg, transparent, ${card.color}, transparent)`,
+              boxShadow: `0 0 8px ${card.color}`,
+            }} />
+
             <div>
-              <span
-                style={{
-                  fontSize: 9,
-                  fontWeight: 800,
-                  letterSpacing: "0.12em",
-                  color: card.color,
-                  background: `${card.color}18`,
-                  padding: "2px 7px",
-                  borderRadius: 4,
-                  display: "inline-block",
-                  marginBottom: 8,
-                }}
-              >
+              {/* Lit-up tag header */}
+              <span style={{
+                fontSize: 8,
+                fontWeight: 900,
+                letterSpacing: "0.15em",
+                color: "#000",
+                background: card.color,
+                padding: "2px 6px",
+                borderRadius: 3,
+                display: "inline-block",
+                marginBottom: 6,
+                boxShadow: `0 0 6px ${card.color}`,
+                textTransform: "uppercase",
+              }}>
                 {card.tag}
               </span>
-              <p style={{ color: "#f1f5f9", fontSize: 12, fontWeight: 700, lineHeight: 1.35, marginBottom: 6 }}>
+              {/* Neon-lit title */}
+              <p style={{
+                color: card.color,
+                fontSize: 10,
+                fontWeight: 800,
+                lineHeight: 1.3,
+                marginBottom: 4,
+                textShadow: `0 0 8px ${card.color}99`,
+                letterSpacing: "0.01em",
+              }}>
                 {card.title}
               </p>
-              <p style={{ color: "#94a3b8", fontSize: 10, lineHeight: 1.4 }}>
+              <p style={{ color: "#64748b", fontSize: 8.5, lineHeight: 1.35 }}>
                 {card.subtitle}
               </p>
             </div>
-            <div style={{ display: "flex", alignItems: "center", gap: 6, marginTop: 8 }}>
-              <div style={{ width: 6, height: 6, borderRadius: "50%", backgroundColor: card.color, flexShrink: 0 }} />
-              <span style={{ color: "#475569", fontSize: 9, letterSpacing: "0.05em" }}>
-                AETHON APEX IP — RESEARCH PLATFORM
-              </span>
-            </div>
+
+            {/* Bottom neon line */}
+            <div style={{
+              position: "absolute", bottom: 0, left: 0, right: 0, height: 1,
+              background: `linear-gradient(90deg, transparent, ${card.color}80, transparent)`,
+            }} />
           </div>
         ))}
       </div>
