@@ -9,7 +9,7 @@ import { base44 } from "@/api/base44Client";
 // ResearchSlideStrip removed — now using DocumentSlideStrip on both sides
 import DocumentSlideStrip from "../components/DocumentSlideStrip";
 import PatentSlideStrip from "../components/PatentSlideStrip";
-import DeviceSlideStrip from "../components/DeviceSlideStrip";
+import PlatformOverviewCarousel from "../components/PlatformOverviewCarousel";
 import FeatureCube3D from "../components/FeatureCube3D";
 import IPEmpireValueSection from "../components/IPEmpireValueSection";
 
@@ -730,8 +730,7 @@ export default function FunnelHome() {
         </div>
       </footer>
       </div>
-      <DocumentSlideStrip />
-      <DeviceSlideStrip />
+      <PlatformOverviewCarousel />
     </div>
   );
 }
