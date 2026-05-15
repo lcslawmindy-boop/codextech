@@ -339,7 +339,6 @@ export default function FunnelHome() {
 
   return (
     <div className="min-h-screen bg-slate-950 text-white flex">
-      <DocumentSlideStrip reverse />
 
       <div className="flex-1 min-w-0">
       {/* ── Urgency Bar ── */}
