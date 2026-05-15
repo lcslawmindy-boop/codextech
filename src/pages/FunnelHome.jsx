@@ -752,6 +752,7 @@ export default function FunnelHome() {
           <a href="mailto:info@zetithapex.io" className="hover:text-slate-400">Contact Investors</a>
         </div>
       </footer>
+      </div>
     </div>
   );
 }
