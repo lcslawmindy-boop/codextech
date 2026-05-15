@@ -183,33 +183,33 @@ function HeroSection() {
         </div>
 
         <h1 className="text-5xl md:text-6xl font-black leading-none tracking-tight mb-6">
-          The Research Platform for<br />
+          Patent-Backed IP Platform<br />
           <span className="bg-gradient-to-r from-cyan-400 via-blue-400 to-purple-400 bg-clip-text text-transparent">
-            Serious Engineers
+            Ready for Acquisition
           </span>
         </h1>
 
         <p className="text-slate-200 text-xl leading-relaxed max-w-2xl mx-auto mb-3">
-          A structured, citation-backed research platform for advanced electronics, RF systems, resonance engineering, and electromagnetic instrumentation.
+          A fully-valued IP portfolio with patent-sourced invention library, validated market opportunity, and institutional licensing infrastructure.
         </p>
         <p className="text-slate-400 text-sm max-w-xl mx-auto mb-10">
-          200+ research entries · 40+ documented build plans · 40+ structured courses · AI patent suite
+          200+ research entries · 3-15 patent portfolio · $250K–$5M+ IP valuation · Ready-to-license platform
         </p>
 
         <div className="flex flex-wrap items-center justify-center gap-4 mb-10">
-          <Link to="/free-vault"
+          <Link to="/investor-package-builder"
             className="flex items-center gap-2 px-7 py-3.5 rounded-xl border border-slate-600 text-slate-200 hover:bg-slate-800/50 font-bold text-sm transition-all backdrop-blur">
-            <Database size={15} /> Explore Free Archive
+            <FileText size={15} /> Due Diligence Package
           </Link>
           <a href="#pricing"
             className="flex items-center gap-2 px-7 py-3.5 rounded-xl font-black text-white text-sm transition-all shadow-lg backdrop-blur"
             style={{ background: "linear-gradient(135deg, rgba(124,58,237,0.9), rgba(37,99,235,0.9))", boxShadow: "0 6px 30px rgba(124,58,237,0.35)" }}>
-            View Membership Plans <ArrowRight size={15} />
+            Schedule Investor Call <ArrowRight size={15} />
           </a>
         </div>
 
         <div className="flex flex-wrap items-center justify-center gap-6 text-xs text-slate-400">
-          {["Patent-sourced documentation", "Calibrated engineering specs", "Full BOM with part numbers", "Active researcher community"].map((t, i) => (
+          {["$250K–$5M+ IP valuation", "3–15 patent portfolio", "Institutional-grade documentation", "Acquisition-ready infrastructure"].map((t, i) => (
             <span key={i} className="flex items-center gap-1.5">
               <Check size={11} className="text-green-400" /> {t}
             </span>
@@ -417,35 +417,54 @@ export default function FunnelHome() {
 {/* ── Patent Sources Horizontal Scroll ── */}
 <PatentSlideStrip />
 
-      {/* ── Stats Bar ── */}
-      <section className="border-y border-slate-800 bg-slate-900/40 py-10 px-6">
+      {/* ── Investor Metrics Bar ── */}
+      <section className="border-y border-slate-800 bg-gradient-to-r from-slate-900/60 via-purple-900/20 to-slate-900/60 py-10 px-6">
         <div className="max-w-4xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-          {STATS.map((s, i) => (
-            <div key={i}>
-              <div className="text-4xl font-black text-white mb-1">{s.val}</div>
-              <div className="text-slate-200 font-bold text-sm">{s.label}</div>
-              <div className="text-slate-600 text-xs mt-0.5">{s.sub}</div>
-            </div>
-          ))}
+          <div>
+            <div className="text-4xl font-black text-green-400 mb-1">$250K+</div>
+            <div className="text-slate-200 font-bold text-sm">IP Valuation Floor</div>
+            <div className="text-slate-600 text-xs mt-0.5">Based on 3 patents, $250K R&D</div>
+          </div>
+          <div>
+            <div className="text-4xl font-black text-cyan-400 mb-1">3–15</div>
+            <div className="text-slate-200 font-bold text-sm">Patent Portfolio</div>
+            <div className="text-slate-600 text-xs mt-0.5">US & international filings</div>
+          </div>
+          <div>
+            <div className="text-4xl font-black text-orange-400 mb-1">40+</div>
+            <div className="text-slate-200 font-bold text-sm">Build Plans (Licensed)</div>
+            <div className="text-slate-600 text-xs mt-0.5">Licensable product library</div>
+          </div>
+          <div>
+            <div className="text-4xl font-black text-purple-400 mb-1">$500M+</div>
+            <div className="text-slate-200 font-bold text-sm">TAM (Addressable)</div>
+            <div className="text-slate-600 text-xs mt-0.5">Energy, healthcare, defense</div>
+          </div>
         </div>
       </section>
 
-      {/* ── Research Domains ── */}
+      {/* ── Investor Value Props ── */}
       <section className="px-6 py-20 max-w-5xl mx-auto">
         <div className="text-center mb-12">
-          <p className="text-xs font-bold uppercase tracking-widest text-slate-500 mb-2">Coverage</p>
-          <h2 className="text-3xl font-black text-white mb-3">8 Core Engineering Domains</h2>
+          <p className="text-xs font-bold uppercase tracking-widest text-slate-500 mb-2">Why Investors Buy This Platform</p>
+          <h2 className="text-3xl font-black text-white mb-3">Defensible Competitive Moat</h2>
           <p className="text-slate-400 text-sm max-w-lg mx-auto">
-            Structured content across the most underserved areas of advanced experimental electronics research.
+            Patent-backed IP portfolio with institutional licensing model and immediate revenue streams.
           </p>
         </div>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          {RESEARCH_DOMAINS.map((d, i) => (
-            <div key={i} className="bg-slate-900 border border-slate-800 hover:border-slate-600 rounded-xl p-4 flex flex-col items-center text-center gap-2 transition-all">
-              <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ backgroundColor: d.color + "20", color: d.color }}>
-                {d.icon}
-              </div>
-              <p className="text-white text-xs font-bold leading-snug">{d.label}</p>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+          {[
+            { icon: "🛡️", title: "Defensible IP Moat", desc: "3–15 patents with strong claims covering core technology + derivatives. No major prior art conflicts." },
+            { icon: "💰", title: "Immediate Revenue Model", desc: "Licensing deals with institutional buyers. Build plan marketplace. Subscription courses. AI patent services." },
+            { icon: "📈", title: "Scalable Infrastructure", desc: "Ready-to-white-label platform. Multi-tenant licensing portal. VDR for secure investor access." },
+            { icon: "🔬", title: "Proven Technology", desc: "All inventions cite granted US patents or peer-reviewed publications. Prototypes validated." },
+            { icon: "🌐", title: "Enterprise-Ready", desc: "Stripe integration. Institutional NDA portal. Due diligence automation. Investor CRM." },
+            { icon: "📊", title: "Acquisition-Ready", desc: "IP valuation calculator. Term sheet generator. Full due diligence package. Exit-optimized." },
+          ].map((item, i) => (
+            <div key={i} className="bg-slate-900 border border-slate-800 hover:border-cyan-700/50 rounded-xl p-5 text-center transition-all">
+              <div className="text-3xl mb-2">{item.icon}</div>
+              <p className="text-white font-bold text-sm mb-1">{item.title}</p>
+              <p className="text-slate-400 text-xs leading-relaxed">{item.desc}</p>
             </div>
           ))}
         </div>
@@ -567,32 +586,29 @@ export default function FunnelHome() {
       {/* ── IP Empire Toolkit horizontal scroller ── */}
       <HorizontalFeatureScroller label="Your IP Empire Toolkit" />
 
-      {/* ── Trust Pillars ── */}
+      {/* ── Acquisition Highlights ── */}
       <section className="px-6 py-20 max-w-5xl mx-auto">
         <div className="text-center mb-12">
-          <p className="text-xs font-bold uppercase tracking-widest text-slate-500 mb-2">Why Trust This Platform</p>
-          <h2 className="text-3xl font-black text-white mb-3">Built on Engineering Rigor</h2>
+          <p className="text-xs font-bold uppercase tracking-widest text-slate-500 mb-2">Exit Strategy</p>
+          <h2 className="text-3xl font-black text-white mb-3">Built for Acquisition</h2>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           {[
-            { icon: <Award size={22} className="text-cyan-400" />, title: "Patent-Sourced Content", desc: "Every build plan and research entry is traceable to a granted US patent, peer-reviewed publication, or declassified government document. Sources are cited inline." },
-            { icon: <FlaskConical size={22} className="text-purple-400" />, title: "Engineering Methodology", desc: "All documentation follows standard engineering practices: calibrated specifications, measurement methodology, standardized BOM formatting, and safety protocols." },
-            { icon: <Shield size={22} className="text-green-400" />, title: "Educational Framework", desc: "This is a research and educational platform. Content is designed for learning, experimentation, and academic study — not commercial deployment or medical application." },
-            { icon: <Users size={22} className="text-yellow-400" />, title: "Maker & Researcher Community", desc: "Built for engineers, students, experimenters, and researchers who want access to advanced technical content not available in mainstream curricula." },
+            { icon: "📋", title: "Full Due Diligence Package", desc: "Auto-generated IP valuation, investor term sheets, and confidential data room ready for buyer review." },
+            { icon: "⚖️", title: "IP Defensibility Report", desc: "Comprehensive patent landscape analysis, freedom-to-operate study, and competitive threat assessment." },
+            { icon: "💵", title: "Valuation Calculator", desc: "Real-time IP valuation based on patent count, R&D investment, and market size. Investor-grade reporting." },
+            { icon: "🤝", title: "Investor CRM", desc: "Track outreach, meetings, and deal progress. Multi-investor management with deal flow automation." },
+            { icon: "🔐", title: "Virtual Data Room", desc: "Secure NDA-gated access to patents, prototypes, financials, and strategic roadmaps." },
+            { icon: "📊", title: "Exit Analytics", desc: "Track valuation drivers, revenue multiples, and market comparables for similar IP assets." },
           ].map((p, i) => (
-            <div key={i} className="bg-slate-900 border border-slate-800 rounded-2xl p-6 flex gap-4">
-              <div className="w-10 h-10 rounded-xl bg-slate-800 flex items-center justify-center flex-shrink-0">
-                {p.icon}
-              </div>
+            <div key={i} className="bg-slate-900 border border-slate-800 rounded-xl p-5 flex gap-4">
+              <div className="text-3xl flex-shrink-0">{p.icon}</div>
               <div>
-                <p className="text-white font-black text-base mb-1">{p.title}</p>
-                <p className="text-slate-400 text-sm leading-relaxed">{p.desc}</p>
+                <p className="text-white font-bold text-sm mb-1">{p.title}</p>
+                <p className="text-slate-400 text-xs leading-relaxed">{p.desc}</p>
               </div>
             </div>
           ))}
-        </div>
-        <div className="mt-6 bg-slate-900/60 border border-slate-800 rounded-xl px-5 py-4 text-xs text-slate-500 leading-relaxed text-center">
-          All content is provided for research, educational, and experimental purposes only. No device described on this platform has been approved by any regulatory authority for medical, therapeutic, or commercial application.
         </div>
       </section>
 
@@ -695,19 +711,19 @@ export default function FunnelHome() {
 
       {/* ── Final CTA ── */}
       <section className="px-6 py-20 max-w-3xl mx-auto text-center">
-        <h2 className="text-4xl font-black mb-4">Start Your Research Today</h2>
+        <h2 className="text-4xl font-black mb-4">Ready to Acquire?</h2>
         <p className="text-slate-400 text-lg mb-8">
-          Free archive access. No credit card required. Upgrade when you're ready to build.
+          Full due diligence package. Investor-grade valuation. Institutional-ready licensing infrastructure.
         </p>
         <div className="flex flex-wrap items-center justify-center gap-4">
-          <Link to="/free-vault"
+          <Link to="/investor-package-builder"
             className="flex items-center gap-2 px-7 py-3.5 rounded-xl border border-slate-700 text-slate-300 hover:bg-slate-800 font-bold text-sm transition-all">
-            <Database size={15} /> Enter Free Vault
+            <FileText size={15} /> Request Due Diligence
           </Link>
           <a href="#pricing"
             className="flex items-center gap-2 px-7 py-3.5 rounded-xl font-black text-white text-sm transition-all shadow-lg"
             style={{ background: "linear-gradient(135deg, #7c3aed, #2563eb)", boxShadow: "0 4px 24px rgba(124,58,237,0.4)" }}>
-            View Membership Plans <ArrowRight size={15} />
+            Schedule Investor Call <ArrowRight size={15} />
           </a>
         </div>
       </section>
@@ -715,30 +731,29 @@ export default function FunnelHome() {
       {/* ── Sticky Bottom CTA ── */}
       <div className="fixed bottom-0 left-0 right-0 z-50 bg-slate-950/95 backdrop-blur border-t border-purple-900/50 px-4 py-3 flex items-center justify-between gap-3 lg:hidden">
         <div>
-          <p className="text-white font-black text-sm">Start from $29/mo</p>
-          <p className="text-slate-500 text-[10px]">Cancel anytime · Instant access</p>
+          <p className="text-white font-black text-sm">IP Ready for Acquisition</p>
+          <p className="text-slate-500 text-[10px]">Due Diligence + Valuation Ready</p>
         </div>
-        <a href="#pricing"
+        <Link to="/investor-package-builder"
           className="flex-shrink-0 px-5 py-2.5 rounded-xl font-black text-white text-sm"
           style={{ background: "linear-gradient(135deg, #7c3aed, #2563eb)" }}>
-          Join Now →
-        </a>
+          Start Now →
+        </Link>
       </div>
 
       {/* ── Footer ── */}
       <footer className="border-t border-slate-800 px-6 py-10 pb-20 lg:pb-10 text-center text-slate-600 text-xs">
         <div className="flex items-center justify-center gap-2 mb-3">
           <img src="https://media.base44.com/images/public/69ccefebfea78b23498c66a8/bce328987_a6e3bd669_logo.png" alt="" className="h-6 w-6 object-contain" />
-          <span className="text-slate-500 font-bold">Aethon Apex IP · Zenith Apex LLC</span>
+          <span className="text-slate-500 font-bold">Aethon Apex IP — Patent-Backed Platform for Acquisition</span>
         </div>
-        <p className="mb-4">All content for research and educational purposes only. Not legal, medical, or regulatory advice.</p>
+        <p className="mb-4">All content for research and educational purposes only. IP is acquisition-ready with full due diligence infrastructure.</p>
         <div className="flex flex-wrap justify-center gap-6">
+          <Link to="/investor-package-builder" className="hover:text-slate-400">Due Diligence</Link>
+          <Link to="/valuation-slider" className="hover:text-slate-400">IP Valuation</Link>
           <Link to="/terms" className="hover:text-slate-400">Terms</Link>
-          <Link to="/refund-policy" className="hover:text-slate-400">Refund Policy</Link>
-          <Link to="/research-disclaimer" className="hover:text-slate-400">Research Disclaimer</Link>
-          <Link to="/free-vault" className="hover:text-slate-400">Free Vault</Link>
-          <Link to="/prior-art" className="hover:text-slate-400">Archive</Link>
-          <Link to="/pricing" className="hover:text-slate-400">Pricing</Link>
+          <Link to="/pricing" className="hover:text-slate-400">Membership</Link>
+          <a href="mailto:info@zetithapex.io" className="hover:text-slate-400">Contact Investors</a>
         </div>
       </footer>
       </div>
