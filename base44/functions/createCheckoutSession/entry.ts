@@ -49,11 +49,14 @@ Deno.serve(async (req) => {
         quantity: 1,
       }];
     } else if (priceId) {
-      // One-time payment using a real Stripe price ID (physical goods → collect shipping)
+      // One-time payment using a real Stripe price ID
       sessionParams.mode = 'payment';
-      sessionParams.shipping_address_collection = {
-        allowed_countries: ['US', 'CA', 'GB', 'AU', 'DE', 'FR', 'NL', 'SE', 'NO', 'DK', 'FI', 'JP', 'SG', 'NZ']
-      };
+      // Only collect shipping for physical goods categories
+      if (category === 'kit' || category === 'physical') {
+        sessionParams.shipping_address_collection = {
+          allowed_countries: ['US', 'CA', 'GB', 'AU', 'DE', 'FR', 'NL', 'SE', 'NO', 'DK', 'FI', 'JP', 'SG', 'NZ']
+        };
+      }
       sessionParams.line_items = [{ price: priceId, quantity: 1 }];
     } else {
       // One-time payment using dynamic price data

@@ -61,15 +61,15 @@ const TIERS = [
     annual: 39,
     color: "#a855f7",
     badge: "MOST POPULAR",
-    desc: "5 rotating courses + 5 rotating build plans monthly",
+    desc: "3 courses + 3 build plans + AI Patent Suite + 5 Forge sessions",
     features: [
-      "5 structured engineering courses (rotating monthly)",
-      "5 complete build plans with BOM & schematics",
-      "25% discount on à la carte content",
+      "3 structured engineering courses (rotating monthly)",
+      "3 complete build plans with BOM & schematics",
+      "AI Patent Suite — drafting, analysis & monitoring",
+      "5 Invention Forge sessions per month",
       "Community forum full access",
-      "Monthly new course + build drop",
     ],
-    locked: ["AI Patent Suite", "Invention Forge sessions"],
+    locked: [],
     highlight: true,
   },
   {
@@ -79,12 +79,12 @@ const TIERS = [
     annual: 119,
     color: "#f97316",
     badge: "BEST VALUE",
-    desc: "Full platform — 10 courses + 10 builds + AI patent suite",
+    desc: "6 courses + 6 build plans + AI Patent Suite + 20 Forge sessions",
     features: [
-      "10 structured engineering courses (rotating)",
-      "10 full build plans with BOM, schematics & sourcing",
+      "6 structured engineering courses (rotating)",
+      "6 full build plans with BOM, schematics & sourcing",
       "AI Patent Suite — drafting, analysis & threat monitoring",
-      "5 Invention Forge sessions per month",
+      "20 Invention Forge sessions per month",
       "Priority support & expert forum access",
       "Early access to all new content drops",
     ],
@@ -217,17 +217,23 @@ function TierCard({ tier, isAnnual }) {
   const [loading, setLoading] = useState(false);
   const price = isAnnual ? tier.annual : tier.monthly;
 
+  const PRICE_IDS = {
+    explorer:   { monthly: "price_1TXTFLBkbCWuj2nHKPYdnfH0", annual: "price_1TXTFLBkbCWuj2nHlkPxvXC8" },
+    research:   { monthly: "price_1TXTFLBkbCWuj2nHbK0MpT7x", annual: "price_1TXTFLBkbCWuj2nH9LC0ABm0" },
+    pro:        { monthly: "price_1TXTFLBkbCWuj2nHHKfUYuoV", annual: "price_1TXTFLBkbCWuj2nHXEZn1hEc" },
+  };
+
   const handleCheckout = async () => {
     if (window.self !== window.top) { alert("Checkout only works from the published app."); return; }
     setLoading(true);
     try {
-      const priceInCents = isAnnual ? Math.round(tier.annual * 12 * 100) : Math.round(tier.monthly * 100);
+      const priceId = PRICE_IDS[tier.id]?.[isAnnual ? "annual" : "monthly"];
       const res = await base44.functions.invoke("createCheckoutSession", {
         title: `Aethon Apex IP — ${tier.name}`,
-        priceInCents,
-        description: tier.desc,
+        priceId,
+        mode: "subscription",
         category: "membership",
-        successUrl: `${window.location.origin}/member-dashboard`,
+        successUrl: `${window.location.origin}/member-dashboard?checkout=success`,
         cancelUrl: `${window.location.origin}/start`,
       });
       if (res.data?.url) window.location.href = res.data.url;

@@ -1244,10 +1244,15 @@ async function generateMasterPDF(allInventions) {
   doc.save(`ZenithApex_MASTER_Build_Plans_${new Date().toISOString().slice(0, 10)}.pdf`);
 }
 
+// Map invention titles to Stripe one-time price IDs
+const INVENTION_PRICE_IDS = {
+  "MEG Replication Parts Kit": "price_MEG",          // replace with real price ID
+  "Scalar EM Lab Starter Kit": "price_scalar",       // replace with real price ID
+};
+
 function BuyNowButton({ invention }) {
   const [loading, setLoading] = useState(false);
 
-  // Parse price string like "$297" or "$1,097" into cents
   const priceStr = invention?.price || "$97";
   const priceInCents = Math.round(parseFloat(priceStr.replace(/[$,]/g, "")) * 100);
   const priceDisplay = priceStr.replace(",", "");
@@ -1265,7 +1270,8 @@ function BuyNowButton({ invention }) {
         priceInCents,
         description: invention?.tagline || "Full invention build plan with step-by-step instructions and BOM",
         category: "Invention",
-        successUrl: `${origin}/invention-plans`,
+        mode: "payment",
+        successUrl: `${origin}/invention-plans?purchased=1`,
         cancelUrl: `${origin}/invention-plans`
       });
       if (res.data?.url) window.location.href = res.data.url;
