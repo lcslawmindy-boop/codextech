@@ -183,6 +183,7 @@ import OSShell from './components/OSShell';
 import IntelligenceLayer from './pages/IntelligenceLayer';
 import ConversionAnalytics from './pages/ConversionAnalytics';
 import ValuationSlider from './pages/ValuationSlider';
+import InvestorPackageBuilder from './pages/InvestorPackageBuilder';
 
 
 const AuthenticatedApp = () => {
@@ -390,6 +391,7 @@ const AuthenticatedApp = () => {
             <Route path="/revenue-audit" element={<RevenueAudit />} />
             <Route path="/conversion-analytics" element={<ConversionAnalytics />} />
           <Route path="/valuation-slider" element={<ValuationSlider />} />
+          <Route path="/investor-package-builder" element={<InvestorPackageBuilder />} />
           </Route>
 
           {/* Scalar Venture Vault Routes */}
