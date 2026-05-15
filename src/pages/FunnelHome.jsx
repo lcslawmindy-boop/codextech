@@ -8,6 +8,7 @@ import {
 import { base44 } from "@/api/base44Client";
 // ResearchSlideStrip removed — now using DocumentSlideStrip on both sides
 import DocumentSlideStrip from "../components/DocumentSlideStrip";
+import PatentSlideStrip from "../components/PatentSlideStrip";
 import DeviceSlideStrip from "../components/DeviceSlideStrip";
 import FeatureCube3D from "../components/FeatureCube3D";
 import IPEmpireValueSection from "../components/IPEmpireValueSection";
@@ -345,6 +346,7 @@ export default function FunnelHome() {
 
   return (
     <div className="min-h-screen bg-slate-950 text-white flex">
+      <PatentSlideStrip />
 
       <div className="flex-1 min-w-0">
       {/* ── Urgency Bar ── */}
