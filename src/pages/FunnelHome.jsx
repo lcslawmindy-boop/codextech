@@ -8,6 +8,7 @@ import {
 import { base44 } from "@/api/base44Client";
 // ResearchSlideStrip removed — now using DocumentSlideStrip on both sides
 import DocumentSlideStrip from "../components/DocumentSlideStrip";
+import DeviceSlideStrip from "../components/DeviceSlideStrip";
 
 const HERO_BG_IMAGES = [
   "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/fee7eab82_sleek-mri-scanner-room-enhanced-holographic-displays-brain-scans-other-medical-data-embodying-cutting-edge-314416241.webp",
@@ -660,6 +661,7 @@ export default function FunnelHome() {
       </footer>
       </div>
       <DocumentSlideStrip />
+      <DeviceSlideStrip />
     </div>
   );
 }
