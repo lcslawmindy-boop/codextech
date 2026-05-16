@@ -1,0 +1,142 @@
+{
+  "name": "BriefPackContent",
+  "type": "object",
+  "properties": {
+    "pack_id": {
+      "type": "string",
+      "description": "The pack id from briefPackData.js"
+    },
+    "pack_title": {
+      "type": "string"
+    },
+    "overview": {
+      "type": "string",
+      "description": "Full overview and introduction section"
+    },
+    "theory_deep": {
+      "type": "string",
+      "description": "Deep theoretical background (physics, prior art, patent references)"
+    },
+    "system_architecture": {
+      "type": "string",
+      "description": "Full system architecture description"
+    },
+    "bom": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "ref": {
+            "type": "string"
+          },
+          "component": {
+            "type": "string"
+          },
+          "spec": {
+            "type": "string"
+          },
+          "qty": {
+            "type": "string"
+          },
+          "source": {
+            "type": "string"
+          },
+          "notes": {
+            "type": "string"
+          }
+        }
+      },
+      "description": "Full bill of materials with part numbers and specs"
+    },
+    "assembly_steps": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "step": {
+            "type": "integer"
+          },
+          "title": {
+            "type": "string"
+          },
+          "detail": {
+            "type": "string"
+          },
+          "caution": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "circuit_description": {
+      "type": "string",
+      "description": "Detailed circuit/winding/topology description"
+    },
+    "measurement_protocols": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "test": {
+            "type": "string"
+          },
+          "equipment": {
+            "type": "string"
+          },
+          "procedure": {
+            "type": "string"
+          },
+          "expected_result": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "safety_guidelines": {
+      "type": "string"
+    },
+    "troubleshooting": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "symptom": {
+            "type": "string"
+          },
+          "likely_cause": {
+            "type": "string"
+          },
+          "remedy": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "references": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "generating",
+        "complete",
+        "error"
+      ],
+      "default": "pending"
+    },
+    "word_count": {
+      "type": "integer"
+    },
+    "estimated_pages": {
+      "type": "integer"
+    }
+  },
+  "required": [
+    "pack_id",
+    "pack_title"
+  ]
+}

@@ -4,6 +4,8 @@ import { ArrowLeft, Download, Plus, Trash2, Check, X, Search, RefreshCw, FileTex
 import { base44 } from "@/api/base44Client";
 import { BRIEF_PACKS } from "../lib/briefPackData";
 import { jsPDF } from "jspdf";
+import BriefPackContentGenerator from "../components/admin/BriefPackContentGenerator";
+import { generateFullMasterPDF } from "../lib/generateFullBriefPDF";
 
 function generateMasterPDF() {
   const doc = new jsPDF({ orientation: "portrait", unit: "mm", format: "a4" });
@@ -213,28 +215,52 @@ function generateMasterPDF() {
 
 function AdminMasterPdfButton() {
   const [generating, setGenerating] = useState(false);
+  const [contentMap, setContentMap] = useState({});
+  const [loaded, setLoaded] = useState(false);
+
+  useEffect(() => {
+    base44.entities.BriefPackContent.list().then(records => {
+      const map = {};
+      (records || []).forEach(r => { map[r.pack_id] = r; });
+      setContentMap(map);
+      setLoaded(true);
+    }).catch(() => setLoaded(true));
+  }, []);
+
+  const completeCount = loaded ? BRIEF_PACKS.filter(p => contentMap[p.id]?.status === 'complete').length : 0;
+  const hasFullContent = completeCount === 33;
+
   const handleGenerate = () => {
     setGenerating(true);
     setTimeout(() => {
-      generateMasterPDF();
+      if (hasFullContent) {
+        generateFullMasterPDF(contentMap);
+      } else {
+        generateMasterPDF();
+      }
       setGenerating(false);
     }, 100);
   };
+
   return (
     <div className="bg-gray-900 border-2 border-green-700/60 rounded-2xl p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
       <div>
         <p className="text-white font-black text-lg flex items-center gap-2">🔓 Admin Master PDF — All 33 Brief Packs</p>
-        <p className="text-gray-400 text-sm mt-1">Generates a complete multi-page PDF with every device build plan, sections, BOM overview, theory basis, and difficulty. Download instantly — no URL needed.</p>
+        <p className="text-gray-400 text-sm mt-1">
+          {hasFullContent
+            ? "Full AI-generated content ready — downloads ~1,400+ pages with complete BOM tables, assembly steps, measurement protocols, and references."
+            : `${completeCount}/33 packs have full AI content. Download now for metadata catalog, or generate all packs below for the full 1,400+ page version.`}
+        </p>
         <div className="flex flex-wrap gap-2 mt-3">
-          {["33 Device Plans", "1,400+ Pages", "All Sections", "All Categories", "Admin Only"].map(tag => (
+          {["33 Device Plans", hasFullContent ? "1,400+ Pages (Full)" : "Metadata Catalog", "All Sections", "All Categories", "Admin Only"].map(tag => (
             <span key={tag} className="text-xs px-2 py-1 rounded-full bg-green-950/60 border border-green-800 text-green-300 font-bold">{tag}</span>
           ))}
         </div>
       </div>
-      <button onClick={handleGenerate} disabled={generating}
+      <button onClick={handleGenerate} disabled={generating || !loaded}
         className="flex-shrink-0 flex items-center gap-2 px-6 py-3 rounded-xl bg-green-700 hover:bg-green-600 text-white font-black text-sm transition-all disabled:opacity-60 min-w-[180px] justify-center">
         <Download size={16} />
-        {generating ? "Generating…" : "Download Master PDF"}
+        {generating ? "Generating…" : hasFullContent ? "Download Full PDF (1,400p+)" : "Download Catalog PDF"}
       </button>
     </div>
   );
@@ -918,6 +944,9 @@ export default function AdminPdfAccess() {
 
         {/* Admin Master PDF Download */}
         <AdminMasterPdfButton />
+
+        {/* AI Content Generator */}
+        <BriefPackContentGenerator />
 
         {/* Master Bundle Section */}
         <MasterBundlePanel adminEmail={adminEmail} />
