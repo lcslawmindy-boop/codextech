@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { ArrowLeft, Plus, ExternalLink, Copy, Check, ChevronDown, ChevronUp, Target, DollarSign, Users, FileText, Star, ShieldCheck, LayoutTemplate } from "lucide-react";
+import { ArrowLeft, Plus, ExternalLink, Copy, Check, ChevronDown, ChevronUp, Target, DollarSign, Users, FileText, Star, ShieldCheck, LayoutTemplate, Send } from "lucide-react";
+import OutreachCRM from "../components/acquisition/OutreachCRM";
 
 const BROKERS = [
   {
@@ -648,6 +649,7 @@ export default function AcquisitionOutreachTracker() {
       {/* Tabs */}
       <div className="flex gap-1 px-5 pt-5 border-b border-gray-800 overflow-x-auto">
         {[
+          { id: "crm", label: "📨 Outreach CRM" },
           { id: "brokers", label: "IP Brokers & M&A" },
           { id: "platforms", label: "Marketplace Listings" },
           { id: "linkedin", label: "Direct Buyer Outreach" },
@@ -664,6 +666,10 @@ export default function AcquisitionOutreachTracker() {
 
       {/* Content */}
       <div className="flex-1 overflow-y-auto px-5 py-5 max-w-4xl mx-auto w-full space-y-3">
+        {tab === "crm" && (
+          <OutreachCRM outreachTemplate={OUTREACH_TEMPLATE} />
+        )}
+
         {tab === "brokers" && (
           <>
             <p className="text-gray-500 text-xs mb-4">These firms work on contingency or commission — <strong className="text-gray-300">zero money upfront</strong>. They find buyers/licensees and take a % on close.</p>
