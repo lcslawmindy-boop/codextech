@@ -106,18 +106,20 @@ const HELPERS = [
       {
         name: "Quiet Light Brokerage",
         type: "Full-service M&A broker for online businesses",
-        what: "They do everything: value your business, prep the listing, vet buyers, manage negotiations, and close the deal. You just show up for calls.",
-        cost: "No upfront cost. ~10–15% success fee on sale.",
-        action: "Email them a 1-page summary. They'll tell you within a week if they can help.",
+        what: "Quiet Light is one of the most respected brokers for selling content-driven SaaS platforms and IP-rich digital businesses in the $100K–$5M range. They assign you a dedicated advisor (all former online business owners themselves), handle the full process — valuation, listing, buyer vetting, negotiation, and close — and only get paid when you do. Their buyers are pre-qualified, serious, and actively looking. For a platform like yours (AI tools + IP library + Stripe revenue), they're a strong fit. Start by filling out their intake form — they'll respond within 2–3 business days with a free valuation call to tell you exactly what your platform is worth today and what you'd need to do to increase it.",
+        cost: "No upfront cost. ~8–12% success fee, paid only at close.",
+        action: "Fill out their intake form (5 min). Expect a free valuation call within 2–3 days.",
         link: "https://quietlight.com",
+        askingRange: "$150K – $2M realistic range for your platform type",
       },
       {
         name: "Empire Flippers",
         type: "Premium business broker (mid-market)",
-        what: "Handles $100K–$10M+ deals. Very thorough vetting process. Their buyers are serious and have capital ready.",
-        cost: "No upfront. 2–15% success fee (sliding scale).",
-        action: "Submit your business via their online form. They'll do a free valuation call.",
+        what: "Empire Flippers is the largest curated marketplace for buying and selling established online businesses, with a strong track record in the $100K–$10M+ range. They have a rigorous vetting process that actually increases buyer confidence — meaning your listing gets in front of serious, funded buyers rather than tire-kickers. They handle everything: migration support, escrow, due diligence coordination, and post-sale transition. For a platform with working Stripe infrastructure, AI tools, and documented IP, they're one of the best-positioned brokers to tell your story to the right buyer. Submit your business on their site and they'll schedule a free valuation call — no commitment, no cost.",
+        cost: "No upfront. Success fee: 2–15% sliding scale (lower % on larger deals).",
+        action: "Submit via their website form. They'll schedule a free valuation call within a week.",
         link: "https://empireflippers.com",
+        askingRange: "$200K – $3M realistic range depending on ARR at time of listing",
       },
     ],
   },
@@ -454,6 +456,9 @@ export default function ExitAdvisor() {
                         )}
                       </div>
                       <p className="text-gray-300 text-xs leading-relaxed mb-1.5">{p.what}</p>
+                      {p.askingRange && (
+                        <p className="text-green-400 text-xs font-bold mb-1.5">💰 {p.askingRange}</p>
+                      )}
                       <p className="text-gray-500 text-xs mb-1"><strong className="text-gray-400">Cost:</strong> {p.cost}</p>
                       <p className="text-xs text-cyan-400"><strong className="text-cyan-300">→ Action:</strong> {p.action}</p>
                     </div>
