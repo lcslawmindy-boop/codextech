@@ -360,6 +360,75 @@ export default function ExitAdvisor() {
               <strong className="text-amber-300">Honest note:</strong> You will not get $14M–$38M in a first deal without patent filings, significant verified revenue, and a strategic buyer who specifically wants your technology domains. Those numbers are strategic upside scenarios, not today's reality. Focus on the $150K–$500K range — that's achievable in 3–6 months with the right prep.
             </p>
           </div>
+
+          {/* Where to find each buyer type */}
+          <div className="border border-gray-800 rounded-xl overflow-hidden">
+            <div className="px-4 py-3 bg-gray-900 border-b border-gray-800">
+              <p className="text-white font-black text-sm">🔍 Where to Find Each Buyer Type</p>
+            </div>
+            <div className="divide-y divide-gray-800">
+              {[
+                {
+                  range: "$50K – $150K",
+                  color: "#94a3b8",
+                  buyer: "Individual operator / small fund",
+                  where: [
+                    { name: "Acquire.com", url: "https://acquire.com", note: "Largest buyer pool for code + content assets. Free to list, stealth mode available." },
+                    { name: "Flippa", url: "https://flippa.com", note: "Good for smaller deals. Post as 'Confidential' — buyers sign NDA before details." },
+                    { name: "MicroAcquire", url: "https://microacquire.com", note: "Fast marketplace. Buyers here move quickly on sub-$200K deals." },
+                  ],
+                },
+                {
+                  range: "$150K – $500K",
+                  color: "#06b6d4",
+                  buyer: "Tech acquirer / IP firm / small fund",
+                  where: [
+                    { name: "Quiet Light Brokerage", url: "https://quietlight.com", note: "Full-service broker. They find the buyer, manage the deal, take ~10%. No upfront cost." },
+                    { name: "Empire Flippers", url: "https://empireflippers.com", note: "Vetted buyer network. Submit your business for a free valuation call." },
+                    { name: "Acquire.com", url: "https://acquire.com", note: "Also has buyers in this range — especially for AI/SaaS platforms." },
+                  ],
+                },
+                {
+                  range: "$500K – $2M",
+                  color: "#a855f7",
+                  buyer: "Strategic acquirer / IP monetization firm",
+                  where: [
+                    { name: "IPOfferings.com", url: "https://ipofferings.com", note: "Pure IP broker. Email your exec summary — they match you with strategic buyers." },
+                    { name: "Dominion Harbor", url: "https://dominionharbor.com", note: "Specializes in energy/defense-adjacent IP. Works pure contingency." },
+                    { name: "Ocean Tomo", url: "https://oceantomo.com", note: "IP auctions + M&A advisory. Good for full platform + IP combined deals." },
+                  ],
+                },
+                {
+                  range: "$2M – $10M+",
+                  color: "#f97316",
+                  buyer: "Defense prime / pharma / major IP firm",
+                  where: [
+                    { name: "Acacia Research", url: "https://acaciaresearch.com", note: "Buys IP outright. Handles all monetization. You get a lump sum." },
+                    { name: "Linked In outreach (direct)", url: "https://linkedin.com", note: "Target BD/M&A leads at Lockheed, Raytheon, or major IP law firms directly." },
+                    { name: "Ocean Tomo / FTI Consulting", url: "https://oceantomo.com", note: "Handles strategic IP M&A at this scale. Requires a polished due diligence package." },
+                  ],
+                },
+              ].map((row, i) => (
+                <div key={i} className="px-4 py-3 flex flex-col sm:flex-row sm:items-start gap-3">
+                  <div className="sm:w-32 flex-shrink-0">
+                    <span className="font-black text-sm" style={{ color: row.color }}>{row.range}</span>
+                    <p className="text-gray-600 text-xs mt-0.5">{row.buyer}</p>
+                  </div>
+                  <div className="flex-1 space-y-1.5">
+                    {row.where.map((w, j) => (
+                      <div key={j} className="flex items-start gap-2">
+                        <a href={w.url} target="_blank" rel="noopener noreferrer"
+                          className="text-blue-400 hover:text-blue-300 text-xs font-bold whitespace-nowrap transition-colors flex items-center gap-1">
+                          <ExternalLink size={9} /> {w.name}
+                        </a>
+                        <span className="text-gray-500 text-xs">— {w.note}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
         </Section>
 
         {/* Who can help */}
