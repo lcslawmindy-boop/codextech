@@ -12,6 +12,104 @@ const BRIEF_PACK_DOCS = [
   { id: "anenergy-pump", title: "Anenergy Pump Preliminary", pages: 15, file: "anenergy-pump-preliminary.pdf" },
 ];
 
+// ── Admin Master Bundle — direct view of all 33 packs with URL management ──────
+function AdminMasterBundleAccess() {
+  const [bundleUrl, setBundleUrl] = useState("");
+  const [saved, setSaved] = useState(false);
+  const [open, setOpen] = useState(false);
+
+  // Load from localStorage for quick admin reference
+  useEffect(() => {
+    const stored = localStorage.getItem("admin_master_bundle_url");
+    if (stored) setBundleUrl(stored);
+  }, []);
+
+  const handleSave = () => {
+    localStorage.setItem("admin_master_bundle_url", bundleUrl);
+    setSaved(true);
+    setTimeout(() => setSaved(false), 2000);
+  };
+
+  return (
+    <div className="bg-gray-900 border-2 border-yellow-600/70 rounded-2xl overflow-hidden">
+      <button onClick={() => setOpen(o => !o)}
+        className="w-full flex items-center justify-between px-5 py-4 bg-yellow-950/30 hover:bg-yellow-950/50 transition-colors text-left">
+        <div className="flex items-center gap-3">
+          <Package size={18} className="text-yellow-400" />
+          <div>
+            <p className="text-white font-black text-base">Admin Access — Master PDF Bundle (All 33 Device Build Plans)</p>
+            <p className="text-yellow-300/70 text-xs mt-0.5">Set your Google Drive / storage URL · View all 33 pack titles · Grant buyer access below</p>
+          </div>
+        </div>
+        <div className="flex items-center gap-3 flex-shrink-0">
+          <span className="text-xs px-3 py-1 rounded-full bg-yellow-900/60 border border-yellow-700 text-yellow-300 font-black">33 PDFs · $197</span>
+          {open ? <ChevronUp size={15} className="text-gray-500" /> : <ChevronDown size={15} className="text-gray-500" />}
+        </div>
+      </button>
+
+      {open && (
+        <div className="p-5 space-y-5">
+          {/* Master bundle URL */}
+          <div>
+            <label className="block text-xs font-black text-yellow-400 mb-2 uppercase tracking-wider">Master Bundle Download URL (Google Drive folder / Dropbox / S3)</label>
+            <div className="flex gap-2">
+              <input
+                type="url"
+                placeholder="https://drive.google.com/drive/folders/... (paste your hosted folder link here)"
+                value={bundleUrl}
+                onChange={e => { setBundleUrl(e.target.value); setSaved(false); }}
+                className="flex-1 px-3 py-2.5 rounded-lg bg-gray-800 border border-yellow-700/50 text-white text-sm focus:outline-none focus:border-yellow-500"
+              />
+              <button onClick={handleSave}
+                className={`flex items-center gap-1.5 px-4 py-2.5 rounded-lg text-sm font-black transition-all ${saved ? "bg-green-700 text-white" : "bg-yellow-700 hover:bg-yellow-600 text-black"}`}>
+                {saved ? <><Check size={13} /> Saved</> : "Save URL"}
+              </button>
+              {bundleUrl && (
+                <a href={bundleUrl} target="_blank" rel="noopener noreferrer"
+                  className="flex items-center gap-1.5 px-4 py-2.5 rounded-lg bg-gray-800 hover:bg-gray-700 text-gray-300 text-sm font-bold transition-all">
+                  <ExternalLink size={13} /> Open
+                </a>
+              )}
+            </div>
+            <p className="text-gray-600 text-xs mt-1">This URL is stored locally in your browser for quick reference. Use it when granting buyer access below.</p>
+          </div>
+
+          {/* All 33 pack titles */}
+          <div>
+            <p className="text-gray-400 text-xs font-bold uppercase tracking-wider mb-3">All 33 Included Device Build Plans</p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 max-h-80 overflow-y-auto pr-1">
+              {BRIEF_PACKS.map((pack, i) => (
+                <div key={pack.id} className="flex items-start gap-2 px-3 py-2 rounded-lg bg-gray-800/60 border border-gray-700/50">
+                  <span className="text-gray-600 text-xs font-mono flex-shrink-0 mt-0.5">{String(i + 1).padStart(2, "0")}</span>
+                  <div className="min-w-0">
+                    <p className="text-gray-200 text-xs font-bold leading-snug truncate">{pack.icon} {pack.title}</p>
+                    <p className="text-gray-600 text-xs">{pack.category} · {pack.pages}p · {pack.difficulty}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Quick stats */}
+          <div className="grid grid-cols-4 gap-3">
+            {[
+              { label: "Total PDFs", val: "33" },
+              { label: "Est. Pages", val: "1,400–1,800" },
+              { label: "Retail Value", val: `$${33 * 27}` },
+              { label: "Bundle Price", val: "$197" },
+            ].map(s => (
+              <div key={s.label} className="bg-gray-800/50 border border-gray-700/50 rounded-lg px-3 py-2 text-center">
+                <p className="text-yellow-300 font-black text-lg">{s.val}</p>
+                <p className="text-gray-600 text-xs">{s.label}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
 function MasterBundlePanel({ adminEmail }) {
   const [grants, setGrants] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -580,6 +678,9 @@ export default function AdminPdfAccess() {
             className="w-full pl-9 pr-4 py-2.5 rounded-lg bg-gray-900 border border-gray-800 text-white placeholder-gray-600 text-sm focus:outline-none focus:border-yellow-500"
           />
         </div>
+
+        {/* Admin Master Bundle Access */}
+        <AdminMasterBundleAccess />
 
         {/* Master Bundle Section */}
         <MasterBundlePanel adminEmail={adminEmail} />
