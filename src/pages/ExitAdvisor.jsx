@@ -218,7 +218,401 @@ const SCENARIOS = [
   },
 ];
 
-// ── Broker email templates ───────────────────────────────────────────────────
+// ── All outreach templates ────────────────────────────────────────────────────
+const OUTREACH_TEMPLATES = [
+  // ── M&A BROKERS ──
+  {
+    category: "M&A Brokers",
+    color: "#6366f1",
+    templates: [
+      {
+        id: "quietlight",
+        label: "Quiet Light Brokerage",
+        emailLink: "mailto:info@quietlight.com",
+        subject: "Online Business for Sale — AI + IP Research SaaS Platform ($150K–$500K asking range)",
+        body: `Hi Quiet Light team,
+
+I'm the founder of Aethon Apex IP (aethon.base44.app), an AI-powered intellectual property research and SaaS platform built around a documented library of 40+ patent-sourced invention build plans, a full AI patent drafting suite, virtual data room, investor CRM, and live Stripe subscriptions.
+
+Here's the quick overview:
+• Platform type: SaaS + AI tools + IP content library
+• Revenue: Stripe Live Mode active — subscriptions from $29–$497/month
+• Assets: 40+ invention build plans, 26+ courses, AI patent drafting wizard, FTO analysis, VDR, IP marketplace, white-label SaaS infrastructure
+• Tech: React/Vite frontend, Deno backend, 70+ components, 50+ backend functions
+• Asking range: $150K–$500K (open to discussion based on your valuation)
+
+I'm looking for a full-service broker to handle the sale. I'd love to schedule your free valuation call to understand what the platform is worth today and what I'd need to do to maximize the sale price.
+
+Would you be able to get on a call this week?
+
+Best,
+[Your Name]
+zenithapexresearch@gmail.com`,
+      },
+      {
+        id: "empireflippers",
+        label: "Empire Flippers",
+        emailLink: "https://empireflippers.com/sell-your-business/",
+        subject: "Business Submission — AI SaaS + IP Research Platform | Stripe Live | Asking $150K–$500K",
+        body: `Hi Empire Flippers,
+
+I'd like to submit my online business for your free valuation review.
+
+Business overview:
+• Name: Aethon Apex IP
+• URL: aethon.base44.app
+• Type: SaaS + AI tools + IP content library
+• Monetization: Stripe subscriptions ($29–$497/month), one-time product sales, AI tool credits
+• Assets: 40+ documented invention build plans, AI patent suite, VDR, investor CRM, white-label SaaS infrastructure, 26+ engineering courses
+• Tech stack: React/Vite, Deno Deploy, Claude/GPT AI integrations, Stripe Live Mode
+• Asking price: $150K–$500K (flexible, subject to your valuation)
+
+I'm ready to provide Stripe screenshots, platform walkthrough video, and full asset list on request.
+
+Can we schedule a free valuation call?
+
+Best,
+[Your Name]
+zenithapexresearch@gmail.com`,
+      },
+      {
+        id: "acquire",
+        label: "Acquire.com (Private Listing)",
+        emailLink: "https://acquire.com",
+        subject: "AI + IP Research SaaS — Stealth Listing Inquiry | $150K–$500K",
+        body: `Hi Acquire.com team,
+
+I'd like to create a stealth/private listing for my SaaS platform, Aethon Apex IP.
+
+Key details:
+• Platform: AI-powered IP research SaaS + patent toolkit
+• URL: aethon.base44.app
+• Revenue model: Subscriptions $29–$497/mo + one-time sales
+• Tech: React + Deno + Stripe Live Mode — fully functional
+• Unique asset: 40+ patent-sourced invention build plans + AI FTO analysis + Virtual Data Room
+• Asking: $150K–$500K
+
+I want a private listing where buyers must sign an NDA before any details are revealed. Happy to provide Stripe screenshots and Loom walkthrough on request.
+
+How do I get started?
+
+Best,
+[Your Name]`,
+      },
+    ],
+  },
+
+  // ── IP BROKERS ──
+  {
+    category: "IP Brokers",
+    color: "#f59e0b",
+    templates: [
+      {
+        id: "ipofferings",
+        label: "IPOfferings.com",
+        emailLink: "mailto:info@ipofferings.com",
+        subject: "IP Portfolio Acquisition Opportunity — Patent-Backed EM & Energy Tech | NDA Required",
+        body: `Hi IPOfferings team,
+
+I'm reaching out about a potential listing for a patent-backed IP portfolio in advanced electromagnetics, bioelectromagnetic therapeutics, and clean energy technology.
+
+PORTFOLIO HIGHLIGHTS:
+• 40+ documented inventions with full engineering specs, BOMs, and schematics
+• 6 patent clusters: Advanced Energy (MEG/ZPE), Bioelectromagnetic Therapeutics, Scalar EM Communications, EMF Detection, Hydromagnetic Propulsion, Resonance Energy Transfer
+• Estimated IP valuation: $250K–$5M+ depending on acquirer type
+• References: granted US patents (including US 6,362,718 MEG) — all properly cited
+
+PLATFORM ASSETS ALSO INCLUDED (if desired):
+• Full SaaS platform (React/Deno) with AI patent drafting, FTO wizard, VDR, investor CRM
+• Stripe Live Mode with $29–$497/mo subscription tiers
+• 26+ structured engineering courses and 200+ prior art entries
+
+DEAL STRUCTURES I'M OPEN TO:
+• Outright IP acquisition
+• Exclusive field-of-use license
+• Non-exclusive royalty arrangement
+• Full platform + IP package
+
+Happy to send a 1-page executive summary and sign an NDA for the full due diligence package.
+
+Best,
+[Your Name]
+zenithapexresearch@gmail.com`,
+      },
+      {
+        id: "dominion",
+        label: "Dominion Harbor",
+        emailLink: "https://dominionharbor.com",
+        subject: "Scalar EM + Energy IP Portfolio — Licensing & Monetization Inquiry",
+        body: `Hi Dominion Harbor team,
+
+I have a defensible IP portfolio spanning scalar electromagnetics, clean energy devices, and bioelectromagnetic therapeutics that I believe aligns well with your monetization capabilities.
+
+TECHNOLOGY CLUSTERS:
+1. Motionless Electromagnetic Generator (MEG) — references US 6,362,718
+2. Prioré-type Bioelectromagnetic Therapy — references French patent literature + Foundations of Physics Letters
+3. Scalar Wave Communications (G-Com) — novel modulation topology
+4. Atmospheric Energy Harvesting — based on Tesla-derived prior art
+5. Hydromagnetic Propulsion — cross-domain naval + aerospace applications
+6. EMF Shielding & Detection Instruments — commercial near-term
+
+I'm open to licensing deals, royalty arrangements, or outright acquisition of individual clusters or the full portfolio. No upfront cost required from my side — I understand your contingency model.
+
+Can we schedule a brief call to discuss fit?
+
+Best,
+[Your Name]
+zenithapexresearch@gmail.com`,
+      },
+      {
+        id: "acacia",
+        label: "Acacia Research",
+        emailLink: "https://acaciaresearch.com",
+        subject: "IP Portfolio Submission — Advanced EM, Bioelectromagnetics & Clean Energy Technology",
+        body: `Hi Acacia Research,
+
+I'd like to submit a patent-backed IP portfolio for your acquisition consideration.
+
+OVERVIEW:
+• 6 technology clusters across electromagnetics, energy, bioelectromagnetics, and propulsion
+• All inventions are sourced from or reference granted US/international patents
+• Research library includes 200+ cited prior art entries with full documentation
+• SaaS platform built around the IP — AI patent drafting, FTO analysis, investor VDR, Stripe revenue
+
+VALUATION BASIS:
+• Conservative: $250K–$500K (3 filed patents + R&D investment basis)
+• Strategic: $2M–$10M+ (to defense contractor, pharma, or energy sector acquirer)
+
+I'm interested in a clean acquisition where you handle all monetization post-close. Can we discuss fit?
+
+Best,
+[Your Name]
+zenithapexresearch@gmail.com`,
+      },
+    ],
+  },
+
+  // ── DIRECT STRATEGIC BUYERS ──
+  {
+    category: "Direct Strategic Buyers",
+    color: "#22c55e",
+    templates: [
+      {
+        id: "defense_prime",
+        label: "Defense Contractor (BD Lead)",
+        emailLink: "https://linkedin.com",
+        subject: "Advanced EM Technology Portfolio — Strategic Acquisition Inquiry (NDA Required)",
+        body: `Hi [Name],
+
+I'm the founder of a patent-backed IP research platform specializing in advanced electromagnetic systems with direct applications in defense: scalar wave communications, EMF detection instrumentation, atmospheric energy harvesting, and hydromagnetic propulsion.
+
+I'm reaching out because [Company]'s work in [specific program/area] appears highly complementary to what we've built.
+
+QUICK SNAPSHOT:
+• 40+ documented inventions with full engineering specs and BOMs
+• References: granted US patents across 6 technology clusters
+• Platform: AI-powered IP suite with FTO analysis, VDR, investor CRM (all live)
+• Deal: Looking for strategic acquisition, exclusive license, or co-development JV
+
+This is a confidential process. All details are behind an NDA-gated virtual data room.
+
+Would you be open to a 20-minute call to assess fit?
+
+Best regards,
+[Your Name]
+Aethon Apex IP
+zenithapexresearch@gmail.com`,
+      },
+      {
+        id: "pharma_rd",
+        label: "Pharma / Biotech R&D Lead",
+        emailLink: "https://linkedin.com",
+        subject: "Bioelectromagnetic Therapeutic IP — Acquisition Inquiry | Prioré-Type Multichannel EM Protocol",
+        body: `Hi [Name],
+
+I'm the founder of Aethon Apex IP, a research platform with a documented bioelectromagnetic therapeutic IP cluster that I believe is relevant to [Company]'s oncology / regenerative medicine / longevity research pipeline.
+
+THE CORE IP:
+• Multichannel Cellular Conditioning System (MCCS) — based on Prioré-type EM therapeutic methodology
+• TRD-1 Telomere Resonance Device — resonant EM approach to cellular longevity
+• Full engineering documentation, BOMs, and prior art citations (Foundations of Physics Letters, declassified government reports)
+• AI platform with FTO analysis and patent drafting already integrated
+
+IMPORTANT DISCLAIMER: This IP is for research and development use only — not FDA-cleared or approved for any medical application. All content is educational and experimental.
+
+DEAL INTEREST:
+• Exclusive field-of-use license (oncology / longevity / regenerative medicine)
+• R&D partnership with milestone royalties
+• Outright acquisition of the bioEM cluster
+
+Can we set up a brief confidential call? I can send a 1-page summary and NDA immediately.
+
+Best,
+[Your Name]
+zenithapexresearch@gmail.com`,
+      },
+      {
+        id: "ipfirm_whitelabel",
+        label: "IP Law Firm (White-Label SaaS)",
+        emailLink: "https://linkedin.com",
+        subject: "White-Label AI Patent Suite — Built for IP Firms | FTO, Drafting Wizard, Patent Monitoring",
+        body: `Hi [Name],
+
+I've built an AI patent toolkit that I think could add significant value to [Firm Name]'s client offering — either as a white-labeled internal tool or a client-facing portal.
+
+WHAT'S BUILT AND WORKING:
+• USPTO-formatted patent drafting wizard (AI-generated claim language + spec)
+• Freedom-to-Operate (FTO) analysis with blocking patent identification
+• Prior art cross-reference engine (200+ entries)
+• Automated patent threat monitoring
+• Shared patent draft portal for attorney-client collaboration
+• Virtual Data Room for client due diligence packages
+• All live on React/Deno — deployable as white-label in days
+
+LICENSING MODEL:
+• Annual white-label license: $10K–$50K/yr depending on usage
+• Per-seat model available: $500–$1,500/user/yr
+• One-time purchase with self-hosting option
+
+This is production-ready — not a demo. Happy to do a live walkthrough.
+
+Are you open to a 30-minute demo?
+
+Best,
+[Your Name]
+zenithapexresearch@gmail.com`,
+      },
+      {
+        id: "edtech_rollup",
+        label: "EdTech / LegalTech Rollup",
+        emailLink: "https://acquire.com",
+        subject: "AI-Powered IP Research SaaS Acquisition — $150K–$500K | 40+ Courses + Patent Tools",
+        body: `Hi [Name],
+
+I'm the founder of Aethon Apex IP, an AI-powered research and education platform at the intersection of advanced engineering, IP law, and patent strategy. I'm exploring a sale to a strategic acquirer in the EdTech or LegalTech space.
+
+PLATFORM METRICS:
+• 40+ structured engineering courses (beginner → advanced)
+• 200+ research archive entries with inline citations
+• AI patent drafting, FTO analysis, patent monitoring, attorney chat
+• Virtual Data Room and investor CRM
+• Stripe Live Mode: $29–$497/month subscription tiers
+• Tech: React/Vite, Deno, Claude/GPT integrations
+
+WHY THIS FITS A ROLLUP:
+• Defensible niche — no direct competitor combining patent tools + engineering education
+• White-label infrastructure already built
+• Immediately monetizable inventory (courses, build plans, AI tools)
+• Clean codebase, documented, no technical debt
+
+Asking: $150K–$500K. Open to earnout or equity component.
+
+Would you be open to a brief call?
+
+Best,
+[Your Name]
+zenithapexresearch@gmail.com`,
+      },
+    ],
+  },
+
+  // ── FOLLOW-UP SEQUENCES ──
+  {
+    category: "Follow-Up Sequences",
+    color: "#06b6d4",
+    templates: [
+      {
+        id: "followup_d3",
+        label: "Follow-Up #1 — Day 3 (No Response)",
+        emailLink: "",
+        subject: "Re: [Original Subject] — Quick Follow-Up",
+        body: `Hi [Name],
+
+Just following up on my note from [Day]. I know inboxes get busy.
+
+I'm the founder of Aethon Apex IP — a patent-backed IP research SaaS with 40+ invention build plans, an AI patent suite, and live Stripe revenue. I'm exploring acquisition options in the $150K–$500K range.
+
+If this isn't the right fit for your focus right now, completely understood — just a quick yes or no would be helpful so I can direct my search.
+
+If there's any interest, I can send a 1-page summary and a Loom walkthrough within the hour.
+
+Best,
+[Your Name]`,
+      },
+      {
+        id: "followup_d7",
+        label: "Follow-Up #2 — Day 7 (New Angle)",
+        emailLink: "",
+        subject: "One more thing about Aethon Apex IP — [specific asset]",
+        body: `Hi [Name],
+
+I sent you a note last week about Aethon Apex IP. One thing I didn't mention that might be more relevant for your focus:
+
+The platform includes a white-label AI patent drafting and FTO analysis suite that's already generating revenue. Separate from the IP portfolio itself, this tool alone — licensed to 2–3 IP firms at $20K/yr — would generate $60K+ ARR with near-zero marginal cost.
+
+If you're evaluating tools rather than IP portfolios, that component is licensable independently.
+
+Happy to do a live demo — takes 20 minutes.
+
+Best,
+[Your Name]
+zenithapexresearch@gmail.com`,
+      },
+      {
+        id: "followup_d14",
+        label: "Follow-Up #3 — Day 14 (Final Nudge)",
+        emailLink: "",
+        subject: "Closing the loop — Aethon Apex IP",
+        body: `Hi [Name],
+
+This will be my last note on this — I don't want to fill your inbox.
+
+I'm actively in conversations with [2–3 other brokers/buyers] about Aethon Apex IP and expect to have a deal structure in place within the next 30–60 days.
+
+If there was any interest on your side — even just a "send me the exec summary" — now is the best window to engage before the process closes.
+
+If not, no hard feelings at all. I appreciate your time.
+
+Best,
+[Your Name]
+zenithapexresearch@gmail.com
+
+P.S. Platform demo: aethon.base44.app | IP broker page: aethon.base44.app/ip-broker`,
+      },
+      {
+        id: "nda_response",
+        label: "NDA Response Template (After They Ask)",
+        emailLink: "",
+        subject: "Re: [Subject] — NDA + Due Diligence Package",
+        body: `Hi [Name],
+
+Thank you for your interest — I'm glad to move forward.
+
+Here's the NDA link (DocuSign — takes 2 minutes):
+[Your NDA link]
+
+Once signed, I'll grant you immediate access to the Virtual Data Room, which includes:
+• Full platform asset inventory and source code overview
+• Stripe revenue dashboard screenshots
+• IP portfolio overview with patent citations
+• Technology demo recording (Loom)
+• 1-page executive summary with valuation basis
+• Sample build plan and course module
+
+I'll send VDR access credentials within 24 hours of NDA signature.
+
+Looking forward to connecting.
+
+Best,
+[Your Name]
+Aethon Apex IP
+zenithapexresearch@gmail.com`,
+      },
+    ],
+  },
+];
+
+// ── Broker email templates (kept for BrokerEmailTemplate component compatibility) ───────────────────────────────────────────────────────────────────────
 const BROKER_EMAILS = {
   quietlight: {
     subject: "Online Business for Sale — AI + IP Research SaaS Platform ($150K–$500K asking range)",
@@ -351,6 +745,66 @@ function CopyBtn({ text }) {
       {copied ? <Check size={10} className="text-green-400" /> : <Copy size={10} />}
       {copied ? "Copied" : "Copy"}
     </button>
+  );
+}
+
+function TemplateCard({ tpl, color }) {
+  const [open, setOpen] = useState(false);
+  const [copied, setCopied] = useState(null);
+
+  const copy = (field, value) => {
+    navigator.clipboard.writeText(value);
+    setCopied(field);
+    setTimeout(() => setCopied(null), 1800);
+  };
+
+  return (
+    <div className="border rounded-xl overflow-hidden" style={{ borderColor: color + "30" }}>
+      <button onClick={() => setOpen(o => !o)}
+        className="w-full flex items-center justify-between px-4 py-3 text-left hover:bg-gray-900/60 transition-colors"
+        style={{ background: color + "08" }}>
+        <span className="text-sm font-bold text-white">✉️ {tpl.label}</span>
+        {open ? <ChevronUp size={13} className="text-gray-500" /> : <ChevronDown size={13} className="text-gray-500" />}
+      </button>
+      {open && (
+        <div className="bg-gray-950 px-4 pb-4 pt-3 space-y-3">
+          <div>
+            <div className="flex items-center justify-between mb-1">
+              <p className="text-gray-500 text-xs font-bold uppercase tracking-wider">Subject Line</p>
+              <button onClick={() => copy("subject", tpl.subject)}
+                className="flex items-center gap-1 px-2 py-1 rounded bg-gray-800 hover:bg-gray-700 text-xs text-gray-400 font-bold transition-all">
+                {copied === "subject" ? <Check size={9} className="text-green-400" /> : <Copy size={9} />}
+                {copied === "subject" ? "Copied" : "Copy"}
+              </button>
+            </div>
+            <p className="text-gray-200 text-xs bg-gray-900 rounded-lg px-3 py-2 border border-gray-800">{tpl.subject}</p>
+          </div>
+          <div>
+            <div className="flex items-center justify-between mb-1">
+              <p className="text-gray-500 text-xs font-bold uppercase tracking-wider">Email Body</p>
+              <div className="flex items-center gap-2">
+                <button onClick={() => copy("body", tpl.body)}
+                  className="flex items-center gap-1 px-2 py-1 rounded bg-gray-800 hover:bg-gray-700 text-xs text-gray-400 font-bold transition-all">
+                  {copied === "body" ? <Check size={9} className="text-green-400" /> : <Copy size={9} />}
+                  {copied === "body" ? "Copied" : "Copy"}
+                </button>
+                {tpl.emailLink && (
+                  <a href={tpl.emailLink} target="_blank" rel="noopener noreferrer"
+                    className="flex items-center gap-1 px-2 py-1 rounded text-xs font-bold transition-all"
+                    style={{ background: color + "20", color, border: `1px solid ${color}50` }}>
+                    <ExternalLink size={9} /> Open
+                  </a>
+                )}
+              </div>
+            </div>
+            <pre className="text-gray-300 text-xs leading-relaxed whitespace-pre-wrap font-mono bg-gray-900 rounded-lg px-3 py-3 border border-gray-800 max-h-72 overflow-y-auto">
+              {tpl.body}
+            </pre>
+          </div>
+          <p className="text-gray-600 text-xs">Replace all <strong className="text-gray-500">[bracketed placeholders]</strong> before sending.</p>
+        </div>
+      )}
+    </div>
   );
 }
 
@@ -595,6 +1049,27 @@ export default function ExitAdvisor() {
         <Section title="✉️ Buyer Outreach Templates & Follow-Up Sequences">
           <p className="text-gray-400 text-sm">6 buyer-type-specific cold emails + a 5-email follow-up sequence over 30 days. Copy, fill in the brackets, send.</p>
           <BuyerOutreachTemplates />
+        </Section>
+
+        {/* Outreach Templates */}
+        <Section title="📧 Buyer Outreach Templates & Email Sequences">
+          <p className="text-gray-400 text-sm">Copy, fill in the blanks, and send. Organized by buyer type — brokers, IP firms, direct strategic buyers, and follow-up sequences.</p>
+          <div className="space-y-6">
+            {OUTREACH_TEMPLATES.map((cat, ci) => (
+              <div key={ci}>
+                <p className="text-xs font-black uppercase tracking-widest mb-3 flex items-center gap-2"
+                  style={{ color: cat.color }}>
+                  <span className="w-2 h-2 rounded-full inline-block" style={{ background: cat.color }} />
+                  {cat.category}
+                </p>
+                <div className="space-y-2">
+                  {cat.templates.map((tpl) => (
+                    <TemplateCard key={tpl.id} tpl={tpl} color={cat.color} />
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
         </Section>
 
         {/* Next 10 steps */}
