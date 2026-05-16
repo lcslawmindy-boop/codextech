@@ -90,6 +90,22 @@ function AdminMasterBundleAccess() {
             </div>
           </div>
 
+          {/* Admin Free Download CTA */}
+          <div className="bg-green-950/30 border border-green-700/50 rounded-xl p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+            <div>
+              <p className="text-green-300 font-black text-sm">🔓 Admin Access — No Charge</p>
+              <p className="text-gray-400 text-xs mt-0.5">As admin, you have full access to all 33 PDFs. Paste your hosted bundle URL above and click Open to access instantly.</p>
+            </div>
+            {bundleUrl ? (
+              <a href={bundleUrl} target="_blank" rel="noopener noreferrer"
+                className="flex-shrink-0 flex items-center gap-2 px-5 py-2.5 rounded-xl bg-green-700 hover:bg-green-600 text-white font-black text-sm transition-all">
+                <Download size={14} /> Open All 33 PDFs
+              </a>
+            ) : (
+              <span className="flex-shrink-0 text-xs text-gray-600 italic">Paste your bundle URL above to enable download</span>
+            )}
+          </div>
+
           {/* Quick stats */}
           <div className="grid grid-cols-4 gap-3">
             {[
