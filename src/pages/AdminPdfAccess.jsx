@@ -12,114 +12,99 @@ const BRIEF_PACK_DOCS = [
   { id: "anenergy-pump", title: "Anenergy Pump Preliminary", pages: 15, file: "anenergy-pump-preliminary.pdf" },
 ];
 
-// ── Admin Master Bundle — direct view of all 33 packs with URL management ──────
+// ── Admin Master Bundle — individual URL per pack + bundle URL ──────────────────
 function AdminMasterBundleAccess() {
-  const [bundleUrl, setBundleUrl] = useState("");
-  const [saved, setSaved] = useState(false);
   const [open, setOpen] = useState(false);
+  const [urls, setUrls] = useState(() => {
+    try { return JSON.parse(localStorage.getItem("admin_pdf_urls") || "{}"); } catch { return {}; }
+  });
+  const [savedId, setSavedId] = useState(null);
 
-  // Load from localStorage for quick admin reference
-  useEffect(() => {
-    const stored = localStorage.getItem("admin_master_bundle_url");
-    if (stored) setBundleUrl(stored);
-  }, []);
-
-  const handleSave = () => {
-    localStorage.setItem("admin_master_bundle_url", bundleUrl);
-    setSaved(true);
-    setTimeout(() => setSaved(false), 2000);
+  const saveUrl = (id, val) => {
+    const next = { ...urls, [id]: val };
+    setUrls(next);
+    localStorage.setItem("admin_pdf_urls", JSON.stringify(next));
+    setSavedId(id);
+    setTimeout(() => setSavedId(null), 1500);
   };
 
+  const bundleUrl = urls["__bundle__"] || "";
+  const filledCount = Object.values(urls).filter(v => v && v !== urls["__bundle__"]).length;
+
   return (
-    <div className="bg-gray-900 border-2 border-yellow-600/70 rounded-2xl overflow-hidden">
+    <div className="bg-gray-900 border-2 border-green-700/60 rounded-2xl overflow-hidden">
       <button onClick={() => setOpen(o => !o)}
-        className="w-full flex items-center justify-between px-5 py-4 bg-yellow-950/30 hover:bg-yellow-950/50 transition-colors text-left">
+        className="w-full flex items-center justify-between px-5 py-4 bg-green-950/20 hover:bg-green-950/40 transition-colors text-left">
         <div className="flex items-center gap-3">
-          <Package size={18} className="text-yellow-400" />
+          <span className="text-xl">🔓</span>
           <div>
-            <p className="text-white font-black text-base">Admin Access — Master PDF Bundle (All 33 Device Build Plans)</p>
-            <p className="text-yellow-300/70 text-xs mt-0.5">Set your Google Drive / storage URL · View all 33 pack titles · Grant buyer access below</p>
+            <p className="text-white font-black text-base">Admin PDF Library — All 33 Brief Packs (No Charge)</p>
+            <p className="text-green-300/70 text-xs mt-0.5">Set individual download URLs per PDF · {filledCount}/33 URLs configured</p>
           </div>
         </div>
         <div className="flex items-center gap-3 flex-shrink-0">
-          <span className="text-xs px-3 py-1 rounded-full bg-yellow-900/60 border border-yellow-700 text-yellow-300 font-black">33 PDFs · $197</span>
+          <span className="text-xs px-3 py-1 rounded-full bg-green-900/50 border border-green-700 text-green-300 font-black">{filledCount}/33 ready</span>
           {open ? <ChevronUp size={15} className="text-gray-500" /> : <ChevronDown size={15} className="text-gray-500" />}
         </div>
       </button>
 
       {open && (
-        <div className="p-5 space-y-5">
-          {/* Master bundle URL */}
-          <div>
-            <label className="block text-xs font-black text-yellow-400 mb-2 uppercase tracking-wider">Master Bundle Download URL (Google Drive folder / Dropbox / S3)</label>
+        <div className="p-5 space-y-4">
+          {/* Master folder URL */}
+          <div className="bg-yellow-950/20 border border-yellow-700/40 rounded-xl p-4">
+            <label className="block text-xs font-black text-yellow-400 mb-2 uppercase tracking-wider">
+              📦 Master Bundle URL — All 33 in one folder/zip
+            </label>
             <div className="flex gap-2">
-              <input
-                type="url"
-                placeholder="https://drive.google.com/drive/folders/... (paste your hosted folder link here)"
+              <input type="url" placeholder="https://drive.google.com/drive/folders/..."
                 value={bundleUrl}
-                onChange={e => { setBundleUrl(e.target.value); setSaved(false); }}
-                className="flex-1 px-3 py-2.5 rounded-lg bg-gray-800 border border-yellow-700/50 text-white text-sm focus:outline-none focus:border-yellow-500"
-              />
-              <button onClick={handleSave}
-                className={`flex items-center gap-1.5 px-4 py-2.5 rounded-lg text-sm font-black transition-all ${saved ? "bg-green-700 text-white" : "bg-yellow-700 hover:bg-yellow-600 text-black"}`}>
-                {saved ? <><Check size={13} /> Saved</> : "Save URL"}
-              </button>
+                onChange={e => setUrls(u => ({ ...u, "__bundle__": e.target.value }))}
+                onBlur={e => saveUrl("__bundle__", e.target.value)}
+                className="flex-1 px-3 py-2 rounded-lg bg-gray-800 border border-yellow-700/50 text-white text-sm focus:outline-none focus:border-yellow-500" />
               {bundleUrl && (
                 <a href={bundleUrl} target="_blank" rel="noopener noreferrer"
-                  className="flex items-center gap-1.5 px-4 py-2.5 rounded-lg bg-gray-800 hover:bg-gray-700 text-gray-300 text-sm font-bold transition-all">
-                  <ExternalLink size={13} /> Open
+                  className="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-green-700 hover:bg-green-600 text-white text-sm font-black transition-all">
+                  <Download size={13} /> Open All
                 </a>
               )}
             </div>
-            <p className="text-gray-600 text-xs mt-1">This URL is stored locally in your browser for quick reference. Use it when granting buyer access below.</p>
           </div>
 
-          {/* All 33 pack titles */}
+          {/* Individual PDFs */}
           <div>
-            <p className="text-gray-400 text-xs font-bold uppercase tracking-wider mb-3">All 33 Included Device Build Plans</p>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 max-h-80 overflow-y-auto pr-1">
-              {BRIEF_PACKS.map((pack, i) => (
-                <div key={pack.id} className="flex items-start gap-2 px-3 py-2 rounded-lg bg-gray-800/60 border border-gray-700/50">
-                  <span className="text-gray-600 text-xs font-mono flex-shrink-0 mt-0.5">{String(i + 1).padStart(2, "0")}</span>
-                  <div className="min-w-0">
-                    <p className="text-gray-200 text-xs font-bold leading-snug truncate">{pack.icon} {pack.title}</p>
-                    <p className="text-gray-600 text-xs">{pack.category} · {pack.pages}p · {pack.difficulty}</p>
+            <p className="text-gray-400 text-xs font-black uppercase tracking-wider mb-3">Individual PDF Download URLs — paste Google Drive / Dropbox / S3 link per pack</p>
+            <div className="space-y-2 max-h-[600px] overflow-y-auto pr-1">
+              {BRIEF_PACKS.map((pack, i) => {
+                const url = urls[pack.id] || "";
+                return (
+                  <div key={pack.id} className="flex items-center gap-3 px-3 py-2.5 rounded-xl bg-gray-800/60 border border-gray-700/40 hover:border-gray-600/60 transition-colors">
+                    <span className="text-gray-600 text-xs font-mono w-5 flex-shrink-0">{String(i + 1).padStart(2, "0")}</span>
+                    <span className="text-base flex-shrink-0">{pack.icon}</span>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-gray-200 text-xs font-bold truncate">{pack.title}</p>
+                      <p className="text-gray-600 text-xs">{pack.category} · {pack.pages}p</p>
+                    </div>
+                    <div className="flex items-center gap-2 flex-shrink-0 w-64">
+                      <input type="url" placeholder="Paste PDF URL..."
+                        value={url}
+                        onChange={e => setUrls(u => ({ ...u, [pack.id]: e.target.value }))}
+                        onBlur={e => { if (e.target.value !== (urls[pack.id] || "")) saveUrl(pack.id, e.target.value); else saveUrl(pack.id, url); }}
+                        className="flex-1 px-2.5 py-1.5 rounded-lg bg-gray-900 border border-gray-700 text-white text-xs focus:outline-none focus:border-green-500 min-w-0" />
+                      {savedId === pack.id && <Check size={12} className="text-green-400 flex-shrink-0" />}
+                      {url && (
+                        <a href={url} target="_blank" rel="noopener noreferrer"
+                          className="flex items-center gap-1 px-2 py-1.5 rounded-lg bg-green-800/60 hover:bg-green-700 text-green-300 text-xs font-bold transition-all flex-shrink-0">
+                          <Download size={11} /> Open
+                        </a>
+                      )}
+                    </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
 
-          {/* Admin Free Download CTA */}
-          <div className="bg-green-950/30 border border-green-700/50 rounded-xl p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-            <div>
-              <p className="text-green-300 font-black text-sm">🔓 Admin Access — No Charge</p>
-              <p className="text-gray-400 text-xs mt-0.5">As admin, you have full access to all 33 PDFs. Paste your hosted bundle URL above and click Open to access instantly.</p>
-            </div>
-            {bundleUrl ? (
-              <a href={bundleUrl} target="_blank" rel="noopener noreferrer"
-                className="flex-shrink-0 flex items-center gap-2 px-5 py-2.5 rounded-xl bg-green-700 hover:bg-green-600 text-white font-black text-sm transition-all">
-                <Download size={14} /> Open All 33 PDFs
-              </a>
-            ) : (
-              <span className="flex-shrink-0 text-xs text-gray-600 italic">Paste your bundle URL above to enable download</span>
-            )}
-          </div>
-
-          {/* Quick stats */}
-          <div className="grid grid-cols-4 gap-3">
-            {[
-              { label: "Total PDFs", val: "33" },
-              { label: "Est. Pages", val: "1,400–1,800" },
-              { label: "Retail Value", val: `$${33 * 27}` },
-              { label: "Bundle Price", val: "$197" },
-            ].map(s => (
-              <div key={s.label} className="bg-gray-800/50 border border-gray-700/50 rounded-lg px-3 py-2 text-center">
-                <p className="text-yellow-300 font-black text-lg">{s.val}</p>
-                <p className="text-gray-600 text-xs">{s.label}</p>
-              </div>
-            ))}
-          </div>
+          <p className="text-gray-700 text-xs">URLs are saved in your browser (localStorage). To persist across devices, use the Grant sections below and store URLs in the database.</p>
         </div>
       )}
     </div>
