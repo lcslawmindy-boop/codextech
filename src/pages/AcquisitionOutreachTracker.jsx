@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { ArrowLeft, Plus, ExternalLink, Copy, Check, ChevronDown, ChevronUp, Target, DollarSign, Users, FileText, Star, ShieldCheck } from "lucide-react";
+import { ArrowLeft, Plus, ExternalLink, Copy, Check, ChevronDown, ChevronUp, Target, DollarSign, Users, FileText, Star, ShieldCheck, LayoutTemplate } from "lucide-react";
 
 const BROKERS = [
   {
@@ -221,31 +221,105 @@ function PlatformCard({ platform: initialPlatform }) {
   );
 }
 
-const OUTREACH_TEMPLATE = `Subject: Acquisition Opportunity — AI Research Platform (NDA Required)
+const OUTREACH_TEMPLATE = `Subject: IP Portfolio Acquisition Opportunity — Patent-Backed EM & Energy Tech (NDA Required)
 
 Hi [Name],
 
-I'm the founder of ZARP (Zenith Apex Research Platform) — an AI-powered platform built on Tom Bearden's scalar electromagnetics research library.
+I'm reaching out regarding a discreet acquisition or licensing opportunity for a patent-backed IP portfolio in advanced electromagnetics, bioelectromagnetic therapeutics, and clean energy technology.
 
-The platform is available for acquisition. It includes:
-• 21+ invention build plans with full BOMs & assembly instructions
-• AI patent drafting & claims generation tools
-• Investor CRM, Virtual Data Room, and IP portfolio tools
-• Growing paid beta membership (recurring revenue)
-• Full course library and content ecosystem
+PLATFORM: Aethon Apex IP — aethon.base44.app/ip-broker
 
-This is a discreet, NDA-gated process. I'm not seeking public exposure.
+PORTFOLIO HIGHLIGHTS:
+• 40+ invention build plans with calibrated BOMs, schematics & assembly documentation
+• 6 patent clusters: Advanced Energy (MEG/ZPE), Bioelectromagnetic Therapeutics (Prioré-type), Scalar EM Communications, EMF Detection Instruments, Hydromagnetic Propulsion, Resonance Energy Transfer
+• Estimated portfolio valuation: $2M – $50M (IP-adjusted DCF)
+• 3–15 active/pending US patents with strong defensible claims
+• 8+ addressable market sectors: defense, oncology, off-grid power, naval, IoT, space
 
-To receive the full acquisition package (financials, IP valuation, technical overview), please sign the NDA here:
-https://na4.docusign.net/Member/PowerFormSigning.aspx?PowerFormId=ZARP-NDA&env=na4&acct=zenithapex
+PLATFORM ASSETS INCLUDED:
+• Full source code (React + Deno backend) with 40+ live modules
+• AI Patent Suite: drafting wizard, FTO analysis, patent monitoring, claims generator
+• Virtual Data Room with NDA-gated investor access infrastructure
+• Investor CRM, valuation engine, SBIR grant pipeline, IP Marketplace
+• Stripe Live Mode — multi-stream revenue model (subscriptions, one-time, API, white-label)
+• Complete research library: 200+ prior art entries, 26+ courses, knowledge graph
 
-Or preview the platform first:
-https://zenithapex.base44.app/beta-apply
+DEAL STRUCTURES AVAILABLE:
+• Outright acquisition ($500K – $50M depending on portfolio scope)
+• Exclusive field-of-use or geographic license
+• Non-exclusive multi-licensee royalty arrangement
+• Joint venture / equity co-development
 
-Happy to discuss structure (full acquisition, licensing, or revenue-share).
+This is a fully NDA-gated, private process. No public exposure.
 
-Best,
-[Your Name]`;
+To receive the full due diligence package (IP valuation report, patent landscape, financial model, Stripe screenshots, source code walkthrough):
+
+Step 1 — Preview the broker page: https://aethon.base44.app/ip-broker
+Step 2 — Reply to this email or sign NDA at: https://na4.docusign.net/Member/PowerFormSigning.aspx?PowerFormId=ZARP-NDA&env=na4&acct=zenithapex
+
+Happy to discuss any deal structure. Available for a call at your convenience.
+
+Best regards,
+[Your Name]
+Aethon Apex IP
+zenithapexresearch@gmail.com`;
+
+const EXEC_SUMMARY = `AETHON APEX IP — 1-PAGE EXECUTIVE SUMMARY
+Confidential · NDA Required · aethon.base44.app/ip-broker
+═══════════════════════════════════════════════════════════════
+
+WHAT IT IS
+A patent-backed IP portfolio and AI-powered commercialization platform spanning 6 advanced technology clusters: electromagnetic energy systems, bioelectromagnetic therapeutics, scalar communications, EMF instrumentation, hydromagnetic propulsion, and resonance energy transfer.
+
+PORTFOLIO SIZE & STAGE
+• 40+ fully documented inventions with calibrated BOMs and assembly specs
+• 3–15 active/pending US patents (strong independent claims)
+• 6 patent clusters across 8+ addressable market sectors
+• All inventions cite granted US patents or peer-reviewed literature
+
+IP VALUATION RANGE
+Conservative: $2M – $10M (patent count + R&D spend DCF basis)
+Strategic:    $10M – $50M (to defense contractor, pharma, or energy acquirer)
+Asset Floor:  $16.2M (40+ built platform modules at comparable SaaS benchmarks)
+
+REVENUE MODEL (EXISTING PLATFORM)
+SaaS Subscriptions   $29–$497/mo · Explorer → Enterprise tiers
+Build Plan Sales     $49–$600 per plan · 40+ catalogue
+Course Library       26+ engineering courses · $97–$497 each
+AI Patent Suite      Credits + subscriptions · $49–$349 per pack
+White-Label SaaS     $10K–$50K/yr per IP firm or university
+Valuation API        $0.50–$2.00/call · B2B (VCs, law firms, R&D)
+Current ARR target: $58K (conservative) → $350K+ (12mo post-acquisition)
+
+TECHNOLOGY
+React 18 + Tailwind · Deno Deploy backend · Stripe Live Mode
+20+ database entities · 50+ backend functions · Claude/GPT/Gemini AI
+Modules: Patent Drafting, FTO Analysis, VDR, Investor CRM, IP Marketplace,
+         SBIR Pipeline, Valuation API, Co-Inventor Matching, Build Tracker
+
+DEAL STRUCTURES
+• Full acquisition: $750K – $2.5M (platform + IP portfolio)
+• IP-only licensing: $250K – $5M upfront + royalties
+• Exclusive field license (per sector): negotiable
+• Joint venture / equity: available for strategic partners
+
+IDEAL ACQUIRER
+IP law firm · Defense/R&D contractor · EdTech/LegalTech rollup
+VC-backed IP marketplace · Pharma / biotech (bioEM cluster)
+Individual operator/SaaS acquirer
+
+CONTACT & NEXT STEPS
+1. Sign NDA to receive full due diligence package
+2. VDR access granted within 24 hours
+3. Technical walkthrough + Stripe revenue call available
+4. Term sheet generated within 48 hours of qualified interest
+
+Email: zenithapexresearch@gmail.com
+Subject: "Aethon Apex IP — Acquisition Inquiry"
+Broker Page: https://aethon.base44.app/ip-broker
+
+This document is confidential. Distribution prohibited without written consent.
+All figures are projections. Subject to NDA and due diligence verification.`;
 
 const LEGAL_SECTIONS = [
   {
@@ -435,6 +509,7 @@ function LegalChecklist() {
 export default function AcquisitionOutreachTracker() {
   const [tab, setTab] = useState("brokers");
   const [showTemplate, setShowTemplate] = useState(false);
+  const [showSummary, setShowSummary] = useState(false);
 
   const highPriorityBrokers = BROKERS.filter(b => b.priority === "high").length;
   const highPriorityPlatforms = PLATFORMS.filter(p => p.priority === "high").length;
@@ -455,20 +530,39 @@ export default function AcquisitionOutreachTracker() {
             <p className="text-gray-500 text-xs">No money upfront — brokers, platforms & direct buyer pipeline</p>
           </div>
         </div>
-        <button onClick={() => setShowTemplate(t => !t)}
-          className="flex items-center gap-2 px-3 py-2 rounded-lg bg-yellow-900/40 border border-yellow-700 text-yellow-300 text-xs font-bold hover:bg-yellow-800/50 transition-all">
-          <FileText size={12} /> {showTemplate ? "Hide" : "Show"} Email Template
-        </button>
+        <div className="flex items-center gap-2">
+          <button onClick={() => { setShowSummary(s => !s); setShowTemplate(false); }}
+            className="flex items-center gap-2 px-3 py-2 rounded-lg bg-purple-900/40 border border-purple-700 text-purple-300 text-xs font-bold hover:bg-purple-800/50 transition-all">
+            <LayoutTemplate size={12} /> {showSummary ? "Hide" : "1-Page"} Summary
+          </button>
+          <button onClick={() => { setShowTemplate(t => !t); setShowSummary(false); }}
+            className="flex items-center gap-2 px-3 py-2 rounded-lg bg-yellow-900/40 border border-yellow-700 text-yellow-300 text-xs font-bold hover:bg-yellow-800/50 transition-all">
+            <FileText size={12} /> {showTemplate ? "Hide" : "Email"} Template
+          </button>
+        </div>
       </div>
+
+      {/* 1-Page Executive Summary */}
+      {showSummary && (
+        <div className="mx-5 mt-4 bg-gray-900 border border-purple-800/50 rounded-2xl p-4">
+          <div className="flex items-center justify-between mb-3">
+            <p className="text-purple-400 text-xs font-black uppercase tracking-wider">1-Page Executive Summary — Copy & Send with Every Broker Email</p>
+            <CopyBtn text={EXEC_SUMMARY} />
+          </div>
+          <pre className="text-gray-300 text-xs leading-relaxed whitespace-pre-wrap font-mono bg-gray-800/50 rounded-xl p-4 max-h-80 overflow-y-auto">
+            {EXEC_SUMMARY}
+          </pre>
+        </div>
+      )}
 
       {/* Email Template */}
       {showTemplate && (
         <div className="mx-5 mt-4 bg-gray-900 border border-yellow-800/50 rounded-2xl p-4">
           <div className="flex items-center justify-between mb-3">
-            <p className="text-yellow-400 text-xs font-black uppercase tracking-wider">Cold Outreach Email Template</p>
+            <p className="text-yellow-400 text-xs font-black uppercase tracking-wider">Cold Outreach Email Template — IP Broker Edition</p>
             <CopyBtn text={OUTREACH_TEMPLATE} />
           </div>
-          <pre className="text-gray-300 text-xs leading-relaxed whitespace-pre-wrap font-mono bg-gray-800/50 rounded-xl p-4 max-h-64 overflow-y-auto">
+          <pre className="text-gray-300 text-xs leading-relaxed whitespace-pre-wrap font-mono bg-gray-800/50 rounded-xl p-4 max-h-80 overflow-y-auto">
             {OUTREACH_TEMPLATE}
           </pre>
         </div>
