@@ -165,6 +165,7 @@ import HydromagnetopropulsionCourse from './pages/HydromagnetopropulsionCourse';
 import AlaCarteMenu from './pages/AlaCarteMenu';
 import ResearchBriefLanding from './pages/ResearchBriefLanding';
 import TechnicalBriefPack from './pages/TechnicalBriefPack';
+import TechnicalBriefPacks from './pages/TechnicalBriefPacks';
 import ResearchMembership from './pages/ResearchMembership';
 import AdvancedEngineeringBundle from './pages/AdvancedEngineeringBundle';
 import ResearchDisclaimer from './pages/ResearchDisclaimer';
@@ -418,6 +419,7 @@ const AuthenticatedApp = () => {
           <Route path="/alacarte" element={<AlaCarteMenu />} />
           <Route path="/research-brief" element={<ResearchBriefLanding />} />
           <Route path="/technical-brief-pack" element={<TechnicalBriefPack />} />
+          <Route path="/technical-brief-packs" element={<TechnicalBriefPacks />} />
           <Route path="/research-membership" element={<ResearchMembership />} />
           <Route path="/advanced-engineering-bundle" element={<AdvancedEngineeringBundle />} />
           <Route path="/research-disclaimer" element={<ResearchDisclaimer />} />

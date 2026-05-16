@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { ArrowLeft, Download, Plus, Trash2, Check, X, Search, RefreshCw, FileText, Send, ExternalLink } from "lucide-react";
+import { ArrowLeft, Download, Plus, Trash2, Check, X, Search, RefreshCw, FileText, Send, ExternalLink, Package, ChevronDown, ChevronUp } from "lucide-react";
 import { base44 } from "@/api/base44Client";
+import { BRIEF_PACKS } from "../lib/briefPackData";
 
 // Brief pack PDF definitions — update download_url fields with real hosted PDF links
 const BRIEF_PACK_DOCS = [
@@ -10,6 +11,214 @@ const BRIEF_PACK_DOCS = [
   { id: "measurement-protocols", title: "Measurement Protocol Suite", pages: 25, file: "measurement-protocols.pdf" },
   { id: "anenergy-pump", title: "Anenergy Pump Preliminary", pages: 15, file: "anenergy-pump-preliminary.pdf" },
 ];
+
+function MasterBundlePanel({ adminEmail }) {
+  const [grants, setGrants] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [showForm, setShowForm] = useState(false);
+  const [form, setForm] = useState({ email: "", download_url: "", stripe_session_id: "", notes: "" });
+  const [saving, setSaving] = useState(false);
+  const [sendingEmail, setSendingEmail] = useState(null);
+  const [showAll, setShowAll] = useState(false);
+
+  useEffect(() => { loadGrants(); }, []);
+
+  const loadGrants = async () => {
+    setLoading(true);
+    const data = await base44.entities.PdfAccessGrant.filter({ product: "Master Brief Bundle" }, "-created_date", 200);
+    setGrants(data || []);
+    setLoading(false);
+  };
+
+  const handleGrant = async () => {
+    if (!form.email) return;
+    setSaving(true);
+    await base44.entities.PdfAccessGrant.create({
+      email: form.email.toLowerCase().trim(),
+      tier: "brief_pack",
+      product: "Master Brief Bundle",
+      download_url: form.download_url || "",
+      stripe_session_id: form.stripe_session_id || "",
+      notes: form.notes,
+      granted_by: adminEmail,
+      active: true,
+      email_sent: false,
+    });
+    setForm({ email: "", download_url: "", stripe_session_id: "", notes: "" });
+    setShowForm(false);
+    await loadGrants();
+    setSaving(false);
+  };
+
+  const handleSendEmail = async (grant) => {
+    setSendingEmail(grant.id);
+    try {
+      await base44.integrations.Core.SendEmail({
+        to: grant.email,
+        subject: "Your Master Brief Pack Bundle — All 33 Device Build Plans",
+        body: `Hi,
+
+Thank you for your purchase of the All 33 Device Build Plans — Master Brief Pack Bundle!
+
+Your complete bundle of 33 engineering brief pack PDFs is ready for download:
+
+${grant.download_url ? `📦 Download All 33 PDFs:\n${grant.download_url}` : "Your download link will be sent shortly. Please reply to this email if you haven't received it within 24 hours."}
+
+WHAT'S INCLUDED (33 PDFs — 1,400–1,800 total pages):
+• Vacuum Energy Devices (Anenergy Pump, VPO, MEG, Asymmetric Generators)
+• Scalar EM Systems (Energy Bottle, Phase Conjugate Mirror, T-Polarized Transducer)  
+• Bioelectromagnetic Devices (Kaznacheyev Chamber, Prioré-Type, TRD-1, KRCIC, UBDRS)
+• Defense & Detection (Quantum Potential Sensor, ELF Detector, Aegis-SV, Woodpecker Detector)
+• Agricultural & Environmental (MorphoYield, AEGH, MFCS)
+• Longevity & Epigenetics (PPDTS, WVTS, CEES, BESC-1, BCRC)
+• And more...
+
+Each pack includes: system architecture, bill of materials with exact part numbers, circuit diagrams, assembly procedures, and measurement protocols.
+
+IMPORTANT: All documents are for research and experimental purposes only. Please review the disclaimer in each PDF.
+
+If you have any questions, reply to this email.
+
+— Aethon Apex IP Research Team`
+      });
+      await base44.entities.PdfAccessGrant.update(grant.id, { email_sent: true });
+      setGrants(prev => prev.map(g => g.id === grant.id ? { ...g, email_sent: true } : g));
+    } catch (e) {
+      console.error(e);
+    }
+    setSendingEmail(null);
+  };
+
+  const handleToggle = async (grant) => {
+    await base44.entities.PdfAccessGrant.update(grant.id, { active: !grant.active });
+    setGrants(prev => prev.map(g => g.id === grant.id ? { ...g, active: !g.active } : g));
+  };
+
+  const handleDelete = async (id) => {
+    if (!confirm("Remove this master bundle access grant?")) return;
+    await base44.entities.PdfAccessGrant.delete(id);
+    setGrants(prev => prev.filter(g => g.id !== id));
+  };
+
+  const displayedGrants = showAll ? grants : grants.slice(0, 5);
+
+  return (
+    <div className="bg-gray-900 border border-yellow-800/50 rounded-2xl overflow-hidden">
+      <div className="px-5 py-4 border-b border-yellow-800/30 bg-yellow-950/20 flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <Package size={15} className="text-yellow-400" />
+          <h2 className="text-white font-black text-sm">Master Bundle — All 33 Brief Packs ($197)</h2>
+          <span className="text-xs px-2 py-0.5 rounded-full bg-yellow-900/50 border border-yellow-700 text-yellow-300 font-bold">{grants.filter(g => g.active).length} active</span>
+        </div>
+        <button onClick={() => setShowForm(s => !s)}
+          className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-yellow-700 hover:bg-yellow-600 text-black text-xs font-black transition-colors">
+          <Plus size={12} /> Grant Master Bundle Access
+        </button>
+      </div>
+
+      <div className="px-5 py-3 border-b border-gray-800 bg-gray-900/50">
+        <p className="text-gray-500 text-xs mb-1 font-bold uppercase tracking-wider">Includes all 33 PDFs — {BRIEF_PACKS.length} device engineering packs</p>
+        <div className="flex flex-wrap gap-1.5">
+          {["Vacuum Energy", "Scalar EM", "Bioelectromagnetics", "Free Energy", "Defense", "AgTech", "Longevity", "Epigenetics"].map(cat => (
+            <span key={cat} className="text-xs px-2 py-0.5 rounded bg-gray-800 border border-gray-700 text-gray-400">{cat}</span>
+          ))}
+        </div>
+      </div>
+
+      {showForm && (
+        <div className="px-5 py-5 border-b border-gray-800 bg-gray-900/60 space-y-3">
+          <h3 className="text-white font-bold text-sm">Grant Master Bundle Access</h3>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label className="block text-xs font-bold text-gray-400 mb-1">Buyer Email *</label>
+              <input type="email" placeholder="buyer@email.com" value={form.email}
+                onChange={e => setForm(f => ({ ...f, email: e.target.value }))}
+                className="w-full px-3 py-2 rounded-lg bg-gray-800 border border-gray-700 text-white text-sm focus:outline-none focus:border-yellow-500" />
+            </div>
+            <div>
+              <label className="block text-xs font-bold text-gray-400 mb-1">Stripe Session ID</label>
+              <input type="text" placeholder="cs_live_..." value={form.stripe_session_id}
+                onChange={e => setForm(f => ({ ...f, stripe_session_id: e.target.value }))}
+                className="w-full px-3 py-2 rounded-lg bg-gray-800 border border-gray-700 text-white text-sm focus:outline-none focus:border-yellow-500" />
+            </div>
+          </div>
+          <div>
+            <label className="block text-xs font-bold text-gray-400 mb-1">Master Bundle Download URL (Google Drive folder / zip link)</label>
+            <input type="url" placeholder="https://drive.google.com/..." value={form.download_url}
+              onChange={e => setForm(f => ({ ...f, download_url: e.target.value }))}
+              className="w-full px-3 py-2 rounded-lg bg-gray-800 border border-gray-700 text-white text-sm focus:outline-none focus:border-yellow-500" />
+          </div>
+          <div>
+            <label className="block text-xs font-bold text-gray-400 mb-1">Notes</label>
+            <input type="text" placeholder="e.g. Stripe purchase $197 verified" value={form.notes}
+              onChange={e => setForm(f => ({ ...f, notes: e.target.value }))}
+              className="w-full px-3 py-2 rounded-lg bg-gray-800 border border-gray-700 text-white text-sm focus:outline-none focus:border-yellow-500" />
+          </div>
+          <div className="flex gap-2">
+            <button onClick={handleGrant} disabled={saving || !form.email}
+              className="px-4 py-2 rounded-lg bg-yellow-700 hover:bg-yellow-600 text-black font-black text-sm disabled:opacity-50 transition-colors">
+              {saving ? "Saving…" : "Grant & Save"}
+            </button>
+            <button onClick={() => setShowForm(false)}
+              className="px-4 py-2 rounded-lg bg-gray-800 hover:bg-gray-700 text-gray-300 font-bold text-sm transition-colors">
+              Cancel
+            </button>
+          </div>
+        </div>
+      )}
+
+      {loading ? (
+        <div className="flex items-center justify-center py-8">
+          <div className="w-6 h-6 border-4 border-gray-700 border-t-yellow-500 rounded-full animate-spin" />
+        </div>
+      ) : grants.length === 0 ? (
+        <div className="text-center py-8 text-gray-600 text-sm">No master bundle grants yet.</div>
+      ) : (
+        <>
+          <div className="divide-y divide-gray-800/60">
+            {displayedGrants.map(g => (
+              <div key={g.id} className="flex items-center gap-3 px-5 py-3 hover:bg-gray-800/20 transition-colors">
+                <div className="flex-1 min-w-0">
+                  <p className="text-white text-sm font-medium truncate">{g.email}</p>
+                  <div className="flex items-center gap-2 mt-0.5">
+                    {g.stripe_session_id && <span className="text-xs text-gray-600 truncate max-w-[100px]">{g.stripe_session_id}</span>}
+                    <span className="text-xs text-gray-700">{g.created_date ? new Date(g.created_date).toLocaleDateString() : ""}</span>
+                  </div>
+                </div>
+                <div className="flex items-center gap-2 flex-shrink-0">
+                  {g.download_url && (
+                    <a href={g.download_url} target="_blank" rel="noopener noreferrer"
+                      className="flex items-center gap-1 px-2 py-1 rounded bg-gray-800 hover:bg-gray-700 text-gray-400 text-xs transition-colors">
+                      <ExternalLink size={10} /> Bundle
+                    </a>
+                  )}
+                  <button onClick={() => handleSendEmail(g)} disabled={sendingEmail === g.id}
+                    className={`flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-bold transition-all ${g.email_sent ? "bg-green-950/40 border border-green-800 text-green-400" : "bg-yellow-900/40 hover:bg-yellow-800/60 border border-yellow-700 text-yellow-300"}`}>
+                    {sendingEmail === g.id ? "Sending…" : g.email_sent ? <><Check size={10} /> Sent</> : <><Send size={10} /> Send Email</>}
+                  </button>
+                  <button onClick={() => handleToggle(g)}
+                    className={`w-7 h-7 rounded-full flex items-center justify-center transition-colors ${g.active ? "bg-green-900/50 text-green-400" : "bg-gray-800 text-gray-600"}`}>
+                    {g.active ? <Check size={12} /> : <X size={12} />}
+                  </button>
+                  <button onClick={() => handleDelete(g.id)}
+                    className="w-7 h-7 rounded-lg flex items-center justify-center text-gray-600 hover:text-red-400 hover:bg-red-900/20 transition-colors">
+                    <Trash2 size={12} />
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+          {grants.length > 5 && (
+            <button onClick={() => setShowAll(s => !s)}
+              className="w-full flex items-center justify-center gap-1 py-2.5 text-gray-600 hover:text-gray-400 text-xs transition-colors border-t border-gray-800">
+              {showAll ? <><ChevronUp size={11} /> Show less</> : <><ChevronDown size={11} /> Show all {grants.length} grants</>}
+            </button>
+          )}
+        </>
+      )}
+    </div>
+  );
+}
 
 function BriefPackAccessPanel({ adminEmail, onRefresh }) {
   const [grants, setGrants] = useState([]);
@@ -371,6 +580,9 @@ export default function AdminPdfAccess() {
             className="w-full pl-9 pr-4 py-2.5 rounded-lg bg-gray-900 border border-gray-800 text-white placeholder-gray-600 text-sm focus:outline-none focus:border-yellow-500"
           />
         </div>
+
+        {/* Master Bundle Section */}
+        <MasterBundlePanel adminEmail={adminEmail} />
 
         {/* Brief Pack Section */}
         <BriefPackAccessPanel adminEmail={adminEmail} onRefresh={loadGrants} />
