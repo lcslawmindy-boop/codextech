@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { ArrowLeft, ChevronDown, ChevronUp, ExternalLink, Copy, Check } from "lucide-react";
-import BuyerOutreachTemplates from "../components/acquisition/BuyerOutreachTemplates";
 
 // ── What you've actually built ────────────────────────────────────────────────
 const WHAT_YOU_BUILT = [
@@ -1043,12 +1042,6 @@ export default function ExitAdvisor() {
               </div>
             ))}
           </div>
-        </Section>
-
-        {/* Buyer Outreach Templates */}
-        <Section title="✉️ Buyer Outreach Templates & Follow-Up Sequences">
-          <p className="text-gray-400 text-sm">6 buyer-type-specific cold emails + a 5-email follow-up sequence over 30 days. Copy, fill in the brackets, send.</p>
-          <BuyerOutreachTemplates />
         </Section>
 
         {/* Outreach Templates */}
