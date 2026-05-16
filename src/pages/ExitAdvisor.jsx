@@ -1094,6 +1094,18 @@ export default function ExitAdvisor() {
           </div>
         </Section>
 
+        {/* Acquisition Ready Kit CTA */}
+        <div className="bg-yellow-950/20 border border-yellow-800/40 rounded-2xl p-5 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div>
+            <p className="text-yellow-300 font-black text-base">📦 Acquisition Ready Kit</p>
+            <p className="text-gray-400 text-sm mt-0.5">Private listing draft, all 5 broker emails, due diligence PDFs, and Loom recording guide — all in one place.</p>
+          </div>
+          <Link to="/acquisition-ready-kit"
+            className="flex-shrink-0 flex items-center gap-2 px-5 py-2.5 rounded-xl bg-yellow-700 hover:bg-yellow-600 text-black font-black text-sm transition-all">
+            Open Kit →
+          </Link>
+        </div>
+
         {/* Bottom line */}
         <div className="bg-gray-900 border border-gray-700 rounded-2xl p-6 text-center">
           <p className="text-white font-black text-lg mb-3">Bottom Line</p>
