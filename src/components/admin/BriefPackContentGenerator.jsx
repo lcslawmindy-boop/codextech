@@ -37,7 +37,7 @@ export default function BriefPackContentGenerator() {
     setGeneratingIds(prev => new Set([...prev, pack.id]));
     setError(null);
     try {
-      await base44.functions.invoke('generateBriefPackContent', {
+      await base44.functions.invoke('generateBriefPackContentFast', {
         pack_id: pack.id,
         pack_title: pack.title,
         pack_subtitle: pack.subtitle,
@@ -68,7 +68,7 @@ export default function BriefPackContentGenerator() {
       const pack = toGenerate[i];
       setBulkProgress({ current: i + 1, total: toGenerate.length, currentTitle: pack.title });
       try {
-        await base44.functions.invoke('generateBriefPackContent', {
+        await base44.functions.invoke('generateBriefPackContentFast', {
           pack_id: pack.id,
           pack_title: pack.title,
           pack_subtitle: pack.subtitle,
