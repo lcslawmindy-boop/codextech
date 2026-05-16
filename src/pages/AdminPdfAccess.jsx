@@ -3,6 +3,242 @@ import { Link } from "react-router-dom";
 import { ArrowLeft, Download, Plus, Trash2, Check, X, Search, RefreshCw, FileText, Send, ExternalLink, Package, ChevronDown, ChevronUp } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import { BRIEF_PACKS } from "../lib/briefPackData";
+import { jsPDF } from "jspdf";
+
+function generateMasterPDF() {
+  const doc = new jsPDF({ orientation: "portrait", unit: "mm", format: "a4" });
+  const W = 210, margin = 18, contentW = W - margin * 2;
+  let y = 0;
+
+  const addPage = () => { doc.addPage(); y = 20; };
+  const checkSpace = (needed) => { if (y + needed > 275) addPage(); };
+
+  // Cover page
+  doc.setFillColor(10, 15, 30);
+  doc.rect(0, 0, 210, 297, "F");
+  doc.setTextColor(6, 182, 212);
+  doc.setFontSize(9);
+  doc.setFont("helvetica", "bold");
+  doc.text("AETHON APEX IP — ADMIN REFERENCE", W / 2, 60, { align: "center" });
+  doc.setTextColor(255, 255, 255);
+  doc.setFontSize(26);
+  doc.text("Master Technical Brief Pack", W / 2, 80, { align: "center" });
+  doc.setFontSize(16);
+  doc.text("All 33 Device Build Plans", W / 2, 92, { align: "center" });
+  doc.setTextColor(150, 160, 180);
+  doc.setFontSize(10);
+  doc.setFont("helvetica", "normal");
+  doc.text("Complete Engineering Catalog — Admin Access Only", W / 2, 108, { align: "center" });
+  doc.text(`Generated: ${new Date().toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}`, W / 2, 116, { align: "center" });
+
+  // Stats
+  const stats = [
+    ["33", "Device Build Plans"],
+    ["1,400+", "Est. Total Pages"],
+    ["$891", "Retail Value"],
+    ["$197", "Bundle Price"],
+  ];
+  let sx = 20;
+  stats.forEach(([val, label]) => {
+    doc.setTextColor(6, 182, 212);
+    doc.setFontSize(18);
+    doc.setFont("helvetica", "bold");
+    doc.text(val, sx + 20, 160, { align: "center" });
+    doc.setTextColor(130, 140, 160);
+    doc.setFontSize(8);
+    doc.setFont("helvetica", "normal");
+    doc.text(label, sx + 20, 167, { align: "center" });
+    sx += 44;
+  });
+
+  doc.setTextColor(80, 90, 110);
+  doc.setFontSize(7.5);
+  doc.text("FOR RESEARCH AND EXPERIMENTAL PURPOSES ONLY. NOT FOR MEDICAL USE.", W / 2, 270, { align: "center" });
+  doc.text("All content based on published patents and peer-reviewed literature.", W / 2, 276, { align: "center" });
+
+  // Table of contents page
+  doc.addPage();
+  doc.setFillColor(15, 20, 35);
+  doc.rect(0, 0, 210, 297, "F");
+  y = 20;
+  doc.setTextColor(6, 182, 212);
+  doc.setFontSize(14);
+  doc.setFont("helvetica", "bold");
+  doc.text("TABLE OF CONTENTS", margin, y);
+  y += 10;
+  doc.setDrawColor(6, 182, 212);
+  doc.setLineWidth(0.3);
+  doc.line(margin, y, W - margin, y);
+  y += 7;
+
+  BRIEF_PACKS.forEach((pack, i) => {
+    checkSpace(8);
+    const num = String(i + 1).padStart(2, "0");
+    doc.setTextColor(100, 120, 150);
+    doc.setFontSize(7.5);
+    doc.setFont("helvetica", "normal");
+    doc.text(num, margin, y);
+    doc.setTextColor(220, 225, 235);
+    doc.setFont("helvetica", "bold");
+    doc.text(pack.title, margin + 8, y);
+    doc.setTextColor(80, 100, 130);
+    doc.setFont("helvetica", "normal");
+    doc.text(pack.category, W - margin - 28, y, { align: "right" });
+    doc.text(`${pack.pages}p`, W - margin, y, { align: "right" });
+    y += 6.5;
+  });
+
+  // Individual pack pages
+  BRIEF_PACKS.forEach((pack, i) => {
+    doc.addPage();
+    doc.setFillColor(12, 17, 30);
+    doc.rect(0, 0, 210, 297, "F");
+    y = 18;
+
+    // Pack number + category badge
+    doc.setFillColor(30, 40, 60);
+    doc.roundedRect(margin, y - 4, contentW, 8, 2, 2, "F");
+    doc.setTextColor(100, 130, 170);
+    doc.setFontSize(7.5);
+    doc.setFont("helvetica", "bold");
+    doc.text(`PACK ${String(i + 1).padStart(2, "0")} / 33`, margin + 3, y + 0.5);
+    doc.setTextColor(6, 182, 212);
+    doc.text(pack.category.toUpperCase(), W - margin - 3, y + 0.5, { align: "right" });
+    y += 10;
+
+    // Title
+    doc.setTextColor(255, 255, 255);
+    doc.setFontSize(16);
+    doc.setFont("helvetica", "bold");
+    const titleLines = doc.splitTextToSize(`${pack.icon} ${pack.title}`, contentW);
+    titleLines.forEach(line => { doc.text(line, margin, y); y += 7; });
+
+    // Subtitle
+    doc.setTextColor(150, 165, 190);
+    doc.setFontSize(9);
+    doc.setFont("helvetica", "italic");
+    const subLines = doc.splitTextToSize(pack.subtitle, contentW);
+    subLines.forEach(line => { doc.text(line, margin, y); y += 5; });
+    y += 3;
+
+    // Tagline box
+    doc.setFillColor(20, 30, 50);
+    doc.setDrawColor(6, 182, 212);
+    doc.setLineWidth(0.4);
+    const tagLines = doc.splitTextToSize(pack.tagline, contentW - 10);
+    const tagH = tagLines.length * 5 + 8;
+    checkSpace(tagH + 4);
+    doc.roundedRect(margin, y, contentW, tagH, 2, 2, "FD");
+    doc.setTextColor(180, 220, 240);
+    doc.setFontSize(8.5);
+    doc.setFont("helvetica", "normal");
+    tagLines.forEach((line, li) => { doc.text(line, margin + 5, y + 6 + li * 5); });
+    y += tagH + 6;
+
+    // Info row
+    const infoItems = [
+      ["Difficulty", pack.difficulty],
+      ["Est. Pages", pack.pages],
+      ["Price", `$${pack.price}`],
+    ];
+    checkSpace(14);
+    let ix = margin;
+    infoItems.forEach(([label, val]) => {
+      doc.setFillColor(25, 35, 55);
+      doc.roundedRect(ix, y, 52, 12, 2, 2, "F");
+      doc.setTextColor(100, 130, 170);
+      doc.setFontSize(6.5);
+      doc.setFont("helvetica", "normal");
+      doc.text(label.toUpperCase(), ix + 4, y + 5);
+      doc.setTextColor(220, 230, 245);
+      doc.setFontSize(9);
+      doc.setFont("helvetica", "bold");
+      doc.text(val, ix + 4, y + 10);
+      ix += 56;
+    });
+    y += 18;
+
+    // Theory basis
+    checkSpace(16);
+    doc.setTextColor(6, 182, 212);
+    doc.setFontSize(7.5);
+    doc.setFont("helvetica", "bold");
+    doc.text("THEORETICAL BASIS", margin, y);
+    y += 5;
+    doc.setTextColor(170, 185, 210);
+    doc.setFontSize(8);
+    doc.setFont("helvetica", "normal");
+    const basisLines = doc.splitTextToSize(pack.theory_basis, contentW);
+    basisLines.forEach(line => { checkSpace(5); doc.text(line, margin, y); y += 5; });
+    y += 4;
+
+    // Sections
+    checkSpace(12);
+    doc.setTextColor(6, 182, 212);
+    doc.setFontSize(7.5);
+    doc.setFont("helvetica", "bold");
+    doc.text("DOCUMENT SECTIONS", margin, y);
+    y += 5;
+    doc.setDrawColor(30, 45, 70);
+    doc.setLineWidth(0.2);
+    doc.line(margin, y, W - margin, y);
+    y += 4;
+
+    pack.sections.forEach((section, si) => {
+      checkSpace(8);
+      doc.setFillColor(22, 32, 52);
+      doc.roundedRect(margin, y - 1, contentW, 7, 1, 1, "F");
+      doc.setTextColor(6, 182, 212);
+      doc.setFontSize(7);
+      doc.setFont("helvetica", "bold");
+      doc.text(`${si + 1}.`, margin + 3, y + 3.5);
+      doc.setTextColor(210, 220, 235);
+      doc.setFont("helvetica", "normal");
+      doc.setFontSize(8);
+      const sLines = doc.splitTextToSize(section, contentW - 14);
+      sLines.forEach((sl, sli) => { doc.text(sl, margin + 9, y + 3.5 + sli * 4.5); });
+      y += sLines.length > 1 ? 6 + (sLines.length - 1) * 4.5 : 8;
+    });
+
+    // Footer
+    doc.setTextColor(50, 65, 90);
+    doc.setFontSize(6.5);
+    doc.setFont("helvetica", "normal");
+    doc.text("For research and experimental purposes only. Not for medical use.", margin, 290);
+    doc.text(`${i + 1} / ${BRIEF_PACKS.length}`, W - margin, 290, { align: "right" });
+  });
+
+  doc.save("Aethon-Apex-Master-Brief-Pack-All-33.pdf");
+}
+
+function AdminMasterPdfButton() {
+  const [generating, setGenerating] = useState(false);
+  const handleGenerate = () => {
+    setGenerating(true);
+    setTimeout(() => {
+      generateMasterPDF();
+      setGenerating(false);
+    }, 100);
+  };
+  return (
+    <div className="bg-gray-900 border-2 border-green-700/60 rounded-2xl p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+      <div>
+        <p className="text-white font-black text-lg flex items-center gap-2">🔓 Admin Master PDF — All 33 Brief Packs</p>
+        <p className="text-gray-400 text-sm mt-1">Generates a complete multi-page PDF with every device build plan, sections, BOM overview, theory basis, and difficulty. Download instantly — no URL needed.</p>
+        <div className="flex flex-wrap gap-2 mt-3">
+          {["33 Device Plans", "1,400+ Pages", "All Sections", "All Categories", "Admin Only"].map(tag => (
+            <span key={tag} className="text-xs px-2 py-1 rounded-full bg-green-950/60 border border-green-800 text-green-300 font-bold">{tag}</span>
+          ))}
+        </div>
+      </div>
+      <button onClick={handleGenerate} disabled={generating}
+        className="flex-shrink-0 flex items-center gap-2 px-6 py-3 rounded-xl bg-green-700 hover:bg-green-600 text-white font-black text-sm transition-all disabled:opacity-60 min-w-[180px] justify-center">
+        <Download size={16} />
+        {generating ? "Generating…" : "Download Master PDF"}
+      </button>
+    </div>
+  );
+}
 
 // Brief pack PDF definitions — update download_url fields with real hosted PDF links
 const BRIEF_PACK_DOCS = [
@@ -680,8 +916,8 @@ export default function AdminPdfAccess() {
           />
         </div>
 
-        {/* Admin Master Bundle Access */}
-        <AdminMasterBundleAccess />
+        {/* Admin Master PDF Download */}
+        <AdminMasterPdfButton />
 
         {/* Master Bundle Section */}
         <MasterBundlePanel adminEmail={adminEmail} />
