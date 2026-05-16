@@ -1094,6 +1094,18 @@ export default function ExitAdvisor() {
           </div>
         </Section>
 
+        {/* Acquisition Tier Roadmap CTA */}
+        <div className="bg-orange-950/20 border border-orange-800/40 rounded-2xl p-5 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div>
+            <p className="text-orange-300 font-black text-base">🎯 Acquisition Tier Roadmap</p>
+            <p className="text-gray-400 text-sm mt-0.5">Exactly what it costs financially to reach each exit tier — from $50K individual buyer to $10M+ major IP firm.</p>
+          </div>
+          <Link to="/acquisition-tier-roadmap"
+            className="flex-shrink-0 flex items-center gap-2 px-5 py-2.5 rounded-xl bg-orange-700 hover:bg-orange-600 text-white font-black text-sm transition-all">
+            View Roadmap →
+          </Link>
+        </div>
+
         {/* Investor Budget Sheet CTA */}
         <div className="bg-indigo-950/20 border border-indigo-800/40 rounded-2xl p-5 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div>

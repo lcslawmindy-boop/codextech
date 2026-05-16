@@ -188,6 +188,7 @@ import IPBrokerLanding from './pages/IPBrokerLanding';
 import ExitAdvisor from './pages/ExitAdvisor';
 import AcquisitionReadyKit from './pages/AcquisitionReadyKit';
 import InvestorBudgetSheet from './pages/InvestorBudgetSheet';
+import AcquisitionTierRoadmap from './pages/AcquisitionTierRoadmap';
 
 
 const AuthenticatedApp = () => {
@@ -400,6 +401,7 @@ const AuthenticatedApp = () => {
           <Route path="/exit-advisor" element={<ExitAdvisor />} />
           <Route path="/acquisition-ready-kit" element={<AcquisitionReadyKit />} />
           <Route path="/investor-budget-sheet" element={<InvestorBudgetSheet />} />
+          <Route path="/acquisition-tier-roadmap" element={<AcquisitionTierRoadmap />} />
           </Route>
 
           {/* Scalar Venture Vault Routes */}
