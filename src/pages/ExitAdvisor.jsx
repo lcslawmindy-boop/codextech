@@ -1094,6 +1094,18 @@ export default function ExitAdvisor() {
           </div>
         </Section>
 
+        {/* Investor Budget Sheet CTA */}
+        <div className="bg-indigo-950/20 border border-indigo-800/40 rounded-2xl p-5 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div>
+            <p className="text-indigo-300 font-black text-base">💰 Investor Budget Sheet</p>
+            <p className="text-gray-400 text-sm mt-0.5">Full budget breakdown, valuation bridge, and ROI scenarios to present to an investor for LLC formation + patent filing.</p>
+          </div>
+          <Link to="/investor-budget-sheet"
+            className="flex-shrink-0 flex items-center gap-2 px-5 py-2.5 rounded-xl bg-indigo-700 hover:bg-indigo-600 text-white font-black text-sm transition-all">
+            Open Sheet →
+          </Link>
+        </div>
+
         {/* Acquisition Ready Kit CTA */}
         <div className="bg-yellow-950/20 border border-yellow-800/40 rounded-2xl p-5 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div>
