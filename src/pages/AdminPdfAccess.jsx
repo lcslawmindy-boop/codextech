@@ -1,7 +1,207 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { ArrowLeft, Download, Plus, Trash2, Check, X, Search, RefreshCw } from "lucide-react";
+import { ArrowLeft, Download, Plus, Trash2, Check, X, Search, RefreshCw, FileText, Send, ExternalLink } from "lucide-react";
 import { base44 } from "@/api/base44Client";
+
+// Brief pack PDF definitions — update download_url fields with real hosted PDF links
+const BRIEF_PACK_DOCS = [
+  { id: "meg-architecture", title: "MEG System Architecture", pages: 40, file: "meg-system-architecture.pdf" },
+  { id: "scalar-transmitter", title: "Scalar Transmitter Design", pages: 35, file: "scalar-transmitter-design.pdf" },
+  { id: "measurement-protocols", title: "Measurement Protocol Suite", pages: 25, file: "measurement-protocols.pdf" },
+  { id: "anenergy-pump", title: "Anenergy Pump Preliminary", pages: 15, file: "anenergy-pump-preliminary.pdf" },
+];
+
+function BriefPackAccessPanel({ adminEmail, onRefresh }) {
+  const [grants, setGrants] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [form, setForm] = useState({ email: "", notes: "", download_url: "", stripe_session_id: "" });
+  const [showForm, setShowForm] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [sendingEmail, setSendingEmail] = useState(null);
+
+  useEffect(() => { loadGrants(); }, []);
+
+  const loadGrants = async () => {
+    setLoading(true);
+    const data = await base44.entities.PdfAccessGrant.filter({ tier: "brief_pack" }, "-created_date", 200);
+    setGrants(data || []);
+    setLoading(false);
+  };
+
+  const handleGrant = async () => {
+    if (!form.email) return;
+    setSaving(true);
+    await base44.entities.PdfAccessGrant.create({
+      email: form.email.toLowerCase().trim(),
+      tier: "brief_pack",
+      product: "Technical Brief Pack",
+      download_url: form.download_url || "",
+      stripe_session_id: form.stripe_session_id || "",
+      notes: form.notes,
+      granted_by: adminEmail,
+      active: true,
+      email_sent: false,
+    });
+    setForm({ email: "", notes: "", download_url: "", stripe_session_id: "" });
+    setShowForm(false);
+    await loadGrants();
+    setSaving(false);
+  };
+
+  const handleSendEmail = async (grant) => {
+    setSendingEmail(grant.id);
+    try {
+      await base44.integrations.Core.SendEmail({
+        to: grant.email,
+        subject: "Your Technical Brief Pack — Instant Download Links",
+        body: `Hi,
+
+Thank you for your purchase of the Technical Brief Pack!
+
+Your 4 PDF documents are ready for instant download:
+
+${BRIEF_PACK_DOCS.map((d, i) => `${i + 1}. ${d.title} (${d.pages} pages)\n   ${grant.download_url || "[Download link — update in Admin PDF Access]"}`).join("\n\n")}
+
+These are research documents for experimental engineering purposes. Please review the disclaimer included in each document.
+
+If you have any questions, reply to this email.
+
+— Aethon Apex IP Research Team`
+      });
+      await base44.entities.PdfAccessGrant.update(grant.id, { email_sent: true });
+      setGrants(prev => prev.map(g => g.id === grant.id ? { ...g, email_sent: true } : g));
+    } catch (e) {
+      console.error(e);
+    }
+    setSendingEmail(null);
+  };
+
+  const handleToggle = async (grant) => {
+    await base44.entities.PdfAccessGrant.update(grant.id, { active: !grant.active });
+    setGrants(prev => prev.map(g => g.id === grant.id ? { ...g, active: !g.active } : g));
+  };
+
+  const handleDelete = async (id) => {
+    if (!confirm("Remove this brief pack access grant?")) return;
+    await base44.entities.PdfAccessGrant.delete(id);
+    setGrants(prev => prev.filter(g => g.id !== id));
+  };
+
+  return (
+    <div className="bg-gray-900 border border-cyan-800/50 rounded-2xl overflow-hidden">
+      <div className="px-5 py-4 border-b border-cyan-800/30 bg-cyan-950/20 flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <FileText size={15} className="text-cyan-400" />
+          <h2 className="text-white font-black text-sm">Brief Pack — Instant PDF Access</h2>
+          <span className="text-xs px-2 py-0.5 rounded-full bg-cyan-900/50 border border-cyan-700 text-cyan-300 font-bold">{grants.filter(g => g.active).length} active</span>
+        </div>
+        <button onClick={() => setShowForm(s => !s)}
+          className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-cyan-700 hover:bg-cyan-600 text-white text-xs font-bold transition-colors">
+          <Plus size={12} /> Grant Brief Pack Access
+        </button>
+      </div>
+
+      {/* What's in the pack */}
+      <div className="px-5 py-3 border-b border-gray-800 bg-gray-900/50">
+        <p className="text-gray-500 text-xs mb-2 font-bold uppercase tracking-wider">PDFs in this pack ($27 product)</p>
+        <div className="flex flex-wrap gap-2">
+          {BRIEF_PACK_DOCS.map(d => (
+            <span key={d.id} className="text-xs px-2.5 py-1 rounded-lg bg-gray-800 border border-gray-700 text-gray-300">
+              📄 {d.title} <span className="text-gray-600">({d.pages}p)</span>
+            </span>
+          ))}
+        </div>
+      </div>
+
+      {/* Add grant form */}
+      {showForm && (
+        <div className="px-5 py-5 border-b border-gray-800 bg-gray-900/60 space-y-3">
+          <h3 className="text-white font-bold text-sm">Grant Brief Pack Access</h3>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label className="block text-xs font-bold text-gray-400 mb-1">Buyer Email *</label>
+              <input type="email" placeholder="buyer@email.com" value={form.email}
+                onChange={e => setForm(f => ({ ...f, email: e.target.value }))}
+                className="w-full px-3 py-2 rounded-lg bg-gray-800 border border-gray-700 text-white text-sm focus:outline-none focus:border-cyan-500" />
+            </div>
+            <div>
+              <label className="block text-xs font-bold text-gray-400 mb-1">Stripe Session ID (optional)</label>
+              <input type="text" placeholder="cs_live_..." value={form.stripe_session_id}
+                onChange={e => setForm(f => ({ ...f, stripe_session_id: e.target.value }))}
+                className="w-full px-3 py-2 rounded-lg bg-gray-800 border border-gray-700 text-white text-sm focus:outline-none focus:border-cyan-500" />
+            </div>
+          </div>
+          <div>
+            <label className="block text-xs font-bold text-gray-400 mb-1">PDF Download URL (hosted link to zip or drive folder)</label>
+            <input type="url" placeholder="https://drive.google.com/... or storage URL" value={form.download_url}
+              onChange={e => setForm(f => ({ ...f, download_url: e.target.value }))}
+              className="w-full px-3 py-2 rounded-lg bg-gray-800 border border-gray-700 text-white text-sm focus:outline-none focus:border-cyan-500" />
+          </div>
+          <div>
+            <label className="block text-xs font-bold text-gray-400 mb-1">Notes</label>
+            <input type="text" placeholder="e.g. Stripe purchase verified" value={form.notes}
+              onChange={e => setForm(f => ({ ...f, notes: e.target.value }))}
+              className="w-full px-3 py-2 rounded-lg bg-gray-800 border border-gray-700 text-white text-sm focus:outline-none focus:border-cyan-500" />
+          </div>
+          <div className="flex gap-2">
+            <button onClick={handleGrant} disabled={saving || !form.email}
+              className="px-4 py-2 rounded-lg bg-cyan-700 hover:bg-cyan-600 text-white font-bold text-sm disabled:opacity-50 transition-colors">
+              {saving ? "Saving…" : "Grant & Save"}
+            </button>
+            <button onClick={() => setShowForm(false)}
+              className="px-4 py-2 rounded-lg bg-gray-800 hover:bg-gray-700 text-gray-300 font-bold text-sm transition-colors">
+              Cancel
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Grants list */}
+      {loading ? (
+        <div className="flex items-center justify-center py-10">
+          <div className="w-6 h-6 border-4 border-gray-700 border-t-cyan-500 rounded-full animate-spin" />
+        </div>
+      ) : grants.length === 0 ? (
+        <div className="text-center py-10 text-gray-600 text-sm">No brief pack grants yet.</div>
+      ) : (
+        <div className="divide-y divide-gray-800/60">
+          {grants.map(g => (
+            <div key={g.id} className="flex items-center gap-3 px-5 py-3 hover:bg-gray-800/20 transition-colors">
+              <div className="flex-1 min-w-0">
+                <p className="text-white text-sm font-medium truncate">{g.email}</p>
+                <div className="flex items-center gap-2 mt-0.5">
+                  {g.stripe_session_id && <span className="text-xs text-gray-600 truncate max-w-[120px]">{g.stripe_session_id}</span>}
+                  {g.notes && <span className="text-xs text-gray-600 truncate">{g.notes}</span>}
+                  <span className="text-xs text-gray-700">{g.created_date ? new Date(g.created_date).toLocaleDateString() : ""}</span>
+                </div>
+              </div>
+              <div className="flex items-center gap-2 flex-shrink-0">
+                {g.download_url && (
+                  <a href={g.download_url} target="_blank" rel="noopener noreferrer"
+                    className="flex items-center gap-1 px-2 py-1 rounded bg-gray-800 hover:bg-gray-700 text-gray-400 text-xs transition-colors">
+                    <ExternalLink size={10} /> PDF
+                  </a>
+                )}
+                <button onClick={() => handleSendEmail(g)} disabled={sendingEmail === g.id}
+                  className={`flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-bold transition-all ${g.email_sent ? "bg-green-950/40 border border-green-800 text-green-400" : "bg-cyan-900/40 hover:bg-cyan-800/60 border border-cyan-700 text-cyan-300"}`}>
+                  {sendingEmail === g.id ? "Sending…" : g.email_sent ? <><Check size={10} /> Sent</> : <><Send size={10} /> Send Email</>}
+                </button>
+                <button onClick={() => handleToggle(g)}
+                  className={`w-7 h-7 rounded-full flex items-center justify-center transition-colors ${g.active ? "bg-green-900/50 text-green-400" : "bg-gray-800 text-gray-600"}`}>
+                  {g.active ? <Check size={12} /> : <X size={12} />}
+                </button>
+                <button onClick={() => handleDelete(g.id)}
+                  className="w-7 h-7 rounded-lg flex items-center justify-center text-gray-600 hover:text-red-400 hover:bg-red-900/20 transition-colors">
+                  <Trash2 size={12} />
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
 
 export default function AdminPdfAccess() {
   const [grants, setGrants] = useState([]);
@@ -133,6 +333,7 @@ export default function AdminPdfAccess() {
                 >
                   <option value="elite">Elite</option>
                   <option value="gov">GOV / Defense</option>
+                  <option value="brief_pack">Brief Pack</option>
                 </select>
               </div>
             </div>
@@ -171,6 +372,9 @@ export default function AdminPdfAccess() {
           />
         </div>
 
+        {/* Brief Pack Section */}
+        <BriefPackAccessPanel adminEmail={adminEmail} onRefresh={loadGrants} />
+
         {/* Grants table */}
         {loading ? (
           <div className="flex items-center justify-center py-16">
@@ -201,8 +405,12 @@ export default function AdminPdfAccess() {
                   <tr key={g.id} className="hover:bg-gray-800/30 transition-colors">
                     <td className="py-3 px-5 text-white font-medium">{g.email}</td>
                     <td className="py-3 px-4">
-                      <span className={`text-xs px-2 py-1 rounded-full font-bold ${g.tier === "gov" ? "bg-green-900/40 text-green-300 border border-green-800" : "bg-yellow-900/40 text-yellow-300 border border-yellow-800"}`}>
-                        {g.tier === "gov" ? "GOV" : "Elite"}
+                      <span className={`text-xs px-2 py-1 rounded-full font-bold ${
+                        g.tier === "gov" ? "bg-green-900/40 text-green-300 border border-green-800" :
+                        g.tier === "brief_pack" ? "bg-cyan-900/40 text-cyan-300 border border-cyan-800" :
+                        "bg-yellow-900/40 text-yellow-300 border border-yellow-800"
+                      }`}>
+                        {g.tier === "gov" ? "GOV" : g.tier === "brief_pack" ? "Brief Pack" : "Elite"}
                       </span>
                     </td>
                     <td className="py-3 px-4 text-gray-400 text-xs">{g.granted_by || "—"}</td>

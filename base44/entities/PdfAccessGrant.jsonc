@@ -10,9 +10,22 @@
       "type": "string",
       "enum": [
         "elite",
-        "gov"
+        "gov",
+        "brief_pack"
       ],
-      "description": "Membership tier the user is on"
+      "description": "Membership tier or product the user purchased"
+    },
+    "product": {
+      "type": "string",
+      "description": "Specific product granted (e.g. 'Technical Brief Pack', 'MEG System Architecture')"
+    },
+    "download_url": {
+      "type": "string",
+      "description": "Direct URL or signed URL for the PDF file"
+    },
+    "stripe_session_id": {
+      "type": "string",
+      "description": "Stripe checkout session ID for verification"
     },
     "granted_by": {
       "type": "string",
@@ -26,6 +39,11 @@
       "type": "boolean",
       "default": true,
       "description": "Whether this grant is currently active"
+    },
+    "email_sent": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether the download link email has been sent"
     }
   },
   "required": [
