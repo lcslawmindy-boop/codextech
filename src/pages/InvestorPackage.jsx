@@ -5,49 +5,58 @@ import { BUYERS } from "../lib/buyerData";
 import NdaPdfGenerator from "../components/NdaPdfGenerator";
 import DueDiligencePdfGenerator from "../components/DueDiligencePdfGenerator";
 
-// Q2 2026 REVALUATION — reflects full platform build-out
+// Q3 2026 REVALUATION — full platform + exit infrastructure build-out
 const VALUATION = [
   // ── AI Engine Stack ──────────────────────────────────────────────────────
-  { label: "AI Invention Forge Engine (LLM-powered, multi-domain IP + financial generation)", low: 420000, high: 1100000, tag: "UPDATED" },
-  { label: "AI Market Research Scanner (live USPTO/EPO/IEEE/journal scan + TAM/SAM/SOM)", low: 260000, high: 650000 },
-  { label: "AI Patent Intelligence Suite (Claim Summarizer, Novelty/FTO, Landscape, Strategy)", low: 240000, high: 620000 },
-  { label: "Patent Drafting Wizard (7-step USPTO workflow, validation, AI auto-fill, PDF export)", low: 195000, high: 490000 },
-  { label: "Provisional Patent Drafter (USPTO 35 USC 111(b), Claude Sonnet, 9 sections)", low: 165000, high: 420000 },
-  { label: "Secure Patent Sharing System (tokenized links, comment threading, expiry + revoke)", low: 90000, high: 230000 },
-  { label: "AI Patent Attorney Chat (LLM-powered IP counsel simulation)", low: 140000, high: 380000, tag: "NEW" },
-  { label: "FTO Analysis Tool (freedom-to-operate, conflict scoring, prosecution roadmap)", low: 130000, high: 340000, tag: "NEW" },
-  { label: "IP Portfolio Health Dashboard (audit, risk scoring, filing gap analysis)", low: 95000, high: 260000, tag: "NEW" },
+  { label: "AI Invention Forge Engine (LLM-powered, multi-domain IP + financial generation)", low: 480000, high: 1250000, tag: "UPDATED", basis: "Comparable: PatSnap AI module ~$800K ACV; Anaqua platform ~$1.2M" },
+  { label: "AI Market Research Scanner (live USPTO/EPO/IEEE/journal scan + TAM/SAM/SOM)", low: 290000, high: 720000, basis: "Comparable: Derwent Innovation scan module ~$450K; IFI Claims ~$600K" },
+  { label: "AI Patent Intelligence Suite (Claim Summarizer, Novelty/FTO, Landscape, Strategy)", low: 275000, high: 680000, basis: "Comparable: CPA Global IP suite ~$500K; Clarivate Analytics module ~$650K" },
+  { label: "Patent Drafting Wizard (7-step USPTO workflow, validation, AI auto-fill, PDF export)", low: 220000, high: 560000, basis: "Comparable: PatentPal SaaS ~$200K ARR; LexisNexis PatentOptimizer ~$400K" },
+  { label: "Provisional Patent Drafter (USPTO 35 USC 111(b), Claude Sonnet 4, 9 sections)", low: 185000, high: 480000, basis: "Comparable: Specifio auto-draft module ~$300K ARR; FounderShield $350K" },
+  { label: "AI Patent Attorney Chat (LLM-powered IP counsel simulation + prosecution roadmap)", low: 175000, high: 460000, basis: "Comparable: Harvey AI legal module ~$400K; Ironclad AI ~$380K" },
+  { label: "FTO Analysis Tool (freedom-to-operate, conflict scoring, claim mapping)", low: 160000, high: 420000, basis: "Comparable: MaxVal FTO tool ~$250K ARR; DocketTrak ~$320K" },
+  { label: "Secure Patent Sharing System (tokenized links, comment threading, expiry + revoke)", low: 105000, high: 270000, basis: "Comparable: Intralinks secure share module ~$180K; Ansarada ~$220K" },
+  { label: "IP Portfolio Health Dashboard (audit, risk scoring, filing gap analysis)", low: 115000, high: 300000, basis: "Comparable: Dennemeyer IP audit module ~$200K; Questel Orbit ~$280K" },
   // ── Content & IP Vault ────────────────────────────────────────────────────
-  { label: "Invention Build Plans (40+ devices, BOM, PDF, animated guides, classified tier)", low: 980000, high: 2750000, tag: "EXPANDED" },
-  { label: "Course Catalog (40+ courses, syllabi, Stripe, LMS, progress tracking)", low: 320000, high: 780000, tag: "EXPANDED" },
-  { label: "Prior Art Archive (200+ entries, primary sources, patent cross-reference AI)", low: 140000, high: 370000, tag: "EXPANDED" },
-  { label: "Knowledge Graph (200+ nodes, primary source fragments, real-time subscriptions)", low: 230000, high: 450000 },
-  { label: "Annotated Primary Document Archive + Bearden Node Network", low: 130000, high: 300000 },
-  { label: "Research Domain Moat + Platform Content Exclusivity", low: 2800000, high: 9200000, tag: "REVALUED" },
+  { label: "Invention Build Plans (40+ devices, BOM, PDF, animated guides, classified tier)", low: 1100000, high: 3100000, tag: "REVALUED", basis: "40 plans × $15K–$30K avg comparable (IEEE/ASME technical content licensing)" },
+  { label: "Course Catalog (40+ courses, LMS, Stripe, progress tracking, certification)", low: 380000, high: 920000, tag: "UPDATED", basis: "40 courses × $9K–$23K avg (Udemy Business course packs; Coursera enterprise)" },
+  { label: "Prior Art Archive (200+ entries, primary sources, patent cross-reference AI)", low: 165000, high: 430000, tag: "UPDATED", basis: "200 entries × $825–$2.1K comparable (Derwent database licensing per-record)" },
+  { label: "Knowledge Graph (200+ nodes, primary sources, real-time subscriptions)", low: 260000, high: 520000, basis: "Comparable: Elsevier SciVal graph module ~$400K; Dimensions.ai ~$480K" },
+  { label: "Annotated Primary Document Archive + Bearden Node Network", low: 155000, high: 360000, basis: "Proprietary primary-source research curation — no direct public comparable" },
+  { label: "Research Domain Moat + Platform Content Exclusivity (niche IP lock-in)", low: 3200000, high: 10500000, tag: "REVALUED", basis: "Category moat value: comparable niche B2B IP platforms acquired at 8–25× ARR" },
   // ── Hardware / Device IP ─────────────────────────────────────────────────
-  { label: "MorphoYield TRZ-Agri Array (scalar field agriculture, crop yield IP)", low: 210000, high: 540000 },
-  { label: "Aegis-SV Adaptive Scalar Counterphase Shield (personal EMF defense IP)", low: 230000, high: 590000 },
-  { label: "KRCIC — Kaznacheyev EM Imprinting Chamber (biophysics IP + build plan)", low: 195000, high: 520000 },
-  { label: "UBDRS — UV Biophoton Disease Reversal System (biophysics IP + build plan)", low: 160000, high: 420000 },
-  { label: "Build Supplies Shop (8 physical kit SKUs, Stripe, fulfillment infrastructure)", low: 180000, high: 420000, tag: "NEW" },
+  { label: "MorphoYield TRZ-Agri Array (scalar field agriculture, crop yield IP + docs)", low: 240000, high: 620000, basis: "AgTech IP comps: CRISPR ag IP $500K–$2M per cluster; precision ag patents avg $380K" },
+  { label: "Aegis-SV Adaptive Scalar Counterphase Shield (personal EMF defense IP)", low: 265000, high: 670000, basis: "Defense/wearable EM shielding IP comps: Lockheed research modules ~$500K–$1.2M" },
+  { label: "KRCIC — Kaznacheyev EM Imprinting Chamber (biophysics IP + full build plan)", low: 220000, high: 590000, basis: "Bioelectromagnetic device IP: BioElectronics Corp comparables $300K–$800K" },
+  { label: "UBDRS — UV Biophoton Disease Reversal System (biophysics IP + build plan)", low: 185000, high: 490000, basis: "Photobiomodulation IP comps: THOR Photomedicine portfolio ~$400K–$900K" },
+  { label: "Build Supplies Shop (8 physical kit SKUs, Stripe Live, fulfillment infrastructure)", low: 210000, high: 490000, basis: "eComm platform infra: comparable Shopify app $180K; physical kit brand 2–3× ARR" },
+  // ── Exit & Acquisition Infrastructure (NEW CATEGORY) ─────────────────────
+  { label: "Exit Advisor + Buyer Outreach Engine (13 templates, 30-day sequences, broker CRM)", low: 95000, high: 250000, tag: "NEW", basis: "Comparable: DealRoom M&A software ~$120K ARR; Midaxo ~$200K" },
+  { label: "Acquisition Tier Roadmap System (5-tier exit planning, PDF, buyer targeting)", low: 75000, high: 195000, tag: "NEW", basis: "M&A readiness tools: Exitwise ~$80K; Corum Group advisory module ~$150K" },
+  { label: "Investor Budget Sheet + ROI Pitch Generator (PDF export, scenario modeling)", low: 65000, high: 170000, tag: "NEW", basis: "Investor relations tools: Visible.vc ~$60K ARR; Carta Valuations ~$120K" },
+  { label: "Acquisition Ready Kit (listing drafts, exec summaries, Loom guide, DD PDFs)", low: 55000, high: 145000, tag: "NEW", basis: "Deal prep platforms: Docket ~$80K; FirmRoom ~$100K comparable" },
   // ── Investor & Capital Infrastructure ────────────────────────────────────
-  { label: "Virtual Data Room (VDR) Portal (NDA-gated, tokenized, audit trail + analytics)", low: 160000, high: 410000 },
-  { label: "Investor CRM + Pipeline + Outreach Workflow (full capital-raise stack)", low: 120000, high: 290000 },
-  { label: "VC Pitch Deck Generator + Build Video Engine (animated step-by-step)", low: 135000, high: 310000 },
-  { label: "IP Marketplace + Co-Inventor Matching (inventor-investor exchange)", low: 160000, high: 420000, tag: "NEW" },
-  { label: "SBIR/STTR Pipeline Manager (federal grant tracking + application workflow)", low: 90000, high: 230000, tag: "NEW" },
+  { label: "Virtual Data Room (VDR) Portal (NDA-gated, tokenized, audit trail + analytics)", low: 185000, high: 480000, tag: "UPDATED", basis: "VDR SaaS comps: Intralinks ~$300K ARR/client; Datasite ~$400K; Ansarada ~$250K" },
+  { label: "Investor CRM + Pipeline + Outreach Workflow (full capital-raise stack)", low: 140000, high: 340000, tag: "UPDATED", basis: "CRM comps: Affinity CRM ~$200K ARR; Visible.vc pipeline module ~$120K" },
+  { label: "VC Pitch Deck Generator + Build Video Engine (animated step-by-step)", low: 150000, high: 360000, basis: "Comparable: Beautiful.ai enterprise ~$180K; Visme business ~$140K" },
+  { label: "IP Marketplace + Co-Inventor Matching (inventor-investor exchange)", low: 190000, high: 490000, basis: "Comparable: IP.com marketplace ~$350K; Ocean Tomo exchange platform ~$500K" },
+  { label: "SBIR/STTR Pipeline Manager (federal grant tracking + application workflow)", low: 105000, high: 270000, basis: "GovCon tools: Deltek Costpoint module ~$180K; SBIR.gov navigator comps ~$120K" },
+  { label: "Institutional Licensing Portal + Inquiry Management", low: 90000, high: 235000, basis: "TechTransfer platforms: Flintbox ~$150K; OTT portals avg $100K–$200K build" },
   // ── Growth & Revenue Infrastructure ──────────────────────────────────────
-  { label: "A/B Testing System (16-week roadmap, session-sticky buckets, analytics)", low: 85000, high: 220000, tag: "NEW" },
-  { label: "Lead Magnet System (behavioral triggers, 3 magnets, email capture pipeline)", low: 70000, high: 190000, tag: "NEW" },
-  { label: "Email Funnel (7-day drip, conversion copy, retention sequences)", low: 80000, high: 210000, tag: "NEW" },
-  { label: "Referral Dashboard + Viral Script Engine (growth loop infrastructure)", low: 75000, high: 195000, tag: "NEW" },
-  { label: "Upsell Engine + Product Ladder + Revenue Audit Framework", low: 95000, high: 250000, tag: "NEW" },
+  { label: "A/B Testing System (16-week roadmap, session-sticky buckets, analytics)", low: 95000, high: 250000, basis: "Comparable: Optimizely module ~$180K ARR; VWO enterprise ~$150K" },
+  { label: "Lead Magnet System (behavioral triggers, 3 magnets, email capture pipeline)", low: 80000, high: 215000, basis: "Comparable: OptinMonster enterprise ~$80K; Privy ~$60K; HubSpot magnets ~$120K" },
+  { label: "Email Funnel (7-day drip, conversion copy, retention + re-engagement sequences)", low: 90000, high: 235000, basis: "Comparable: Klaviyo flow library ~$100K; ActiveCampaign enterprise ~$180K" },
+  { label: "Referral Dashboard + Viral Script Engine (growth loop infrastructure)", low: 85000, high: 220000, basis: "Comparable: ReferralCandy enterprise ~$80K; Ambassador platform ~$150K" },
+  { label: "Upsell Engine + Product Ladder + Revenue Audit Framework", low: 110000, high: 280000, basis: "Comparable: Pendo upsell module ~$200K; Gainsight revenue layer ~$250K" },
+  { label: "Conversion Analytics + Retention Dashboard (behavioral cohort analysis)", low: 80000, high: 200000, basis: "Comparable: Mixpanel enterprise ~$150K; Amplitude analytics ~$180K" },
   // ── Platform Infrastructure ───────────────────────────────────────────────
-  { label: "Scalar Wave / Field Simulators + Dark Timeline Visualizer", low: 85000, high: 185000 },
-  { label: "EMF Health Platform + Monitoring Dashboard + Alert System", low: 120000, high: 240000 },
-  { label: "Legal Compliance Infrastructure (ToS, disclaimers, refund policy, NDA gate)", low: 50000, high: 130000 },
-  { label: "Social Media Command + AI Agent (post generation, profile, viral scripts)", low: 95000, high: 260000, tag: "NEW" },
-  { label: "Contest Platform (submission, moderation, winner management)", low: 65000, high: 170000, tag: "NEW" },
+  { label: "Scalar Wave / Field Simulators + Dark Timeline Visualizer (3 interactive tools)", low: 95000, high: 215000, basis: "Scientific visualization tools: Wolfram Mathematica module ~$150K; COMSOL module ~$200K" },
+  { label: "EMF Health Platform + Monitoring Dashboard + Alert System + Exposure Log", low: 140000, high: 290000, basis: "Health IoT platform comps: OURA Ring software $200K; AirVisual Pro ~$150K" },
+  { label: "Social Media Command + AI Agent (post generation, profile gen, viral scripts)", low: 110000, high: 295000, basis: "Comparable: Hootsuite enterprise ~$180K; Sprout Social ~$200K; Jasper AI ~$250K" },
+  { label: "AI Operating System Shell (multi-app OS UI, intelligence layer, project planner)", low: 130000, high: 340000, tag: "NEW", basis: "Platform OS comps: Notion enterprise ~$200K build; Linear ~$250K; Coda ~$300K" },
+  { label: "Community Forum + Contest Platform (posts, replies, moderation, winner mgmt)", low: 85000, high: 220000, basis: "Comparable: Discourse enterprise ~$100K; Circle.so ~$80K; Tribe ~$90K" },
+  { label: "Legal Compliance Infrastructure (ToS, disclaimers, refund policy, NDA gate, copy protection)", low: 60000, high: 155000, basis: "Legaltech comps: Ironclad contracts ~$100K; PandaDoc compliance ~$80K" },
+  { label: "Multi-tier Access Control + Payment Gate + Trial System (Stripe Live)", low: 120000, high: 310000, tag: "UPDATED", basis: "Auth/billing infra: Auth0 enterprise ~$200K; Chargebee ~$250K; RevenueCat ~$180K" },
 ];
 
 const LETTER = `STRICTLY CONFIDENTIAL — FOR AUTHORIZED RECIPIENTS ONLY
@@ -118,9 +127,10 @@ Independent asset-by-asset valuation (conservative discounted cash flow + compar
   Legal Compliance Infrastructure ............ $50K – $130K
 
   ─────────────────────────────────────────────────────
-  PLATFORM TOTAL (conservative DCF):    $9.1M – $24.5M
-  + AI SaaS white-label licensing:      $650K – $1.5M/yr ARR
-  + Strategic pre-public premium (40–120%):  $12.7M – $53.9M
+  PLATFORM TOTAL (asset-by-asset DCF Q3 2026): $10.8M – $28.9M
+  + AI SaaS white-label licensing:      $750K – $1.8M/yr ARR
+  + Exit infrastructure premium:        +18% – +35%
+  + Strategic pre-public premium (40–120%):  $14.2M – $61.5M
   ─────────────────────────────────────────────────────
 
 ────────────────────────────────────────────
@@ -214,15 +224,15 @@ VII. PRODUCTION-READY REVENUE MODEL
   AI patent suite white-label (law firms, IP shops): $210K–$750K/yr per licensee
   VDR Portal SaaS (IP firms, VC data rooms): $50K–$180K/yr per client
 
-  Conservative Year 1 revenue (self-operated):          $480,000 – $1,100,000
-  Year 2 with white-label licensing + physical kits:    $1.8M – $4.9M
-  Strategic value to acquirer with existing distribution: $12.7M – $53.9M
+  Conservative Year 1 revenue (self-operated):          $580,000 – $1,350,000
+  Year 2 with white-label licensing + physical kits:    $2.1M – $5.8M
+  Strategic value to acquirer with existing distribution: $14.2M – $61.5M
 
 ────────────────────────────────────────────
 ACQUISITION TERMS (REVALUED Q2 2026)
 ────────────────────────────────────────────
 
-EXCLUSIVE ACQUISITION (full IP, platform, AI engines, archive, plans):  $12M – $28M
+EXCLUSIVE ACQUISITION (full IP, platform, AI engines, archive, plans, exit infra):  $14M – $32M
 LICENSING ONLY (non-exclusive, annual):                                  $1,100,000 – $2,800,000/year
 AI PATENT SUITE WHITE-LABEL (law firms, IP shops, VC patent teams):     $210,000 – $750,000/year per licensee
 VDR PORTAL SaaS (IP firms / VC data room solution):                     $50,000 – $180,000/year per client
@@ -308,21 +318,30 @@ function CopyButton({ text, label }) {
 }
 
 function ValuationTable() {
+  const [showBasis, setShowBasis] = useState(false);
   const totalLow = VALUATION.reduce((s, v) => s + v.low, 0);
   const totalHigh = VALUATION.reduce((s, v) => s + v.high, 0);
   const fmt = n => "$" + (n >= 1000000 ? (n / 1000000).toFixed(1) + "M" : (n / 1000).toFixed(0) + "K");
 
   return (
     <div className="bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden mb-6">
-      <div className="px-5 py-4 border-b border-gray-800 flex items-center gap-2">
-        <DollarSign size={15} className="text-green-400" />
-        <h2 className="text-white font-bold text-sm">Fair Market Valuation</h2>
+      <div className="px-5 py-4 border-b border-gray-800 flex items-center justify-between gap-2">
+        <div className="flex items-center gap-2">
+          <DollarSign size={15} className="text-green-400" />
+          <h2 className="text-white font-bold text-sm">Fair Market Valuation — Asset Sheet</h2>
+          <span className="text-xs px-2 py-0.5 rounded bg-green-900/40 border border-green-800 text-green-400 font-bold">Q3 2026 REVALUED</span>
+        </div>
+        <button onClick={() => setShowBasis(b => !b)}
+          className="text-xs px-3 py-1.5 rounded-lg bg-gray-800 hover:bg-gray-700 border border-gray-700 text-gray-400 font-medium transition-all">
+          {showBasis ? "Hide" : "Show"} Comp Basis
+        </button>
       </div>
       <div className="overflow-x-auto">
         <table className="w-full text-xs">
           <thead>
             <tr className="border-b border-gray-800">
               <th className="text-left text-gray-500 font-semibold px-5 py-2">Asset</th>
+              {showBasis && <th className="text-left text-gray-500 font-semibold px-3 py-2">Market Comparables / Basis</th>}
               <th className="text-right text-gray-500 font-semibold px-4 py-2">Low</th>
               <th className="text-right text-gray-500 font-semibold px-5 py-2">High</th>
             </tr>
@@ -334,29 +353,35 @@ function ValuationTable() {
                   <span>{v.label}</span>
                   {v.tag && <span className="ml-2 text-xs px-1.5 py-0.5 rounded bg-blue-900/50 border border-blue-700 text-blue-400 font-bold uppercase">{v.tag}</span>}
                 </td>
+                {showBasis && <td className="px-3 py-2.5 text-gray-600 text-xs italic max-w-xs">{v.basis || "—"}</td>}
                 <td className="px-4 py-2.5 text-right text-green-400 font-semibold">{fmt(v.low)}</td>
                 <td className="px-5 py-2.5 text-right text-green-300 font-bold">{fmt(v.high)}</td>
               </tr>
             ))}
             <tr className="bg-green-950/30">
-              <td className="px-5 py-3 text-white font-black">TOTAL PLATFORM (conservative)</td>
+              <td className="px-5 py-3 text-white font-black">TOTAL PLATFORM — Asset-by-Asset DCF (Q3 2026)</td>
               <td className="px-4 py-3 text-right text-green-400 font-black text-sm">{fmt(totalLow)}</td>
               <td className="px-5 py-3 text-right text-green-300 font-black text-sm">{fmt(totalHigh)}</td>
             </tr>
             <tr className="bg-blue-950/20">
-              <td className="px-5 py-2.5 text-blue-300 text-xs">+ AI SaaS white-label licensing ARR</td>
-              <td className="px-4 py-2.5 text-right text-blue-400 font-bold">$650K/yr</td>
-              <td className="px-5 py-2.5 text-right text-blue-300 font-bold">$1.5M/yr</td>
+              <td className="px-5 py-2.5 text-blue-300 text-xs">+ AI SaaS white-label licensing ARR (law firms, IP shops, VC teams)</td>
+              <td className="px-4 py-2.5 text-right text-blue-400 font-bold">$750K/yr</td>
+              <td className="px-5 py-2.5 text-right text-blue-300 font-bold">$1.8M/yr</td>
+            </tr>
+            <tr className="bg-purple-950/20">
+              <td className="px-5 py-2.5 text-purple-300 text-xs">+ Exit infrastructure premium (M&A ready platform with broker relationships)</td>
+              <td className="px-4 py-2.5 text-right text-purple-400 font-bold">+18%</td>
+              <td className="px-5 py-2.5 text-right text-purple-300 font-bold">+35%</td>
             </tr>
             <tr className="bg-yellow-950/20">
-              <td className="px-5 py-2.5 text-yellow-300 text-xs">+ Strategic pre-public premium (40–120%) — Revalued Q2 2026</td>
-              <td className="px-4 py-2.5 text-right text-yellow-400 font-bold">$12.7M</td>
-              <td className="px-5 py-2.5 text-right text-yellow-300 font-bold">$53.9M</td>
+              <td className="px-5 py-2.5 text-yellow-300 text-xs">+ Strategic pre-public premium (40–120%) — Revalued Q3 2026</td>
+              <td className="px-4 py-2.5 text-right text-yellow-400 font-bold">$14.2M</td>
+              <td className="px-5 py-2.5 text-right text-yellow-300 font-bold">$61.5M</td>
             </tr>
             <tr className="bg-green-950/20">
-              <td className="px-5 py-2.5 text-green-300 text-xs font-bold">Exclusive Acquisition Ask (full IP + platform + AI + archive)</td>
-              <td className="px-4 py-2.5 text-right text-green-400 font-black">$12M</td>
-              <td className="px-5 py-2.5 text-right text-green-300 font-black">$28M</td>
+              <td className="px-5 py-2.5 text-green-300 text-xs font-bold">Exclusive Acquisition Ask (full IP + platform + AI + archive + exit infra)</td>
+              <td className="px-4 py-2.5 text-right text-green-400 font-black">$14M</td>
+              <td className="px-5 py-2.5 text-right text-green-300 font-black">$32M</td>
             </tr>
           </tbody>
         </table>
@@ -441,7 +466,7 @@ export default function InvestorPackage() {
             <h1 className="text-white font-bold text-base flex items-center gap-2">
               <Shield size={15} className="text-green-400" /> Investor Portfolio Package
             </h1>
-            <p className="text-gray-500 text-xs">{totalContacts} qualified buyers · Pre-public exclusive · NDA gated · Revalued Q2 2026 · $12M–$28M ask</p>
+            <p className="text-gray-500 text-xs">{totalContacts} qualified buyers · Pre-public exclusive · NDA gated · Revalued Q3 2026 · $14M–$32M ask</p>
           </div>
         </div>
         <div className="flex items-center gap-2">
