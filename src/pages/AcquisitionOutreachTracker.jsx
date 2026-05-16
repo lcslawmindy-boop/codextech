@@ -586,6 +586,10 @@ export default function AcquisitionOutreachTracker() {
             className="flex items-center gap-2 px-3 py-2 rounded-lg bg-green-900/40 border border-green-700 text-green-300 text-xs font-bold hover:bg-green-800/50 transition-all">
             <FileText size={12} /> Draft Term Sheet
           </button>
+          <Link to="/exit-advisor" 
+            className="flex items-center gap-2 px-3 py-2 rounded-lg bg-blue-900/40 border border-blue-700 text-blue-300 text-xs font-bold hover:bg-blue-800/50 transition-all">
+            <Users size={12} /> Exit Advisor
+          </Link>
         </div>
       </div>
 

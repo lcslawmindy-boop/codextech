@@ -185,6 +185,7 @@ import ConversionAnalytics from './pages/ConversionAnalytics';
 import ValuationSlider from './pages/ValuationSlider';
 import InvestorPackageBuilder from './pages/InvestorPackageBuilder';
 import IPBrokerLanding from './pages/IPBrokerLanding';
+import ExitAdvisor from './pages/ExitAdvisor';
 
 
 const AuthenticatedApp = () => {
@@ -394,6 +395,7 @@ const AuthenticatedApp = () => {
           <Route path="/valuation-slider" element={<ValuationSlider />} />
           <Route path="/investor-package-builder" element={<InvestorPackageBuilder />} />
           <Route path="/ip-broker" element={<IPBrokerLanding />} />
+          <Route path="/exit-advisor" element={<ExitAdvisor />} />
           </Route>
 
           {/* Scalar Venture Vault Routes */}
