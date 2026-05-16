@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { ArrowLeft, Plus, ExternalLink, Copy, Check, ChevronDown, ChevronUp, Target, DollarSign, Users, FileText, Star, ShieldCheck, LayoutTemplate, Send } from "lucide-react";
 import OutreachCRM from "../components/acquisition/OutreachCRM";
+import AcquisitionTermSheet from "../components/acquisition/AcquisitionTermSheet";
 
 const BROKERS = [
   {
@@ -551,6 +552,7 @@ export default function AcquisitionOutreachTracker() {
   const [tab, setTab] = useState("brokers");
   const [showTemplate, setShowTemplate] = useState(false);
   const [showSummary, setShowSummary] = useState(false);
+  const [showTermSheet, setShowTermSheet] = useState(false);
 
   const highPriorityBrokers = BROKERS.filter(b => b.priority === "high").length;
   const highPriorityPlatforms = PLATFORMS.filter(p => p.priority === "high").length;
@@ -580,8 +582,15 @@ export default function AcquisitionOutreachTracker() {
             className="flex items-center gap-2 px-3 py-2 rounded-lg bg-yellow-900/40 border border-yellow-700 text-yellow-300 text-xs font-bold hover:bg-yellow-800/50 transition-all">
             <FileText size={12} /> {showTemplate ? "Hide" : "Email"} Template
           </button>
+          <button onClick={() => setShowTermSheet(true)}
+            className="flex items-center gap-2 px-3 py-2 rounded-lg bg-green-900/40 border border-green-700 text-green-300 text-xs font-bold hover:bg-green-800/50 transition-all">
+            <FileText size={12} /> Draft Term Sheet
+          </button>
         </div>
       </div>
+
+      {/* Acquisition Term Sheet Modal */}
+      {showTermSheet && <AcquisitionTermSheet onClose={() => setShowTermSheet(false)} />}
 
       {/* 1-Page Executive Summary */}
       {showSummary && (
