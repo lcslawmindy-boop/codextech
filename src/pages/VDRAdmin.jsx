@@ -3,9 +3,11 @@ import { Link } from "react-router-dom";
 import {
   ArrowLeft, Shield, Plus, Eye, Clock, User, Mail, Building2,
   CheckCircle, XCircle, AlertTriangle, Loader2, Trash2, Copy,
-  BarChart3, Activity, Lock, ChevronDown, ChevronUp, ExternalLink
+  BarChart3, Activity, Lock, ChevronDown, ChevronUp, ExternalLink, Zap, Star
 } from "lucide-react";
 import { base44 } from "@/api/base44Client";
+import SmartVDRWorkflow from "../components/vdr/SmartVDRWorkflow";
+import VDRReadinessScore from "../components/vdr/VDRReadinessScore";
 
 const STATUS_CONFIG = {
   active:  { color: 'text-green-400',  bg: 'bg-green-950/40 border-green-800',  icon: CheckCircle,   label: 'Active' },
@@ -259,6 +261,8 @@ export default function VDRAdmin() {
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [filter, setFilter] = useState('all');
+  const [tab, setTab] = useState('sessions');
+  const [vdrDocState, setVdrDocState] = useState({});
 
   useEffect(() => { loadSessions(); }, []);
 
@@ -337,29 +341,66 @@ export default function VDRAdmin() {
         ))}
       </div>
 
-      {/* Filter tabs */}
-      <div className="flex gap-1 px-5 py-3 border-b border-gray-800">
-        {[['all','All'], ['active','Active'], ['expired','Expired'], ['revoked','Revoked']].map(([val, label]) => (
-          <button key={val} onClick={() => setFilter(val)}
-            className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${filter === val ? 'bg-gray-800 text-white' : 'text-gray-600 hover:text-gray-400'}`}>
-            {label} ({val === 'all' ? sessions.length : sessions.filter(s => s.status === val).length})
+      {/* Main tabs */}
+      <div className="flex gap-1 px-5 py-2.5 border-b border-gray-800 overflow-x-auto">
+        {[
+          { id: 'sessions', label: '🔐 Buyer Sessions' },
+          { id: 'smart-vdr', label: '⚡ Smart VDR — Auto-Populate' },
+          { id: 'readiness', label: '📊 Readiness Score' },
+        ].map(t => (
+          <button key={t.id} onClick={() => setTab(t.id)}
+            className={`px-4 py-2 rounded-lg text-xs font-bold whitespace-nowrap transition-all ${tab === t.id ? 'bg-gray-800 text-white' : 'text-gray-600 hover:text-gray-400'}`}>
+            {t.label}
           </button>
         ))}
       </div>
 
-      {/* Session list */}
-      <div className="flex-1 p-5 space-y-3 max-w-4xl mx-auto w-full">
-        {filtered.length === 0 ? (
-          <div className="text-center py-12">
-            <Shield size={40} className="text-gray-800 mx-auto mb-4" />
-            <p className="text-gray-600 text-sm">No sessions yet. Generate a VDR link for a buyer after NDA execution.</p>
+      {tab === 'sessions' && (
+        <>
+          {/* Session filter */}
+          <div className="flex gap-1 px-5 py-2 border-b border-gray-800/60">
+            {[['all','All'], ['active','Active'], ['expired','Expired'], ['revoked','Revoked']].map(([val, label]) => (
+              <button key={val} onClick={() => setFilter(val)}
+                className={`px-3 py-1 rounded-lg text-xs font-bold transition-all ${filter === val ? 'bg-gray-700 text-white' : 'text-gray-600 hover:text-gray-400'}`}>
+                {label} ({val === 'all' ? sessions.length : sessions.filter(s => s.status === val).length})
+              </button>
+            ))}
           </div>
-        ) : (
-          filtered.map(session => (
-            <SessionCard key={session.id} session={session} onRevoke={handleRevoke} onDelete={handleDelete} />
-          ))
-        )}
-      </div>
+
+          <div className="flex-1 p-5 space-y-3 max-w-4xl mx-auto w-full">
+            {filtered.length === 0 ? (
+              <div className="text-center py-12">
+                <Shield size={40} className="text-gray-800 mx-auto mb-4" />
+                <p className="text-gray-600 text-sm">No sessions yet. Generate a VDR link for a buyer after NDA execution.</p>
+              </div>
+            ) : (
+              filtered.map(session => (
+                <SessionCard key={session.id} session={session} onRevoke={handleRevoke} onDelete={handleDelete} />
+              ))
+            )}
+          </div>
+        </>
+      )}
+
+      {tab === 'smart-vdr' && (
+        <div className="flex-1 overflow-y-auto p-5 max-w-3xl mx-auto w-full">
+          <div className="mb-4">
+            <p className="text-white font-black text-base">Smart VDR — Auto-Populate Documents</p>
+            <p className="text-gray-500 text-sm mt-1">Auto-generate all due diligence documents for buyer review. Click "Generate All Docs" to populate the entire data room in one go.</p>
+          </div>
+          <SmartVDRWorkflow onDocStateChange={setVdrDocState} />
+        </div>
+      )}
+
+      {tab === 'readiness' && (
+        <div className="flex-1 overflow-y-auto p-5 max-w-3xl mx-auto w-full">
+          <div className="mb-4">
+            <p className="text-white font-black text-base">VDR Readiness Score</p>
+            <p className="text-gray-500 text-sm mt-1">Track how buyer-ready your data room is. Score 80+ to start broker outreach.</p>
+          </div>
+          <VDRReadinessScore docState={vdrDocState} />
+        </div>
+      )}
 
       {showModal && (
         <GenerateModal onClose={() => setShowModal(false)} onCreated={loadSessions} />
