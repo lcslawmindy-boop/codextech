@@ -7,6 +7,7 @@ import {
 } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import { jsPDF } from "jspdf";
+import FTOWizard from "../components/fto/FTOWizard";
 
 const DOMAINS = [
   "Electromagnetic / RF", "Bioelectromagnetics / Medical Devices",
@@ -148,7 +149,7 @@ function HistoryCard({ record, onDelete, onLoad }) {
 
 // ── MAIN PAGE ─────────────────────────────────────────────────────────────────
 export default function FTOAnalysisTool() {
-  const [tab, setTab] = useState("analyze"); // analyze | history
+  const [tab, setTab] = useState("wizard"); // wizard | analyze | history
   const [form, setForm] = useState({ title: "", description: "", domain: "", markets: ["United States"] });
   const [loading, setLoading] = useState(false);
   const [analysis, setAnalysis] = useState(null);
@@ -307,13 +308,20 @@ Be specific, cite real patent classes (CPC/IPC codes where relevant), and treat 
 
       {/* Tabs */}
       <div className="flex gap-1 px-5 py-3 border-b border-gray-800 bg-gray-900/40">
-        {[["analyze", "⚡ New Analysis"], ["history", "🗂 Past Reports"]].map(([id, label]) => (
+        {[["wizard", "🧭 FTO Wizard"], ["analyze", "⚡ Quick Analysis"], ["history", "🗂 Past Reports"]].map(([id, label]) => (
           <button key={id} onClick={() => setTab(id)}
             className={`px-4 py-1.5 rounded-lg text-xs font-bold transition-all ${tab === id ? "bg-gray-800 text-white" : "text-gray-600 hover:text-gray-400"}`}>
             {label}
           </button>
         ))}
       </div>
+
+      {/* WIZARD TAB */}
+      {tab === "wizard" && (
+        <div className="flex-1 overflow-y-auto p-5 max-w-3xl mx-auto w-full">
+          <FTOWizard onExportPDF={exportPDF} />
+        </div>
+      )}
 
       {/* HISTORY TAB */}
       {tab === "history" && (
