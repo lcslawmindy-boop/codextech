@@ -183,7 +183,7 @@ export function generateFullMasterPDF(contentMap) {
     y += tagH + 8;
 
     // Info pills
-    const infoItems = [["Difficulty", pack.difficulty], ["Est. Pages", hasFullContent ? `~${content.estimated_pages}` : pack.pages], ["Price", `$${pack.price}`]];
+    const infoItems = [["Difficulty", pack.difficulty || "Medium"], ["Est. Pages", hasFullContent ? `~${content.estimated_pages}` : `${pack.pages || 40}`], ["Category", pack.category || "Research"]];
     checkSpace(15);
     let ix = margin;
     infoItems.forEach(([lbl, val]) => {
@@ -208,24 +208,28 @@ export function generateFullMasterPDF(contentMap) {
       doc.setTextColor(200, 160, 80);
       doc.setFontSize(8);
       doc.setFont("helvetica", "bold");
-      doc.text("⚠ Full AI content not yet generated for this pack. Generate from Admin → PDF Access → AI Content Generator.", W / 2, y + 8, { align: "center" });
+      doc.text("⚠ Full AI-generated content pending. Use Admin → PDF Access → AI Content Generator to generate this pack.", W / 2, y + 8, { align: "center" });
       y += 18;
 
-      // Show metadata sections
-      drawSectionHeader("THEORETICAL BASIS");
+      // Show unique metadata for THIS pack
+      drawSectionHeader("ABOUT THIS DEVICE");
+      writeBody(pack.tagline);
+      
+      drawSectionHeader("THEORETICAL FOUNDATION");
       writeBody(pack.theory_basis);
-      drawSectionHeader("DOCUMENT SECTIONS");
-      pack.sections.forEach((s, si) => {
-        checkSpace(7);
-        doc.setTextColor(6, 182, 212);
-        doc.setFontSize(7);
-        doc.text(`${si + 1}.`, margin + 2, y);
-        doc.setTextColor(200, 210, 230);
+      
+      if (pack.sections && pack.sections.length > 0) {
+        drawSectionHeader("CONTENT TO GENERATE");
+        doc.setTextColor(170, 180, 210);
         doc.setFontSize(8);
-        const sl = doc.splitTextToSize(s, contentW - 12);
-        sl.forEach((line, li) => doc.text(line, margin + 8, y + li * 4.5));
-        y += sl.length * 4.5 + 3;
-      });
+        doc.setFont("helvetica", "normal");
+        pack.sections.forEach((s, si) => {
+          checkSpace(7);
+          doc.text(`${si + 1}. ${s}`, margin + 4, y);
+          y += 5;
+        });
+        y += 3;
+      }
 
     } else {
       // FULL CONTENT PAGES
