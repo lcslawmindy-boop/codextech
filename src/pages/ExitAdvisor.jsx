@@ -217,6 +217,54 @@ const SCENARIOS = [
   },
 ];
 
+// ── Broker email templates ───────────────────────────────────────────────────
+const BROKER_EMAILS = {
+  quietlight: {
+    subject: "Online Business for Sale — AI + IP Research SaaS Platform ($150K–$500K asking range)",
+    body: `Hi Quiet Light team,
+
+I'm the founder of Aethon Apex IP (aethon.base44.app), an AI-powered intellectual property research and SaaS platform built around a documented library of 40+ patent-sourced invention build plans, a full AI patent drafting suite, virtual data room, investor CRM, and live Stripe subscriptions.
+
+Here's the quick overview:
+• Platform type: SaaS + AI tools + IP content library
+• Revenue: Stripe Live Mode active — subscriptions from $29–$497/month
+• Assets: 40+ invention build plans, 26+ courses, AI patent drafting wizard, FTO analysis, VDR, IP marketplace, white-label SaaS infrastructure
+• Tech: React/Vite frontend, Deno backend, 70+ components, 50+ backend functions
+• Asking range: $150K–$500K (open to discussion based on your valuation)
+
+I'm looking for a full-service broker to handle the sale. I'd love to schedule your free valuation call to understand what the platform is worth today and what I'd need to do to maximize the sale price.
+
+Would you be able to get on a call this week?
+
+Best,
+[Your Name]
+zenithapexresearch@gmail.com`,
+  },
+  empireflippers: {
+    subject: "Business Submission — AI SaaS + IP Research Platform | Stripe Live | Asking $150K–$500K",
+    body: `Hi Empire Flippers,
+
+I'd like to submit my online business for your free valuation review.
+
+Business overview:
+• Name: Aethon Apex IP
+• URL: aethon.base44.app
+• Type: SaaS + AI tools + IP content library
+• Monetization: Stripe subscriptions ($29–$497/month), one-time product sales, AI tool credits
+• Assets included: 40+ documented invention build plans, AI patent suite, virtual data room, investor CRM, white-label SaaS infrastructure, 26+ engineering courses
+• Tech stack: React/Vite, Deno Deploy, Claude/GPT AI integrations, Stripe Live Mode
+• Asking price: $150K–$500K (flexible, subject to your valuation)
+
+I'm ready to provide Stripe screenshots, platform walkthrough video, and full asset list on request. I'm looking for your team to manage the full sale process.
+
+Can we schedule a free valuation call?
+
+Best,
+[Your Name]
+zenithapexresearch@gmail.com`,
+  },
+};
+
 // ── Next 10 actions ──────────────────────────────────────────────────────────
 const NEXT_STEPS = [
   { step: 1, action: "Form a Delaware LLC", detail: "Stripe Atlas or ZenBusiness. Takes 1–3 days. ~$50–$500. Do this first — everything else flows through it.", link: "https://stripe.com/atlas", urgent: true },
@@ -232,6 +280,67 @@ const NEXT_STEPS = [
 ];
 
 // ── Components ───────────────────────────────────────────────────────────────
+
+function BrokerEmailTemplate({ brokerKey, label, color, emailLink }) {
+  const [open, setOpen] = useState(false);
+  const [copied, setCopied] = useState(null);
+  const tpl = BROKER_EMAILS[brokerKey];
+
+  const copyField = (field, value) => {
+    navigator.clipboard.writeText(value);
+    setCopied(field);
+    setTimeout(() => setCopied(null), 1800);
+  };
+
+  return (
+    <div className="border rounded-xl overflow-hidden" style={{ borderColor: color + "40" }}>
+      <button onClick={() => setOpen(o => !o)}
+        className="w-full flex items-center justify-between px-4 py-3 text-left transition-colors hover:bg-gray-900/60"
+        style={{ background: color + "10" }}>
+        <span className="text-sm font-black" style={{ color }}>✉️ Ready-to-Send Email → {label}</span>
+        {open ? <ChevronUp size={13} className="text-gray-500" /> : <ChevronDown size={13} className="text-gray-500" />}
+      </button>
+      {open && (
+        <div className="bg-gray-950 px-4 pb-4 pt-3 space-y-3">
+          {/* Subject */}
+          <div>
+            <div className="flex items-center justify-between mb-1">
+              <p className="text-gray-500 text-xs font-bold uppercase tracking-wider">Subject Line</p>
+              <button onClick={() => copyField("subject", tpl.subject)}
+                className="flex items-center gap-1 px-2 py-1 rounded bg-gray-800 hover:bg-gray-700 text-xs text-gray-400 font-bold transition-all">
+                {copied === "subject" ? <Check size={9} className="text-green-400" /> : <Copy size={9} />}
+                {copied === "subject" ? "Copied" : "Copy"}
+              </button>
+            </div>
+            <p className="text-gray-200 text-xs bg-gray-900 rounded-lg px-3 py-2 border border-gray-800">{tpl.subject}</p>
+          </div>
+          {/* Body */}
+          <div>
+            <div className="flex items-center justify-between mb-1">
+              <p className="text-gray-500 text-xs font-bold uppercase tracking-wider">Email Body</p>
+              <div className="flex items-center gap-2">
+                <button onClick={() => copyField("body", tpl.body)}
+                  className="flex items-center gap-1 px-2 py-1 rounded bg-gray-800 hover:bg-gray-700 text-xs text-gray-400 font-bold transition-all">
+                  {copied === "body" ? <Check size={9} className="text-green-400" /> : <Copy size={9} />}
+                  {copied === "body" ? "Copied" : "Copy"}
+                </button>
+                <a href={emailLink} target="_blank" rel="noopener noreferrer"
+                  className="flex items-center gap-1 px-2 py-1 rounded text-xs font-bold transition-all"
+                  style={{ background: color + "20", color, border: `1px solid ${color}50` }}>
+                  <ExternalLink size={9} /> Open Email / Site
+                </a>
+              </div>
+            </div>
+            <pre className="text-gray-300 text-xs leading-relaxed whitespace-pre-wrap font-mono bg-gray-900 rounded-lg px-3 py-3 border border-gray-800 max-h-64 overflow-y-auto">
+              {tpl.body}
+            </pre>
+          </div>
+          <p className="text-gray-600 text-xs">Fill in <strong>[Your Name]</strong> before sending.</p>
+        </div>
+      )}
+    </div>
+  );
+}
 
 function CopyBtn({ text }) {
   const [copied, setCopied] = useState(false);
@@ -464,6 +573,18 @@ export default function ExitAdvisor() {
                     </div>
                   ))}
                 </div>
+
+                {/* Email templates for M&A brokers */}
+                {ci === 0 && (
+                  <div className="mt-4 space-y-3">
+                    {[
+                      { key: "quietlight", label: "Quiet Light", color: "#6366f1", emailLink: "mailto:info@quietlight.com" },
+                      { key: "empireflippers", label: "Empire Flippers", color: "#06b6d4", emailLink: "https://empireflippers.com/sell-your-business/" },
+                    ].map(({ key, label, color, emailLink }) => (
+                      <BrokerEmailTemplate key={key} brokerKey={key} label={label} color={color} emailLink={emailLink} />
+                    ))}
+                  </div>
+                )}
               </div>
             ))}
           </div>
