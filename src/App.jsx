@@ -121,6 +121,7 @@ import RDSandbox from './pages/RDSandbox';
 import HybridPortfolio from './pages/HybridPortfolio';
 import FTOAnalysisTool from './pages/FTOAnalysisTool';
 import PatentAttorneyChat from './pages/PatentAttorneyChat';
+const PatentOpportunityAnalyzer = lazy(() => import('./pages/PatentOpportunityAnalyzer'));
 import IPMarketplace from './pages/IPMarketplace';
 import CoInventorMatching from './pages/CoInventorMatching';
 import FlashSale from './pages/FlashSale';
@@ -342,6 +343,7 @@ const AuthenticatedApp = () => {
           <Route path="/hybrid-portfolio" element={<HybridPortfolio />} />
           <Route path="/fto-analysis" element={<FTOAnalysisTool />} />
           <Route path="/patent-attorney-chat" element={<PatentAttorneyChat />} />
+          <Route path="/patent-opportunity" element={<PatentOpportunityAnalyzer />} />
           <Route path="/ip-marketplace" element={<IPMarketplace />} />
           <Route path="/co-inventor-matching" element={<CoInventorMatching />} />
           <Route path="/white-label-saas" element={<WhiteLabelSaaS />} />
