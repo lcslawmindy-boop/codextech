@@ -1,5 +1,6 @@
 import { Link, useLocation } from "react-router-dom";
 import { Vault, Wrench, Zap, BookOpen, FlaskConical } from "lucide-react";
+import { useState } from "react";
 
 const TABS = [
   {
@@ -37,6 +38,7 @@ const TABS = [
 
 export default function BottomTabBar() {
   const { pathname } = useLocation();
+  const [pressed, setPressed] = useState(null);
 
   return (
     <div
@@ -52,21 +54,30 @@ export default function BottomTabBar() {
         {TABS.map((tab) => {
           const Icon = tab.icon;
           const active = tab.match(pathname);
+          const isPressed = pressed === tab.path;
 
           if (tab.highlight) {
             return (
               <Link
                 key={tab.path}
                 to={tab.path}
+                onTouchStart={() => setPressed(tab.path)}
+                onTouchEnd={() => setPressed(null)}
+                onMouseDown={() => setPressed(tab.path)}
+                onMouseUp={() => setPressed(null)}
                 className="flex-1 flex flex-col items-center justify-center gap-1 relative"
-                style={{ minHeight: 44 }}
+                style={{ minHeight: 56 }}
               >
-                <div className="flex flex-col items-center justify-center gap-1 px-4 py-1.5 rounded-xl mx-2"
+                <div
+                  className="flex flex-col items-center justify-center gap-1 px-4 py-1.5 rounded-xl mx-2 transition-transform duration-75"
                   style={{
                     background: active
                       ? "linear-gradient(135deg, #7c3aed, #4f46e5)"
                       : "linear-gradient(135deg, #6d28d9, #4338ca)",
                     boxShadow: "0 2px 12px rgba(109,40,217,0.5)",
+                    transform: isPressed ? "scale(0.91)" : "scale(1)",
+                    minWidth: 56,
+                    minHeight: 44,
                   }}>
                   <Icon size={18} strokeWidth={2.2} style={{ color: "#fff" }} />
                   <span className="text-[10px] font-black tracking-wide text-white">Upgrade</span>
@@ -79,8 +90,18 @@ export default function BottomTabBar() {
             <Link
               key={tab.path}
               to={tab.path}
-              className="flex-1 flex flex-col items-center justify-center gap-1 transition-all relative"
-              style={{ minHeight: 44 }}
+              onTouchStart={() => setPressed(tab.path)}
+              onTouchEnd={() => setPressed(null)}
+              onMouseDown={() => setPressed(tab.path)}
+              onMouseUp={() => setPressed(null)}
+              className="flex-1 flex flex-col items-center justify-center gap-1 relative"
+              style={{
+                minHeight: 56,
+                transform: isPressed ? "scale(0.88)" : "scale(1)",
+                transition: "transform 75ms ease-out",
+                backgroundColor: isPressed ? "rgba(14,165,233,0.08)" : "transparent",
+                borderRadius: 12,
+              }}
             >
               {active && (
                 <div
@@ -89,7 +110,7 @@ export default function BottomTabBar() {
                 />
               )}
               <Icon
-                size={21}
+                size={22}
                 strokeWidth={active ? 2.2 : 1.6}
                 style={{ color: active ? "#0EA5E9" : "#475569" }}
               />

@@ -7,16 +7,25 @@ import { TrialContext } from './lib/TrialContext';
 import { QueryClientProvider } from '@tanstack/react-query'
 import { queryClientInstance } from '@/lib/query-client'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { lazy, Suspense } from 'react';
 import PageNotFound from './lib/PageNotFound';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
+
+// Lightweight fallback for lazy-loaded pages
+const LazyFallback = () => (
+  <div className="flex items-center justify-center min-h-[50vh]">
+    <div className="w-7 h-7 border-4 border-gray-700 border-t-cyan-500 rounded-full animate-spin" />
+  </div>
+);
+
 // Add page imports here
 import ZarpLanding from './pages/ZarpLanding';
 import VaultNDALanding from './pages/VaultNDALanding';
 import CodextechLanding from './pages/CodextechLanding';
 import FreeVault from './pages/FreeVault';
 import OrderTracking from './pages/OrderTracking';
-import ConceptGraph from './pages/ConceptGraph';
+const ConceptGraph = lazy(() => import('./pages/ConceptGraph'));
 import LegalAgreement from './pages/LegalAgreement';
 import CopyProtection from './components/CopyProtection';
 import { useNdaGate } from './hooks/useNdaGate';
@@ -31,40 +40,40 @@ import MarketingPlan from './pages/MarketingPlan';
 import Simulator from './pages/Simulator';
 import Checkout from './pages/Checkout';
 import MyLearning from './pages/MyLearning';
-import LabSimulation from './pages/LabSimulation';
+const LabSimulation = lazy(() => import('./pages/LabSimulation'));
 import InventionPlans from './pages/InventionPlans';
 import EMFImpact from './pages/EMFImpact';
 import EMFCrisisPitchDeck from './pages/EMFCrisisPitchDeck';
-import ScalarEMLab from './pages/ScalarEMLab';
-import PatentDraftingTool from './pages/PatentDraftingTool';
+const ScalarEMLab = lazy(() => import('./pages/ScalarEMLab'));
+const PatentDraftingTool = lazy(() => import('./pages/PatentDraftingTool'));
 import PatentClaimsGenerator from './pages/PatentClaimsGenerator';
 import TimelinePitchDeck from './pages/TimelinePitchDeck';
 import PriorArtArchive from './pages/PriorArtArchive';
 import InvestorPortal from './pages/InvestorPortal';
 import InvestorOutreachWorkflow from './pages/InvestorOutreachWorkflow';
 import InvestorOutreachGuide from './pages/InvestorOutreachGuide';
-import PatentLandscapeGraph from './pages/PatentLandscapeGraph';
+const PatentLandscapeGraph = lazy(() => import('./pages/PatentLandscapeGraph'));
 import MonitoringDashboard from './pages/MonitoringDashboard';
 import PatentFilingWizard from './pages/PatentFilingWizard';
 import InvestorCRM from './pages/InvestorCRM';
 import InvestorPackage from './pages/InvestorPackage';
 import ZenithApex from './pages/ZenithApex';
-import ScalarWaveSimulatorPage from './pages/ScalarWaveSimulatorPage';
-import ScalarFieldSim from './pages/ScalarFieldSim';
+const ScalarWaveSimulatorPage = lazy(() => import('./pages/ScalarWaveSimulatorPage'));
+const ScalarFieldSim = lazy(() => import('./pages/ScalarFieldSim'));
 import BrandArchitecture from './pages/BrandArchitecture';
 import EMFExposureLog from './pages/EMFExposureLog';
 import HeavyMetalDetox from './pages/HeavyMetalDetox';
-import HealthAnalytics from './pages/HealthAnalytics';
+const HealthAnalytics = lazy(() => import('./pages/HealthAnalytics'));
 import EMFProtectionShop from './pages/EMFProtectionShop';
 import DarkTimeline from './pages/DarkTimeline';
 import InventionForge from './pages/InventionForge';
 import ProvisionalPatent from './pages/ProvisionalPatent';
-import ScalarPotentialMap from './pages/ScalarPotentialMap';
+const ScalarPotentialMap = lazy(() => import('./pages/ScalarPotentialMap'));
 import AdminVideos from './pages/AdminVideos';
 import OpportunityMonitor from './pages/OpportunityMonitor';
 import AdminDownloadCenter from './pages/AdminDownloadCenter';
 import InventionLibrary from './pages/InventionLibrary';
-import DeviceGallery3D from './pages/DeviceGallery3D';
+const DeviceGallery3D = lazy(() => import('./pages/DeviceGallery3D'));
 import DownloadCenter from './pages/DownloadCenter';
 import InventionTimeline from './pages/InventionTimeline';
 import Pricing from './pages/Pricing';
@@ -74,7 +83,7 @@ import AdminBeta from './pages/AdminBeta';
 import MemberPortal from './pages/MemberPortal';
 import LicensingPortal from './pages/LicensingPortal';
 import MobileLayout from './components/MobileLayout';
-import DeviceKnowledgeGraph from './pages/DeviceKnowledgeGraph';
+const DeviceKnowledgeGraph = lazy(() => import('./pages/DeviceKnowledgeGraph'));
 import AcquisitionCRM from './pages/AcquisitionCRM';
 import ValuationDashboard from './pages/ValuationDashboard';
 import VDRPortal from './pages/VDRPortal';
@@ -120,7 +129,7 @@ import WhiteLabelSaaS from './pages/WhiteLabelSaaS';
 import SBIRPipeline from './pages/SBIRPipeline';
 import ZARPAcquisitionPackage from './pages/ZARPAcquisitionPackage';
 import AcquisitionOutreachTracker from './pages/AcquisitionOutreachTracker';
-import CollabPatentDraft from './pages/CollabPatentDraft';
+const CollabPatentDraft = lazy(() => import('./pages/CollabPatentDraft'));
 import IPPortfolioHealth from './pages/IPPortfolioHealth';
 import BuildMilestoneAI from './pages/BuildMilestoneAI';
 import ValuationAPI from './pages/ValuationAPI';
@@ -176,8 +185,8 @@ import PatentHub from './pages/PatentHub';
 import DeviceCatalogue from './pages/DeviceCatalogue';
 import CourseCatalogue2 from './pages/CourseCatalogue2';
 import InventionForge2 from './pages/InventionForge2';
-import AIOperatingSystem from './pages/AIOperatingSystem';
-import IPNetworkGraph from './pages/IPNetworkGraph';
+const AIOperatingSystem = lazy(() => import('./pages/AIOperatingSystem'));
+const IPNetworkGraph = lazy(() => import('./pages/IPNetworkGraph'));
 import ProjectPlanner from './pages/ProjectPlanner';
 import BuildPlanExplorer from './pages/BuildPlanExplorer';
 import OSShell from './components/OSShell';
@@ -455,7 +464,9 @@ function App() {
       <QueryClientProvider client={queryClientInstance}>
         <Router>
           <PageBackground />
-          <AuthenticatedApp />
+          <Suspense fallback={<LazyFallback />}>
+            <AuthenticatedApp />
+          </Suspense>
         </Router>
         <Toaster />
       </QueryClientProvider>

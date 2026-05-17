@@ -27,14 +27,8 @@ export default function AccountSettings() {
     if (deleteInput !== "DELETE") return;
     setDeleting(true);
     try {
-      // Sign out — actual account deletion must be handled via support
-      // per App Store guidelines we must provide a way to request deletion
-      await base44.integrations.Core.SendEmail({
-        to: "support@zenithapex.com",
-        subject: `Account Deletion Request — ${user?.email}`,
-        body: `User ${user?.full_name} (${user?.email}) has requested account deletion from the app.`,
-      });
-      alert("Your deletion request has been submitted. You will receive confirmation within 48 hours.");
+      await base44.functions.invoke("deleteAccount", {});
+      alert("Your deletion request has been submitted. You will receive a confirmation email shortly. Processing takes up to 30 days per App Store guidelines.");
       base44.auth.logout("/");
     } catch (e) {
       alert("Error submitting request: " + e.message);
