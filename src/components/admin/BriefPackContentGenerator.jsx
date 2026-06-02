@@ -24,7 +24,7 @@ export default function BriefPackContentGenerator() {
 
   const loadContent = async () => {
     try {
-      const records = await base44.entities.BriefPackContent.list();
+      const records = await base44.entities.BriefPackContent.list("-created_date", 100);
       const map = {};
       records.forEach(r => { map[r.pack_id] = r; });
       setContentMap(map);

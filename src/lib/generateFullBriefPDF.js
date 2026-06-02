@@ -15,9 +15,9 @@ export function generateFullMasterPDF(contentMap) {
 
   const drawSectionHeader = (text, color = [6, 182, 212]) => {
     checkSpace(12);
-    doc.setFillColor(...color, 0.15);
+    doc.setFillColor(18, 28, 50);
     doc.setDrawColor(...color);
-    doc.setLineWidth(0.3);
+    doc.setLineWidth(0.4);
     doc.roundedRect(margin, y - 2, contentW, 8, 1, 1, "FD");
     doc.setTextColor(...color);
     doc.setFontSize(8);
@@ -287,27 +287,34 @@ export function generateFullMasterPDF(contentMap) {
         y += 7;
 
         content.bom.forEach((item, bi) => {
-          checkSpace(9);
+          const rowData = [
+            { x: margin, w: 11, text: String(item.ref || '') },
+            { x: margin + 12, w: 41, text: String(item.component || '') },
+            { x: margin + 54, w: 37, text: String(item.spec || '') },
+            { x: margin + 92, w: 9, text: String(item.qty || '') },
+            { x: margin + 102, w: 27, text: String(item.source || '') },
+            { x: margin + 130, w: 43, text: String(item.notes || '') },
+          ];
+          // Calculate row height based on tallest cell
+          let maxLines = 1;
+          rowData.forEach(cell => {
+            const lines = doc.splitTextToSize(cell.text, cell.w - 2);
+            if (lines.length > maxLines) maxLines = lines.length;
+          });
+          const rowH = maxLines * 4.5 + 4;
+          checkSpace(rowH + 2);
           if (bi % 2 === 0) {
             doc.setFillColor(18, 26, 44);
-            doc.rect(margin, y - 1, contentW, 8, "F");
+            doc.rect(margin, y - 1, contentW, rowH, "F");
           }
-          const rowData = [
-            { x: margin, w: 11, text: item.ref || '' },
-            { x: margin + 12, w: 41, text: item.component || '' },
-            { x: margin + 54, w: 37, text: item.spec || '' },
-            { x: margin + 92, w: 9, text: item.qty || '' },
-            { x: margin + 102, w: 27, text: item.source || '' },
-            { x: margin + 130, w: 43, text: item.notes || '' },
-          ];
           rowData.forEach(cell => {
             doc.setTextColor(200, 210, 225);
             doc.setFontSize(7);
             doc.setFont("helvetica", "normal");
-            const lines = doc.splitTextToSize(cell.text, cell.w - 1);
-            doc.text(lines[0] || '', cell.x + 1, y + 4.5);
+            const lines = doc.splitTextToSize(cell.text, cell.w - 2);
+            lines.forEach((l, li) => doc.text(l, cell.x + 1, y + 4 + li * 4.5));
           });
-          y += 8;
+          y += rowH;
         });
         y += 4;
       }
@@ -403,20 +410,20 @@ export function generateFullMasterPDF(contentMap) {
           y += 8;
           doc.setTextColor(140, 155, 185);
           doc.setFontSize(7.5);
+          doc.setFont("helvetica", "bold");
           doc.text(`Cause: `, margin + 3, y);
           doc.setTextColor(200, 210, 225);
           doc.setFont("helvetica", "normal");
           const causeLines = doc.splitTextToSize(item.likely_cause || '', contentW - 18);
-          doc.text(causeLines[0], margin + 16, y);
-          y += 5;
+          causeLines.forEach(l => { checkSpace(5); doc.text(l, margin + 16, y); y += 4.5; });
           doc.setTextColor(140, 155, 185);
           doc.setFont("helvetica", "bold");
           doc.text(`Remedy: `, margin + 3, y);
           doc.setFont("helvetica", "normal");
           doc.setTextColor(170, 220, 200);
           const remLines = doc.splitTextToSize(item.remedy || '', contentW - 20);
-          doc.text(remLines[0], margin + 18, y);
-          y += 7;
+          remLines.forEach(l => { checkSpace(5); doc.text(l, margin + 18, y); y += 4.5; });
+          y += 3;
         });
       }
 
@@ -425,16 +432,16 @@ export function generateFullMasterPDF(contentMap) {
         checkSpace(14);
         drawSectionHeader("10. REFERENCES & CITATIONS", [100, 150, 220]);
         content.references.forEach((ref, ri) => {
-          checkSpace(7);
+          const rLines = doc.splitTextToSize(String(ref), contentW - 10);
+          checkSpace(rLines.length * 4.5 + 3);
           doc.setTextColor(100, 140, 200);
           doc.setFontSize(7.5);
           doc.setFont("helvetica", "bold");
           doc.text(`[${ri + 1}]`, margin, y);
           doc.setFont("helvetica", "normal");
           doc.setTextColor(170, 185, 215);
-          const rLines = doc.splitTextToSize(ref, contentW - 10);
           rLines.forEach(l => { doc.text(l, margin + 9, y); y += 4.5; });
-          y += 1;
+          y += 2;
         });
       }
     }

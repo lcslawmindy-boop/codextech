@@ -1,0 +1,93 @@
+{
+  "name": "Affiliate",
+  "type": "object",
+  "properties": {
+    "email": {
+      "type": "string",
+      "description": "Affiliate email address"
+    },
+    "full_name": {
+      "type": "string",
+      "description": "Affiliate full name"
+    },
+    "affiliate_code": {
+      "type": "string",
+      "description": "Unique referral code (auto-generated)"
+    },
+    "commission_rate": {
+      "type": "number",
+      "description": "Commission percentage (e.g., 20 for 20%)",
+      "default": 20
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "approved",
+        "active",
+        "suspended"
+      ],
+      "default": "pending",
+      "description": "Affiliate status"
+    },
+    "total_referrals": {
+      "type": "integer",
+      "default": 0,
+      "description": "Total referrals made"
+    },
+    "total_conversions": {
+      "type": "integer",
+      "default": 0,
+      "description": "Successful conversions"
+    },
+    "total_earnings": {
+      "type": "number",
+      "default": 0,
+      "description": "Total commission earned in cents"
+    },
+    "payout_method": {
+      "type": "string",
+      "enum": [
+        "bank_transfer",
+        "paypal",
+        "stripe",
+        "pending"
+      ],
+      "default": "pending",
+      "description": "How affiliate wants to be paid"
+    },
+    "payout_details": {
+      "type": "string",
+      "description": "Bank account, PayPal email, or Stripe account details"
+    },
+    "website_url": {
+      "type": "string",
+      "description": "Affiliate's website or social media profile"
+    },
+    "marketing_channels": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": [],
+      "description": "e.g., ['email', 'social', 'blog', 'youtube']"
+    },
+    "approved_at": {
+      "type": "string",
+      "description": "Date affiliate was approved"
+    },
+    "suspended_at": {
+      "type": "string",
+      "description": "Date affiliate was suspended (if applicable)"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Admin notes"
+    }
+  },
+  "required": [
+    "email",
+    "full_name",
+    "affiliate_code"
+  ]
+}
