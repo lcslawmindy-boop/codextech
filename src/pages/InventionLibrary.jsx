@@ -1,6 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
-import { ArrowLeft, Film, Download, FileText, Loader2, Search, X, Lock } from "lucide-react";
+import { ArrowLeft, Film, Download, FileText, Loader2, Search, X, Lock, RefreshCw } from "lucide-react";
+import { usePullToRefresh } from "../hooks/usePullToRefresh";
 import { jsPDF } from "jspdf";
 import { businessItems } from "../lib/businessItems";
 import { inventionSteps } from "../lib/inventionSteps";
@@ -354,6 +355,22 @@ export default function InventionLibrary() {
       inv.tagline?.toLowerCase().includes(search.toLowerCase());
   });
 
+  const handleRefresh = useCallback(async () => {
+    setCheckingPurchase(true);
+    try {
+      const res = await base44.functions.invoke("getUserPurchases", {});
+      const purchases = res?.data?.purchases || [];
+      const paid = purchases.some(p =>
+        p.category === "Invention" || p.title?.toLowerCase().includes("invention") ||
+        p.title?.toLowerCase().includes("plan") || p.title?.toLowerCase().includes("build")
+      );
+      setHasPurchased(paid);
+    } catch { setHasPurchased(false); }
+    finally { setCheckingPurchase(false); }
+  }, []);
+
+  const { containerRef, pullY, refreshing } = usePullToRefresh(handleRefresh);
+
   const handlePdf = async (inv) => {
     setGeneratingPdf(inv.title);
     await new Promise(r => setTimeout(r, 50));
@@ -409,7 +426,16 @@ export default function InventionLibrary() {
       </div>
 
       {/* Grid */}
-      <div className="flex-1 p-5 overflow-y-auto">
+      <div ref={containerRef} className="flex-1 p-5 overflow-y-auto relative">
+        {/* Pull-to-refresh indicator */}
+        {(pullY > 0 || refreshing) && (
+          <div className="flex justify-center mb-3 -mt-3" style={{ opacity: pullY > 0 ? pullY : 1 }}>
+            <div className={`flex items-center gap-2 px-3 py-1.5 rounded-full bg-gray-800 border border-gray-700 text-gray-400 text-xs ${refreshing ? "animate-pulse" : ""}`}>
+              <RefreshCw size={11} className={refreshing ? "animate-spin" : ""} />
+              {refreshing ? "Refreshing…" : "Release to refresh"}
+            </div>
+          </div>
+        )}
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
           {filtered.map((inv, i) => {
             const hasSteps = !!inventionSteps[inv.title];
@@ -506,6 +532,8 @@ export default function InventionLibrary() {
             <p>No inventions match "{search}"</p>
           </div>
         )}
+
+
       </div>
 
       {buildVideoInv && (

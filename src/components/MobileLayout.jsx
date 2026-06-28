@@ -2,6 +2,7 @@ import { Outlet, useLocation } from "react-router-dom";
 import BottomTabBar from "./BottomTabBar";
 import { useTrial } from "@/lib/TrialContext";
 import { useRef, useEffect } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 
 // Pages that should NOT show the bottom tab bar
 const HIDDEN_TAB_ROUTES = ["/legal", "/checkout", "/paywall", "/pricing", "/free-vault", "/", "/start"];
@@ -49,13 +50,20 @@ export default function MobileLayout() {
       }}
     >
       <div className="flex-1 relative overflow-hidden">
-        <div
-          ref={scrollRef}
-          className="absolute inset-0 overflow-y-auto"
-          style={{ WebkitOverflowScrolling: "touch" }}
-        >
-          <Outlet />
-        </div>
+        <AnimatePresence mode="wait" initial={false}>
+          <motion.div
+            key={pathname}
+            ref={scrollRef}
+            initial={{ opacity: 0, x: 12 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -12 }}
+            transition={{ duration: 0.18, ease: "easeOut" }}
+            className="absolute inset-0 overflow-y-auto"
+            style={{ WebkitOverflowScrolling: "touch" }}
+          >
+            <Outlet />
+          </motion.div>
+        </AnimatePresence>
       </div>
       {!hideTab && <BottomTabBar />}
     </div>

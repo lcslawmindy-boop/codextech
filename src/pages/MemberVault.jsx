@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { Link } from "react-router-dom";
-import { Bookmark, History, Zap, LogOut, Settings, Heart } from "lucide-react";
+import { Bookmark, History, Zap, LogOut, Settings, Heart, RefreshCw } from "lucide-react";
+import { usePullToRefresh } from "../hooks/usePullToRefresh";
 
 const MEMBER_BUILDS = [
   { id: 1, title: "MEG Replication Device", category: "Energy", status: "viewed", progress: 35, saved: true },
@@ -16,6 +17,14 @@ const RECENT_HISTORY = [
 
 export default function MemberVault() {
   const [activeTab, setActiveTab] = useState("saved");
+  const [refreshKey, setRefreshKey] = useState(0);
+
+  const handleRefresh = useCallback(async () => {
+    await new Promise(r => setTimeout(r, 600));
+    setRefreshKey(k => k + 1);
+  }, []);
+
+  const { containerRef, pullY, refreshing } = usePullToRefresh(handleRefresh);
 
   return (
     <div className="min-h-screen bg-gray-950 text-white">
@@ -37,7 +46,15 @@ export default function MemberVault() {
         </div>
       </div>
 
-      <div className="max-w-6xl mx-auto px-6 py-12">
+      <div ref={containerRef} className="max-w-6xl mx-auto px-6 py-12 overflow-y-auto">
+        {(pullY > 0 || refreshing) && (
+          <div className="flex justify-center mb-4 -mt-6" style={{ opacity: pullY > 0 ? pullY : 1 }}>
+            <div className={`flex items-center gap-2 px-3 py-1.5 rounded-full bg-gray-800 border border-gray-700 text-gray-400 text-xs ${refreshing ? "animate-pulse" : ""}`}>
+              <RefreshCw size={11} className={refreshing ? "animate-spin" : ""} />
+              {refreshing ? "Refreshing…" : "Release to refresh"}
+            </div>
+          </div>
+        )}
         {/* ── Tabs ── */}
         <div className="flex gap-4 mb-8 border-b border-gray-800">
           {["saved", "recent", "recommended"].map(tab => (

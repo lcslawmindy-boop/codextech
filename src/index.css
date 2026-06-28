@@ -146,6 +146,20 @@ html[data-theme="steel"] {
     min-height: 44px;
   }
 
+  /* Prevent text selection on interactive elements */
+  button, nav, [role="button"], [role="navigation"], .tab-bar {
+    user-select: none;
+    -webkit-user-select: none;
+  }
+
+  /* Safe area padding for header and bottom nav */
+  .safe-header {
+    padding-top: max(env(safe-area-inset-top), 0px);
+  }
+  .safe-bottom-nav {
+    padding-bottom: max(env(safe-area-inset-bottom), 0px);
+  }
+
   /* Allow text selection in readable content */
   p, li, td, blockquote, .selectable {
     user-select: text;

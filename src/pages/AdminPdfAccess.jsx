@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { ArrowLeft, Download, Plus, Trash2, Check, X, Search, RefreshCw, FileText, Send, ExternalLink, Package, ChevronDown, ChevronUp } from "lucide-react";
+import ActionSheet from "../components/ActionSheet";
 import { base44 } from "@/api/base44Client";
 import { BRIEF_PACKS } from "../lib/briefPackData";
 import { jsPDF } from "jspdf";
@@ -781,6 +782,13 @@ export default function AdminPdfAccess() {
   const [form, setForm] = useState({ email: "", tier: "elite", notes: "" });
   const [saving, setSaving] = useState(false);
   const [adminEmail, setAdminEmail] = useState("");
+  const [tierSheetOpen, setTierSheetOpen] = useState(false);
+
+  const tierOptions = [
+    { value: "elite", label: "Elite" },
+    { value: "gov", label: "GOV / Defense" },
+    { value: "brief_pack", label: "Brief Pack" },
+  ];
 
   useEffect(() => {
     base44.auth.me().then(u => setAdminEmail(u?.email || "admin")).catch(() => {});
@@ -896,15 +904,22 @@ export default function AdminPdfAccess() {
               </div>
               <div>
                 <label className="block text-xs font-bold text-gray-400 mb-1.5">Membership Tier *</label>
-                <select
-                  value={form.tier}
-                  onChange={e => setForm(f => ({ ...f, tier: e.target.value }))}
-                  className="w-full px-4 py-2.5 rounded-lg bg-gray-800 border border-gray-700 text-white text-sm focus:outline-none focus:border-yellow-500"
+                <button
+                  type="button"
+                  onClick={() => setTierSheetOpen(true)}
+                  className="w-full px-4 py-2.5 rounded-lg bg-gray-800 border border-gray-700 text-white text-sm focus:outline-none focus:border-yellow-500 flex items-center justify-between"
                 >
-                  <option value="elite">Elite</option>
-                  <option value="gov">GOV / Defense</option>
-                  <option value="brief_pack">Brief Pack</option>
-                </select>
+                  <span>{tierOptions.find(o => o.value === form.tier)?.label || "Select tier"}</span>
+                  <ChevronDown size={14} className="text-gray-500" />
+                </button>
+                <ActionSheet
+                  open={tierSheetOpen}
+                  onClose={() => setTierSheetOpen(false)}
+                  title="Select Membership Tier"
+                  options={tierOptions}
+                  value={form.tier}
+                  onChange={val => setForm(f => ({ ...f, tier: val }))}
+                />
               </div>
             </div>
             <div className="mb-4">
