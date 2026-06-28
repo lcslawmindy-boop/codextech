@@ -88,14 +88,34 @@ export default function ConceptNetworkGraph({ onNodeClick, selectedNodeId, graph
 
     const defs = svg.append("defs");
 
-    // ── Radial gradients per group ──
+    // ── 3D sphere gradients per group ──
     Object.entries(groupColors).forEach(([group, color]) => {
+      // Main sphere body gradient (off-center for 3D shading)
       const grad = defs.append("radialGradient")
         .attr("id", `grad-${group}`)
-        .attr("cx", "35%").attr("cy", "35%").attr("r", "65%");
-      grad.append("stop").attr("offset", "0%").attr("stop-color", color).attr("stop-opacity", 0.55);
-      grad.append("stop").attr("offset", "100%").attr("stop-color", color).attr("stop-opacity", 0.08);
+        .attr("cx", "32%").attr("cy", "28%").attr("r", "70%");
+      grad.append("stop").attr("offset", "0%").attr("stop-color", "#ffffff").attr("stop-opacity", 0.35);
+      grad.append("stop").attr("offset", "35%").attr("stop-color", color).attr("stop-opacity", 0.85);
+      grad.append("stop").attr("offset", "100%").attr("stop-color", color).attr("stop-opacity", 0.12);
+
+      // Specular highlight (bright spot top-left)
+      const spec = defs.append("radialGradient")
+        .attr("id", `spec-${group}`)
+        .attr("cx", "28%").attr("cy", "22%").attr("r", "38%");
+      spec.append("stop").attr("offset", "0%").attr("stop-color", "#ffffff").attr("stop-opacity", 0.7);
+      spec.append("stop").attr("offset", "100%").attr("stop-color", "#ffffff").attr("stop-opacity", 0);
+
+      // Bottom shadow for depth
+      const shadow = defs.append("radialGradient")
+        .attr("id", `shadow-${group}`)
+        .attr("cx", "60%").attr("cy", "75%").attr("r", "55%");
+      shadow.append("stop").attr("offset", "0%").attr("stop-color", "#000000").attr("stop-opacity", 0.45);
+      shadow.append("stop").attr("offset", "100%").attr("stop-color", "#000000").attr("stop-opacity", 0);
     });
+
+    // ── Drop shadow filter ──
+    const dropShadow = defs.append("filter").attr("id", "dropShadow").attr("x", "-40%").attr("y", "-40%").attr("width", "180%").attr("height", "180%");
+    dropShadow.append("feDropShadow").attr("dx", "2").attr("dy", "4").attr("stdDeviation", "5").attr("flood-color", "#000000").attr("flood-opacity", "0.6");
 
 
 
@@ -303,28 +323,66 @@ export default function ConceptNetworkGraph({ onNodeClick, selectedNodeId, graph
       )
       .on("click", (e, d) => { e.stopPropagation(); onNodeClick(d); });
 
-    // ── Outer ring ──
-    node.append("circle")
-      .attr("class", "ring")
-      .attr("r", d => nodeRadius(d) + 4)
-      .attr("fill", "none")
-      .attr("stroke", d => groupColors[d.group])
-      .attr("stroke-width", 1)
-      .attr("stroke-opacity", 0.25)
+    // ── Drop shadow ellipse (below sphere) ──
+    node.append("ellipse")
+      .attr("class", "sphere-shadow")
+      .attr("rx", d => nodeRadius(d) * 0.85)
+      .attr("ry", d => nodeRadius(d) * 0.22)
+      .attr("cy", d => nodeRadius(d) * 0.9)
+      .attr("fill", "#000000")
+      .attr("fill-opacity", 0.45)
       .attr("pointer-events", "none");
 
-    // ── Main node circle ──
+    // ── Outer glow ring ──
+    node.append("circle")
+      .attr("class", "ring")
+      .attr("r", d => nodeRadius(d) + 5)
+      .attr("fill", "none")
+      .attr("stroke", d => groupColors[d.group])
+      .attr("stroke-width", 1.5)
+      .attr("stroke-opacity", 0.2)
+      .attr("pointer-events", "none");
+
+    // ── Main sphere body ──
     node.append("circle")
       .attr("class", "main-circle")
       .attr("r", d => nodeRadius(d))
       .attr("fill", d => `url(#grad-${d.group})`)
       .attr("stroke", d => groupColors[d.group])
-      .attr("stroke-width", mode.nodeStrokeWidth)
+      .attr("stroke-width", mode.nodeStrokeWidth + 0.5)
+      .attr("filter", "url(#dropShadow)")
+      .attr("pointer-events", "none");
+
+    // ── Bottom shadow overlay for depth ──
+    node.append("circle")
+      .attr("class", "sphere-depth")
+      .attr("r", d => nodeRadius(d))
+      .attr("fill", d => `url(#shadow-${d.group})`)
+      .attr("pointer-events", "none");
+
+    // ── Specular highlight ──
+    node.append("circle")
+      .attr("class", "sphere-spec")
+      .attr("r", d => nodeRadius(d))
+      .attr("fill", d => `url(#spec-${d.group})`)
+      .attr("pointer-events", "none");
+
+    // ── Invisible hit target on top ──
+    node.append("circle")
+      .attr("class", "hit-target")
+      .attr("r", d => nodeRadius(d))
+      .attr("fill", "transparent")
+      .attr("stroke", "none")
       .on("mouseenter", function(e, d) {
         const r = nodeRadius(d);
-        d3.select(this.parentNode).select(".ring")
-          .transition().duration(180).attr("stroke-opacity", 0.7).attr("r", r + 8);
-        d3.select(this).transition().duration(180).attr("stroke-width", 2.5);
+        const nodeG = d3.select(this.parentNode);
+        nodeG.select(".ring")
+          .transition().duration(180).attr("stroke-opacity", 0.8).attr("r", r + 10).attr("stroke-width", 2);
+        nodeG.select(".main-circle")
+          .transition().duration(180).attr("stroke-width", 2.5);
+        nodeG.select(".sphere-shadow")
+          .transition().duration(180).attr("rx", r * 1.05).attr("fill-opacity", 0.6);
+        d3.select(this.parentNode).attr("filter", "url(#dropShadow)");
         d3.select(this.parentNode).select(".group-label")
           .transition().duration(150).attr("fill-opacity", 1);
         linkLabel.transition().duration(150)
@@ -367,9 +425,14 @@ export default function ConceptNetworkGraph({ onNodeClick, selectedNodeId, graph
       })
       .on("mouseleave", function(e, d) {
         const r = nodeRadius(d);
-        d3.select(this.parentNode).select(".ring")
-          .transition().duration(300).attr("stroke-opacity", d.id === selectedNodeId ? 0.7 : 0.25).attr("r", r + 4);
-        d3.select(this).transition().duration(300).attr("stroke-width", d.id === selectedNodeId ? 2.5 : mode.nodeStrokeWidth);
+        const nodeG = d3.select(this.parentNode);
+        nodeG.select(".ring")
+          .transition().duration(300).attr("stroke-opacity", d.id === selectedNodeId ? 0.7 : 0.2).attr("r", r + 5).attr("stroke-width", d.id === selectedNodeId ? 2 : 1.5);
+        nodeG.select(".main-circle")
+          .transition().duration(300).attr("stroke-width", d.id === selectedNodeId ? 2.5 : mode.nodeStrokeWidth + 0.5);
+        nodeG.select(".sphere-shadow")
+          .transition().duration(300).attr("rx", r * 0.85).attr("fill-opacity", 0.45);
+        d3.select(this.parentNode).attr("filter", null);
         d3.select(this.parentNode).select(".group-label")
           .transition().duration(300).attr("fill-opacity", 0.6);
         linkLabel.transition().duration(200)
@@ -518,11 +581,12 @@ export default function ConceptNetworkGraph({ onNodeClick, selectedNodeId, graph
       const isSelected = d.id === selectedNodeId;
       const grp = d3.select(this);
       grp.select(".main-circle")
-        .attr("stroke-width", isSelected ? 2.5 : 1.5)
-        .attr("filter", isSelected ? (glowMap[d.group] || null) : null);
+        .attr("stroke-width", isSelected ? 3 : 2)
+        .attr("filter", isSelected ? (glowMap[d.group] || "url(#dropShadow)") : "url(#dropShadow)");
       grp.select(".ring")
-        .attr("stroke-opacity", isSelected ? 0.75 : 0.25)
-        .attr("stroke-width", isSelected ? 1.5 : 1);
+        .attr("stroke-opacity", isSelected ? 0.85 : 0.2)
+        .attr("stroke-width", isSelected ? 2.5 : 1.5);
+      grp.attr("filter", isSelected ? (glowMap[d.group] || null) : null);
     });
   }, [selectedNodeId]);
 
