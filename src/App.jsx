@@ -29,7 +29,6 @@ import OrderTracking from './pages/OrderTracking';
 const ConceptGraph = lazy(() => import('./pages/ConceptGraph'));
 import LegalAgreement from './pages/LegalAgreement';
 import CopyProtection from './components/CopyProtection';
-import { useNdaGate } from './hooks/useNdaGate';
 import { usePaymentGate } from './hooks/usePaymentGate';
 import BusinessModels from './pages/BusinessModels';
 import PitchBuilder from './pages/PitchBuilder';
@@ -205,11 +204,10 @@ import AcquisitionTierRoadmap from './pages/AcquisitionTierRoadmap';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
-  const { accepted: ndaAccepted, loading: ndaLoading } = useNdaGate();
   const { paid: hasPaid, isTrial, loading: paymentLoading } = usePaymentGate();
 
   // Show loading spinner while checking app public settings or auth
-  if (isLoadingPublicSettings || isLoadingAuth || ndaLoading || paymentLoading) {
+  if (isLoadingPublicSettings || isLoadingAuth || paymentLoading) {
     return (
       <div className="fixed inset-0 flex items-center justify-center">
         <div className="w-8 h-8 border-4 border-slate-200 border-t-slate-800 rounded-full animate-spin"></div>
@@ -226,22 +224,6 @@ const AuthenticatedApp = () => {
       navigateToLogin();
       return null;
     }
-  }
-
-  // Redirect to NDA gate if not accepted
-  if (!ndaAccepted) {
-    return (
-      <Routes>
-        <Route path="/" element={<VaultNDALanding />} />
-        <Route path="/free-vault" element={<FreeVault />} />
-        <Route path="/build-supplies-shop" element={<BuildSuppliesShop />} />
-        <Route path="/emf-impact" element={<EMFImpact />} />
-        <Route path="/vault" element={<ConceptGraph />} />
-        <Route path="/pricing" element={<Pricing />} />
-        <Route path="/paywall" element={<PaywallPage />} />
-        <Route path="*" element={<LegalAgreement />} />
-      </Routes>
-    );
   }
 
   // Redirect to trial onboarding or pricing if not paid
