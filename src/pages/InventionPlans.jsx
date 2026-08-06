@@ -271,7 +271,7 @@ function generatePDF(invention, data) {
 
   const infoBoxes = [
     { label: "CATEGORY", value: invention.category },
-    { label: "PRICE", value: invention.price },
+    { label: "STATUS", value: "Not for Sale — Research Only" },
     { label: "AUDIENCE", value: invention.audience },
   ];
   infoBoxes.forEach(({ label, value }) => {
@@ -826,7 +826,7 @@ async function generateMasterPDF(allInventions) {
     }
     const metaX = margin + (inv.icon ? 14 : 0);
 
-    [[" PRICE", inv.price], ["AUDIENCE", inv.audience]].forEach(([lbl, val]) => {
+    [[" STATUS", "Not for Sale"], ["AUDIENCE", inv.audience]].forEach(([lbl, val]) => {
       if (!val) return;
       doc.setFontSize(7.5);
       doc.setFont("helvetica", "bold");

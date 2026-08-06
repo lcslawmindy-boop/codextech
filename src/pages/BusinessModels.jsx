@@ -78,7 +78,11 @@ function ItemCard({ item }) {
               >
                 {item.category}
               </span>
-              <span className="text-green-400 font-bold text-sm">{item.price}</span>
+              {item.category === "Invention" ? (
+                <span className="text-xs px-2 py-0.5 rounded font-bold uppercase tracking-wider bg-red-950/60 border border-red-800 text-red-400">Not for Sale</span>
+              ) : (
+                <span className="text-green-400 font-bold text-sm">{item.price}</span>
+              )}
             </div>
             <h3 className="text-white font-bold text-base leading-snug">{item.title}</h3>
             <p className="text-gray-400 text-xs mt-0.5 italic">"{item.tagline}"</p>
