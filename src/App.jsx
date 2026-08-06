@@ -200,6 +200,7 @@ import ExitAdvisor from './pages/ExitAdvisor';
 import AcquisitionReadyKit from './pages/AcquisitionReadyKit';
 import InvestorBudgetSheet from './pages/InvestorBudgetSheet';
 import AcquisitionTierRoadmap from './pages/AcquisitionTierRoadmap';
+import TherapyPod from './pages/TherapyPod';
 
 
 const AuthenticatedApp = () => {
@@ -397,6 +398,7 @@ const AuthenticatedApp = () => {
           <Route path="/acquisition-ready-kit" element={<AcquisitionReadyKit />} />
           <Route path="/investor-budget-sheet" element={<InvestorBudgetSheet />} />
           <Route path="/acquisition-tier-roadmap" element={<AcquisitionTierRoadmap />} />
+          <Route path="/therapy-pod" element={<TherapyPod />} />
           </Route>
 
           {/* Scalar Venture Vault Routes */}
