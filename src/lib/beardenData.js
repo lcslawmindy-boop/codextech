@@ -1,4 +1,7 @@
+import { vedicOccultNodes, vedicOccultLinks } from "./vedicOccultData";
+
 export const nodes = [
+  ...vedicOccultNodes,
   {
     id: "brush_kinetic_gravitation",
     label: "Brush Kinetic Theory of Gravitation (1910-1929)",
@@ -1056,6 +1059,7 @@ export const links = [
   { source: "mills_hydrino", target: "bohren_cop1", label: "COP>1 chemical analog" },
   { source: "rife_microscope", target: "lisitsyn_trigger_windows", label: "mortal oscillatory rates match" },
   { source: "rife_microscope", target: "kaznacheyev", label: "frequency mechanism parallels" },
+  ...vedicOccultLinks,
 ];
 
 export const groupColors = {
@@ -1065,4 +1069,6 @@ export const groupColors = {
   consciousness: "#a855f7",
   history: "#f59e0b",
   philosophy: "#06b6d4",
+  ancient: "#eab308",
+  occult: "#ec4899",
 };
