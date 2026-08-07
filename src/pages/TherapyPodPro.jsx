@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { ArrowLeft, Heart, Dna, FileText, Package, Shield, AlertTriangle, Box, ChevronDown, ChevronUp, CheckCircle2 } from "lucide-react";
 import TherapyPodExplodedView from "../components/TherapyPodExplodedView";
 import TherapyPodEngineeringDocs from "../components/TherapyPodEngineeringDocs";
+import TherapyPodModalityExplodedView from "../components/TherapyPodModalityExplodedView";
 import AttributionFooter from "../components/AttributionFooter";
 
 // ── Assembly Manual Data ─────────────────────────────────────────────────
@@ -524,7 +525,10 @@ export default function TherapyPodPro() {
         )}
 
         {view === "assembly" && (
-          <AssemblyManual expandedSection={expandedSection} toggleSection={toggleSection} />
+          <div className="space-y-4">
+            <TherapyPodModalityExplodedView />
+            <AssemblyManual expandedSection={expandedSection} toggleSection={toggleSection} />
+          </div>
         )}
       </div>
     </div>
