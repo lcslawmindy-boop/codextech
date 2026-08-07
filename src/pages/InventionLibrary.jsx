@@ -457,7 +457,7 @@ export default function InventionLibrary() {
                     <span className="text-2xl flex-shrink-0">{inv.icon}</span>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 mb-1 flex-wrap">
-                        <span className="text-xs px-2 py-0.5 rounded font-bold uppercase" style={{ backgroundColor: color + "22", color }}>{inv.price}</span>
+                        <span className="text-xs px-2 py-0.5 rounded font-bold uppercase bg-red-950/60 border border-red-800 text-red-400">Not for Sale</span>
                         {hasSteps && <span className="text-xs px-2 py-0.5 rounded bg-green-950/50 border border-green-800 text-green-400">Full Plans</span>}
                       </div>
                       <h3 className="text-white font-bold text-sm leading-snug">{inv.title}</h3>
@@ -517,9 +517,9 @@ export default function InventionLibrary() {
                        </button>
                      </>
                    )}
-                   <Link to="/pricing" className="flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold bg-cyan-700 hover:bg-cyan-600 text-white transition-all flex-1">
-                     💳 Buy Now
-                   </Link>
+                   <span className="flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold bg-red-950/40 border border-red-800 text-red-400 flex-1">
+                     🔒 Not for Sale
+                   </span>
                  </div>
                   </div>
             );

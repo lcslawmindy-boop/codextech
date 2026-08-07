@@ -13,7 +13,7 @@ const BUILDS_DATA = {
     shortDesc: "US Patent 6,362,718. Complete peer-reviewed replication.",
     longDesc: "The Motionless Electromagnetic Generator (MEG) is the most documented free energy device in modern history. Tom Bearden's 2002 patent 6,362,718 specifies exact geometry, materials, and winding ratios. This build plan includes a 23-component BOM with exact part numbers from verified suppliers, step-by-step assembly guide, and physics explanation of why COP>1 doesn't violate thermodynamics.",
     marketContext: "If operational, this device could disrupt global energy markets. The patent was granted by the USPTO, peer-reviewed in Foundations of Physics Letters, and replicated by dozens of independent engineers. This is not theoretical—it's documented, replicable technology.",
-    estimatedCost: "$287 for components; $45 for tools",
+    estimatedCost: "Not for sale — research members only",
     whatYouGet: [
       "23-component bill of materials with part numbers",
       "Supplier links and sourcing guide",
@@ -55,7 +55,7 @@ export default function BuildDetail() {
             <p className="text-xs text-cyan-400 font-bold uppercase tracking-wider mb-1">{build.category}</p>
             <h1 className="text-3xl font-black">{build.title}</h1>
           </div>
-          <span className="text-green-400 font-black text-lg">{build.cost}</span>
+          <span className="text-xs px-3 py-1 rounded-full bg-red-950/60 border border-red-800 text-red-400 font-bold uppercase tracking-wider">Not for Sale — Research Only</span>
         </div>
       </div>
 
@@ -69,31 +69,17 @@ export default function BuildDetail() {
           </div>
 
           <div>
-            {/* ── Premium upsell ── */}
-            <div className="bg-gray-900 border border-gray-700 rounded-2xl p-6 mb-6">
+            <div className="bg-gray-900 border border-red-900/40 rounded-2xl p-6">
               <div className="flex items-center gap-2 mb-4">
-                <Zap size={18} className="text-cyan-400" />
-                <span className="text-cyan-400 font-bold text-sm">Premium</span>
+                <span className="text-xs px-3 py-1 rounded-full bg-red-950/60 border border-red-800 text-red-400 font-bold uppercase tracking-wider">Not for Sale</span>
+                <span className="text-xs px-3 py-1 rounded-full bg-yellow-950/40 border border-yellow-800 text-yellow-400 font-bold uppercase tracking-wider">Research</span>
               </div>
-              <p className="text-gray-400 text-sm leading-relaxed mb-6">
-                BOMs and schematics are free. Upgrade for: video assembly (3–12 hrs), verified supplier links, and access to engineer forums.
+              <p className="text-gray-400 text-sm leading-relaxed">
+                This build plan is available to research members only. Access full BOMs, schematics, and assembly guides through a research membership tier.
               </p>
-              <Link to="/pricing-vault" className="w-full py-3 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-black text-center transition-all">
-                Upgrade to Pro
+              <Link to="/research-membership" className="w-full py-3 rounded-xl bg-gray-700 hover:bg-gray-600 text-white font-black text-center transition-all mt-4 inline-block">
+                Research Membership
               </Link>
-              <div className="text-xs text-gray-600 mt-4 space-y-1">
-                <p>✓ $99/month or $299 one-time per build</p>
-                <p>✓ Cancel anytime</p>
-              </div>
-            </div>
-
-            {/* ── Kit upsell ── */}
-            <div className="bg-gray-900 border border-orange-900/30 rounded-2xl p-6">
-              <h3 className="text-white font-black text-sm mb-2">Buy the Kit</h3>
-              <p className="text-gray-400 text-xs mb-4">All 23 components pre-sourced and verified. Ready to assemble.</p>
-              <button className="w-full py-3 rounded-xl border border-orange-800 text-orange-400 hover:bg-orange-900/20 font-black text-sm transition-all">
-                <ShoppingCart size={14} className="inline mr-2" /> Shop Kit
-              </button>
             </div>
           </div>
         </div>
@@ -113,8 +99,8 @@ export default function BuildDetail() {
             </div>
 
             <div className="border-t border-gray-800 pt-6">
-              <h3 className="text-white font-bold mb-2">Estimated Cost to Build</h3>
-              <p className="text-gray-300 font-mono">{build.estimatedCost}</p>
+              <h3 className="text-white font-bold mb-2">Classification</h3>
+              <p className="text-gray-300">Research build plan — not for sale. Available to research members only.</p>
             </div>
           </div>
         </section>
@@ -122,7 +108,7 @@ export default function BuildDetail() {
         {/* ── Kit Upsell ── */}
         <BuildKitUpsellPanel
           buildTitle={build.title}
-          kitPrice={287}
+          kitPrice={null}
           components={[
             "Toroidal ferrite core (Fair-Rite)",
             "Magnet wire AWG 14",

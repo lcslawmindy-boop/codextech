@@ -70,7 +70,7 @@ export default function DeviceGallery3D() {
                   </div>
                   <p className="text-gray-400 text-xs leading-relaxed flex-1">{inv.description}</p>
                   <div className="mt-3 flex items-center gap-2 justify-between">
-                    <span className="text-xs px-2 py-1 rounded bg-gray-800 text-gray-400">{inv.price}</span>
+                    <span className="text-xs px-2 py-1 rounded bg-red-950/60 border border-red-800 text-red-400 font-bold uppercase tracking-wider">Not for Sale</span>
                     <Link to="/invention-library" className="text-xs px-3 py-1 rounded-lg bg-gray-700 hover:bg-gray-600 text-gray-300 transition-colors">
                       View Details
                     </Link>

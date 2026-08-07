@@ -40,13 +40,13 @@ export default function BuildKitUpsellPanel({ buildTitle, kitPrice = 287, compon
   return (
     <div className="bg-gradient-to-r from-orange-950/30 to-yellow-950/30 border border-orange-800/40 rounded-2xl p-8 mb-8">
       <div className="flex items-start gap-4">
-        <div className="w-14 h-14 rounded-xl bg-orange-900/60 border border-orange-700 flex items-center justify-center flex-shrink-0">
-          <ShoppingCart size={24} className="text-orange-400" />
+        <div className="w-14 h-14 rounded-xl bg-red-900/60 border border-red-700 flex items-center justify-center flex-shrink-0">
+          <ShoppingCart size={24} className="text-red-400" />
         </div>
         <div className="flex-1">
-          <h3 className="text-white font-black text-lg mb-1">Buy the Complete Kit</h3>
+          <h3 className="text-white font-black text-lg mb-1">Component List</h3>
           <p className="text-gray-400 text-sm mb-5">
-            Skip the sourcing. All {components.length} components pre-verified and ready to ship.
+            All {components.length} components listed for research reference. Build plans are not for sale — available to research members only.
           </p>
 
           {/* Component summary */}
@@ -68,34 +68,22 @@ export default function BuildKitUpsellPanel({ buildTitle, kitPrice = 287, compon
             </div>
           </div>
 
-          {/* Price + CTA */}
+          {/* Classification */}
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-gray-500 text-xs mb-1">Kit Price</p>
+              <p className="text-gray-500 text-xs mb-1">Classification</p>
               <div className="flex items-baseline gap-2">
-                <span className="text-3xl font-black text-orange-400">${kitPrice}</span>
-                <span className="text-gray-600 text-sm">Ships in 2–3 days</span>
+                <span className="text-xl font-black text-red-400">Not for Sale</span>
+                <span className="text-gray-600 text-sm">Research Members Only</span>
               </div>
             </div>
-            <button
-              onClick={handleCheckout}
-              disabled={loading}
-              className="px-8 py-3 rounded-xl bg-orange-600 hover:bg-orange-500 disabled:opacity-50 text-white font-black flex items-center gap-2 transition-all"
-            >
-              {loading ? (
-                <>
-                  <Loader2 size={16} className="animate-spin" /> Checking out...
-                </>
-              ) : (
-                <>
-                  <Zap size={16} /> Buy Kit
-                </>
-              )}
-            </button>
+            <span className="px-6 py-3 rounded-xl bg-red-950/40 border border-red-800 text-red-400 font-black text-sm">
+              Research Only
+            </span>
           </div>
 
           <p className="text-gray-600 text-xs mt-3">
-            💡 Or upgrade to <span className="text-indigo-400 font-bold">Pro membership ($99/mo)</span> for unlimited builds + kits at 50% off.
+            💡 Build plans are available through a <span className="text-indigo-400 font-bold">research membership</span> — not sold individually.
           </p>
         </div>
       </div>
