@@ -91,6 +91,7 @@ const HEX = (c) => [parseInt(c.slice(1,3),16), parseInt(c.slice(3,5),16), parseI
 export default function ConceptNetworkGraph({ onNodeClick, selectedNodeId, graphMode = "neural", onLinkClick }) {
   const svgRef = useRef(null);
   const simRef = useRef(null);
+  const shimmerRef = useRef({ nodeId: null, startTime: 0 });
 
   useEffect(() => {
     const mode = MODES[graphMode] || MODES.neural;
@@ -223,6 +224,21 @@ export default function ConceptNetworkGraph({ onNodeClick, selectedNodeId, graph
       .attr("stroke-linecap", "round")
       .attr("stroke-linejoin", "round")
       .attr("filter", "url(#glow-link)");
+
+    // ── Link data-flow pulse layer (connections breathing with light) ──
+    const linkPulseGroup = g.append("g").attr("class", "link-pulses").lower();
+    const linkPulseData = links.map((l, i) => ({ link: l, phase: (i * 0.7) % (Math.PI * 2) }));
+    const linkPulseEls = linkPulseData.map(() => {
+      const el = document.createElementNS("http://www.w3.org/2000/svg", "line");
+      el.setAttribute("stroke", mode.linkColor);
+      el.setAttribute("stroke-width", mode.linkWidth * 2.2);
+      el.setAttribute("stroke-linecap", "round");
+      el.setAttribute("stroke-opacity", "0");
+      el.setAttribute("filter", "url(#glow-link)");
+      el.setAttribute("pointer-events", "none");
+      linkPulseGroup.node().appendChild(el);
+      return el;
+    });
 
     // ── Electric jolt layer (traveling dashes) ──
     const joltColors = ["#7dd3fc","#c4b5fd","#86efac","#fde68a","#f9a8d4","#ffffff","#67e8f9","#fbcfe8"];
@@ -366,6 +382,19 @@ export default function ConceptNetworkGraph({ onNodeClick, selectedNodeId, graph
     g.selectAll(".linklabel-bg").raise();
     linkLabel.raise();
 
+    // ── Node data-flow pulse rings (nodes breathing with light) ──
+    const nodePulseGroup = g.append("g").attr("class", "node-pulses");
+    const nodePulseData = nodes.map((n, i) => ({ node: n, t: (i * 0.13) % 1 }));
+    const nodePulseEls = nodePulseData.map(() => {
+      const el = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+      el.setAttribute("fill", "none");
+      el.setAttribute("stroke-width", 1.5);
+      el.setAttribute("stroke-opacity", "0");
+      el.setAttribute("pointer-events", "none");
+      nodePulseGroup.node().appendChild(el);
+      return el;
+    });
+
     // ── Node groups ──
     const node = g.append("g").selectAll("g.node")
       .data(nodes).enter().append("g")
@@ -376,7 +405,7 @@ export default function ConceptNetworkGraph({ onNodeClick, selectedNodeId, graph
         .on("drag", (e, d) => { d.fx = e.x; d.fy = e.y; })
         .on("end", (e, d) => { if (!e.active) simRef.current.alphaTarget(0); d.fx = null; d.fy = null; })
       )
-      .on("click", (e, d) => { e.stopPropagation(); onNodeClick(d); });
+      .on("click", (e, d) => { e.stopPropagation(); shimmerRef.current = { nodeId: d.id, startTime: performance.now() }; onNodeClick(d); });
 
     // Drop shadow ellipse
     node.append("ellipse")
@@ -547,11 +576,15 @@ export default function ConceptNetworkGraph({ onNodeClick, selectedNodeId, graph
           joltEls[i].setAttribute("stroke-dashoffset", -joltData[i].offset);
         }
       }
-      // Synaptic pulses traveling along links
+      // Synaptic pulses traveling along links (+ shimmer burst on clicked node)
+      const shimmer = shimmerRef.current;
+      const shimmerAge = shimmer.nodeId ? (performance.now() - shimmer.startTime) : Infinity;
+      const SHIMMER_DUR = 2600;
+      const shimmerAmt = shimmerAge < SHIMMER_DUR ? 1 - (shimmerAge / SHIMMER_DUR) : 0;
       if (mode.showSynapses) {
         for (let i = 0; i < synapseData.length; i++) {
           const sd = synapseData[i];
-          sd.t += sd.speed * sd.dir;
+          sd.t += sd.speed * sd.dir * (1 + shimmerAmt * 1.8);
           if (sd.t > 1) sd.t = 0;
           if (sd.t < 0) sd.t = 1;
           const l = sd.link;
@@ -561,7 +594,19 @@ export default function ConceptNetworkGraph({ onNodeClick, selectedNodeId, graph
           synapseEls[i].setAttribute("cx", x);
           synapseEls[i].setAttribute("cy", y);
           // Brighter near the ends (firing intensity)
-          const intensity = 0.5 + 0.5 * Math.sin(sd.t * Math.PI);
+          let intensity = 0.5 + 0.5 * Math.sin(sd.t * Math.PI);
+          // Shimmer burst on synapses connected to the clicked/expanded node
+          const sId = typeof l.source === 'object' ? l.source.id : l.source;
+          const tId = typeof l.target === 'object' ? l.target.id : l.target;
+          if (shimmerAmt > 0 && (sId === shimmer.nodeId || tId === shimmer.nodeId)) {
+            const shimWave = 0.5 + 0.5 * Math.sin(performance.now() * 0.022 + i);
+            intensity = Math.min(1, intensity + shimmerAmt * (0.4 + shimWave * 0.6));
+            synapseEls[i].setAttribute("r", sd.r * (1 + shimmerAmt * 1.6));
+            synapseEls[i].setAttribute("fill", shimmerAmt > 0.45 ? "#fef9c3" : "#fde047");
+          } else {
+            synapseEls[i].setAttribute("r", sd.r);
+            synapseEls[i].setAttribute("fill", sd.color);
+          }
           synapseEls[i].setAttribute("opacity", intensity);
         }
       }
@@ -598,6 +643,33 @@ export default function ConceptNetworkGraph({ onNodeClick, selectedNodeId, graph
             f.nextFire = now + 3000 + Math.random() * 6000;
           }
         }
+      }
+      // Link data-flow pulse (connections breathing with light)
+      for (let i = 0; i < linkPulseData.length; i++) {
+        const lp = linkPulseData[i];
+        const l = lp.link;
+        if (!l.source?.x || !l.target?.x) continue;
+        const pulse = 0.5 + 0.5 * Math.sin(breath * 1.6 + lp.phase);
+        linkPulseEls[i].setAttribute("x1", l.source.x);
+        linkPulseEls[i].setAttribute("y1", l.source.y);
+        linkPulseEls[i].setAttribute("x2", l.target.x);
+        linkPulseEls[i].setAttribute("y2", l.target.y);
+        linkPulseEls[i].setAttribute("stroke-opacity", pulse * 0.45);
+      }
+      // Node data-flow pulse rings (nodes breathing with light)
+      for (let i = 0; i < nodePulseData.length; i++) {
+        const np = nodePulseData[i];
+        const nd = np.node;
+        if (!nd?.x) continue;
+        np.t += 0.006;
+        if (np.t > 1) np.t = 0;
+        const r = nodeRadius(nd) * (1 + np.t * 1.1);
+        const op = (1 - np.t) * 0.5;
+        nodePulseEls[i].setAttribute("cx", nd.x);
+        nodePulseEls[i].setAttribute("cy", nd.y);
+        nodePulseEls[i].setAttribute("r", r);
+        nodePulseEls[i].setAttribute("stroke", groupColors[nd.group]);
+        nodePulseEls[i].setAttribute("stroke-opacity", op);
       }
       rafId = requestAnimationFrame(animate);
     };
@@ -651,6 +723,13 @@ export default function ConceptNetworkGraph({ onNodeClick, selectedNodeId, graph
       grp.select(".aura").attr("opacity", isSelected ? 0.55 : 0.25);
       grp.attr("filter", isSelected ? (glowMap[d.group] || null) : null);
     });
+  }, [selectedNodeId]);
+
+  // Trigger synapse shimmer when selection changes from outside the graph (e.g. search)
+  useEffect(() => {
+    if (selectedNodeId) {
+      shimmerRef.current = { nodeId: selectedNodeId, startTime: performance.now() };
+    }
   }, [selectedNodeId]);
 
   return <svg ref={svgRef} className="w-full h-full" style={{ transformStyle: "preserve-3d" }} />;
