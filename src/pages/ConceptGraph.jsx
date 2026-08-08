@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { BookOpen, Wrench, Gavel, Zap, Gift, DollarSign } from "lucide-react";
 import SearchPanel from "../components/SearchPanel";
 import ConceptNetworkGraph from "../components/ConceptNetworkGraph";
+import BrainBackground from "../components/BrainBackground";
 import NodePanel from "../components/NodePanel";
 import TimelineView from "../components/TimelineView";
 import ClusterSummaryPanel from "../components/ClusterSummaryPanel";
@@ -28,7 +29,7 @@ export default function ConceptGraph() {
   const [clusterNodes, setClusterNodes] = useState([]);
   const [view, setView] = useState("graph");
   const [showTopConcepts, setShowTopConcepts] = useState(false);
-  const [graphMode, setGraphMode] = useState("analyst");
+  const [graphMode, setGraphMode] = useState("neural");
 
   const groups = [...new Set(nodes.map(n => n.group))];
 
@@ -111,6 +112,7 @@ export default function ConceptGraph() {
         {/* Graph mode switcher */}
         <div className="flex items-center bg-gray-900 border border-gray-700 rounded-lg p-0.5 gap-0.5 mr-2">
           {[
+            { id: "neural", label: "🧠 NEURAL", title: "Living brain — synapses, quantum fields, firing" },
             { id: "analyst", label: "⬡ ANALYST", title: "Clean government/physics style" },
             { id: "electric", label: "⚡ ELECTRIC", title: "Animated current jolts on links" },
             { id: "research", label: "〰 RESEARCH", title: "Subtle scalar wave pulses" },
@@ -165,11 +167,7 @@ export default function ConceptGraph() {
           />
         ) : (
           <>
-            <div className="absolute inset-0 z-0 pointer-events-none" style={{
-              background: `radial-gradient(ellipse at 50% 60%, rgba(6,182,212,0.04) 0%, transparent 65%), radial-gradient(ellipse at 80% 20%, rgba(139,92,246,0.05) 0%, transparent 50%), #080d14`,
-              backgroundImage: `linear-gradient(rgba(30,41,59,0.6) 1px, transparent 1px), linear-gradient(90deg, rgba(30,41,59,0.6) 1px, transparent 1px)`,
-              backgroundSize: '48px 48px',
-            }} />
+            <BrainBackground />
             {clusterMode && clusterNodes.length > 0 && (
               <ClusterSummaryPanel
                 nodes={clusterNodes}
