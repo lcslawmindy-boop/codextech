@@ -203,6 +203,7 @@ import AcquisitionTierRoadmap from './pages/AcquisitionTierRoadmap';
 import TherapyPod from './pages/TherapyPod';
 import TherapyPodPro from './pages/TherapyPodPro';
 import ResonanceDashboard from './pages/ResonanceDashboard';
+import MedbedShowcase from './pages/MedbedShowcase';
 
 
 const AuthenticatedApp = () => {
@@ -403,6 +404,7 @@ const AuthenticatedApp = () => {
           <Route path="/therapy-pod" element={<TherapyPod />} />
           <Route path="/therapy-pod-pro" element={<TherapyPodPro />} />
           <Route path="/resonance-dashboard" element={<ResonanceDashboard />} />
+          <Route path="/medbed-showcase" element={<MedbedShowcase />} />
           </Route>
 
           {/* Scalar Venture Vault Routes */}
