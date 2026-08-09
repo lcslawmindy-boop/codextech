@@ -92,6 +92,7 @@ export default function ConceptNetworkGraph({ onNodeClick, selectedNodeId, graph
   const svgRef = useRef(null);
   const simRef = useRef(null);
   const shimmerRef = useRef({ nodeId: null, startTime: 0 });
+  const degreesRef = useRef({});
 
   useEffect(() => {
     const mode = MODES[graphMode] || MODES.neural;
@@ -194,6 +195,7 @@ export default function ConceptNetworkGraph({ onNodeClick, selectedNodeId, graph
     const nodes = rawNodes.map(d => ({ ...d }));
     const links = rawLinks.map(d => ({ ...d }));
     const degrees = getNodeDegrees(nodes, links);
+    degreesRef.current = degrees;
 
     const minR = 26, maxR = 46;
     const maxDeg = Math.max(...Object.values(degrees));
@@ -405,7 +407,7 @@ export default function ConceptNetworkGraph({ onNodeClick, selectedNodeId, graph
         .on("drag", (e, d) => { d.fx = e.x; d.fy = e.y; })
         .on("end", (e, d) => { if (!e.active) simRef.current.alphaTarget(0); d.fx = null; d.fy = null; })
       )
-      .on("click", (e, d) => { e.stopPropagation(); shimmerRef.current = { nodeId: d.id, startTime: performance.now() }; onNodeClick(d); });
+      .on("click", (e, d) => { e.stopPropagation(); shimmerRef.current = { nodeId: d.id, startTime: performance.now(), degree: degrees[d.id] || 0 }; onNodeClick(d); });
 
     // Drop shadow ellipse
     node.append("ellipse")
@@ -581,10 +583,12 @@ export default function ConceptNetworkGraph({ onNodeClick, selectedNodeId, graph
       const shimmerAge = shimmer.nodeId ? (performance.now() - shimmer.startTime) : Infinity;
       const SHIMMER_DUR = 2600;
       const shimmerAmt = shimmerAge < SHIMMER_DUR ? 1 - (shimmerAge / SHIMMER_DUR) : 0;
+      // Relevance factor: higher-degree nodes drive faster, more intense pulses (capped at 3x)
+      const relevance = shimmer.degree ? 1 + Math.min(shimmer.degree / 12, 2) : 1;
       if (mode.showSynapses) {
         for (let i = 0; i < synapseData.length; i++) {
           const sd = synapseData[i];
-          sd.t += sd.speed * sd.dir * (1 + shimmerAmt * 1.8);
+          sd.t += sd.speed * sd.dir * (1 + shimmerAmt * 1.8 * relevance);
           if (sd.t > 1) sd.t = 0;
           if (sd.t < 0) sd.t = 1;
           const l = sd.link;
@@ -728,7 +732,7 @@ export default function ConceptNetworkGraph({ onNodeClick, selectedNodeId, graph
   // Trigger synapse shimmer when selection changes from outside the graph (e.g. search)
   useEffect(() => {
     if (selectedNodeId) {
-      shimmerRef.current = { nodeId: selectedNodeId, startTime: performance.now() };
+      shimmerRef.current = { nodeId: selectedNodeId, startTime: performance.now(), degree: degreesRef.current[selectedNodeId] || 0 };
     }
   }, [selectedNodeId]);
 

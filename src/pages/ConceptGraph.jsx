@@ -167,7 +167,7 @@ export default function ConceptGraph() {
           />
         ) : (
           <>
-            <BrainBackground />
+            <BrainBackground activeGroup={selectedNode?.group} />
             {clusterMode && clusterNodes.length > 0 && (
               <ClusterSummaryPanel
                 nodes={clusterNodes}

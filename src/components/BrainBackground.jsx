@@ -10,15 +10,35 @@ const BRAIN_SIDE =
 const BRAIN_TOP =
   "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/b33b5de2f_generated_image.png";
 
-export default function BrainBackground() {
+const GROUP_HUES = {
+  physics: "59,130,246",
+  biology: "34,197,94",
+  weapons: "239,68,68",
+  consciousness: "168,85,247",
+  history: "245,158,11",
+  philosophy: "6,182,212",
+  ancient: "234,179,8",
+  occult: "236,72,153",
+};
+const DEFAULT_HUE = "99,102,241"; // indigo when no category active
+
+export default function BrainBackground({ activeGroup }) {
   const canvasRef = useRef(null);
+  const activeGroupRef = useRef(null);
+  activeGroupRef.current = activeGroup || null;
 
   // Animated sacred-geometry + quantum-field overlay (flower of life, metatron grid, radiating rings)
+  // Reacts to the active research category by shifting its hue.
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext("2d");
     let raf, t = 0;
+
+    // Smoothly lerped RGB — transitions hue when active group changes
+    const parseRGB = (s) => s.split(",").map(Number);
+    let curRGB = parseRGB(DEFAULT_HUE);
+    const lerp = (a, b, f) => a + (b - a) * f;
     const resize = () => {
       canvas.width = canvas.parentElement.clientWidth;
       canvas.height = canvas.parentElement.clientHeight;
@@ -60,7 +80,13 @@ export default function BrainBackground() {
       const W = canvas.width, H = canvas.height;
       ctx.clearRect(0, 0, W, H);
 
-      // Quantum field — slow rotating metatron grid
+      // Lerp current hue toward active group's hue
+      const tgtStr = GROUP_HUES[activeGroupRef.current] || DEFAULT_HUE;
+      const tgt = parseRGB(tgtStr);
+      curRGB = curRGB.map((v, i) => lerp(v, tgt[i], 0.02));
+      const hue = curRGB.map(Math.round).join(",");
+
+      // Quantum field — slow rotating metatron grid (hue-reactive)
       ctx.save();
       ctx.translate(W / 2, H / 2);
       ctx.rotate(t * 0.04);
@@ -70,38 +96,40 @@ export default function BrainBackground() {
         ctx.beginPath();
         ctx.moveTo(0, 0);
         ctx.lineTo(Math.cos(ang) * R, Math.sin(ang) * R);
-        ctx.strokeStyle = `rgba(168,85,247,${0.05 + 0.04 * Math.sin(t + i)})`;
+        ctx.strokeStyle = `rgba(${hue},${0.05 + 0.04 * Math.sin(t + i)})`;
         ctx.lineWidth = 0.5;
         ctx.stroke();
       }
       for (let ring = 1; ring <= 4; ring++) {
         ctx.beginPath();
         ctx.arc(0, 0, (R / 4) * ring, 0, Math.PI * 2);
-        ctx.strokeStyle = `rgba(99,102,241,${0.04 + 0.03 * Math.sin(t + ring)})`;
+        ctx.strokeStyle = `rgba(${hue},${0.04 + 0.03 * Math.sin(t + ring)})`;
         ctx.lineWidth = 0.5;
         ctx.stroke();
       }
       ctx.restore();
 
-      // Flower of life — breathing
+      // Flower of life — breathing (hue-reactive)
       const breathe = 1 + Math.sin(t * 0.7) * 0.04;
+      ctx.strokeStyle = `rgba(${hue},0.5)`;
       drawFlowerOfLife(W * 0.28, H * 0.42, 46 * breathe, 0.10 + 0.05 * Math.sin(t));
       drawFlowerOfLife(W * 0.72, H * 0.6, 38 * breathe, 0.08 + 0.04 * Math.sin(t + 1.5));
 
-      // Radiating quantum ripples from brain centers
+      // Shimmering quantum field radiating from brain image centers (hue-reactive)
       const centers = [
-        { x: W * 0.3, y: H * 0.4, color: "56,189,248" },
-        { x: W * 0.7, y: H * 0.55, color: "168,85,247" },
-        { x: W * 0.5, y: H * 0.7, color: "250,204,21" },
+        { x: W * 0.32, y: H * 0.38 },
+        { x: W * 0.68, y: H * 0.5 },
+        { x: W * 0.47, y: H * 0.68 },
       ];
       centers.forEach((c, ci) => {
-        for (let i = 0; i < 4; i++) {
-          const phase = (t * 0.5 + ci + i * 0.4) % 1;
-          const r = phase * Math.min(W, H) * 0.5;
+        for (let i = 0; i < 5; i++) {
+          const phase = (t * 0.4 + ci + i * 0.35) % 1;
+          const r = phase * Math.min(W, H) * 0.52;
+          const shimmer = 0.5 + 0.5 * Math.sin(t * 2 + ci * 1.7 + i);
           ctx.beginPath();
           ctx.arc(c.x, c.y, r, 0, Math.PI * 2);
-          ctx.strokeStyle = `rgba(${c.color},${(1 - phase) * 0.12})`;
-          ctx.lineWidth = 1;
+          ctx.strokeStyle = `rgba(${hue},${(1 - phase) * (0.10 + shimmer * 0.08)})`;
+          ctx.lineWidth = 1 + shimmer * 0.8;
           ctx.stroke();
         }
       });
