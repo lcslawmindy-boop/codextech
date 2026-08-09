@@ -2,19 +2,6 @@ import { useEffect, useRef } from "react";
 import * as d3 from "d3";
 import { nodes as rawNodes, links as rawLinks, groupColors } from "../lib/beardenData";
 
-// ── Night Vision tactical palette ──
-const NV = {
-  bg: "#020402",
-  node: "#00ff41",        // phosphor green
-  nodeDim: "#0a8a2a",
-  link: "#00ff41",
-  linkOpacity: 0.18,
-  label: "#7dff8a",
-  labelDim: "#3a8a4a",
-  grid: "#0a3a1a",
-  reticle: "#00ff41",
-};
-
 function wrapLabel(label, maxChars = 13) {
   const words = label.split(' ');
   const lines = [];
@@ -28,7 +15,7 @@ function wrapLabel(label, maxChars = 13) {
     }
   });
   if (cur) lines.push(cur.trim());
-  return lines.slice(0, 2);
+  return lines.slice(0, 3);
 }
 
 function getNodeDegrees(nodes, links) {
@@ -43,11 +30,52 @@ function getNodeDegrees(nodes, links) {
   return deg;
 }
 
-export default function ConceptNetworkGraph({ onNodeClick, selectedNodeId, graphMode = "nightvision", onLinkClick }) {
+// Mode configs
+const MODES = {
+  analyst: {
+    bg: "#080d14",
+    linkColor: "#ffffff",
+    linkOpacity: 1,
+    linkWidth: 1.5,
+    nodeStrokeWidth: 1,
+    showJolts: false,
+    showWaves: false,
+    showFlashes: false,
+    glowBlur: 0,
+    label: "ANALYST",
+  },
+  electric: {
+    bg: "#07090f",
+    linkColor: "#ffffff",
+    linkOpacity: 0.35,
+    linkWidth: 1.0,
+    nodeStrokeWidth: 1.5,
+    showJolts: true,
+    showWaves: false,
+    showFlashes: false,
+    glowBlur: 5,
+    label: "ELECTRIC",
+  },
+  research: {
+    bg: "#060b0f",
+    linkColor: "#94a3b8",
+    linkOpacity: 0.4,
+    linkWidth: 1.0,
+    nodeStrokeWidth: 1.5,
+    showJolts: false,
+    showWaves: true,
+    showFlashes: false,
+    glowBlur: 4,
+    label: "RESEARCH",
+  },
+};
+
+export default function ConceptNetworkGraph({ onNodeClick, selectedNodeId, graphMode = "analyst", onLinkClick }) {
   const svgRef = useRef(null);
   const simRef = useRef(null);
 
   useEffect(() => {
+    const mode = MODES[graphMode] || MODES.analyst;
     const container = svgRef.current.parentElement;
     const width = container.clientWidth;
     const height = container.clientHeight;
@@ -59,37 +87,84 @@ export default function ConceptNetworkGraph({ onNodeClick, selectedNodeId, graph
     svg.selectAll("*").remove();
 
     const defs = svg.append("defs");
-    // Subtle phosphor glow
-    const glow = defs.append("filter").attr("id", "nv-glow").attr("x", "-50%").attr("y", "-50%").attr("width", "200%").attr("height", "200%");
-    glow.append("feGaussianBlur").attr("stdDeviation", "1.5").attr("result", "b");
-    const fm = glow.append("feMerge");
-    fm.append("feMergeNode").attr("in", "b");
-    fm.append("feMergeNode").attr("in", "SourceGraphic");
 
-    // Scan-line pattern
-    const pattern = defs.append("pattern").attr("id", "scanlines").attr("width", 4).attr("height", 4).attr("patternUnits", "userSpaceOnUse");
-    pattern.append("rect").attr("width", 4).attr("height", 4).attr("fill", "transparent");
-    pattern.append("line").attr("x1", 0).attr("y1", 0).attr("x2", 4).attr("y2", 0).attr("stroke", NV.grid).attr("stroke-width", 0.5).attr("opacity", 0.3);
+    // ── 3D sphere gradients per group ──
+    Object.entries(groupColors).forEach(([group, color]) => {
+      // Main sphere body gradient (off-center for 3D shading)
+      const grad = defs.append("radialGradient")
+        .attr("id", `grad-${group}`)
+        .attr("cx", "32%").attr("cy", "28%").attr("r", "70%");
+      grad.append("stop").attr("offset", "0%").attr("stop-color", "#ffffff").attr("stop-opacity", 0.35);
+      grad.append("stop").attr("offset", "35%").attr("stop-color", color).attr("stop-opacity", 0.85);
+      grad.append("stop").attr("offset", "100%").attr("stop-color", color).attr("stop-opacity", 0.12);
 
-    // Background grid + scanlines
-    svg.append("rect").attr("width", width).attr("height", height).attr("fill", NV.bg);
-    svg.append("rect").attr("width", width).attr("height", height).attr("fill", "url(#scanlines)");
+      // Specular highlight (bright spot top-left)
+      const spec = defs.append("radialGradient")
+        .attr("id", `spec-${group}`)
+        .attr("cx", "28%").attr("cy", "22%").attr("r", "38%");
+      spec.append("stop").attr("offset", "0%").attr("stop-color", "#ffffff").attr("stop-opacity", 0.7);
+      spec.append("stop").attr("offset", "100%").attr("stop-color", "#ffffff").attr("stop-opacity", 0);
 
-    // Tactical reticle (center crosshair)
-    const reticle = svg.append("g").attr("opacity", 0.08);
-    reticle.append("line").attr("x1", 0).attr("y1", height/2).attr("x2", width).attr("y2", height/2).attr("stroke", NV.reticle).attr("stroke-width", 0.5);
-    reticle.append("line").attr("x1", width/2).attr("y1", 0).attr("x2", width/2).attr("y2", height).attr("stroke", NV.reticle).attr("stroke-width", 0.5);
-    reticle.append("circle").attr("cx", width/2).attr("cy", height/2).attr("r", 60).attr("fill", "none").attr("stroke", NV.reticle).attr("stroke-width", 0.5).attr("stroke-dasharray", "4 4");
-    reticle.append("circle").attr("cx", width/2).attr("cy", height/2).attr("r", 180).attr("fill", "none").attr("stroke", NV.reticle).attr("stroke-width", 0.5).attr("stroke-dasharray", "2 6");
+      // Bottom shadow for depth
+      const shadow = defs.append("radialGradient")
+        .attr("id", `shadow-${group}`)
+        .attr("cx", "60%").attr("cy", "75%").attr("r", "55%");
+      shadow.append("stop").attr("offset", "0%").attr("stop-color", "#000000").attr("stop-opacity", 0.45);
+      shadow.append("stop").attr("offset", "100%").attr("stop-color", "#000000").attr("stop-opacity", 0);
+    });
+
+    // ── Drop shadow filter ──
+    const dropShadow = defs.append("filter").attr("id", "dropShadow").attr("x", "-40%").attr("y", "-40%").attr("width", "180%").attr("height", "180%");
+    dropShadow.append("feDropShadow").attr("dx", "2").attr("dy", "4").attr("stdDeviation", "5").attr("flood-color", "#000000").attr("flood-opacity", "0.6");
+
+
+
+    // ── Glow filters ──
+    const makeGlow = (id, blur, color) => {
+      const f = defs.append("filter").attr("id", id).attr("x", "-60%").attr("y", "-60%").attr("width", "220%").attr("height", "220%");
+      f.append("feColorMatrix").attr("type", "matrix")
+        .attr("values", `0 0 0 0 ${parseInt(color.slice(1,3),16)/255} 0 0 0 0 ${parseInt(color.slice(3,5),16)/255} 0 0 0 0 ${parseInt(color.slice(5,7),16)/255} 0 0 0 1 0`)
+        .attr("result", "colorOut");
+      f.append("feGaussianBlur").attr("in", "colorOut").attr("stdDeviation", blur).attr("result", "blurred");
+      const fm = f.append("feMerge");
+      fm.append("feMergeNode").attr("in", "blurred");
+      fm.append("feMergeNode").attr("in", "SourceGraphic");
+    };
+
+    makeGlow("glow-blue", mode.glowBlur, "#3b82f6");
+    makeGlow("glow-green", mode.glowBlur, "#22c55e");
+    makeGlow("glow-red", mode.glowBlur, "#ef4444");
+    makeGlow("glow-purple", mode.glowBlur, "#a855f7");
+    makeGlow("glow-amber", mode.glowBlur, "#f59e0b");
+    makeGlow("glow-cyan", mode.glowBlur, "#06b6d4");
+    makeGlow("glow-white", mode.glowBlur, "#ffffff");
+    makeGlow("glow-link", mode.glowBlur, mode.linkColor);
+
+    // ── Jolt glow (electric mode only) ──
+    const joltFilter = defs.append("filter").attr("id", "joltGlow").attr("x", "-100%").attr("y", "-100%").attr("width", "300%").attr("height", "300%");
+    joltFilter.append("feGaussianBlur").attr("in", "SourceGraphic").attr("stdDeviation", "3").attr("result", "b");
+    const jfm = joltFilter.append("feMerge");
+    jfm.append("feMergeNode").attr("in", "b");
+    jfm.append("feMergeNode").attr("in", "SourceGraphic");
+
+    // ── Wave glow (research mode only) ──
+    const waveFilter = defs.append("filter").attr("id", "waveGlow").attr("x", "-80%").attr("y", "-80%").attr("width", "260%").attr("height", "260%");
+    waveFilter.append("feGaussianBlur").attr("in", "SourceGraphic").attr("stdDeviation", "3").attr("result", "wb");
+    const wfm = waveFilter.append("feMerge");
+    wfm.append("feMergeNode").attr("in", "wb");
+    wfm.append("feMergeNode").attr("in", "SourceGraphic");
 
     const g = svg.append("g");
-    svg.call(d3.zoom().scaleExtent([0.15, 5]).on("zoom", e => g.attr("transform", e.transform)));
+    svg.call(d3.zoom().scaleExtent([0.1, 6]).on("zoom", e => g.attr("transform", e.transform)));
+
+    // Create link layer first (so it renders behind nodes)
+    const linkGroup = g.append("g");
 
     const nodes = rawNodes.map(d => ({ ...d }));
     const links = rawLinks.map(d => ({ ...d }));
     const degrees = getNodeDegrees(nodes, links);
 
-    const minR = 8, maxR = 18;
+    const minR = 26, maxR = 46;
     const maxDeg = Math.max(...Object.values(degrees));
     const nodeRadius = d => minR + ((degrees[d.id] || 0) / maxDeg) * (maxR - minR);
 
@@ -97,37 +172,150 @@ export default function ConceptNetworkGraph({ onNodeClick, selectedNodeId, graph
       .force("link", d3.forceLink(links).id(d => d.id).distance(d => {
         const srcDeg = degrees[typeof d.source === 'object' ? d.source.id : d.source] || 0;
         const tgtDeg = degrees[typeof d.target === 'object' ? d.target.id : d.target] || 0;
-        return 120 + (srcDeg + tgtDeg) * 4;
+        const baseDistance = 190 + (srcDeg + tgtDeg) * 3.5;
+        const srcNode = nodes.find(n => n.id === (typeof d.source === 'object' ? d.source.id : d.source));
+        const tgtNode = nodes.find(n => n.id === (typeof d.target === 'object' ? d.target.id : d.target));
+        const srcRadius = srcNode ? nodeRadius(srcNode) : 0;
+        const tgtRadius = tgtNode ? nodeRadius(tgtNode) : 0;
+        return baseDistance + srcRadius + tgtRadius;
       }))
-      .force("charge", d3.forceManyBody().strength(d => -350 - (degrees[d.id] || 0) * 12))
+      .force("charge", d3.forceManyBody().strength(d => -900 - (degrees[d.id] || 0) * 20))
       .force("center", d3.forceCenter(width / 2, height / 2))
-      .force("collision", d3.forceCollide(d => nodeRadius(d) + 10));
+      .force("collision", d3.forceCollide(d => nodeRadius(d) + 18));
 
-    // Links — thin phosphor lines, minimal
-    const link = g.append("g").selectAll("line")
+    // ── Links ──
+    const link = linkGroup.selectAll("line.link-line")
       .data(links).enter().append("line")
-      .attr("stroke", NV.link)
-      .attr("stroke-width", 0.6)
-      .attr("stroke-opacity", NV.linkOpacity)
-      .attr("pointer-events", "none");
+      .attr("class", "link-line")
+      .attr("stroke", mode.linkColor)
+      .attr("stroke-width", mode.linkWidth)
+      .attr("stroke-opacity", mode.linkOpacity)
+      .attr("stroke-dasharray", null)
+      .attr("stroke-linecap", "round")
+      .attr("stroke-linejoin", "round")
+      .attr("filter", graphMode === "analyst" ? null : "url(#glow-link)");
 
-    // Link labels — monospace, dim, only on hover
-    const linkLabel = g.append("g").selectAll("text")
-      .data(links).enter().append("text")
-      .attr("font-family", "monospace")
-      .attr("font-size", 8)
-      .attr("fill", NV.labelDim)
-      .attr("text-anchor", "middle")
-      .attr("opacity", 0)
+    // ── Electric jolt layer ──
+    const joltColorsElectric = ["#7dd3fc","#c4b5fd","#86efac","#fde68a","#f9a8d4","#ffffff"];
+    const joltColorsAnalyst  = ["#bae6fd","#e0f2fe","#93c5fd","#dbeafe","#bfdbfe","#ffffff"];
+    const joltColors = graphMode === "analyst" ? joltColorsAnalyst : joltColorsElectric;
+    let joltData = [], joltEls = [];
+    if (mode.showJolts) {
+      const joltGroup = g.append("g").attr("class", "jolts");
+      joltData = links.map((l, i) => ({
+        link: l,
+        color: joltColors[i % joltColors.length],
+        speed: graphMode === "analyst" ? 1.8 + (i % 5) * 0.4 : 2.2 + (i % 5) * 0.6,
+        dashLen: graphMode === "analyst" ? 12 + (i % 4) * 6 : 8 + (i % 4) * 5,
+        gapLen: graphMode === "analyst" ? 40 + (i % 6) * 14 : 35 + (i % 6) * 12,
+        offset: Math.random() * 150,
+      }));
+      joltEls = joltData.map(jd => {
+        const el = document.createElementNS("http://www.w3.org/2000/svg", "line");
+        el.setAttribute("stroke", jd.color);
+        el.setAttribute("stroke-width", graphMode === "analyst" ? "1.4" : "1.8");
+        el.setAttribute("stroke-opacity", graphMode === "analyst" ? "0.6" : "0.85");
+        el.setAttribute("stroke-linecap", "round");
+        el.setAttribute("filter", "url(#joltGlow)");
+        el.setAttribute("pointer-events", "none");
+        el.setAttribute("stroke-dasharray", `${jd.dashLen} ${jd.gapLen}`);
+        joltGroup.node().appendChild(el);
+        return el;
+      });
+    }
+
+    // ── Scalar wave rings (research mode) ──
+    const waveColors = ["#38bdf8","#818cf8","#34d399","#fb923c","#f472b6"];
+    let waveData = [], waveEls = [];
+    if (mode.showWaves) {
+      const scalarGroup = g.append("g").attr("class", "scalar-waves");
+      const NUM_WAVES = 30;
+      waveData = Array.from({ length: NUM_WAVES }, (_, i) => ({
+        nodeIdx: Math.floor(Math.random() * nodes.length),
+        r: (i / NUM_WAVES) * 150,
+        maxR: 240 + Math.random() * 180,
+        speed: 0.8 + Math.random() * 0.8,
+        color: waveColors[i % waveColors.length],
+        strokeW: 0.8 + Math.random() * 0.7,
+      }));
+      waveEls = waveData.map(w => {
+        const el = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+        el.setAttribute("fill", "none");
+        el.setAttribute("stroke-width", w.strokeW);
+        el.setAttribute("filter", "url(#waveGlow)");
+        el.setAttribute("pointer-events", "none");
+        scalarGroup.node().appendChild(el);
+        return el;
+      });
+    }
+
+    // ── Link labels (clickable with visual feedback) ──
+    const linkLabelBg = g.append("g").selectAll("rect.linklabel-bg")
+      .data(links).enter().append("rect")
+      .attr("class", "linklabel-bg")
+      .attr("fill", "transparent")
+      .attr("rx", 4)
       .attr("pointer-events", "none")
-      .style("letter-spacing", "0.05em")
-      .text(d => d.label);
+      .attr("opacity", 0);
 
-    // Nodes
+    const linkLabel = g.append("g").selectAll("text.linklabel")
+      .data(links).enter().append("text")
+      .attr("class", "linklabel")
+      .attr("font-size", 11).attr("font-weight", "800")
+      .attr("fill", "#ffffff").attr("fill-opacity", 0.8)
+      .attr("stroke", "#000").attr("stroke-width", 2.5)
+      .attr("stroke-linejoin", "round").attr("paint-order", "stroke")
+      .attr("text-anchor", "middle")
+      .style("cursor", "pointer")
+      .text(d => d.label)
+      .on("mouseenter", function(e, d) {
+        d3.select(this)
+          .transition().duration(150)
+          .attr("fill-opacity", 1)
+          .attr("font-size", 12);
+        d3.select(this.parentNode).selectAll("rect.linklabel-bg").filter((bd) => bd === d)
+          .transition().duration(150)
+          .attr("opacity", 0.15)
+          .attr("fill", "#fbbf24");
+      })
+      .on("mouseleave", function(e, d) {
+        d3.select(this)
+          .transition().duration(150)
+          .attr("fill-opacity", 0.8)
+          .attr("font-size", 11);
+        d3.select(this.parentNode).selectAll("rect.linklabel-bg").filter((bd) => bd === d)
+          .transition().duration(150)
+          .attr("opacity", 0);
+      })
+      .on("click", (e, d) => {
+        e.stopPropagation();
+        if (onLinkClick) onLinkClick(d);
+      });
+
+    // Position label backgrounds
+    linkLabel.each(function(d, i) {
+      const bbox = this.getBBox();
+      d3.select(linkLabelBg.nodes()[i])
+        .attr("x", bbox.x - 6)
+        .attr("y", bbox.y - 2)
+        .attr("width", bbox.width + 12)
+        .attr("height", bbox.height + 4)
+        .style("pointer-events", "auto")
+        .on("click", (e) => {
+          e.stopPropagation();
+          if (onLinkClick) onLinkClick(d);
+        });
+    });
+
+    // Raise link labels to front so they're always clickable
+    g.selectAll(".linklabel-bg").raise();
+    linkLabel.raise();
+
+    // ── Node groups ──
     const node = g.append("g").selectAll("g.node")
       .data(nodes).enter().append("g")
       .attr("class", "node")
-      .style("cursor", "crosshair")
+      .style("cursor", "pointer")
       .call(d3.drag()
         .on("start", (e, d) => { if (!e.active) simRef.current.alphaTarget(0.3).restart(); d.fx = d.x; d.fy = d.y; })
         .on("drag", (e, d) => { d.fx = e.x; d.fy = e.y; })
@@ -135,103 +323,270 @@ export default function ConceptNetworkGraph({ onNodeClick, selectedNodeId, graph
       )
       .on("click", (e, d) => { e.stopPropagation(); onNodeClick(d); });
 
-    // Node ring (tactical bracket)
+    // ── Drop shadow ellipse (below sphere) ──
+    node.append("ellipse")
+      .attr("class", "sphere-shadow")
+      .attr("rx", d => nodeRadius(d) * 0.85)
+      .attr("ry", d => nodeRadius(d) * 0.22)
+      .attr("cy", d => nodeRadius(d) * 0.9)
+      .attr("fill", "#000000")
+      .attr("fill-opacity", 0.45)
+      .attr("pointer-events", "none");
+
+    // ── Outer glow ring ──
     node.append("circle")
       .attr("class", "ring")
-      .attr("r", d => nodeRadius(d) + 3)
+      .attr("r", d => nodeRadius(d) + 5)
       .attr("fill", "none")
-      .attr("stroke", NV.node)
-      .attr("stroke-width", 0.8)
-      .attr("stroke-opacity", 0.4)
+      .attr("stroke", d => groupColors[d.group])
+      .attr("stroke-width", 1.5)
+      .attr("stroke-opacity", 0.2)
       .attr("pointer-events", "none");
 
-    // Node body — phosphor green, intensity by degree
+    // ── Main sphere body ──
     node.append("circle")
-      .attr("class", "body")
+      .attr("class", "main-circle")
       .attr("r", d => nodeRadius(d))
-      .attr("fill", d => {
-        const deg = degrees[d.id] || 0;
-        const intensity = 0.25 + (deg / maxDeg) * 0.5;
-        return `rgba(0,255,65,${intensity})`;
-      })
-      .attr("stroke", NV.node)
-      .attr("stroke-width", 1)
+      .attr("fill", d => `url(#grad-${d.group})`)
+      .attr("stroke", d => groupColors[d.group])
+      .attr("stroke-width", mode.nodeStrokeWidth + 0.5)
+      .attr("filter", "url(#dropShadow)")
       .attr("pointer-events", "none");
 
-    // Node labels — monospace, phosphor
+    // ── Bottom shadow overlay for depth ──
+    node.append("circle")
+      .attr("class", "sphere-depth")
+      .attr("r", d => nodeRadius(d))
+      .attr("fill", d => `url(#shadow-${d.group})`)
+      .attr("pointer-events", "none");
+
+    // ── Specular highlight ──
+    node.append("circle")
+      .attr("class", "sphere-spec")
+      .attr("r", d => nodeRadius(d))
+      .attr("fill", d => `url(#spec-${d.group})`)
+      .attr("pointer-events", "none");
+
+    // ── Invisible hit target on top ──
+    node.append("circle")
+      .attr("class", "hit-target")
+      .attr("r", d => nodeRadius(d))
+      .attr("fill", "transparent")
+      .attr("stroke", "none")
+      .on("mouseenter", function(e, d) {
+        const r = nodeRadius(d);
+        const nodeG = d3.select(this.parentNode);
+        nodeG.select(".ring")
+          .transition().duration(180).attr("stroke-opacity", 0.8).attr("r", r + 10).attr("stroke-width", 2);
+        nodeG.select(".main-circle")
+          .transition().duration(180).attr("stroke-width", 2.5);
+        nodeG.select(".sphere-shadow")
+          .transition().duration(180).attr("rx", r * 1.05).attr("fill-opacity", 0.6);
+        d3.select(this.parentNode).attr("filter", "url(#dropShadow)");
+        d3.select(this.parentNode).select(".group-label")
+          .transition().duration(150).attr("fill-opacity", 1);
+        linkLabel.transition().duration(150)
+          .attr("fill-opacity", l => {
+            const src = typeof l.source === 'object' ? l.source.id : l.source;
+            const tgt = typeof l.target === 'object' ? l.target.id : l.target;
+            return (src === d.id || tgt === d.id) ? 1 : 0.9;
+          })
+          .attr("font-size", l => {
+            const src = typeof l.source === 'object' ? l.source.id : l.source;
+            const tgt = typeof l.target === 'object' ? l.target.id : l.target;
+            return (src === d.id || tgt === d.id) ? 13 : 11;
+          })
+          .attr("stroke-width", l => {
+            const src = typeof l.source === 'object' ? l.source.id : l.source;
+            const tgt = typeof l.target === 'object' ? l.target.id : l.target;
+            return (src === d.id || tgt === d.id) ? 3.5 : 2.5;
+          })
+          .attr("fill", l => {
+            const src = typeof l.source === 'object' ? l.source.id : l.source;
+            const tgt = typeof l.target === 'object' ? l.target.id : l.target;
+            return (src === d.id || tgt === d.id) ? "#ffff00" : "#ffffff";
+          });
+        link.transition().duration(150)
+          .attr("stroke-opacity", l => {
+            const src = typeof l.source === 'object' ? l.source.id : l.source;
+            const tgt = typeof l.target === 'object' ? l.target.id : l.target;
+            return (src === d.id || tgt === d.id) ? 1 : 0.1;
+          })
+          .attr("stroke", l => {
+            const src = typeof l.source === 'object' ? l.source.id : l.source;
+            const tgt = typeof l.target === 'object' ? l.target.id : l.target;
+            return (src === d.id || tgt === d.id) ? groupColors[d.group] : mode.linkColor;
+          })
+          .attr("stroke-width", l => {
+            const src = typeof l.source === 'object' ? l.source.id : l.source;
+            const tgt = typeof l.target === 'object' ? l.target.id : l.target;
+            return (src === d.id || tgt === d.id) ? 2.5 : mode.linkWidth;
+          });
+      })
+      .on("mouseleave", function(e, d) {
+        const r = nodeRadius(d);
+        const nodeG = d3.select(this.parentNode);
+        nodeG.select(".ring")
+          .transition().duration(300).attr("stroke-opacity", d.id === selectedNodeId ? 0.7 : 0.2).attr("r", r + 5).attr("stroke-width", d.id === selectedNodeId ? 2 : 1.5);
+        nodeG.select(".main-circle")
+          .transition().duration(300).attr("stroke-width", d.id === selectedNodeId ? 2.5 : mode.nodeStrokeWidth + 0.5);
+        nodeG.select(".sphere-shadow")
+          .transition().duration(300).attr("rx", r * 0.85).attr("fill-opacity", 0.45);
+        d3.select(this.parentNode).attr("filter", null);
+        d3.select(this.parentNode).select(".group-label")
+          .transition().duration(300).attr("fill-opacity", 0.6);
+        linkLabel.transition().duration(200)
+          .attr("fill-opacity", 0.8)
+          .attr("font-size", 11)
+          .attr("stroke-width", 2.5)
+          .attr("fill", "#ffffff");
+        link.transition().duration(200)
+          .attr("stroke-opacity", mode.linkOpacity)
+          .attr("stroke", mode.linkColor)
+          .attr("stroke-width", mode.linkWidth);
+      });
+
+    // ── Node degree arc ──
     node.each(function(d) {
-      const lines = wrapLabel(d.label, 12);
-      const lineH = 10;
-      const startY = nodeRadius(d) + 10;
+      const r = nodeRadius(d);
+      const deg = degrees[d.id] || 0;
+      const maxAngle = Math.PI * 2 * Math.min(deg / 15, 1);
+      const arc = d3.arc().innerRadius(r + 2).outerRadius(r + 5).startAngle(0).endAngle(maxAngle);
+      d3.select(this).append("path")
+        .attr("d", arc())
+        .attr("fill", groupColors[d.group])
+        .attr("fill-opacity", 0.4)
+        .attr("pointer-events", "none");
+    });
+
+    // ── Multi-line node labels ──
+    node.each(function(d) {
+      const lines = wrapLabel(d.label, 11);
+      const lineH = 13;
+      const startY = -(lines.length - 1) * lineH / 2;
       const sel = d3.select(this);
+      const color = groupColors[d.group];
+      const fontSize = lines.length > 2 ? 10 : lines.length === 2 ? 11 : 12;
+
       lines.forEach((t, i) => {
-        sel.append("text")
-          .attr("text-anchor", "middle")
-          .attr("y", startY + i * lineH)
-          .attr("font-family", "monospace")
-          .attr("font-size", 8)
-          .attr("font-weight", "700")
-          .attr("fill", NV.label)
-          .attr("opacity", 0.5)
-          .attr("pointer-events", "none")
-          .style("letter-spacing", "0.03em")
-          .text(t.toUpperCase());
+        sel.append("text").attr("class", "lbl-shadow")
+          .attr("text-anchor", "middle").attr("y", startY + i * lineH)
+          .attr("font-size", fontSize).attr("font-weight", "900")
+          .attr("fill", "none").attr("stroke", "#ffffff").attr("stroke-width", 3)
+          .attr("stroke-linejoin", "round").attr("paint-order", "stroke")
+          .attr("pointer-events", "none").text(t);
+      });
+
+      lines.forEach((t, i) => {
+        sel.append("text").attr("class", "lbl-fill")
+          .attr("text-anchor", "middle").attr("y", startY + i * lineH)
+          .attr("font-size", fontSize).attr("font-weight", "900")
+          .attr("fill", "#000000").attr("pointer-events", "none").text(t);
       });
     });
 
-    // Hover behavior — highlight connected links/nodes, show link labels
-    node.append("circle")
-      .attr("class", "hit")
-      .attr("r", d => nodeRadius(d) + 4)
-      .attr("fill", "transparent")
-      .on("mouseenter", function(e, d) {
-        const nodeG = d3.select(this.parentNode);
-        nodeG.select(".ring").attr("stroke-opacity", 1).attr("stroke-width", 1.5);
-        nodeG.select(".body").attr("stroke-width", 2);
-        link.attr("stroke-opacity", l => {
-          const s = typeof l.source === 'object' ? l.source.id : l.source;
-          const t2 = typeof l.target === 'object' ? l.target.id : l.target;
-          return (s === d.id || t2 === d.id) ? 0.7 : 0.05;
-        }).attr("stroke-width", l => {
-          const s = typeof l.source === 'object' ? l.source.id : l.source;
-          const t2 = typeof l.target === 'object' ? l.target.id : l.target;
-          return (s === d.id || t2 === d.id) ? 1.2 : 0.6;
-        });
-        linkLabel.attr("opacity", l => {
-          const s = typeof l.source === 'object' ? l.source.id : l.source;
-          const t2 = typeof l.target === 'object' ? l.target.id : l.target;
-          return (s === d.id || t2 === d.id) ? 0.9 : 0;
-        }).attr("x", l => (l.source.x + l.target.x) / 2).attr("y", l => (l.source.y + l.target.y) / 2 - 4);
-      })
-      .on("mouseleave", function(e, d) {
-        const nodeG = d3.select(this.parentNode);
-        const sel = d.id === selectedNodeId;
-        nodeG.select(".ring").attr("stroke-opacity", sel ? 1 : 0.4).attr("stroke-width", sel ? 1.5 : 0.8);
-        nodeG.select(".body").attr("stroke-width", sel ? 2 : 1);
-        link.attr("stroke-opacity", NV.linkOpacity).attr("stroke-width", 0.6);
-        linkLabel.attr("opacity", 0);
-      });
+    // ── Group subtitle ──
+    node.append("text")
+      .attr("class", "group-label")
+      .attr("text-anchor", "middle")
+      .attr("y", d => nodeRadius(d) + 15)
+      .attr("font-size", 8).attr("font-weight", "700")
+      .attr("letter-spacing", "0.09em")
+      .attr("fill", graphMode === "analyst" ? "#ffffff" : d => groupColors[d.group])
+      .attr("fill-opacity", graphMode === "analyst" ? 0.85 : 0.6)
+      .attr("stroke", "#000").attr("stroke-width", 1.5)
+      .attr("paint-order", "stroke")
+      .attr("pointer-events", "none")
+      .text(d => d.group.toUpperCase());
 
-    // Tick
+    // ── RAF animation ──
+    let rafId;
+    const animate = () => {
+      if (mode.showJolts) {
+        for (let i = 0; i < joltData.length; i++) {
+          joltData[i].offset += joltData[i].speed;
+          joltEls[i].setAttribute("stroke-dashoffset", -joltData[i].offset);
+        }
+      }
+      if (mode.showWaves) {
+        for (let i = 0; i < waveData.length; i++) {
+          const w = waveData[i];
+          const nd = nodes[w.nodeIdx];
+          if (!nd?.x) continue;
+          w.r += w.speed;
+          if (w.r > w.maxR) { w.r = 0; w.nodeIdx = Math.floor(Math.random() * nodes.length); }
+          const op = Math.sin((w.r / w.maxR) * Math.PI) * 0.45;
+          waveEls[i].setAttribute("cx", nd.x);
+          waveEls[i].setAttribute("cy", nd.y);
+          waveEls[i].setAttribute("r", w.r);
+          waveEls[i].setAttribute("stroke", w.color);
+          waveEls[i].setAttribute("stroke-opacity", op);
+        }
+      }
+      rafId = requestAnimationFrame(animate);
+    };
+    setTimeout(() => { rafId = requestAnimationFrame(animate); }, 400);
+
+    // ── Tick ──
     simRef.current.on("tick", () => {
       link.attr("x1", d => d.source?.x ?? 0).attr("y1", d => d.source?.y ?? 0)
           .attr("x2", d => d.target?.x ?? 0).attr("y2", d => d.target?.y ?? 0);
+
+      if (mode.showJolts) {
+        for (let i = 0; i < joltData.length; i++) {
+          const l = joltData[i].link;
+          joltEls[i].setAttribute("x1", l.source?.x ?? 0);
+          joltEls[i].setAttribute("y1", l.source?.y ?? 0);
+          joltEls[i].setAttribute("x2", l.target?.x ?? 0);
+          joltEls[i].setAttribute("y2", l.target?.y ?? 0);
+        }
+      }
+
+      linkLabel
+        .attr("x", d => (d.source.x + d.target.x) / 2)
+        .attr("y", d => (d.source.y + d.target.y) / 2 - 4);
+
+      // Update label background positions
+      linkLabelBg.each(function(d, i) {
+        const labelEl = linkLabel.nodes()[i];
+        if (labelEl) {
+          const bbox = labelEl.getBBox();
+          d3.select(this)
+            .attr("x", bbox.x - 6)
+            .attr("y", bbox.y - 2)
+            .attr("width", bbox.width + 12)
+            .attr("height", bbox.height + 4);
+        }
+      });
+
       node.attr("transform", d => `translate(${d.x},${d.y})`);
     });
 
-    return () => { simRef.current?.stop(); };
+    return () => {
+      simRef.current?.stop();
+      if (rafId) cancelAnimationFrame(rafId);
+    };
   }, [graphMode]);
 
-  // Selected node highlight
+  // ── Selected node highlight ──
   useEffect(() => {
     if (!svgRef.current) return;
+    const glowMap = {
+      physics: "url(#glow-blue)", biology: "url(#glow-green)", weapons: "url(#glow-red)",
+      consciousness: "url(#glow-purple)", history: "url(#glow-amber)", philosophy: "url(#glow-cyan)"
+    };
     const svg = d3.select(svgRef.current);
     svg.selectAll("g.node").each(function(d) {
       if (!d) return;
       const isSelected = d.id === selectedNodeId;
       const grp = d3.select(this);
-      grp.select(".ring").attr("stroke-opacity", isSelected ? 1 : 0.4).attr("stroke-width", isSelected ? 1.5 : 0.8);
-      grp.select(".body").attr("stroke-width", isSelected ? 2 : 1).attr("filter", isSelected ? "url(#nv-glow)" : "url(#nv-glow)");
+      grp.select(".main-circle")
+        .attr("stroke-width", isSelected ? 3 : 2)
+        .attr("filter", isSelected ? (glowMap[d.group] || "url(#dropShadow)") : "url(#dropShadow)");
+      grp.select(".ring")
+        .attr("stroke-opacity", isSelected ? 0.85 : 0.2)
+        .attr("stroke-width", isSelected ? 2.5 : 1.5);
+      grp.attr("filter", isSelected ? (glowMap[d.group] || null) : null);
     });
   }, [selectedNodeId]);
 
