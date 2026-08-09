@@ -204,6 +204,7 @@ import TherapyPod from './pages/TherapyPod';
 import TherapyPodPro from './pages/TherapyPodPro';
 import ResonanceDashboard from './pages/ResonanceDashboard';
 import MedbedShowcase from './pages/MedbedShowcase';
+import ScalarHealingSystems from './pages/ScalarHealingSystems';
 
 
 const AuthenticatedApp = () => {
@@ -405,6 +406,7 @@ const AuthenticatedApp = () => {
           <Route path="/therapy-pod-pro" element={<TherapyPodPro />} />
           <Route path="/resonance-dashboard" element={<ResonanceDashboard />} />
           <Route path="/medbed-showcase" element={<MedbedShowcase />} />
+          <Route path="/scalar-healing" element={<ScalarHealingSystems />} />
           </Route>
 
           {/* Scalar Venture Vault Routes */}
