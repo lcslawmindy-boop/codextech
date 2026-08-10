@@ -208,6 +208,7 @@ import MedbedShowcase from './pages/MedbedShowcase';
 import ScalarHealingSystems from './pages/ScalarHealingSystems';
 import LightTimelineDevices from './pages/LightTimelineDevices';
 import InvestorMasterPackage from './pages/InvestorMasterPackage';
+import PortfolioStrategy from './pages/PortfolioStrategy';
 
 
 const AuthenticatedApp = () => {
@@ -413,6 +414,7 @@ const AuthenticatedApp = () => {
           <Route path="/scalar-healing" element={<ScalarHealingSystems />} />
           <Route path="/light-timeline-devices" element={<LightTimelineDevices />} />
           <Route path="/investor-master-package" element={<InvestorMasterPackage />} />
+          <Route path="/portfolio-strategy" element={<PortfolioStrategy />} />
           </Route>
 
           {/* Scalar Venture Vault Routes */}
