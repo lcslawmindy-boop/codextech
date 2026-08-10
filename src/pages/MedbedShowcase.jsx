@@ -3,8 +3,9 @@ import { Link } from "react-router-dom";
 import {
   Zap, Shield, Brain, Activity, Cpu, FlaskConical,
   ChevronRight, ChevronDown, Star, AlertTriangle,
-  FileText, Layers, Settings, Target, Radio, Wind
+  FileText, Layers, Settings, Target, Radio, Wind, Package
 } from "lucide-react";
+import MedbedBomGenerator from "@/components/MedbedBomGenerator";
 
 // ── Device catalog derived from all uploaded engineering docs ──────────────
 
@@ -348,6 +349,7 @@ export default function MedbedShowcase() {
     { id: "overview", label: "Overview" },
     { id: "modalities", label: `Modalities (${d.modalities.length})` },
     { id: "specs", label: "Technical Specs" },
+    { id: "bom", label: "BOM Generator" },
     { id: "assembly", label: "Assembly Plan" },
     { id: "documents", label: "Documents" },
     { id: "features", label: d.id === "zds-ptsd-pod" ? "Military Features" : d.id === "aatcs-p1-asd" ? "ASD Features" : "MedBed Features" },
@@ -490,6 +492,10 @@ export default function MedbedShowcase() {
                   </ul>
                 </div>
               </div>
+            )}
+
+            {activeTab === "bom" && (
+              <MedbedBomGenerator device={d} />
             )}
 
             {activeTab === "assembly" && (
