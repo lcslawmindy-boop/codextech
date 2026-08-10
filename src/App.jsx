@@ -43,6 +43,7 @@ import MyLearning from './pages/MyLearning';
 const LabSimulation = lazy(() => import('./pages/LabSimulation'));
 import InventionPlans from './pages/InventionPlans';
 import EMFImpact from './pages/EMFImpact';
+import EMFImpactSlideshow from './pages/EMFImpactSlideshow';
 import EMFCrisisPitchDeck from './pages/EMFCrisisPitchDeck';
 const ScalarEMLab = lazy(() => import('./pages/ScalarEMLab'));
 const PatentDraftingTool = lazy(() => import('./pages/PatentDraftingTool'));
@@ -273,6 +274,7 @@ const AuthenticatedApp = () => {
           <Route path="/lab" element={<LabSimulation />} />
           <Route path="/invention-plans" element={<InventionPlans />} />
           <Route path="/emf-impact" element={<EMFImpact />} />
+          <Route path="/emf-impact-slideshow" element={<EMFImpactSlideshow />} />
           <Route path="/emf-crisis" element={<EMFCrisisPitchDeck />} />
           <Route path="/scalar-lab" element={<ScalarEMLab />} />
           <Route path="/patent-tool" element={<PatentDraftingTool />} />
