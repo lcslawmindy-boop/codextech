@@ -206,6 +206,7 @@ import TherapyPodPro from './pages/TherapyPodPro';
 import ResonanceDashboard from './pages/ResonanceDashboard';
 import MedbedShowcase from './pages/MedbedShowcase';
 import ScalarHealingSystems from './pages/ScalarHealingSystems';
+import LightTimelineDevices from './pages/LightTimelineDevices';
 
 
 const AuthenticatedApp = () => {
@@ -409,6 +410,7 @@ const AuthenticatedApp = () => {
           <Route path="/resonance-dashboard" element={<ResonanceDashboard />} />
           <Route path="/medbed-showcase" element={<MedbedShowcase />} />
           <Route path="/scalar-healing" element={<ScalarHealingSystems />} />
+          <Route path="/light-timeline-devices" element={<LightTimelineDevices />} />
           </Route>
 
           {/* Scalar Venture Vault Routes */}
