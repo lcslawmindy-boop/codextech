@@ -26,25 +26,35 @@ Deno.serve(async (req) => {
       });
     }
 
-    const prompt = `You are a technical engineer writing a brief engineering document for the device: ${pack_title} (${pack_subtitle || ''}).
+    const sectionsList = (sections || []).map((s, i) => `  ${i + 1}. ${s}`).join('\n');
 
+    const prompt = `You are a senior research engineer writing a COMPLETE technical brief pack document for the following device. This is a real engineering document that will be sold to researchers and builders — it must be detailed, technically accurate, and specific to THIS device.
+
+DEVICE: ${pack_title}
+SUBTITLE: ${pack_subtitle || ''}
 CATEGORY: ${category || 'Research'}
-THEORETICAL BASIS: ${theory_basis || 'Advanced electromagnetics'}
+DIFFICULTY: ${difficulty || 'Intermediate'}
+THEORETICAL BASIS: ${theory_basis || 'Advanced electromagnetics and scalar field theory'}
 
-Write CONCISE technical content (not verbose). Return ONLY valid JSON with these keys:
+DOCUMENT SECTIONS TO COVER:
+${sectionsList || 'Standard engineering brief sections'}
+
+Write DETAILED, TECHNICAL content specific to this device. Do NOT write generic placeholder text — every section must reference the actual physics, components, and architecture of THIS device. Cite real patents and papers where possible. Return ONLY valid JSON with these exact keys:
 
 {
-  "overview": "2-3 sentence overview of what this device does and its significance",
-  "theory_deep": "3-4 paragraph explanation of the physics and prior art (cite real patents where applicable)",
-  "system_architecture": "Detailed description of major subsystems and how they connect",
-  "circuit_description": "Description of the electrical topology, coil configuration, and core design",
-  "bom": [{"ref":"C1","component":"Capacitor","spec":"100uF 50V","qty":"2","source":"Mouser","notes":"Polypropylene preferred"}, ...20 more items],
-  "assembly_steps": [{"step":1,"title":"Prepare core","detail":"Wind the primary coil using 22 AWG wire...","caution":"..."}, ...15 items],
-  "measurement_protocols": [{"test":"Voltage measurement","equipment":"DMM, oscilloscope","procedure":"Connect probes to...","expected_result":"..."}, ...8 items],
-  "safety_guidelines": "2-3 paragraph safety overview covering electrical hazards, RF/EM exposure, grounding",
-  "troubleshooting": [{"symptom":"Device overheats","likely_cause":"Excessive current","remedy":"Check coil resistance"}, ...10 items],
-  "references": ["US Patent 6,362,718 - Motionless EM Generator", "Bearden, T.E. (2002) Energy from the Vacuum", ...]
-}`;
+  "overview": "4-5 sentence overview of what this device does, its significance, and what the builder will achieve",
+  "theory_deep": "4-5 paragraph deep theoretical explanation covering: (1) core physics principle, (2) prior art and patent history with real patent numbers, (3) key innovation or mechanism, (4) relationship to the theoretical basis, (5) current research status. Be specific to THIS device.",
+  "system_architecture": "3-4 paragraph description of ALL major subsystems, how they connect, signal flow, and packaging. Name specific subsystems for THIS device type.",
+  "circuit_description": "3-4 paragraph detailed description of the electrical topology, coil winding geometry, core materials, resonant frequency calculations, and signal path. Include specific component values where possible.",
+  "bom": [{"ref":"C1","component":"Capacitor","spec":"100uF 50V Polypropylene","qty":"2","source":"Mouser","notes":"Low-loss film type"}, ...at least 20 items specific to this device...],
+  "assembly_steps": [{"step":1,"title":"Prepare core materials","detail":"Detailed 2-3 sentence instruction...","caution":"Specific safety caution..."}, ...at least 15 steps...],
+  "measurement_protocols": [{"test":"Test name","equipment":"Specific instruments","procedure":"Step-by-step procedure","expected_result":"Specific expected value"}, ...at least 8 protocols...],
+  "safety_guidelines": "3-4 paragraph safety overview covering electrical hazards, RF/EM exposure, grounding, thermal considerations, and PPE. Be specific to THIS device's voltage/power levels.",
+  "troubleshooting": [{"symptom":"Specific to this device","likely_cause":"Specific cause","remedy":"Specific fix"}, ...at least 10 entries...],
+  "references": ["US Patent XXXXXXXX - Title", "Author, Title, Year", ...at least 8 references specific to this device category...]
+}
+
+CRITICAL: Every section must be SPECIFIC to "${pack_title}". Do not write generic content that could apply to any device.`;
 
     const result = await base44.asServiceRole.integrations.Core.InvokeLLM({
       prompt,
