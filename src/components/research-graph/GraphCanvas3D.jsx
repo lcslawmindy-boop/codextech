@@ -2,6 +2,7 @@ import { useRef, useEffect, useState, useMemo } from "react";
 import * as THREE from "three";
 import { ZoomIn, ZoomOut, Maximize2, Crosshair, Network } from "lucide-react";
 import { DOMAINS, CONNECTION_TYPES, getNodeRadius, SUPPRESSION_STATUS } from "@/lib/researchGraphData";
+import { goldenSpiralPositions, goldenSpiralCurve, buildDomainCardTexture, BackgroundCarousel, GRAPH_BG_IMAGES } from "@/lib/graphScene3D";
 
 // ── 3D Interactive Research Graph ──────────────────────────────────────────
 // Three.js force-directed graph: labeled nodes colored by domain, labeled edges
@@ -13,76 +14,6 @@ const CONN_MAP = new Map(Object.entries(CONNECTION_TYPES));
 // Apply a callback to every material on a group's descendants
 const applyMats = (group, fn) => { if (!group) return; group.traverse(o => { if (o.material) fn(o.material); }); };
 
-// Flower of life — 19 circle centers (seed: 1 + 6, then 6 + 6 outer rings)
-const FLOWER_CENTERS = [[0, 0]];
-for (let i = 0; i < 6; i++) { const a = i * Math.PI / 3; FLOWER_CENTERS.push([Math.cos(a), Math.sin(a)]); }
-for (let i = 0; i < 6; i++) { const a = i * Math.PI / 3 + Math.PI / 6; FLOWER_CENTERS.push([Math.sqrt(3) * Math.cos(a), Math.sqrt(3) * Math.sin(a)]); }
-for (let i = 0; i < 6; i++) { const a = i * Math.PI / 3; FLOWER_CENTERS.push([2 * Math.cos(a), 2 * Math.sin(a)]); }
-
-// Simple 3D force simulation (charge + spring + center gravity)
-function simulate3D(nodes, edges, iterations = 300) {
-  const pos = new Map();
-  // Initial random positions on a sphere
-  nodes.forEach((n, i) => {
-    const r = 200 + Math.random() * 100;
-    const theta = Math.random() * Math.PI * 2;
-    const phi = Math.acos(2 * Math.random() - 1);
-    pos.set(n.numericId, new THREE.Vector3(
-      r * Math.sin(phi) * Math.cos(theta),
-      r * Math.sin(phi) * Math.sin(theta),
-      r * Math.cos(phi)
-    ));
-  });
-
-  const k = 40; // spring length
-  const repulsion = 1200;
-  const centerGravity = 0.015;
-
-  for (let iter = 0; iter < iterations; iter++) {
-    // Repulsion (O(n²) — fine for ~500 nodes at 300 iters)
-    for (let i = 0; i < nodes.length; i++) {
-      const pi = pos.get(nodes[i].numericId);
-      for (let j = i + 1; j < nodes.length; j++) {
-        const pj = pos.get(nodes[j].numericId);
-        const dx = pi.x - pj.x;
-        const dy = pi.y - pj.y;
-        const dz = pi.z - pj.z;
-        let distSq = dx * dx + dy * dy + dz * dz;
-        if (distSq < 1) distSq = 1;
-        const force = repulsion / distSq;
-        const dist = Math.sqrt(distSq);
-        const fx = (dx / dist) * force;
-        const fy = (dy / dist) * force;
-        const fz = (dz / dist) * force;
-        pi.x += fx; pi.y += fy; pi.z += fz;
-        pj.x -= fx; pj.y -= fy; pj.z -= fz;
-      }
-    }
-    // Spring attraction along edges
-    edges.forEach(e => {
-      const p1 = pos.get(e.source);
-      const p2 = pos.get(e.target);
-      if (!p1 || !p2) return;
-      const dx = p2.x - p1.x;
-      const dy = p2.y - p1.y;
-      const dz = p2.z - p1.z;
-      const dist = Math.max(1, Math.sqrt(dx * dx + dy * dy + dz * dz));
-      const force = (dist - k) * 0.05;
-      const fx = (dx / dist) * force;
-      const fy = (dy / dist) * force;
-      const fz = (dz / dist) * force;
-      p1.x += fx; p1.y += fy; p1.z += fz;
-      p2.x -= fx; p2.y -= fy; p2.z -= fz;
-    });
-    // Center gravity
-    pos.forEach(p => {
-      p.x -= p.x * centerGravity;
-      p.y -= p.y * centerGravity;
-      p.z -= p.z * centerGravity;
-    });
-  }
-  return pos;
-}
 
 export default function GraphCanvas3D({ allNodes, allEdges, filters, selectedNode, onNodeClick, focusNode, graphMode, settings, searchQuery }) {
   const mountRef = useRef(null);
@@ -163,46 +94,8 @@ export default function GraphCanvas3D({ allNodes, allEdges, filters, selectedNod
     scene.background = new THREE.Color(0x020617);
     sceneRef.current = scene;
 
-    // ── Brain background image ──
-    const bgLoader = new THREE.TextureLoader();
-    const bgPlaneGeo = new THREE.PlaneGeometry(4000, 4000);
-    const bgMat = new THREE.MeshBasicMaterial({
-      transparent: true,
-      opacity: 0.28,
-      depthWrite: false,
-    });
-    bgLoader.load(
-      "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/05551803a_braning4.webp",
-      (tex) => {
-        bgMat.map = tex;
-        bgMat.needsUpdate = true;
-      }
-    );
-    const bgPlane = new THREE.Mesh(bgPlaneGeo, bgMat);
-    bgPlane.position.z = -1500;
-    scene.add(bgPlane);
-
-    // ── Quantum scalar 3D axis laser scan from center ──
-    const axisExtent = 900;
-    const axisGroup = new THREE.Group();
-    const axisColors = [0x00ffff, 0xff00ff, 0xffff00]; // x=cyan, y=magenta, z=yellow
-    const axisDirs = [new THREE.Vector3(1, 0, 0), new THREE.Vector3(0, 1, 0), new THREE.Vector3(0, 0, 1)];
-    const axisPulses = [];
-    axisDirs.forEach((dir, i) => {
-      const lineGeo = new THREE.BufferGeometry().setFromPoints([
-        dir.clone().multiplyScalar(-axisExtent),
-        dir.clone().multiplyScalar(axisExtent),
-      ]);
-      const lineMat = new THREE.LineBasicMaterial({ color: axisColors[i], transparent: true, opacity: 0.22, blending: THREE.AdditiveBlending, depthWrite: false });
-      axisGroup.add(new THREE.Line(lineGeo, lineMat));
-      const pulseMat = new THREE.MeshBasicMaterial({ color: axisColors[i], transparent: true, opacity: 0.9, blending: THREE.AdditiveBlending, depthWrite: false });
-      const haloMat = new THREE.MeshBasicMaterial({ color: axisColors[i], transparent: true, opacity: 0.25, blending: THREE.AdditiveBlending, depthWrite: false });
-      const pulse = new THREE.Mesh(new THREE.SphereGeometry(4, 12, 12), pulseMat);
-      const halo = new THREE.Mesh(new THREE.SphereGeometry(11, 12, 12), haloMat);
-      axisGroup.add(pulse, halo);
-      axisPulses.push({ pulse, halo, dir, phase: i * 1.2 });
-    });
-    scene.add(axisGroup);
+    // ── Rotating background image carousel (cross-fading, layered, transparent) ──
+    const bgCarousel = new BackgroundCarousel(scene, GRAPH_BG_IMAGES, { maxOpacity: 0.88, holdTime: 6.5, fadeTime: 2.2 });
 
     // Camera
     const camera = new THREE.PerspectiveCamera(60, width / height, 1, 5000);
@@ -229,8 +122,8 @@ export default function GraphCanvas3D({ allNodes, allEdges, filters, selectedNod
     dirLight.position.set(1, 1, 1);
     scene.add(dirLight);
 
-    // Simulate positions
-    const positions = simulate3D(visibleNodes, visibleEdges, 250);
+    // ── Golden spiral placement (Twilight-Zone layout) ──
+    const positions = goldenSpiralPositions(visibleNodes);
     const posArray = new Float32Array(visibleNodes.length * 3);
     visibleNodes.forEach((n, i) => {
       const p = positions.get(n.numericId);
@@ -239,79 +132,38 @@ export default function GraphCanvas3D({ allNodes, allEdges, filters, selectedNod
       posArray[i * 3 + 2] = p.z;
     });
 
-    // ── Sacred geometry nodes: Platonic solids + star tetrahedron + flower of life ──
-    const SACRED_SHAPES = ['dodecahedron', 'icosahedron', 'octahedron', 'starTetrahedron', 'tetrahedron', 'flowerOfLife'];
-    const domainShape = new Map();
-    DOMAINS.forEach((d, idx) => { domainShape.set(d.id, SACRED_SHAPES[idx % SACRED_SHAPES.length]); });
+    // Graph group — holds the spiral, cards, and edges; rotates slowly
+    const graphGroup = new THREE.Group();
+    scene.add(graphGroup);
 
-    // Cached unit geometries (shared across all nodes of the same shape)
-    const platonicGeo = {
-      dodecahedron: new THREE.DodecahedronGeometry(1, 0),
-      icosahedron: new THREE.IcosahedronGeometry(1, 0),
-      octahedron: new THREE.OctahedronGeometry(1, 0),
-      tetrahedron: new THREE.TetrahedronGeometry(1, 0),
-    };
-    const platonicEdges = {
-      dodecahedron: new THREE.EdgesGeometry(platonicGeo.dodecahedron, 1),
-      icosahedron: new THREE.EdgesGeometry(platonicGeo.icosahedron, 1),
-      octahedron: new THREE.EdgesGeometry(platonicGeo.octahedron, 1),
-      tetrahedron: new THREE.EdgesGeometry(platonicGeo.tetrahedron, 1),
-    };
-    const flowerRingGeo = new THREE.RingGeometry(0.9, 1, 48);
+    // ── Golden spiral guide line ──
+    const spiralPts = goldenSpiralCurve(700);
+    const spiralGeo = new THREE.BufferGeometry().setFromPoints(spiralPts);
+    const spiralMat = new THREE.LineBasicMaterial({ color: 0xE8C766, transparent: true, opacity: 0.5, blending: THREE.AdditiveBlending, depthWrite: false });
+    const spiralLine = new THREE.Line(spiralGeo, spiralMat);
+    graphGroup.add(spiralLine);
 
-    function buildSacredNode(shapeType, color) {
-      const solidGroup = new THREE.Group();
-      const edgeGroup = new THREE.Group();
-      const solidMat = () => new THREE.MeshStandardMaterial({
-        color, emissive: color, emissiveIntensity: 0.5,
-        metalness: 0.35, roughness: 0.25,
-        transparent: true, opacity: 0.72, flatShading: true,
-      });
-      const edgeMat = () => new THREE.LineBasicMaterial({ color, transparent: true, opacity: 0.7 });
-
-      if (platonicGeo[shapeType]) {
-        solidGroup.add(new THREE.Mesh(platonicGeo[shapeType], solidMat()));
-        edgeGroup.add(new THREE.LineSegments(platonicEdges[shapeType], edgeMat()));
-      } else if (shapeType === 'starTetrahedron') {
-        // Merkaba — two interlocking tetrahedra (point-reflected dual = stella octangula)
-        const up = new THREE.Mesh(platonicGeo.tetrahedron, solidMat());
-        const upEdge = new THREE.LineSegments(platonicEdges.tetrahedron, edgeMat());
-        const downMat = solidMat(); downMat.side = THREE.DoubleSide;
-        const down = new THREE.Mesh(platonicGeo.tetrahedron, downMat);
-        down.scale.set(-1, -1, -1);
-        const downEdge = new THREE.LineSegments(platonicEdges.tetrahedron, edgeMat());
-        downEdge.scale.set(-1, -1, -1);
-        solidGroup.add(up, down);
-        edgeGroup.add(upEdge, downEdge);
-      } else if (shapeType === 'flowerOfLife') {
-        // 19 glowing rings in the classic flower of life pattern (flat disc, random orientation)
-        const fMat = new THREE.MeshBasicMaterial({ color, transparent: true, opacity: 0.85, side: THREE.DoubleSide, blending: THREE.AdditiveBlending, depthWrite: false });
-        FLOWER_CENTERS.forEach(([cx, cy]) => {
-          const ring = new THREE.Mesh(flowerRingGeo, fMat);
-          ring.position.set(cx, cy, 0);
-          solidGroup.add(ring);
-        });
-        solidGroup.rotation.set(Math.random() * Math.PI, Math.random() * Math.PI, Math.random() * Math.PI);
-      }
-      return { solidGroup, edgeGroup };
-    }
+    // ── 3D realistic research cards (billboarded, one shared texture per domain) ──
+    const cardGeo = new THREE.PlaneGeometry(1, 1.3);
+    const domainTex = new Map(DOMAINS.map(d => [d.id, buildDomainCardTexture(d)]));
 
     const nodeGroup = new THREE.Group();
-    scene.add(nodeGroup);
+    graphGroup.add(nodeGroup);
     const meshes = [];
     visibleNodes.forEach((n, i) => {
-      const r = Math.max(2.5, getNodeRadius(n) * 0.7);
+      const r = Math.max(11, getNodeRadius(n) * 1.15);
       const color = new THREE.Color(n.domainColor);
-      const shapeType = domainShape.get(n.domainId) || 'icosahedron';
-      const { solidGroup, edgeGroup } = buildSacredNode(shapeType, color);
-      solidGroup.scale.setScalar(r);
-      edgeGroup.scale.setScalar(r);
+      const tex = domainTex.get(n.domainId);
+      const mat = new THREE.MeshBasicMaterial({
+        map: tex, transparent: true, opacity: 0.92, side: THREE.DoubleSide, depthWrite: false,
+      });
+      const card = new THREE.Mesh(cardGeo, mat);
+      card.scale.setScalar(r);
 
       const mesh = new THREE.Group();
-      mesh.add(solidGroup);
-      mesh.add(edgeGroup);
+      mesh.add(card);
       mesh.position.set(posArray[i * 3], posArray[i * 3 + 1], posArray[i * 3 + 2]);
-      mesh.userData = { node: n, index: i, baseColor: color.clone(), baseEmissive: 0.5, firingIntensity: 0, fireTimer: Math.random() * 5, solids: solidGroup, edges: edgeGroup };
+      mesh.userData = { node: n, index: i, baseColor: color.clone(), baseOpacity: 0.92, card, cardMat: mat };
       nodeGroup.add(mesh);
       meshes.push(mesh);
     });
@@ -346,7 +198,7 @@ export default function GraphCanvas3D({ allNodes, allEdges, filters, selectedNod
       depthWrite: false,
     });
     const edgeLines = new THREE.LineSegments(edgeGeo, edgeMat);
-    scene.add(edgeLines);
+    graphGroup.add(edgeLines);
     edgeLinesRef.current = edgeLines;
 
     // Edge list (used for label placement)
@@ -381,76 +233,65 @@ export default function GraphCanvas3D({ allNodes, allEdges, filters, selectedNod
         cam.lookAt(0, 0, 0);
       }
 
-      // ── Brain background: billboard to camera + breathe to look alive ──
-      if (bgPlane && cameraRef.current) {
-        const cam = cameraRef.current;
-        const dir = new THREE.Vector3(0, 0, 0).sub(cam.position).normalize();
-        bgPlane.position.copy(cam.position).add(dir.multiplyScalar(1400));
-        bgPlane.lookAt(cam.position);
-        bgPlane.userData.spin = (bgPlane.userData.spin || 0) + 0.0015;
-        bgPlane.rotateZ(bgPlane.userData.spin);
-        const breath = 0.5 + Math.sin(pulseClockRef.current * 0.6) * 0.5;
-        bgMat.opacity = 0.16 + breath * 0.12;
-        bgPlane.scale.setScalar(1 + breath * 0.08);
+      // ── Rotating background carousel ──
+      bgCarousel.update(0.016);
+
+      // ── Rotate the golden spiral graph group (Twilight-Zone sweep) ──
+      graphGroup.rotation.y += 0.016 * 0.08;
+
+      // ── Billboard each card to face the camera (pop-out effect) ──
+      if (cameraRef.current) {
+        const invGroup = graphGroup.quaternion.clone().invert();
+        const targetQ = invGroup.multiply(cameraRef.current.quaternion);
+        meshes.forEach((mesh, i) => {
+          const ud = mesh.userData;
+          ud.card.quaternion.copy(targetQ);
+          // Only breathe opacity when nothing is hovered — hover owns opacity/scale
+          if (!hoveredNode) {
+            const breath = 0.86 + Math.sin(pulseClockRef.current * 0.6 + i * 0.4) * 0.06;
+            ud.cardMat.opacity = breath;
+            mesh.scale.setScalar(1);
+          }
+        });
       }
-
-      // ── Quantum axis laser scan ──
-      const scanT = pulseClockRef.current * 0.5;
-      axisPulses.forEach((ap) => {
-        const t = (Math.sin(scanT + ap.phase) * 0.5 + 0.5);
-        const dist = (t - 0.5) * 2 * axisExtent;
-        const pos = ap.dir.clone().multiplyScalar(dist);
-        ap.pulse.position.copy(pos);
-        ap.halo.position.copy(pos);
-        const fade = Math.sin(t * Math.PI);
-        ap.pulse.material.opacity = 0.9 * fade;
-        ap.halo.material.opacity = 0.25 * fade;
-      });
-
-      // ── Calm breathing glow (no firing/particles) ──
-      meshes.forEach((mesh, i) => {
-        const ud = mesh.userData;
-        const breath = 0.4 + Math.sin(pulseClockRef.current + i * 0.3) * 0.15;
-        applyMats(ud.solids, m => { if (m.emissiveIntensity !== undefined) m.emissiveIntensity = breath; });
-        applyMats(ud.edges, m => { m.opacity = 0.7; });
-        if (!hoveredNode || ud.node.numericId !== hoveredNode.numericId) {
-          mesh.scale.setScalar(1);
-        }
-      });
 
       // Update label positions
       const childCount = visibleNodes.length + (settings.showLabels && edgeList.length < 200 ? visibleEdges.length : 0);
       if (labelsDiv.childNodes.length === childCount) {
+        const _wp = new THREE.Vector3();
         visibleNodes.forEach((n, i) => {
           const mesh = meshes[i];
           if (!mesh) return;
           const label = labelsDiv.childNodes[i];
           if (!label) return;
-          const v = mesh.position.clone().project(camera);
+          mesh.getWorldPosition(_wp);
+          const v = _wp.clone().project(camera);
           const x = (v.x * 0.5 + 0.5) * width;
           const y = (-v.y * 0.5 + 0.5) * height;
-          const visible = v.z < 1;
+          const vis = v.z < 1;
           label.style.transform = `translate(${x}px, ${y}px)`;
-          label.style.display = visible ? "block" : "none";
+          label.style.display = vis ? "block" : "none";
         });
         // Edge labels at midpoint
         if (settings.showLabels && edgeList.length < 200) {
+          const _ws = new THREE.Vector3();
+          const _wt = new THREE.Vector3();
           visibleEdges.forEach((e, i) => {
             const label = labelsDiv.childNodes[visibleNodes.length + i];
             if (!label) return;
             const sIdx = nodeById.get(e.source);
             const tIdx = nodeById.get(e.target);
             if (sIdx === undefined || tIdx === undefined) return;
-            const sp = meshes[sIdx]?.position;
-            const tp = meshes[tIdx]?.position;
-            if (!sp || !tp) return;
-            const mid = sp.clone().add(tp).multiplyScalar(0.5);
+            const sm = meshes[sIdx], tm = meshes[tIdx];
+            if (!sm || !tm) return;
+            sm.getWorldPosition(_ws); tm.getWorldPosition(_wt);
+            const mid = _ws.clone().add(_wt).multiplyScalar(0.5);
             const v = mid.project(camera);
             const x = (v.x * 0.5 + 0.5) * width;
             const y = (-v.y * 0.5 + 0.5) * height;
-            const visible = v.z < 1;
+            const vis = v.z < 1;
             label.style.transform = `translate(${x}px, ${y}px)`;
-            label.style.display = visible ? "block" : "none";
+            label.style.display = vis ? "block" : "none";
           });
         }
       }
@@ -505,10 +346,9 @@ export default function GraphCanvas3D({ allNodes, allEdges, filters, selectedNod
         if (obj.geometry) obj.geometry.dispose();
         if (obj.material) obj.material.dispose();
       });
-      bgPlaneGeo.dispose();
-      Object.values(platonicGeo).forEach(g => g.dispose());
-      Object.values(platonicEdges).forEach(g => g.dispose());
-      flowerRingGeo.dispose();
+      bgCarousel.dispose();
+      cardGeo.dispose();
+      spiralGeo.dispose();
     };
   }, [visibleNodes, visibleEdges, settings.edgeOpacity, settings.showLabels]);
 
@@ -627,20 +467,12 @@ export default function GraphCanvas3D({ allNodes, allEdges, filters, selectedNod
     if (hoveredNode) {
       const connectedIds = adjacency.get(hoveredNode.numericId) || new Set();
       connectedIds.add(hoveredNode.numericId);
-      // Dim non-connected nodes, highlight connected
+      // Dim non-connected cards, highlight connected
       meshes.forEach(mesh => {
         const isConnected = connectedIds.has(mesh.userData.node.numericId);
         const ud = mesh.userData;
-        applyMats(ud.solids, m => {
-          m.opacity = isConnected ? 0.95 : 0.12;
-          if (m.emissiveIntensity !== undefined) m.emissiveIntensity = isConnected ? 1.0 : 0.05;
-        });
-        applyMats(ud.edges, m => {
-          m.opacity = isConnected ? 0.9 : 0.08;
-          if (ud.node.numericId === hoveredNode.numericId) m.color.setHex(0x000000);
-          else m.color.copy(ud.baseColor);
-        });
-        const scale = (ud.node.numericId === hoveredNode.numericId ? 1.5 : 1);
+        ud.cardMat.opacity = isConnected ? 1 : 0.12;
+        const scale = (ud.node.numericId === hoveredNode.numericId ? 1.6 : 1);
         mesh.scale.setScalar(scale);
       });
       // Light up connected edges, dim others
@@ -676,11 +508,7 @@ export default function GraphCanvas3D({ allNodes, allEdges, filters, selectedNod
       // Reset
       meshes.forEach(mesh => {
         const ud = mesh.userData;
-        applyMats(ud.solids, m => {
-          m.opacity = 0.72;
-          if (m.emissiveIntensity !== undefined) m.emissiveIntensity = ud.baseEmissive;
-        });
-        applyMats(ud.edges, m => { m.opacity = 0.7; m.color.copy(ud.baseColor); });
+        ud.cardMat.opacity = ud.baseOpacity;
         mesh.scale.setScalar(1);
       });
       if (edgeLines.userData.origColors) {
@@ -785,7 +613,7 @@ export default function GraphCanvas3D({ allNodes, allEdges, filters, selectedNod
         </div>
         <div className="px-2 py-1.5 rounded-lg bg-slate-950 border border-amber-400/30 text-[9px] font-mono flex items-center gap-1">
           <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
-          <span className="text-amber-400">CINEMATIC</span>
+          <span className="text-amber-400">GOLDEN SPIRAL</span>
         </div>
       </div>
 
@@ -868,7 +696,7 @@ export default function GraphCanvas3D({ allNodes, allEdges, filters, selectedNod
                 ))}
               </div>
             </div>
-            <p className="text-amber-400 text-[8px] mt-2">Hover a node → its edges turn the node's color · black outline = active</p>
+            <p className="text-amber-400 text-[8px] mt-2">Hover a card → it pops out & its edges light up · drag to rotate the spiral</p>
           </div>
         </div>
       )}
