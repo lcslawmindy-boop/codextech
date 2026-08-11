@@ -10,6 +10,15 @@ import { DOMAINS, CONNECTION_TYPES, getNodeRadius } from "@/lib/researchGraphDat
 const DOMAIN_MAP = new Map(DOMAINS.map(d => [d.id, d]));
 const CONN_MAP = new Map(Object.entries(CONNECTION_TYPES));
 
+// Apply a callback to every material on a group's descendants
+const applyMats = (group, fn) => { if (!group) return; group.traverse(o => { if (o.material) fn(o.material); }); };
+
+// Flower of life — 19 circle centers (seed: 1 + 6, then 6 + 6 outer rings)
+const FLOWER_CENTERS = [[0, 0]];
+for (let i = 0; i < 6; i++) { const a = i * Math.PI / 3; FLOWER_CENTERS.push([Math.cos(a), Math.sin(a)]); }
+for (let i = 0; i < 6; i++) { const a = i * Math.PI / 3 + Math.PI / 6; FLOWER_CENTERS.push([Math.sqrt(3) * Math.cos(a), Math.sqrt(3) * Math.sin(a)]); }
+for (let i = 0; i < 6; i++) { const a = i * Math.PI / 3; FLOWER_CENTERS.push([2 * Math.cos(a), 2 * Math.sin(a)]); }
+
 // Simple 3D force simulation (charge + spring + center gravity)
 function simulate3D(nodes, edges, iterations = 300) {
   const pos = new Map();
@@ -208,45 +217,79 @@ export default function GraphCanvas3D({ allNodes, allEdges, filters, selectedNod
       posArray[i * 3 + 2] = p.z;
     });
 
-    // Nodes as neuron-like structures: icosahedron core + wireframe shell + synaptic terminals
+    // ── Sacred geometry nodes: Platonic solids + star tetrahedron + flower of life ──
+    const SACRED_SHAPES = ['dodecahedron', 'icosahedron', 'octahedron', 'starTetrahedron', 'tetrahedron', 'flowerOfLife'];
+    const domainShape = new Map();
+    DOMAINS.forEach((d, idx) => { domainShape.set(d.id, SACRED_SHAPES[idx % SACRED_SHAPES.length]); });
+
+    // Cached unit geometries (shared across all nodes of the same shape)
+    const platonicGeo = {
+      dodecahedron: new THREE.DodecahedronGeometry(1, 0),
+      icosahedron: new THREE.IcosahedronGeometry(1, 0),
+      octahedron: new THREE.OctahedronGeometry(1, 0),
+      tetrahedron: new THREE.TetrahedronGeometry(1, 0),
+    };
+    const platonicEdges = {
+      dodecahedron: new THREE.EdgesGeometry(platonicGeo.dodecahedron, 1),
+      icosahedron: new THREE.EdgesGeometry(platonicGeo.icosahedron, 1),
+      octahedron: new THREE.EdgesGeometry(platonicGeo.octahedron, 1),
+      tetrahedron: new THREE.EdgesGeometry(platonicGeo.tetrahedron, 1),
+    };
+    const flowerRingGeo = new THREE.RingGeometry(0.9, 1, 48);
+
+    function buildSacredNode(shapeType, color) {
+      const solidGroup = new THREE.Group();
+      const edgeGroup = new THREE.Group();
+      const solidMat = () => new THREE.MeshStandardMaterial({
+        color, emissive: color, emissiveIntensity: 0.5,
+        metalness: 0.35, roughness: 0.25,
+        transparent: true, opacity: 0.72, flatShading: true,
+      });
+      const edgeMat = () => new THREE.LineBasicMaterial({ color, transparent: true, opacity: 0.7 });
+
+      if (platonicGeo[shapeType]) {
+        solidGroup.add(new THREE.Mesh(platonicGeo[shapeType], solidMat()));
+        edgeGroup.add(new THREE.LineSegments(platonicEdges[shapeType], edgeMat()));
+      } else if (shapeType === 'starTetrahedron') {
+        // Merkaba — two interlocking tetrahedra (point-reflected dual = stella octangula)
+        const up = new THREE.Mesh(platonicGeo.tetrahedron, solidMat());
+        const upEdge = new THREE.LineSegments(platonicEdges.tetrahedron, edgeMat());
+        const downMat = solidMat(); downMat.side = THREE.DoubleSide;
+        const down = new THREE.Mesh(platonicGeo.tetrahedron, downMat);
+        down.scale.set(-1, -1, -1);
+        const downEdge = new THREE.LineSegments(platonicEdges.tetrahedron, edgeMat());
+        downEdge.scale.set(-1, -1, -1);
+        solidGroup.add(up, down);
+        edgeGroup.add(upEdge, downEdge);
+      } else if (shapeType === 'flowerOfLife') {
+        // 19 glowing rings in the classic flower of life pattern (flat disc, random orientation)
+        const fMat = new THREE.MeshBasicMaterial({ color, transparent: true, opacity: 0.85, side: THREE.DoubleSide, blending: THREE.AdditiveBlending, depthWrite: false });
+        FLOWER_CENTERS.forEach(([cx, cy]) => {
+          const ring = new THREE.Mesh(flowerRingGeo, fMat);
+          ring.position.set(cx, cy, 0);
+          solidGroup.add(ring);
+        });
+        solidGroup.rotation.set(Math.random() * Math.PI, Math.random() * Math.PI, Math.random() * Math.PI);
+      }
+      return { solidGroup, edgeGroup };
+    }
+
     const nodeGroup = new THREE.Group();
     scene.add(nodeGroup);
     const meshes = [];
-    const neuronGeo = new THREE.IcosahedronGeometry(1, 1); // shared geometry, scaled per node
-    const wireGeo = new THREE.IcosahedronGeometry(1.15, 1);
     visibleNodes.forEach((n, i) => {
       const r = Math.max(2.5, getNodeRadius(n) * 0.7);
       const color = new THREE.Color(n.domainColor);
+      const shapeType = domainShape.get(n.domainId) || 'icosahedron';
+      const { solidGroup, edgeGroup } = buildSacredNode(shapeType, color);
+      solidGroup.scale.setScalar(r);
+      edgeGroup.scale.setScalar(r);
 
-      // Core — glassy translucent neuron body
-      const coreMat = new THREE.MeshStandardMaterial({
-        color,
-        emissive: color,
-        emissiveIntensity: 0.5,
-        metalness: 0.2,
-        roughness: 0.15,
-        transparent: true,
-        opacity: 0.75,
-      });
-      const core = new THREE.Mesh(neuronGeo, coreMat);
-      core.scale.setScalar(r);
-
-      // Wireframe shell — neural pathway mesh look
-      const wireMat = new THREE.MeshBasicMaterial({
-        color,
-        wireframe: true,
-        transparent: true,
-        opacity: 0.5,
-      });
-      const wire = new THREE.Mesh(wireGeo, wireMat);
-      wire.scale.setScalar(r);
-
-      // Group them so raycaster hits the core
       const mesh = new THREE.Group();
-      mesh.add(core);
-      mesh.add(wire);
+      mesh.add(solidGroup);
+      mesh.add(edgeGroup);
       mesh.position.set(posArray[i * 3], posArray[i * 3 + 1], posArray[i * 3 + 2]);
-      mesh.userData = { node: n, index: i, baseColor: color.clone(), baseEmissive: 0.5, firingIntensity: 0, fireTimer: Math.random() * 5, core, wire };
+      mesh.userData = { node: n, index: i, baseColor: color.clone(), baseEmissive: 0.5, firingIntensity: 0, fireTimer: Math.random() * 5, solids: solidGroup, edges: edgeGroup };
       nodeGroup.add(mesh);
       meshes.push(mesh);
     });
@@ -452,12 +495,8 @@ export default function GraphCanvas3D({ allNodes, allEdges, filters, selectedNod
         // Base breathing pulse + firing boost
         const breath = 0.4 + Math.sin(pulseClockRef.current + i * 0.3) * 0.15;
         const fireBoost = ud.firingIntensity * 2.0;
-        if (ud.core) {
-          ud.core.material.emissiveIntensity = breath + fireBoost;
-        }
-        if (ud.wire) {
-          ud.wire.material.opacity = 0.4 + ud.firingIntensity * 0.5;
-        }
+        applyMats(ud.solids, m => { if (m.emissiveIntensity !== undefined) m.emissiveIntensity = breath + fireBoost; });
+        applyMats(ud.edges, m => { m.opacity = 0.4 + ud.firingIntensity * 0.5; });
         // Scale up slightly when firing (preserve hover scale if hovered)
         const fireScale = 1 + ud.firingIntensity * 0.5;
         if (!hoveredNode || ud.node.numericId !== hoveredNode.numericId) {
@@ -597,9 +636,10 @@ export default function GraphCanvas3D({ allNodes, allEdges, filters, selectedNod
       particleGeo.dispose();
       haloGeo.dispose();
       rippleGeo.dispose();
-      neuronGeo.dispose();
-      wireGeo.dispose();
       bgPlaneGeo.dispose();
+      Object.values(platonicGeo).forEach(g => g.dispose());
+      Object.values(platonicEdges).forEach(g => g.dispose());
+      flowerRingGeo.dispose();
     };
   }, [visibleNodes, visibleEdges, settings.edgeOpacity, settings.showLabels]);
 
@@ -681,8 +721,7 @@ export default function GraphCanvas3D({ allNodes, allEdges, filters, selectedNod
       pointerRef.current.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
       raycasterRef.current.setFromCamera(pointerRef.current, cameraRef.current);
       // Nodes are Groups — intersect their children, then walk up to the group
-      const allChildren = nodeMeshesRef.current.flatMap(g => g.children);
-      const intersects = raycasterRef.current.intersectObjects(allChildren);
+      const intersects = raycasterRef.current.intersectObjects(nodeMeshesRef.current, true);
       if (intersects.length > 0) {
         let obj = intersects[0].object;
         while (obj && !obj.userData.node) obj = obj.parent;
@@ -722,17 +761,13 @@ export default function GraphCanvas3D({ allNodes, allEdges, filters, selectedNod
       // Dim non-connected nodes, highlight connected
       meshes.forEach(mesh => {
         const isConnected = connectedIds.has(mesh.userData.node.numericId);
-        const core = mesh.userData.core;
-        const wire = mesh.userData.wire;
-        if (core) {
-          core.material.opacity = isConnected ? 0.95 : 0.12;
-          core.material.emissiveIntensity = isConnected ? 1.0 : 0.05;
-        }
-        if (wire) {
-          wire.material.opacity = isConnected ? 0.8 : 0.08;
-        }
-        const baseR = Math.max(2.5, getNodeRadius(mesh.userData.node) * 0.7);
-        const scale = (mesh.userData.node.numericId === hoveredNode.numericId ? 1.5 : 1);
+        const ud = mesh.userData;
+        applyMats(ud.solids, m => {
+          m.opacity = isConnected ? 0.95 : 0.12;
+          if (m.emissiveIntensity !== undefined) m.emissiveIntensity = isConnected ? 1.0 : 0.05;
+        });
+        applyMats(ud.edges, m => { m.opacity = isConnected ? 0.85 : 0.08; });
+        const scale = (ud.node.numericId === hoveredNode.numericId ? 1.5 : 1);
         mesh.scale.setScalar(scale);
       });
       // Light up connected edges, dim others
@@ -770,15 +805,12 @@ export default function GraphCanvas3D({ allNodes, allEdges, filters, selectedNod
     } else {
       // Reset
       meshes.forEach(mesh => {
-        const core = mesh.userData.core;
-        const wire = mesh.userData.wire;
-        if (core) {
-          core.material.opacity = 0.75;
-          core.material.emissiveIntensity = mesh.userData.baseEmissive;
-        }
-        if (wire) {
-          wire.material.opacity = 0.5;
-        }
+        const ud = mesh.userData;
+        applyMats(ud.solids, m => {
+          m.opacity = 0.72;
+          if (m.emissiveIntensity !== undefined) m.emissiveIntensity = ud.baseEmissive;
+        });
+        applyMats(ud.edges, m => { m.opacity = 0.7; });
         mesh.scale.setScalar(1);
       });
       if (edgeLines.userData.origColors) {
@@ -800,8 +832,7 @@ export default function GraphCanvas3D({ allNodes, allEdges, filters, selectedNod
       pointerRef.current.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
       pointerRef.current.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
       raycasterRef.current.setFromCamera(pointerRef.current, cameraRef.current);
-      const allChildren = nodeMeshesRef.current.flatMap(g => g.children);
-      const intersects = raycasterRef.current.intersectObjects(allChildren);
+      const intersects = raycasterRef.current.intersectObjects(nodeMeshesRef.current, true);
       if (intersects.length > 0) {
         let obj = intersects[0].object;
         while (obj && !obj.userData.node) obj = obj.parent;
