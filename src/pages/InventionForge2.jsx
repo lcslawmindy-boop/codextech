@@ -8,6 +8,8 @@ import { generatePdrData } from "@/lib/pdrGenerator";
 import PdrSection from "@/components/PdrSection";
 import { generatePrdData } from "@/lib/prdGenerator";
 import PrdSection from "@/components/PrdSection";
+import { generateBomData } from "@/lib/bomGenerator";
+import BomSection from "@/components/BomSection";
 
 const inventions = businessItems.filter(i => i.category === "Invention");
 
@@ -172,7 +174,8 @@ Generate a completely new invention concept that synthesizes these technologies.
       // Auto-generate PDR (Section 11) and PRD (Section 12) from selected nodes and result
       const pdrData = generatePdrData(selected, res, mode);
       const prdData = generatePrdData(selected, res, mode);
-      setResult({ ...res, pdrData, prdData });
+      const bomData = generateBomData(selected, res, mode);
+      setResult({ ...res, pdrData, prdData, bomData });
     } catch (e) {
       setError("Failed to generate hybrid invention. Please try again.");
       console.error(e);
@@ -438,6 +441,57 @@ Generate a completely new invention concept that synthesizes these technologies.
         section("12.9 OUT OF SCOPE");
         body("This device does NOT:");
         prd.outOfScope.forEach(item => body(`  ✗ ${item}`));
+      }
+
+      // ── Section 13: Conceptual BOM ──
+      if (result.bomData) {
+        const bom = result.bomData;
+        addPage();
+
+        // BOM permanent label
+        doc.setFillColor(45, 35, 5);
+        doc.rect(margin - 3, y - 3, cW + 6, 22, "F");
+        doc.setFontSize(8);
+        doc.setFont("helvetica", "bold");
+        doc.setTextColor(180, 130, 20);
+        doc.text("CONCEPTUAL BILL OF MATERIALS — PRE-ENGINEERING STAGE", margin, y + 1);
+        doc.setFont("helvetica", "normal");
+        doc.setFontSize(7);
+        doc.setTextColor(150, 110, 15);
+        doc.text("Component selections are conceptual reference points only.", margin, y + 6);
+        doc.text("Final BOM requires manufacturer engineering and supplier qualification.", margin, y + 11);
+        doc.text("No procurement authority granted.", margin, y + 16);
+        y += 24;
+
+        // 13.1 Header Block
+        section("13.1 BOM HEADER BLOCK");
+        body(`BOM Code: ${bom.header.bomCode}`);
+        body(`Device: ${bom.header.device}`);
+        body(`Version: ${bom.header.version}  |  Date: ${bom.header.date}  |  Status: ${bom.header.status}`);
+        body(`Prepared by: ${bom.header.preparedBy}`);
+
+        // 13.2 BOM Table
+        section(`13.2 BOM TABLE — ${bom.allItems.length} LINE ITEMS`);
+        Object.entries(bom.assemblies).forEach(([num, asm]) => {
+          body("");
+          body(`ASSEMBLY ${num} — ${asm.name.toUpperCase()} (${asm.items.length} items):`);
+          body("");
+          body(`  | Item # | Sub-Assembly | Description | Category | Qty | Unit | Function | Source |`);
+          asm.items.forEach(item => {
+            body(`  | ${item.item} | ${item.subAssembly} | ${item.desc} | ${item.category} | ${item.qty} | ${item.unit} | ${item.func} | ${item.sourceNode} |`);
+          });
+        });
+
+        // 13.3 BOM Notes
+        section("13.3 BOM NOTES");
+        body(bom.notes);
+
+        // 13.4 Revision Log
+        section("13.4 BOM REVISION LOG");
+        body("| Rev | Date | Author | Changes |");
+        bom.revisionLog.forEach(r => {
+          body(`  | ${r.rev} | ${r.date} | ${r.author} | ${r.changes} |`);
+        });
       }
 
       // Footer
@@ -716,6 +770,9 @@ Generate a completely new invention concept that synthesizes these technologies.
 
               {/* Section 12 — PRD (auto-generated) */}
               {result.prdData && <PrdSection prdData={result.prdData} />}
+
+              {/* Section 13 — Conceptual BOM (auto-generated) */}
+              {result.bomData && <BomSection bomData={result.bomData} />}
 
               {/* Deliverable Notice */}
               <div className="bg-gradient-to-br from-yellow-950/30 to-gray-900 border border-yellow-800/40 rounded-2xl p-6 text-center">
