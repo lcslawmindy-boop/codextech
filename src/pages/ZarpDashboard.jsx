@@ -100,6 +100,26 @@ export default function ZarpDashboard() {
             </p>
           </div>
 
+          {/* Showcase video */}
+          <div className="relative rounded-2xl overflow-hidden border border-zarp-gold/20" style={{ boxShadow: '0 0 60px hsl(var(--zarp-violet) / 0.15)' }}>
+            <video
+              src="https://media.base44.com/videos/public/69ccefebfea78b23498c66a8/0bb7a01b0_aethonapexipvideo.MOV"
+              autoPlay
+              loop
+              muted
+              playsInline
+              className="w-full h-auto object-cover"
+              style={{ maxHeight: '420px' }}
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-zarp-bg/70 via-transparent to-transparent pointer-events-none" />
+            <div className="absolute bottom-3 left-4 flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-zarp-gold animate-pulse" />
+              <span className="text-zarp-gold text-[10px] font-bold tracking-wider uppercase" style={{ fontFamily: 'JetBrains Mono, monospace' }}>
+                Aethon Apex IP — Platform Showcase
+              </span>
+            </div>
+          </div>
+
           {/* Featured: 3D Research Graph hero */}
           <Link to="/research-explorer" className="group relative block overflow-hidden rounded-2xl border border-zarp-blue/30 bg-gradient-to-br from-zarp-card via-zarp-elevated to-zarp-card p-5 hover:border-zarp-blue/60 transition-all">
             <div className="absolute inset-0 opacity-20 pointer-events-none" style={{ background: "radial-gradient(circle at 80% 50%, hsl(var(--zarp-blue) / 0.4), transparent 60%)" }} />
