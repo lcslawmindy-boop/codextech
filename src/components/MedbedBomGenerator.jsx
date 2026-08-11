@@ -30,9 +30,8 @@ export default function MedbedBomGenerator({ device }) {
 
   const handleExport = () => {
     const rows = [
-      ["Ref", "Category", "Description", "Qty", "Unit Cost ($)", "Ext Cost ($)", "Supplier", "Notes"],
-      ...bom.lineItems.map((l) => [l.ref, l.category, l.desc, l.qty, l.unitCost.toFixed(2), l.extCost.toFixed(2), l.supplier, l.notes]),
-      ["", "", "", "", "", "TOTAL", bom.totalCost.toFixed(2), ""],
+      ["Ref", "Category", "Description", "Qty", "Supplier", "Notes"],
+      ...bom.lineItems.map((l) => [l.ref, l.category, l.desc, l.qty, l.supplier, l.notes]),
     ];
     const csv = rows.map((r) => r.map((c) => `"${c}"`).join(",")).join("\n");
     const blob = new Blob([csv], { type: "text/csv" });
@@ -86,7 +85,7 @@ export default function MedbedBomGenerator({ device }) {
       ) : (
         <>
           {/* Summary stats */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+          <div className="grid grid-cols-3 gap-3">
             <div className="bg-gray-900 border border-gray-800 rounded-xl p-4">
               <p className="text-gray-600 text-[10px] uppercase tracking-wider">Line Items</p>
               <p className="text-white font-black text-xl">{bom.totalLineItems}</p>
@@ -96,10 +95,6 @@ export default function MedbedBomGenerator({ device }) {
               <p className="text-white font-black text-xl">{categories.length}</p>
             </div>
             <div className="bg-gray-900 border border-gray-800 rounded-xl p-4">
-              <p className="text-gray-600 text-[10px] uppercase tracking-wider">Total Cost</p>
-              <p className="font-black text-xl" style={{ color: device.color }}>${bom.totalCost.toLocaleString()}</p>
-            </div>
-            <div className="bg-gray-900 border border-gray-800 rounded-xl p-4">
               <p className="text-gray-600 text-[10px] uppercase tracking-wider">Generated</p>
               <p className="text-white font-bold text-xs mt-1">{new Date(bom.generatedAt).toLocaleTimeString()}</p>
             </div>
@@ -107,11 +102,11 @@ export default function MedbedBomGenerator({ device }) {
 
           {/* Category breakdown */}
           <div className="bg-gray-900 border border-gray-800 rounded-xl p-4">
-            <p className="text-gray-500 text-xs font-bold uppercase tracking-wider mb-3">Cost Breakdown by Category</p>
+            <p className="text-gray-500 text-xs font-bold uppercase tracking-wider mb-3">Component Count by Category</p>
             <div className="space-y-2">
               {categories.map((cat) => {
                 const data = bom.categorySummary[cat];
-                const pct = (data.cost / bom.totalCost) * 100;
+                const pct = (data.count / bom.totalLineItems) * 100;
                 const color = CATEGORY_COLORS[cat] || "#64748b";
                 return (
                   <div key={cat} className="flex items-center gap-3">
@@ -119,8 +114,7 @@ export default function MedbedBomGenerator({ device }) {
                     <div className="flex-1 h-4 bg-gray-950 rounded-full overflow-hidden">
                       <div className="h-full rounded-full" style={{ width: pct + "%", backgroundColor: color }} />
                     </div>
-                    <span className="text-gray-300 text-xs font-bold w-16 text-right">${data.cost.toLocaleString()}</span>
-                    <span className="text-gray-600 text-[10px] w-10 text-right">{data.count} items</span>
+                    <span className="text-gray-300 text-xs font-bold w-16 text-right">{data.count} items</span>
                   </div>
                 );
               })}
@@ -137,11 +131,10 @@ export default function MedbedBomGenerator({ device }) {
             {/* Table header */}
             <div className="grid grid-cols-12 gap-2 px-4 py-2 bg-gray-950 border-b border-gray-800 text-[10px] font-bold uppercase tracking-wider text-gray-600">
               <div className="col-span-2">Ref</div>
-              <div className="col-span-4">Description</div>
+              <div className="col-span-5">Description</div>
               <div className="col-span-1 text-center">Qty</div>
-              <div className="col-span-2 text-right">Unit $</div>
-              <div className="col-span-2 text-right">Ext $</div>
-              <div className="col-span-1 text-center">Supplier</div>
+              <div className="col-span-3">Supplier</div>
+              <div className="col-span-1 text-center">Notes</div>
             </div>
 
             {/* Line items grouped by category */}
@@ -154,19 +147,15 @@ export default function MedbedBomGenerator({ device }) {
                   <button onClick={() => toggleCat(cat)} className="w-full flex items-center gap-2 px-4 py-2 hover:bg-gray-950 transition-colors" style={{ borderLeft: `3px solid ${color}` }}>
                     {expanded ? <ChevronUp size={12} className="text-gray-600" /> : <ChevronDown size={12} className="text-gray-600" />}
                     <span className="text-xs font-bold" style={{ color }}>{cat}</span>
-                    <span className="text-gray-600 text-[10px]">({items.length} items · ${bom.categorySummary[cat].cost.toLocaleString()})</span>
+                    <span className="text-gray-600 text-[10px]">({items.length} items)</span>
                   </button>
                   {expanded && items.map((item, i) => (
                     <div key={item.ref} className={`grid grid-cols-12 gap-2 px-4 py-1.5 text-xs items-center ${i % 2 === 0 ? "bg-gray-950/50" : ""}`}>
                       <div className="col-span-2 font-mono text-gray-500">{item.ref}</div>
-                      <div className="col-span-4 text-gray-300">
-                        {item.desc}
-                        {item.notes && <span className="text-gray-600 text-[10px] block">{item.notes}</span>}
-                      </div>
+                      <div className="col-span-5 text-gray-300">{item.desc}</div>
                       <div className="col-span-1 text-center text-gray-400">{item.qty}</div>
-                      <div className="col-span-2 text-right text-gray-400">${item.unitCost.toFixed(2)}</div>
-                      <div className="col-span-2 text-right text-white font-bold">${item.extCost.toFixed(2)}</div>
-                      <div className="col-span-1 text-center text-gray-600 text-[10px] truncate" title={item.supplier}>{item.supplier.split(" ")[0]}</div>
+                      <div className="col-span-3 text-gray-500 text-[10px] truncate" title={item.supplier}>{item.supplier}</div>
+                      <div className="col-span-1 text-center text-gray-600 text-[9px] truncate" title={item.notes}>{item.notes ? "ℹ" : ""}</div>
                     </div>
                   ))}
                 </div>
@@ -175,11 +164,10 @@ export default function MedbedBomGenerator({ device }) {
 
             {/* Total row */}
             <div className="grid grid-cols-12 gap-2 px-4 py-3 bg-gray-950 border-t-2" style={{ borderColor: device.color }}>
-              <div className="col-span-6 text-white font-bold text-sm">TOTAL COMPONENT COST</div>
+              <div className="col-span-5 text-white font-bold text-sm">TOTAL LINE ITEMS</div>
               <div className="col-span-1 text-center text-gray-500 text-xs">{bom.lineItems.reduce((s, l) => s + l.qty, 0)} units</div>
-              <div className="col-span-2"></div>
-              <div className="col-span-2 text-right font-black text-base" style={{ color: device.color }}>${bom.totalCost.toLocaleString()}</div>
-              <div className="col-span-1"></div>
+              <div className="col-span-3 text-gray-500 text-xs">{bom.totalLineItems} components</div>
+              <div className="col-span-3 text-right text-gray-500 text-[10px]">Conceptual — subject to manufacturer validation</div>
             </div>
           </div>
         </>

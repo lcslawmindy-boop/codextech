@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { ArrowLeft, Zap, Plus, X, Loader2, TrendingUp, DollarSign, Map, ShoppingCart, RotateCcw, CheckCircle2, AlertTriangle, Download, BookOpen } from "lucide-react";
+import { ArrowLeft, Zap, Plus, X, Loader2, TrendingUp, Map, RotateCcw, CheckCircle2, AlertTriangle, Download, BookOpen } from "lucide-react";
 import { businessItems } from "../lib/businessItems";
 import { base44 } from "@/api/base44Client";
 import { jsPDF } from "jspdf";
@@ -24,36 +24,7 @@ function DeviceChip({ inv, onRemove }) {
   );
 }
 
-function IPValuationMeter({ low, high }) {
-  const avg = (low + high) / 2;
-  const tier = avg >= 500 ? "🔥 High Value" : avg >= 100 ? "💡 Mid Value" : "🌱 Early Stage";
-  const color = avg >= 500 ? "text-red-400" : avg >= 100 ? "text-yellow-400" : "text-green-400";
-
-  return (
-    <div className="bg-gray-900 border border-gray-800 rounded-xl p-4">
-      <p className="text-gray-400 font-bold text-xs uppercase tracking-wider mb-3">IP Valuation Estimate</p>
-      <div className="flex items-end gap-3 mb-2">
-        <div>
-          <p className="text-gray-500 text-xs">Low</p>
-          <p className="text-white font-black text-xl">${low}M</p>
-        </div>
-        <div className="text-gray-600 text-lg font-bold mb-1">—</div>
-        <div>
-          <p className="text-gray-500 text-xs">High</p>
-          <p className="text-white font-black text-xl">${high}M</p>
-        </div>
-        <div className="ml-auto text-right">
-          <p className={`font-black text-sm ${color}`}>{tier}</p>
-          <p className="text-gray-500 text-xs">USD (pre-patent)</p>
-        </div>
-      </div>
-      <div className="w-full h-2 bg-gray-800 rounded-full overflow-hidden">
-        <div className="h-full rounded-full bg-gradient-to-r from-green-500 via-yellow-500 to-red-500"
-          style={{ width: `${Math.min(100, (avg / 1000) * 100)}%` }} />
-      </div>
-    </div>
-  );
-}
+const PROFESSIONAL_DELIVERABLE = "Professional-grade deliverable — generated in minutes from your ZARP research and device data.";
 
 function RoadmapTimeline({ phases }) {
   return (
@@ -91,7 +62,6 @@ export default function InventionForge2() {
   const [savedId, setSavedId] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [checkoutLoading, setCheckoutLoading] = useState(false);
   const [pdfLoading, setPdfLoading] = useState(false);
 
   const toggle = (inv) => {
@@ -261,7 +231,7 @@ Generate a completely new invention concept that synthesizes these technologies.
       doc.setTextColor(80, 80, 80);
       doc.text(`Mode: ${mode === "merge" ? "Merged" : "Cross-Pollinated"} IP  |  Synergy Score: ${result.synergy_score}/100`, margin, y);
       y += 7;
-      doc.text(`IP Valuation: $${result.ip_value_low}M – $${result.ip_value_high}M`, margin, y);
+      doc.text(PROFESSIONAL_DELIVERABLE, margin, y);
       y += 7;
       doc.text(`Input Technologies: ${selected.map(s => s.title).join(", ")}`, margin, y);
       y += 7;
@@ -279,8 +249,8 @@ Generate a completely new invention concept that synthesizes these technologies.
       doc.text("⚠ Draft only — consult a patent attorney before filing", margin, y);
       y += 10;
 
-      section("3. IP VALUATION");
-      body(result.ip_valuation);
+      section("3. PROFESSIONAL DELIVERABLE");
+      body(PROFESSIONAL_DELIVERABLE);
 
       section("4. MARKET APPLICATIONS");
       body(result.market_applications);
@@ -308,28 +278,6 @@ Generate a completely new invention concept that synthesizes these technologies.
       doc.save(`AethonApex_${fname}.pdf`);
     } catch (e) { console.error(e); }
     setPdfLoading(false);
-  };
-
-  const handleCheckout = async () => {
-    if (!result) return;
-    if (window.self !== window.top) {
-      alert("Checkout only works from the published app, not inside the editor.");
-      return;
-    }
-    setCheckoutLoading(true);
-    try {
-      const origin = window.location.origin;
-      const res = await base44.functions.invoke("createCheckoutSession", {
-        title: `IP Package: ${result.hybrid_concept}`,
-        priceInCents: 49700,
-        description: "Full IP package: patent claims, commercialization roadmap, market analysis",
-        category: "IP",
-        successUrl: `${origin}/invention-forge`,
-        cancelUrl: `${origin}/invention-forge`,
-      });
-      if (res.data?.url) window.location.href = res.data.url;
-    } catch (e) { console.error(e); }
-    setCheckoutLoading(false);
   };
 
   return (
@@ -440,9 +388,9 @@ Generate a completely new invention concept that synthesizes these technologies.
               <div className="grid grid-cols-2 gap-3 text-left w-full">
                 {[
                   ["🔬", "Hybrid concept name & mechanism"],
-                  ["📜", "Patent claims (3 independent)"],
-                  ["💰", "IP valuation estimate"],
-                  ["🗺️", "Commercialization roadmap"],
+                   ["📜", "Patent claims (3 independent)"],
+                   ["📋", "Professional-grade deliverable"],
+                   ["🗺️", "Commercialization roadmap"],
                   ["📈", "Market applications & sizing"],
                   ["✅", "Next steps to file & launch"],
                 ].map(([icon, text], i) => (
@@ -534,10 +482,15 @@ Generate a completely new invention concept that synthesizes these technologies.
                 </div>
               </div>
 
-              {/* IP Valuation */}
-              <IPValuationMeter low={result.ip_value_low} high={result.ip_value_high} />
-              <div className="bg-gray-900 border border-gray-800 rounded-xl p-4">
-                <p className="text-gray-400 text-xs leading-relaxed italic">{result.ip_valuation}</p>
+              {/* Professional Deliverable Banner */}
+              <div className="bg-gray-900 border border-gray-800 rounded-xl p-4 flex items-center gap-3">
+                <div className="w-10 h-10 rounded-lg bg-yellow-900/30 border border-yellow-700/40 flex items-center justify-center flex-shrink-0">
+                  <CheckCircle2 size={18} className="text-yellow-400" />
+                </div>
+                <div>
+                  <p className="text-yellow-400 font-bold text-xs uppercase tracking-wider">Professional-Grade Deliverable</p>
+                  <p className="text-gray-400 text-xs leading-relaxed mt-0.5">{PROFESSIONAL_DELIVERABLE}</p>
+                </div>
               </div>
 
               {/* Patent Claims */}
@@ -579,18 +532,13 @@ Generate a completely new invention concept that synthesizes these technologies.
                 <p className="text-gray-300 text-sm leading-relaxed whitespace-pre-line">{result.suggested_next_steps}</p>
               </div>
 
-              {/* CTA */}
+              {/* Deliverable Notice */}
               <div className="bg-gradient-to-br from-yellow-950/30 to-gray-900 border border-yellow-800/40 rounded-2xl p-6 text-center">
-                <h3 className="text-white font-black text-xl mb-2">Get the Full IP Package</h3>
+                <h3 className="text-white font-black text-xl mb-2">Full IP Package Ready</h3>
                 <p className="text-gray-400 text-sm mb-4">
-                  Download a full PDF package with all patent claims, commercialization roadmap, market analysis, and component specs.
+                  {PROFESSIONAL_DELIVERABLE}
                 </p>
-                <button onClick={handleCheckout} disabled={checkoutLoading}
-                  className="flex items-center justify-center gap-2 w-full py-3 rounded-xl text-white font-black text-sm bg-yellow-700 hover:bg-yellow-600 disabled:opacity-50 transition-all max-w-sm mx-auto">
-                  {checkoutLoading ? <Loader2 size={15} className="animate-spin" /> : <ShoppingCart size={15} />}
-                  {checkoutLoading ? "Processing..." : "Get Full IP Package — $497"}
-                </button>
-                <p className="text-gray-600 text-xs mt-3">Includes PDF export, filing checklist & attorney-ready claim format</p>
+                <p className="text-gray-600 text-xs">Includes PDF export, filing checklist & attorney-ready claim format</p>
               </div>
             </div>
           )}

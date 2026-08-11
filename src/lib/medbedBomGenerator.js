@@ -14,7 +14,7 @@ const SUPPLIERS = {
 };
 
 function line(ref, category, desc, qty, unitCost, supplier, notes) {
-  return { ref, category, desc, qty, unitCost, extCost: qty * unitCost, supplier, notes: notes || "" };
+  return { ref, category, desc, qty, supplier, notes: notes || "" };
 }
 
 function modalityComponents(modalities, isMil) {
@@ -164,12 +164,10 @@ export function generateBom(device) {
     return a.ref.localeCompare(b.ref);
   });
 
-  const totalCost = bom.reduce(function (s, l) { return s + l.extCost; }, 0);
   const categorySummary = {};
   bom.forEach(function (l) {
-    if (!categorySummary[l.category]) categorySummary[l.category] = { count: 0, cost: 0 };
+    if (!categorySummary[l.category]) categorySummary[l.category] = { count: 0 };
     categorySummary[l.category].count++;
-    categorySummary[l.category].cost += l.extCost;
   });
 
   return {
@@ -179,7 +177,6 @@ export function generateBom(device) {
     isAsd: isAsd,
     lineItems: bom,
     totalLineItems: bom.length,
-    totalCost: totalCost,
     categorySummary: categorySummary,
     generatedAt: new Date().toISOString(),
   };
