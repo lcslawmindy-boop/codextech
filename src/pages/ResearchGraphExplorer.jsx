@@ -9,6 +9,7 @@ import NodeListView from "@/components/research-graph/NodeListView";
 import NodeCardView from "@/components/research-graph/NodeCardView";
 import CollectionsPanel from "@/components/research-graph/CollectionsPanel";
 import QuickGuideModal from "@/components/research-graph/QuickGuideModal";
+import NodeSummaryCard from "@/components/research-graph/NodeSummaryCard";
 
 const GRAPH_MODES = [
   { id: "full", label: "Full Graph", icon: Network },
@@ -30,6 +31,7 @@ export default function ResearchGraphExplorer() {
   const [showQuickGuide, setShowQuickGuide] = useState(false);
   const [showFilters, setShowFilters] = useState(true);
   const [showDrawer, setShowDrawer] = useState(false);
+  const [showSummaryCard, setShowSummaryCard] = useState(false);
   const [graphMode, setGraphMode] = useState("full");
   const [focusNode, setFocusNode] = useState(null);
   const [collections, setCollections] = useState([]);
@@ -68,9 +70,10 @@ export default function ResearchGraphExplorer() {
   }, []);
 
   const handleNodeClick = (node, isDoubleClick) => {
-    if (!node) { setSelectedNode(null); setShowDrawer(false); return; }
+    if (!node) { setSelectedNode(null); setShowDrawer(false); setShowSummaryCard(false); return; }
     setSelectedNode(node);
-    setShowDrawer(true);
+    setShowSummaryCard(true);
+    setShowDrawer(false);
     if (isDoubleClick) setFocusNode(node);
   };
 
@@ -287,6 +290,18 @@ export default function ResearchGraphExplorer() {
             onNodeClick={handleNodeClick}
             collections={collections}
             onAddToCollection={handleAddToCollection}
+          />
+        )}
+
+        {/* AI summary card — pops up on node click */}
+        {showSummaryCard && selectedNode && (
+          <NodeSummaryCard
+            node={selectedNode}
+            allNodes={graphData.nodes}
+            allEdges={graphData.edges}
+            onClose={() => setShowSummaryCard(false)}
+            onNavigateNode={(n) => { setSelectedNode(n); setFocusNode(n); }}
+            onOpenFullDetails={() => { setShowSummaryCard(false); setShowDrawer(true); }}
           />
         )}
       </div>
