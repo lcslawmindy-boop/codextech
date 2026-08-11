@@ -349,126 +349,12 @@ export default function GraphCanvas3D({ allNodes, allEdges, filters, selectedNod
     scene.add(edgeLines);
     edgeLinesRef.current = edgeLines;
 
-    // ── Neuron firing system: signal particles traveling along edges ──
+    // Edge list (used for label placement)
     const edgeList = visibleEdges.map(e => ({
       source: nodeById.get(e.source),
       target: nodeById.get(e.target),
       typeColor: e.typeColor || "#C9A84C",
     })).filter(e => e.source !== undefined && e.target !== undefined);
-
-    // Neon pulse palette — vivid electric colors for hypnotizing signal travel
-    const NEON_COLORS = [
-      0x00ffff, // cyan
-      0xff00ff, // magenta
-      0x39ff14, // electric green
-      0xffff00, // electric yellow
-      0xff6600, // hot orange
-      0x00ff60, // neon green
-      0xff0066, // hot pink
-      0x4d4dff, // electric blue
-    ];
-    // Particle pool — glowing neon signal pulses traveling along edges
-    const PARTICLE_POOL_SIZE = Math.min(200, edgeList.length);
-    const particles = [];
-    const particleGeo = new THREE.SphereGeometry(2.5, 10, 10);
-    // Glow halo around each pulse
-    const haloGeo = new THREE.SphereGeometry(5, 10, 10);
-    for (let p = 0; p < PARTICLE_POOL_SIZE; p++) {
-      const edge = edgeList[Math.floor(Math.random() * edgeList.length)];
-      const neonColor = NEON_COLORS[Math.floor(Math.random() * NEON_COLORS.length)];
-      const color = new THREE.Color(neonColor);
-      const mat = new THREE.MeshBasicMaterial({
-        color,
-        transparent: true,
-        opacity: 1,
-        blending: THREE.AdditiveBlending,
-        depthWrite: false,
-      });
-      const mesh = new THREE.Mesh(particleGeo, mat);
-      mesh.visible = false;
-      scene.add(mesh);
-      // Halo — larger transparent glow
-      const haloMat = new THREE.MeshBasicMaterial({
-        color,
-        transparent: true,
-        opacity: 0.3,
-        blending: THREE.AdditiveBlending,
-        depthWrite: false,
-      });
-      const halo = new THREE.Mesh(haloGeo, haloMat);
-      halo.visible = false;
-      scene.add(halo);
-      particles.push({
-        mesh,
-        halo,
-        sourceIdx: edge.source,
-        targetIdx: edge.target,
-        progress: Math.random(),
-        speed: 0.004 + Math.random() * 0.008,
-        color,
-      });
-    }
-
-    // ── Ripple pool — expanding neon scalar wave rings when neurons fire ──
-    const RIPPLE_POOL_SIZE = 40;
-    const ripples = [];
-    const rippleGeo = new THREE.RingGeometry(1, 1.06, 48);
-    for (let r = 0; r < RIPPLE_POOL_SIZE; r++) {
-      const mat = new THREE.MeshBasicMaterial({
-        color: 0x00ffff,
-        transparent: true,
-        opacity: 0,
-        side: THREE.DoubleSide,
-        blending: THREE.AdditiveBlending,
-        depthWrite: false,
-      });
-      const mesh = new THREE.Mesh(rippleGeo, mat);
-      mesh.visible = false;
-      scene.add(mesh);
-      ripples.push({ mesh, active: false, age: 0, maxAge: 1.2 });
-    }
-
-    // Fire a neuron: brighten it, emit ripple ring, spawn outgoing neon signal particles
-    const fireNeuron = (nodeIdx) => {
-      const mesh = meshes[nodeIdx];
-      if (!mesh) return;
-      mesh.userData.firingIntensity = 1;
-      // Emit neon ripple ring
-      const ripple = ripples.find(r => !r.active);
-      if (ripple) {
-        ripple.active = true;
-        ripple.age = 0;
-        ripple.mesh.position.copy(mesh.position);
-        ripple.mesh.lookAt(camera.position);
-        const neon = NEON_COLORS[Math.floor(Math.random() * NEON_COLORS.length)];
-        ripple.mesh.material.color.setHex(neon);
-        ripple.mesh.visible = true;
-        ripple.mesh.scale.setScalar(1);
-        ripple.mesh.material.opacity = 0.3;
-      }
-      // Spawn outgoing neon signal particles to connected nodes
-      const connections = [];
-      edgeList.forEach(e => {
-        if (e.source === nodeIdx) connections.push(e.target);
-        else if (e.target === nodeIdx) connections.push(e.source);
-      });
-      connections.slice(0, 4).forEach(targetIdx => {
-        const particle = particles.find(p => !p.mesh.visible);
-        if (particle) {
-          particle.sourceIdx = nodeIdx;
-          particle.targetIdx = targetIdx;
-          particle.progress = 0;
-          // Pick a random neon color for this pulse
-          const neon = NEON_COLORS[Math.floor(Math.random() * NEON_COLORS.length)];
-          particle.color.setHex(neon);
-          particle.mesh.visible = true;
-          particle.mesh.material.opacity = 1;
-          particle.mesh.material.color.copy(particle.color);
-          particle.halo.visible = true;
-          particle.halo.material.color.copy(particle.color);
-        }
-      });
-    };
 
     // Labels overlay (HTML)
     const labelsDiv = document.createElement("div");
@@ -478,7 +364,6 @@ export default function GraphCanvas3D({ allNodes, allEdges, filters, selectedNod
 
     // Render loop
     let animId;
-    let fireCooldown = 0;
     const animate = () => {
       animId = requestAnimationFrame(animate);
       pulseClockRef.current += 0.016;
@@ -522,76 +407,15 @@ export default function GraphCanvas3D({ allNodes, allEdges, filters, selectedNod
         ap.halo.material.opacity = 0.25 * fade;
       });
 
-      // ── Neuron firing: randomly fire nodes to keep the brain alive ──
-      fireCooldown -= 0.016;
-      if (fireCooldown <= 0 && meshes.length > 0) {
-        // Fire 2-5 random neurons for a hypnotizing, alive feel
-        const count = 2 + Math.floor(Math.random() * 4);
-        for (let f = 0; f < count; f++) {
-          fireNeuron(Math.floor(Math.random() * meshes.length));
-        }
-        fireCooldown = 0.08 + Math.random() * 0.2;
-      }
-
-      // ── Update node firing intensity (decay + glow) ──
+      // ── Calm breathing glow (no firing/particles) ──
       meshes.forEach((mesh, i) => {
         const ud = mesh.userData;
-        if (ud.firingIntensity > 0) {
-          ud.firingIntensity *= 0.92; // decay
-          if (ud.firingIntensity < 0.01) ud.firingIntensity = 0;
-        }
-        // Base breathing pulse + firing boost
         const breath = 0.4 + Math.sin(pulseClockRef.current + i * 0.3) * 0.15;
-        const fireBoost = ud.firingIntensity * 2.0;
-        applyMats(ud.solids, m => { if (m.emissiveIntensity !== undefined) m.emissiveIntensity = breath + fireBoost; });
-        applyMats(ud.edges, m => { m.opacity = 0.4 + ud.firingIntensity * 0.5; });
-        // Scale up slightly when firing (preserve hover scale if hovered)
-        const fireScale = 1 + ud.firingIntensity * 0.5;
+        applyMats(ud.solids, m => { if (m.emissiveIntensity !== undefined) m.emissiveIntensity = breath; });
+        applyMats(ud.edges, m => { m.opacity = 0.7; });
         if (!hoveredNode || ud.node.numericId !== hoveredNode.numericId) {
-          mesh.scale.setScalar(fireScale);
+          mesh.scale.setScalar(1);
         }
-      });
-
-      // ── Update signal particles traveling along edges ──
-      particles.forEach(p => {
-        if (!p.mesh.visible) return;
-        p.progress += p.speed;
-        if (p.progress >= 1) {
-          // Arrived at target — fire the target neuron and recycle
-          p.mesh.visible = false;
-          p.halo.visible = false;
-          fireNeuron(p.targetIdx);
-          return;
-        }
-        const src = meshes[p.sourceIdx];
-        const tgt = meshes[p.targetIdx];
-        if (!src || !tgt) { p.mesh.visible = false; p.halo.visible = false; return; }
-        const pos = src.position.clone().lerp(tgt.position, p.progress);
-        p.mesh.position.copy(pos);
-        p.halo.position.copy(pos);
-        // Fade in/out at start/end of journey — bright vivid pulse
-        const fade = Math.sin(p.progress * Math.PI);
-        p.mesh.material.opacity = fade;
-        p.halo.material.opacity = 0.4 * fade;
-        const scale = 0.6 + fade * 1.5;
-        p.mesh.scale.setScalar(scale);
-        p.halo.scale.setScalar(scale);
-      });
-
-      // ── Update ripple rings (neon scalar wave expansion) ──
-      ripples.forEach(r => {
-        if (!r.active) return;
-        r.age += 0.016;
-        if (r.age >= r.maxAge) {
-          r.active = false;
-          r.mesh.visible = false;
-          return;
-        }
-        const t = r.age / r.maxAge;
-        const scale = 1 + t * 50;
-        r.mesh.scale.setScalar(scale);
-        r.mesh.material.opacity = 0.3 * (1 - t);
-        r.mesh.lookAt(camera.position);
       });
 
       // Update label positions
@@ -681,9 +505,6 @@ export default function GraphCanvas3D({ allNodes, allEdges, filters, selectedNod
         if (obj.geometry) obj.geometry.dispose();
         if (obj.material) obj.material.dispose();
       });
-      particleGeo.dispose();
-      haloGeo.dispose();
-      rippleGeo.dispose();
       bgPlaneGeo.dispose();
       Object.values(platonicGeo).forEach(g => g.dispose());
       Object.values(platonicEdges).forEach(g => g.dispose());
