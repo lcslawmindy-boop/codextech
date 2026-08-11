@@ -4,6 +4,8 @@ import { ArrowLeft, Zap, Plus, X, Loader2, TrendingUp, Map, RotateCcw, CheckCirc
 import { businessItems } from "../lib/businessItems";
 import { base44 } from "@/api/base44Client";
 import { jsPDF } from "jspdf";
+import { generatePdrData } from "@/lib/pdrGenerator";
+import PdrSection from "@/components/PdrSection";
 
 const inventions = businessItems.filter(i => i.category === "Invention");
 
@@ -165,7 +167,9 @@ Generate a completely new invention concept that synthesizes these technologies.
         setSavedId(saved?.id || null);
       } catch { /* non-critical */ }
 
-      setResult(res);
+      // Auto-generate PDR (Section 11) from selected nodes and result
+      const pdrData = generatePdrData(selected, res, mode);
+      setResult({ ...res, pdrData });
     } catch (e) {
       setError("Failed to generate hybrid invention. Please try again.");
       console.error(e);
@@ -260,6 +264,88 @@ Generate a completely new invention concept that synthesizes these technologies.
 
       section("6. SUGGESTED NEXT STEPS");
       body(result.suggested_next_steps);
+
+      // ── Section 11: PDR ──
+      if (result.pdrData) {
+        const pdr = result.pdrData;
+        addPage();
+
+        // PDR permanent label
+        doc.setFillColor(45, 35, 5);
+        doc.rect(margin - 3, y - 3, cW + 6, 18, "F");
+        doc.setFontSize(8);
+        doc.setFont("helvetica", "bold");
+        doc.setTextColor(180, 130, 20);
+        doc.text("PRELIMINARY DESIGN REVIEW — CONCEPT STAGE", margin, y + 1);
+        doc.setFont("helvetica", "normal");
+        doc.setFontSize(7);
+        doc.setTextColor(150, 110, 15);
+        doc.text("Subject to manufacturer validation and engineering review. Not a final design. Not a certified device.", margin, y + 6);
+        doc.text(`Document Code: ${pdr.docCode}`, margin, y + 11);
+        y += 20;
+
+        // 1.1 System Overview
+        section("11.1 SYSTEM OVERVIEW");
+        body(`Device Name: ${pdr.systemOverview.deviceName}`);
+        body(`Device Code: ${pdr.systemOverview.deviceCode}`);
+        body(`Version: ${pdr.systemOverview.version}  |  Date: ${pdr.systemOverview.date}`);
+        body(`Mission Statement: ${pdr.systemOverview.missionStatement}`);
+        body(`Target Population: ${pdr.systemOverview.targetPopulation}`);
+        body(`Primary Innovation Goal: ${pdr.systemOverview.primaryInnovationGoal}`);
+        body(`Technology Readiness Level: ${pdr.systemOverview.trl}`);
+        body(`TRL Justification: ${pdr.systemOverview.trlJustification}`);
+
+        // 1.2 Design Basis
+        section("11.2 DESIGN BASIS & REQUIREMENTS SUMMARY");
+        body("Source Research Nodes:");
+        pdr.designBasis.sourceNodes.forEach(n => body(`  ${n.code} — ${n.title} (${n.source})`));
+        body("");
+        body("Key Design Drivers:");
+        pdr.designBasis.keyDesignDrivers.forEach(d => body(`  ${d.label}: ${d.value}`));
+        body("");
+        body("Design Constraints:");
+        pdr.designBasis.designConstraints.forEach(c => body(`  • ${c}`));
+        body("");
+        body("Open Design Questions:");
+        pdr.designBasis.openDesignQuestions.forEach(q => body(`  ⚠ ${q}`));
+
+        // 1.3 Architecture Block Diagram
+        section("11.3 MULTI-SYSTEM ARCHITECTURE BLOCK DIAGRAM");
+        pdr.architectureBlocks.forEach(b => body(`  [${b.label}] (${b.source}): ${b.desc}`));
+        body("");
+        body(`Feedback Loop: ${pdr.feedbackLoop}`);
+
+        // 1.4 Modality Matrix
+        section("11.4 MODALITY MATRIX");
+        body(`| # | Name | Source Node | Frequency/Range | Delivery | Target Tissue | Safety Ref | Priority |`);
+        pdr.modalityMatrix.forEach(m => {
+          body(`  ${m.num} | ${m.name} | ${m.sourceNode} | ${m.frequencyRange} | ${m.deliveryMethod} | ${m.targetTissue} | ${m.safetyRef} | ${m.priorityRank}`);
+        });
+
+        // 1.5 ICD
+        section("11.5 INTERFACE CONTROL DOCUMENT (ICD — CONCEPTUAL)");
+        body("| Interface ID | From | To | Signal Type | Protocol | Notes |");
+        pdr.icd.forEach(i => body(`  ${i.id} | ${i.from} | ${i.to} | ${i.signal} | ${i.protocol} | ${i.notes}`));
+
+        // 1.6 Risk Register
+        section("11.6 PDR RISK REGISTER");
+        pdr.riskRegister.forEach(r => {
+          body(`  ${r.id}: ${r.description}`);
+          body(`    Likelihood: ${r.likelihood} | Impact: ${r.impact}`);
+          body(`    Mitigation: ${r.mitigation}`);
+        });
+
+        // 1.7 Action Items
+        section("11.7 PDR ACTION ITEMS");
+        pdr.actionItems.forEach(a => body(`  ${a.id}: ${a.text}`));
+
+        // 1.8 Sign-Off Block
+        section("11.8 PDR SIGN-OFF BLOCK");
+        body(`Prepared by: ${pdr.signOff.preparedBy}`);
+        body(`Date: ${pdr.signOff.date}`);
+        body(`Review Status: ${pdr.signOff.reviewStatus}`);
+        body(`Next Milestone: ${pdr.signOff.nextMilestone}`);
+      }
 
       // Footer
       const total = doc.getNumberOfPages();
@@ -531,6 +617,9 @@ Generate a completely new invention concept that synthesizes these technologies.
                 <p className="text-white font-bold text-xs uppercase tracking-wider mb-3">Suggested Next Steps</p>
                 <p className="text-gray-300 text-sm leading-relaxed whitespace-pre-line">{result.suggested_next_steps}</p>
               </div>
+
+              {/* Section 11 — PDR (auto-generated) */}
+              {result.pdrData && <PdrSection pdrData={result.pdrData} />}
 
               {/* Deliverable Notice */}
               <div className="bg-gradient-to-br from-yellow-950/30 to-gray-900 border border-yellow-800/40 rounded-2xl p-6 text-center">
