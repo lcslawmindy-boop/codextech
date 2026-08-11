@@ -6,6 +6,7 @@ import {
   FileText, Layers, Settings, Target, Radio, Wind, Package
 } from "lucide-react";
 import MedbedBomGenerator from "@/components/MedbedBomGenerator";
+import MedbedNdaGate from "@/components/MedbedNdaGate";
 
 // ── Device catalog derived from all uploaded engineering docs ──────────────
 
@@ -344,6 +345,15 @@ export default function MedbedShowcase() {
   const [activeTab, setActiveTab] = useState("overview");
 
   const d = selectedDevice;
+
+  return (
+    <MedbedNdaGate>
+      <MedbedShowcaseContent device={d} selectedDevice={selectedDevice} setSelectedDevice={setSelectedDevice} activeTab={activeTab} setActiveTab={setActiveTab} />
+    </MedbedNdaGate>
+  );
+}
+
+function MedbedShowcaseContent({ device: d, selectedDevice, setSelectedDevice, activeTab, setActiveTab }) {
 
   const TABS = [
     { id: "overview", label: "Overview" },
