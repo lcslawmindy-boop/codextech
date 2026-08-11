@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -7,6 +8,23 @@
   --surface-0: 222 14% 7%;    /* bg-gray-950 */
   --surface-1: 222 12% 11%;   /* bg-gray-900 */
   --surface-2: 222 10% 17%;   /* bg-gray-800 */
+
+  /* ── ZARP BRAND TOKENS ── */
+  --zarp-bg: 222 67% 4%;
+  --zarp-card: 215 28% 7%;
+  --zarp-elevated: 215 22% 11%;
+  --zarp-gold: 43 51% 57%;
+  --zarp-blue: 202 70% 38%;
+  --zarp-violet: 270 100% 59%;
+  --zarp-green: 160 84% 39%;
+  --zarp-amber: 38 92% 50%;
+  --zarp-red: 0 84% 60%;
+  --zarp-text: 220 100% 98%;
+  --zarp-text-muted: 214 23% 62%;
+  --zarp-border: 215 14% 15%;
+  --font-display: 'Orbitron', sans-serif;
+  --font-body: 'Inter', sans-serif;
+  --font-mono-zarp: 'JetBrains Mono', monospace;
 }
 
 /* Deep Navy */

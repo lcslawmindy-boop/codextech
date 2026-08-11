@@ -12,13 +12,20 @@ module.exports = {
   				900: 'hsl(var(--surface-1) / <alpha-value>)',
   				950: 'hsl(var(--surface-0) / <alpha-value>)',
   			},
-  		},
-  		borderRadius: {
-  			lg: 'var(--radius)',
-  			md: 'calc(var(--radius) - 2px)',
-  			sm: 'calc(var(--radius) - 4px)'
-  		},
-  		colors: {
+  			zarp: {
+  				bg: 'hsl(var(--zarp-bg))',
+  				card: 'hsl(var(--zarp-card))',
+  				elevated: 'hsl(var(--zarp-elevated))',
+  				gold: 'hsl(var(--zarp-gold))',
+  				blue: 'hsl(var(--zarp-blue))',
+  				violet: 'hsl(var(--zarp-violet))',
+  				green: 'hsl(var(--zarp-green))',
+  				amber: 'hsl(var(--zarp-amber))',
+  				red: 'hsl(var(--zarp-red))',
+  				text: 'hsl(var(--zarp-text))',
+  				muted: 'hsl(var(--zarp-text-muted))',
+  				border: 'hsl(var(--zarp-border))',
+  			},
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
   			card: {

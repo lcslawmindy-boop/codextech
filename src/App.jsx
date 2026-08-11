@@ -210,6 +210,8 @@ import LightTimelineDevices from './pages/LightTimelineDevices';
 import InvestorMasterPackage from './pages/InvestorMasterPackage';
 import PortfolioStrategy from './pages/PortfolioStrategy';
 import ResearchGraphExplorer from './pages/ResearchGraphExplorer';
+import ZarpLandingNew from './pages/ZarpLandingNew';
+import ZarpDashboard from './pages/ZarpDashboard';
 
 
 const AuthenticatedApp = () => {
@@ -240,7 +242,7 @@ const AuthenticatedApp = () => {
   if (!hasPaid) {
     return (
       <Routes>
-        <Route path="/" element={<VaultNDALanding />} />
+        <Route path="/" element={<ZarpLandingNew />} />
         <Route path="/free-vault" element={<FreeVault />} />
         <Route path="/build-supplies-shop" element={<BuildSuppliesShop />} />
         <Route path="/emf-impact" element={<EMFImpact />} />
@@ -261,7 +263,7 @@ const AuthenticatedApp = () => {
 
       <Routes>
         <Route element={<MobileLayout />}>
-          <Route path="/" element={<ConceptGraph />} />
+          <Route path="/" element={<ZarpDashboard />} />
           <Route path="/zarp-landing" element={<ZarpLanding />} />
           <Route path="/free-vault" element={<FreeVault />} />
           <Route path="/member-dashboard" element={<MemberDashboard />} />
