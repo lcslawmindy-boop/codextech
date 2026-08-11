@@ -1,7 +1,7 @@
 import { useRef, useEffect, useState, useMemo } from "react";
 import * as THREE from "three";
 import { ZoomIn, ZoomOut, Maximize2, Crosshair, Network } from "lucide-react";
-import { DOMAINS, CONNECTION_TYPES, getNodeRadius } from "@/lib/researchGraphData";
+import { DOMAINS, CONNECTION_TYPES, getNodeRadius, SUPPRESSION_STATUS } from "@/lib/researchGraphData";
 
 // ── 3D Interactive Research Graph ──────────────────────────────────────────
 // Three.js force-directed graph: labeled nodes colored by domain, labeled edges
@@ -181,6 +181,28 @@ export default function GraphCanvas3D({ allNodes, allEdges, filters, selectedNod
     const bgPlane = new THREE.Mesh(bgPlaneGeo, bgMat);
     bgPlane.position.z = -1500;
     scene.add(bgPlane);
+
+    // ── Quantum scalar 3D axis laser scan from center ──
+    const axisExtent = 900;
+    const axisGroup = new THREE.Group();
+    const axisColors = [0x00ffff, 0xff00ff, 0xffff00]; // x=cyan, y=magenta, z=yellow
+    const axisDirs = [new THREE.Vector3(1, 0, 0), new THREE.Vector3(0, 1, 0), new THREE.Vector3(0, 0, 1)];
+    const axisPulses = [];
+    axisDirs.forEach((dir, i) => {
+      const lineGeo = new THREE.BufferGeometry().setFromPoints([
+        dir.clone().multiplyScalar(-axisExtent),
+        dir.clone().multiplyScalar(axisExtent),
+      ]);
+      const lineMat = new THREE.LineBasicMaterial({ color: axisColors[i], transparent: true, opacity: 0.22, blending: THREE.AdditiveBlending, depthWrite: false });
+      axisGroup.add(new THREE.Line(lineGeo, lineMat));
+      const pulseMat = new THREE.MeshBasicMaterial({ color: axisColors[i], transparent: true, opacity: 0.9, blending: THREE.AdditiveBlending, depthWrite: false });
+      const haloMat = new THREE.MeshBasicMaterial({ color: axisColors[i], transparent: true, opacity: 0.25, blending: THREE.AdditiveBlending, depthWrite: false });
+      const pulse = new THREE.Mesh(new THREE.SphereGeometry(4, 12, 12), pulseMat);
+      const halo = new THREE.Mesh(new THREE.SphereGeometry(11, 12, 12), haloMat);
+      axisGroup.add(pulse, halo);
+      axisPulses.push({ pulse, halo, dir, phase: i * 1.2 });
+    });
+    scene.add(axisGroup);
 
     // Camera
     const camera = new THREE.PerspectiveCamera(60, width / height, 1, 5000);
@@ -390,7 +412,7 @@ export default function GraphCanvas3D({ allNodes, allEdges, filters, selectedNod
     // ── Ripple pool — expanding neon scalar wave rings when neurons fire ──
     const RIPPLE_POOL_SIZE = 40;
     const ripples = [];
-    const rippleGeo = new THREE.RingGeometry(1, 1.4, 32);
+    const rippleGeo = new THREE.RingGeometry(1, 1.06, 48);
     for (let r = 0; r < RIPPLE_POOL_SIZE; r++) {
       const mat = new THREE.MeshBasicMaterial({
         color: 0x00ffff,
@@ -422,7 +444,7 @@ export default function GraphCanvas3D({ allNodes, allEdges, filters, selectedNod
         ripple.mesh.material.color.setHex(neon);
         ripple.mesh.visible = true;
         ripple.mesh.scale.setScalar(1);
-        ripple.mesh.material.opacity = 0.8;
+        ripple.mesh.material.opacity = 0.3;
       }
       // Spawn outgoing neon signal particles to connected nodes
       const connections = [];
@@ -473,6 +495,32 @@ export default function GraphCanvas3D({ allNodes, allEdges, filters, selectedNod
         );
         cam.lookAt(0, 0, 0);
       }
+
+      // ── Brain background: billboard to camera + breathe to look alive ──
+      if (bgPlane && cameraRef.current) {
+        const cam = cameraRef.current;
+        const dir = new THREE.Vector3(0, 0, 0).sub(cam.position).normalize();
+        bgPlane.position.copy(cam.position).add(dir.multiplyScalar(1400));
+        bgPlane.lookAt(cam.position);
+        bgPlane.userData.spin = (bgPlane.userData.spin || 0) + 0.0015;
+        bgPlane.rotateZ(bgPlane.userData.spin);
+        const breath = 0.5 + Math.sin(pulseClockRef.current * 0.6) * 0.5;
+        bgMat.opacity = 0.16 + breath * 0.12;
+        bgPlane.scale.setScalar(1 + breath * 0.08);
+      }
+
+      // ── Quantum axis laser scan ──
+      const scanT = pulseClockRef.current * 0.5;
+      axisPulses.forEach((ap) => {
+        const t = (Math.sin(scanT + ap.phase) * 0.5 + 0.5);
+        const dist = (t - 0.5) * 2 * axisExtent;
+        const pos = ap.dir.clone().multiplyScalar(dist);
+        ap.pulse.position.copy(pos);
+        ap.halo.position.copy(pos);
+        const fade = Math.sin(t * Math.PI);
+        ap.pulse.material.opacity = 0.9 * fade;
+        ap.halo.material.opacity = 0.25 * fade;
+      });
 
       // ── Neuron firing: randomly fire nodes to keep the brain alive ──
       fireCooldown -= 0.016;
@@ -542,7 +590,7 @@ export default function GraphCanvas3D({ allNodes, allEdges, filters, selectedNod
         const t = r.age / r.maxAge;
         const scale = 1 + t * 50;
         r.mesh.scale.setScalar(scale);
-        r.mesh.material.opacity = 0.8 * (1 - t);
+        r.mesh.material.opacity = 0.3 * (1 - t);
         r.mesh.lookAt(camera.position);
       });
 
@@ -766,7 +814,11 @@ export default function GraphCanvas3D({ allNodes, allEdges, filters, selectedNod
           m.opacity = isConnected ? 0.95 : 0.12;
           if (m.emissiveIntensity !== undefined) m.emissiveIntensity = isConnected ? 1.0 : 0.05;
         });
-        applyMats(ud.edges, m => { m.opacity = isConnected ? 0.85 : 0.08; });
+        applyMats(ud.edges, m => {
+          m.opacity = isConnected ? 0.9 : 0.08;
+          if (ud.node.numericId === hoveredNode.numericId) m.color.setHex(0x000000);
+          else m.color.copy(ud.baseColor);
+        });
         const scale = (ud.node.numericId === hoveredNode.numericId ? 1.5 : 1);
         mesh.scale.setScalar(scale);
       });
@@ -780,16 +832,13 @@ export default function GraphCanvas3D({ allNodes, allEdges, filters, selectedNod
         edgeLines.userData.origColors = new Float32Array(colors);
       }
       const orig = edgeLines.userData.origColors;
+      const hc = new THREE.Color(hoveredNode.domainColor);
       visibleEdges.forEach((e, i) => {
         const isConn = e.source === hoveredNode.numericId || e.target === hoveredNode.numericId;
         if (isConn) {
-          // Brighten
-          colors[i * 6] = Math.min(1, orig[i * 6] * 2.5);
-          colors[i * 6 + 1] = Math.min(1, orig[i * 6 + 1] * 2.5);
-          colors[i * 6 + 2] = Math.min(1, orig[i * 6 + 2] * 2.5);
-          colors[i * 6 + 3] = colors[i * 6];
-          colors[i * 6 + 4] = colors[i * 6 + 1];
-          colors[i * 6 + 5] = colors[i * 6 + 2];
+          // Connected edges take the hovered node's color — bold & clear
+          colors[i * 6] = hc.r; colors[i * 6 + 1] = hc.g; colors[i * 6 + 2] = hc.b;
+          colors[i * 6 + 3] = hc.r; colors[i * 6 + 4] = hc.g; colors[i * 6 + 5] = hc.b;
         } else {
           // Dim to gray
           colors[i * 6] = orig[i * 6] * 0.15;
@@ -810,7 +859,7 @@ export default function GraphCanvas3D({ allNodes, allEdges, filters, selectedNod
           m.opacity = 0.72;
           if (m.emissiveIntensity !== undefined) m.emissiveIntensity = ud.baseEmissive;
         });
-        applyMats(ud.edges, m => { m.opacity = 0.7; });
+        applyMats(ud.edges, m => { m.opacity = 0.7; m.color.copy(ud.baseColor); });
         mesh.scale.setScalar(1);
       });
       if (edgeLines.userData.origColors) {
@@ -962,18 +1011,30 @@ export default function GraphCanvas3D({ allNodes, allEdges, filters, selectedNod
         </div>
       )}
 
-      {/* Legend */}
+      {/* Legend — Color Key */}
       {settings.showLegend && (
-        <div className="absolute bottom-3 left-3 z-10 max-w-[280px]">
+        <div className="absolute bottom-3 left-3 z-10 max-w-[300px]">
           <div className="bg-slate-950/95 border border-slate-800 rounded-lg p-3 backdrop-blur">
-            <p className="text-slate-400 text-[9px] font-bold uppercase tracking-wider mb-2">Node Size = Connections</p>
+            <p className="text-amber-400 text-[9px] font-black uppercase tracking-wider mb-1" style={{ fontFamily: "Orbitron, sans-serif" }}>Color Key — Research Topics</p>
+            <p className="text-slate-500 text-[7px] mb-2">Node size = connection count · each domain has its own color</p>
             <div className="grid grid-cols-2 gap-x-3 gap-y-1">
               {DOMAINS.map(d => (
                 <div key={d.id} className="flex items-center gap-1.5">
-                  <span className="w-2 h-2 rounded-full flex-shrink-0" style={{ backgroundColor: d.color }} />
-                  <span className="text-slate-400 text-[8px] truncate">{d.name}</span>
+                  <span className="w-2 h-2 rounded-full flex-shrink-0" style={{ backgroundColor: d.color, boxShadow: `0 0 4px ${d.color}` }} />
+                  <span className="text-slate-300 text-[8px] truncate">{d.name}</span>
                 </div>
               ))}
+            </div>
+            <div className="mt-2 pt-2 border-t border-slate-800">
+              <p className="text-slate-400 text-[8px] font-bold uppercase mb-1">Suppression Status</p>
+              <div className="grid grid-cols-1 gap-y-0.5">
+                {SUPPRESSION_STATUS.map(s => (
+                  <div key={s.id} className="flex items-center gap-1.5">
+                    <span className="w-2 h-2 rounded-full flex-shrink-0" style={{ backgroundColor: s.color }} />
+                    <span className="text-slate-400 text-[7px] truncate">{s.label}</span>
+                  </div>
+                ))}
+              </div>
             </div>
             <div className="mt-2 pt-2 border-t border-slate-800">
               <p className="text-slate-400 text-[8px] font-bold uppercase mb-1">Edge Colors (connection type)</p>
@@ -986,7 +1047,7 @@ export default function GraphCanvas3D({ allNodes, allEdges, filters, selectedNod
                 ))}
               </div>
             </div>
-            <p className="text-amber-400 text-[8px] mt-2">Hover a node → connected edges light up</p>
+            <p className="text-amber-400 text-[8px] mt-2">Hover a node → its edges turn the node's color · black outline = active</p>
           </div>
         </div>
       )}
