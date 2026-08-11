@@ -154,6 +154,25 @@ export default function GraphCanvas3D({ allNodes, allEdges, filters, selectedNod
     scene.background = new THREE.Color(0x020617);
     sceneRef.current = scene;
 
+    // ── Brain background image ──
+    const bgLoader = new THREE.TextureLoader();
+    const bgPlaneGeo = new THREE.PlaneGeometry(4000, 4000);
+    const bgMat = new THREE.MeshBasicMaterial({
+      transparent: true,
+      opacity: 0.28,
+      depthWrite: false,
+    });
+    bgLoader.load(
+      "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/05551803a_braning4.webp",
+      (tex) => {
+        bgMat.map = tex;
+        bgMat.needsUpdate = true;
+      }
+    );
+    const bgPlane = new THREE.Mesh(bgPlaneGeo, bgMat);
+    bgPlane.position.z = -1500;
+    scene.add(bgPlane);
+
     // Camera
     const camera = new THREE.PerspectiveCamera(60, width / height, 1, 5000);
     const sph = cameraSphericalRef.current;
@@ -189,26 +208,45 @@ export default function GraphCanvas3D({ allNodes, allEdges, filters, selectedNod
       posArray[i * 3 + 2] = p.z;
     });
 
-    // Nodes as glassy translucent spheres (neuron-like)
+    // Nodes as neuron-like structures: icosahedron core + wireframe shell + synaptic terminals
     const nodeGroup = new THREE.Group();
     scene.add(nodeGroup);
     const meshes = [];
+    const neuronGeo = new THREE.IcosahedronGeometry(1, 1); // shared geometry, scaled per node
+    const wireGeo = new THREE.IcosahedronGeometry(1.15, 1);
     visibleNodes.forEach((n, i) => {
-      const r = getNodeRadius(n) * 0.6;
-      const geo = new THREE.SphereGeometry(Math.max(2, r), 16, 16);
+      const r = Math.max(2.5, getNodeRadius(n) * 0.7);
       const color = new THREE.Color(n.domainColor);
-      const mat = new THREE.MeshStandardMaterial({
+
+      // Core — glassy translucent neuron body
+      const coreMat = new THREE.MeshStandardMaterial({
         color,
         emissive: color,
-        emissiveIntensity: 0.4,
-        metalness: 0.1,
-        roughness: 0.2,
+        emissiveIntensity: 0.5,
+        metalness: 0.2,
+        roughness: 0.15,
         transparent: true,
-        opacity: 0.85,
+        opacity: 0.75,
       });
-      const mesh = new THREE.Mesh(geo, mat);
+      const core = new THREE.Mesh(neuronGeo, coreMat);
+      core.scale.setScalar(r);
+
+      // Wireframe shell — neural pathway mesh look
+      const wireMat = new THREE.MeshBasicMaterial({
+        color,
+        wireframe: true,
+        transparent: true,
+        opacity: 0.5,
+      });
+      const wire = new THREE.Mesh(wireGeo, wireMat);
+      wire.scale.setScalar(r);
+
+      // Group them so raycaster hits the core
+      const mesh = new THREE.Group();
+      mesh.add(core);
+      mesh.add(wire);
       mesh.position.set(posArray[i * 3], posArray[i * 3 + 1], posArray[i * 3 + 2]);
-      mesh.userData = { node: n, index: i, baseColor: color.clone(), baseEmissive: 0.4, firingIntensity: 0, fireTimer: Math.random() * 5 };
+      mesh.userData = { node: n, index: i, baseColor: color.clone(), baseEmissive: 0.5, firingIntensity: 0, fireTimer: Math.random() * 5, core, wire };
       nodeGroup.add(mesh);
       meshes.push(mesh);
     });
@@ -233,11 +271,14 @@ export default function GraphCanvas3D({ allNodes, allEdges, filters, selectedNod
     });
     edgeGeo.setAttribute("position", new THREE.BufferAttribute(edgePositions, 3));
     edgeGeo.setAttribute("color", new THREE.BufferAttribute(edgeColors, 3));
+    // Bold neon edges — boosted opacity and additive blending for glow
     const edgeMat = new THREE.LineBasicMaterial({
       vertexColors: true,
       transparent: true,
-      opacity: settings.edgeOpacity || 0.35,
-      linewidth: 1,
+      opacity: Math.max(0.5, settings.edgeOpacity || 0.5),
+      linewidth: 2,
+      blending: THREE.AdditiveBlending,
+      depthWrite: false,
     });
     const edgeLines = new THREE.LineSegments(edgeGeo, edgeMat);
     scene.add(edgeLines);
@@ -250,82 +291,116 @@ export default function GraphCanvas3D({ allNodes, allEdges, filters, selectedNod
       typeColor: e.typeColor || "#C9A84C",
     })).filter(e => e.source !== undefined && e.target !== undefined);
 
-    // Particle pool — glowing signal pulses traveling along edges (like serotonin/electric signals)
-    const PARTICLE_POOL_SIZE = Math.min(120, edgeList.length);
+    // Neon pulse palette — vivid electric colors for hypnotizing signal travel
+    const NEON_COLORS = [
+      0x00ffff, // cyan
+      0xff00ff, // magenta
+      0x39ff14, // electric green
+      0xffff00, // electric yellow
+      0xff6600, // hot orange
+      0x00ff60, // neon green
+      0xff0066, // hot pink
+      0x4d4dff, // electric blue
+    ];
+    // Particle pool — glowing neon signal pulses traveling along edges
+    const PARTICLE_POOL_SIZE = Math.min(200, edgeList.length);
     const particles = [];
-    const particleGeo = new THREE.SphereGeometry(1.8, 8, 8);
+    const particleGeo = new THREE.SphereGeometry(2.5, 10, 10);
+    // Glow halo around each pulse
+    const haloGeo = new THREE.SphereGeometry(5, 10, 10);
     for (let p = 0; p < PARTICLE_POOL_SIZE; p++) {
       const edge = edgeList[Math.floor(Math.random() * edgeList.length)];
-      const color = new THREE.Color(edge.typeColor);
+      const neonColor = NEON_COLORS[Math.floor(Math.random() * NEON_COLORS.length)];
+      const color = new THREE.Color(neonColor);
       const mat = new THREE.MeshBasicMaterial({
         color,
         transparent: true,
-        opacity: 0.9,
+        opacity: 1,
         blending: THREE.AdditiveBlending,
+        depthWrite: false,
       });
       const mesh = new THREE.Mesh(particleGeo, mat);
       mesh.visible = false;
       scene.add(mesh);
+      // Halo — larger transparent glow
+      const haloMat = new THREE.MeshBasicMaterial({
+        color,
+        transparent: true,
+        opacity: 0.3,
+        blending: THREE.AdditiveBlending,
+        depthWrite: false,
+      });
+      const halo = new THREE.Mesh(haloGeo, haloMat);
+      halo.visible = false;
+      scene.add(halo);
       particles.push({
         mesh,
+        halo,
         sourceIdx: edge.source,
         targetIdx: edge.target,
         progress: Math.random(),
-        speed: 0.003 + Math.random() * 0.005,
+        speed: 0.004 + Math.random() * 0.008,
         color,
       });
     }
 
-    // ── Ripple pool — expanding scalar wave rings when neurons fire ──
-    const RIPPLE_POOL_SIZE = 25;
+    // ── Ripple pool — expanding neon scalar wave rings when neurons fire ──
+    const RIPPLE_POOL_SIZE = 40;
     const ripples = [];
-    const rippleGeo = new THREE.RingGeometry(1, 1.3, 32);
+    const rippleGeo = new THREE.RingGeometry(1, 1.4, 32);
     for (let r = 0; r < RIPPLE_POOL_SIZE; r++) {
       const mat = new THREE.MeshBasicMaterial({
-        color: 0xC9A84C,
+        color: 0x00ffff,
         transparent: true,
         opacity: 0,
         side: THREE.DoubleSide,
         blending: THREE.AdditiveBlending,
+        depthWrite: false,
       });
       const mesh = new THREE.Mesh(rippleGeo, mat);
       mesh.visible = false;
       scene.add(mesh);
-      ripples.push({ mesh, active: false, age: 0, maxAge: 1.5 });
+      ripples.push({ mesh, active: false, age: 0, maxAge: 1.2 });
     }
 
-    // Fire a neuron: brighten it, emit ripple ring, spawn outgoing signal particles
+    // Fire a neuron: brighten it, emit ripple ring, spawn outgoing neon signal particles
     const fireNeuron = (nodeIdx) => {
       const mesh = meshes[nodeIdx];
       if (!mesh) return;
       mesh.userData.firingIntensity = 1;
-      // Emit ripple ring
+      // Emit neon ripple ring
       const ripple = ripples.find(r => !r.active);
       if (ripple) {
         ripple.active = true;
         ripple.age = 0;
         ripple.mesh.position.copy(mesh.position);
         ripple.mesh.lookAt(camera.position);
-        ripple.mesh.material.color.copy(mesh.userData.baseColor);
+        const neon = NEON_COLORS[Math.floor(Math.random() * NEON_COLORS.length)];
+        ripple.mesh.material.color.setHex(neon);
         ripple.mesh.visible = true;
         ripple.mesh.scale.setScalar(1);
-        ripple.mesh.material.opacity = 0.6;
+        ripple.mesh.material.opacity = 0.8;
       }
-      // Spawn outgoing signal particles to connected nodes
+      // Spawn outgoing neon signal particles to connected nodes
       const connections = [];
       edgeList.forEach(e => {
         if (e.source === nodeIdx) connections.push(e.target);
         else if (e.target === nodeIdx) connections.push(e.source);
       });
-      connections.slice(0, 3).forEach(targetIdx => {
+      connections.slice(0, 4).forEach(targetIdx => {
         const particle = particles.find(p => !p.mesh.visible);
         if (particle) {
           particle.sourceIdx = nodeIdx;
           particle.targetIdx = targetIdx;
           particle.progress = 0;
+          // Pick a random neon color for this pulse
+          const neon = NEON_COLORS[Math.floor(Math.random() * NEON_COLORS.length)];
+          particle.color.setHex(neon);
           particle.mesh.visible = true;
-          particle.mesh.material.opacity = 0.9;
-          particle.mesh.material.color.copy(mesh.userData.baseColor);
+          particle.mesh.material.opacity = 1;
+          particle.mesh.material.color.copy(particle.color);
+          particle.halo.visible = true;
+          particle.halo.material.color.copy(particle.color);
         }
       });
     };
@@ -359,12 +434,12 @@ export default function GraphCanvas3D({ allNodes, allEdges, filters, selectedNod
       // ── Neuron firing: randomly fire nodes to keep the brain alive ──
       fireCooldown -= 0.016;
       if (fireCooldown <= 0 && meshes.length > 0) {
-        // Fire 1-3 random neurons
-        const count = 1 + Math.floor(Math.random() * 3);
+        // Fire 2-5 random neurons for a hypnotizing, alive feel
+        const count = 2 + Math.floor(Math.random() * 4);
         for (let f = 0; f < count; f++) {
           fireNeuron(Math.floor(Math.random() * meshes.length));
         }
-        fireCooldown = 0.15 + Math.random() * 0.35;
+        fireCooldown = 0.08 + Math.random() * 0.2;
       }
 
       // ── Update node firing intensity (decay + glow) ──
@@ -375,12 +450,19 @@ export default function GraphCanvas3D({ allNodes, allEdges, filters, selectedNod
           if (ud.firingIntensity < 0.01) ud.firingIntensity = 0;
         }
         // Base breathing pulse + firing boost
-        const breath = 0.35 + Math.sin(pulseClockRef.current + i * 0.3) * 0.12;
-        const fireBoost = ud.firingIntensity * 1.5;
-        mesh.material.emissiveIntensity = breath + fireBoost;
-        // Scale up slightly when firing
-        const fireScale = 1 + ud.firingIntensity * 0.4;
-        mesh.scale.setScalar(fireScale);
+        const breath = 0.4 + Math.sin(pulseClockRef.current + i * 0.3) * 0.15;
+        const fireBoost = ud.firingIntensity * 2.0;
+        if (ud.core) {
+          ud.core.material.emissiveIntensity = breath + fireBoost;
+        }
+        if (ud.wire) {
+          ud.wire.material.opacity = 0.4 + ud.firingIntensity * 0.5;
+        }
+        // Scale up slightly when firing (preserve hover scale if hovered)
+        const fireScale = 1 + ud.firingIntensity * 0.5;
+        if (!hoveredNode || ud.node.numericId !== hoveredNode.numericId) {
+          mesh.scale.setScalar(fireScale);
+        }
       });
 
       // ── Update signal particles traveling along edges ──
@@ -390,20 +472,26 @@ export default function GraphCanvas3D({ allNodes, allEdges, filters, selectedNod
         if (p.progress >= 1) {
           // Arrived at target — fire the target neuron and recycle
           p.mesh.visible = false;
+          p.halo.visible = false;
           fireNeuron(p.targetIdx);
           return;
         }
         const src = meshes[p.sourceIdx];
         const tgt = meshes[p.targetIdx];
-        if (!src || !tgt) { p.mesh.visible = false; return; }
-        p.mesh.position.lerpVectors(src.position, tgt.position, p.progress);
-        // Fade in/out at start/end of journey
+        if (!src || !tgt) { p.mesh.visible = false; p.halo.visible = false; return; }
+        const pos = src.position.clone().lerp(tgt.position, p.progress);
+        p.mesh.position.copy(pos);
+        p.halo.position.copy(pos);
+        // Fade in/out at start/end of journey — bright vivid pulse
         const fade = Math.sin(p.progress * Math.PI);
-        p.mesh.material.opacity = 0.9 * fade;
-        p.mesh.scale.setScalar(0.5 + fade * 1.2);
+        p.mesh.material.opacity = fade;
+        p.halo.material.opacity = 0.4 * fade;
+        const scale = 0.6 + fade * 1.5;
+        p.mesh.scale.setScalar(scale);
+        p.halo.scale.setScalar(scale);
       });
 
-      // ── Update ripple rings (scalar wave expansion) ──
+      // ── Update ripple rings (neon scalar wave expansion) ──
       ripples.forEach(r => {
         if (!r.active) return;
         r.age += 0.016;
@@ -413,9 +501,9 @@ export default function GraphCanvas3D({ allNodes, allEdges, filters, selectedNod
           return;
         }
         const t = r.age / r.maxAge;
-        const scale = 1 + t * 40;
+        const scale = 1 + t * 50;
         r.mesh.scale.setScalar(scale);
-        r.mesh.material.opacity = 0.6 * (1 - t);
+        r.mesh.material.opacity = 0.8 * (1 - t);
         r.mesh.lookAt(camera.position);
       });
 
@@ -507,7 +595,11 @@ export default function GraphCanvas3D({ allNodes, allEdges, filters, selectedNod
         if (obj.material) obj.material.dispose();
       });
       particleGeo.dispose();
+      haloGeo.dispose();
       rippleGeo.dispose();
+      neuronGeo.dispose();
+      wireGeo.dispose();
+      bgPlaneGeo.dispose();
     };
   }, [visibleNodes, visibleEdges, settings.edgeOpacity, settings.showLabels]);
 
@@ -588,18 +680,23 @@ export default function GraphCanvas3D({ allNodes, allEdges, filters, selectedNod
       pointerRef.current.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
       pointerRef.current.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
       raycasterRef.current.setFromCamera(pointerRef.current, cameraRef.current);
-      const intersects = raycasterRef.current.intersectObjects(nodeMeshesRef.current);
+      // Nodes are Groups — intersect their children, then walk up to the group
+      const allChildren = nodeMeshesRef.current.flatMap(g => g.children);
+      const intersects = raycasterRef.current.intersectObjects(allChildren);
       if (intersects.length > 0) {
-        const mesh = intersects[0].object;
-        const node = mesh.userData.node;
-        setHoveredNode(node);
-        setTooltip({ node, x: e.clientX - rect.left, y: e.clientY - rect.top });
-        mount.style.cursor = "pointer";
-      } else {
-        setHoveredNode(null);
-        setTooltip(null);
-        mount.style.cursor = "grab";
+        let obj = intersects[0].object;
+        while (obj && !obj.userData.node) obj = obj.parent;
+        if (obj && obj.userData.node) {
+          const node = obj.userData.node;
+          setHoveredNode(node);
+          setTooltip({ node, x: e.clientX - rect.left, y: e.clientY - rect.top });
+          mount.style.cursor = "pointer";
+          return;
+        }
       }
+      setHoveredNode(null);
+      setTooltip(null);
+      mount.style.cursor = "grab";
     };
 
     const onMove = (e) => {
@@ -625,10 +722,17 @@ export default function GraphCanvas3D({ allNodes, allEdges, filters, selectedNod
       // Dim non-connected nodes, highlight connected
       meshes.forEach(mesh => {
         const isConnected = connectedIds.has(mesh.userData.node.numericId);
-        mesh.material.opacity = isConnected ? 1 : 0.15;
-        mesh.material.transparent = true;
-        mesh.material.emissiveIntensity = isConnected ? 0.8 : 0.05;
-        const scale = mesh.userData.node.numericId === hoveredNode.numericId ? 1.5 : 1;
+        const core = mesh.userData.core;
+        const wire = mesh.userData.wire;
+        if (core) {
+          core.material.opacity = isConnected ? 0.95 : 0.12;
+          core.material.emissiveIntensity = isConnected ? 1.0 : 0.05;
+        }
+        if (wire) {
+          wire.material.opacity = isConnected ? 0.8 : 0.08;
+        }
+        const baseR = Math.max(2.5, getNodeRadius(mesh.userData.node) * 0.7);
+        const scale = (mesh.userData.node.numericId === hoveredNode.numericId ? 1.5 : 1);
         mesh.scale.setScalar(scale);
       });
       // Light up connected edges, dim others
@@ -666,9 +770,15 @@ export default function GraphCanvas3D({ allNodes, allEdges, filters, selectedNod
     } else {
       // Reset
       meshes.forEach(mesh => {
-        mesh.material.opacity = 0.9;
-        mesh.material.transparent = true;
-        mesh.material.emissiveIntensity = mesh.userData.baseEmissive;
+        const core = mesh.userData.core;
+        const wire = mesh.userData.wire;
+        if (core) {
+          core.material.opacity = 0.75;
+          core.material.emissiveIntensity = mesh.userData.baseEmissive;
+        }
+        if (wire) {
+          wire.material.opacity = 0.5;
+        }
         mesh.scale.setScalar(1);
       });
       if (edgeLines.userData.origColors) {
@@ -676,7 +786,7 @@ export default function GraphCanvas3D({ allNodes, allEdges, filters, selectedNod
         edgeColorAttr.array.set(edgeLines.userData.origColors);
         edgeColorAttr.needsUpdate = true;
       }
-      edgeLines.material.opacity = settings.edgeOpacity || 0.35;
+      edgeLines.material.opacity = Math.max(0.5, settings.edgeOpacity || 0.5);
     }
   }, [hoveredNode, adjacency, visibleEdges, settings.edgeOpacity]);
 
@@ -690,12 +800,17 @@ export default function GraphCanvas3D({ allNodes, allEdges, filters, selectedNod
       pointerRef.current.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
       pointerRef.current.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
       raycasterRef.current.setFromCamera(pointerRef.current, cameraRef.current);
-      const intersects = raycasterRef.current.intersectObjects(nodeMeshesRef.current);
+      const allChildren = nodeMeshesRef.current.flatMap(g => g.children);
+      const intersects = raycasterRef.current.intersectObjects(allChildren);
       if (intersects.length > 0) {
-        onNodeClick(intersects[0].object.userData.node);
-      } else {
-        onNodeClick(null);
+        let obj = intersects[0].object;
+        while (obj && !obj.userData.node) obj = obj.parent;
+        if (obj && obj.userData.node) {
+          onNodeClick(obj.userData.node);
+          return;
+        }
       }
+      onNodeClick(null);
     };
     mount.addEventListener("click", onClick);
     return () => mount.removeEventListener("click", onClick);
