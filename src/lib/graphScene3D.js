@@ -37,37 +37,43 @@ export const GRAPH_BG_IMAGES = [
 export function goldenSpiralPositions(nodes) {
   const pos = new Map();
   const N = nodes.length;
-  const turns = 5.5;                 // how many full revolutions
-  const minR = 40;
-  const maxR = 340;
-  const heightRange = 520;
+  const turns = 7.5;                 // more revolutions for a grander spiral
+  const minR = 70;
+  const maxR = 560;
+  const heightRange = 820;
   for (let i = 0; i < N; i++) {
     const t = N > 1 ? i / (N - 1) : 0.5;
     const theta = t * turns * Math.PI * 2;
     // logarithmic radius growth (golden-spiral feel), bounded for readability
-    const r = minR + (maxR - minR) * Math.pow(t, 0.85);
+    const r = minR + (maxR - minR) * Math.pow(t, 0.82);
     const y = (t - 0.5) * heightRange;
+    // 3D spread: secondary vertical wave + lateral breathing for dimensional depth
+    const wave = Math.sin(theta * 0.5) * 60;
+    const breath = Math.cos(theta * 0.33) * 40;
     // small jitter so cards don't overlap perfectly on the curve
-    const jx = (Math.sin(i * 12.9) * 6);
-    const jy = (Math.cos(i * 78.3) * 6);
+    const jx = (Math.sin(i * 12.9) * 8);
+    const jy = (Math.cos(i * 78.3) * 8);
+    const jz = (Math.sin(i * 45.1) * 8);
     pos.set(nodes[i].numericId, new THREE.Vector3(
-      Math.cos(theta) * r + jx,
-      y + jy,
-      Math.sin(theta) * r
+      Math.cos(theta) * r + breath + jx,
+      y + wave + jy,
+      Math.sin(theta) * r + jz
     ));
   }
   return pos;
 }
 
 // Continuous spiral curve (for the gold guide-line drawn through the graph)
-export function goldenSpiralCurve(samples = 600, turns = 5.5, minR = 40, maxR = 340, heightRange = 520) {
+export function goldenSpiralCurve(samples = 900, turns = 7.5, minR = 70, maxR = 560, heightRange = 820) {
   const pts = [];
   for (let i = 0; i <= samples; i++) {
     const t = i / samples;
     const theta = t * turns * Math.PI * 2;
-    const r = minR + (maxR - minR) * Math.pow(t, 0.85);
+    const r = minR + (maxR - minR) * Math.pow(t, 0.82);
     const y = (t - 0.5) * heightRange;
-    pts.push(new THREE.Vector3(Math.cos(theta) * r, y, Math.sin(theta) * r));
+    const wave = Math.sin(theta * 0.5) * 60;
+    const breath = Math.cos(theta * 0.33) * 40;
+    pts.push(new THREE.Vector3(Math.cos(theta) * r + breath, y + wave, Math.sin(theta) * r));
   }
   return pts;
 }

@@ -25,7 +25,7 @@ export default function GraphCanvas3D({ allNodes, allEdges, filters, selectedNod
   const labelsRef = useRef(null);
   const raycasterRef = useRef(new THREE.Raycaster());
   const pointerRef = useRef(new THREE.Vector2());
-  const cameraSphericalRef = useRef({ radius: 500, theta: 0, phi: Math.PI / 2.6 });
+  const cameraSphericalRef = useRef({ radius: 780, theta: 0, phi: Math.PI / 2.6 });
   const [hoveredNode, setHoveredNode] = useState(null);
   const [tooltip, setTooltip] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -136,12 +136,45 @@ export default function GraphCanvas3D({ allNodes, allEdges, filters, selectedNod
     const graphGroup = new THREE.Group();
     scene.add(graphGroup);
 
-    // ── Golden spiral guide line ──
-    const spiralPts = goldenSpiralCurve(700);
+    // ── Golden spiral guide line (neon green, glowing) ──
+    const spiralPts = goldenSpiralCurve(900);
     const spiralGeo = new THREE.BufferGeometry().setFromPoints(spiralPts);
-    const spiralMat = new THREE.LineBasicMaterial({ color: 0xE8C766, transparent: true, opacity: 0.5, blending: THREE.AdditiveBlending, depthWrite: false });
+    const spiralMat = new THREE.LineBasicMaterial({ color: 0x39FF14, transparent: true, opacity: 0.75, blending: THREE.AdditiveBlending, depthWrite: false });
     const spiralLine = new THREE.Line(spiralGeo, spiralMat);
     graphGroup.add(spiralLine);
+
+    // ── 3D laser axis — four colored beams rotating from the center ──
+    const AXIS_LEN = 900;
+    const axisColors = [0x00BFFF /* blue */, 0xFF8C00 /* orange */, 0x39FF14 /* green */, 0xB026FF /* purple */];
+    const axisGroup = new THREE.Group();
+    axisColors.forEach((col, i) => {
+      const angle = (i / axisColors.length) * Math.PI * 2;
+      const dir = new THREE.Vector3(Math.cos(angle), 0, Math.sin(angle));
+      const axisGeo = new THREE.BufferGeometry().setFromPoints([
+        new THREE.Vector3(0, 0, 0),
+        dir.clone().multiplyScalar(AXIS_LEN),
+      ]);
+      const axisMat = new THREE.LineBasicMaterial({ color: col, transparent: true, opacity: 0.85, blending: THREE.AdditiveBlending, depthWrite: false });
+      const axisLine = new THREE.Line(axisGeo, axisMat);
+      axisLine.userData = { baseAngle: angle, color: col };
+      axisGroup.add(axisLine);
+
+      // glowing core orb at the tip of each beam
+      const orbGeo = new THREE.SphereGeometry(6, 12, 12);
+      const orbMat = new THREE.MeshBasicMaterial({ color: col, transparent: true, opacity: 0.9, blending: THREE.AdditiveBlending, depthWrite: false });
+      const orb = new THREE.Mesh(orbGeo, orbMat);
+      orb.position.copy(dir.clone().multiplyScalar(AXIS_LEN));
+      orb.userData = { baseAngle: angle };
+      axisGroup.add(orb);
+    });
+    // vertical center beam (white-green core)
+    const vGeo = new THREE.BufferGeometry().setFromPoints([
+      new THREE.Vector3(0, -AXIS_LEN, 0),
+      new THREE.Vector3(0, AXIS_LEN, 0),
+    ]);
+    const vMat = new THREE.LineBasicMaterial({ color: 0xAFFFA0, transparent: true, opacity: 0.6, blending: THREE.AdditiveBlending, depthWrite: false });
+    axisGroup.add(new THREE.Line(vGeo, vMat));
+    graphGroup.add(axisGroup);
 
     // ── 3D realistic research cards (billboarded, one shared texture per domain) ──
     const cardGeo = new THREE.PlaneGeometry(1, 1.3);
@@ -182,17 +215,21 @@ export default function GraphCanvas3D({ allNodes, allEdges, filters, selectedNod
       const tp = meshes[tIdx].position;
       edgePositions[i * 6] = sp.x; edgePositions[i * 6 + 1] = sp.y; edgePositions[i * 6 + 2] = sp.z;
       edgePositions[i * 6 + 3] = tp.x; edgePositions[i * 6 + 4] = tp.y; edgePositions[i * 6 + 5] = tp.z;
-      const c = new THREE.Color(e.typeColor || "#C9A84C");
+      const c = new THREE.Color(e.typeColor || "#39FF14");
+      // push to neon-bright values for additive glow
+      c.r = Math.min(1, c.r * 1.3 + 0.15);
+      c.g = Math.min(1, c.g * 1.3 + 0.15);
+      c.b = Math.min(1, c.b * 1.3 + 0.15);
       edgeColors[i * 6] = c.r; edgeColors[i * 6 + 1] = c.g; edgeColors[i * 6 + 2] = c.b;
       edgeColors[i * 6 + 3] = c.r; edgeColors[i * 6 + 4] = c.g; edgeColors[i * 6 + 5] = c.b;
     });
     edgeGeo.setAttribute("position", new THREE.BufferAttribute(edgePositions, 3));
     edgeGeo.setAttribute("color", new THREE.BufferAttribute(edgeColors, 3));
-    // Bold neon edges — boosted opacity and additive blending for glow
+    // Neon connecting edges — vivid additive glow
     const edgeMat = new THREE.LineBasicMaterial({
       vertexColors: true,
       transparent: true,
-      opacity: Math.max(0.5, settings.edgeOpacity || 0.5),
+      opacity: Math.max(0.65, settings.edgeOpacity || 0.65),
       linewidth: 2,
       blending: THREE.AdditiveBlending,
       depthWrite: false,
@@ -238,6 +275,15 @@ export default function GraphCanvas3D({ allNodes, allEdges, filters, selectedNod
 
       // ── Rotate the golden spiral graph group (Twilight-Zone sweep) ──
       graphGroup.rotation.y += 0.016 * 0.08;
+
+      // ── Rotate the 3D laser axis from the center ──
+      axisGroup.rotation.y += 0.016 * 0.35;
+      axisGroup.children.forEach((c, i) => {
+        if (c.userData && c.userData.baseAngle !== undefined && c.geometry && c.geometry.attributes && c.geometry.attributes.position) {
+          // pulsing opacity for laser flicker
+          c.material.opacity = 0.6 + Math.sin(pulseClockRef.current * 2 + i) * 0.25;
+        }
+      });
 
       // ── Billboard each card to face the camera (pop-out effect) ──
       if (cameraRef.current) {
@@ -394,7 +440,7 @@ export default function GraphCanvas3D({ allNodes, allEdges, filters, selectedNod
       if (!cameraRef.current) return;
       const sph = cameraSphericalRef.current;
       sph.radius *= e.deltaY > 0 ? 1.1 : 0.9;
-      sph.radius = Math.max(50, Math.min(2000, sph.radius));
+      sph.radius = Math.max(80, Math.min(3000, sph.radius));
       const cam = cameraRef.current;
       cam.position.set(
         sph.radius * Math.sin(sph.phi) * Math.cos(sph.theta),
@@ -402,7 +448,7 @@ export default function GraphCanvas3D({ allNodes, allEdges, filters, selectedNod
         sph.radius * Math.sin(sph.phi) * Math.sin(sph.theta)
       );
       cam.lookAt(0, 0, 0);
-      setZoomLevel(500 / sph.radius);
+      setZoomLevel(780 / sph.radius);
     };
 
     mount.addEventListener("pointerdown", onPointerDown);
@@ -548,7 +594,7 @@ export default function GraphCanvas3D({ allNodes, allEdges, filters, selectedNod
   // Zoom controls
   const handleZoomIn = () => {
     const sph = cameraSphericalRef.current;
-    sph.radius = Math.max(50, sph.radius * 0.8);
+    sph.radius = Math.max(80, sph.radius * 0.8);
     if (cameraRef.current) {
       cameraRef.current.position.set(
         sph.radius * Math.sin(sph.phi) * Math.cos(sph.theta),
@@ -556,12 +602,12 @@ export default function GraphCanvas3D({ allNodes, allEdges, filters, selectedNod
         sph.radius * Math.sin(sph.phi) * Math.sin(sph.theta)
       );
       cameraRef.current.lookAt(0, 0, 0);
-      setZoomLevel(500 / sph.radius);
+      setZoomLevel(780 / sph.radius);
     }
   };
   const handleZoomOut = () => {
     const sph = cameraSphericalRef.current;
-    sph.radius = Math.min(2000, sph.radius * 1.25);
+    sph.radius = Math.min(3000, sph.radius * 1.25);
     if (cameraRef.current) {
       cameraRef.current.position.set(
         sph.radius * Math.sin(sph.phi) * Math.cos(sph.theta),
@@ -569,11 +615,11 @@ export default function GraphCanvas3D({ allNodes, allEdges, filters, selectedNod
         sph.radius * Math.sin(sph.phi) * Math.sin(sph.theta)
       );
       cameraRef.current.lookAt(0, 0, 0);
-      setZoomLevel(500 / sph.radius);
+      setZoomLevel(780 / sph.radius);
     }
   };
   const handleFitAll = () => {
-    cameraSphericalRef.current = { radius: 500, theta: 0, phi: Math.PI / 2.6 };
+    cameraSphericalRef.current = { radius: 780, theta: 0, phi: Math.PI / 2.6 };
     if (cameraRef.current) {
       const sph = cameraSphericalRef.current;
       cameraRef.current.position.set(
@@ -586,6 +632,7 @@ export default function GraphCanvas3D({ allNodes, allEdges, filters, selectedNod
     }
   };
   const handleCenter = handleFitAll;
+
 
   const modeLabel = focusNode ? `FOCUS: ${focusNode.label}` :
     (filters.domains.length > 0 || filters.evidence.length > 0 || filters.suppression.length > 0) ?
