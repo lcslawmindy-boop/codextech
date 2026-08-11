@@ -60,7 +60,7 @@ export default function LandingHero() {
         </div>
 
         {/* CTAs */}
-        <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
+        <div className="flex flex-col sm:flex-row gap-4 justify-center mb-10">
           <a
             href="#pricing"
             className="px-8 py-4 rounded-xl text-base font-bold text-zarp-bg transition-all hover:scale-105"
@@ -71,6 +71,26 @@ export default function LandingHero() {
           <button className="px-8 py-4 rounded-xl text-base font-bold text-zarp-text border border-zarp-border bg-zarp-card/40 backdrop-blur-sm hover:border-zarp-blue/50 transition-all flex items-center justify-center gap-2">
             <Play size={16} className="text-zarp-blue" /> Watch How It Works
           </button>
+        </div>
+
+        {/* Showcase video */}
+        <div className="relative max-w-4xl mx-auto mb-12 rounded-2xl overflow-hidden border border-zarp-gold/20 group" style={{ boxShadow: '0 0 60px hsl(var(--zarp-violet) / 0.15)' }}>
+          <div className="absolute inset-0 bg-gradient-to-t from-zarp-bg/60 via-transparent to-transparent z-10 pointer-events-none" />
+          <video
+            src="https://media.base44.com/videos/public/69ccefebfea78b23498c66a8/0bb7a01b0_aethonapexipvideo.MOV"
+            autoPlay
+            loop
+            muted
+            playsInline
+            className="w-full h-auto object-cover"
+            style={{ maxHeight: '420px' }}
+          />
+          <div className="absolute bottom-3 left-4 z-20 flex items-center gap-2">
+            <span className="w-2 h-2 rounded-full bg-zarp-gold animate-pulse" />
+            <span className="text-zarp-gold text-[10px] font-bold tracking-wider uppercase" style={{ fontFamily: 'JetBrains Mono, monospace' }}>
+              Aethon Apex IP — Platform Showcase
+            </span>
+          </div>
         </div>
 
         {/* Scroll indicator */}

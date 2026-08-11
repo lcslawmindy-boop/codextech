@@ -92,6 +92,8 @@ export default function GraphCanvas3D({ allNodes, allEdges, filters, selectedNod
   const [zoomLevel, setZoomLevel] = useState(1);
   const isDraggingRef = useRef(false);
   const lastPointerRef = useRef({ x: 0, y: 0 });
+  const autoRotateRef = useRef(true);
+  const pulseClockRef = useRef(0);
 
   // Filter nodes/edges
   const { visibleNodes, visibleEdges } = useMemo(() => {
@@ -249,6 +251,30 @@ export default function GraphCanvas3D({ allNodes, allEdges, filters, selectedNod
     let animId;
     const animate = () => {
       animId = requestAnimationFrame(animate);
+      pulseClockRef.current += 0.016;
+
+      // Cinematic auto-rotation — slow camera sweep, pauses while dragging
+      if (autoRotateRef.current && !isDraggingRef.current && cameraRef.current) {
+        const sph = cameraSphericalRef.current;
+        sph.theta += 0.0015;
+        const cam = cameraRef.current;
+        cam.position.set(
+          sph.radius * Math.sin(sph.phi) * Math.cos(sph.theta),
+          sph.radius * Math.cos(sph.phi),
+          sph.radius * Math.sin(sph.phi) * Math.sin(sph.theta)
+        );
+        cam.lookAt(0, 0, 0);
+      }
+
+      // Pulsing glow on nodes (cinematic breathing effect)
+      const pulse = 0.3 + Math.sin(pulseClockRef.current) * 0.15;
+      meshes.forEach((mesh, i) => {
+        if (mesh.userData.baseEmissive !== undefined) {
+          // Only pulse non-hovered nodes; hovered highlighting handles its own emissive
+          mesh.material.emissiveIntensity = pulse + (i % 7) * 0.02;
+        }
+      });
+
       // Update label positions
       if (labelsDiv.childNodes.length === visibleNodes.length) {
         visibleNodes.forEach((n, i) => {
@@ -312,6 +338,7 @@ export default function GraphCanvas3D({ allNodes, allEdges, filters, selectedNod
 
     const onPointerDown = (e) => {
       isDraggingRef.current = true;
+      autoRotateRef.current = false;
       lastPointerRef.current = { x: e.clientX, y: e.clientY };
     };
     const onPointerMove = (e) => {
@@ -336,7 +363,11 @@ export default function GraphCanvas3D({ allNodes, allEdges, filters, selectedNod
         lastPointerRef.current = { x: e.clientX, y: e.clientY };
       }
     };
-    const onPointerUp = () => { isDraggingRef.current = false; };
+    const onPointerUp = () => {
+      isDraggingRef.current = false;
+      // Resume auto-rotation after 3 seconds of inactivity
+      setTimeout(() => { autoRotateRef.current = true; }, 3000);
+    };
     const onWheel = (e) => {
       e.preventDefault();
       if (!cameraRef.current) return;
@@ -551,10 +582,14 @@ export default function GraphCanvas3D({ allNodes, allEdges, filters, selectedNod
       )}
 
       {/* Mode indicator */}
-      <div className="absolute top-3 left-3 z-10">
+      <div className="absolute top-3 left-3 z-10 flex items-center gap-2">
         <div className="px-3 py-1.5 rounded-lg bg-[#0D1117] border border-[#21262D] text-[10px] font-mono flex items-center gap-1.5">
           <Network size={10} className="text-[#C9A84C]" />
           <span className="text-[#C9A84C]">{modeLabel}</span>
+        </div>
+        <div className="px-2 py-1.5 rounded-lg bg-[#0D1117] border border-[#C9A84C]/30 text-[9px] font-mono flex items-center gap-1">
+          <span className="w-1.5 h-1.5 rounded-full bg-[#C9A84C] animate-pulse" />
+          <span className="text-[#C9A84C]">CINEMATIC</span>
         </div>
       </div>
 
