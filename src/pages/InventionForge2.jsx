@@ -10,6 +10,8 @@ import { generatePrdData } from "@/lib/prdGenerator";
 import PrdSection from "@/components/PrdSection";
 import { generateBomData } from "@/lib/bomGenerator";
 import BomSection from "@/components/BomSection";
+import { generateValuationData } from "@/lib/valuationGenerator";
+import ValuationSection from "@/components/ValuationSection";
 
 const inventions = businessItems.filter(i => i.category === "Invention");
 
@@ -175,7 +177,8 @@ Generate a completely new invention concept that synthesizes these technologies.
       const pdrData = generatePdrData(selected, res, mode);
       const prdData = generatePrdData(selected, res, mode);
       const bomData = generateBomData(selected, res, mode);
-      setResult({ ...res, pdrData, prdData, bomData });
+      const valuationData = generateValuationData(selected, res, mode);
+      setResult({ ...res, pdrData, prdData, bomData, valuationData });
     } catch (e) {
       setError("Failed to generate hybrid invention. Please try again.");
       console.error(e);
@@ -494,6 +497,98 @@ Generate a completely new invention concept that synthesizes these technologies.
         });
       }
 
+      // ── Section 15: IP Valuation Framework ──
+      if (result.valuationData) {
+        const val = result.valuationData;
+        addPage();
+
+        // Valuation permanent label
+        doc.setFillColor(45, 35, 5);
+        doc.rect(margin - 3, y - 3, cW + 6, 22, "F");
+        doc.setFontSize(8);
+        doc.setFont("helvetica", "bold");
+        doc.setTextColor(180, 130, 20);
+        doc.text("IP VALUATION FRAMEWORK — STRATEGIC PLANNING DOCUMENT", margin, y + 1);
+        doc.setFont("helvetica", "normal");
+        doc.setFontSize(7);
+        doc.setTextColor(150, 110, 15);
+        doc.text("For strategic planning and investor communication purposes only.", margin, y + 6);
+        doc.text("Does NOT constitute a certified IP appraisal, fairness opinion, or securities valuation.", margin, y + 11);
+        doc.text("For binding valuations, engage a licensed IP appraisal firm.", margin, y + 16);
+        y += 24;
+
+        // 5.1 Market Sizing
+        section("15.1 MARKET SIZING (TAM / SAM / SOM)");
+        body("TOTAL ADDRESSABLE MARKET (TAM):");
+        body(`  ${val.marketSizing.tam.description}`);
+        body(`  Figure: ${val.marketSizing.tam.figure}  |  Source: ${val.marketSizing.tam.source}`);
+        body("");
+        body("SERVICEABLE ADDRESSABLE MARKET (SAM):");
+        body(`  ${val.marketSizing.sam.description}`);
+        body(`  Figure: ${val.marketSizing.sam.figure}`);
+        body(`  Rationale: ${val.marketSizing.sam.rationale}`);
+        body("");
+        body("SERVICEABLE OBTAINABLE MARKET (SOM):");
+        body(`  ${val.marketSizing.som.description}`);
+        body(`  Figure: ${val.marketSizing.som.figure}`);
+        body(`  Assumptions: ${val.marketSizing.som.assumptions}`);
+
+        // 5.2 IP Asset Inventory & Strategic Value
+        section("15.2 IP ASSET INVENTORY & STRATEGIC VALUE");
+        body("| Asset | Type | Protection | Importance | IP Life |");
+        val.ipAssets.forEach(a => {
+          body(`  | ${a.asset} | ${a.type} | ${a.protectionStatus} | ${a.strategicImportance} | ${a.ipLife} |`);
+        });
+        body("");
+        body("STRATEGIC VALUE MATRIX (scored 1-10):");
+        val.strategicValueMatrix.forEach(v => {
+          body(`  ${v.driver}: ${v.score}/10 — ${v.rationale}`);
+        });
+        body(`  OVERALL IP STRATEGIC SCORE: ${val.overallScore} / 10`);
+
+        // 5.3 Comparable Transactions
+        section("15.3 COMPARABLE TRANSACTIONS");
+        body("| Transaction | Year | Deal Type | Modality | Terms | Relevance |");
+        val.comparableTransactions.forEach(t => {
+          body(`  | ${t.transaction} | ${t.year} | ${t.dealType} | ${t.modality} | ${t.terms} | ${t.relevance} |`);
+        });
+
+        // 5.4 Licensing Revenue Model
+        section("15.4 LICENSING REVENUE MODEL (3 STRUCTURES)");
+        body("STRUCTURE A — ROYALTY ON NET REVENUE:");
+        body(`  Royalty rate: ${val.licensingModel.structureA.royaltyRate}%`);
+        body(`  Licensee Year 3 revenue projection: $${val.licensingModel.structureA.licenseeYear3Revenue}M`);
+        body(`  Annual royalty income: $${val.licensingModel.structureA.annualRoyalty}M`);
+        body(`  10-year royalty stream (discounted): $${val.licensingModel.structureA.tenYearDiscounted}M`);
+        body("");
+        body("STRUCTURE B — UPFRONT FEE + ROYALTY:");
+        body(`  Upfront fee: $${val.licensingModel.structureB.upfrontFee}M`);
+        body(`  Ongoing royalty: ${val.licensingModel.structureB.royaltyRate}%`);
+        body(`  10-year total projected value: $${val.licensingModel.structureB.tenYearTotal}M`);
+        body("");
+        body("STRUCTURE C — EXCLUSIVE LUMP SUM:");
+        body(`  Lump sum: $${val.licensingModel.structureC.lumpSum}M`);
+        body(`  IP remaining life: ${val.licensingModel.structureC.ipRemainingLife} years`);
+        body(`  Implied annual value: $${val.licensingModel.structureC.impliedAnnual}M`);
+
+        // 5.5 Three Valuation Methods
+        section("15.5 THREE VALUATION METHODS REFERENCE");
+        body("COST APPROACH:");
+        body(`  ${val.valuationMethods.cost.description}`);
+        body(`  Development hours: ${val.valuationMethods.cost.devHours} x Hourly rate: $${val.valuationMethods.cost.hourlyRate}`);
+        body(`  Replacement cost estimate: $${val.valuationMethods.cost.replacementCost}M`);
+        body("");
+        body("MARKET APPROACH:");
+        body(`  ${val.valuationMethods.market.description}`);
+        body(`  Estimated range: ${val.valuationMethods.market.range}`);
+        body("");
+        body("INCOME APPROACH:");
+        body(`  ${val.valuationMethods.income.description}`);
+        body(`  Estimated range: ${val.valuationMethods.income.range}`);
+        body("");
+        body(val.footer);
+      }
+
       // Footer
       const total = doc.getNumberOfPages();
       for (let p = 1; p <= total; p++) {
@@ -773,6 +868,9 @@ Generate a completely new invention concept that synthesizes these technologies.
 
               {/* Section 13 — Conceptual BOM (auto-generated) */}
               {result.bomData && <BomSection bomData={result.bomData} />}
+
+              {/* Section 15 — IP Valuation Framework (auto-generated) */}
+              {result.valuationData && <ValuationSection valuationData={result.valuationData} />}
 
               {/* Deliverable Notice */}
               <div className="bg-gradient-to-br from-yellow-950/30 to-gray-900 border border-yellow-800/40 rounded-2xl p-6 text-center">
