@@ -212,6 +212,8 @@ import PortfolioStrategy from './pages/PortfolioStrategy';
 import ResearchGraphExplorer from './pages/ResearchGraphExplorer';
 import ZarpLandingNew from './pages/ZarpLandingNew';
 import ZarpDashboard from './pages/ZarpDashboard';
+import LicensingHub from './pages/LicensingHub';
+import ResearchAcademy from './pages/ResearchAcademy';
 
 
 const AuthenticatedApp = () => {
@@ -420,6 +422,10 @@ const AuthenticatedApp = () => {
           <Route path="/portfolio-strategy" element={<PortfolioStrategy />} />
           <Route path="/research-explorer" element={<ResearchGraphExplorer />} />
           </Route>
+
+          {/* ZARP premium feature pages — all authenticated users */}
+          <Route path="/licensing-hub" element={<LicensingHub />} />
+          <Route path="/research-academy" element={<ResearchAcademy />} />
 
           {/* Scalar Venture Vault Routes */}
           <Route path="/venture" element={<ScalarVentureHome />} />

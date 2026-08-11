@@ -14,8 +14,8 @@ const NAV_SECTIONS = [
   { icon: <Download size={16} />, label: "Export Center", path: "/download-center" },
   { icon: <Rss size={16} />, label: "Innovation Feed", path: "/opportunity-monitor" },
   { icon: <FolderKanban size={16} />, label: "My Collections", path: "/my-research" },
-  { icon: <Briefcase size={16} />, label: "Licensing Hub", path: "/licensing" },
-  { icon: <GraduationCap size={16} />, label: "Research Academy", path: "/courses" },
+  { icon: <Briefcase size={16} />, label: "Licensing Hub", path: "/licensing-hub" },
+  { icon: <GraduationCap size={16} />, label: "Research Academy", path: "/research-academy" },
   { icon: <Settings size={16} />, label: "Settings", path: "/account" },
 ];
 
