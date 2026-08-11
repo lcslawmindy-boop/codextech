@@ -421,10 +421,10 @@ const AuthenticatedApp = () => {
           <Route path="/light-timeline-devices" element={<LightTimelineDevices />} />
           <Route path="/investor-master-package" element={<InvestorMasterPackage />} />
           <Route path="/portfolio-strategy" element={<PortfolioStrategy />} />
-          <Route path="/research-explorer" element={<ResearchGraphExplorer />} />
           </Route>
 
           {/* ZARP premium feature pages — all authenticated users */}
+          <Route path="/research-explorer" element={<ResearchGraphExplorer />} />
           <Route path="/licensing-hub" element={<LicensingHub />} />
           <Route path="/research-academy" element={<ResearchAcademy />} />
           <Route path="/export-center" element={<ExportCenter />} />

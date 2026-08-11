@@ -1,292 +1,312 @@
-import { useState, useMemo } from "react";
-import { Link } from "react-router-dom";
-import {
-  ArrowLeft, Search, Filter, Database, Layers, Clock, Shield,
-  ChevronDown, X, AlertTriangle, FileText, Cpu
-} from "lucide-react";
-import {
-  RESEARCH_NODES, CONNECTION_EDGES, DEVICE_BUILD_PLANS, SUPPRESSION_TIMELINE,
-  FILTER_DIMENSIONS, DOMAIN_COLORS, SUPPRESSION_COLORS, CONNECTION_TYPES,
-  LEGAL_NOTICE,
-} from "@/lib/researchGraphExpansion";
-import ResearchNodeCard from "@/components/ResearchNodeCard";
-import DeviceBuildPlanCard from "@/components/DeviceBuildPlanCard";
-import SuppressionTimelineView from "@/components/SuppressionTimelineView";
+import { useState, useEffect, useMemo } from "react";
+import { Search, FolderKanban, Settings, HelpCircle, Network, List, LayoutGrid, X, ChevronLeft, ChevronRight, AlertTriangle } from "lucide-react";
+import { generateGraph, DOMAINS } from "@/lib/researchGraphData";
+import GraphCanvas from "@/components/research-graph/GraphCanvas";
+import FilterPanel from "@/components/research-graph/FilterPanel";
+import NodeDetailDrawer from "@/components/research-graph/NodeDetailDrawer";
+import NodeListView from "@/components/research-graph/NodeListView";
+import NodeCardView from "@/components/research-graph/NodeCardView";
+import CollectionsPanel from "@/components/research-graph/CollectionsPanel";
+import QuickGuideModal from "@/components/research-graph/QuickGuideModal";
+
+const GRAPH_MODES = [
+  { id: "full", label: "Full Graph", icon: Network },
+  { id: "domain-clusters", label: "Domain Clusters", icon: Network },
+  { id: "timeline", label: "Timeline", icon: Network },
+  { id: "evidence-tier", label: "Evidence Tier", icon: Network },
+  { id: "connection-strength", label: "Connection Strength", icon: Network },
+  { id: "device-builder", label: "Device Builder", icon: Network },
+];
 
 export default function ResearchGraphExplorer() {
-  const [activeView, setActiveView] = useState("nodes");
+  const [graphData, setGraphData] = useState({ nodes: [], edges: [] });
+  const [viewMode, setViewMode] = useState("graph");
+  const [filters, setFilters] = useState({ domains: [], evidence: [], suppression: [], targetSystems: [], minConnections: 0, eraMin: null, eraMax: null, freqMin: null, freqMax: null, population: [], deviceIntegration: [] });
+  const [selectedNode, setSelectedNode] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
-  const [showFilters, setShowFilters] = useState(false);
-  const [filters, setFilters] = useState({
-    technologyDomain: [],
-    suppressionLevel: [],
-    evidenceQuality: [],
-    targetSystem: [],
-    deviceIntegration: [],
-    ipOpportunity: [],
-    population: [],
-  });
+  const [showCollections, setShowCollections] = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
+  const [showQuickGuide, setShowQuickGuide] = useState(false);
+  const [showFilters, setShowFilters] = useState(true);
+  const [showDrawer, setShowDrawer] = useState(false);
+  const [graphMode, setGraphMode] = useState("full");
+  const [focusNode, setFocusNode] = useState(null);
+  const [collections, setCollections] = useState([]);
+  const [settings, setSettings] = useState({ showLabels: false, edgeOpacity: 0.3, physicsStrength: -120, showLegend: true, showMiniMap: true, backgroundGrid: false });
+  const [isMobile, setIsMobile] = useState(false);
 
-  // Filter nodes
-  const filteredNodes = useMemo(() => {
-    return RESEARCH_NODES.filter(node => {
-      // Search
-      if (searchQuery) {
-        const q = searchQuery.toLowerCase();
-        const searchable = [
-          node.title, node.description, node.domain,
-          ...(node.researchers || []),
-          ...(node.tags || []),
-        ].join(" ").toLowerCase();
-        if (!searchable.includes(q)) return false;
+  useEffect(() => {
+    const data = generateGraph();
+    setGraphData(data);
+    // Load collections from localStorage
+    try {
+      const saved = localStorage.getItem("zarp_collections");
+      if (saved) setCollections(JSON.parse(saved));
+    } catch {}
+
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem("zarp_collections", JSON.stringify(collections));
+  }, [collections]);
+
+  // Keyboard shortcuts
+  useEffect(() => {
+    const handler = (e) => {
+      if (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA") return;
+      if (e.key === "Escape") { setSelectedNode(null); setShowDrawer(false); setFocusNode(null); }
+      if (e.key === "f" || e.key === "F") {/* fit all - handled in canvas */}
+      if (e.key === "l" || e.key === "L") setSettings(s => ({ ...s, showLabels: !s.showLabels }));
+    };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, []);
+
+  const handleNodeClick = (node, isDoubleClick) => {
+    if (!node) { setSelectedNode(null); setShowDrawer(false); return; }
+    setSelectedNode(node);
+    setShowDrawer(true);
+    if (isDoubleClick) setFocusNode(node);
+  };
+
+  const handleAddToCollection = (node, colId) => {
+    if (!colId) {
+      // Create a default collection if none specified
+      const newCol = { id: `col-${Date.now()}`, name: `Collection ${collections.length + 1}`, nodeIds: [node.numericId], created: new Date().toISOString() };
+      setCollections(prev => [...prev, newCol]);
+      return;
+    }
+    setCollections(prev => prev.map(c => {
+      if (c.id === colId && !c.nodeIds.includes(node.numericId)) {
+        return { ...c, nodeIds: [...c.nodeIds, node.numericId] };
       }
-      // Filters
-      if (filters.technologyDomain.length > 0 && !filters.technologyDomain.includes(node.domain)) return false;
-      if (filters.suppressionLevel.length > 0 && !filters.suppressionLevel.includes(node.suppressionLevel)) return false;
-      if (filters.evidenceQuality.length > 0 && !filters.evidenceQuality.includes(node.evidenceQuality)) return false;
-      if (filters.targetSystem.length > 0 && !filters.targetSystem.includes(node.targetSystem)) return false;
-      if (filters.deviceIntegration.length > 0 && !filters.deviceIntegration.includes(node.deviceIntegration)) return false;
-      if (filters.ipOpportunity.length > 0 && !filters.ipOpportunity.includes(node.ipOpportunity)) return false;
-      if (filters.population.length > 0 && !filters.population.some(p => node.population?.includes(p))) return false;
-      return true;
-    });
-  }, [searchQuery, filters]);
-
-  const toggleFilter = (dimension, value) => {
-    setFilters(prev => ({
-      ...prev,
-      [dimension]: prev[dimension].includes(value)
-        ? prev[dimension].filter(v => v !== value)
-        : [...prev[dimension], value],
+      return c;
     }));
   };
 
-  const clearFilters = () => {
-    setFilters({
-      technologyDomain: [], suppressionLevel: [], evidenceQuality: [],
-      targetSystem: [], deviceIntegration: [], ipOpportunity: [], population: [],
-    });
+  const handleHighlightNodes = (nodeIds) => {
+    setShowCollections(false);
+    // Could set a highlight state - for now just close the panel
   };
 
-  const activeFilterCount = Object.values(filters).flat().length;
+  const nodeCounts = useMemo(() => {
+    let visible = graphData.nodes.length;
+    if (filters.domains.length > 0) visible = graphData.nodes.filter(n => filters.domains.includes(n.domainId)).length;
+    return { visible, total: graphData.nodes.length };
+  }, [graphData.nodes, filters]);
 
-  // Connection stats
-  const connectionStats = useMemo(() => {
-    const typeCount = {};
-    CONNECTION_EDGES.forEach(edge => {
-      typeCount[edge.type] = (typeCount[edge.type] || 0) + 1;
+  const filteredNodes = useMemo(() => {
+    if (!graphData.nodes.length) return [];
+    return graphData.nodes.filter(n => {
+      if (filters.domains.length > 0 && !filters.domains.includes(n.domainId)) return false;
+      if (filters.evidence.length > 0 && !filters.evidence.includes(n.evidence)) return false;
+      if (filters.suppression.length > 0 && !filters.suppression.includes(n.suppressionId)) return false;
+      if (filters.targetSystems.length > 0 && !n.targetSystems.some(t => filters.targetSystems.includes(t))) return false;
+      if (filters.minConnections > 0 && n.connectionCount < filters.minConnections) return false;
+      if (filters.eraMin && n.year < filters.eraMin) return false;
+      if (filters.eraMax && n.year > filters.eraMax) return false;
+      if (searchQuery) {
+        const q = searchQuery.toLowerCase();
+        if (!n.label.toLowerCase().includes(q) && !n.researcher.toLowerCase().includes(q) && !n.tags.some(t => t.toLowerCase().includes(q))) return false;
+      }
+      return true;
     });
-    return typeCount;
-  }, []);
+  }, [graphData.nodes, filters, searchQuery]);
+
+  const filteredEdgeCount = useMemo(() => {
+    if (!graphData.edges.length) return 0;
+    const visIds = new Set(filteredNodes.map(n => n.numericId));
+    return graphData.edges.filter(e => visIds.has(e.source) && visIds.has(e.target)).length;
+  }, [graphData.edges, filteredNodes]);
+
+  // Mobile: force list view
+  const effectiveViewMode = isMobile ? "list" : viewMode;
 
   return (
-    <div className="min-h-screen bg-gray-950 text-white">
+    <div className="h-screen flex flex-col bg-[#030712] overflow-hidden">
       {/* Header */}
-      <div className="border-b border-gray-800 bg-gray-900/80 px-6 py-4 sticky top-0 z-40">
-        <div className="max-w-7xl mx-auto flex items-center justify-between gap-4 flex-wrap">
-          <div className="flex items-center gap-3">
-            <Link to="/" className="flex items-center gap-2 text-gray-400 hover:text-white text-sm transition-colors">
-              <ArrowLeft size={14} /> Graph
-            </Link>
-            <div className="w-px h-5 bg-gray-700" />
-            <Database size={16} className="text-cyan-400" />
+      <header className="flex-shrink-0 bg-[#0D1117] border-b border-[#21262D] px-4 py-2.5 z-20">
+        <div className="flex items-center justify-between gap-4">
+          {/* Left: Title */}
+          <div className="flex items-center gap-3 flex-shrink-0">
             <div>
-              <h1 className="text-white font-black text-lg">ZARP Research Intelligence Engine</h1>
-              <p className="text-gray-500 text-xs">{RESEARCH_NODES.length} research nodes · {CONNECTION_EDGES.length} connections · {DEVICE_BUILD_PLANS.length} device build plans</p>
+              <h1 className="text-[#C9A84C] font-black text-sm tracking-wider leading-none" style={{ fontFamily: "Orbitron, sans-serif" }}>ZARP RESEARCH GRAPH</h1>
+              <p className="text-[#8B9AB0] text-[9px] mt-0.5">{graphData.nodes.length}+ nodes · {graphData.edges.length}+ connections · {DOMAINS.length} domains</p>
             </div>
           </div>
-          <div className="flex gap-2">
-            <Link to="/portfolio-strategy" className="px-3 py-2 rounded-lg bg-gray-800 border border-gray-700 text-gray-300 text-xs font-bold hover:bg-gray-700 transition-colors">
-              Strategy →
-            </Link>
-            <Link to="/medbed-showcase" className="px-3 py-2 rounded-lg bg-cyan-900/30 border border-cyan-800 text-cyan-300 text-xs font-bold hover:bg-cyan-900/50 transition-colors">
-              MedBed →
-            </Link>
-          </div>
-        </div>
-      </div>
 
-      <div className="max-w-7xl mx-auto px-6 py-6 space-y-6">
-        {/* Legal Notice */}
-        <div className="rounded-xl bg-amber-950/20 border border-amber-800/40 px-4 py-3">
-          <div className="flex items-start gap-2">
-            <AlertTriangle size={14} className="text-amber-400 flex-shrink-0 mt-0.5" />
-            <p className="text-amber-200/70 text-[11px] leading-relaxed">{LEGAL_NOTICE}</p>
+          {/* Center: Search */}
+          <div className="flex-1 max-w-md relative">
+            <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#8B9AB0]" />
+            <input
+              value={searchQuery}
+              onChange={e => setSearchQuery(e.target.value)}
+              placeholder="Search nodes, researchers, mechanisms, frequencies..."
+              className="w-full pl-9 pr-3 py-2 rounded-lg bg-[#161B22] border border-[#21262D] text-[#F0F6FF] text-xs placeholder-[#8B9AB0] outline-none focus:border-[#C9A84C]/50 focus:shadow-md focus:shadow-[#C9A84C]/10 transition-all"
+            />
+            {searchQuery && (
+              <button onClick={() => setSearchQuery("")} className="absolute right-2 top-1/2 -translate-y-1/2 text-[#8B9AB0] hover:text-[#F0F6FF]"><X size={14} /></button>
+            )}
           </div>
-        </div>
 
-        {/* View tabs */}
-        <div className="flex gap-2 flex-wrap">
-          {[
-            { id: "nodes", label: "Research Nodes", icon: <Database size={14} />, count: RESEARCH_NODES.length },
-            { id: "connections", label: "Connection Edges", icon: <Layers size={14} />, count: CONNECTION_EDGES.length },
-            { id: "devices", label: "Device Build Plans", icon: <Cpu size={14} />, count: DEVICE_BUILD_PLANS.length },
-            { id: "timeline", label: "Suppression Timeline", icon: <Clock size={14} />, count: SUPPRESSION_TIMELINE.length },
-          ].map(tab => (
-            <button
-              key={tab.id}
-              onClick={() => setActiveView(tab.id)}
-              className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-bold transition-all border ${
-                activeView === tab.id ? "bg-white/10 border-white/20 text-white" : "border-gray-700 text-gray-400 hover:text-white"
-              }`}
-            >
-              {tab.icon}{tab.label}
-              <span className="px-1.5 py-0.5 rounded text-[10px] bg-gray-800 text-gray-400">{tab.count}</span>
+          {/* Right: Buttons */}
+          <div className="flex items-center gap-1.5 flex-shrink-0">
+            <button onClick={() => setShowCollections(true)} className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-[#161B22] border border-[#21262D] text-[#8B9AB0] text-[10px] font-bold hover:text-[#C9A84C] hover:border-[#C9A84C]/50 transition-colors">
+              <FolderKanban size={12} /> <span className="hidden lg:inline">Collections</span>
             </button>
-          ))}
+            <button onClick={() => setShowSettings(!showSettings)} className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-[#161B22] border border-[#21262D] text-[#8B9AB0] text-[10px] font-bold hover:text-[#C9A84C] hover:border-[#C9A84C]/50 transition-colors">
+              <Settings size={12} /> <span className="hidden lg:inline">Settings</span>
+            </button>
+            <button onClick={() => setShowQuickGuide(true)} className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-[#161B22] border border-[#21262D] text-[#8B9AB0] text-[10px] font-bold hover:text-[#C9A84C] hover:border-[#C9A84C]/50 transition-colors">
+              <HelpCircle size={12} /> <span className="hidden lg:inline">Help</span>
+            </button>
+            {/* View toggle */}
+            <div className="flex items-center bg-[#161B22] border border-[#21262D] rounded-lg p-0.5">
+              <button onClick={() => setViewMode("graph")} disabled={isMobile} className={`p-1.5 rounded transition-colors ${effectiveViewMode === "graph" ? "bg-[#C9A84C] text-[#030712]" : "text-[#8B9AB0] hover:text-[#F0F6FF]"}`} title="Graph View"><Network size={12} /></button>
+              <button onClick={() => setViewMode("list")} className={`p-1.5 rounded transition-colors ${effectiveViewMode === "list" ? "bg-[#C9A84C] text-[#030712]" : "text-[#8B9AB0] hover:text-[#F0F6FF]"}`} title="List View"><List size={12} /></button>
+              <button onClick={() => setViewMode("cards")} className={`p-1.5 rounded transition-colors ${effectiveViewMode === "cards" ? "bg-[#C9A84C] text-[#030712]" : "text-[#8B9AB0] hover:text-[#F0F6FF]"}`} title="Card View"><LayoutGrid size={12} /></button>
+            </div>
+          </div>
         </div>
 
-        {/* ── NODES VIEW ── */}
-        {activeView === "nodes" && (
-          <div className="space-y-4">
-            {/* Search + Filter bar */}
-            <div className="flex gap-2 flex-wrap">
-              <div className="relative flex-1 min-w-[200px]">
-                <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-600" />
-                <input
-                  type="text"
-                  value={searchQuery}
-                  onChange={e => setSearchQuery(e.target.value)}
-                  placeholder="Search by name, researcher, technology, frequency, or tag..."
-                  className="w-full pl-10 pr-4 py-2.5 rounded-lg bg-gray-900 border border-gray-700 text-white text-sm placeholder-gray-600 focus:border-cyan-500 focus:outline-none"
-                />
-              </div>
-              <button
-                onClick={() => setShowFilters(!showFilters)}
-                className={`flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-bold transition-all border ${
-                  showFilters || activeFilterCount > 0 ? "bg-cyan-900/30 border-cyan-700 text-cyan-300" : "border-gray-700 text-gray-400 hover:text-white"
-                }`}
-              >
-                <Filter size={14} /> Filters
-                {activeFilterCount > 0 && <span className="px-1.5 py-0.5 rounded text-[10px] bg-cyan-700 text-white">{activeFilterCount}</span>}
+        {/* Graph modes */}
+        {effectiveViewMode === "graph" && !isMobile && (
+          <div className="flex items-center gap-1 mt-2 overflow-x-auto">
+            {GRAPH_MODES.map(m => (
+              <button key={m.id} onClick={() => setGraphMode(m.id)} className={`px-2.5 py-1 rounded-full text-[10px] font-bold whitespace-nowrap transition-colors ${graphMode === m.id ? "bg-[#C9A84C] text-[#030712]" : "bg-[#161B22] text-[#8B9AB0] hover:text-[#F0F6FF]"}`}>
+                {m.label}
               </button>
-              {activeFilterCount > 0 && (
-                <button onClick={clearFilters} className="flex items-center gap-1 px-3 py-2.5 rounded-lg text-sm text-gray-500 hover:text-white">
-                  <X size={14} /> Clear
-                </button>
-              )}
-            </div>
-
-            {/* Filter panel */}
-            {showFilters && (
-              <div className="bg-gray-900 border border-gray-800 rounded-xl p-4 space-y-4">
-                {Object.entries(FILTER_DIMENSIONS).map(([dim, values]) => (
-                  <div key={dim}>
-                    <p className="text-gray-500 text-xs font-bold uppercase tracking-wider mb-2">{dim.replace(/([A-Z])/g, " $1").trim()}</p>
-                    <div className="flex flex-wrap gap-1.5">
-                      {values.map(value => {
-                        const active = filters[dim].includes(value);
-                        const colorMap = dim === "technologyDomain" ? DOMAIN_COLORS : dim === "suppressionLevel" ? SUPPRESSION_COLORS : {};
-                        const color = colorMap[value] || "#6b7280";
-                        return (
-                          <button
-                            key={value}
-                            onClick={() => toggleFilter(dim, value)}
-                            className={`px-2.5 py-1 rounded-lg text-xs font-semibold transition-all border ${
-                              active ? "text-white" : "text-gray-400 border-gray-700 hover:border-gray-600"
-                            }`}
-                            style={active ? { backgroundColor: color + "30", borderColor: color, color } : {}}
-                          >
-                            {value}
-                          </button>
-                        );
-                      })}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-
-            {/* Results count */}
-            <p className="text-gray-500 text-xs">
-              Showing {filteredNodes.length} of {RESEARCH_NODES.length} nodes
-            </p>
-
-            {/* Node grid */}
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-3">
-              {filteredNodes.map(node => <ResearchNodeCard key={node.id} node={node} />)}
-            </div>
-
-            {filteredNodes.length === 0 && (
-              <div className="text-center py-12">
-                <p className="text-gray-500 text-sm">No nodes match your search. Try clearing filters.</p>
-              </div>
+            ))}
+            {focusNode && (
+              <button onClick={() => setFocusNode(null)} className="px-2.5 py-1 rounded-full bg-[#C9A84C]/20 text-[#C9A84C] text-[10px] font-bold border border-[#C9A84C]/40 hover:bg-[#C9A84C]/30 transition-colors ml-auto">
+                ← Exit Focus Mode
+              </button>
             )}
           </div>
         )}
+      </header>
 
-        {/* ── CONNECTIONS VIEW ── */}
-        {activeView === "connections" && (
-          <div className="space-y-4">
-            <div className="flex items-center gap-2 mb-2">
-              <Layers size={18} className="text-purple-400" />
-              <h3 className="text-white font-bold text-lg">Connection Edges</h3>
+      {/* Settings drawer */}
+      {showSettings && (
+        <div className="absolute right-0 top-0 bottom-0 w-72 bg-[#0D1117] border-l border-[#21262D] z-30 p-4 overflow-y-auto">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-[#C9A84C] text-xs font-black tracking-wider" style={{ fontFamily: "Orbitron, sans-serif" }}>GRAPH SETTINGS</h3>
+            <button onClick={() => setShowSettings(false)} className="text-[#8B9AB0] hover:text-[#F0F6FF]"><X size={16} /></button>
+          </div>
+          <div className="space-y-3">
+            <Toggle label="Show node labels" value={settings.showLabels} onChange={v => setSettings(s => ({ ...s, showLabels: v }))} />
+            <Toggle label="Show legend" value={settings.showLegend} onChange={v => setSettings(s => ({ ...s, showLegend: v }))} />
+            <Toggle label="Background grid" value={settings.backgroundGrid} onChange={v => setSettings(s => ({ ...s, backgroundGrid: v }))} />
+            <div>
+              <label className="text-[#8B9AB0] text-[10px] font-bold uppercase tracking-wider">Edge Opacity: {Math.round(settings.edgeOpacity * 100)}%</label>
+              <input type="range" min="0.1" max="1" step="0.1" value={settings.edgeOpacity} onChange={e => setSettings(s => ({ ...s, edgeOpacity: parseFloat(e.target.value) }))} className="w-full accent-[#C9A84C] mt-1" />
             </div>
-            <p className="text-gray-500 text-sm leading-relaxed">
-              {CONNECTION_EDGES.length} connection edges between research nodes. Each edge represents a relationship
-              between two technologies — frequency overlap, shared physics, engineering synergy, historical lineage, or suppression patterns.
-            </p>
+            <div>
+              <label className="text-[#8B9AB0] text-[10px] font-bold uppercase tracking-wider">Physics Strength: {settings.physicsStrength}</label>
+              <input type="range" min="-300" max="-30" step="10" value={settings.physicsStrength} onChange={e => setSettings(s => ({ ...s, physicsStrength: parseInt(e.target.value) }))} className="w-full accent-[#C9A84C] mt-1" />
+            </div>
+          </div>
+        </div>
+      )}
 
-            {/* Connection type legend */}
-            <div className="flex flex-wrap gap-2">
-              {Object.entries(CONNECTION_TYPES).map(([type, info]) => (
-                <div key={type} className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-gray-900 border border-gray-800">
-                  <div className="w-2 h-2 rounded-full" style={{ backgroundColor: info.color }} />
-                  <span className="text-xs text-gray-400">{info.label}</span>
-                  <span className="text-[10px] text-gray-600">({connectionStats[type] || 0})</span>
-                </div>
-              ))}
-            </div>
+      {/* Main layout */}
+      <div className="flex-1 flex overflow-hidden">
+        {/* Filter panel */}
+        {showFilters && effectiveViewMode !== "graph" || (showFilters && effectiveViewMode === "graph") ? (
+          <div className={`${showFilters ? "block" : "hidden"}`}>
+            <FilterPanel filters={filters} setFilters={setFilters} nodeCounts={nodeCounts} edgeCount={filteredEdgeCount} />
+          </div>
+        ) : null}
+        {!showFilters && (
+          <button onClick={() => setShowFilters(true)} className="w-8 bg-[#0D1117] border-r border-[#21262D] flex items-center justify-center text-[#8B9AB0] hover:text-[#C9A84C] transition-colors flex-shrink-0">
+            <ChevronRight size={16} />
+          </button>
+        )}
+        {showFilters && effectiveViewMode === "graph" && (
+          <button onClick={() => setShowFilters(false)} className="w-6 bg-[#0D1117] border-r border-[#21262D] flex items-center justify-center text-[#8B9AB0] hover:text-[#C9A84C] transition-colors flex-shrink-0">
+            <ChevronLeft size={14} />
+          </button>
+        )}
 
-            {/* Edge list */}
-            <div className="space-y-2">
-              {CONNECTION_EDGES.map((edge, i) => {
-                const typeInfo = CONNECTION_TYPES[edge.type];
-                const sourceNode = RESEARCH_NODES.find(n => n.id === edge.source);
-                const targetNode = RESEARCH_NODES.find(n => n.id === edge.target);
-                if (!sourceNode || !targetNode) return null;
-                return (
-                  <div key={i} className="bg-gray-900 border border-gray-800 rounded-lg p-3">
-                    <div className="flex items-center gap-2 mb-1.5 flex-wrap">
-                      <span className="px-2 py-0.5 rounded text-[9px] font-bold" style={{ backgroundColor: typeInfo.color + "20", color: typeInfo.color }}>{typeInfo.label}</span>
-                      <span className="text-gray-600 text-[10px]">Strength: {edge.strength}/10</span>
-                      {edge.deviceIntegration === "YES" && <span className="px-1.5 py-0.5 rounded text-[9px] font-bold bg-green-900/40 text-green-300">Device Integration</span>}
-                    </div>
-                    <div className="flex items-center gap-2 text-xs">
-                      <span className="text-gray-300 font-semibold flex-1">{sourceNode.title}</span>
-                      <span style={{ color: typeInfo.color }}>→</span>
-                      <span className="text-gray-300 font-semibold flex-1 text-right">{targetNode.title}</span>
-                    </div>
-                    <p className="text-gray-500 text-[11px] mt-1.5 leading-relaxed">{edge.mechanism}</p>
-                  </div>
-                );
-              })}
-            </div>
+        {/* Center content */}
+        {effectiveViewMode === "graph" && !isMobile ? (
+          <div className="flex-1 relative">
+            <GraphCanvas
+              allNodes={graphData.nodes}
+              allEdges={graphData.edges}
+              filters={filters}
+              selectedNode={selectedNode}
+              onNodeClick={handleNodeClick}
+              focusNode={focusNode}
+              graphMode={graphMode}
+              settings={settings}
+              searchQuery={searchQuery}
+            />
+          </div>
+        ) : effectiveViewMode === "list" ? (
+          <div className="flex-1 flex flex-col p-4 overflow-hidden">
+            {isMobile && (
+              <div className="mb-3 rounded-lg border border-[#F59E0B]/40 bg-[#F59E0B]/10 p-2.5 flex items-center gap-2">
+                <AlertTriangle size={14} className="text-[#F59E0B] flex-shrink-0" />
+                <p className="text-[#8B9AB0] text-[10px]">For the best graph experience, use ZARP on a desktop browser.</p>
+              </div>
+            )}
+            <NodeListView nodes={filteredNodes} onNodeClick={handleNodeClick} onAddToCollection={handleAddToCollection} />
+          </div>
+        ) : (
+          <div className="flex-1 flex flex-col overflow-hidden">
+            <NodeCardView nodes={filteredNodes} onNodeClick={handleNodeClick} onAddToCollection={handleAddToCollection} />
           </div>
         )}
 
-        {/* ── DEVICE BUILD PLANS VIEW ── */}
-        {activeView === "devices" && (
-          <div className="space-y-4">
-            <div className="flex items-center gap-2 mb-2">
-              <Cpu size={18} className="text-green-400" />
-              <h3 className="text-white font-bold text-lg">Device Build Plans</h3>
-            </div>
-            <p className="text-gray-500 text-sm leading-relaxed">
-              {DEVICE_BUILD_PLANS.length} innovation device build plans integrating connected research node clusters.
-              Each plan is a CONCEPT framework — to be validated by manufacturer. All plans include IP opportunity and regulatory pathway concepts.
-            </p>
-            <div className="space-y-4">
-              {DEVICE_BUILD_PLANS.map(plan => <DeviceBuildPlanCard key={plan.code} plan={plan} />)}
-            </div>
-          </div>
-        )}
-
-        {/* ── SUPPRESSION TIMELINE VIEW ── */}
-        {activeView === "timeline" && (
-          <SuppressionTimelineView timeline={SUPPRESSION_TIMELINE} />
+        {/* Detail drawer */}
+        {showDrawer && selectedNode && (
+          <NodeDetailDrawer
+            node={selectedNode}
+            allNodes={graphData.nodes}
+            allEdges={graphData.edges}
+            onClose={() => { setSelectedNode(null); setShowDrawer(false); }}
+            onNodeClick={handleNodeClick}
+            collections={collections}
+            onAddToCollection={handleAddToCollection}
+          />
         )}
       </div>
+
+      {/* Collections panel */}
+      <CollectionsPanel
+        open={showCollections}
+        onClose={() => setShowCollections(false)}
+        collections={collections}
+        setCollections={setCollections}
+        allNodes={graphData.nodes}
+        onHighlightNodes={handleHighlightNodes}
+      />
+
+      {/* Quick guide modal */}
+      <QuickGuideModal open={showQuickGuide} onClose={() => setShowQuickGuide(false)} />
+
+      {/* Legal footer */}
+      <footer className="flex-shrink-0 bg-[#0D1117] border-t border-[#21262D] px-4 py-2">
+        <p className="text-[#8B9AB0] text-[9px] leading-relaxed text-center">
+          ZARP Research Graph — All nodes represent published historical and scientific research for innovation and IP development purposes only. ZARP does not validate or endorse the underlying scientific claims of any research node. Content is not medical advice. Node connections represent potential engineering integration opportunities — not clinical protocols. © 2026 Aethon Apex IP Holdings LLC.
+        </p>
+      </footer>
+    </div>
+  );
+}
+
+function Toggle({ label, value, onChange }) {
+  return (
+    <div className="flex items-center justify-between">
+      <span className="text-[#F0F6FF] text-xs">{label}</span>
+      <button onClick={() => onChange(!value)} className={`w-9 h-5 rounded-full transition-colors relative ${value ? "bg-[#C9A84C]" : "bg-[#21262D]"}`}>
+        <span className={`absolute top-0.5 w-4 h-4 rounded-full bg-white transition-transform ${value ? "left-4" : "left-0.5"}`} />
+      </button>
     </div>
   );
 }
