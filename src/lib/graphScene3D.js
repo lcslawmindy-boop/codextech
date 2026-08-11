@@ -206,7 +206,9 @@ export class BackgroundCarousel {
     this.holdTime = opts.holdTime || 7;     // seconds per image
     this.fadeTime = opts.fadeTime || 2.2;  // cross-fade duration
     this.loader = new THREE.TextureLoader();
-    this.geo = new THREE.SphereGeometry(this.radius, 48, 32);
+    this._maxAniso = 16; // high anisotropic filtering for sharp background images
+    // more segments = smoother sphere surface, less faceting distortion
+    this.geo = new THREE.SphereGeometry(this.radius, 96, 64);
     this.idx = 0;
     this.timer = 0;
     this.fading = false;
@@ -216,6 +218,10 @@ export class BackgroundCarousel {
     }));
     this.sphereA = mk(this.maxOpacity);
     this.sphereB = mk(0);
+    // Flatten the spheres vertically so the heavily-distorted polar regions
+    // are pushed out of view — the crisp equatorial band fills the screen.
+    this.sphereA.scale.y = 0.55;
+    this.sphereB.scale.y = 0.55;
     this.sphereA.rotation.y = Math.random() * Math.PI * 2;
     this.sphereB.rotation.y = Math.random() * Math.PI * 2;
     scene.add(this.sphereA, this.sphereB);
@@ -229,8 +235,20 @@ export class BackgroundCarousel {
   }
 
   _loadInto(sphere, url) {
-    const tex = this.loader.load(url, t => { t.colorSpace = THREE.SRGBColorSpace; });
+    const tex = this.loader.load(url, t => {
+      t.colorSpace = THREE.SRGBColorSpace;
+      // sharpen: anisotropic filtering keeps the image crisp at grazing angles
+      t.anisotropy = this._maxAniso;
+      t.minFilter = THREE.LinearMipmapLinearFilter;
+      t.magFilter = THREE.LinearFilter;
+      t.generateMipmaps = true;
+      t.needsUpdate = true;
+    });
     tex.colorSpace = THREE.SRGBColorSpace;
+    tex.anisotropy = this._maxAniso;
+    tex.minFilter = THREE.LinearMipmapLinearFilter;
+    tex.magFilter = THREE.LinearFilter;
+    tex.generateMipmaps = true;
     sphere.material.map = tex;
     sphere.material.needsUpdate = true;
   }
