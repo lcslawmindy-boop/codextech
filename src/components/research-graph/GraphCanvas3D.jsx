@@ -151,7 +151,7 @@ export default function GraphCanvas3D({ allNodes, allEdges, filters, selectedNod
 
     // Scene
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x030712);
+    scene.background = new THREE.Color(0x020617);
     sceneRef.current = scene;
 
     // Camera
@@ -569,33 +569,33 @@ export default function GraphCanvas3D({ allNodes, allEdges, filters, selectedNod
     `3D GRAPH — ${visibleNodes.length} nodes · ${visibleEdges.length} edges`;
 
   return (
-    <div className="relative w-full h-full bg-[#030712] overflow-hidden">
+    <div className="relative w-full h-full bg-slate-950 overflow-hidden">
       <div ref={mountRef} className="w-full h-full" style={{ cursor: "grab" }} />
 
       {loading && (
-        <div className="absolute inset-0 flex items-center justify-center bg-[#030712]/80 z-30">
+        <div className="absolute inset-0 flex items-center justify-center bg-slate-950/80 z-30">
           <div className="text-center">
-            <div className="w-12 h-12 rounded-full border-2 border-[#C9A84C] border-t-transparent animate-spin mx-auto mb-3" />
-            <p className="text-[#C9A84C] text-sm font-bold" style={{ fontFamily: "Orbitron, sans-serif" }}>Building 3D research graph...</p>
+            <div className="w-12 h-12 rounded-full border-2 border-amber-400 border-t-transparent animate-spin mx-auto mb-3" />
+            <p className="text-amber-400 text-sm font-bold" style={{ fontFamily: "Orbitron, sans-serif" }}>Building 3D research graph...</p>
           </div>
         </div>
       )}
 
       {/* Mode indicator */}
       <div className="absolute top-3 left-3 z-10 flex items-center gap-2">
-        <div className="px-3 py-1.5 rounded-lg bg-[#0D1117] border border-[#21262D] text-[10px] font-mono flex items-center gap-1.5">
-          <Network size={10} className="text-[#C9A84C]" />
-          <span className="text-[#C9A84C]">{modeLabel}</span>
+        <div className="px-3 py-1.5 rounded-lg bg-slate-950 border border-slate-800 text-[10px] font-mono flex items-center gap-1.5">
+          <Network size={10} className="text-amber-400" />
+          <span className="text-amber-400">{modeLabel}</span>
         </div>
-        <div className="px-2 py-1.5 rounded-lg bg-[#0D1117] border border-[#C9A84C]/30 text-[9px] font-mono flex items-center gap-1">
-          <span className="w-1.5 h-1.5 rounded-full bg-[#C9A84C] animate-pulse" />
-          <span className="text-[#C9A84C]">CINEMATIC</span>
+        <div className="px-2 py-1.5 rounded-lg bg-slate-950 border border-amber-400/30 text-[9px] font-mono flex items-center gap-1">
+          <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
+          <span className="text-amber-400">CINEMATIC</span>
         </div>
       </div>
 
       {/* Zoom indicator */}
       <div className="absolute top-3 right-3 z-10">
-        <div className="px-2.5 py-1.5 rounded-lg bg-[#0D1117] border border-[#21262D] text-[10px] font-mono text-[#8B9AB0]">
+        <div className="px-2.5 py-1.5 rounded-lg bg-slate-950 border border-slate-800 text-[10px] font-mono text-slate-400">
           {Math.round(zoomLevel * 100)}%
         </div>
       </div>
@@ -603,9 +603,9 @@ export default function GraphCanvas3D({ allNodes, allEdges, filters, selectedNod
       {/* Hover connection count badge */}
       {hoveredNode && (
         <div className="absolute top-14 left-3 z-10">
-          <div className="px-3 py-2 rounded-lg bg-[#0D1117] border border-[#C9A84C]/40 text-[10px]">
-            <span className="text-[#C9A84C] font-bold">🔗 {adjacency.get(hoveredNode.numericId)?.size || 0} connections</span>
-            <span className="text-[#8B9AB0] ml-2">lit up</span>
+          <div className="px-3 py-2 rounded-lg bg-slate-950 border border-amber-400/40 text-[10px]">
+            <span className="text-amber-400 font-bold">🔗 {adjacency.get(hoveredNode.numericId)?.size || 0} connections</span>
+            <span className="text-slate-400 ml-2">lit up</span>
           </div>
         </div>
       )}
@@ -616,21 +616,21 @@ export default function GraphCanvas3D({ allNodes, allEdges, filters, selectedNod
           className="absolute z-20 pointer-events-none max-w-[280px]"
           style={{ left: Math.min(tooltip.x + 15, (mountRef.current?.clientWidth || 800) - 290), top: Math.min(tooltip.y + 15, (mountRef.current?.clientHeight || 600) - 200) }}
         >
-          <div className="bg-[#0D1117] border border-[#21262D] rounded-lg overflow-hidden shadow-2xl">
+          <div className="bg-slate-950 border border-slate-700 rounded-lg overflow-hidden shadow-2xl">
             <div className="h-1" style={{ backgroundColor: tooltip.node.domainColor }} />
             <div className="p-3">
-              <p className="text-[#F0F6FF] text-xs font-bold leading-tight">{tooltip.node.label}</p>
-              <p className="text-[#8B9AB0] text-[10px] mt-0.5">{tooltip.node.researcher} — {tooltip.node.year}</p>
+              <p className="text-white text-xs font-bold leading-tight">{tooltip.node.label}</p>
+              <p className="text-slate-400 text-[10px] mt-0.5">{tooltip.node.researcher} — {tooltip.node.year}</p>
               <div className="flex items-center gap-2 mt-2 text-[9px]">
-                <span className="text-[#C9A84C] font-bold">🔗 {adjacency.get(tooltip.node.numericId)?.size || 0} links</span>
+                <span className="text-amber-400 font-bold">🔗 {adjacency.get(tooltip.node.numericId)?.size || 0} links</span>
                 <span style={{ color: tooltip.node.suppressionColor }}>{tooltip.node.suppression}</span>
               </div>
               <div className="flex flex-wrap gap-1 mt-2">
                 {tooltip.node.tags.slice(0, 4).map(t => (
-                  <span key={t} className="px-1.5 py-0.5 rounded bg-[#161B22] text-[#8B9AB0] text-[8px]">{t}</span>
+                  <span key={t} className="px-1.5 py-0.5 rounded bg-slate-800 text-slate-400 text-[8px]">{t}</span>
                 ))}
               </div>
-              <p className="text-[#C9A84C] text-[9px] mt-2">Click to explore · Drag to rotate · Scroll to zoom</p>
+              <p className="text-amber-400 text-[9px] mt-2">Click to explore · Drag to rotate · Scroll to zoom</p>
             </div>
           </div>
         </div>
@@ -639,38 +639,38 @@ export default function GraphCanvas3D({ allNodes, allEdges, filters, selectedNod
       {/* Legend */}
       {settings.showLegend && (
         <div className="absolute bottom-3 left-3 z-10 max-w-[280px]">
-          <div className="bg-[#0D1117]/95 border border-[#21262D] rounded-lg p-3 backdrop-blur">
-            <p className="text-[#8B9AB0] text-[9px] font-bold uppercase tracking-wider mb-2">Node Size = Connections</p>
+          <div className="bg-slate-950/95 border border-slate-800 rounded-lg p-3 backdrop-blur">
+            <p className="text-slate-400 text-[9px] font-bold uppercase tracking-wider mb-2">Node Size = Connections</p>
             <div className="grid grid-cols-2 gap-x-3 gap-y-1">
               {DOMAINS.map(d => (
                 <div key={d.id} className="flex items-center gap-1.5">
                   <span className="w-2 h-2 rounded-full flex-shrink-0" style={{ backgroundColor: d.color }} />
-                  <span className="text-[#8B9AB0] text-[8px] truncate">{d.name}</span>
+                  <span className="text-slate-400 text-[8px] truncate">{d.name}</span>
                 </div>
               ))}
             </div>
-            <div className="mt-2 pt-2 border-t border-[#21262D]">
-              <p className="text-[#8B9AB0] text-[8px] font-bold uppercase mb-1">Edge Colors (connection type)</p>
+            <div className="mt-2 pt-2 border-t border-slate-800">
+              <p className="text-slate-400 text-[8px] font-bold uppercase mb-1">Edge Colors (connection type)</p>
               <div className="grid grid-cols-2 gap-x-3 gap-y-0.5">
                 {Object.entries(CONNECTION_TYPES).map(([key, ct]) => (
                   <div key={key} className="flex items-center gap-1.5">
                     <span className="w-3 h-0.5 flex-shrink-0" style={{ backgroundColor: ct.color }} />
-                    <span className="text-[#8B9AB0] text-[7px] truncate">{ct.label}</span>
+                    <span className="text-slate-400 text-[7px] truncate">{ct.label}</span>
                   </div>
                 ))}
               </div>
             </div>
-            <p className="text-[#C9A84C] text-[8px] mt-2">Hover a node → connected edges light up</p>
+            <p className="text-amber-400 text-[8px] mt-2">Hover a node → connected edges light up</p>
           </div>
         </div>
       )}
 
       {/* Zoom controls */}
       <div className="absolute bottom-3 right-3 z-10 flex flex-col gap-1">
-        <button onClick={handleZoomIn} className="w-9 h-9 rounded-lg bg-[#0D1117] border border-[#21262D] flex items-center justify-center text-[#8B9AB0] hover:text-[#C9A84C] hover:border-[#C9A84C]/50 transition-colors" title="Zoom In"><ZoomIn size={16} /></button>
-        <button onClick={handleZoomOut} className="w-9 h-9 rounded-lg bg-[#0D1117] border border-[#21262D] flex items-center justify-center text-[#8B9AB0] hover:text-[#C9A84C] hover:border-[#C9A84C]/50 transition-colors" title="Zoom Out"><ZoomOut size={16} /></button>
-        <button onClick={handleFitAll} className="w-9 h-9 rounded-lg bg-[#0D1117] border border-[#21262D] flex items-center justify-center text-[#8B9AB0] hover:text-[#C9A84C] hover:border-[#C9A84C]/50 transition-colors" title="Fit All"><Maximize2 size={16} /></button>
-        <button onClick={handleCenter} className="w-9 h-9 rounded-lg bg-[#0D1117] border border-[#21262D] flex items-center justify-center text-[#8B9AB0] hover:text-[#C9A84C] hover:border-[#C9A84C]/50 transition-colors" title="Center"><Crosshair size={16} /></button>
+        <button onClick={handleZoomIn} className="w-9 h-9 rounded-lg bg-slate-950 border border-slate-800 flex items-center justify-center text-slate-400 hover:text-amber-400 hover:border-amber-400/50 transition-colors" title="Zoom In"><ZoomIn size={16} /></button>
+        <button onClick={handleZoomOut} className="w-9 h-9 rounded-lg bg-slate-950 border border-slate-800 flex items-center justify-center text-slate-400 hover:text-amber-400 hover:border-amber-400/50 transition-colors" title="Zoom Out"><ZoomOut size={16} /></button>
+        <button onClick={handleFitAll} className="w-9 h-9 rounded-lg bg-slate-950 border border-slate-800 flex items-center justify-center text-slate-400 hover:text-amber-400 hover:border-amber-400/50 transition-colors" title="Fit All"><Maximize2 size={16} /></button>
+        <button onClick={handleCenter} className="w-9 h-9 rounded-lg bg-slate-950 border border-slate-800 flex items-center justify-center text-slate-400 hover:text-amber-400 hover:border-amber-400/50 transition-colors" title="Center"><Crosshair size={16} /></button>
       </div>
     </div>
   );

@@ -128,51 +128,58 @@ export default function ResearchGraphExplorer() {
   const effectiveViewMode = isMobile ? "list" : viewMode;
 
   return (
-    <div className="h-screen flex flex-col bg-[#030712] overflow-hidden">
+    <div className="h-screen flex flex-col bg-slate-950 overflow-hidden">
+      {/* Disclaimer bar */}
+      <div className="flex-shrink-0 border-b border-slate-800 px-4 py-1.5 bg-slate-950">
+        <p className="text-slate-500 text-[9px] leading-relaxed text-center font-mono">
+          ⚠ All nodes represent published historical and scientific research for innovation and IP development purposes only. ZARP does not validate or endorse underlying scientific claims. Not medical advice.
+        </p>
+      </div>
+
       {/* Header */}
-      <header className="flex-shrink-0 bg-[#0D1117] border-b border-[#21262D] px-4 py-2.5 z-20">
+      <header className="flex-shrink-0 bg-slate-950 border-b border-slate-800 px-4 py-2.5 z-20">
         <div className="flex items-center justify-between gap-4">
           {/* Left: Home button + Title */}
           <div className="flex items-center gap-3 flex-shrink-0">
-            <Link to="/" className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-[#161B22] border border-[#21262D] text-[#8B9AB0] hover:text-[#C9A84C] hover:border-[#C9A84C]/50 transition-colors" title="Back to Dashboard">
+            <Link to="/" className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-slate-900 border border-slate-800 text-slate-400 hover:text-amber-400 hover:border-amber-400/50 transition-colors" title="Back to Dashboard">
               <Home size={14} /> <span className="text-[10px] font-bold hidden sm:inline">Home</span>
             </Link>
             <div>
-              <h1 className="text-[#C9A84C] font-black text-sm tracking-wider leading-none" style={{ fontFamily: "Orbitron, sans-serif" }}>ZARP RESEARCH GRAPH</h1>
-              <p className="text-[#8B9AB0] text-[9px] mt-0.5">{graphData.nodes.length}+ nodes · {graphData.edges.length}+ connections · {DOMAINS.length} domains</p>
+              <h1 className="text-amber-400 font-black text-sm tracking-wider leading-none" style={{ fontFamily: "Orbitron, sans-serif" }}>ZARP RESEARCH GRAPH</h1>
+              <p className="text-slate-500 text-[9px] mt-0.5">{graphData.nodes.length}+ nodes · {graphData.edges.length}+ connections · {DOMAINS.length} domains</p>
             </div>
           </div>
 
           {/* Center: Search */}
           <div className="flex-1 max-w-md relative">
-            <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#8B9AB0]" />
+            <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
             <input
               value={searchQuery}
               onChange={e => setSearchQuery(e.target.value)}
               placeholder="Search nodes, researchers, mechanisms, frequencies..."
-              className="w-full pl-9 pr-3 py-2 rounded-lg bg-[#161B22] border border-[#21262D] text-[#F0F6FF] text-xs placeholder-[#8B9AB0] outline-none focus:border-[#C9A84C]/50 focus:shadow-md focus:shadow-[#C9A84C]/10 transition-all"
+              className="w-full pl-9 pr-3 py-2 rounded-lg bg-slate-900 border border-slate-800 text-white text-xs placeholder-slate-500 outline-none focus:border-amber-400/50 focus:shadow-md focus:shadow-amber-400/10 transition-all"
             />
             {searchQuery && (
-              <button onClick={() => setSearchQuery("")} className="absolute right-2 top-1/2 -translate-y-1/2 text-[#8B9AB0] hover:text-[#F0F6FF]"><X size={14} /></button>
+              <button onClick={() => setSearchQuery("")} className="absolute right-2 top-1/2 -translate-y-1/2 text-slate-500 hover:text-white"><X size={14} /></button>
             )}
           </div>
 
           {/* Right: Buttons */}
           <div className="flex items-center gap-1.5 flex-shrink-0">
-            <button onClick={() => setShowCollections(true)} className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-[#161B22] border border-[#21262D] text-[#8B9AB0] text-[10px] font-bold hover:text-[#C9A84C] hover:border-[#C9A84C]/50 transition-colors">
+            <button onClick={() => setShowCollections(true)} className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-slate-900 border border-slate-800 text-slate-400 text-[10px] font-bold hover:text-amber-400 hover:border-amber-400/50 transition-colors">
               <FolderKanban size={12} /> <span className="hidden lg:inline">Collections</span>
             </button>
-            <button onClick={() => setShowSettings(!showSettings)} className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-[#161B22] border border-[#21262D] text-[#8B9AB0] text-[10px] font-bold hover:text-[#C9A84C] hover:border-[#C9A84C]/50 transition-colors">
+            <button onClick={() => setShowSettings(!showSettings)} className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-slate-900 border border-slate-800 text-slate-400 text-[10px] font-bold hover:text-amber-400 hover:border-amber-400/50 transition-colors">
               <Settings size={12} /> <span className="hidden lg:inline">Settings</span>
             </button>
-            <button onClick={() => setShowQuickGuide(true)} className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-[#161B22] border border-[#21262D] text-[#8B9AB0] text-[10px] font-bold hover:text-[#C9A84C] hover:border-[#C9A84C]/50 transition-colors">
+            <button onClick={() => setShowQuickGuide(true)} className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-slate-900 border border-slate-800 text-slate-400 text-[10px] font-bold hover:text-amber-400 hover:border-amber-400/50 transition-colors">
               <HelpCircle size={12} /> <span className="hidden lg:inline">Help</span>
             </button>
             {/* View toggle */}
-            <div className="flex items-center bg-[#161B22] border border-[#21262D] rounded-lg p-0.5">
-              <button onClick={() => setViewMode("graph")} disabled={isMobile} className={`p-1.5 rounded transition-colors ${effectiveViewMode === "graph" ? "bg-[#C9A84C] text-[#030712]" : "text-[#8B9AB0] hover:text-[#F0F6FF]"}`} title="Graph View"><Network size={12} /></button>
-              <button onClick={() => setViewMode("list")} className={`p-1.5 rounded transition-colors ${effectiveViewMode === "list" ? "bg-[#C9A84C] text-[#030712]" : "text-[#8B9AB0] hover:text-[#F0F6FF]"}`} title="List View"><List size={12} /></button>
-              <button onClick={() => setViewMode("cards")} className={`p-1.5 rounded transition-colors ${effectiveViewMode === "cards" ? "bg-[#C9A84C] text-[#030712]" : "text-[#8B9AB0] hover:text-[#F0F6FF]"}`} title="Card View"><LayoutGrid size={12} /></button>
+            <div className="flex items-center bg-slate-900 border border-slate-800 rounded-lg p-0.5">
+              <button onClick={() => setViewMode("graph")} disabled={isMobile} className={`p-1.5 rounded transition-colors ${effectiveViewMode === "graph" ? "bg-amber-400 text-slate-950" : "text-slate-400 hover:text-white"}`} title="Graph View"><Network size={12} /></button>
+              <button onClick={() => setViewMode("list")} className={`p-1.5 rounded transition-colors ${effectiveViewMode === "list" ? "bg-amber-400 text-slate-950" : "text-slate-400 hover:text-white"}`} title="List View"><List size={12} /></button>
+              <button onClick={() => setViewMode("cards")} className={`p-1.5 rounded transition-colors ${effectiveViewMode === "cards" ? "bg-amber-400 text-slate-950" : "text-slate-400 hover:text-white"}`} title="Card View"><LayoutGrid size={12} /></button>
             </div>
           </div>
         </div>
@@ -181,12 +188,12 @@ export default function ResearchGraphExplorer() {
         {effectiveViewMode === "graph" && !isMobile && (
           <div className="flex items-center gap-1 mt-2 overflow-x-auto">
             {GRAPH_MODES.map(m => (
-              <button key={m.id} onClick={() => setGraphMode(m.id)} className={`px-2.5 py-1 rounded-full text-[10px] font-bold whitespace-nowrap transition-colors ${graphMode === m.id ? "bg-[#C9A84C] text-[#030712]" : "bg-[#161B22] text-[#8B9AB0] hover:text-[#F0F6FF]"}`}>
+              <button key={m.id} onClick={() => setGraphMode(m.id)} className={`px-2.5 py-1 rounded-full text-[10px] font-bold whitespace-nowrap transition-colors border ${graphMode === m.id ? "bg-amber-400 text-slate-950 border-amber-400" : "bg-slate-900 text-slate-400 border-slate-800 hover:text-white hover:border-slate-600"}`}>
                 {m.label}
               </button>
             ))}
             {focusNode && (
-              <button onClick={() => setFocusNode(null)} className="px-2.5 py-1 rounded-full bg-[#C9A84C]/20 text-[#C9A84C] text-[10px] font-bold border border-[#C9A84C]/40 hover:bg-[#C9A84C]/30 transition-colors ml-auto">
+              <button onClick={() => setFocusNode(null)} className="px-2.5 py-1 rounded-full bg-amber-400/20 text-amber-400 text-[10px] font-bold border border-amber-400/40 hover:bg-amber-400/30 transition-colors ml-auto">
                 ← Exit Focus Mode
               </button>
             )}
@@ -196,22 +203,22 @@ export default function ResearchGraphExplorer() {
 
       {/* Settings drawer */}
       {showSettings && (
-        <div className="absolute right-0 top-0 bottom-0 w-72 bg-[#0D1117] border-l border-[#21262D] z-30 p-4 overflow-y-auto">
+        <div className="absolute right-0 top-0 bottom-0 w-72 bg-slate-950 border-l border-slate-800 z-30 p-4 overflow-y-auto">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-[#C9A84C] text-xs font-black tracking-wider" style={{ fontFamily: "Orbitron, sans-serif" }}>GRAPH SETTINGS</h3>
-            <button onClick={() => setShowSettings(false)} className="text-[#8B9AB0] hover:text-[#F0F6FF]"><X size={16} /></button>
+            <h3 className="text-amber-400 text-xs font-black tracking-wider" style={{ fontFamily: "Orbitron, sans-serif" }}>GRAPH SETTINGS</h3>
+            <button onClick={() => setShowSettings(false)} className="text-slate-400 hover:text-white"><X size={16} /></button>
           </div>
           <div className="space-y-3">
             <Toggle label="Show node labels" value={settings.showLabels} onChange={v => setSettings(s => ({ ...s, showLabels: v }))} />
             <Toggle label="Show legend" value={settings.showLegend} onChange={v => setSettings(s => ({ ...s, showLegend: v }))} />
             <Toggle label="Background grid" value={settings.backgroundGrid} onChange={v => setSettings(s => ({ ...s, backgroundGrid: v }))} />
             <div>
-              <label className="text-[#8B9AB0] text-[10px] font-bold uppercase tracking-wider">Edge Opacity: {Math.round(settings.edgeOpacity * 100)}%</label>
-              <input type="range" min="0.1" max="1" step="0.1" value={settings.edgeOpacity} onChange={e => setSettings(s => ({ ...s, edgeOpacity: parseFloat(e.target.value) }))} className="w-full accent-[#C9A84C] mt-1" />
+              <label className="text-slate-400 text-[10px] font-bold uppercase tracking-wider">Edge Opacity: {Math.round(settings.edgeOpacity * 100)}%</label>
+              <input type="range" min="0.1" max="1" step="0.1" value={settings.edgeOpacity} onChange={e => setSettings(s => ({ ...s, edgeOpacity: parseFloat(e.target.value) }))} className="w-full accent-amber-400 mt-1" />
             </div>
             <div>
-              <label className="text-[#8B9AB0] text-[10px] font-bold uppercase tracking-wider">Physics Strength: {settings.physicsStrength}</label>
-              <input type="range" min="-300" max="-30" step="10" value={settings.physicsStrength} onChange={e => setSettings(s => ({ ...s, physicsStrength: parseInt(e.target.value) }))} className="w-full accent-[#C9A84C] mt-1" />
+              <label className="text-slate-400 text-[10px] font-bold uppercase tracking-wider">Physics Strength: {settings.physicsStrength}</label>
+              <input type="range" min="-300" max="-30" step="10" value={settings.physicsStrength} onChange={e => setSettings(s => ({ ...s, physicsStrength: parseInt(e.target.value) }))} className="w-full accent-amber-400 mt-1" />
             </div>
           </div>
         </div>
@@ -295,8 +302,8 @@ export default function ResearchGraphExplorer() {
       <QuickGuideModal open={showQuickGuide} onClose={() => setShowQuickGuide(false)} />
 
       {/* Legal footer */}
-      <footer className="flex-shrink-0 bg-[#0D1117] border-t border-[#21262D] px-4 py-2">
-        <p className="text-[#8B9AB0] text-[9px] leading-relaxed text-center">
+      <footer className="flex-shrink-0 bg-slate-950 border-t border-slate-800 px-4 py-2">
+        <p className="text-slate-500 text-[9px] leading-relaxed text-center">
           ZARP Research Graph — All nodes represent published historical and scientific research for innovation and IP development purposes only. ZARP does not validate or endorse the underlying scientific claims of any research node. Content is not medical advice. Node connections represent potential engineering integration opportunities — not clinical protocols. © 2026 Aethon Apex IP Holdings LLC.
         </p>
       </footer>
@@ -307,8 +314,8 @@ export default function ResearchGraphExplorer() {
 function Toggle({ label, value, onChange }) {
   return (
     <div className="flex items-center justify-between">
-      <span className="text-[#F0F6FF] text-xs">{label}</span>
-      <button onClick={() => onChange(!value)} className={`w-9 h-5 rounded-full transition-colors relative ${value ? "bg-[#C9A84C]" : "bg-[#21262D]"}`}>
+      <span className="text-white text-xs">{label}</span>
+      <button onClick={() => onChange(!value)} className={`w-9 h-5 rounded-full transition-colors relative ${value ? "bg-amber-400" : "bg-slate-700"}`}>
         <span className={`absolute top-0.5 w-4 h-4 rounded-full bg-white transition-transform ${value ? "left-4" : "left-0.5"}`} />
       </button>
     </div>
