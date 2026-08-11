@@ -1,29 +1,35 @@
 import * as THREE from "three";
 
-// ── Rotating background image set (uploaded references) ───────────────────
-const IMG_BASE = "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/";
+// ── Rotating background image set ─────────────────────────────────────────
 export const GRAPH_BG_IMAGES = [
-  "2c2c53d1d_FF-Copy.jpeg",
-  "321c996ad_JHKJK.jpeg",
-  "26a449972_JJJ-Copy.jpeg",
-  "edd5828bf_JJJJ-Copy2.jpeg",
-  "4b48198d3_MMMM-Copy2.jpeg",
-  "b1e40858f_MMMMMMM-Copy.jpeg",
-  "213901994_NGNG.jpeg",
-  "bef70ea1e_NN-Copy.jpeg",
-  "2e346b657_NNN-Copy2.jpeg",
-  "b36588d06_TES-Copy.jpeg",
-  "2ac5156d5_UKUKK.jpeg",
-  "4b8934f1e_VCCVC-Copy.jpeg",
-  "79f60e749_VV-Copy3.jpeg",
-  "4c0a5f5ca_6e9914fb6d6d4a305dd2fbe4c30e098d-Copy2.jpg",
-  "457de90bb_334dc76f54a01292d408e91651da000cd556da33_full-Copy2.jpg",
-  "e96b9fdb4_1000_F_755228805_cGY4gZzDtaVC2GKBWaMzOtOPwnbV4ZIc-Copy2.jpg",
-  "4458567be_1000_F_971892795_RX3cpf8xMUbbE4vJ2MnOerElgOeodidS.jpg",
-  "aed46fae7_615224639_1183362507294312_8069412157456999405_n-Copy.jpg",
-  "98cf429ac_615812757_25669650252651736_4672308845905138780_n-Copy.jpg",
-  "485aa72e7_a8838d6e6380e3cc2ddff672d7c0883b-Copy-Copy.jpg",
-].map(f => IMG_BASE + f);
+  // User-provided dimensional palace & library images
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/3b7e019e6_Screenshot_11-8-2026_13110_wwwbingcom.jpeg",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/6ef5ea26e_Screenshot_11-8-2026_13170_wwwbingcom.jpeg",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/0ef05008f_Screenshot_11-8-2026_131046_wwwbingcom.jpeg",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/be1bf8352_Screenshot_11-8-2026_131116_wwwbingcom.jpeg",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/77dcad0f0_Screenshot_11-8-2026_131156_wwwbingcom.jpeg",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/c3106ca61_Screenshot_11-8-2026_131228_wwwbingcom.jpeg",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/ce094315f_Screenshot_11-8-2026_131346_wwwbingcom.jpeg",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/c10b81ac2_Screenshot_11-8-2026_131440_wwwbingcom.jpeg",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/d7ef617ce_Screenshot_11-8-2026_131457_wwwbingcom.jpeg",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/7ea0c59a4_Screenshot_11-8-2026_131524_wwwbingcom.jpeg",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/9614304ed_Screenshot_11-8-2026_131615_wwwbingcom.jpeg",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/a216383fe_Screenshot_11-8-2026_131653_wwwbingcom.jpeg",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/2354b96d7_Screenshot_11-8-2026_131719_wwwbingcom.jpeg",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/70dc9df4f_Screenshot_11-8-2026_131728_wwwbingcom.jpeg",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/83d34aea7_Screenshot_11-8-2026_131744_wwwbingcom.jpeg",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/9b5315451_Screenshot_11-8-2026_131754_wwwbingcom.jpeg",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/c1a7a8dba_ak3.jpg",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/0ea6d0025_ak6.jpg",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/29dd866b7_ak7.jpg",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/6408cab54_aasas.webp",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/adf7454c9_ak.webp",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/4bf9157f1_ak5.webp",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/ad4564a6a_ak8.webp",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/075033c57_ak9.webp",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/98f6ff30d_ak11.webp",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/4e456e388_ak12.webp",
+];
 
 // ── Golden spiral placement (Twilight-Zone style conical spiral) ───────────
 // Nodes are laid out along a logarithmic spiral that winds upward, giving the
