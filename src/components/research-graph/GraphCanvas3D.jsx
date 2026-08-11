@@ -420,7 +420,8 @@ export default function GraphCanvas3D({ allNodes, allEdges, filters, selectedNod
       });
 
       // Update label positions
-      if (labelsDiv.childNodes.length === visibleNodes.length) {
+      const childCount = visibleNodes.length + (settings.showLabels && edgeList.length < 200 ? visibleEdges.length : 0);
+      if (labelsDiv.childNodes.length === childCount) {
         visibleNodes.forEach((n, i) => {
           const mesh = meshes[i];
           if (!mesh) return;
@@ -433,6 +434,26 @@ export default function GraphCanvas3D({ allNodes, allEdges, filters, selectedNod
           label.style.transform = `translate(${x}px, ${y}px)`;
           label.style.display = visible ? "block" : "none";
         });
+        // Edge labels at midpoint
+        if (settings.showLabels && edgeList.length < 200) {
+          visibleEdges.forEach((e, i) => {
+            const label = labelsDiv.childNodes[visibleNodes.length + i];
+            if (!label) return;
+            const sIdx = nodeById.get(e.source);
+            const tIdx = nodeById.get(e.target);
+            if (sIdx === undefined || tIdx === undefined) return;
+            const sp = meshes[sIdx]?.position;
+            const tp = meshes[tIdx]?.position;
+            if (!sp || !tp) return;
+            const mid = sp.clone().add(tp).multiplyScalar(0.5);
+            const v = mid.project(camera);
+            const x = (v.x * 0.5 + 0.5) * width;
+            const y = (-v.y * 0.5 + 0.5) * height;
+            const visible = v.z < 1;
+            label.style.transform = `translate(${x}px, ${y}px)`;
+            label.style.display = visible ? "block" : "none";
+          });
+        }
       }
       renderer.render(scene, camera);
     };
@@ -448,6 +469,19 @@ export default function GraphCanvas3D({ allNodes, allEdges, filters, selectedNod
         label.style.cssText = `position:absolute;left:0;top:0;transform-origin:0 0;white-space:nowrap;font-size:9px;font-family:Inter,sans-serif;color:${showLabel ? "#F0F6FF" : "transparent"};background:${showLabel ? "rgba(13,17,23,0.7)" : "transparent"};padding:1px 4px;border-radius:3px;border:1px solid ${showLabel ? n.domainColor + "60" : "transparent"};pointer-events:none;text-shadow:0 0 4px #000;`;
         labelsDiv.appendChild(label);
       });
+
+      // Edge labels (connection type) — only when showLabels is on
+      if (settings.showLabels && edgeList.length < 200) {
+        visibleEdges.forEach((e, i) => {
+          const label = document.createElement("div");
+          const ct = CONN_MAP.get(e.type);
+          label.textContent = ct ? ct.label : "";
+          label.dataset.edgeIdx = i;
+          label.style.cssText = `position:absolute;left:0;top:0;transform-origin:0 0;white-space:nowrap;font-size:7px;font-family:JetBrains Mono,monospace;color:${e.typeColor || "#C9A84C"};background:rgba(13,17,23,0.8);padding:0px 3px;border-radius:2px;pointer-events:none;text-shadow:0 0 3px #000;opacity:0.85;`;
+          labelsDiv.appendChild(label);
+        });
+      }
+
       setLoading(false);
     }, 100);
 

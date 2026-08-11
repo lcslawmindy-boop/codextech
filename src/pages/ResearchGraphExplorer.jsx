@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from "react";
-import { Search, FolderKanban, Settings, HelpCircle, Network, List, LayoutGrid, X, ChevronLeft, ChevronRight, Home } from "lucide-react";
+import { Search, FolderKanban, Settings, HelpCircle, Network, List, LayoutGrid, X, ChevronLeft, ChevronRight, Home, Tag } from "lucide-react";
 import { Link } from "react-router-dom";
 import { generateGraph, DOMAINS } from "@/lib/researchGraphData";
 import GraphCanvas from "@/components/research-graph/GraphCanvas3D";
@@ -175,6 +175,15 @@ export default function ResearchGraphExplorer() {
             <button onClick={() => setShowQuickGuide(true)} className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-slate-900 border border-slate-800 text-slate-400 text-[10px] font-bold hover:text-amber-400 hover:border-amber-400/50 transition-colors">
               <HelpCircle size={12} /> <span className="hidden lg:inline">Help</span>
             </button>
+            {/* Labels toggle */}
+            <button
+              onClick={() => setSettings(s => ({ ...s, showLabels: !s.showLabels }))}
+              className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border text-[10px] font-bold transition-colors ${settings.showLabels ? "bg-amber-400 text-slate-950 border-amber-400" : "bg-slate-900 text-slate-400 border-slate-800 hover:text-amber-400 hover:border-amber-400/50"}`}
+              title="Toggle node & edge labels"
+            >
+              <Tag size={12} /> <span className="hidden lg:inline">Labels</span>
+            </button>
+
             {/* View toggle */}
             <div className="flex items-center bg-slate-900 border border-slate-800 rounded-lg p-0.5">
               <button onClick={() => setViewMode("graph")} disabled={isMobile} className={`p-1.5 rounded transition-colors ${effectiveViewMode === "graph" ? "bg-amber-400 text-slate-950" : "text-slate-400 hover:text-white"}`} title="Graph View"><Network size={12} /></button>
