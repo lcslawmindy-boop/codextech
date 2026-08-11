@@ -189,24 +189,26 @@ export default function GraphCanvas3D({ allNodes, allEdges, filters, selectedNod
       posArray[i * 3 + 2] = p.z;
     });
 
-    // Nodes as spheres
+    // Nodes as glassy translucent spheres (neuron-like)
     const nodeGroup = new THREE.Group();
     scene.add(nodeGroup);
     const meshes = [];
     visibleNodes.forEach((n, i) => {
       const r = getNodeRadius(n) * 0.6;
-      const geo = new THREE.SphereGeometry(Math.max(2, r), 12, 12);
+      const geo = new THREE.SphereGeometry(Math.max(2, r), 16, 16);
       const color = new THREE.Color(n.domainColor);
       const mat = new THREE.MeshStandardMaterial({
         color,
         emissive: color,
-        emissiveIntensity: 0.3,
-        metalness: 0.3,
-        roughness: 0.5,
+        emissiveIntensity: 0.4,
+        metalness: 0.1,
+        roughness: 0.2,
+        transparent: true,
+        opacity: 0.85,
       });
       const mesh = new THREE.Mesh(geo, mat);
       mesh.position.set(posArray[i * 3], posArray[i * 3 + 1], posArray[i * 3 + 2]);
-      mesh.userData = { node: n, index: i, baseColor: color.clone(), baseEmissive: 0.3 };
+      mesh.userData = { node: n, index: i, baseColor: color.clone(), baseEmissive: 0.4, firingIntensity: 0, fireTimer: Math.random() * 5 };
       nodeGroup.add(mesh);
       meshes.push(mesh);
     });
@@ -241,6 +243,93 @@ export default function GraphCanvas3D({ allNodes, allEdges, filters, selectedNod
     scene.add(edgeLines);
     edgeLinesRef.current = edgeLines;
 
+    // ── Neuron firing system: signal particles traveling along edges ──
+    const edgeList = visibleEdges.map(e => ({
+      source: nodeById.get(e.source),
+      target: nodeById.get(e.target),
+      typeColor: e.typeColor || "#C9A84C",
+    })).filter(e => e.source !== undefined && e.target !== undefined);
+
+    // Particle pool — glowing signal pulses traveling along edges (like serotonin/electric signals)
+    const PARTICLE_POOL_SIZE = Math.min(120, edgeList.length);
+    const particles = [];
+    const particleGeo = new THREE.SphereGeometry(1.8, 8, 8);
+    for (let p = 0; p < PARTICLE_POOL_SIZE; p++) {
+      const edge = edgeList[Math.floor(Math.random() * edgeList.length)];
+      const color = new THREE.Color(edge.typeColor);
+      const mat = new THREE.MeshBasicMaterial({
+        color,
+        transparent: true,
+        opacity: 0.9,
+        blending: THREE.AdditiveBlending,
+      });
+      const mesh = new THREE.Mesh(particleGeo, mat);
+      mesh.visible = false;
+      scene.add(mesh);
+      particles.push({
+        mesh,
+        sourceIdx: edge.source,
+        targetIdx: edge.target,
+        progress: Math.random(),
+        speed: 0.003 + Math.random() * 0.005,
+        color,
+      });
+    }
+
+    // ── Ripple pool — expanding scalar wave rings when neurons fire ──
+    const RIPPLE_POOL_SIZE = 25;
+    const ripples = [];
+    const rippleGeo = new THREE.RingGeometry(1, 1.3, 32);
+    for (let r = 0; r < RIPPLE_POOL_SIZE; r++) {
+      const mat = new THREE.MeshBasicMaterial({
+        color: 0xC9A84C,
+        transparent: true,
+        opacity: 0,
+        side: THREE.DoubleSide,
+        blending: THREE.AdditiveBlending,
+      });
+      const mesh = new THREE.Mesh(rippleGeo, mat);
+      mesh.visible = false;
+      scene.add(mesh);
+      ripples.push({ mesh, active: false, age: 0, maxAge: 1.5 });
+    }
+
+    // Fire a neuron: brighten it, emit ripple ring, spawn outgoing signal particles
+    const fireNeuron = (nodeIdx) => {
+      const mesh = meshes[nodeIdx];
+      if (!mesh) return;
+      mesh.userData.firingIntensity = 1;
+      // Emit ripple ring
+      const ripple = ripples.find(r => !r.active);
+      if (ripple) {
+        ripple.active = true;
+        ripple.age = 0;
+        ripple.mesh.position.copy(mesh.position);
+        ripple.mesh.lookAt(camera.position);
+        ripple.mesh.material.color.copy(mesh.userData.baseColor);
+        ripple.mesh.visible = true;
+        ripple.mesh.scale.setScalar(1);
+        ripple.mesh.material.opacity = 0.6;
+      }
+      // Spawn outgoing signal particles to connected nodes
+      const connections = [];
+      edgeList.forEach(e => {
+        if (e.source === nodeIdx) connections.push(e.target);
+        else if (e.target === nodeIdx) connections.push(e.source);
+      });
+      connections.slice(0, 3).forEach(targetIdx => {
+        const particle = particles.find(p => !p.mesh.visible);
+        if (particle) {
+          particle.sourceIdx = nodeIdx;
+          particle.targetIdx = targetIdx;
+          particle.progress = 0;
+          particle.mesh.visible = true;
+          particle.mesh.material.opacity = 0.9;
+          particle.mesh.material.color.copy(mesh.userData.baseColor);
+        }
+      });
+    };
+
     // Labels overlay (HTML)
     const labelsDiv = document.createElement("div");
     labelsDiv.style.cssText = "position:absolute;inset:0;pointer-events:none;overflow:hidden;";
@@ -249,6 +338,7 @@ export default function GraphCanvas3D({ allNodes, allEdges, filters, selectedNod
 
     // Render loop
     let animId;
+    let fireCooldown = 0;
     const animate = () => {
       animId = requestAnimationFrame(animate);
       pulseClockRef.current += 0.016;
@@ -266,13 +356,67 @@ export default function GraphCanvas3D({ allNodes, allEdges, filters, selectedNod
         cam.lookAt(0, 0, 0);
       }
 
-      // Pulsing glow on nodes (cinematic breathing effect)
-      const pulse = 0.3 + Math.sin(pulseClockRef.current) * 0.15;
-      meshes.forEach((mesh, i) => {
-        if (mesh.userData.baseEmissive !== undefined) {
-          // Only pulse non-hovered nodes; hovered highlighting handles its own emissive
-          mesh.material.emissiveIntensity = pulse + (i % 7) * 0.02;
+      // ── Neuron firing: randomly fire nodes to keep the brain alive ──
+      fireCooldown -= 0.016;
+      if (fireCooldown <= 0 && meshes.length > 0) {
+        // Fire 1-3 random neurons
+        const count = 1 + Math.floor(Math.random() * 3);
+        for (let f = 0; f < count; f++) {
+          fireNeuron(Math.floor(Math.random() * meshes.length));
         }
+        fireCooldown = 0.15 + Math.random() * 0.35;
+      }
+
+      // ── Update node firing intensity (decay + glow) ──
+      meshes.forEach((mesh, i) => {
+        const ud = mesh.userData;
+        if (ud.firingIntensity > 0) {
+          ud.firingIntensity *= 0.92; // decay
+          if (ud.firingIntensity < 0.01) ud.firingIntensity = 0;
+        }
+        // Base breathing pulse + firing boost
+        const breath = 0.35 + Math.sin(pulseClockRef.current + i * 0.3) * 0.12;
+        const fireBoost = ud.firingIntensity * 1.5;
+        mesh.material.emissiveIntensity = breath + fireBoost;
+        // Scale up slightly when firing
+        const fireScale = 1 + ud.firingIntensity * 0.4;
+        mesh.scale.setScalar(fireScale);
+      });
+
+      // ── Update signal particles traveling along edges ──
+      particles.forEach(p => {
+        if (!p.mesh.visible) return;
+        p.progress += p.speed;
+        if (p.progress >= 1) {
+          // Arrived at target — fire the target neuron and recycle
+          p.mesh.visible = false;
+          fireNeuron(p.targetIdx);
+          return;
+        }
+        const src = meshes[p.sourceIdx];
+        const tgt = meshes[p.targetIdx];
+        if (!src || !tgt) { p.mesh.visible = false; return; }
+        p.mesh.position.lerpVectors(src.position, tgt.position, p.progress);
+        // Fade in/out at start/end of journey
+        const fade = Math.sin(p.progress * Math.PI);
+        p.mesh.material.opacity = 0.9 * fade;
+        p.mesh.scale.setScalar(0.5 + fade * 1.2);
+      });
+
+      // ── Update ripple rings (scalar wave expansion) ──
+      ripples.forEach(r => {
+        if (!r.active) return;
+        r.age += 0.016;
+        if (r.age >= r.maxAge) {
+          r.active = false;
+          r.mesh.visible = false;
+          return;
+        }
+        const t = r.age / r.maxAge;
+        const scale = 1 + t * 40;
+        r.mesh.scale.setScalar(scale);
+        r.mesh.material.opacity = 0.6 * (1 - t);
+        r.mesh.lookAt(camera.position);
       });
 
       // Update label positions
@@ -328,6 +472,8 @@ export default function GraphCanvas3D({ allNodes, allEdges, filters, selectedNod
         if (obj.geometry) obj.geometry.dispose();
         if (obj.material) obj.material.dispose();
       });
+      particleGeo.dispose();
+      rippleGeo.dispose();
     };
   }, [visibleNodes, visibleEdges, settings.edgeOpacity, settings.showLabels]);
 

@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from "react";
-import { Search, FolderKanban, Settings, HelpCircle, Network, List, LayoutGrid, X, ChevronLeft, ChevronRight, AlertTriangle, Home } from "lucide-react";
+import { Search, FolderKanban, Settings, HelpCircle, Network, List, LayoutGrid, X, ChevronLeft, ChevronRight, Home } from "lucide-react";
 import { Link } from "react-router-dom";
 import { generateGraph, DOMAINS } from "@/lib/researchGraphData";
 import GraphCanvas from "@/components/research-graph/GraphCanvas3D";
@@ -124,8 +124,8 @@ export default function ResearchGraphExplorer() {
     return graphData.edges.filter(e => visIds.has(e.source) && visIds.has(e.target)).length;
   }, [graphData.edges, filteredNodes]);
 
-  // Mobile: force list view
-  const effectiveViewMode = isMobile ? "list" : viewMode;
+  // 3D graph is the primary experience on all devices
+  const effectiveViewMode = viewMode;
 
   return (
     <div className="h-screen flex flex-col bg-slate-950 overflow-hidden">
@@ -185,7 +185,7 @@ export default function ResearchGraphExplorer() {
         </div>
 
         {/* Graph modes */}
-        {effectiveViewMode === "graph" && !isMobile && (
+        {effectiveViewMode === "graph" && (
           <div className="flex items-center gap-1 mt-2 overflow-x-auto">
             {GRAPH_MODES.map(m => (
               <button key={m.id} onClick={() => setGraphMode(m.id)} className={`px-2.5 py-1 rounded-full text-[10px] font-bold whitespace-nowrap transition-colors border ${graphMode === m.id ? "bg-amber-400 text-slate-950 border-amber-400" : "bg-slate-900 text-slate-400 border-slate-800 hover:text-white hover:border-slate-600"}`}>
@@ -244,7 +244,7 @@ export default function ResearchGraphExplorer() {
         )}
 
         {/* Center content */}
-        {effectiveViewMode === "graph" && !isMobile ? (
+        {effectiveViewMode === "graph" ? (
           <div className="flex-1 relative">
             <GraphCanvas
               allNodes={graphData.nodes}
@@ -260,12 +260,6 @@ export default function ResearchGraphExplorer() {
           </div>
         ) : effectiveViewMode === "list" ? (
           <div className="flex-1 flex flex-col p-4 overflow-hidden">
-            {isMobile && (
-              <div className="mb-3 rounded-lg border border-[#F59E0B]/40 bg-[#F59E0B]/10 p-2.5 flex items-center gap-2">
-                <AlertTriangle size={14} className="text-[#F59E0B] flex-shrink-0" />
-                <p className="text-[#8B9AB0] text-[10px]">For the best graph experience, use ZARP on a desktop browser.</p>
-              </div>
-            )}
             <NodeListView nodes={filteredNodes} onNodeClick={handleNodeClick} onAddToCollection={handleAddToCollection} />
           </div>
         ) : (
