@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import {
   Zap, BookOpen, Wrench, Shield, Database, Star, ArrowRight,
-  ChevronRight, Package, FileText, Radio, Activity, Cpu
+  ChevronRight, Package, FileText, Radio, Activity, Cpu, Download
 } from "lucide-react";
 
 const QUICK_LINKS = [
@@ -50,9 +50,16 @@ const FEATURED_BUILDS = [
 
 export default function MemberDashboard() {
   const [user, setUser] = useState(null);
+  const [exports, setExports] = useState([]);
 
   useEffect(() => {
-    base44.auth.me().then(u => setUser(u)).catch(() => {});
+    base44.auth.me().then(u => {
+      setUser(u);
+      if (u?.email) {
+        base44.entities.NodeExport.filter({ user_email: u.email }, "-created_date", 20)
+          .then(setExports).catch(() => {});
+      }
+    }).catch(() => {});
 
     // If redirected here after a successful Stripe checkout, re-verify access
     const params = new URLSearchParams(window.location.search);
@@ -101,6 +108,41 @@ export default function MemberDashboard() {
             View Plans <ArrowRight size={14} />
           </Link>
         </div>
+
+        {/* My Exported Research */}
+        {exports.length > 0 && (
+          <div className="mb-10">
+            <div className="flex items-center gap-2 mb-1">
+              <FileText size={18} className="text-amber-400" />
+              <h2 className="text-lg font-black text-white">My Exported Research</h2>
+            </div>
+            <p className="text-slate-500 text-sm mb-5">AI intelligence briefs you've exported from the Research Graph — saved here and on your computer.</p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {exports.map(exp => (
+                <div key={exp.id} className="bg-slate-900 border border-slate-800 rounded-xl p-4 flex flex-col">
+                  <div className="flex items-start justify-between gap-2 mb-2">
+                    <h3 className="text-white font-bold text-sm leading-tight flex-1">{exp.node_label}</h3>
+                    <span className="text-[9px] text-slate-500 flex-shrink-0">{new Date(exp.created_date).toLocaleDateString()}</span>
+                  </div>
+                  <div className="flex items-center gap-2 mb-3 text-[10px] flex-wrap">
+                    {exp.domain && <span className="px-1.5 py-0.5 rounded bg-amber-900/30 text-amber-400 font-bold">{exp.domain}</span>}
+                    {exp.patent_count > 0 && <span className="text-violet-400">{exp.patent_count} patents</span>}
+                    {exp.paper_count > 0 && <span className="text-emerald-400">{exp.paper_count} papers</span>}
+                  </div>
+                  <div className="flex gap-2 mt-auto">
+                    <a href={exp.pdf_url} target="_blank" rel="noopener noreferrer" download
+                      className="flex-1 flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg bg-amber-400 text-slate-950 text-[10px] font-bold hover:bg-amber-300 transition-all">
+                      <Download size={11} /> Download
+                    </a>
+                    <Link to="/research-explorer" className="px-3 py-1.5 rounded-lg border border-slate-800 text-slate-400 text-[10px] font-bold hover:text-amber-400 hover:border-amber-400/50 transition-all">
+                      Open Graph
+                    </Link>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* Getting Started */}
         <div className="mb-10">

@@ -1,6 +1,8 @@
 import { useState, useEffect, useMemo } from "react";
-import { X, Sparkles, FileText, BookOpen, Link2, ChevronRight, ExternalLink, AlertCircle } from "lucide-react";
+import { X, Sparkles, FileText, BookOpen, Link2, ChevronRight, ExternalLink, AlertCircle, Download, Loader2 } from "lucide-react";
 import { base44 } from "@/api/base44Client";
+import { useToast } from "@/components/ui/use-toast";
+import { generateNodeExportPdf } from "@/lib/nodeExportPdf";
 
 // AI-powered research summary card — pops up on node click.
 // Generates a summary + real patent numbers + cited papers (web search),
@@ -10,6 +12,38 @@ export default function NodeSummaryCard({ node, allNodes, allEdges, onClose, onN
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
+  const [exporting, setExporting] = useState(false);
+  const { toast } = useToast();
+
+  const handleExportPdf = async () => {
+    if (exporting) return;
+    setExporting(true);
+    try {
+      const doc = generateNodeExportPdf({ node, aiData: data, connectedNodes: connected.map(c => c.node) });
+      const filename = `ZARP_${node.label.replace(/[^a-z0-9]+/gi, "_").substring(0, 50)}.pdf`;
+      doc.save(filename); // hard drive download
+      const blob = doc.output("blob");
+      const file = new File([blob], filename, { type: "application/pdf" });
+      const { file_url } = await base44.integrations.Core.UploadFile({ file });
+      const me = await base44.auth.me().catch(() => null);
+      await base44.entities.NodeExport.create({
+        node_id: node.id,
+        node_label: node.label,
+        domain: node.domain,
+        researcher: node.researcher,
+        user_email: me?.email || "unknown",
+        user_name: me?.full_name || "",
+        pdf_url: file_url,
+        summary: (data?.summary || "").substring(0, 500),
+        patent_count: data?.patent_numbers?.length || 0,
+        paper_count: data?.cited_papers?.length || 0,
+      });
+      toast({ title: "PDF exported", description: "Saved to your dashboard & downloaded to your computer." });
+    } catch (e) {
+      toast({ title: "Export failed", description: e?.message || "Could not generate PDF", variant: "destructive" });
+    }
+    setExporting(false);
+  };
 
   // Top connected nodes (by edge strength)
   const connected = useMemo(() => {
@@ -232,12 +266,19 @@ Return strict JSON matching the schema.`;
         </div>
 
         {/* Footer */}
-        <div className="flex-shrink-0 px-4 py-2.5 border-t border-slate-800 bg-slate-950">
+        <div className="flex-shrink-0 px-4 py-2.5 border-t border-slate-800 bg-slate-950 flex gap-2">
+          <button
+            onClick={handleExportPdf}
+            disabled={exporting || !data}
+            className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg bg-amber-400 text-slate-950 text-[10px] font-bold transition-all hover:bg-amber-300 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {exporting ? (<><Loader2 size={12} className="animate-spin" /> Exporting...</>) : (<><Download size={12} /> Export PDF</>)}
+          </button>
           <button
             onClick={onOpenFullDetails}
-            className="w-full flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg bg-slate-900 border border-slate-800 hover:border-amber-400/50 hover:text-amber-400 text-slate-300 text-[10px] font-bold transition-all"
+            className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg bg-slate-900 border border-slate-800 hover:border-amber-400/50 hover:text-amber-400 text-slate-300 text-[10px] font-bold transition-all"
           >
-            Full Details & Build Integration <ChevronRight size={12} />
+            Full Details <ChevronRight size={12} />
           </button>
         </div>
       </div>
