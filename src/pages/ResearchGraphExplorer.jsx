@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo } from "react";
 import { Search, FolderKanban, Settings, HelpCircle, Network, List, LayoutGrid, X, ChevronLeft, ChevronRight, AlertTriangle } from "lucide-react";
 import { generateGraph, DOMAINS } from "@/lib/researchGraphData";
-import GraphCanvas from "@/components/research-graph/GraphCanvas";
+import GraphCanvas from "@/components/research-graph/GraphCanvas3D";
 import FilterPanel from "@/components/research-graph/FilterPanel";
 import NodeDetailDrawer from "@/components/research-graph/NodeDetailDrawer";
 import NodeListView from "@/components/research-graph/NodeListView";
