@@ -6,6 +6,8 @@ import { base44 } from "@/api/base44Client";
 import { jsPDF } from "jspdf";
 import { generatePdrData } from "@/lib/pdrGenerator";
 import PdrSection from "@/components/PdrSection";
+import { generatePrdData } from "@/lib/prdGenerator";
+import PrdSection from "@/components/PrdSection";
 
 const inventions = businessItems.filter(i => i.category === "Invention");
 
@@ -167,9 +169,10 @@ Generate a completely new invention concept that synthesizes these technologies.
         setSavedId(saved?.id || null);
       } catch { /* non-critical */ }
 
-      // Auto-generate PDR (Section 11) from selected nodes and result
+      // Auto-generate PDR (Section 11) and PRD (Section 12) from selected nodes and result
       const pdrData = generatePdrData(selected, res, mode);
-      setResult({ ...res, pdrData });
+      const prdData = generatePrdData(selected, res, mode);
+      setResult({ ...res, pdrData, prdData });
     } catch (e) {
       setError("Failed to generate hybrid invention. Please try again.");
       console.error(e);
@@ -345,6 +348,96 @@ Generate a completely new invention concept that synthesizes these technologies.
         body(`Date: ${pdr.signOff.date}`);
         body(`Review Status: ${pdr.signOff.reviewStatus}`);
         body(`Next Milestone: ${pdr.signOff.nextMilestone}`);
+      }
+
+      // ── Section 12: PRD ──
+      if (result.prdData) {
+        const prd = result.prdData;
+        addPage();
+
+        // PRD permanent label
+        doc.setFillColor(45, 35, 5);
+        doc.rect(margin - 3, y - 3, cW + 6, 18, "F");
+        doc.setFontSize(8);
+        doc.setFont("helvetica", "bold");
+        doc.setTextColor(180, 130, 20);
+        doc.text("PRODUCT REQUIREMENTS DOCUMENT — CONCEPT STAGE", margin, y + 1);
+        doc.setFont("helvetica", "normal");
+        doc.setFontSize(7);
+        doc.setTextColor(150, 110, 15);
+        doc.text("Requirements are conceptual and subject to validation. Not a final engineering specification.", margin, y + 6);
+        doc.text(`Document Code: ${prd.docCode}`, margin, y + 11);
+        y += 20;
+
+        // 2.1 Vision
+        section("12.1 PRODUCT VISION STATEMENT");
+        body(prd.visionStatement);
+
+        // 2.2 Personas
+        section("12.2 USER PERSONAS");
+        prd.personas.forEach(p => {
+          body(`PERSONA ${p.id} — ${p.title.toUpperCase()}`);
+          body(`  Profile: ${p.profile}`);
+          if (p.currentSolution) body(`  Current solution & failure: ${p.currentSolution}`);
+          if (p.whatTheyNeed) body(`  What they need: ${p.whatTheyNeed}`);
+          if (p.successDef) body(`  Success definition: ${p.successDef}`);
+          if (p.setupReq) body(`  Setup & operation: ${p.setupReq}`);
+          if (p.dataReq) body(`  Data & reporting: ${p.dataReq}`);
+          if (p.trainingReq) body(`  Training: ${p.trainingReq}`);
+          if (p.adoptionJustification) body(`  Adoption justification: ${p.adoptionJustification}`);
+          if (p.evidenceReq) body(`  Evidence requirements: ${p.evidenceReq}`);
+          body("");
+        });
+
+        // 2.3 Functional Requirements
+        section("12.3 FUNCTIONAL REQUIREMENTS");
+        body("| FR-ID | Requirement | Priority | Rationale | Source |");
+        prd.functionalReqs.forEach(fr => {
+          body(`  ${fr.id} | ${fr.requirement} | ${fr.priority} | ${fr.rationale} | ${fr.source}`);
+        });
+
+        // 2.4 Non-Functional Requirements
+        section("12.4 NON-FUNCTIONAL REQUIREMENTS");
+        body("| NFR-ID | Requirement | Category |");
+        prd.nonFunctionalReqs.forEach(nfr => {
+          body(`  ${nfr.id} | ${nfr.requirement} | ${nfr.category}`);
+        });
+
+        // 2.5 Modality Performance
+        section("12.5 MODALITY PERFORMANCE REQUIREMENTS");
+        body("| Modality | Output Parameter | Min | Max | Tolerance | Accuracy | Safety Limit |");
+        prd.modalityPerfReqs.forEach(m => {
+          body(`  ${m.modality} | ${m.outputParam} | ${m.min} | ${m.max} | ${m.tolerance} | ${m.accuracy} | ${m.safetyLimit}`);
+        });
+
+        // 2.6 UI Requirements
+        section("12.6 USER INTERFACE REQUIREMENTS");
+        body(`Control Type: ${prd.uiRequirements.controlType}`);
+        body("Display:");
+        prd.uiRequirements.display.forEach(item => body(`  • ${item}`));
+        body("Alerts & Alarms:");
+        prd.uiRequirements.alerts.forEach(item => body(`  ⚠ ${item}`));
+        body("Data Logging:");
+        prd.uiRequirements.dataLogging.forEach(item => body(`  • ${item}`));
+        body(`Connectivity: ${prd.uiRequirements.connectivity}`);
+
+        // 2.7 Regulatory
+        section("12.7 REGULATORY REQUIREMENTS SUMMARY");
+        body(`FDA Classification: ${prd.regulatory.fdaClassification}`);
+        body(`Likely Pathway: ${prd.regulatory.likelyPathway}`);
+        body("Applicable Standards:");
+        prd.regulatory.applicableStandards.forEach(s => body(`  ${s.std} — ${s.desc}`));
+
+        // 2.8 Acceptance Criteria
+        section("12.8 ACCEPTANCE CRITERIA");
+        prd.acceptanceCriteria.forEach(ac => {
+          body(`  ${ac.id} [${ac.frRef}]: ${ac.criteria}`);
+        });
+
+        // 2.9 Out of Scope
+        section("12.9 OUT OF SCOPE");
+        body("This device does NOT:");
+        prd.outOfScope.forEach(item => body(`  ✗ ${item}`));
       }
 
       // Footer
@@ -620,6 +713,9 @@ Generate a completely new invention concept that synthesizes these technologies.
 
               {/* Section 11 — PDR (auto-generated) */}
               {result.pdrData && <PdrSection pdrData={result.pdrData} />}
+
+              {/* Section 12 — PRD (auto-generated) */}
+              {result.prdData && <PrdSection prdData={result.prdData} />}
 
               {/* Deliverable Notice */}
               <div className="bg-gradient-to-br from-yellow-950/30 to-gray-900 border border-yellow-800/40 rounded-2xl p-6 text-center">
