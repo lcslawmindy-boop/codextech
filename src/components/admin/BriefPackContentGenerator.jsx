@@ -46,7 +46,6 @@ export default function BriefPackContentGenerator() {
         sections: pack.sections,
         difficulty: pack.difficulty,
         icon: pack.icon,
-        tagline: pack.tagline,
       });
       await loadContent();
     } catch (e) {
@@ -78,7 +77,6 @@ export default function BriefPackContentGenerator() {
           sections: pack.sections,
           difficulty: pack.difficulty,
           icon: pack.icon,
-          tagline: pack.tagline,
         });
         await loadContent();
       } catch (e) {
