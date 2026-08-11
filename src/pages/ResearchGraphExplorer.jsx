@@ -1,5 +1,6 @@
 import { useState, useEffect, useMemo } from "react";
-import { Search, FolderKanban, Settings, HelpCircle, Network, List, LayoutGrid, X, ChevronLeft, ChevronRight, AlertTriangle } from "lucide-react";
+import { Search, FolderKanban, Settings, HelpCircle, Network, List, LayoutGrid, X, ChevronLeft, ChevronRight, AlertTriangle, Home } from "lucide-react";
+import { Link } from "react-router-dom";
 import { generateGraph, DOMAINS } from "@/lib/researchGraphData";
 import GraphCanvas from "@/components/research-graph/GraphCanvas3D";
 import FilterPanel from "@/components/research-graph/FilterPanel";
@@ -131,8 +132,11 @@ export default function ResearchGraphExplorer() {
       {/* Header */}
       <header className="flex-shrink-0 bg-[#0D1117] border-b border-[#21262D] px-4 py-2.5 z-20">
         <div className="flex items-center justify-between gap-4">
-          {/* Left: Title */}
+          {/* Left: Home button + Title */}
           <div className="flex items-center gap-3 flex-shrink-0">
+            <Link to="/" className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-[#161B22] border border-[#21262D] text-[#8B9AB0] hover:text-[#C9A84C] hover:border-[#C9A84C]/50 transition-colors" title="Back to Dashboard">
+              <Home size={14} /> <span className="text-[10px] font-bold hidden sm:inline">Home</span>
+            </Link>
             <div>
               <h1 className="text-[#C9A84C] font-black text-sm tracking-wider leading-none" style={{ fontFamily: "Orbitron, sans-serif" }}>ZARP RESEARCH GRAPH</h1>
               <p className="text-[#8B9AB0] text-[9px] mt-0.5">{graphData.nodes.length}+ nodes · {graphData.edges.length}+ connections · {DOMAINS.length} domains</p>
