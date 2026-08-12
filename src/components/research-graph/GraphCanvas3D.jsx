@@ -4,6 +4,7 @@ import { ZoomIn, ZoomOut, Maximize2, Crosshair, Network } from "lucide-react";
 import { DOMAINS, CONNECTION_TYPES, getNodeRadius, SUPPRESSION_STATUS } from "@/lib/researchGraphData";
 import { goldenSpiralPositions, goldenSpiralCurve, buildDomainCardTexture, BackgroundCarousel, GRAPH_BG_IMAGES, buildMetatronCube, buildLightningEdgeGeometry } from "@/lib/graphScene3D";
 import MatrixRainOverlay from "@/components/research-graph/MatrixRainOverlay";
+import BgSlideshow from "@/components/research-graph/BgSlideshow";
 
 // ── 3D Interactive Research Graph ──────────────────────────────────────────
 // Three.js force-directed graph: labeled nodes colored by domain, labeled edges
@@ -91,13 +92,13 @@ export default function GraphCanvas3D({ allNodes, allEdges, filters, selectedNod
     const width = mount.clientWidth || 800;
     const height = mount.clientHeight || 600;
 
-    // Scene
+    // Scene — transparent so the CSS slideshow behind shows through
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x020617);
+    // No scene.background — CSS layer provides the background images
     sceneRef.current = scene;
 
-    // ── Rotating background image carousel (cross-fading, layered, transparent) ──
-    const bgCarousel = new BackgroundCarousel(scene, GRAPH_BG_IMAGES, { maxOpacity: 0.88, holdTime: 6.5, fadeTime: 2.2 });
+    // Stub carousel (no-op — CSS slideshow handles backgrounds)
+    const bgCarousel = new BackgroundCarousel();
 
     // Camera
     const camera = new THREE.PerspectiveCamera(60, width / height, 1, 5000);
@@ -112,6 +113,7 @@ export default function GraphCanvas3D({ allNodes, allEdges, filters, selectedNod
 
     // Renderer
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    renderer.setClearColor(0x000000, 0); // fully transparent
     renderer.setSize(width, height);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     mount.innerHTML = "";
@@ -262,8 +264,7 @@ export default function GraphCanvas3D({ allNodes, allEdges, filters, selectedNod
         cam.lookAt(0, 0, 0);
       }
 
-      // ── Rotating background carousel ──
-      bgCarousel.update(0.016);
+      // (background handled by CSS slideshow)
 
       // ── Rotate the golden spiral graph group (Twilight-Zone sweep) ──
       graphGroup.rotation.y += 0.016 * 0.08;
@@ -646,7 +647,8 @@ export default function GraphCanvas3D({ allNodes, allEdges, filters, selectedNod
 
   return (
     <div className="relative w-full h-full bg-slate-950 overflow-hidden">
-      <div ref={mountRef} className="w-full h-full" style={{ cursor: "grab" }} />
+      <BgSlideshow opacity={0.75} />
+      <div ref={mountRef} className="w-full h-full" style={{ cursor: "grab", position: "relative", zIndex: 1 }} />
       <MatrixRainOverlay opacity={0.28} />
 
       {loading && (

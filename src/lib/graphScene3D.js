@@ -1,34 +1,66 @@
 import * as THREE from "three";
 
-// ── Rotating background image set ─────────────────────────────────────────
+// ── Background image set (used by CSS slideshow in GraphCanvas3D) ──────────
 export const GRAPH_BG_IMAGES = [
-  // User-provided dimensional palace & library images
-  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/3b7e019e6_Screenshot_11-8-2026_13110_wwwbingcom.jpeg",
-  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/6ef5ea26e_Screenshot_11-8-2026_13170_wwwbingcom.jpeg",
-  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/0ef05008f_Screenshot_11-8-2026_131046_wwwbingcom.jpeg",
-  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/be1bf8352_Screenshot_11-8-2026_131116_wwwbingcom.jpeg",
-  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/77dcad0f0_Screenshot_11-8-2026_131156_wwwbingcom.jpeg",
-  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/c3106ca61_Screenshot_11-8-2026_131228_wwwbingcom.jpeg",
-  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/ce094315f_Screenshot_11-8-2026_131346_wwwbingcom.jpeg",
-  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/c10b81ac2_Screenshot_11-8-2026_131440_wwwbingcom.jpeg",
-  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/d7ef617ce_Screenshot_11-8-2026_131457_wwwbingcom.jpeg",
-  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/7ea0c59a4_Screenshot_11-8-2026_131524_wwwbingcom.jpeg",
-  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/9614304ed_Screenshot_11-8-2026_131615_wwwbingcom.jpeg",
-  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/a216383fe_Screenshot_11-8-2026_131653_wwwbingcom.jpeg",
-  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/2354b96d7_Screenshot_11-8-2026_131719_wwwbingcom.jpeg",
-  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/70dc9df4f_Screenshot_11-8-2026_131728_wwwbingcom.jpeg",
-  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/83d34aea7_Screenshot_11-8-2026_131744_wwwbingcom.jpeg",
-  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/9b5315451_Screenshot_11-8-2026_131754_wwwbingcom.jpeg",
-  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/c1a7a8dba_ak3.jpg",
-  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/0ea6d0025_ak6.jpg",
-  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/29dd866b7_ak7.jpg",
-  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/6408cab54_aasas.webp",
-  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/adf7454c9_ak.webp",
-  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/4bf9157f1_ak5.webp",
-  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/ad4564a6a_ak8.webp",
-  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/075033c57_ak9.webp",
-  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/98f6ff30d_ak11.webp",
-  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/4e456e388_ak12.webp",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/6f66d099c_Screenshot_11-8-2026_13110_wwwbingcom.jpeg",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/175ec089c_Screenshot_11-8-2026_13170_wwwbingcom.jpeg",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/0720505b8_Screenshot_11-8-2026_131046_wwwbingcom.jpeg",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/34987dcd6_ak3.jpg",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/c16bd6864_ak6.jpg",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/5770b129b_ak7.jpg",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/a42ed96a7_brain2.jpg",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/6fb10d5bb_aasas.webp",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/9ded85bcc_ak.webp",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/53f61559d_ak5.webp",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/ee054a4ea_ak8.webp",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/8ed8a017d_ak9.webp",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/8b5ef67cf_ak11.webp",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/7de6a608d_ak12.webp",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/2f782a7e0_AATCS-P1CADhybrid.png",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/e02abe810_ChatGPTImageJul21202603_49_04PM.png",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/b5a2676c6_122.jpeg",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/610e6831f_AAA-Copy2.jpeg",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/b0e4b0af9_a-long-row-of-bookshelves-in-a-library-free-photo.jpeg",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/309b010cc_atom-big-crop-2048x1097.jpeg",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/8d83f4a56_BB-Copy.jpeg",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/d5b6ac752_BG1-Copy-Copy-Copy-Copy.jpeg",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/2d8f7bd12_CCC.jpeg",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/0e1c8730a_FF.jpeg",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/57b02fd65_GHGHGH.jpeg",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/f24a45d1d_IMG_7985.jpeg",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/e1516e7e3_IMG_7986.jpeg",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/77d107f0a_JHKJK-Copy.jpeg",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/bcdcb4635_JJJ-Copy.jpeg",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/a51d144fd_JJJJ-Copy2.jpeg",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/4bff4c608_MHMGHM.jpeg",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/a51d271e4_MMMMMMM-Copy.jpeg",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/31fd513d8_NGNG.jpeg",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/251bf5edc_NN-Copy.jpeg",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/dc42c60d4_NNN-Copy-Copy.jpeg",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/19d7839e1_OIF-Copy.jpeg",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/54ff03c96_S3-Copy-Copy.jpeg",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/5ba0c3775_SSA.jpeg",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/854f5cf4d_TES-Copy2-Copy.jpeg",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/c1cf2e2b2_UKUKK.jpeg",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/68d381476_VCCVC-Copy.jpeg",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/e14860bf0_VV-Copy3.jpeg",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/eefa3e715_5a9efa54-1732-426f-9f15-2281d076e774.jpg",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/4f4da77a3_6e9914fb6d6d4a305dd2fbe4c30e098d-Copy2.jpg",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/1cf2ceebb_80df6c4979f8a455e66622179c4fa152--when-you-know-you-never-know-Copy.jpg",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/b322c0d2a_334dc76f54a01292d408e91651da000cd556da33_full.jpg",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/f371ddf7e_1000_F_755228805_cGY4gZzDtaVC2GKBWaMzOtOPwnbV4ZIc-Copy.jpg",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/ac1d10d5f_BG4-Copy.jpg",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/cda8493e6_bookshelves-library-with-old-books_1131516-3-Copy.jpg",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/99128f256_maxresdefault-Copy.jpg",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/ca5a93f4f_maxresdefault3-Copy.jpg",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/64997c94a_modern-office-space-with-empty-bookshelves-and-clean-decor-generated-by-ai-photo.jpg",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/087016483_mri-machine-medical-interior-design-with-lights_932514-2211.jpg",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/8aeabc816_RB-Copy.jpg",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/db9e7c569_SDSD.jpg",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/0a53e586c_solomon-temple-inner.jpg",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/2c9a82679_thumb-1920-1062369.jpg",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/3da7710e9_wallpapersdencom_the-matrix-4k_3840x2160.jpg",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/3347973d2_wonkhe-summer-library-2740x1541-Copy-Copy.jpg",
 ];
 
 // ── Golden spiral placement (Twilight-Zone style conical spiral) ───────────
@@ -194,98 +226,11 @@ function wrapText(ctx, text, x, y, maxW, lh) {
   ctx.fillText(line, x, yy);
 }
 
-// ── Rotating background carousel ──────────────────────────────────────────
-// Two large inside-out spheres cross-fade through the image set while slowly
-// rotating, giving the layered, transparent "rotating images" backdrop.
+// ── BackgroundCarousel — no-op stub (background handled by CSS in GraphCanvas3D) ──
 export class BackgroundCarousel {
-  constructor(scene, images, opts = {}) {
-    this.scene = scene;
-    this.images = images;
-    this.radius = opts.radius || 2600;
-    this.maxOpacity = opts.maxOpacity ?? 0.6;
-    this.holdTime = opts.holdTime || 7;     // seconds per image
-    this.fadeTime = opts.fadeTime || 2.2;  // cross-fade duration
-    this.loader = new THREE.TextureLoader();
-    this._maxAniso = 16; // high anisotropic filtering for sharp background images
-    // more segments = smoother sphere surface, less faceting distortion
-    this.geo = new THREE.SphereGeometry(this.radius, 96, 64);
-    this.idx = 0;
-    this.timer = 0;
-    this.fading = false;
-
-    const mk = (opacity) => new THREE.Mesh(this.geo, new THREE.MeshBasicMaterial({
-      transparent: true, opacity, side: THREE.BackSide, depthWrite: false,
-    }));
-    this.sphereA = mk(this.maxOpacity);
-    this.sphereB = mk(0);
-    // Flatten the spheres vertically so the heavily-distorted polar regions
-    // are pushed out of view — the crisp equatorial band fills the screen.
-    this.sphereA.scale.y = 0.55;
-    this.sphereB.scale.y = 0.55;
-    this.sphereA.rotation.y = Math.random() * Math.PI * 2;
-    this.sphereB.rotation.y = Math.random() * Math.PI * 2;
-    scene.add(this.sphereA, this.sphereB);
-    this.active = this.sphereA;
-    this.incoming = this.sphereB;
-
-    this._loadInto(this.active, this.images[0]);
-    this._preload = [];
-    // preload a couple textures ahead for smooth fades
-    for (let i = 1; i < Math.min(3, this.images.length); i++) this._preload.push(this.loader.load(this.images[i]));
-  }
-
-  _loadInto(sphere, url) {
-    const tex = this.loader.load(url, t => {
-      t.colorSpace = THREE.SRGBColorSpace;
-      // sharpen: anisotropic filtering keeps the image crisp at grazing angles
-      t.anisotropy = this._maxAniso;
-      t.minFilter = THREE.LinearMipmapLinearFilter;
-      t.magFilter = THREE.LinearFilter;
-      t.generateMipmaps = true;
-      t.needsUpdate = true;
-    });
-    tex.colorSpace = THREE.SRGBColorSpace;
-    tex.anisotropy = this._maxAniso;
-    tex.minFilter = THREE.LinearMipmapLinearFilter;
-    tex.magFilter = THREE.LinearFilter;
-    tex.generateMipmaps = true;
-    sphere.material.map = tex;
-    sphere.material.needsUpdate = true;
-  }
-
-  update(dt) {
-    // rotate both spheres for parallax (different speeds)
-    this.active.rotation.y += dt * 0.03;
-    this.incoming.rotation.y += dt * 0.045;
-
-    this.timer += dt;
-    if (!this.fading && this.timer >= this.holdTime) {
-      this.fading = true;
-      this.timer = 0;
-      this.idx = (this.idx + 1) % this.images.length;
-      this._loadInto(this.incoming, this.images[this.idx]);
-    }
-    if (this.fading) {
-      const t = Math.min(1, this.timer / this.fadeTime);
-      this.incoming.material.opacity = this.maxOpacity * t;
-      this.active.material.opacity = this.maxOpacity * (1 - t);
-      if (t >= 1) {
-        // swap roles
-        const tmp = this.active; this.active = this.incoming; this.incoming = tmp;
-        this.incoming.material.opacity = 0;
-        this.incoming.material.map = null;
-        this.incoming.material.needsUpdate = true;
-        this.fading = false;
-        this.timer = 0;
-      }
-    }
-  }
-
+  constructor() {}
+  update() {}
   dispose() {
-    this.scene.remove(this.sphereA, this.sphereB);
-    [this.sphereA, this.sphereB].forEach(s => { s.material.map?.dispose?.(); s.material.dispose(); });
-    this.geo.dispose();
-    this._preload.forEach(t => t.dispose());
     cardTextureCache.forEach(t => t.dispose());
     cardTextureCache.clear();
   }
