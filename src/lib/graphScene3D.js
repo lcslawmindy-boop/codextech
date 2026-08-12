@@ -2,6 +2,19 @@ import * as THREE from "three";
 
 // ── Background image set (used by CSS slideshow in GraphCanvas3D) ──────────
 export const GRAPH_BG_IMAGES = [
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/f1e766cb5_Screenshot_11-8-2026_13110_wwwbingcom.jpeg",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/08aead0fc_Screenshot_11-8-2026_13166_wwwbingcom.jpeg",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/2edcce9f9_Screenshot_11-8-2026_13170_wwwbingcom.jpeg",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/90fbbd803_Screenshot_11-8-2026_18280_wwwbingcom.jpeg",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/20cbacb10_Screenshot_11-8-2026_18307_wwwbingcom.jpeg",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/92cea7948_Screenshot_11-8-2026_18343_wwwbingcom.jpeg",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/453a598db_Screenshot_11-8-2026_131046_wwwbingcom.jpeg",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/4c33ca196_Screenshot_11-8-2026_131116_wwwbingcom.jpeg",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/9ff201665_Screenshot_11-8-2026_131156_wwwbingcom.jpeg",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/845461940_Screenshot_11-8-2026_131228_wwwbingcom.jpeg",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/508822b44_Screenshot_11-8-2026_131346_wwwbingcom.jpeg",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/182da3b78_Screenshot_11-8-2026_131440_wwwbingcom.jpeg",
+  "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/5e9cc8e8a_Screenshot_11-8-2026_131457_wwwbingcom.jpeg",
   "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/6f66d099c_Screenshot_11-8-2026_13110_wwwbingcom.jpeg",
   "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/175ec089c_Screenshot_11-8-2026_13170_wwwbingcom.jpeg",
   "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/0720505b8_Screenshot_11-8-2026_131046_wwwbingcom.jpeg",
