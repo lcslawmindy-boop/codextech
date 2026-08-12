@@ -2,6 +2,7 @@ import { useState, useEffect, useMemo } from "react";
 import { Search, FolderKanban, Settings, HelpCircle, Network, List, LayoutGrid, X, ChevronLeft, ChevronRight, Home, Tag } from "lucide-react";
 import { Link } from "react-router-dom";
 import { generateGraph, DOMAINS } from "@/lib/researchGraphData";
+import { GRAPH_BG_THEMES } from "@/lib/graphScene3D";
 import GraphCanvas from "@/components/research-graph/GraphCanvas3D";
 import FilterPanel from "@/components/research-graph/FilterPanel";
 import NodeDetailDrawer from "@/components/research-graph/NodeDetailDrawer";
@@ -37,6 +38,7 @@ export default function ResearchGraphExplorer() {
   const [collections, setCollections] = useState([]);
   const [settings, setSettings] = useState({ showLabels: false, edgeOpacity: 0.3, physicsStrength: -120, showLegend: true, showMiniMap: true, backgroundGrid: false });
   const [isMobile, setIsMobile] = useState(false);
+  const [bgTheme, setBgTheme] = useState("Golden Spiral");
 
   useEffect(() => {
     const data = generateGraph();
@@ -178,6 +180,18 @@ export default function ResearchGraphExplorer() {
             <button onClick={() => setShowQuickGuide(true)} className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-slate-900 border border-slate-800 text-slate-400 text-[10px] font-bold hover:text-amber-400 hover:border-amber-400/50 transition-colors">
               <HelpCircle size={12} /> <span className="hidden lg:inline">Help</span>
             </button>
+            {/* Background theme picker */}
+            <select
+              value={bgTheme}
+              onChange={e => setBgTheme(e.target.value)}
+              className="px-2.5 py-1.5 rounded-lg bg-slate-900 border border-slate-800 text-slate-400 text-[10px] font-bold hover:border-amber-400/50 transition-colors outline-none cursor-pointer"
+              title="Graph background theme"
+            >
+              {Object.keys(GRAPH_BG_THEMES).map(t => (
+                <option key={t} value={t}>{t}</option>
+              ))}
+            </select>
+
             {/* Labels toggle */}
             <button
               onClick={() => setSettings(s => ({ ...s, showLabels: !s.showLabels }))}
@@ -268,6 +282,7 @@ export default function ResearchGraphExplorer() {
               graphMode={graphMode}
               settings={settings}
               searchQuery={searchQuery}
+              bgImages={GRAPH_BG_THEMES[bgTheme]}
             />
           </div>
         ) : effectiveViewMode === "list" ? (

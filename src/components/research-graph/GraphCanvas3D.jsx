@@ -17,7 +17,7 @@ const CONN_MAP = new Map(Object.entries(CONNECTION_TYPES));
 const applyMats = (group, fn) => { if (!group) return; group.traverse(o => { if (o.material) fn(o.material); }); };
 
 
-export default function GraphCanvas3D({ allNodes, allEdges, filters, selectedNode, onNodeClick, focusNode, graphMode, settings, searchQuery }) {
+export default function GraphCanvas3D({ allNodes, allEdges, filters, selectedNode, onNodeClick, focusNode, graphMode, settings, searchQuery, bgImages }) {
   const mountRef = useRef(null);
   const sceneRef = useRef(null);
   const cameraRef = useRef(null);
@@ -647,7 +647,7 @@ export default function GraphCanvas3D({ allNodes, allEdges, filters, selectedNod
 
   return (
     <div className="relative w-full h-full bg-slate-950 overflow-hidden">
-      <BgSlideshow opacity={0.75} />
+      <BgSlideshow opacity={0.75} images={bgImages} />
       <div ref={mountRef} className="w-full h-full" style={{ cursor: "grab", position: "relative", zIndex: 1 }} />
       <MatrixRainOverlay opacity={0.28} />
 

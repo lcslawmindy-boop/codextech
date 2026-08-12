@@ -2,18 +2,26 @@ import { useEffect, useRef, useState } from "react";
 import { GRAPH_BG_IMAGES } from "@/lib/graphScene3D";
 
 // Displays images at full size (object-fit: cover, no distortion) rotating every 5s.
-export default function BgSlideshow({ opacity = 0.7 }) {
+export default function BgSlideshow({ opacity = 0.7, images }) {
+  const imgList = images && images.length > 0 ? images : GRAPH_BG_IMAGES;
   const [current, setCurrent] = useState(0);
   const [next, setNext] = useState(1);
   const [fading, setFading] = useState(false);
   const timerRef = useRef(null);
 
+  // Reset indices when image list changes
+  useEffect(() => {
+    setCurrent(0);
+    setNext(1 % imgList.length);
+    setFading(false);
+  }, [images]);
+
   useEffect(() => {
     timerRef.current = setInterval(() => {
       setFading(true);
       setTimeout(() => {
-        setCurrent(c => (c + 1) % GRAPH_BG_IMAGES.length);
-        setNext(c => (c + 2) % GRAPH_BG_IMAGES.length);
+        setCurrent(c => (c + 1) % imgList.length);
+        setNext(c => (c + 2) % imgList.length);
         setFading(false);
       }, 1000); // 1s cross-fade
     }, 5000);
@@ -43,7 +51,7 @@ export default function BgSlideshow({ opacity = 0.7 }) {
       {/* Current image */}
       <img
         key={current}
-        src={GRAPH_BG_IMAGES[current]}
+        src={imgList[current]}
         alt=""
         style={{
           ...imgStyle,
@@ -55,7 +63,7 @@ export default function BgSlideshow({ opacity = 0.7 }) {
       {/* Next image (fades in) */}
       <img
         key={`n-${next}`}
-        src={GRAPH_BG_IMAGES[next]}
+        src={imgList[next]}
         alt=""
         style={{
           ...imgStyle,
