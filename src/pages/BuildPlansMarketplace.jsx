@@ -7,8 +7,6 @@ const BUILD_PLANS = [
     id: "meg",
     title: "MEG Replication Device",
     category: "Free Energy",
-    basePrice: 287,
-    videoPdfPrice: 50,
     teaser: "Complete Mobile Electromagnetic Generator system with flux-coupled coils, Lorentz force optimization, and COP>1 validation framework.",
     what_you_get: [
       "Full Bill of Materials with part numbers & quantities",
@@ -28,8 +26,6 @@ const BUILD_PLANS = [
     id: "scalar-transmitter",
     title: "Scalar EM Transmitter",
     category: "Communications",
-    basePrice: 243,
-    videoPdfPrice: 50,
     teaser: "Phase-conjugate scalar wave transmitter operating at 10-40 kHz with over-unity signal coupling and phase-locking architecture.",
     what_you_get: [
       "Complete tuning specifications & frequency tables",
@@ -49,8 +45,6 @@ const BUILD_PLANS = [
     id: "priore-device",
     title: "Prioré Device Component Bundle",
     category: "Bio-Signal",
-    basePrice: 349,
-    videoPdfPrice: 50,
     teaser: "Electromagnetic resonance chamber based on Prioré's original French patent designs for biofield interaction and cellular regeneration research.",
     what_you_get: [
       "Frequency mapping (Shor & Kaznacheyev biofields)",
@@ -70,8 +64,6 @@ const BUILD_PLANS = [
     id: "scalar-potential",
     title: "Scalar Potential Extractor",
     category: "Energy",
-    basePrice: 389,
-    videoPdfPrice: 50,
     teaser: "Zero-point energy tap using scalar potential wells, time-varying electromagnetic gradients, and non-Hertzian wave coupling.",
     what_you_get: [
       "Scalar field mathematical modeling",
@@ -91,8 +83,6 @@ const BUILD_PLANS = [
     id: "biofield-chamber",
     title: "Biofield Resonance Chamber",
     category: "Bio-Tech",
-    basePrice: 195,
-    videoPdfPrice: 50,
     teaser: "Kaznacheyev-Torsion field generator for cellular communication research and bioelectric field mapping.",
     what_you_get: [
       "Torsion field coil specifications",

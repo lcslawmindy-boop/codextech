@@ -201,7 +201,7 @@ function generateInventionPDF(inv) {
     doc.setFillColor(30, 30, 30);
     doc.rect(margin - 3, y - 3, cW + 6, 11, "F");
     const cols = [margin - 1, margin + 15, margin + 85, margin + 135];
-    ["Qty", "Component", "Specification", "Source / Cost"].forEach((h, i) => {
+    ["Qty", "Component", "Specification", "Source"].forEach((h, i) => {
       doc.setFontSize(9);
       doc.setFont("helvetica", "bold");
       doc.setTextColor(255, 255, 255);

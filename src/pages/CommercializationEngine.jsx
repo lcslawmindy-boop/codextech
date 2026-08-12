@@ -26,7 +26,7 @@ const TABS = [
   { id: "build", label: "Build Plan", icon: Cpu },
   { id: "course", label: "Course", icon: BookOpen },
   { id: "product", label: "Digital Product", icon: Package },
-  { id: "pricing", label: "Pricing", icon: DollarSign },
+  { id: "pricing", label: "Tiers", icon: DollarSign },
   { id: "impact", label: "Humanity Impact", icon: Heart },
 ];
 
@@ -68,7 +68,7 @@ Using real public records (patents, research papers, engineering archives, marke
 Produce strict JSON with these exact fields:
 
 1. "build_plan" — A practical build plan for a physical device or system based on this technology:
-   { "title", "overview" (2-3 sentences), "difficulty" (Beginner/Intermediate/Advanced), "time_estimate_hours" (number), "components": [{ "name", "source", "estimated_cost" }], "assembly_steps": [string], "safety_notes" }
+   { "title", "overview" (2-3 sentences), "difficulty" (Beginner/Intermediate/Advanced), "time_estimate_hours" (number), "components": [{ "name", "source" }], "assembly_steps": [string], "safety_notes" }
 
 2. "course_outline" — A structured course teaching people to understand and build this technology:
    { "title", "target_audience", "prerequisites": [string], "learning_outcomes": [string], "modules": [{ "title", "lessons": [string], "lab_activity" }], "total_hours" (number) }
@@ -76,7 +76,7 @@ Produce strict JSON with these exact fields:
 3. "digital_product" — A digital product people will pay for (blueprint pack, software tool, dataset, certification, etc.):
    { "name", "format" (e.g. "PDF Blueprint Pack", "Interactive Simulator", "Certification Course"), "description", "deliverables": [string], "target_market", "unique_value" }
 
-4. "pricing_tiers" — 3 pricing tiers as array of { "tier_name", "price" (string like "$49"), "format" (one-time/monthly), "included": [string] }
+4. "pricing_tiers" — 3 deliverable tiers as array of { "tier_name", "format" (one-time/monthly), "included": [string] }
 
 5. "monetization_strategies" — 5-7 additional revenue channels (licensing, kits, consulting, certification, SaaS, etc.) as array of strings
 
@@ -97,7 +97,7 @@ Produce strict JSON with these exact fields:
                 overview: { type: "string" },
                 difficulty: { type: "string" },
                 time_estimate_hours: { type: "number" },
-                components: { type: "array", items: { type: "object", properties: { name: { type: "string" }, source: { type: "string" }, estimated_cost: { type: "string" } } } },
+                components: { type: "array", items: { type: "object", properties: { name: { type: "string" }, source: { type: "string" } } } },
                 assembly_steps: { type: "array", items: { type: "string" } },
                 safety_notes: { type: "string" }
               }
@@ -130,7 +130,6 @@ Produce strict JSON with these exact fields:
                 type: "object",
                 properties: {
                   tier_name: { type: "string" },
-                  price: { type: "string" },
                   format: { type: "string" },
                   included: { type: "array", items: { type: "string" } }
                 }
@@ -355,7 +354,7 @@ function BuildPlanTab({ data }) {
                 <span className="text-slate-600 font-mono">{String(i + 1).padStart(2, "0")}</span>
                 <div className="flex-1">
                   <p className="text-slate-200 font-medium">{c.name}</p>
-                  <p className="text-slate-500">{c.source} {c.estimated_cost && `· ${c.estimated_cost}`}</p>
+                  <p className="text-slate-500">{c.source}</p>
                 </div>
               </div>
             ))}
@@ -466,13 +465,13 @@ function PricingTab({ data, strategies }) {
   if (!data?.length) return <Empty />;
   return (
     <div className="space-y-5">
-      <h3 className="text-white font-bold text-lg">Pricing Tiers</h3>
+      <h3 className="text-white font-bold text-lg">Deliverable Tiers</h3>
       <div className="grid sm:grid-cols-3 gap-3">
         {data.map((t, i) => (
           <div key={i} className={`rounded-xl border p-4 ${i === 1 ? "border-amber-400/50 bg-amber-400/5" : "border-slate-800 bg-slate-950/50"}`}>
             <p className="text-amber-400 text-xs font-bold uppercase">{t.tier_name}</p>
-            <p className="text-white text-2xl font-bold my-2">{t.price}</p>
-            <p className="text-slate-500 text-[10px] mb-2">{t.format}</p>
+            <p className="text-slate-400 text-sm font-medium my-2">{t.format}</p>
+            <p className="text-slate-500 text-[10px] mb-2">Deliverables</p>
             <ul className="space-y-1">
               {t.included?.map((inc, j) => <li key={j} className="text-xs text-slate-300 flex gap-1.5"><ChevronRight size={11} className="text-slate-600 mt-0.5" />{inc}</li>)}
             </ul>
