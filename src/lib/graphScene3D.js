@@ -40,7 +40,7 @@ export function goldenSpiralPositions(nodes) {
   const turns = 7.5;                 // more revolutions for a grander spiral
   const minR = 70;
   const maxR = 560;
-  const heightRange = 820;
+  const heightRange = 1600;          // stretched vertically for a towering spiral
   for (let i = 0; i < N; i++) {
     const t = N > 1 ? i / (N - 1) : 0.5;
     const theta = t * turns * Math.PI * 2;
@@ -64,7 +64,7 @@ export function goldenSpiralPositions(nodes) {
 }
 
 // Continuous spiral curve (for the gold guide-line drawn through the graph)
-export function goldenSpiralCurve(samples = 900, turns = 7.5, minR = 70, maxR = 560, heightRange = 820) {
+export function goldenSpiralCurve(samples = 900, turns = 7.5, minR = 70, maxR = 560, heightRange = 1600) {
   const pts = [];
   for (let i = 0; i <= samples; i++) {
     const t = i / samples;
@@ -289,4 +289,147 @@ export class BackgroundCarousel {
     cardTextureCache.forEach(t => t.dispose());
     cardTextureCache.clear();
   }
+}
+
+// ── Metatron's Cube + Platonic Solids ─────────────────────────────────────
+// Builds a sacred-geometry group: 13 node-spheres arranged in the Metatron's
+// cube pattern, connecting lines between all pairs, and the five Platonic
+// solids (tetrahedron, cube, octahedron, dodecahedron, icosahedron) nested at
+// the center. Returns a THREE.Group with a `update(dt)` method attached.
+export function buildMetatronCube(size = 120) {
+  const group = new THREE.Group();
+  const neonGreen = 0x39FF14;
+  const gold = 0xE8C766;
+
+  // 13 circles of Metatron: 1 center + 6 inner hexagon + 6 outer hexagon
+  const nodes = [];
+  const r = size;
+  // center
+  nodes.push(new THREE.Vector3(0, 0, 0));
+  // 6 inner hexagon
+  for (let i = 0; i < 6; i++) {
+    const a = (i / 6) * Math.PI * 2;
+    nodes.push(new THREE.Vector3(Math.cos(a) * r, Math.sin(a) * r, 0));
+  }
+  // 6 outer hexagon (offset 30°)
+  for (let i = 0; i < 6; i++) {
+    const a = (i / 6) * Math.PI * 2 + Math.PI / 6;
+    nodes.push(new THREE.Vector3(Math.cos(a) * r * 1.7, Math.sin(a) * r * 1.7, 0));
+  }
+
+  // node spheres (small glowing orbs)
+  const nodeGeo = new THREE.SphereGeometry(size * 0.09, 16, 16);
+  nodes.forEach((p, i) => {
+    const mat = new THREE.MeshBasicMaterial({
+      color: i === 0 ? gold : neonGreen,
+      transparent: true,
+      opacity: 0.9,
+      blending: THREE.AdditiveBlending,
+      depthWrite: false,
+    });
+    const m = new THREE.Mesh(nodeGeo, mat);
+    m.position.copy(p);
+    group.add(m);
+  });
+
+  // connecting lines (all 78 pairs = Metatron's cube)
+  const linePts = [];
+  for (let i = 0; i < nodes.length; i++) {
+    for (let j = i + 1; j < nodes.length; j++) {
+      linePts.push(nodes[i], nodes[j]);
+    }
+  }
+  const lineGeo = new THREE.BufferGeometry().setFromPoints(linePts);
+  const lineMat = new THREE.LineBasicMaterial({
+    color: neonGreen,
+    transparent: true,
+    opacity: 0.35,
+    blending: THREE.AdditiveBlending,
+    depthWrite: false,
+  });
+  group.add(new THREE.LineSegments(lineGeo, lineMat));
+
+  // ── Platonic solids nested at center ──
+  const solids = [];
+  const solidDefs = [
+    { geo: new THREE.TetrahedronGeometry(size * 0.55), color: 0x39FF14 },
+    { geo: new THREE.BoxGeometry(size * 0.7), color: 0xE8C766 },
+    { geo: new THREE.OctahedronGeometry(size * 0.6), color: 0x00BFFF },
+    { geo: new THREE.DodecahedronGeometry(size * 0.5), color: 0xB026FF },
+    { geo: new THREE.IcosahedronGeometry(size * 0.45), color: 0xFF8C00 },
+  ];
+  solidDefs.forEach((s, i) => {
+    const mat = new THREE.MeshBasicMaterial({
+      color: s.color,
+      transparent: true,
+      opacity: 0.4,
+      wireframe: true,
+      blending: THREE.AdditiveBlending,
+      depthWrite: false,
+    });
+    const mesh = new THREE.Mesh(s.geo, mat);
+    mesh.userData = {
+      rotSpeed: { x: 0.3 + i * 0.1, y: 0.4 + i * 0.08, z: 0.2 + i * 0.05 },
+      baseScale: 1,
+    };
+    solids.push(mesh);
+    group.add(mesh);
+  });
+
+  group.userData.solids = solids;
+  group.update = (dt) => {
+    group.rotation.z += dt * 0.15;
+    solids.forEach((s, i) => {
+      s.rotation.x += dt * s.userData.rotSpeed.x;
+      s.rotation.y += dt * s.userData.rotSpeed.y;
+      s.rotation.z += dt * s.userData.rotSpeed.z;
+      s.material.opacity = 0.3 + Math.sin(Date.now() * 0.001 + i) * 0.15;
+    });
+  };
+
+  return group;
+}
+
+// ── Lightning-bolt edge geometry ──────────────────────────────────────────
+// Replaces a straight edge with a jagged multi-segment polyline that looks
+// like a lightning bolt. Returns a Float32Array of positions.
+export function buildLightningEdgeGeometry(edges, nodePositions) {
+  const SEGMENTS = 5; // intermediate points per edge
+  const totalVerts = edges.length * (SEGMENTS + 1);
+  const positions = new Float32Array(totalVerts * 3);
+  const colors = new Float32Array(totalVerts * 3);
+  const _a = new THREE.Vector3();
+  const _b = new THREE.Vector3();
+  const _mid = new THREE.Vector3();
+  const _perp = new THREE.Vector3();
+
+  edges.forEach((e, i) => {
+    const sp = nodePositions.get(e.source);
+    const tp = nodePositions.get(e.target);
+    if (!sp || !tp) return;
+    _a.copy(sp); _b.copy(tp);
+    const baseColor = new THREE.Color(e.typeColor || "#39FF14");
+    baseColor.r = Math.min(1, baseColor.r * 1.4 + 0.2);
+    baseColor.g = Math.min(1, baseColor.g * 1.4 + 0.2);
+    baseColor.b = Math.min(1, baseColor.b * 1.4 + 0.2);
+
+    for (let s = 0; s <= SEGMENTS; s++) {
+      const t = s / SEGMENTS;
+      _mid.lerpVectors(_a, _b, t);
+      // jagged displacement perpendicular to the edge, tapering at endpoints
+      if (s > 0 && s < SEGMENTS) {
+        const jitter = (Math.random() - 0.5) * 40 * (1 - Math.abs(t - 0.5) * 1.4);
+        _perp.set(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5).normalize();
+        _mid.addScaledVector(_perp, jitter);
+      }
+      const idx = (i * (SEGMENTS + 1) + s) * 3;
+      positions[idx] = _mid.x;
+      positions[idx + 1] = _mid.y;
+      positions[idx + 2] = _mid.z;
+      colors[idx] = baseColor.r;
+      colors[idx + 1] = baseColor.g;
+      colors[idx + 2] = baseColor.b;
+    }
+  });
+  return { positions, colors, segments: SEGMENTS };
 }

@@ -2,7 +2,8 @@ import { useRef, useEffect, useState, useMemo } from "react";
 import * as THREE from "three";
 import { ZoomIn, ZoomOut, Maximize2, Crosshair, Network } from "lucide-react";
 import { DOMAINS, CONNECTION_TYPES, getNodeRadius, SUPPRESSION_STATUS } from "@/lib/researchGraphData";
-import { goldenSpiralPositions, goldenSpiralCurve, buildDomainCardTexture, BackgroundCarousel, GRAPH_BG_IMAGES } from "@/lib/graphScene3D";
+import { goldenSpiralPositions, goldenSpiralCurve, buildDomainCardTexture, BackgroundCarousel, GRAPH_BG_IMAGES, buildMetatronCube, buildLightningEdgeGeometry } from "@/lib/graphScene3D";
+import MatrixRainOverlay from "@/components/research-graph/MatrixRainOverlay";
 
 // ── 3D Interactive Research Graph ──────────────────────────────────────────
 // Three.js force-directed graph: labeled nodes colored by domain, labeled edges
@@ -22,6 +23,7 @@ export default function GraphCanvas3D({ allNodes, allEdges, filters, selectedNod
   const rendererRef = useRef(null);
   const nodeMeshesRef = useRef([]);
   const edgeLinesRef = useRef(null);
+  const metatronRef = useRef(null);
   const labelsRef = useRef(null);
   const raycasterRef = useRef(new THREE.Raycaster());
   const pointerRef = useRef(new THREE.Vector2());
@@ -176,6 +178,11 @@ export default function GraphCanvas3D({ allNodes, allEdges, filters, selectedNod
     axisGroup.add(new THREE.Line(vGeo, vMat));
     graphGroup.add(axisGroup);
 
+    // ── Metatron's Cube + Platonic solids on the axis center ──
+    const metatron = buildMetatronCube(140);
+    metatronRef.current = metatron;
+    graphGroup.add(metatron);
+
     // ── 3D realistic research cards (billboarded, one shared texture per domain) ──
     const cardGeo = new THREE.PlaneGeometry(1, 1.3);
     const domainTex = new Map(DOMAINS.map(d => [d.id, buildDomainCardTexture(d)]));
@@ -202,30 +209,14 @@ export default function GraphCanvas3D({ allNodes, allEdges, filters, selectedNod
     });
     nodeMeshesRef.current = meshes;
 
-    // Edges as line segments
-    const edgeGeo = new THREE.BufferGeometry();
-    const edgePositions = new Float32Array(visibleEdges.length * 6);
-    const edgeColors = new Float32Array(visibleEdges.length * 6);
+    // ── Lightning-bolt edges (jagged neon polylines with energy pulse) ──
     const nodeById = new Map(visibleNodes.map((n, i) => [n.numericId, i]));
-    visibleEdges.forEach((e, i) => {
-      const sIdx = nodeById.get(e.source);
-      const tIdx = nodeById.get(e.target);
-      if (sIdx === undefined || tIdx === undefined) return;
-      const sp = meshes[sIdx].position;
-      const tp = meshes[tIdx].position;
-      edgePositions[i * 6] = sp.x; edgePositions[i * 6 + 1] = sp.y; edgePositions[i * 6 + 2] = sp.z;
-      edgePositions[i * 6 + 3] = tp.x; edgePositions[i * 6 + 4] = tp.y; edgePositions[i * 6 + 5] = tp.z;
-      const c = new THREE.Color(e.typeColor || "#39FF14");
-      // push to neon-bright values for additive glow
-      c.r = Math.min(1, c.r * 1.3 + 0.15);
-      c.g = Math.min(1, c.g * 1.3 + 0.15);
-      c.b = Math.min(1, c.b * 1.3 + 0.15);
-      edgeColors[i * 6] = c.r; edgeColors[i * 6 + 1] = c.g; edgeColors[i * 6 + 2] = c.b;
-      edgeColors[i * 6 + 3] = c.r; edgeColors[i * 6 + 4] = c.g; edgeColors[i * 6 + 5] = c.b;
-    });
-    edgeGeo.setAttribute("position", new THREE.BufferAttribute(edgePositions, 3));
-    edgeGeo.setAttribute("color", new THREE.BufferAttribute(edgeColors, 3));
-    // Neon connecting edges — vivid additive glow
+    const nodePosMap = new Map();
+    visibleNodes.forEach((n, i) => nodePosMap.set(n.numericId, meshes[i].position));
+    const bolt = buildLightningEdgeGeometry(visibleEdges, nodePosMap);
+    const edgeGeo = new THREE.BufferGeometry();
+    edgeGeo.setAttribute("position", new THREE.BufferAttribute(bolt.positions, 3));
+    edgeGeo.setAttribute("color", new THREE.BufferAttribute(bolt.colors, 3));
     const edgeMat = new THREE.LineBasicMaterial({
       vertexColors: true,
       transparent: true,
@@ -235,6 +226,7 @@ export default function GraphCanvas3D({ allNodes, allEdges, filters, selectedNod
       depthWrite: false,
     });
     const edgeLines = new THREE.LineSegments(edgeGeo, edgeMat);
+    edgeLines.userData = { segments: bolt.segments, baseOpacity: Math.max(0.65, settings.edgeOpacity || 0.65) };
     graphGroup.add(edgeLines);
     edgeLinesRef.current = edgeLines;
 
@@ -284,6 +276,17 @@ export default function GraphCanvas3D({ allNodes, allEdges, filters, selectedNod
           c.material.opacity = 0.6 + Math.sin(pulseClockRef.current * 2 + i) * 0.25;
         }
       });
+
+      // ── Metatron's cube + Platonic solids rotation ──
+      if (metatronRef.current?.update) metatronRef.current.update(0.016);
+
+      // ── Lightning-bolt energy pulse — flickering opacity shocks ──
+      if (edgeLinesRef.current) {
+        const el = edgeLinesRef.current;
+        const base = el.userData.baseOpacity || 0.65;
+        // rapid energy-shock flicker
+        el.material.opacity = base * (0.6 + Math.abs(Math.sin(pulseClockRef.current * 4)) * 0.4 + Math.random() * 0.15);
+      }
 
       // ── Billboard each card to face the camera (pop-out effect) ──
       if (cameraRef.current) {
@@ -532,20 +535,22 @@ export default function GraphCanvas3D({ allNodes, allEdges, filters, selectedNod
       }
       const orig = edgeLines.userData.origColors;
       const hc = new THREE.Color(hoveredNode.domainColor);
+      const stride = (edgeLines.userData.segments + 1) * 3; // 6 verts * 3 = 18
       visibleEdges.forEach((e, i) => {
         const isConn = e.source === hoveredNode.numericId || e.target === hoveredNode.numericId;
+        const base = i * stride;
         if (isConn) {
           // Connected edges take the hovered node's color — bold & clear
-          colors[i * 6] = hc.r; colors[i * 6 + 1] = hc.g; colors[i * 6 + 2] = hc.b;
-          colors[i * 6 + 3] = hc.r; colors[i * 6 + 4] = hc.g; colors[i * 6 + 5] = hc.b;
+          for (let v = 0; v < stride; v += 3) {
+            colors[base + v] = hc.r; colors[base + v + 1] = hc.g; colors[base + v + 2] = hc.b;
+          }
         } else {
           // Dim to gray
-          colors[i * 6] = orig[i * 6] * 0.15;
-          colors[i * 6 + 1] = orig[i * 6 + 1] * 0.15;
-          colors[i * 6 + 2] = orig[i * 6 + 2] * 0.15;
-          colors[i * 6 + 3] = colors[i * 6];
-          colors[i * 6 + 4] = colors[i * 6 + 1];
-          colors[i * 6 + 5] = colors[i * 6 + 2];
+          for (let v = 0; v < stride; v += 3) {
+            colors[base + v] = orig[base + v] * 0.15;
+            colors[base + v + 1] = orig[base + v + 1] * 0.15;
+            colors[base + v + 2] = orig[base + v + 2] * 0.15;
+          }
         }
       });
       edgeColorAttr.needsUpdate = true;
@@ -642,6 +647,7 @@ export default function GraphCanvas3D({ allNodes, allEdges, filters, selectedNod
   return (
     <div className="relative w-full h-full bg-slate-950 overflow-hidden">
       <div ref={mountRef} className="w-full h-full" style={{ cursor: "grab" }} />
+      <MatrixRainOverlay opacity={0.28} />
 
       {loading && (
         <div className="absolute inset-0 flex items-center justify-center bg-slate-950/80 z-30">
