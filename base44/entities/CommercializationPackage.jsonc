@@ -1,0 +1,188 @@
+{
+  "name": "CommercializationPackage",
+  "type": "object",
+  "properties": {
+    "topic": {
+      "type": "string",
+      "description": "The research topic or technology being commercialized"
+    },
+    "domain": {
+      "type": "string",
+      "description": "Research domain (e.g. scalar_em, suppressed_em, zero_point)"
+    },
+    "source_node_id": {
+      "type": "string",
+      "description": "Optional research graph node ID this was generated from"
+    },
+    "user_email": {
+      "type": "string",
+      "description": "Email of the user who generated this package"
+    },
+    "build_plan": {
+      "type": "object",
+      "description": "AI-generated build plan for a physical device or system",
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "overview": {
+          "type": "string"
+        },
+        "difficulty": {
+          "type": "string"
+        },
+        "time_estimate_hours": {
+          "type": "number"
+        },
+        "components": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "source": {
+                "type": "string"
+              },
+              "estimated_cost": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "assembly_steps": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "safety_notes": {
+          "type": "string"
+        }
+      }
+    },
+    "course_outline": {
+      "type": "object",
+      "description": "AI-generated course curriculum",
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "target_audience": {
+          "type": "string"
+        },
+        "prerequisites": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "learning_outcomes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "modules": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "title": {
+                "type": "string"
+              },
+              "lessons": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "lab_activity": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "total_hours": {
+          "type": "number"
+        }
+      }
+    },
+    "digital_product": {
+      "type": "object",
+      "description": "AI-generated digital product specification",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "format": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "deliverables": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "target_market": {
+          "type": "string"
+        },
+        "unique_value": {
+          "type": "string"
+        }
+      }
+    },
+    "pricing_tiers": {
+      "type": "array",
+      "description": "Suggested pricing tiers for the commercialized offering",
+      "items": {
+        "type": "object",
+        "properties": {
+          "tier_name": {
+            "type": "string"
+          },
+          "price": {
+            "type": "string"
+          },
+          "format": {
+            "type": "string"
+          },
+          "included": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "monetization_strategies": {
+      "type": "array",
+      "description": "Additional revenue channels and go-to-market strategies",
+      "items": {
+        "type": "string"
+      }
+    },
+    "humanity_impact": {
+      "type": "string",
+      "description": "How this technology advances humanity when commercialized responsibly"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "published",
+        "archived"
+      ],
+      "default": "draft"
+    }
+  },
+  "required": [
+    "topic",
+    "user_email"
+  ]
+}
