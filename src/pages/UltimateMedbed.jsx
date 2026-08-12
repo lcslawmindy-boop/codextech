@@ -3,13 +3,15 @@ import { Link } from "react-router-dom";
 import {
   Home, Box, FileText, Package, Layers, Activity, AlertTriangle,
   ChevronRight, Cpu, Shield, Zap, Download, RefreshCw, ChevronDown, ChevronUp,
-  Brain, Heart, Sparkles, Wrench
+  Brain, Heart, Sparkles, Wrench, CheckCircle2
 } from "lucide-react";
 import UltimateMedbed3D from "@/components/UltimateMedbed3D";
+import UltimateMedbedAssembly3D from "@/components/UltimateMedbedAssembly3D";
 import {
   MEDBED_OVERVIEW, MODALITIES, PRD, PDR, BOM_SUMMARY, BOM_CATEGORIES,
   ASSEMBLY_PHASES, TOTAL_HOURS, SUPPRESSED_CONCEPTS
 } from "@/lib/ultimateMedbedData";
+import { ASSEMBLY_STEPS, TOTAL_SUB_STEPS } from "@/lib/ultimateMedbedAssembly";
 
 const TABS = [
   { id: "render", label: "3D Render", icon: Box },
@@ -169,23 +171,61 @@ export default function UltimateMedbed() {
         {/* Build Plan tab */}
         {tab === "build" && (
           <div className="space-y-6">
-            <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-5">
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="text-white font-bold text-base flex items-center gap-2"><Wrench size={18} className="text-amber-400" /> Assembly Phases</h2>
-                <span className="text-slate-400 text-xs">Total: <strong className="text-white">{TOTAL_HOURS} hours</strong></span>
+            {/* Interactive 3D Assembly Manual */}
+            <UltimateMedbedAssembly3D />
+
+            {/* Summary stats */}
+            <div className="grid grid-cols-3 gap-3">
+              <div className="bg-slate-900 border border-slate-800 rounded-xl p-4">
+                <p className="text-slate-600 text-[10px] uppercase tracking-wider">Assembly Phases</p>
+                <p className="text-white font-black text-xl">{ASSEMBLY_STEPS.length}</p>
               </div>
-              <div className="space-y-3">
-                {ASSEMBLY_PHASES.map(p => (
-                  <div key={p.phase} className="flex gap-4 items-start">
-                    <div className="w-9 h-9 rounded-lg bg-slate-800 border border-slate-700 text-amber-400 font-black text-sm flex items-center justify-center flex-shrink-0">
-                      {p.phase}
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center justify-between">
-                        <span className="text-white font-semibold text-sm">{p.title}</span>
-                        <span className="text-slate-500 text-xs">{p.hours}h</span>
+              <div className="bg-slate-900 border border-slate-800 rounded-xl p-4">
+                <p className="text-slate-600 text-[10px] uppercase tracking-wider">Sub-Steps</p>
+                <p className="text-white font-black text-xl">{TOTAL_SUB_STEPS}</p>
+              </div>
+              <div className="bg-slate-900 border border-slate-800 rounded-xl p-4">
+                <p className="text-slate-600 text-[10px] uppercase tracking-wider">Total Hours</p>
+                <p className="text-white font-black text-xl">{TOTAL_HOURS}h</p>
+              </div>
+            </div>
+
+            {/* Detailed step-by-step assembly */}
+            <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-5">
+              <h2 className="text-white font-bold text-base flex items-center gap-2 mb-4"><Wrench size={18} className="text-amber-400" /> Technical Assembly Layout — Step by Step</h2>
+              <div className="space-y-6">
+                {ASSEMBLY_STEPS.map((phase) => (
+                  <div key={phase.phase} className="border-l-2 pl-4" style={{ borderColor: phase.color }}>
+                    <div className="flex items-center justify-between mb-3">
+                      <div className="flex items-center gap-2">
+                        <div className="w-8 h-8 rounded-lg flex items-center justify-center font-black text-sm flex-shrink-0" style={{ backgroundColor: `${phase.color}20`, border: `1px solid ${phase.color}40`, color: phase.color }}>
+                          {phase.phase}
+                        </div>
+                        <div>
+                          <h3 className="text-white font-bold text-sm">{phase.title}</h3>
+                          <p className="text-slate-500 text-[10px]">{phase.steps.length} sub-steps</p>
+                        </div>
                       </div>
-                      <p className="text-slate-500 text-xs mt-0.5 leading-relaxed">{p.desc}</p>
+                      <span className="text-slate-400 text-xs font-bold">{phase.hours}h</span>
+                    </div>
+                    <div className="space-y-2">
+                      {phase.steps.map((s) => (
+                        <div key={s.id} className="bg-slate-950/50 rounded-lg p-3 border border-slate-800">
+                          <div className="flex items-start gap-2 mb-1">
+                            <span className="font-mono text-[10px] font-bold flex-shrink-0 w-8" style={{ color: phase.color }}>{s.id}</span>
+                            <h4 className="text-white text-xs font-bold flex-1">{s.title}</h4>
+                          </div>
+                          <p className="text-slate-400 text-[11px] leading-relaxed mb-2 ml-10">{s.detail}</p>
+                          <div className="ml-10 flex flex-wrap gap-x-4 gap-y-1 text-[10px]">
+                            <span className="text-slate-500"><strong className="text-slate-400">Tool:</strong> {s.tool}</span>
+                            <span className="text-slate-500"><strong className="text-slate-400">Parts:</strong> {s.parts}</span>
+                          </div>
+                          <div className="ml-10 mt-2 flex items-start gap-1.5">
+                            <CheckCircle2 size={11} className="text-green-400 flex-shrink-0 mt-0.5" />
+                            <p className="text-green-400 text-[10px]"><strong>Verify:</strong> {s.verify}</p>
+                          </div>
+                        </div>
+                      ))}
                     </div>
                   </div>
                 ))}
