@@ -11,6 +11,7 @@ import NodeCardView from "@/components/research-graph/NodeCardView";
 import CollectionsPanel from "@/components/research-graph/CollectionsPanel";
 import QuickGuideModal from "@/components/research-graph/QuickGuideModal";
 import NodeSummaryCard from "@/components/research-graph/NodeSummaryCard";
+import GraphStylePicker from "@/components/research-graph/GraphStylePicker";
 
 const GRAPH_MODES = [
   { id: "full", label: "Full Graph", icon: Network },
@@ -181,16 +182,7 @@ export default function ResearchGraphExplorer() {
               <HelpCircle size={12} /> <span className="hidden lg:inline">Help</span>
             </button>
             {/* Background theme picker */}
-            <select
-              value={bgTheme}
-              onChange={e => setBgTheme(e.target.value)}
-              className="px-2.5 py-1.5 rounded-lg bg-slate-900 border border-slate-800 text-slate-400 text-[10px] font-bold hover:border-amber-400/50 transition-colors outline-none cursor-pointer"
-              title="Graph background theme"
-            >
-              {Object.keys(GRAPH_BG_THEMES).map(t => (
-                <option key={t} value={t}>{t}</option>
-              ))}
-            </select>
+            <GraphStylePicker value={bgTheme} onChange={setBgTheme} />
 
             {/* Labels toggle */}
             <button
