@@ -217,6 +217,7 @@ import ResearchAcademy from './pages/ResearchAcademy';
 import ExportCenter from './pages/ExportCenter';
 import CommercializationEngine from './pages/CommercializationEngine';
 import MonetizationHub from './pages/MonetizationHub';
+import UltimateMedbed from './pages/UltimateMedbed';
 
 
 const AuthenticatedApp = () => {
@@ -432,6 +433,7 @@ const AuthenticatedApp = () => {
           <Route path="/export-center" element={<ExportCenter />} />
           <Route path="/commercialization-engine" element={<CommercializationEngine />} />
           <Route path="/monetization-hub" element={<MonetizationHub />} />
+          <Route path="/ultimate-medbed" element={<UltimateMedbed />} />
 
           {/* Scalar Venture Vault Routes */}
           <Route path="/venture" element={<ScalarVentureHome />} />
