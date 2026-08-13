@@ -43,7 +43,6 @@ import MyLearning from './pages/MyLearning';
 const LabSimulation = lazy(() => import('./pages/LabSimulation'));
 import InventionPlans from './pages/InventionPlans';
 import EMFImpact from './pages/EMFImpact';
-import EMFImpactSlideshow from './pages/EMFImpactSlideshow';
 import EMFCrisisPitchDeck from './pages/EMFCrisisPitchDeck';
 const ScalarEMLab = lazy(() => import('./pages/ScalarEMLab'));
 const PatentDraftingTool = lazy(() => import('./pages/PatentDraftingTool'));
@@ -204,17 +203,6 @@ import AcquisitionTierRoadmap from './pages/AcquisitionTierRoadmap';
 import TherapyPod from './pages/TherapyPod';
 import TherapyPodPro from './pages/TherapyPodPro';
 import ResonanceDashboard from './pages/ResonanceDashboard';
-import MedbedShowcase from './pages/MedbedShowcase';
-import ScalarHealingSystems from './pages/ScalarHealingSystems';
-import LightTimelineDevices from './pages/LightTimelineDevices';
-import InvestorMasterPackage from './pages/InvestorMasterPackage';
-import PortfolioStrategy from './pages/PortfolioStrategy';
-import ResearchGraphExplorer from './pages/ResearchGraphExplorer';
-import ZarpLandingNew from './pages/ZarpLandingNew';
-import ZarpDashboard from './pages/ZarpDashboard';
-import LicensingHub from './pages/LicensingHub';
-import ResearchAcademy from './pages/ResearchAcademy';
-import ExportCenter from './pages/ExportCenter';
 
 
 const AuthenticatedApp = () => {
@@ -245,7 +233,7 @@ const AuthenticatedApp = () => {
   if (!hasPaid) {
     return (
       <Routes>
-        <Route path="/" element={<ZarpLandingNew />} />
+        <Route path="/" element={<VaultNDALanding />} />
         <Route path="/free-vault" element={<FreeVault />} />
         <Route path="/build-supplies-shop" element={<BuildSuppliesShop />} />
         <Route path="/emf-impact" element={<EMFImpact />} />
@@ -266,7 +254,7 @@ const AuthenticatedApp = () => {
 
       <Routes>
         <Route element={<MobileLayout />}>
-          <Route path="/" element={<ZarpDashboard />} />
+          <Route path="/" element={<ConceptGraph />} />
           <Route path="/zarp-landing" element={<ZarpLanding />} />
           <Route path="/free-vault" element={<FreeVault />} />
           <Route path="/member-dashboard" element={<MemberDashboard />} />
@@ -283,7 +271,6 @@ const AuthenticatedApp = () => {
           <Route path="/lab" element={<LabSimulation />} />
           <Route path="/invention-plans" element={<InventionPlans />} />
           <Route path="/emf-impact" element={<EMFImpact />} />
-          <Route path="/emf-impact-slideshow" element={<EMFImpactSlideshow />} />
           <Route path="/emf-crisis" element={<EMFCrisisPitchDeck />} />
           <Route path="/scalar-lab" element={<ScalarEMLab />} />
           <Route path="/patent-tool" element={<PatentDraftingTool />} />
@@ -416,18 +403,7 @@ const AuthenticatedApp = () => {
           <Route path="/therapy-pod" element={<TherapyPod />} />
           <Route path="/therapy-pod-pro" element={<TherapyPodPro />} />
           <Route path="/resonance-dashboard" element={<ResonanceDashboard />} />
-          <Route path="/medbed-showcase" element={<MedbedShowcase />} />
-          <Route path="/scalar-healing" element={<ScalarHealingSystems />} />
-          <Route path="/light-timeline-devices" element={<LightTimelineDevices />} />
-          <Route path="/investor-master-package" element={<InvestorMasterPackage />} />
-          <Route path="/portfolio-strategy" element={<PortfolioStrategy />} />
           </Route>
-
-          {/* ZARP premium feature pages — all authenticated users */}
-          <Route path="/research-explorer" element={<ResearchGraphExplorer />} />
-          <Route path="/licensing-hub" element={<LicensingHub />} />
-          <Route path="/research-academy" element={<ResearchAcademy />} />
-          <Route path="/export-center" element={<ExportCenter />} />
 
           {/* Scalar Venture Vault Routes */}
           <Route path="/venture" element={<ScalarVentureHome />} />

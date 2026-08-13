@@ -1,17 +1,9 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { ArrowLeft, Zap, Plus, X, Loader2, TrendingUp, Map, RotateCcw, CheckCircle2, AlertTriangle, Download, BookOpen } from "lucide-react";
+import { ArrowLeft, Zap, Plus, X, Loader2, TrendingUp, DollarSign, Map, ShoppingCart, RotateCcw, CheckCircle2, AlertTriangle, Download, BookOpen } from "lucide-react";
 import { businessItems } from "../lib/businessItems";
 import { base44 } from "@/api/base44Client";
 import { jsPDF } from "jspdf";
-import { generatePdrData } from "@/lib/pdrGenerator";
-import PdrSection from "@/components/PdrSection";
-import { generatePrdData } from "@/lib/prdGenerator";
-import PrdSection from "@/components/PrdSection";
-import { generateBomData } from "@/lib/bomGenerator";
-import BomSection from "@/components/BomSection";
-import { generateValuationData } from "@/lib/valuationGenerator";
-import ValuationSection from "@/components/ValuationSection";
 
 const inventions = businessItems.filter(i => i.category === "Invention");
 
@@ -32,7 +24,36 @@ function DeviceChip({ inv, onRemove }) {
   );
 }
 
-const PROFESSIONAL_DELIVERABLE = "Professional-grade deliverable — generated in minutes from your ZARP research and device data.";
+function IPValuationMeter({ low, high }) {
+  const avg = (low + high) / 2;
+  const tier = avg >= 500 ? "🔥 High Value" : avg >= 100 ? "💡 Mid Value" : "🌱 Early Stage";
+  const color = avg >= 500 ? "text-red-400" : avg >= 100 ? "text-yellow-400" : "text-green-400";
+
+  return (
+    <div className="bg-gray-900 border border-gray-800 rounded-xl p-4">
+      <p className="text-gray-400 font-bold text-xs uppercase tracking-wider mb-3">IP Valuation Estimate</p>
+      <div className="flex items-end gap-3 mb-2">
+        <div>
+          <p className="text-gray-500 text-xs">Low</p>
+          <p className="text-white font-black text-xl">${low}M</p>
+        </div>
+        <div className="text-gray-600 text-lg font-bold mb-1">—</div>
+        <div>
+          <p className="text-gray-500 text-xs">High</p>
+          <p className="text-white font-black text-xl">${high}M</p>
+        </div>
+        <div className="ml-auto text-right">
+          <p className={`font-black text-sm ${color}`}>{tier}</p>
+          <p className="text-gray-500 text-xs">USD (pre-patent)</p>
+        </div>
+      </div>
+      <div className="w-full h-2 bg-gray-800 rounded-full overflow-hidden">
+        <div className="h-full rounded-full bg-gradient-to-r from-green-500 via-yellow-500 to-red-500"
+          style={{ width: `${Math.min(100, (avg / 1000) * 100)}%` }} />
+      </div>
+    </div>
+  );
+}
 
 function RoadmapTimeline({ phases }) {
   return (
@@ -70,6 +91,7 @@ export default function InventionForge2() {
   const [savedId, setSavedId] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [checkoutLoading, setCheckoutLoading] = useState(false);
   const [pdfLoading, setPdfLoading] = useState(false);
 
   const toggle = (inv) => {
@@ -173,12 +195,7 @@ Generate a completely new invention concept that synthesizes these technologies.
         setSavedId(saved?.id || null);
       } catch { /* non-critical */ }
 
-      // Auto-generate PDR (Section 11) and PRD (Section 12) from selected nodes and result
-      const pdrData = generatePdrData(selected, res, mode);
-      const prdData = generatePrdData(selected, res, mode);
-      const bomData = generateBomData(selected, res, mode);
-      const valuationData = generateValuationData(selected, res, mode);
-      setResult({ ...res, pdrData, prdData, bomData, valuationData });
+      setResult(res);
     } catch (e) {
       setError("Failed to generate hybrid invention. Please try again.");
       console.error(e);
@@ -244,7 +261,7 @@ Generate a completely new invention concept that synthesizes these technologies.
       doc.setTextColor(80, 80, 80);
       doc.text(`Mode: ${mode === "merge" ? "Merged" : "Cross-Pollinated"} IP  |  Synergy Score: ${result.synergy_score}/100`, margin, y);
       y += 7;
-      doc.text(PROFESSIONAL_DELIVERABLE, margin, y);
+      doc.text(`IP Valuation: $${result.ip_value_low}M – $${result.ip_value_high}M`, margin, y);
       y += 7;
       doc.text(`Input Technologies: ${selected.map(s => s.title).join(", ")}`, margin, y);
       y += 7;
@@ -262,8 +279,8 @@ Generate a completely new invention concept that synthesizes these technologies.
       doc.text("⚠ Draft only — consult a patent attorney before filing", margin, y);
       y += 10;
 
-      section("3. PROFESSIONAL DELIVERABLE");
-      body(PROFESSIONAL_DELIVERABLE);
+      section("3. IP VALUATION");
+      body(result.ip_valuation);
 
       section("4. MARKET APPLICATIONS");
       body(result.market_applications);
@@ -273,321 +290,6 @@ Generate a completely new invention concept that synthesizes these technologies.
 
       section("6. SUGGESTED NEXT STEPS");
       body(result.suggested_next_steps);
-
-      // ── Section 11: PDR ──
-      if (result.pdrData) {
-        const pdr = result.pdrData;
-        addPage();
-
-        // PDR permanent label
-        doc.setFillColor(45, 35, 5);
-        doc.rect(margin - 3, y - 3, cW + 6, 18, "F");
-        doc.setFontSize(8);
-        doc.setFont("helvetica", "bold");
-        doc.setTextColor(180, 130, 20);
-        doc.text("PRELIMINARY DESIGN REVIEW — CONCEPT STAGE", margin, y + 1);
-        doc.setFont("helvetica", "normal");
-        doc.setFontSize(7);
-        doc.setTextColor(150, 110, 15);
-        doc.text("Subject to manufacturer validation and engineering review. Not a final design. Not a certified device.", margin, y + 6);
-        doc.text(`Document Code: ${pdr.docCode}`, margin, y + 11);
-        y += 20;
-
-        // 1.1 System Overview
-        section("11.1 SYSTEM OVERVIEW");
-        body(`Device Name: ${pdr.systemOverview.deviceName}`);
-        body(`Device Code: ${pdr.systemOverview.deviceCode}`);
-        body(`Version: ${pdr.systemOverview.version}  |  Date: ${pdr.systemOverview.date}`);
-        body(`Mission Statement: ${pdr.systemOverview.missionStatement}`);
-        body(`Target Population: ${pdr.systemOverview.targetPopulation}`);
-        body(`Primary Innovation Goal: ${pdr.systemOverview.primaryInnovationGoal}`);
-        body(`Technology Readiness Level: ${pdr.systemOverview.trl}`);
-        body(`TRL Justification: ${pdr.systemOverview.trlJustification}`);
-
-        // 1.2 Design Basis
-        section("11.2 DESIGN BASIS & REQUIREMENTS SUMMARY");
-        body("Source Research Nodes:");
-        pdr.designBasis.sourceNodes.forEach(n => body(`  ${n.code} — ${n.title} (${n.source})`));
-        body("");
-        body("Key Design Drivers:");
-        pdr.designBasis.keyDesignDrivers.forEach(d => body(`  ${d.label}: ${d.value}`));
-        body("");
-        body("Design Constraints:");
-        pdr.designBasis.designConstraints.forEach(c => body(`  • ${c}`));
-        body("");
-        body("Open Design Questions:");
-        pdr.designBasis.openDesignQuestions.forEach(q => body(`  ⚠ ${q}`));
-
-        // 1.3 Architecture Block Diagram
-        section("11.3 MULTI-SYSTEM ARCHITECTURE BLOCK DIAGRAM");
-        pdr.architectureBlocks.forEach(b => body(`  [${b.label}] (${b.source}): ${b.desc}`));
-        body("");
-        body(`Feedback Loop: ${pdr.feedbackLoop}`);
-
-        // 1.4 Modality Matrix
-        section("11.4 MODALITY MATRIX");
-        body(`| # | Name | Source Node | Frequency/Range | Delivery | Target Tissue | Safety Ref | Priority |`);
-        pdr.modalityMatrix.forEach(m => {
-          body(`  ${m.num} | ${m.name} | ${m.sourceNode} | ${m.frequencyRange} | ${m.deliveryMethod} | ${m.targetTissue} | ${m.safetyRef} | ${m.priorityRank}`);
-        });
-
-        // 1.5 ICD
-        section("11.5 INTERFACE CONTROL DOCUMENT (ICD — CONCEPTUAL)");
-        body("| Interface ID | From | To | Signal Type | Protocol | Notes |");
-        pdr.icd.forEach(i => body(`  ${i.id} | ${i.from} | ${i.to} | ${i.signal} | ${i.protocol} | ${i.notes}`));
-
-        // 1.6 Risk Register
-        section("11.6 PDR RISK REGISTER");
-        pdr.riskRegister.forEach(r => {
-          body(`  ${r.id}: ${r.description}`);
-          body(`    Likelihood: ${r.likelihood} | Impact: ${r.impact}`);
-          body(`    Mitigation: ${r.mitigation}`);
-        });
-
-        // 1.7 Action Items
-        section("11.7 PDR ACTION ITEMS");
-        pdr.actionItems.forEach(a => body(`  ${a.id}: ${a.text}`));
-
-        // 1.8 Sign-Off Block
-        section("11.8 PDR SIGN-OFF BLOCK");
-        body(`Prepared by: ${pdr.signOff.preparedBy}`);
-        body(`Date: ${pdr.signOff.date}`);
-        body(`Review Status: ${pdr.signOff.reviewStatus}`);
-        body(`Next Milestone: ${pdr.signOff.nextMilestone}`);
-      }
-
-      // ── Section 12: PRD ──
-      if (result.prdData) {
-        const prd = result.prdData;
-        addPage();
-
-        // PRD permanent label
-        doc.setFillColor(45, 35, 5);
-        doc.rect(margin - 3, y - 3, cW + 6, 18, "F");
-        doc.setFontSize(8);
-        doc.setFont("helvetica", "bold");
-        doc.setTextColor(180, 130, 20);
-        doc.text("PRODUCT REQUIREMENTS DOCUMENT — CONCEPT STAGE", margin, y + 1);
-        doc.setFont("helvetica", "normal");
-        doc.setFontSize(7);
-        doc.setTextColor(150, 110, 15);
-        doc.text("Requirements are conceptual and subject to validation. Not a final engineering specification.", margin, y + 6);
-        doc.text(`Document Code: ${prd.docCode}`, margin, y + 11);
-        y += 20;
-
-        // 2.1 Vision
-        section("12.1 PRODUCT VISION STATEMENT");
-        body(prd.visionStatement);
-
-        // 2.2 Personas
-        section("12.2 USER PERSONAS");
-        prd.personas.forEach(p => {
-          body(`PERSONA ${p.id} — ${p.title.toUpperCase()}`);
-          body(`  Profile: ${p.profile}`);
-          if (p.currentSolution) body(`  Current solution & failure: ${p.currentSolution}`);
-          if (p.whatTheyNeed) body(`  What they need: ${p.whatTheyNeed}`);
-          if (p.successDef) body(`  Success definition: ${p.successDef}`);
-          if (p.setupReq) body(`  Setup & operation: ${p.setupReq}`);
-          if (p.dataReq) body(`  Data & reporting: ${p.dataReq}`);
-          if (p.trainingReq) body(`  Training: ${p.trainingReq}`);
-          if (p.adoptionJustification) body(`  Adoption justification: ${p.adoptionJustification}`);
-          if (p.evidenceReq) body(`  Evidence requirements: ${p.evidenceReq}`);
-          body("");
-        });
-
-        // 2.3 Functional Requirements
-        section("12.3 FUNCTIONAL REQUIREMENTS");
-        body("| FR-ID | Requirement | Priority | Rationale | Source |");
-        prd.functionalReqs.forEach(fr => {
-          body(`  ${fr.id} | ${fr.requirement} | ${fr.priority} | ${fr.rationale} | ${fr.source}`);
-        });
-
-        // 2.4 Non-Functional Requirements
-        section("12.4 NON-FUNCTIONAL REQUIREMENTS");
-        body("| NFR-ID | Requirement | Category |");
-        prd.nonFunctionalReqs.forEach(nfr => {
-          body(`  ${nfr.id} | ${nfr.requirement} | ${nfr.category}`);
-        });
-
-        // 2.5 Modality Performance
-        section("12.5 MODALITY PERFORMANCE REQUIREMENTS");
-        body("| Modality | Output Parameter | Min | Max | Tolerance | Accuracy | Safety Limit |");
-        prd.modalityPerfReqs.forEach(m => {
-          body(`  ${m.modality} | ${m.outputParam} | ${m.min} | ${m.max} | ${m.tolerance} | ${m.accuracy} | ${m.safetyLimit}`);
-        });
-
-        // 2.6 UI Requirements
-        section("12.6 USER INTERFACE REQUIREMENTS");
-        body(`Control Type: ${prd.uiRequirements.controlType}`);
-        body("Display:");
-        prd.uiRequirements.display.forEach(item => body(`  • ${item}`));
-        body("Alerts & Alarms:");
-        prd.uiRequirements.alerts.forEach(item => body(`  ⚠ ${item}`));
-        body("Data Logging:");
-        prd.uiRequirements.dataLogging.forEach(item => body(`  • ${item}`));
-        body(`Connectivity: ${prd.uiRequirements.connectivity}`);
-
-        // 2.7 Regulatory
-        section("12.7 REGULATORY REQUIREMENTS SUMMARY");
-        body(`FDA Classification: ${prd.regulatory.fdaClassification}`);
-        body(`Likely Pathway: ${prd.regulatory.likelyPathway}`);
-        body("Applicable Standards:");
-        prd.regulatory.applicableStandards.forEach(s => body(`  ${s.std} — ${s.desc}`));
-
-        // 2.8 Acceptance Criteria
-        section("12.8 ACCEPTANCE CRITERIA");
-        prd.acceptanceCriteria.forEach(ac => {
-          body(`  ${ac.id} [${ac.frRef}]: ${ac.criteria}`);
-        });
-
-        // 2.9 Out of Scope
-        section("12.9 OUT OF SCOPE");
-        body("This device does NOT:");
-        prd.outOfScope.forEach(item => body(`  ✗ ${item}`));
-      }
-
-      // ── Section 13: Conceptual BOM ──
-      if (result.bomData) {
-        const bom = result.bomData;
-        addPage();
-
-        // BOM permanent label
-        doc.setFillColor(45, 35, 5);
-        doc.rect(margin - 3, y - 3, cW + 6, 22, "F");
-        doc.setFontSize(8);
-        doc.setFont("helvetica", "bold");
-        doc.setTextColor(180, 130, 20);
-        doc.text("CONCEPTUAL BILL OF MATERIALS — PRE-ENGINEERING STAGE", margin, y + 1);
-        doc.setFont("helvetica", "normal");
-        doc.setFontSize(7);
-        doc.setTextColor(150, 110, 15);
-        doc.text("Component selections are conceptual reference points only.", margin, y + 6);
-        doc.text("Final BOM requires manufacturer engineering and supplier qualification.", margin, y + 11);
-        doc.text("No procurement authority granted.", margin, y + 16);
-        y += 24;
-
-        // 13.1 Header Block
-        section("13.1 BOM HEADER BLOCK");
-        body(`BOM Code: ${bom.header.bomCode}`);
-        body(`Device: ${bom.header.device}`);
-        body(`Version: ${bom.header.version}  |  Date: ${bom.header.date}  |  Status: ${bom.header.status}`);
-        body(`Prepared by: ${bom.header.preparedBy}`);
-
-        // 13.2 BOM Table
-        section(`13.2 BOM TABLE — ${bom.allItems.length} LINE ITEMS`);
-        Object.entries(bom.assemblies).forEach(([num, asm]) => {
-          body("");
-          body(`ASSEMBLY ${num} — ${asm.name.toUpperCase()} (${asm.items.length} items):`);
-          body("");
-          body(`  | Item # | Sub-Assembly | Description | Category | Qty | Unit | Function | Source |`);
-          asm.items.forEach(item => {
-            body(`  | ${item.item} | ${item.subAssembly} | ${item.desc} | ${item.category} | ${item.qty} | ${item.unit} | ${item.func} | ${item.sourceNode} |`);
-          });
-        });
-
-        // 13.3 BOM Notes
-        section("13.3 BOM NOTES");
-        body(bom.notes);
-
-        // 13.4 Revision Log
-        section("13.4 BOM REVISION LOG");
-        body("| Rev | Date | Author | Changes |");
-        bom.revisionLog.forEach(r => {
-          body(`  | ${r.rev} | ${r.date} | ${r.author} | ${r.changes} |`);
-        });
-      }
-
-      // ── Section 15: IP Valuation Framework ──
-      if (result.valuationData) {
-        const val = result.valuationData;
-        addPage();
-
-        // Valuation permanent label
-        doc.setFillColor(45, 35, 5);
-        doc.rect(margin - 3, y - 3, cW + 6, 22, "F");
-        doc.setFontSize(8);
-        doc.setFont("helvetica", "bold");
-        doc.setTextColor(180, 130, 20);
-        doc.text("IP VALUATION FRAMEWORK — STRATEGIC PLANNING DOCUMENT", margin, y + 1);
-        doc.setFont("helvetica", "normal");
-        doc.setFontSize(7);
-        doc.setTextColor(150, 110, 15);
-        doc.text("For strategic planning and investor communication purposes only.", margin, y + 6);
-        doc.text("Does NOT constitute a certified IP appraisal, fairness opinion, or securities valuation.", margin, y + 11);
-        doc.text("For binding valuations, engage a licensed IP appraisal firm.", margin, y + 16);
-        y += 24;
-
-        // 5.1 Market Sizing
-        section("15.1 MARKET SIZING (TAM / SAM / SOM)");
-        body("TOTAL ADDRESSABLE MARKET (TAM):");
-        body(`  ${val.marketSizing.tam.description}`);
-        body(`  Figure: ${val.marketSizing.tam.figure}  |  Source: ${val.marketSizing.tam.source}`);
-        body("");
-        body("SERVICEABLE ADDRESSABLE MARKET (SAM):");
-        body(`  ${val.marketSizing.sam.description}`);
-        body(`  Figure: ${val.marketSizing.sam.figure}`);
-        body(`  Rationale: ${val.marketSizing.sam.rationale}`);
-        body("");
-        body("SERVICEABLE OBTAINABLE MARKET (SOM):");
-        body(`  ${val.marketSizing.som.description}`);
-        body(`  Figure: ${val.marketSizing.som.figure}`);
-        body(`  Assumptions: ${val.marketSizing.som.assumptions}`);
-
-        // 5.2 IP Asset Inventory & Strategic Value
-        section("15.2 IP ASSET INVENTORY & STRATEGIC VALUE");
-        body("| Asset | Type | Protection | Importance | IP Life |");
-        val.ipAssets.forEach(a => {
-          body(`  | ${a.asset} | ${a.type} | ${a.protectionStatus} | ${a.strategicImportance} | ${a.ipLife} |`);
-        });
-        body("");
-        body("STRATEGIC VALUE MATRIX (scored 1-10):");
-        val.strategicValueMatrix.forEach(v => {
-          body(`  ${v.driver}: ${v.score}/10 — ${v.rationale}`);
-        });
-        body(`  OVERALL IP STRATEGIC SCORE: ${val.overallScore} / 10`);
-
-        // 5.3 Comparable Transactions
-        section("15.3 COMPARABLE TRANSACTIONS");
-        body("| Transaction | Year | Deal Type | Modality | Terms | Relevance |");
-        val.comparableTransactions.forEach(t => {
-          body(`  | ${t.transaction} | ${t.year} | ${t.dealType} | ${t.modality} | ${t.terms} | ${t.relevance} |`);
-        });
-
-        // 5.4 Licensing Revenue Model
-        section("15.4 LICENSING REVENUE MODEL (3 STRUCTURES)");
-        body("STRUCTURE A — ROYALTY ON NET REVENUE:");
-        body(`  Royalty rate: ${val.licensingModel.structureA.royaltyRate}%`);
-        body(`  Licensee Year 3 revenue projection: $${val.licensingModel.structureA.licenseeYear3Revenue}M`);
-        body(`  Annual royalty income: $${val.licensingModel.structureA.annualRoyalty}M`);
-        body(`  10-year royalty stream (discounted): $${val.licensingModel.structureA.tenYearDiscounted}M`);
-        body("");
-        body("STRUCTURE B — UPFRONT FEE + ROYALTY:");
-        body(`  Upfront fee: $${val.licensingModel.structureB.upfrontFee}M`);
-        body(`  Ongoing royalty: ${val.licensingModel.structureB.royaltyRate}%`);
-        body(`  10-year total projected value: $${val.licensingModel.structureB.tenYearTotal}M`);
-        body("");
-        body("STRUCTURE C — EXCLUSIVE LUMP SUM:");
-        body(`  Lump sum: $${val.licensingModel.structureC.lumpSum}M`);
-        body(`  IP remaining life: ${val.licensingModel.structureC.ipRemainingLife} years`);
-        body(`  Implied annual value: $${val.licensingModel.structureC.impliedAnnual}M`);
-
-        // 5.5 Three Valuation Methods
-        section("15.5 THREE VALUATION METHODS REFERENCE");
-        body("COST APPROACH:");
-        body(`  ${val.valuationMethods.cost.description}`);
-        body(`  Development hours: ${val.valuationMethods.cost.devHours} x Hourly rate: $${val.valuationMethods.cost.hourlyRate}`);
-        body(`  Replacement cost estimate: $${val.valuationMethods.cost.replacementCost}M`);
-        body("");
-        body("MARKET APPROACH:");
-        body(`  ${val.valuationMethods.market.description}`);
-        body(`  Estimated range: ${val.valuationMethods.market.range}`);
-        body("");
-        body("INCOME APPROACH:");
-        body(`  ${val.valuationMethods.income.description}`);
-        body(`  Estimated range: ${val.valuationMethods.income.range}`);
-        body("");
-        body(val.footer);
-      }
 
       // Footer
       const total = doc.getNumberOfPages();
@@ -606,6 +308,28 @@ Generate a completely new invention concept that synthesizes these technologies.
       doc.save(`AethonApex_${fname}.pdf`);
     } catch (e) { console.error(e); }
     setPdfLoading(false);
+  };
+
+  const handleCheckout = async () => {
+    if (!result) return;
+    if (window.self !== window.top) {
+      alert("Checkout only works from the published app, not inside the editor.");
+      return;
+    }
+    setCheckoutLoading(true);
+    try {
+      const origin = window.location.origin;
+      const res = await base44.functions.invoke("createCheckoutSession", {
+        title: `IP Package: ${result.hybrid_concept}`,
+        priceInCents: 49700,
+        description: "Full IP package: patent claims, commercialization roadmap, market analysis",
+        category: "IP",
+        successUrl: `${origin}/invention-forge`,
+        cancelUrl: `${origin}/invention-forge`,
+      });
+      if (res.data?.url) window.location.href = res.data.url;
+    } catch (e) { console.error(e); }
+    setCheckoutLoading(false);
   };
 
   return (
@@ -716,9 +440,9 @@ Generate a completely new invention concept that synthesizes these technologies.
               <div className="grid grid-cols-2 gap-3 text-left w-full">
                 {[
                   ["🔬", "Hybrid concept name & mechanism"],
-                   ["📜", "Patent claims (3 independent)"],
-                   ["📋", "Professional-grade deliverable"],
-                   ["🗺️", "Commercialization roadmap"],
+                  ["📜", "Patent claims (3 independent)"],
+                  ["💰", "IP valuation estimate"],
+                  ["🗺️", "Commercialization roadmap"],
                   ["📈", "Market applications & sizing"],
                   ["✅", "Next steps to file & launch"],
                 ].map(([icon, text], i) => (
@@ -810,15 +534,10 @@ Generate a completely new invention concept that synthesizes these technologies.
                 </div>
               </div>
 
-              {/* Professional Deliverable Banner */}
-              <div className="bg-gray-900 border border-gray-800 rounded-xl p-4 flex items-center gap-3">
-                <div className="w-10 h-10 rounded-lg bg-yellow-900/30 border border-yellow-700/40 flex items-center justify-center flex-shrink-0">
-                  <CheckCircle2 size={18} className="text-yellow-400" />
-                </div>
-                <div>
-                  <p className="text-yellow-400 font-bold text-xs uppercase tracking-wider">Professional-Grade Deliverable</p>
-                  <p className="text-gray-400 text-xs leading-relaxed mt-0.5">{PROFESSIONAL_DELIVERABLE}</p>
-                </div>
+              {/* IP Valuation */}
+              <IPValuationMeter low={result.ip_value_low} high={result.ip_value_high} />
+              <div className="bg-gray-900 border border-gray-800 rounded-xl p-4">
+                <p className="text-gray-400 text-xs leading-relaxed italic">{result.ip_valuation}</p>
               </div>
 
               {/* Patent Claims */}
@@ -860,25 +579,18 @@ Generate a completely new invention concept that synthesizes these technologies.
                 <p className="text-gray-300 text-sm leading-relaxed whitespace-pre-line">{result.suggested_next_steps}</p>
               </div>
 
-              {/* Section 11 — PDR (auto-generated) */}
-              {result.pdrData && <PdrSection pdrData={result.pdrData} />}
-
-              {/* Section 12 — PRD (auto-generated) */}
-              {result.prdData && <PrdSection prdData={result.prdData} />}
-
-              {/* Section 13 — Conceptual BOM (auto-generated) */}
-              {result.bomData && <BomSection bomData={result.bomData} />}
-
-              {/* Section 15 — IP Valuation Framework (auto-generated) */}
-              {result.valuationData && <ValuationSection valuationData={result.valuationData} />}
-
-              {/* Deliverable Notice */}
+              {/* CTA */}
               <div className="bg-gradient-to-br from-yellow-950/30 to-gray-900 border border-yellow-800/40 rounded-2xl p-6 text-center">
-                <h3 className="text-white font-black text-xl mb-2">Full IP Package Ready</h3>
+                <h3 className="text-white font-black text-xl mb-2">Get the Full IP Package</h3>
                 <p className="text-gray-400 text-sm mb-4">
-                  {PROFESSIONAL_DELIVERABLE}
+                  Download a full PDF package with all patent claims, commercialization roadmap, market analysis, and component specs.
                 </p>
-                <p className="text-gray-600 text-xs">Includes PDF export, filing checklist & attorney-ready claim format</p>
+                <button onClick={handleCheckout} disabled={checkoutLoading}
+                  className="flex items-center justify-center gap-2 w-full py-3 rounded-xl text-white font-black text-sm bg-yellow-700 hover:bg-yellow-600 disabled:opacity-50 transition-all max-w-sm mx-auto">
+                  {checkoutLoading ? <Loader2 size={15} className="animate-spin" /> : <ShoppingCart size={15} />}
+                  {checkoutLoading ? "Processing..." : "Get Full IP Package — $497"}
+                </button>
+                <p className="text-gray-600 text-xs mt-3">Includes PDF export, filing checklist & attorney-ready claim format</p>
               </div>
             </div>
           )}
