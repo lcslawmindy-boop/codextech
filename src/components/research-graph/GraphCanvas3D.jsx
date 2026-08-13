@@ -35,7 +35,9 @@ export default function GraphCanvas3D({ allNodes, allEdges, filters, selectedNod
   const [zoomLevel, setZoomLevel] = useState(1);
   const isDraggingRef = useRef(false);
   const lastPointerRef = useRef({ x: 0, y: 0 });
+  const pointerDownPosRef = useRef({ x: 0, y: 0 });
   const autoRotateRef = useRef(true);
+  const autoRotateTimerRef = useRef(null);
   const pulseClockRef = useRef(0);
 
   // Filter nodes/edges
@@ -410,6 +412,7 @@ export default function GraphCanvas3D({ allNodes, allEdges, filters, selectedNod
     const onPointerDown = (e) => {
       isDraggingRef.current = true;
       autoRotateRef.current = false;
+      pointerDownPosRef.current = { x: e.clientX, y: e.clientY };
       lastPointerRef.current = { x: e.clientX, y: e.clientY };
     };
     const onPointerMove = (e) => {
@@ -489,12 +492,18 @@ export default function GraphCanvas3D({ allNodes, allEdges, filters, selectedNod
           setHoveredNode(node);
           setTooltip({ node, x: e.clientX - rect.left, y: e.clientY - rect.top });
           mount.style.cursor = "pointer";
+          autoRotateRef.current = false; // pause rotation so the node is clickable
           return;
         }
       }
       setHoveredNode(null);
       setTooltip(null);
       mount.style.cursor = "grab";
+      // resume auto-rotation after a brief pause when no longer hovering
+      if (!isDraggingRef.current) {
+        clearTimeout(autoRotateTimerRef.current);
+        autoRotateTimerRef.current = setTimeout(() => { autoRotateRef.current = true; }, 2500);
+      }
     };
 
     const onMove = (e) => {
@@ -578,6 +587,10 @@ export default function GraphCanvas3D({ allNodes, allEdges, filters, selectedNod
     if (!mount) return;
     const onClick = (e) => {
       if (!cameraRef.current || !sceneRef.current) return;
+      // Skip if this click was actually the end of a drag-rotate
+      const ddx = e.clientX - pointerDownPosRef.current.x;
+      const ddy = e.clientY - pointerDownPosRef.current.y;
+      if (Math.sqrt(ddx * ddx + ddy * ddy) > 6) return;
       const rect = mount.getBoundingClientRect();
       pointerRef.current.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
       pointerRef.current.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
@@ -648,7 +661,7 @@ export default function GraphCanvas3D({ allNodes, allEdges, filters, selectedNod
   return (
     <div className="relative w-full h-full bg-slate-950 overflow-hidden">
       <BgSlideshow opacity={0.75} images={bgImages} />
-      <div ref={mountRef} className="w-full h-full" style={{ cursor: "grab", position: "relative", zIndex: 1 }} />
+      <div ref={mountRef} className="w-full h-full" style={{ cursor: "grab", position: "relative", zIndex: 1, touchAction: "none" }} />
       <MatrixRainOverlay opacity={0.28} />
 
       {loading && (
