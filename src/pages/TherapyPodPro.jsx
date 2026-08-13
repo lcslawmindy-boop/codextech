@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { ArrowLeft, Heart, Dna, FileText, Package, Shield, AlertTriangle, Box, ChevronDown, ChevronUp, CheckCircle2, Radio } from "lucide-react";
+import { ArrowLeft, Heart, Dna, FileText, Package, Shield, AlertTriangle, Box, ChevronDown, ChevronUp, CheckCircle2, Radio, Sparkles } from "lucide-react";
 import TherapyPodExplodedView from "../components/TherapyPodExplodedView";
 import TherapyPodEngineeringDocs from "../components/TherapyPodEngineeringDocs";
 import TherapyPodModalityExplodedView from "../components/TherapyPodModalityExplodedView";
@@ -293,6 +293,9 @@ export default function TherapyPodPro() {
             </span>
             <Link to="/resonance-dashboard" className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold bg-cyan-950/40 border border-cyan-800 text-cyan-400 hover:bg-cyan-900/40 transition-colors">
               <Radio size={12} /> Resonance Monitor
+            </Link>
+            <Link to="/expanded-research" className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold bg-purple-950/40 border border-purple-800 text-purple-400 hover:bg-purple-900/40 transition-colors">
+              <Sparkles size={12} /> Research Archive
             </Link>
           </div>
         </div>
