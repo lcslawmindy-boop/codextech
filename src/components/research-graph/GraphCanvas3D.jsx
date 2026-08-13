@@ -1,10 +1,7 @@
 import { useRef, useEffect, useState, useMemo } from "react";
 import * as THREE from "three";
 import { ZoomIn, ZoomOut, Maximize2, Crosshair, Network } from "lucide-react";
-import { DOMAINS, CONNECTION_TYPES, getNodeRadius, SUPPRESSION_STATUS } from "@/lib/researchGraphData";
-import { goldenSpiralPositions, goldenSpiralCurve, buildDomainCardTexture, BackgroundCarousel, GRAPH_BG_IMAGES, buildMetatronCube, buildLightningEdgeGeometry } from "@/lib/graphScene3D";
-import MatrixRainOverlay from "@/components/research-graph/MatrixRainOverlay";
-import BgSlideshow from "@/components/research-graph/BgSlideshow";
+import { DOMAINS, CONNECTION_TYPES, getNodeRadius } from "@/lib/researchGraphData";
 
 // ── 3D Interactive Research Graph ──────────────────────────────────────────
 // Three.js force-directed graph: labeled nodes colored by domain, labeled edges
@@ -13,30 +10,88 @@ import BgSlideshow from "@/components/research-graph/BgSlideshow";
 const DOMAIN_MAP = new Map(DOMAINS.map(d => [d.id, d]));
 const CONN_MAP = new Map(Object.entries(CONNECTION_TYPES));
 
-// Apply a callback to every material on a group's descendants
-const applyMats = (group, fn) => { if (!group) return; group.traverse(o => { if (o.material) fn(o.material); }); };
+// Simple 3D force simulation (charge + spring + center gravity)
+function simulate3D(nodes, edges, iterations = 300) {
+  const pos = new Map();
+  // Initial random positions on a sphere
+  nodes.forEach((n, i) => {
+    const r = 200 + Math.random() * 100;
+    const theta = Math.random() * Math.PI * 2;
+    const phi = Math.acos(2 * Math.random() - 1);
+    pos.set(n.numericId, new THREE.Vector3(
+      r * Math.sin(phi) * Math.cos(theta),
+      r * Math.sin(phi) * Math.sin(theta),
+      r * Math.cos(phi)
+    ));
+  });
 
+  const k = 40; // spring length
+  const repulsion = 1200;
+  const centerGravity = 0.015;
 
-export default function GraphCanvas3D({ allNodes, allEdges, filters, selectedNode, onNodeClick, focusNode, graphMode, settings, searchQuery, bgImages }) {
+  for (let iter = 0; iter < iterations; iter++) {
+    // Repulsion (O(n²) — fine for ~500 nodes at 300 iters)
+    for (let i = 0; i < nodes.length; i++) {
+      const pi = pos.get(nodes[i].numericId);
+      for (let j = i + 1; j < nodes.length; j++) {
+        const pj = pos.get(nodes[j].numericId);
+        const dx = pi.x - pj.x;
+        const dy = pi.y - pj.y;
+        const dz = pi.z - pj.z;
+        let distSq = dx * dx + dy * dy + dz * dz;
+        if (distSq < 1) distSq = 1;
+        const force = repulsion / distSq;
+        const dist = Math.sqrt(distSq);
+        const fx = (dx / dist) * force;
+        const fy = (dy / dist) * force;
+        const fz = (dz / dist) * force;
+        pi.x += fx; pi.y += fy; pi.z += fz;
+        pj.x -= fx; pj.y -= fy; pj.z -= fz;
+      }
+    }
+    // Spring attraction along edges
+    edges.forEach(e => {
+      const p1 = pos.get(e.source);
+      const p2 = pos.get(e.target);
+      if (!p1 || !p2) return;
+      const dx = p2.x - p1.x;
+      const dy = p2.y - p1.y;
+      const dz = p2.z - p1.z;
+      const dist = Math.max(1, Math.sqrt(dx * dx + dy * dy + dz * dz));
+      const force = (dist - k) * 0.05;
+      const fx = (dx / dist) * force;
+      const fy = (dy / dist) * force;
+      const fz = (dz / dist) * force;
+      p1.x += fx; p1.y += fy; p1.z += fz;
+      p2.x -= fx; p2.y -= fy; p2.z -= fz;
+    });
+    // Center gravity
+    pos.forEach(p => {
+      p.x -= p.x * centerGravity;
+      p.y -= p.y * centerGravity;
+      p.z -= p.z * centerGravity;
+    });
+  }
+  return pos;
+}
+
+export default function GraphCanvas3D({ allNodes, allEdges, filters, selectedNode, onNodeClick, focusNode, graphMode, settings, searchQuery }) {
   const mountRef = useRef(null);
   const sceneRef = useRef(null);
   const cameraRef = useRef(null);
   const rendererRef = useRef(null);
   const nodeMeshesRef = useRef([]);
   const edgeLinesRef = useRef(null);
-  const metatronRef = useRef(null);
   const labelsRef = useRef(null);
   const raycasterRef = useRef(new THREE.Raycaster());
   const pointerRef = useRef(new THREE.Vector2());
-  const cameraSphericalRef = useRef({ radius: 780, theta: 0, phi: Math.PI / 2.6 });
+  const cameraSphericalRef = useRef({ radius: 500, theta: 0, phi: Math.PI / 2.6 });
   const [hoveredNode, setHoveredNode] = useState(null);
   const [tooltip, setTooltip] = useState(null);
   const [loading, setLoading] = useState(true);
   const [zoomLevel, setZoomLevel] = useState(1);
   const isDraggingRef = useRef(false);
   const lastPointerRef = useRef({ x: 0, y: 0 });
-  const autoRotateRef = useRef(true);
-  const pulseClockRef = useRef(0);
 
   // Filter nodes/edges
   const { visibleNodes, visibleEdges } = useMemo(() => {
@@ -92,13 +147,10 @@ export default function GraphCanvas3D({ allNodes, allEdges, filters, selectedNod
     const width = mount.clientWidth || 800;
     const height = mount.clientHeight || 600;
 
-    // Scene — transparent so the CSS slideshow behind shows through
+    // Scene
     const scene = new THREE.Scene();
-    // No scene.background — CSS layer provides the background images
+    scene.background = new THREE.Color(0x030712);
     sceneRef.current = scene;
-
-    // Stub carousel (no-op — CSS slideshow handles backgrounds)
-    const bgCarousel = new BackgroundCarousel();
 
     // Camera
     const camera = new THREE.PerspectiveCamera(60, width / height, 1, 5000);
@@ -113,7 +165,6 @@ export default function GraphCanvas3D({ allNodes, allEdges, filters, selectedNod
 
     // Renderer
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-    renderer.setClearColor(0x000000, 0); // fully transparent
     renderer.setSize(width, height);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     mount.innerHTML = "";
@@ -126,8 +177,8 @@ export default function GraphCanvas3D({ allNodes, allEdges, filters, selectedNod
     dirLight.position.set(1, 1, 1);
     scene.add(dirLight);
 
-    // ── Golden spiral placement (Twilight-Zone layout) ──
-    const positions = goldenSpiralPositions(visibleNodes);
+    // Simulate positions
+    const positions = simulate3D(visibleNodes, visibleEdges, 250);
     const posArray = new Float32Array(visibleNodes.length * 3);
     visibleNodes.forEach((n, i) => {
       const p = positions.get(n.numericId);
@@ -136,108 +187,57 @@ export default function GraphCanvas3D({ allNodes, allEdges, filters, selectedNod
       posArray[i * 3 + 2] = p.z;
     });
 
-    // Graph group — holds the spiral, cards, and edges; rotates slowly
-    const graphGroup = new THREE.Group();
-    scene.add(graphGroup);
-
-    // ── Golden spiral guide line (neon green, glowing) ──
-    const spiralPts = goldenSpiralCurve(900);
-    const spiralGeo = new THREE.BufferGeometry().setFromPoints(spiralPts);
-    const spiralMat = new THREE.LineBasicMaterial({ color: 0x39FF14, transparent: true, opacity: 0.75, blending: THREE.AdditiveBlending, depthWrite: false });
-    const spiralLine = new THREE.Line(spiralGeo, spiralMat);
-    graphGroup.add(spiralLine);
-
-    // ── 3D laser axis — four colored beams rotating from the center ──
-    const AXIS_LEN = 900;
-    const axisColors = [0x00BFFF /* blue */, 0xFF8C00 /* orange */, 0x39FF14 /* green */, 0xB026FF /* purple */];
-    const axisGroup = new THREE.Group();
-    axisColors.forEach((col, i) => {
-      const angle = (i / axisColors.length) * Math.PI * 2;
-      const dir = new THREE.Vector3(Math.cos(angle), 0, Math.sin(angle));
-      const axisGeo = new THREE.BufferGeometry().setFromPoints([
-        new THREE.Vector3(0, 0, 0),
-        dir.clone().multiplyScalar(AXIS_LEN),
-      ]);
-      const axisMat = new THREE.LineBasicMaterial({ color: col, transparent: true, opacity: 0.85, blending: THREE.AdditiveBlending, depthWrite: false });
-      const axisLine = new THREE.Line(axisGeo, axisMat);
-      axisLine.userData = { baseAngle: angle, color: col };
-      axisGroup.add(axisLine);
-
-      // glowing core orb at the tip of each beam
-      const orbGeo = new THREE.SphereGeometry(6, 12, 12);
-      const orbMat = new THREE.MeshBasicMaterial({ color: col, transparent: true, opacity: 0.9, blending: THREE.AdditiveBlending, depthWrite: false });
-      const orb = new THREE.Mesh(orbGeo, orbMat);
-      orb.position.copy(dir.clone().multiplyScalar(AXIS_LEN));
-      orb.userData = { baseAngle: angle };
-      axisGroup.add(orb);
-    });
-    // vertical center beam (white-green core)
-    const vGeo = new THREE.BufferGeometry().setFromPoints([
-      new THREE.Vector3(0, -AXIS_LEN, 0),
-      new THREE.Vector3(0, AXIS_LEN, 0),
-    ]);
-    const vMat = new THREE.LineBasicMaterial({ color: 0xAFFFA0, transparent: true, opacity: 0.6, blending: THREE.AdditiveBlending, depthWrite: false });
-    axisGroup.add(new THREE.Line(vGeo, vMat));
-    graphGroup.add(axisGroup);
-
-    // ── Metatron's Cube + Platonic solids on the axis center ──
-    const metatron = buildMetatronCube(140);
-    metatronRef.current = metatron;
-    graphGroup.add(metatron);
-
-    // ── 3D realistic research cards (billboarded, one shared texture per domain) ──
-    const cardGeo = new THREE.PlaneGeometry(1, 1.3);
-    const domainTex = new Map(DOMAINS.map(d => [d.id, buildDomainCardTexture(d)]));
-
+    // Nodes as spheres
     const nodeGroup = new THREE.Group();
-    graphGroup.add(nodeGroup);
+    scene.add(nodeGroup);
     const meshes = [];
     visibleNodes.forEach((n, i) => {
-      const r = Math.max(11, getNodeRadius(n) * 1.15);
+      const r = getNodeRadius(n) * 0.6;
+      const geo = new THREE.SphereGeometry(Math.max(2, r), 12, 12);
       const color = new THREE.Color(n.domainColor);
-      const tex = domainTex.get(n.domainId);
-      const mat = new THREE.MeshBasicMaterial({
-        map: tex, transparent: true, opacity: 0.92, side: THREE.DoubleSide, depthWrite: false,
+      const mat = new THREE.MeshStandardMaterial({
+        color,
+        emissive: color,
+        emissiveIntensity: 0.3,
+        metalness: 0.3,
+        roughness: 0.5,
       });
-      const card = new THREE.Mesh(cardGeo, mat);
-      card.scale.setScalar(r);
-
-      const mesh = new THREE.Group();
-      mesh.add(card);
+      const mesh = new THREE.Mesh(geo, mat);
       mesh.position.set(posArray[i * 3], posArray[i * 3 + 1], posArray[i * 3 + 2]);
-      mesh.userData = { node: n, index: i, baseColor: color.clone(), baseOpacity: 0.92, card, cardMat: mat };
+      mesh.userData = { node: n, index: i, baseColor: color.clone(), baseEmissive: 0.3 };
       nodeGroup.add(mesh);
       meshes.push(mesh);
     });
     nodeMeshesRef.current = meshes;
 
-    // ── Lightning-bolt edges (jagged neon polylines with energy pulse) ──
-    const nodeById = new Map(visibleNodes.map((n, i) => [n.numericId, i]));
-    const nodePosMap = new Map();
-    visibleNodes.forEach((n, i) => nodePosMap.set(n.numericId, meshes[i].position));
-    const bolt = buildLightningEdgeGeometry(visibleEdges, nodePosMap);
+    // Edges as line segments
     const edgeGeo = new THREE.BufferGeometry();
-    edgeGeo.setAttribute("position", new THREE.BufferAttribute(bolt.positions, 3));
-    edgeGeo.setAttribute("color", new THREE.BufferAttribute(bolt.colors, 3));
+    const edgePositions = new Float32Array(visibleEdges.length * 6);
+    const edgeColors = new Float32Array(visibleEdges.length * 6);
+    const nodeById = new Map(visibleNodes.map((n, i) => [n.numericId, i]));
+    visibleEdges.forEach((e, i) => {
+      const sIdx = nodeById.get(e.source);
+      const tIdx = nodeById.get(e.target);
+      if (sIdx === undefined || tIdx === undefined) return;
+      const sp = meshes[sIdx].position;
+      const tp = meshes[tIdx].position;
+      edgePositions[i * 6] = sp.x; edgePositions[i * 6 + 1] = sp.y; edgePositions[i * 6 + 2] = sp.z;
+      edgePositions[i * 6 + 3] = tp.x; edgePositions[i * 6 + 4] = tp.y; edgePositions[i * 6 + 5] = tp.z;
+      const c = new THREE.Color(e.typeColor || "#C9A84C");
+      edgeColors[i * 6] = c.r; edgeColors[i * 6 + 1] = c.g; edgeColors[i * 6 + 2] = c.b;
+      edgeColors[i * 6 + 3] = c.r; edgeColors[i * 6 + 4] = c.g; edgeColors[i * 6 + 5] = c.b;
+    });
+    edgeGeo.setAttribute("position", new THREE.BufferAttribute(edgePositions, 3));
+    edgeGeo.setAttribute("color", new THREE.BufferAttribute(edgeColors, 3));
     const edgeMat = new THREE.LineBasicMaterial({
       vertexColors: true,
       transparent: true,
-      opacity: Math.max(0.65, settings.edgeOpacity || 0.65),
-      linewidth: 2,
-      blending: THREE.AdditiveBlending,
-      depthWrite: false,
+      opacity: settings.edgeOpacity || 0.35,
+      linewidth: 1,
     });
     const edgeLines = new THREE.LineSegments(edgeGeo, edgeMat);
-    edgeLines.userData = { segments: bolt.segments, baseOpacity: Math.max(0.65, settings.edgeOpacity || 0.65) };
-    graphGroup.add(edgeLines);
+    scene.add(edgeLines);
     edgeLinesRef.current = edgeLines;
-
-    // Edge list (used for label placement)
-    const edgeList = visibleEdges.map(e => ({
-      source: nodeById.get(e.source),
-      target: nodeById.get(e.target),
-      typeColor: e.typeColor || "#C9A84C",
-    })).filter(e => e.source !== undefined && e.target !== undefined);
 
     // Labels overlay (HTML)
     const labelsDiv = document.createElement("div");
@@ -249,101 +249,20 @@ export default function GraphCanvas3D({ allNodes, allEdges, filters, selectedNod
     let animId;
     const animate = () => {
       animId = requestAnimationFrame(animate);
-      pulseClockRef.current += 0.016;
-
-      // Cinematic auto-rotation — slow camera sweep, pauses while dragging
-      if (autoRotateRef.current && !isDraggingRef.current && cameraRef.current) {
-        const sph = cameraSphericalRef.current;
-        sph.theta += 0.0015;
-        const cam = cameraRef.current;
-        cam.position.set(
-          sph.radius * Math.sin(sph.phi) * Math.cos(sph.theta),
-          sph.radius * Math.cos(sph.phi),
-          sph.radius * Math.sin(sph.phi) * Math.sin(sph.theta)
-        );
-        cam.lookAt(0, 0, 0);
-      }
-
-      // (background handled by CSS slideshow)
-
-      // ── Rotate the golden spiral graph group (Twilight-Zone sweep) ──
-      graphGroup.rotation.y += 0.016 * 0.08;
-
-      // ── Rotate the 3D laser axis from the center ──
-      axisGroup.rotation.y += 0.016 * 0.35;
-      axisGroup.children.forEach((c, i) => {
-        if (c.userData && c.userData.baseAngle !== undefined && c.geometry && c.geometry.attributes && c.geometry.attributes.position) {
-          // pulsing opacity for laser flicker
-          c.material.opacity = 0.6 + Math.sin(pulseClockRef.current * 2 + i) * 0.25;
-        }
-      });
-
-      // ── Metatron's cube + Platonic solids rotation ──
-      if (metatronRef.current?.update) metatronRef.current.update(0.016);
-
-      // ── Lightning-bolt energy pulse — flickering opacity shocks ──
-      if (edgeLinesRef.current) {
-        const el = edgeLinesRef.current;
-        const base = el.userData.baseOpacity || 0.65;
-        // rapid energy-shock flicker
-        el.material.opacity = base * (0.6 + Math.abs(Math.sin(pulseClockRef.current * 4)) * 0.4 + Math.random() * 0.15);
-      }
-
-      // ── Billboard each card to face the camera (pop-out effect) ──
-      if (cameraRef.current) {
-        const invGroup = graphGroup.quaternion.clone().invert();
-        const targetQ = invGroup.multiply(cameraRef.current.quaternion);
-        meshes.forEach((mesh, i) => {
-          const ud = mesh.userData;
-          ud.card.quaternion.copy(targetQ);
-          // Only breathe opacity when nothing is hovered — hover owns opacity/scale
-          if (!hoveredNode) {
-            const breath = 0.86 + Math.sin(pulseClockRef.current * 0.6 + i * 0.4) * 0.06;
-            ud.cardMat.opacity = breath;
-            mesh.scale.setScalar(1);
-          }
-        });
-      }
-
       // Update label positions
-      const childCount = visibleNodes.length + (settings.showLabels && edgeList.length < 200 ? visibleEdges.length : 0);
-      if (labelsDiv.childNodes.length === childCount) {
-        const _wp = new THREE.Vector3();
+      if (labelsDiv.childNodes.length === visibleNodes.length) {
         visibleNodes.forEach((n, i) => {
           const mesh = meshes[i];
           if (!mesh) return;
           const label = labelsDiv.childNodes[i];
           if (!label) return;
-          mesh.getWorldPosition(_wp);
-          const v = _wp.clone().project(camera);
+          const v = mesh.position.clone().project(camera);
           const x = (v.x * 0.5 + 0.5) * width;
           const y = (-v.y * 0.5 + 0.5) * height;
-          const vis = v.z < 1;
+          const visible = v.z < 1;
           label.style.transform = `translate(${x}px, ${y}px)`;
-          label.style.display = vis ? "block" : "none";
+          label.style.display = visible ? "block" : "none";
         });
-        // Edge labels at midpoint
-        if (settings.showLabels && edgeList.length < 200) {
-          const _ws = new THREE.Vector3();
-          const _wt = new THREE.Vector3();
-          visibleEdges.forEach((e, i) => {
-            const label = labelsDiv.childNodes[visibleNodes.length + i];
-            if (!label) return;
-            const sIdx = nodeById.get(e.source);
-            const tIdx = nodeById.get(e.target);
-            if (sIdx === undefined || tIdx === undefined) return;
-            const sm = meshes[sIdx], tm = meshes[tIdx];
-            if (!sm || !tm) return;
-            sm.getWorldPosition(_ws); tm.getWorldPosition(_wt);
-            const mid = _ws.clone().add(_wt).multiplyScalar(0.5);
-            const v = mid.project(camera);
-            const x = (v.x * 0.5 + 0.5) * width;
-            const y = (-v.y * 0.5 + 0.5) * height;
-            const vis = v.z < 1;
-            label.style.transform = `translate(${x}px, ${y}px)`;
-            label.style.display = vis ? "block" : "none";
-          });
-        }
       }
       renderer.render(scene, camera);
     };
@@ -359,19 +278,6 @@ export default function GraphCanvas3D({ allNodes, allEdges, filters, selectedNod
         label.style.cssText = `position:absolute;left:0;top:0;transform-origin:0 0;white-space:nowrap;font-size:9px;font-family:Inter,sans-serif;color:${showLabel ? "#F0F6FF" : "transparent"};background:${showLabel ? "rgba(13,17,23,0.7)" : "transparent"};padding:1px 4px;border-radius:3px;border:1px solid ${showLabel ? n.domainColor + "60" : "transparent"};pointer-events:none;text-shadow:0 0 4px #000;`;
         labelsDiv.appendChild(label);
       });
-
-      // Edge labels (connection type) — only when showLabels is on
-      if (settings.showLabels && edgeList.length < 200) {
-        visibleEdges.forEach((e, i) => {
-          const label = document.createElement("div");
-          const ct = CONN_MAP.get(e.type);
-          label.textContent = ct ? ct.label : "";
-          label.dataset.edgeIdx = i;
-          label.style.cssText = `position:absolute;left:0;top:0;transform-origin:0 0;white-space:nowrap;font-size:7px;font-family:JetBrains Mono,monospace;color:${e.typeColor || "#C9A84C"};background:rgba(13,17,23,0.8);padding:0px 3px;border-radius:2px;pointer-events:none;text-shadow:0 0 3px #000;opacity:0.85;`;
-          labelsDiv.appendChild(label);
-        });
-      }
-
       setLoading(false);
     }, 100);
 
@@ -396,9 +302,6 @@ export default function GraphCanvas3D({ allNodes, allEdges, filters, selectedNod
         if (obj.geometry) obj.geometry.dispose();
         if (obj.material) obj.material.dispose();
       });
-      bgCarousel.dispose();
-      cardGeo.dispose();
-      spiralGeo.dispose();
     };
   }, [visibleNodes, visibleEdges, settings.edgeOpacity, settings.showLabels]);
 
@@ -409,7 +312,6 @@ export default function GraphCanvas3D({ allNodes, allEdges, filters, selectedNod
 
     const onPointerDown = (e) => {
       isDraggingRef.current = true;
-      autoRotateRef.current = false;
       lastPointerRef.current = { x: e.clientX, y: e.clientY };
     };
     const onPointerMove = (e) => {
@@ -434,17 +336,13 @@ export default function GraphCanvas3D({ allNodes, allEdges, filters, selectedNod
         lastPointerRef.current = { x: e.clientX, y: e.clientY };
       }
     };
-    const onPointerUp = () => {
-      isDraggingRef.current = false;
-      // Resume auto-rotation after 3 seconds of inactivity
-      setTimeout(() => { autoRotateRef.current = true; }, 3000);
-    };
+    const onPointerUp = () => { isDraggingRef.current = false; };
     const onWheel = (e) => {
       e.preventDefault();
       if (!cameraRef.current) return;
       const sph = cameraSphericalRef.current;
       sph.radius *= e.deltaY > 0 ? 1.1 : 0.9;
-      sph.radius = Math.max(80, Math.min(3000, sph.radius));
+      sph.radius = Math.max(50, Math.min(2000, sph.radius));
       const cam = cameraRef.current;
       cam.position.set(
         sph.radius * Math.sin(sph.phi) * Math.cos(sph.theta),
@@ -452,7 +350,7 @@ export default function GraphCanvas3D({ allNodes, allEdges, filters, selectedNod
         sph.radius * Math.sin(sph.phi) * Math.sin(sph.theta)
       );
       cam.lookAt(0, 0, 0);
-      setZoomLevel(780 / sph.radius);
+      setZoomLevel(500 / sph.radius);
     };
 
     mount.addEventListener("pointerdown", onPointerDown);
@@ -479,22 +377,18 @@ export default function GraphCanvas3D({ allNodes, allEdges, filters, selectedNod
       pointerRef.current.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
       pointerRef.current.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
       raycasterRef.current.setFromCamera(pointerRef.current, cameraRef.current);
-      // Nodes are Groups — intersect their children, then walk up to the group
-      const intersects = raycasterRef.current.intersectObjects(nodeMeshesRef.current, true);
+      const intersects = raycasterRef.current.intersectObjects(nodeMeshesRef.current);
       if (intersects.length > 0) {
-        let obj = intersects[0].object;
-        while (obj && !obj.userData.node) obj = obj.parent;
-        if (obj && obj.userData.node) {
-          const node = obj.userData.node;
-          setHoveredNode(node);
-          setTooltip({ node, x: e.clientX - rect.left, y: e.clientY - rect.top });
-          mount.style.cursor = "pointer";
-          return;
-        }
+        const mesh = intersects[0].object;
+        const node = mesh.userData.node;
+        setHoveredNode(node);
+        setTooltip({ node, x: e.clientX - rect.left, y: e.clientY - rect.top });
+        mount.style.cursor = "pointer";
+      } else {
+        setHoveredNode(null);
+        setTooltip(null);
+        mount.style.cursor = "grab";
       }
-      setHoveredNode(null);
-      setTooltip(null);
-      mount.style.cursor = "grab";
     };
 
     const onMove = (e) => {
@@ -517,12 +411,13 @@ export default function GraphCanvas3D({ allNodes, allEdges, filters, selectedNod
     if (hoveredNode) {
       const connectedIds = adjacency.get(hoveredNode.numericId) || new Set();
       connectedIds.add(hoveredNode.numericId);
-      // Dim non-connected cards, highlight connected
+      // Dim non-connected nodes, highlight connected
       meshes.forEach(mesh => {
         const isConnected = connectedIds.has(mesh.userData.node.numericId);
-        const ud = mesh.userData;
-        ud.cardMat.opacity = isConnected ? 1 : 0.12;
-        const scale = (ud.node.numericId === hoveredNode.numericId ? 1.6 : 1);
+        mesh.material.opacity = isConnected ? 1 : 0.15;
+        mesh.material.transparent = true;
+        mesh.material.emissiveIntensity = isConnected ? 0.8 : 0.05;
+        const scale = mesh.userData.node.numericId === hoveredNode.numericId ? 1.5 : 1;
         mesh.scale.setScalar(scale);
       });
       // Light up connected edges, dim others
@@ -535,23 +430,24 @@ export default function GraphCanvas3D({ allNodes, allEdges, filters, selectedNod
         edgeLines.userData.origColors = new Float32Array(colors);
       }
       const orig = edgeLines.userData.origColors;
-      const hc = new THREE.Color(hoveredNode.domainColor);
-      const stride = (edgeLines.userData.segments + 1) * 3; // 6 verts * 3 = 18
       visibleEdges.forEach((e, i) => {
         const isConn = e.source === hoveredNode.numericId || e.target === hoveredNode.numericId;
-        const base = i * stride;
         if (isConn) {
-          // Connected edges take the hovered node's color — bold & clear
-          for (let v = 0; v < stride; v += 3) {
-            colors[base + v] = hc.r; colors[base + v + 1] = hc.g; colors[base + v + 2] = hc.b;
-          }
+          // Brighten
+          colors[i * 6] = Math.min(1, orig[i * 6] * 2.5);
+          colors[i * 6 + 1] = Math.min(1, orig[i * 6 + 1] * 2.5);
+          colors[i * 6 + 2] = Math.min(1, orig[i * 6 + 2] * 2.5);
+          colors[i * 6 + 3] = colors[i * 6];
+          colors[i * 6 + 4] = colors[i * 6 + 1];
+          colors[i * 6 + 5] = colors[i * 6 + 2];
         } else {
           // Dim to gray
-          for (let v = 0; v < stride; v += 3) {
-            colors[base + v] = orig[base + v] * 0.15;
-            colors[base + v + 1] = orig[base + v + 1] * 0.15;
-            colors[base + v + 2] = orig[base + v + 2] * 0.15;
-          }
+          colors[i * 6] = orig[i * 6] * 0.15;
+          colors[i * 6 + 1] = orig[i * 6 + 1] * 0.15;
+          colors[i * 6 + 2] = orig[i * 6 + 2] * 0.15;
+          colors[i * 6 + 3] = colors[i * 6];
+          colors[i * 6 + 4] = colors[i * 6 + 1];
+          colors[i * 6 + 5] = colors[i * 6 + 2];
         }
       });
       edgeColorAttr.needsUpdate = true;
@@ -559,8 +455,9 @@ export default function GraphCanvas3D({ allNodes, allEdges, filters, selectedNod
     } else {
       // Reset
       meshes.forEach(mesh => {
-        const ud = mesh.userData;
-        ud.cardMat.opacity = ud.baseOpacity;
+        mesh.material.opacity = 0.9;
+        mesh.material.transparent = true;
+        mesh.material.emissiveIntensity = mesh.userData.baseEmissive;
         mesh.scale.setScalar(1);
       });
       if (edgeLines.userData.origColors) {
@@ -568,7 +465,7 @@ export default function GraphCanvas3D({ allNodes, allEdges, filters, selectedNod
         edgeColorAttr.array.set(edgeLines.userData.origColors);
         edgeColorAttr.needsUpdate = true;
       }
-      edgeLines.material.opacity = Math.max(0.5, settings.edgeOpacity || 0.5);
+      edgeLines.material.opacity = settings.edgeOpacity || 0.35;
     }
   }, [hoveredNode, adjacency, visibleEdges, settings.edgeOpacity]);
 
@@ -582,16 +479,12 @@ export default function GraphCanvas3D({ allNodes, allEdges, filters, selectedNod
       pointerRef.current.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
       pointerRef.current.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
       raycasterRef.current.setFromCamera(pointerRef.current, cameraRef.current);
-      const intersects = raycasterRef.current.intersectObjects(nodeMeshesRef.current, true);
+      const intersects = raycasterRef.current.intersectObjects(nodeMeshesRef.current);
       if (intersects.length > 0) {
-        let obj = intersects[0].object;
-        while (obj && !obj.userData.node) obj = obj.parent;
-        if (obj && obj.userData.node) {
-          onNodeClick(obj.userData.node);
-          return;
-        }
+        onNodeClick(intersects[0].object.userData.node);
+      } else {
+        onNodeClick(null);
       }
-      onNodeClick(null);
     };
     mount.addEventListener("click", onClick);
     return () => mount.removeEventListener("click", onClick);
@@ -600,7 +493,7 @@ export default function GraphCanvas3D({ allNodes, allEdges, filters, selectedNod
   // Zoom controls
   const handleZoomIn = () => {
     const sph = cameraSphericalRef.current;
-    sph.radius = Math.max(80, sph.radius * 0.8);
+    sph.radius = Math.max(50, sph.radius * 0.8);
     if (cameraRef.current) {
       cameraRef.current.position.set(
         sph.radius * Math.sin(sph.phi) * Math.cos(sph.theta),
@@ -608,12 +501,12 @@ export default function GraphCanvas3D({ allNodes, allEdges, filters, selectedNod
         sph.radius * Math.sin(sph.phi) * Math.sin(sph.theta)
       );
       cameraRef.current.lookAt(0, 0, 0);
-      setZoomLevel(780 / sph.radius);
+      setZoomLevel(500 / sph.radius);
     }
   };
   const handleZoomOut = () => {
     const sph = cameraSphericalRef.current;
-    sph.radius = Math.min(3000, sph.radius * 1.25);
+    sph.radius = Math.min(2000, sph.radius * 1.25);
     if (cameraRef.current) {
       cameraRef.current.position.set(
         sph.radius * Math.sin(sph.phi) * Math.cos(sph.theta),
@@ -621,11 +514,11 @@ export default function GraphCanvas3D({ allNodes, allEdges, filters, selectedNod
         sph.radius * Math.sin(sph.phi) * Math.sin(sph.theta)
       );
       cameraRef.current.lookAt(0, 0, 0);
-      setZoomLevel(780 / sph.radius);
+      setZoomLevel(500 / sph.radius);
     }
   };
   const handleFitAll = () => {
-    cameraSphericalRef.current = { radius: 780, theta: 0, phi: Math.PI / 2.6 };
+    cameraSphericalRef.current = { radius: 500, theta: 0, phi: Math.PI / 2.6 };
     if (cameraRef.current) {
       const sph = cameraSphericalRef.current;
       cameraRef.current.position.set(
@@ -639,42 +532,35 @@ export default function GraphCanvas3D({ allNodes, allEdges, filters, selectedNod
   };
   const handleCenter = handleFitAll;
 
-
   const modeLabel = focusNode ? `FOCUS: ${focusNode.label}` :
     (filters.domains.length > 0 || filters.evidence.length > 0 || filters.suppression.length > 0) ?
     `FILTERED — ${visibleNodes.length} nodes · ${visibleEdges.length} edges` :
     `3D GRAPH — ${visibleNodes.length} nodes · ${visibleEdges.length} edges`;
 
   return (
-    <div className="relative w-full h-full bg-slate-950 overflow-hidden">
-      <BgSlideshow opacity={0.75} images={bgImages} />
-      <div ref={mountRef} className="w-full h-full" style={{ cursor: "grab", position: "relative", zIndex: 1 }} />
-      <MatrixRainOverlay opacity={0.28} />
+    <div className="relative w-full h-full bg-[#030712] overflow-hidden">
+      <div ref={mountRef} className="w-full h-full" style={{ cursor: "grab" }} />
 
       {loading && (
-        <div className="absolute inset-0 flex items-center justify-center bg-slate-950/80 z-30">
+        <div className="absolute inset-0 flex items-center justify-center bg-[#030712]/80 z-30">
           <div className="text-center">
-            <div className="w-12 h-12 rounded-full border-2 border-amber-400 border-t-transparent animate-spin mx-auto mb-3" />
-            <p className="text-amber-400 text-sm font-bold" style={{ fontFamily: "Orbitron, sans-serif" }}>Building 3D research graph...</p>
+            <div className="w-12 h-12 rounded-full border-2 border-[#C9A84C] border-t-transparent animate-spin mx-auto mb-3" />
+            <p className="text-[#C9A84C] text-sm font-bold" style={{ fontFamily: "Orbitron, sans-serif" }}>Building 3D research graph...</p>
           </div>
         </div>
       )}
 
       {/* Mode indicator */}
-      <div className="absolute top-3 left-3 z-10 flex items-center gap-2">
-        <div className="px-3 py-1.5 rounded-lg bg-slate-950 border border-slate-800 text-[10px] font-mono flex items-center gap-1.5">
-          <Network size={10} className="text-amber-400" />
-          <span className="text-amber-400">{modeLabel}</span>
-        </div>
-        <div className="px-2 py-1.5 rounded-lg bg-slate-950 border border-amber-400/30 text-[9px] font-mono flex items-center gap-1">
-          <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
-          <span className="text-amber-400">GOLDEN SPIRAL</span>
+      <div className="absolute top-3 left-3 z-10">
+        <div className="px-3 py-1.5 rounded-lg bg-[#0D1117] border border-[#21262D] text-[10px] font-mono flex items-center gap-1.5">
+          <Network size={10} className="text-[#C9A84C]" />
+          <span className="text-[#C9A84C]">{modeLabel}</span>
         </div>
       </div>
 
       {/* Zoom indicator */}
       <div className="absolute top-3 right-3 z-10">
-        <div className="px-2.5 py-1.5 rounded-lg bg-slate-950 border border-slate-800 text-[10px] font-mono text-slate-400">
+        <div className="px-2.5 py-1.5 rounded-lg bg-[#0D1117] border border-[#21262D] text-[10px] font-mono text-[#8B9AB0]">
           {Math.round(zoomLevel * 100)}%
         </div>
       </div>
@@ -682,9 +568,9 @@ export default function GraphCanvas3D({ allNodes, allEdges, filters, selectedNod
       {/* Hover connection count badge */}
       {hoveredNode && (
         <div className="absolute top-14 left-3 z-10">
-          <div className="px-3 py-2 rounded-lg bg-slate-950 border border-amber-400/40 text-[10px]">
-            <span className="text-amber-400 font-bold">🔗 {adjacency.get(hoveredNode.numericId)?.size || 0} connections</span>
-            <span className="text-slate-400 ml-2">lit up</span>
+          <div className="px-3 py-2 rounded-lg bg-[#0D1117] border border-[#C9A84C]/40 text-[10px]">
+            <span className="text-[#C9A84C] font-bold">🔗 {adjacency.get(hoveredNode.numericId)?.size || 0} connections</span>
+            <span className="text-[#8B9AB0] ml-2">lit up</span>
           </div>
         </div>
       )}
@@ -695,73 +581,61 @@ export default function GraphCanvas3D({ allNodes, allEdges, filters, selectedNod
           className="absolute z-20 pointer-events-none max-w-[280px]"
           style={{ left: Math.min(tooltip.x + 15, (mountRef.current?.clientWidth || 800) - 290), top: Math.min(tooltip.y + 15, (mountRef.current?.clientHeight || 600) - 200) }}
         >
-          <div className="bg-slate-950 border border-slate-700 rounded-lg overflow-hidden shadow-2xl">
+          <div className="bg-[#0D1117] border border-[#21262D] rounded-lg overflow-hidden shadow-2xl">
             <div className="h-1" style={{ backgroundColor: tooltip.node.domainColor }} />
             <div className="p-3">
-              <p className="text-white text-xs font-bold leading-tight">{tooltip.node.label}</p>
-              <p className="text-slate-400 text-[10px] mt-0.5">{tooltip.node.researcher} — {tooltip.node.year}</p>
+              <p className="text-[#F0F6FF] text-xs font-bold leading-tight">{tooltip.node.label}</p>
+              <p className="text-[#8B9AB0] text-[10px] mt-0.5">{tooltip.node.researcher} — {tooltip.node.year}</p>
               <div className="flex items-center gap-2 mt-2 text-[9px]">
-                <span className="text-amber-400 font-bold">🔗 {adjacency.get(tooltip.node.numericId)?.size || 0} links</span>
+                <span className="text-[#C9A84C] font-bold">🔗 {adjacency.get(tooltip.node.numericId)?.size || 0} links</span>
                 <span style={{ color: tooltip.node.suppressionColor }}>{tooltip.node.suppression}</span>
               </div>
               <div className="flex flex-wrap gap-1 mt-2">
                 {tooltip.node.tags.slice(0, 4).map(t => (
-                  <span key={t} className="px-1.5 py-0.5 rounded bg-slate-800 text-slate-400 text-[8px]">{t}</span>
+                  <span key={t} className="px-1.5 py-0.5 rounded bg-[#161B22] text-[#8B9AB0] text-[8px]">{t}</span>
                 ))}
               </div>
-              <p className="text-amber-400 text-[9px] mt-2">Click to explore · Drag to rotate · Scroll to zoom</p>
+              <p className="text-[#C9A84C] text-[9px] mt-2">Click to explore · Drag to rotate · Scroll to zoom</p>
             </div>
           </div>
         </div>
       )}
 
-      {/* Legend — Color Key */}
+      {/* Legend */}
       {settings.showLegend && (
-        <div className="absolute bottom-3 left-3 z-10 max-w-[300px]">
-          <div className="bg-slate-950/95 border border-slate-800 rounded-lg p-3 backdrop-blur">
-            <p className="text-amber-400 text-[9px] font-black uppercase tracking-wider mb-1" style={{ fontFamily: "Orbitron, sans-serif" }}>Color Key — Research Topics</p>
-            <p className="text-slate-500 text-[7px] mb-2">Node size = connection count · each domain has its own color</p>
+        <div className="absolute bottom-3 left-3 z-10 max-w-[280px]">
+          <div className="bg-[#0D1117]/95 border border-[#21262D] rounded-lg p-3 backdrop-blur">
+            <p className="text-[#8B9AB0] text-[9px] font-bold uppercase tracking-wider mb-2">Node Size = Connections</p>
             <div className="grid grid-cols-2 gap-x-3 gap-y-1">
               {DOMAINS.map(d => (
                 <div key={d.id} className="flex items-center gap-1.5">
-                  <span className="w-2 h-2 rounded-full flex-shrink-0" style={{ backgroundColor: d.color, boxShadow: `0 0 4px ${d.color}` }} />
-                  <span className="text-slate-300 text-[8px] truncate">{d.name}</span>
+                  <span className="w-2 h-2 rounded-full flex-shrink-0" style={{ backgroundColor: d.color }} />
+                  <span className="text-[#8B9AB0] text-[8px] truncate">{d.name}</span>
                 </div>
               ))}
             </div>
-            <div className="mt-2 pt-2 border-t border-slate-800">
-              <p className="text-slate-400 text-[8px] font-bold uppercase mb-1">Suppression Status</p>
-              <div className="grid grid-cols-1 gap-y-0.5">
-                {SUPPRESSION_STATUS.map(s => (
-                  <div key={s.id} className="flex items-center gap-1.5">
-                    <span className="w-2 h-2 rounded-full flex-shrink-0" style={{ backgroundColor: s.color }} />
-                    <span className="text-slate-400 text-[7px] truncate">{s.label}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-            <div className="mt-2 pt-2 border-t border-slate-800">
-              <p className="text-slate-400 text-[8px] font-bold uppercase mb-1">Edge Colors (connection type)</p>
+            <div className="mt-2 pt-2 border-t border-[#21262D]">
+              <p className="text-[#8B9AB0] text-[8px] font-bold uppercase mb-1">Edge Colors (connection type)</p>
               <div className="grid grid-cols-2 gap-x-3 gap-y-0.5">
                 {Object.entries(CONNECTION_TYPES).map(([key, ct]) => (
                   <div key={key} className="flex items-center gap-1.5">
                     <span className="w-3 h-0.5 flex-shrink-0" style={{ backgroundColor: ct.color }} />
-                    <span className="text-slate-400 text-[7px] truncate">{ct.label}</span>
+                    <span className="text-[#8B9AB0] text-[7px] truncate">{ct.label}</span>
                   </div>
                 ))}
               </div>
             </div>
-            <p className="text-amber-400 text-[8px] mt-2">Hover a card → it pops out & its edges light up · drag to rotate the spiral</p>
+            <p className="text-[#C9A84C] text-[8px] mt-2">Hover a node → connected edges light up</p>
           </div>
         </div>
       )}
 
       {/* Zoom controls */}
       <div className="absolute bottom-3 right-3 z-10 flex flex-col gap-1">
-        <button onClick={handleZoomIn} className="w-9 h-9 rounded-lg bg-slate-950 border border-slate-800 flex items-center justify-center text-slate-400 hover:text-amber-400 hover:border-amber-400/50 transition-colors" title="Zoom In"><ZoomIn size={16} /></button>
-        <button onClick={handleZoomOut} className="w-9 h-9 rounded-lg bg-slate-950 border border-slate-800 flex items-center justify-center text-slate-400 hover:text-amber-400 hover:border-amber-400/50 transition-colors" title="Zoom Out"><ZoomOut size={16} /></button>
-        <button onClick={handleFitAll} className="w-9 h-9 rounded-lg bg-slate-950 border border-slate-800 flex items-center justify-center text-slate-400 hover:text-amber-400 hover:border-amber-400/50 transition-colors" title="Fit All"><Maximize2 size={16} /></button>
-        <button onClick={handleCenter} className="w-9 h-9 rounded-lg bg-slate-950 border border-slate-800 flex items-center justify-center text-slate-400 hover:text-amber-400 hover:border-amber-400/50 transition-colors" title="Center"><Crosshair size={16} /></button>
+        <button onClick={handleZoomIn} className="w-9 h-9 rounded-lg bg-[#0D1117] border border-[#21262D] flex items-center justify-center text-[#8B9AB0] hover:text-[#C9A84C] hover:border-[#C9A84C]/50 transition-colors" title="Zoom In"><ZoomIn size={16} /></button>
+        <button onClick={handleZoomOut} className="w-9 h-9 rounded-lg bg-[#0D1117] border border-[#21262D] flex items-center justify-center text-[#8B9AB0] hover:text-[#C9A84C] hover:border-[#C9A84C]/50 transition-colors" title="Zoom Out"><ZoomOut size={16} /></button>
+        <button onClick={handleFitAll} className="w-9 h-9 rounded-lg bg-[#0D1117] border border-[#21262D] flex items-center justify-center text-[#8B9AB0] hover:text-[#C9A84C] hover:border-[#C9A84C]/50 transition-colors" title="Fit All"><Maximize2 size={16} /></button>
+        <button onClick={handleCenter} className="w-9 h-9 rounded-lg bg-[#0D1117] border border-[#21262D] flex items-center justify-center text-[#8B9AB0] hover:text-[#C9A84C] hover:border-[#C9A84C]/50 transition-colors" title="Center"><Crosshair size={16} /></button>
       </div>
     </div>
   );

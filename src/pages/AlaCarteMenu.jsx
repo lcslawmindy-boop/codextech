@@ -135,7 +135,7 @@ function BuildPlanCard({ plan }) {
     const lines = doc.splitTextToSize(plan.description, 180);
     doc.text(lines, margin, 58);
     
-    doc.text("Research plan — membership required.", margin, 200);
+    doc.text("Price: " + plan.price, margin, 200);
     doc.text("For research and educational purposes only.", margin, 280);
     
     doc.save(`${plan.title.replace(/[^a-zA-Z0-9]/g, "_")}.pdf`);
@@ -155,13 +155,17 @@ function BuildPlanCard({ plan }) {
         <p className="text-gray-400 text-sm flex-1 mb-4 line-clamp-3">{plan.description}</p>
         
         <div className="flex items-end justify-between mb-4">
+          <div>
+            <p className="text-gray-600 text-xs">Price</p>
+            <p className="text-green-400 font-black text-lg">{plan.price}</p>
+          </div>
           <span className="text-gray-500 text-xs px-2 py-1 rounded-full bg-gray-800">{plan.category}</span>
         </div>
 
         <div className="space-y-2">
           <button onClick={handleCheckout} disabled={loading}
             className="w-full py-3 rounded-xl bg-orange-600 hover:bg-orange-500 text-white font-bold text-sm transition-all disabled:opacity-60 flex items-center justify-center gap-2">
-            {loading ? "Redirecting…" : <><ShoppingCart size={14} /> Access Plan</> }
+            {loading ? "Redirecting…" : <><ShoppingCart size={14} /> Buy Plan</> }
           </button>
           <button onClick={handleDownloadPDF}
             className="w-full py-2 rounded-lg border border-gray-700 text-gray-300 hover:text-white font-bold text-xs transition-all flex items-center justify-center gap-2">

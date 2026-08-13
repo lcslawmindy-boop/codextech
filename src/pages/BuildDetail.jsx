@@ -8,10 +8,12 @@ const BUILDS_DATA = {
   1: {
     title: "MEG Replication Device",
     category: "Free Energy",
+    cost: "$287",
     emoji: "⚡",
     shortDesc: "US Patent 6,362,718. Complete peer-reviewed replication.",
     longDesc: "The Motionless Electromagnetic Generator (MEG) is the most documented free energy device in modern history. Tom Bearden's 2002 patent 6,362,718 specifies exact geometry, materials, and winding ratios. This build plan includes a 23-component BOM with exact part numbers from verified suppliers, step-by-step assembly guide, and physics explanation of why COP>1 doesn't violate thermodynamics.",
     marketContext: "If operational, this device could disrupt global energy markets. The patent was granted by the USPTO, peer-reviewed in Foundations of Physics Letters, and replicated by dozens of independent engineers. This is not theoretical—it's documented, replicable technology.",
+    estimatedCost: "Not for sale — research members only",
     whatYouGet: [
       "23-component bill of materials with part numbers",
       "Supplier links and sourcing guide",

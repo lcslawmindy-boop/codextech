@@ -215,10 +215,6 @@ import ZarpDashboard from './pages/ZarpDashboard';
 import LicensingHub from './pages/LicensingHub';
 import ResearchAcademy from './pages/ResearchAcademy';
 import ExportCenter from './pages/ExportCenter';
-import CommercializationEngine from './pages/CommercializationEngine';
-import MonetizationHub from './pages/MonetizationHub';
-import UltimateMedbed from './pages/UltimateMedbed';
-import AdaptiveResonancePod from './pages/AdaptiveResonancePod';
 
 
 const AuthenticatedApp = () => {
@@ -432,10 +428,6 @@ const AuthenticatedApp = () => {
           <Route path="/licensing-hub" element={<LicensingHub />} />
           <Route path="/research-academy" element={<ResearchAcademy />} />
           <Route path="/export-center" element={<ExportCenter />} />
-          <Route path="/commercialization-engine" element={<CommercializationEngine />} />
-          <Route path="/monetization-hub" element={<MonetizationHub />} />
-          <Route path="/ultimate-medbed" element={<UltimateMedbed />} />
-          <Route path="/adaptive-resonance-pod" element={<AdaptiveResonancePod />} />
 
           {/* Scalar Venture Vault Routes */}
           <Route path="/venture" element={<ScalarVentureHome />} />

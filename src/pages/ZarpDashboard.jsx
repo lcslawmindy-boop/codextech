@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import {
   Plus, Search, FileText, Download, ArrowRight, Database,
-  Cpu, Rss, FolderKanban, TrendingUp, Clock, Bell, Network, Sparkles
+  Cpu, Rss, FolderKanban, TrendingUp, Clock, Bell
 } from "lucide-react";
 import DashboardSidebar from "@/components/dashboard/DashboardSidebar";
 
@@ -99,51 +99,6 @@ export default function ZarpDashboard() {
               <span className="text-zarp-amber font-semibold">1 grant deadline</span> this week.
             </p>
           </div>
-
-          {/* Showcase video */}
-          <div className="relative rounded-2xl overflow-hidden border border-zarp-gold/20" style={{ boxShadow: '0 0 60px hsl(var(--zarp-violet) / 0.15)' }}>
-            <video
-              src="https://media.base44.com/videos/public/69ccefebfea78b23498c66a8/0bb7a01b0_aethonapexipvideo.MOV"
-              autoPlay
-              loop
-              muted
-              playsInline
-              className="w-full h-auto object-cover"
-              style={{ maxHeight: '420px' }}
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-zarp-bg/70 via-transparent to-transparent pointer-events-none" />
-            <div className="absolute bottom-3 left-4 flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-zarp-gold animate-pulse" />
-              <span className="text-zarp-gold text-[10px] font-bold tracking-wider uppercase" style={{ fontFamily: 'JetBrains Mono, monospace' }}>
-                Aethon Apex IP — Platform Showcase
-              </span>
-            </div>
-          </div>
-
-          {/* Featured: 3D Research Graph hero */}
-          <Link to="/research-explorer" className="group relative block overflow-hidden rounded-2xl border border-zarp-blue/30 bg-gradient-to-br from-zarp-card via-zarp-elevated to-zarp-card p-5 hover:border-zarp-blue/60 transition-all">
-            <div className="absolute inset-0 opacity-20 pointer-events-none" style={{ background: "radial-gradient(circle at 80% 50%, hsl(var(--zarp-blue) / 0.4), transparent 60%)" }} />
-            <div className="relative flex items-center gap-4">
-              <div className="w-14 h-14 rounded-2xl bg-zarp-blue/20 border border-zarp-blue/40 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
-                <Network size={26} className="text-zarp-blue" />
-              </div>
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2 mb-1">
-                  <Sparkles size={12} className="text-zarp-gold" />
-                  <span className="text-zarp-gold text-[10px] font-black uppercase tracking-wider">Featured · Interactive</span>
-                </div>
-                <h2 className="text-zarp-text font-black text-lg leading-tight" style={{ fontFamily: 'Orbitron, sans-serif' }}>
-                  3D Research Graph Explorer
-                </h2>
-                <p className="text-zarp-muted text-xs mt-0.5 leading-relaxed">
-                  549 research nodes · 2,400 connections · 12 domains — rotate, hover, and watch linked edges light up in 3D
-                </p>
-              </div>
-              <div className="flex items-center gap-2 text-zarp-blue font-bold text-sm flex-shrink-0 group-hover:gap-3 transition-all">
-                Launch <ArrowRight size={16} />
-              </div>
-            </div>
-          </Link>
 
           {/* Quick actions */}
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">

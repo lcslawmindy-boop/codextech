@@ -65,7 +65,7 @@ function BuyButton({ invention, color }) {
       style={{ background: `linear-gradient(135deg, ${color}, ${color}99)` }}
     >
       {loading ? <Loader2 size={13} className="animate-spin" /> : <ShoppingCart size={13} />}
-      {loading ? "Processing..." : "Access Plans"}
+      {loading ? "Processing..." : `Get Plans — ${invention.price}`}
     </button>
   );
 }
@@ -110,8 +110,9 @@ export default function Device3DCard({ invention, isHighlight }) {
               style={{ background: color }} />
           </div>
 
-          {/* Complexity */}
+          {/* Price + complexity */}
           <div className="text-right flex flex-col items-end gap-1">
+            <div className="text-2xl font-black" style={{ color }}>{invention.price}</div>
             {complexityBadge(complexity)}
           </div>
         </div>

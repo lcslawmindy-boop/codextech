@@ -108,9 +108,6 @@ function VisualExplainer({ visual }) {
   );
 }
 
-// Strip cost estimates (e.g., "~$4", "$0.50") from BOM source strings
-const stripCost = (s) => (s || "").replace(/\s*~?\s*\$[\d,.]+/g, "").trim();
-
 function BomChecklist({ bom, checked, onToggle, onReset }) {
   const checkedCount = checked.filter(Boolean).length;
   const pct = bom.length > 0 ? Math.round((checkedCount / bom.length) * 100) : 0;
@@ -158,7 +155,7 @@ function BomChecklist({ bom, checked, onToggle, onReset }) {
               <th className="text-left text-gray-500 font-semibold py-2 pr-4 w-12">Qty</th>
               <th className="text-left text-gray-500 font-semibold py-2 pr-4">Item</th>
               <th className="text-left text-gray-500 font-semibold py-2 pr-4">Specification</th>
-              <th className="text-left text-gray-500 font-semibold py-2">Source</th>
+              <th className="text-left text-gray-500 font-semibold py-2">Source / Est. Cost</th>
             </tr>
           </thead>
           <tbody>
@@ -184,7 +181,7 @@ function BomChecklist({ bom, checked, onToggle, onReset }) {
                 <td className={`py-2 pr-4 font-bold ${checked[i] ? "text-gray-600 line-through" : "text-cyan-400"}`}>{row.qty}</td>
                 <td className={`py-2 pr-4 ${checked[i] ? "text-gray-600 line-through" : "text-gray-200"}`}>{row.item}</td>
                 <td className={`py-2 pr-4 ${checked[i] ? "text-gray-700" : "text-gray-400"}`}>{row.spec}</td>
-                <td className={`py-2 ${checked[i] ? "text-gray-700" : "text-gray-500"}`}>{stripCost(row.source)}</td>
+                <td className={`py-2 ${checked[i] ? "text-gray-700" : "text-gray-500"}`}>{row.source}</td>
               </tr>
             ))}
           </tbody>
@@ -379,7 +376,7 @@ function generatePDF(invention, data) {
     const specLines = wrapText(row.spec, 54, 8);
     doc.text(specLines[0], colX[2], y + 1);
     doc.setTextColor(100, 116, 139);
-    const srcLines = wrapText(stripCost(row.source), 42, 8);
+    const srcLines = wrapText(row.source, 42, 8);
     doc.text(srcLines[0], colX[3], y + 1);
     y += 9;
   });
@@ -897,7 +894,7 @@ async function generateMasterPDF(allInventions) {
       const colX2 = [margin, margin + 10, margin + 72, margin + 128];
       doc.setFillColor(...C.gray20);
       doc.rect(margin - 2, y - 4, contentW + 4, 9, "F");
-      ["QTY", "ITEM", "SPECIFICATION", "SOURCE"].forEach((h, i) => {
+      ["QTY", "ITEM", "SPECIFICATION", "SOURCE / COST"].forEach((h, i) => {
         doc.setFont("helvetica", "bold"); doc.setFontSize(7);
         doc.setTextColor(...C.white);
         doc.text(h, colX2[i], y + 1.5);
@@ -917,7 +914,7 @@ async function generateMasterPDF(allInventions) {
         doc.setTextColor(...C.gray40);
         doc.text(doc.splitTextToSize(row.spec || "", 54)[0] || "", colX2[2], y + 1.5);
         doc.setTextColor(...C.gray60);
-        doc.text(doc.splitTextToSize(stripCost(row.source || ""), 40)[0] || "", colX2[3], y + 1.5);
+        doc.text(doc.splitTextToSize(row.source || "", 40)[0] || "", colX2[3], y + 1.5);
         y += 8.5;
       });
       y += 4;
@@ -1143,12 +1140,14 @@ async function generateMasterPDF(allInventions) {
           mats.forEach(m => {
             checkPage(7);
             const name = typeof m === "object" ? m.name : String(m);
+            const cost = typeof m === "object" && m.cost ? m.cost : null;
             const where = typeof m === "object" && m.where ? m.where : null;
             // Checkbox
             doc.setDrawColor(...C.gray40); doc.setLineWidth(0.4);
             doc.rect(margin, y - 3.5, 4, 4, "D");
             doc.setFont("helvetica", "normal"); doc.setFontSize(7.5); doc.setTextColor(...C.gray20);
             doc.text(name.slice(0, 45), margin + 6, y);
+            if (cost) { doc.setTextColor(...C.gray40); doc.text(cost, margin + halfW - 8, y, { align: "right" }); }
             if (where) { doc.setFontSize(6.5); doc.setTextColor(...C.gray60); doc.text(where.slice(0, 30), margin + halfW + 2, y); }
             y += 7;
           });
@@ -1256,6 +1255,7 @@ function BuyNowButton({ invention }) {
 
   const priceStr = invention?.price || "$97";
   const priceInCents = Math.round(parseFloat(priceStr.replace(/[$,]/g, "")) * 100);
+  const priceDisplay = priceStr.replace(",", "");
 
   const handleBuy = async () => {
     if (window.self !== window.top) {
@@ -1288,7 +1288,7 @@ function BuyNowButton({ invention }) {
       className="flex items-center justify-center gap-2 w-full py-3 rounded-xl font-black text-white text-sm bg-green-700 hover:bg-green-600 disabled:opacity-50 transition-all"
     >
       {loading ? <Loader2 size={15} className="animate-spin" /> : <ShoppingCart size={15} />}
-      {loading ? "Processing..." : "Access This Plan"}
+      {loading ? "Processing..." : `Buy This Plan — ${priceDisplay}`}
     </button>
   );
 }
@@ -1417,7 +1417,8 @@ function SpecsLockedGate({ invention }) {
             <p className="text-white font-black text-base mb-1">Full Specs Locked</p>
             <p className="text-gray-400 text-xs mb-4">Purchase this plan to reveal the complete BOM,<br />step-by-step instructions, and schematics.</p>
             <div className="flex items-center justify-center gap-3 flex-wrap">
-              <span className="text-gray-400 font-bold text-sm">Research membership required</span>
+              <span className="text-green-400 font-black text-xl">{invention?.price}</span>
+              <span className="text-gray-600 text-xs">one-time</span>
             </div>
           </div>
         </div>
@@ -1427,6 +1428,7 @@ function SpecsLockedGate({ invention }) {
       <div className="bg-gray-900 border border-gray-800 rounded-2xl p-5 space-y-3">
         <div className="flex items-center justify-between mb-1">
           <p className="text-white font-black text-lg">{invention?.title}</p>
+          <p className="text-green-400 font-black text-xl">{invention?.price}</p>
         </div>
         <p className="text-gray-500 text-xs mb-3">Includes: full BOM, step-by-step assembly, schematics, technical notes & downloadable PDF</p>
         <BuyNowButton invention={invention} />
@@ -1466,7 +1468,7 @@ function PaywallGate({ invention }) {
         </div>
         <Link to="/checkout"
           className="flex items-center justify-center gap-2 w-full py-3 rounded-xl font-black text-white text-sm bg-red-700 hover:bg-red-600 transition-all">
-          <ShoppingCart size={15} /> Purchase Access
+          <ShoppingCart size={15} /> Purchase Access — {invention?.price || "See Pricing"}
         </Link>
         <Link to="/courses" className="block mt-3 text-xs text-gray-600 hover:text-gray-400 transition-colors">
           View all courses & plans →
@@ -1741,7 +1743,7 @@ export default function InventionPlans() {
                     isAdminLocked ? <span className="text-red-900">🔐 Admin Only</span> :
                     isGovLocked ? <span className="text-red-400">🏛 Gov/Defense Only</span> :
                     memberLocked ? <span className="text-indigo-500">🔒 Membership or Purchase</span> :
-                    <span className="text-gray-600">Research Plan</span>}
+                    <span className="text-gray-600">{inv.price}</span>}
                    {isDefenseRestricted(inv.title) && <span className="ml-1 px-1.5 py-0.5 rounded text-xs bg-red-900/40 border border-red-800 text-red-400">Defense Only</span>}
                   </p>
                 </div>
@@ -1774,7 +1776,7 @@ export default function InventionPlans() {
                 <Link to="/pricing"
                   className="flex items-center justify-center gap-2 w-full py-3 rounded-xl font-black text-white text-sm transition-all"
                   style={{ background: "linear-gradient(135deg, #0EA5E9, #10B981)" }}>
-                  Upgrade for Full Access
+                  Upgrade for Full Access — from $47
                 </Link>
               </div>
             </div>
