@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { ArrowLeft, Search, AlertTriangle, Sparkles, Brain, Heart, Shield, Zap, Leaf, Eye, Flame, Dna, Atom, BookOpen, Lock, ChevronDown, ChevronUp, Package, DollarSign, TrendingUp, FlaskConical, Crown } from "lucide-react";
 import { SUPPRESSED_INVENTORS, VEDIC_HEALING_CONCEPTS, OCCULT_ESOTERIC, PATENT_SUPPRESSION } from "../lib/expandedResearchNodes";
 import { NEW_INVENTIONS } from "../lib/newInventions";
+import MasterExportButton from "../components/MasterExportButton";
 
 const CATEGORIES = [
   { id: "suppressed", label: "Suppressed Technology", icon: <Zap size={16} />, color: "red", count: SUPPRESSED_INVENTORS.length },
@@ -254,7 +255,8 @@ export default function ExpandedResearchArchive() {
           </Link>
           <div className="flex items-center gap-2">
             <Crown size={16} className="text-amber-400" />
-            <h1 className="text-sm font-bold">Expanded Research Archive</h1>
+            <h1 className="text-sm font-bold hidden sm:inline">Expanded Research Archive</h1>
+            <MasterExportButton />
           </div>
         </div>
         <p className="text-gray-500 text-xs mb-3">
@@ -344,10 +346,13 @@ export default function ExpandedResearchArchive() {
         {/* 50 New Inventions */}
         {activeCategory === "inventions" && (
           <div className="space-y-3">
-            <div className="flex items-center gap-2 mb-2">
-              <Sparkles size={16} className="text-cyan-400" />
-              <h2 className="text-white font-bold text-sm">50 New Merged Inventions</h2>
-              <span className="text-gray-600 text-xs">({filteredInventions.length})</span>
+            <div className="flex items-center justify-between gap-2 mb-2 flex-wrap">
+              <div className="flex items-center gap-2">
+                <Sparkles size={16} className="text-cyan-400" />
+                <h2 className="text-white font-bold text-sm">50 New Merged Inventions</h2>
+                <span className="text-gray-600 text-xs">({filteredInventions.length})</span>
+              </div>
+              <MasterExportButton />
             </div>
             <p className="text-gray-500 text-xs mb-3">
               Each invention merges concepts from suppressed technology, Vedic medicine, occult/esoteric knowledge, and scalar-EM engineering to create new devices that advance humanity.
