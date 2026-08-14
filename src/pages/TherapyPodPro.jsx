@@ -294,6 +294,9 @@ export default function TherapyPodPro() {
             <Link to="/resonance-dashboard" className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold bg-cyan-950/40 border border-cyan-800 text-cyan-400 hover:bg-cyan-900/40 transition-colors">
               <Radio size={12} /> Resonance Monitor
             </Link>
+            <Link to="/targeted-therapy-pods" className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold bg-rose-950/40 border border-rose-800 text-rose-400 hover:bg-rose-900/40 transition-colors">
+              <Heart size={12} /> Autism & PTSD Pods
+            </Link>
             <Link to="/expanded-research" className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold bg-purple-950/40 border border-purple-800 text-purple-400 hover:bg-purple-900/40 transition-colors">
               <Sparkles size={12} /> Research Archive
             </Link>

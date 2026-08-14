@@ -204,6 +204,7 @@ import TherapyPod from './pages/TherapyPod';
 import TherapyPodPro from './pages/TherapyPodPro';
 import ResonanceDashboard from './pages/ResonanceDashboard';
 import ExpandedResearchArchive from './pages/ExpandedResearchArchive';
+import TargetedTherapyPods from './pages/TargetedTherapyPods';
 
 
 const AuthenticatedApp = () => {
@@ -405,6 +406,7 @@ const AuthenticatedApp = () => {
           <Route path="/therapy-pod-pro" element={<TherapyPodPro />} />
           <Route path="/resonance-dashboard" element={<ResonanceDashboard />} />
           <Route path="/expanded-research" element={<ExpandedResearchArchive />} />
+          <Route path="/targeted-therapy-pods" element={<TargetedTherapyPods />} />
           </Route>
 
           {/* Scalar Venture Vault Routes */}
