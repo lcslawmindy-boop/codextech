@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { ArrowLeft, Brain, Heart, Activity } from "lucide-react";
 import { TARGETED_PODS } from "../lib/targetedTherapyPods";
 import TargetedPodDetail from "../components/TargetedPodDetail";
+import TargetedPodExportButton from "../components/TargetedPodExportButton";
 
 export default function TargetedTherapyPods() {
   const [activePod, setActivePod] = useState(TARGETED_PODS[0].id);
@@ -19,6 +20,7 @@ export default function TargetedTherapyPods() {
           <div className="flex items-center gap-2">
             <Activity size={16} className="text-cyan-400" />
             <h1 className="text-sm font-bold hidden sm:inline">Targeted Therapy Pods</h1>
+            <TargetedPodExportButton pod={pod} />
           </div>
         </div>
         <p className="text-gray-500 text-xs">
