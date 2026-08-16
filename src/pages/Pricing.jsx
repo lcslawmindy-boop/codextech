@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { ArrowLeft, Check, Lock, Gift, Flame, Clock, ChevronDown, ChevronUp, Zap, BookOpen, Wrench, Database, Shield } from "lucide-react";
+import { ArrowLeft, Check, Lock, Gift, Flame, Clock, ChevronDown, ChevronUp, Zap, BookOpen, Wrench, Database, Shield, Coins } from "lucide-react";
 import { base44 } from "@/api/base44Client";
+import { CREDIT_PACKS } from "../lib/creditPacks";
 
 const DEADLINE_KEY = "apex_founding_deadline_v3";
 function getDeadline() {
@@ -31,13 +32,16 @@ const PRICE_IDS = {
   enterprise: { monthly: "price_1TXTFLBkbCWuj2nHw8pspGy0", annual: "price_1TXTFLBkbCWuj2nHXyPYdCol" },
 };
 
-// ── Add-on dossier pricing for standalone credits ────────────────────────────
-const DOSSIER_PACKS = [
-  { name: "Starter Pack", forge: 5, patent: 5, multiplier: "1×", price: 49, color: "#06b6d4" },
-  { name: "Builder Pack", forge: 25, patent: 25, multiplier: "5×", price: 197, color: "#a855f7", popular: true },
-  { name: "Power Pack",   forge: 50, patent: 50, multiplier: "10×", price: 349, color: "#f97316" },
-  { name: "Unlimited",   forge: "∞", patent: "∞", multiplier: "∞", price: 799, color: "#fbbf24" },
-];
+// ── Research credit packs (real Stripe price IDs) ────────────────────────────
+const DOSSIER_PACKS = CREDIT_PACKS.map(p => ({
+  name: p.name,
+  credits: p.credits,
+  priceId: p.priceId,
+  multiplier: p.multiplier,
+  price: p.price,
+  color: p.color,
+  popular: p.popular,
+}));
 
 const TIERS = [
   {
@@ -358,15 +362,16 @@ export default function Pricing() {
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-slate-800 border border-slate-700 text-slate-300 text-xs font-black uppercase tracking-widest mb-3">
             <Zap size={11} className="text-yellow-400" /> Add-On Credit Packs
           </div>
-          <h2 className="text-2xl font-black text-white mb-2">Invention Forge & AI Patent Suite</h2>
-          <p className="text-slate-400 text-sm max-w-lg mx-auto">Purchase standalone credit bundles for Invention Forge sessions and AI Patent Suite dossiers. Each pack includes equal credits for both tools.</p>
+          <h2 className="text-2xl font-black text-white mb-2">Research Credits</h2>
+          <p className="text-slate-400 text-sm max-w-lg mx-auto">Buy standalone credits for PDF build-plan exports, Invention Forge sessions, and AI Patent Suite dossiers. No subscription required — works for any audience.</p>
           <div className="flex flex-wrap justify-center gap-4 mt-3 text-xs text-slate-500">
-            <span>⚡ Forge credit = 1 AI hybrid IP generation session</span>
-            <span>📜 Patent credit = 1 full patent draft + FTO analysis</span>
+            <span className="flex items-center gap-1"><Coins size={11} className="text-amber-400" /> 1 credit = 1 invention PDF spec</span>
+            <span className="flex items-center gap-1"><Coins size={11} className="text-amber-400" /> 2 credits = therapy pod build plan</span>
+            <span className="flex items-center gap-1"><Coins size={11} className="text-amber-400" /> 3 credits = master export (3 vols)</span>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
           {DOSSIER_PACKS.map((pack) => (
             <div key={pack.name}
               className="relative rounded-2xl overflow-hidden flex flex-col"
@@ -383,25 +388,36 @@ export default function Pricing() {
                   <span className="text-[10px] bg-slate-800 px-2 py-0.5 rounded-full text-slate-400 font-mono">{pack.name}</span>
                 </div>
                 <div className="text-4xl font-black mb-1" style={{ color: pack.color }}>${pack.price}</div>
-                <p className="text-slate-500 text-xs mb-4">one-time purchase</p>
+                <p className="text-slate-500 text-xs mb-4">one-time purchase · ${((pack.price / pack.credits)).toFixed(2)}/credit</p>
                 <div className="space-y-2 mb-5 flex-1">
                   <div className="flex items-center gap-2 text-xs text-slate-300">
-                    <span style={{ color: pack.color }}>⚡</span>
-                    <span>{pack.forge === "∞" ? "Unlimited" : pack.forge} Invention Forge sessions</span>
+                    <Coins size={13} style={{ color: pack.color }} />
+                    <span>{pack.credits} research credits</span>
                   </div>
                   <div className="flex items-center gap-2 text-xs text-slate-300">
-                    <span style={{ color: pack.color }}>📜</span>
-                    <span>{pack.patent === "∞" ? "Unlimited" : pack.patent} AI Patent Suite credits</span>
+                    <span style={{ color: pack.color }}>⚡</span>
+                    <span>{pack.credits} Invention Forge or Patent Suite sessions</span>
                   </div>
                   {pack.multiplier !== "1×" && (
                     <div className="flex items-center gap-2 text-xs text-green-400 font-bold mt-2">
                       <span>✦</span>
-                      <span>Save vs individual @ ${Math.round(pack.price / (typeof pack.forge === "number" ? pack.forge : 1))}/credit</span>
+                      <span>Save vs Starter @ ${((pack.price / pack.credits)).toFixed(2)}/credit</span>
                     </div>
                   )}
                 </div>
                 <button
-                  onClick={() => alert("Add-on packs coming soon — contact us to purchase.")}
+                  onClick={async () => {
+                    if (window.self !== window.top) { alert("Checkout only works from the published app."); return; }
+                    base44.analytics.track({ eventName: "credit_pack_checkout_clicked", properties: { pack: pack.name, credits: pack.credits } });
+                    const res = await base44.functions.invoke("purchaseCredits", {
+                      priceId: pack.priceId,
+                      packName: pack.name,
+                      credits: pack.credits,
+                      successUrl: `${window.location.origin}/member-dashboard?credits=purchased`,
+                      cancelUrl: `${window.location.origin}/pricing`,
+                    });
+                    if (res.data?.url) window.location.href = res.data.url;
+                  }}
                   className="w-full py-2.5 rounded-xl text-sm font-black text-white transition-all hover:opacity-90"
                   style={{ background: `linear-gradient(135deg, ${pack.color}, ${pack.color}99)` }}
                 >
@@ -411,7 +427,7 @@ export default function Pricing() {
             </div>
           ))}
         </div>
-        <p className="text-center text-slate-600 text-xs mt-4">Credits never expire · Stack with any membership tier</p>
+        <p className="text-center text-slate-600 text-xs mt-4">Credits never expire · Stack with any membership tier · No subscription required</p>
       </div>
 
       {/* Email Capture */}

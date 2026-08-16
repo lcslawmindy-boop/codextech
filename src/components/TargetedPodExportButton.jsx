@@ -1,17 +1,33 @@
 import { useState } from "react";
-import { Download, Loader2, FileText } from "lucide-react";
+import { Link } from "react-router-dom";
+import { Download, Loader2, FileText, Lock } from "lucide-react";
 import { jsPDF } from "jspdf";
 import { generateAllSpecs } from "../lib/targetedPodSpecs";
+import { useCredits } from "../hooks/useCredits";
+import { EXPORT_COSTS } from "../lib/creditPacks";
 
 export default function TargetedPodExportButton({ pod }) {
   const [generating, setGenerating] = useState(false);
   const [progress, setProgress] = useState(0);
+  const [needCredits, setNeedCredits] = useState(false);
   const color = pod.color;
+  const cost = EXPORT_COSTS.therapy_pod_build_plan.credits;
+  const { spend } = useCredits();
 
   const generatePDF = async () => {
+    setNeedCredits(false);
     setGenerating(true);
     setProgress(0);
     await new Promise(r => setTimeout(r, 50));
+
+    // Spend credits before generating
+    const spent = await spend(`${pod.name} Build Plan`, cost);
+    if (!spent.ok) {
+      setGenerating(false);
+      setProgress(0);
+      setNeedCredits(true);
+      return;
+    }
 
     const specs = generateAllSpecs(pod);
     const doc = new jsPDF({ orientation: "portrait", unit: "mm", format: "a4" });
@@ -256,6 +272,29 @@ export default function TargetedPodExportButton({ pod }) {
     setTimeout(() => setProgress(0), 2000);
   };
 
+  if (needCredits) {
+    return (
+      <div className="flex items-center gap-2">
+        <span className="flex items-center gap-1.5 px-3 py-2.5 rounded-xl bg-red-950/40 border border-red-800 text-red-300 text-xs font-bold">
+          <Lock size={14} /> Need {cost} credits
+        </span>
+        <Link
+          to="/pricing"
+          className="flex items-center gap-1.5 px-4 py-2.5 rounded-xl text-white text-sm font-bold transition-all shadow-lg"
+          style={{ background: `linear-gradient(135deg, #f59e0b, #f97316)` }}
+        >
+          Buy Credits →
+        </Link>
+        <button
+          onClick={() => setNeedCredits(false)}
+          className="px-3 py-2.5 rounded-xl bg-gray-800 border border-gray-700 text-gray-400 text-xs font-bold hover:bg-gray-700 transition-colors"
+        >
+          Cancel
+        </button>
+      </div>
+    );
+  }
+
   return (
     <button
       onClick={generatePDF}
@@ -271,7 +310,7 @@ export default function TargetedPodExportButton({ pod }) {
       ) : (
         <>
           <Download size={16} />
-          Export Build Plan (PDF)
+          Export Build Plan ({cost} credits)
         </>
       )}
     </button>

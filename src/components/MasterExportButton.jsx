@@ -1,8 +1,11 @@
 import { useState } from "react";
-import { Download, Loader2 } from "lucide-react";
+import { Link } from "react-router-dom";
+import { Download, Loader2, Lock } from "lucide-react";
 import { jsPDF } from "jspdf";
 import { NEW_INVENTIONS } from "../lib/newInventions";
 import { generatePRD, generatePDR, generateBOM, generateSOW, generateTestPlan } from "../lib/inventionEngineeringSpecs";
+import { useCredits } from "../hooks/useCredits";
+import { EXPORT_COSTS } from "../lib/creditPacks";
 
 // Split 50 inventions into 3 volumes: 17 + 17 + 16
 const VOLUMES = [
@@ -324,12 +327,26 @@ export default function MasterExportButton() {
   const [generating, setGenerating] = useState(false);
   const [progress, setProgress] = useState(0);
   const [status, setStatus] = useState("");
+  const [needCredits, setNeedCredits] = useState(false);
+  const { balance, spend } = useCredits();
+  const cost = EXPORT_COSTS.master_export_3vol.credits;
 
   const generateAllVolumes = async () => {
+    setNeedCredits(false);
     setGenerating(true);
     setProgress(0);
-    setStatus("Starting...");
+    setStatus("Verifying credits...");
     await new Promise(r => setTimeout(r, 50));
+
+    // Spend credits before generating
+    const spent = await spend("Master Export (3 Volumes)", cost);
+    if (!spent.ok) {
+      setGenerating(false);
+      setProgress(0);
+      setStatus("");
+      setNeedCredits(true);
+      return;
+    }
 
     const results = [];
     for (let v = 0; v < VOLUMES.length; v++) {
@@ -353,6 +370,28 @@ export default function MasterExportButton() {
     setTimeout(() => { setProgress(0); setStatus(""); }, 3000);
   };
 
+  if (needCredits) {
+    return (
+      <div className="flex items-center gap-2">
+        <span className="flex items-center gap-1.5 px-3 py-2.5 rounded-xl bg-red-950/40 border border-red-800 text-red-300 text-xs font-bold">
+          <Lock size={14} /> Need {cost} credits
+        </span>
+        <Link
+          to="/pricing"
+          className="flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-500 hover:to-orange-500 text-white text-sm font-bold transition-all shadow-lg shadow-amber-900/30"
+        >
+          Buy Credits →
+        </Link>
+        <button
+          onClick={() => setNeedCredits(false)}
+          className="px-3 py-2.5 rounded-xl bg-gray-800 border border-gray-700 text-gray-400 text-xs font-bold hover:bg-gray-700 transition-colors"
+        >
+          Cancel
+        </button>
+      </div>
+    );
+  }
+
   return (
     <button
       onClick={generateAllVolumes}
@@ -367,7 +406,7 @@ export default function MasterExportButton() {
       ) : (
         <>
           <Download size={16} />
-          Master Export (3 Volumes)
+          Master Export (3 Vols · {cost} credits)
         </>
       )}
     </button>

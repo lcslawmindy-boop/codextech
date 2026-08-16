@@ -29,6 +29,27 @@ Deno.serve(async (req) => {
       console.error("No email found on session:", session.id);
     }
 
+    // ── Fulfill credit pack purchases ───────────────────────────────────────
+    if (session.metadata?.credit_pack === 'true' && session.payment_status === 'paid') {
+      const creditsAmount = parseInt(session.metadata?.credits_amount || '0', 10);
+      const packName = session.metadata?.pack_name || 'Research Credit Pack';
+      if (creditsAmount > 0 && email) {
+        try {
+          await base44.asServiceRole.entities.CreditTransaction.create({
+            user_email: email,
+            credits: creditsAmount,
+            type: 'purchase',
+            description: `Purchased ${packName} (${creditsAmount} credits)`,
+            stripe_session_id: session.id,
+            pack_name: packName,
+          });
+          console.log(`Credits fulfilled: +${creditsAmount} for ${email} — ${packName}`);
+        } catch (e) {
+          console.error('Error fulfilling credit pack:', e.message);
+        }
+      }
+    }
+
     // Save shop order for physical products (one-time payments with shipping)
     const productName = session.metadata?.product_name || session.metadata?.product_title;
     const isShopOrder = productName && !session.subscription;
