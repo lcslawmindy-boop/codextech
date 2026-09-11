@@ -11,6 +11,7 @@ import DocumentSlideStrip from "../components/DocumentSlideStrip";
 import HorizontalFeatureScroller from "../components/HorizontalFeatureScroller";
 import FeatureCube3D from "../components/FeatureCube3D";
 import IPEmpireValueSection from "../components/IPEmpireValueSection";
+import ProductGrid from "../components/ProductGrid";
 
 const HERO_BG_IMAGES = [
   "https://media.base44.com/images/public/69ccefebfea78b23498c66a8/fee7eab82_sleek-mri-scanner-room-enhanced-holographic-displays-brain-scans-other-medical-data-embodying-cutting-edge-314416241.webp",
@@ -41,62 +42,7 @@ function useCountdown() {
   return `${pad(h)}:${pad(m)}:${pad(s)}`;
 }
 
-// ── Membership Tiers ──────────────────────────────────────────────────────────
-const TIERS = [
-  {
-    id: "explorer",
-    name: "Explorer",
-    monthly: 29,
-    annual: 24,
-    color: "#06b6d4",
-    badge: "STARTER",
-    desc: "Research archive only — build plans locked",
-    features: [
-      "Electromagnetic concept graph — 100+ nodes",
-      "Prior Art Archive — 200+ patent-sourced entries",
-      "Engineering glossary & reference library",
-      "Community forum read access",
-    ],
-    locked: ["Build plans (locked — Research Lab+)", "Structured courses", "Invention Forge", "AI Patent Suite"],
-  },
-  {
-    id: "research",
-    name: "Research Lab",
-    monthly: 49,
-    annual: 39,
-    color: "#a855f7",
-    badge: "MOST POPULAR",
-    desc: "All courses · purchase up to 10 build plans · Forge & Patent credits",
-    valueNote: "$580+ value / mo",
-    features: [
-      "All 40+ structured engineering courses — full access",
-      "Purchase up to 10 build plans / month (BOM, schematics, assembly)",
-      "2 Invention Forge credits / month (AI hybrid IP generation)",
-      "1 AI Patent Suite credit / month (drafting + analysis)",
-      "Full community forum access",
-    ],
-    locked: [],
-    highlight: true,
-  },
-  {
-    id: "pro",
-    name: "Pro Builder",
-    monthly: 149,
-    annual: 119,
-    color: "#f97316",
-    badge: "BEST VALUE",
-    desc: "All courses · unlimited build plans · 10 Forge + 10 Patent credits",
-    valueNote: "$1,400+ value / mo",
-    features: [
-      "All 40+ courses — full access",
-      "Unlimited build plan purchases — full catalogue unlocked",
-      "10 Invention Forge credits / month",
-      "10 AI Patent Suite credits / month",
-      "Priority support & early access to all new drops",
-    ],
-    locked: [],
-  },
-];
+
 
 const STATS = [
   { val: "200+", label: "Research Archive Entries", sub: "Patent-sourced & peer-reviewed" },
@@ -219,93 +165,6 @@ function HeroSection() {
   );
 }
 
-function TierCard({ tier, isAnnual }) {
-  const [loading, setLoading] = useState(false);
-  const price = isAnnual ? tier.annual : tier.monthly;
-
-  const PRICE_IDS = {
-    explorer:   { monthly: "price_1TXTFLBkbCWuj2nHKPYdnfH0", annual: "price_1TXTFLBkbCWuj2nHlkPxvXC8" },
-    research:   { monthly: "price_1TXTFLBkbCWuj2nHbK0MpT7x", annual: "price_1TXTFLBkbCWuj2nH9LC0ABm0" },
-    pro:        { monthly: "price_1TXTFLBkbCWuj2nHHKfUYuoV", annual: "price_1TXTFLBkbCWuj2nHXEZn1hEc" },
-  };
-
-  const handleCheckout = async () => {
-    if (window.self !== window.top) { alert("Checkout only works from the published app."); return; }
-    setLoading(true);
-    try {
-      const priceId = PRICE_IDS[tier.id]?.[isAnnual ? "annual" : "monthly"];
-      const res = await base44.functions.invoke("createCheckoutSession", {
-        title: `Aethon Apex IP — ${tier.name}`,
-        priceId,
-        mode: "subscription",
-        category: "membership",
-        successUrl: `${window.location.origin}/member-dashboard?checkout=success`,
-        cancelUrl: `${window.location.origin}/start`,
-      });
-      if (res.data?.url) window.location.href = res.data.url;
-    } catch (e) { console.error(e); }
-    setLoading(false);
-  };
-
-  return (
-    <div
-      className={`relative flex flex-col rounded-2xl overflow-hidden border transition-all ${
-        tier.highlight ? "shadow-2xl scale-[1.02]" : "border-slate-800"
-      }`}
-      style={tier.highlight ? { borderColor: tier.color, boxShadow: `0 0 40px ${tier.color}20` } : {}}
-    >
-      <div className="py-2 text-center text-xs font-black tracking-widest text-white" style={{ backgroundColor: tier.color }}>
-        {tier.badge}
-      </div>
-      <div className="p-6 bg-slate-900 flex flex-col flex-1">
-        <h3 className="text-white font-black text-xl mb-1">{tier.name}</h3>
-        <p className="text-slate-400 text-xs mb-2">{tier.desc}</p>
-        {tier.valueNote && (
-          <div className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-black mb-3 self-start" style={{ background: tier.color + "20", color: tier.color, border: `1px solid ${tier.color}40` }}>
-            ✦ {tier.valueNote}
-          </div>
-        )}
-
-        <div className="flex items-end gap-1 mb-1">
-          <span className="text-5xl font-black" style={{ color: tier.color }}>${price.toFixed(2)}</span>
-          <span className="text-slate-500 mb-2 text-sm">/mo</span>
-        </div>
-        {isAnnual && <p className="text-green-400 text-xs font-bold mb-1">Save ${((tier.monthly - tier.annual) * 12).toFixed(0)}/year — billed annually</p>}
-        <p className="text-slate-600 text-xs mb-5">{isAnnual ? `$${(tier.annual * 12).toFixed(2)}/year` : "Monthly billing, cancel anytime"}</p>
-
-        <button
-          onClick={handleCheckout}
-          disabled={loading}
-          className="w-full py-3 rounded-xl font-black text-white text-sm transition-all hover:opacity-90 mb-5"
-          style={{ backgroundColor: tier.color }}
-        >
-          {loading ? "Processing..." : `Start ${tier.name} →`}
-        </button>
-
-        <div className="space-y-2.5 flex-1">
-          {tier.features.map((f, i) => (
-            <div key={i} className="flex items-start gap-2 text-xs text-slate-200">
-              <Check size={12} className="flex-shrink-0 mt-0.5" style={{ color: tier.color }} />
-              {f}
-            </div>
-          ))}
-          {tier.locked.length > 0 && (
-            <>
-              <div className="border-t border-slate-800 my-2" />
-              {tier.locked.map((f, i) => (
-                <div key={i} className="flex items-start gap-2 text-xs text-slate-600">
-                  <Lock size={12} className="flex-shrink-0 mt-0.5" />
-                  {f}
-                </div>
-              ))}
-            </>
-          )}
-        </div>
-      </div>
-    </div>
-  );
-}
-
 function FaqItem({ f, i, open, setOpen }) {
   return (
     <div className="border border-slate-800 rounded-xl overflow-hidden">
@@ -330,7 +189,6 @@ function FaqItem({ f, i, open, setOpen }) {
 // ── Main Page ─────────────────────────────────────────────────────────────────
 export default function FunnelHome() {
   const countdown = useCountdown();
-  const [isAnnual, setIsAnnual] = useState(true);
   const [faqOpen, setFaqOpen] = useState(null);
   const [email, setEmail] = useState("");
   const [subscribed, setSubscribed] = useState(false);
@@ -489,12 +347,12 @@ export default function FunnelHome() {
                 ],
               },
               {
-                icon: <Wrench size={22} className="text-orange-400" />,
+                icon: <Wrench size={22} className="text-red-400" />,
                 title: "Build Plan Library",
-                tag: "MEMBER",
-                tagColor: "bg-orange-900/40 border-orange-800 text-orange-300",
+                tag: "NOT FOR SALE",
+                tagColor: "bg-red-950/60 border-red-800 text-red-400",
                 items: [
-                  "40+ complete device build plans",
+                  "40+ complete device build plans — research only",
                   "Calibrated BOM with exact part numbers",
                   "Circuit schematics & wiring diagrams",
                   "Step-by-step assembly instructions",
@@ -634,34 +492,21 @@ export default function FunnelHome() {
 
       {/* ── Pricing ── */}
       <section id="pricing" className="border-y border-slate-800 bg-slate-900/30 px-6 py-20">
-        <div className="max-w-5xl mx-auto">
+        <div className="max-w-6xl mx-auto">
           <div className="text-center mb-10">
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-yellow-950/50 border border-yellow-800/50 text-yellow-300 text-xs font-bold mb-4 uppercase tracking-wider">
-              <Flame size={10} /> Founding Rate · {countdown} remaining
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-cyan-950/50 border border-cyan-800/50 text-cyan-300 text-xs font-bold mb-4 uppercase tracking-wider">
+              <Zap size={10} /> À La Carte — No Memberships
             </div>
-            <h2 className="text-4xl font-black mb-3">Choose Your Access Level</h2>
-            <p className="text-slate-400 max-w-lg mx-auto text-sm">Start free. Upgrade when you're ready to build.</p>
-
-            {/* Billing toggle */}
-            <div className="flex items-center justify-center gap-3 mt-6">
-              <span className={`text-sm font-semibold ${!isAnnual ? "text-white" : "text-slate-500"}`}>Monthly</span>
-              <button
-                onClick={() => setIsAnnual(a => !a)}
-                className={`w-12 h-6 rounded-full relative transition-colors ${isAnnual ? "bg-purple-600" : "bg-slate-700"}`}
-              >
-                <div className={`absolute top-1 w-4 h-4 bg-white rounded-full shadow transition-transform ${isAnnual ? "translate-x-7" : "translate-x-1"}`} />
-              </button>
-              <span className={`text-sm font-semibold ${isAnnual ? "text-white" : "text-slate-500"}`}>
-                Annual <span className="text-green-400 font-black">— Best Value</span>
-              </span>
-            </div>
+            <h2 className="text-4xl font-black mb-3">Buy Only What You Need</h2>
+            <p className="text-slate-400 max-w-lg mx-auto text-sm">No subscriptions. Pick a product, spend credits, get instant access.</p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5 items-stretch">
-            {TIERS.map((tier) => <TierCard key={tier.id} tier={tier} isAnnual={isAnnual} />)}
-          </div>
+          <ProductGrid />
 
-          <p className="text-center text-slate-600 text-xs mt-6">🔒 Secured by Stripe · Cancel anytime · Instant access</p>
+          <p className="text-center text-slate-600 text-xs mt-6">
+            🔒 Credits never expire · No subscription ·{" "}
+            <Link to="/pricing" className="text-cyan-400 hover:underline">Buy credit packs →</Link>
+          </p>
         </div>
       </section>
 
