@@ -162,6 +162,7 @@ import RevenueAudit from './pages/RevenueAudit';
 // AdminNdaSignatures removed
 import AdminStripeCatalog from './pages/AdminStripeCatalog';
 import AdminForgedIP from './pages/AdminForgedIP';
+import AdminIPInventory from './pages/AdminIPInventory';
 import WixCourseImport from './pages/WixCourseImport';
 import ScalarVentureHome from './pages/ScalarVentureHome';
 import VaultBrowser from './pages/VaultBrowser';
@@ -392,6 +393,7 @@ const AuthenticatedApp = () => {
             {/* NDA signatures removed */}
             <Route path="/admin-stripe-catalog" element={<AdminStripeCatalog />} />
             <Route path="/admin-forged-ip" element={<AdminForgedIP />} />
+            <Route path="/admin-ip-inventory" element={<AdminIPInventory />} />
             <Route path="/wix-import" element={<WixCourseImport />} />
             <Route path="/email-funnel" element={<EmailFunnel />} />
             <Route path="/product-ladder" element={<ProductLadder />} />
