@@ -234,11 +234,7 @@ function AdminMasterPdfButton() {
   const handleGenerate = () => {
     setGenerating(true);
     setTimeout(() => {
-      if (hasFullContent) {
-        generateFullMasterPDF(contentMap);
-      } else {
-        generateMasterPDF();
-      }
+      generateFullMasterPDF(contentMap);
       setGenerating(false);
     }, 100);
   };
@@ -250,10 +246,10 @@ function AdminMasterPdfButton() {
         <p className="text-gray-400 text-sm mt-1">
           {hasFullContent
             ? "Full AI-generated content ready — downloads ~1,400+ pages with complete BOM tables, assembly steps, measurement protocols, and references."
-            : `${completeCount}/33 packs have full AI content. Download now for metadata catalog, or generate all packs below for the full 1,400+ page version.`}
+            : `${completeCount}/33 packs have full AI content. The full PDF downloads now — packs without AI content show metadata only (clearly marked). Generate all packs below to fill every page.`}
         </p>
         <div className="flex flex-wrap gap-2 mt-3">
-          {["33 Device Plans", hasFullContent ? "1,400+ Pages (Full)" : "Metadata Catalog", "All Sections", "All Categories", "Admin Only"].map(tag => (
+          {["33 Device Plans", hasFullContent ? "1,400+ Pages (Full)" : `1,400+ Pages (${completeCount}/33 full)`, "All Sections", "All Categories", "Admin Only"].map(tag => (
             <span key={tag} className="text-xs px-2 py-1 rounded-full bg-green-950/60 border border-green-800 text-green-300 font-bold">{tag}</span>
           ))}
         </div>
@@ -261,7 +257,7 @@ function AdminMasterPdfButton() {
       <button onClick={handleGenerate} disabled={generating || !loaded}
         className="flex-shrink-0 flex items-center gap-2 px-6 py-3 rounded-xl bg-green-700 hover:bg-green-600 text-white font-black text-sm transition-all disabled:opacity-60 min-w-[180px] justify-center">
         <Download size={16} />
-        {generating ? "Generating…" : hasFullContent ? "Download Full PDF (1,400p+)" : "Download Catalog PDF"}
+        {generating ? "Generating…" : "Download Full PDF (1,400p+)"}
       </button>
     </div>
   );
