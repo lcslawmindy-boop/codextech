@@ -1,0 +1,98 @@
+{
+  "name": "InventionEvidenceLink",
+  "type": "object",
+  "properties": {
+    "evidence_review_id": {
+      "type": "string",
+      "description": "FK to the parent EvidenceReview record"
+    },
+    "invention_candidate_id": {
+      "type": "string",
+      "description": "FK to the InventionCandidate this evidence supports"
+    },
+    "project_id": {
+      "type": "string",
+      "description": "FK to the parent Project (denormalized for scoping)"
+    },
+    "link_type": {
+      "type": "string",
+      "enum": [
+        "supports",
+        "basis",
+        "validates",
+        "extends",
+        "contradicts"
+      ],
+      "default": "supports",
+      "description": "How this evidence relates to the invention candidate"
+    },
+    "relevance": {
+      "type": "string",
+      "enum": [
+        "direct",
+        "indirect",
+        "tangential"
+      ],
+      "default": "direct",
+      "description": "Relevance of the evidence to the invention"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Notes on how the evidence supports the invention",
+      "maxLength": 2000
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "proposed",
+        "confirmed",
+        "rejected"
+      ],
+      "default": "proposed",
+      "description": "Link verification status"
+    }
+  },
+  "required": [
+    "evidence_review_id",
+    "invention_candidate_id",
+    "link_type"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

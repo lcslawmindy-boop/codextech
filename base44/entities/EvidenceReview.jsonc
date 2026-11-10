@@ -1,0 +1,112 @@
+{
+  "name": "EvidenceReview",
+  "type": "object",
+  "properties": {
+    "evidence_source_id": {
+      "type": "string",
+      "description": "FK to the parent EvidenceSource record"
+    },
+    "review_type": {
+      "type": "string",
+      "enum": [
+        "peer_review",
+        "editorial",
+        "automated",
+        "methodology_check",
+        "replication_attempt",
+        "other"
+      ],
+      "default": "peer_review",
+      "description": "Type of review performed"
+    },
+    "reviewer_email": {
+      "type": "string",
+      "description": "Email of the reviewer"
+    },
+    "reviewer_name": {
+      "type": "string",
+      "description": "Display name of the reviewer"
+    },
+    "assessment": {
+      "type": "string",
+      "enum": [
+        "accepted",
+        "accepted_with_revisions",
+        "rejected",
+        "needs_more_data",
+        "inconclusive"
+      ],
+      "description": "Overall assessment outcome"
+    },
+    "review_notes": {
+      "type": "string",
+      "description": "Detailed review comments",
+      "maxLength": 5000
+    },
+    "methodology_score": {
+      "type": "integer",
+      "description": "Methodology quality score 0-100"
+    },
+    "reproducibility_score": {
+      "type": "integer",
+      "description": "Reproducibility score 0-100"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "in_progress",
+        "completed"
+      ],
+      "default": "pending",
+      "description": "Review workflow status"
+    },
+    "reviewed_date": {
+      "type": "string",
+      "description": "ISO date the review was completed"
+    }
+  },
+  "required": [
+    "evidence_source_id",
+    "review_type",
+    "status"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

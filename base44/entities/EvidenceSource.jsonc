@@ -1,0 +1,117 @@
+{
+  "name": "EvidenceSource",
+  "type": "object",
+  "properties": {
+    "evidence_claim_id": {
+      "type": "string",
+      "description": "FK to the parent EvidenceClaim record"
+    },
+    "source_type": {
+      "type": "string",
+      "enum": [
+        "citation",
+        "dataset",
+        "experiment",
+        "observation",
+        "patent",
+        "publication",
+        "other"
+      ],
+      "default": "citation",
+      "description": "Type of source material"
+    },
+    "title": {
+      "type": "string",
+      "description": "Title of the source"
+    },
+    "url": {
+      "type": "string",
+      "description": "External URL to the source"
+    },
+    "doi": {
+      "type": "string",
+      "description": "Digital Object Identifier if applicable"
+    },
+    "authors": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": [],
+      "description": "List of source authors"
+    },
+    "publication_date": {
+      "type": "string",
+      "description": "ISO date of publication"
+    },
+    "excerpt": {
+      "type": "string",
+      "description": "Relevant excerpt or summary from the source",
+      "maxLength": 5000
+    },
+    "reliability": {
+      "type": "string",
+      "enum": [
+        "high",
+        "moderate",
+        "low",
+        "unverified"
+      ],
+      "default": "moderate",
+      "description": "Assessed reliability of this source"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "collected",
+        "verified",
+        "rejected"
+      ],
+      "default": "collected",
+      "description": "Verification status of the source"
+    }
+  },
+  "required": [
+    "evidence_claim_id",
+    "source_type",
+    "title"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}
