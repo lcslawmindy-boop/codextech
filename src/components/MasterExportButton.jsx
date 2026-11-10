@@ -270,13 +270,13 @@ function buildVolumePDF(inventions, volumeNum, volumeLabel, progressCb) {
     });
 
     sectionBand(`BOM — ${bom.docId} (Rev ${bom.revision})`, [30, 30, 50]);
-    heading(`Summary: ${bom.summary.totalLineItems} line items, ${bom.summary.totalComponents} total components`);
+    heading(`Summary: ${bom.summary.totalLineItems} line items, ${bom.summary.totalComponents} total components, est. cost $${bom.summary.estimatedCost?.toLocaleString() || "N/A"}`);
     body(`Categories: ${bom.summary.categories.join(", ")}`);
     y += 2;
     table(bom.items.map(it => ({
-      Item: it.item, Ref: it.refDes, Description: it.description.slice(0, 50),
-      Cat: it.category, Qty: it.qty, Notes: it.notes,
-    })), [12, 22, 55, 25, 12, 25]);
+      Item: it.item, Ref: it.refDes, Desc: it.description.slice(0, 45),
+      Cat: it.category, Qty: it.qty, Cost: `$${it.estCost || 0}`, Supplier: (it.supplier || "").slice(0, 20), LT: (it.leadTime || "").slice(0, 12),
+    })), [8, 18, 48, 18, 8, 14, 22, 18]);
 
     sectionBand(`SOW — ${sow.docId} (Rev ${sow.revision})`, [50, 30, 30]);
     sow.sections.forEach(sec => {
