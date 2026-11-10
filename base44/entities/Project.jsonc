@@ -1,0 +1,110 @@
+{
+  "name": "Project",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Project title"
+    },
+    "description": {
+      "type": "string",
+      "description": "Project summary and scope",
+      "maxLength": 2000
+    },
+    "project_type": {
+      "type": "string",
+      "enum": [
+        "research",
+        "product_development",
+        "patent_filing",
+        "commercialization",
+        "other"
+      ],
+      "default": "research",
+      "description": "Category of project"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "planning",
+        "active",
+        "paused",
+        "completed",
+        "archived"
+      ],
+      "default": "planning",
+      "description": "Current project status"
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": [],
+      "description": "Searchable tags for this project"
+    },
+    "start_date": {
+      "type": "string",
+      "description": "ISO date the project started"
+    },
+    "target_end_date": {
+      "type": "string",
+      "description": "ISO date for target completion"
+    },
+    "completed_date": {
+      "type": "string",
+      "description": "ISO date the project was completed"
+    },
+    "related_hybrid_invention_id": {
+      "type": "string",
+      "description": "Optional cross-reference to an existing HybridInvention record"
+    },
+    "related_research_experiment_id": {
+      "type": "string",
+      "description": "Optional cross-reference to an existing ResearchExperiment record"
+    }
+  },
+  "required": [
+    "name",
+    "project_type",
+    "status"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

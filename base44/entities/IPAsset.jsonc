@@ -1,0 +1,126 @@
+{
+  "name": "IPAsset",
+  "type": "object",
+  "properties": {
+    "invention_candidate_id": {
+      "type": "string",
+      "description": "FK to the parent InventionCandidate record (optional if standalone)"
+    },
+    "project_id": {
+      "type": "string",
+      "description": "FK to the parent Project record"
+    },
+    "asset_name": {
+      "type": "string",
+      "description": "Name of the IP asset"
+    },
+    "asset_type": {
+      "type": "string",
+      "enum": [
+        "patent",
+        "trademark",
+        "copyright",
+        "trade_secret",
+        "know_how",
+        "design",
+        "other"
+      ],
+      "default": "patent",
+      "description": "Type of intellectual property"
+    },
+    "jurisdiction": {
+      "type": "string",
+      "description": "Filing jurisdiction (e.g., US, EP, PCT)"
+    },
+    "filing_status": {
+      "type": "string",
+      "enum": [
+        "not_filed",
+        "provisional_filed",
+        "non_provisional_filed",
+        "granted",
+        "abandoned"
+      ],
+      "default": "not_filed",
+      "description": "Current filing status"
+    },
+    "application_number": {
+      "type": "string",
+      "description": "Patent office application number"
+    },
+    "filing_date": {
+      "type": "string",
+      "description": "ISO date filed"
+    },
+    "grant_date": {
+      "type": "string",
+      "description": "ISO date granted (if applicable)"
+    },
+    "valuation_low": {
+      "type": "number",
+      "description": "Lower bound of estimated IP value in USD"
+    },
+    "valuation_high": {
+      "type": "number",
+      "description": "Upper bound of estimated IP value in USD"
+    },
+    "related_patent_claim_id": {
+      "type": "string",
+      "description": "Optional cross-reference to an existing PatentClaim record"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "under_review",
+        "abandoned",
+        "sold"
+      ],
+      "default": "active",
+      "description": "Lifecycle status of this IP asset"
+    }
+  },
+  "required": [
+    "asset_name",
+    "asset_type",
+    "status"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

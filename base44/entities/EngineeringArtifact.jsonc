@@ -1,0 +1,104 @@
+{
+  "name": "EngineeringArtifact",
+  "type": "object",
+  "properties": {
+    "invention_candidate_id": {
+      "type": "string",
+      "description": "FK to the parent InventionCandidate record (optional if standalone)"
+    },
+    "project_id": {
+      "type": "string",
+      "description": "FK to the parent Project record"
+    },
+    "artifact_name": {
+      "type": "string",
+      "description": "Name of the engineering artifact"
+    },
+    "artifact_type": {
+      "type": "string",
+      "enum": [
+        "bom",
+        "schematic",
+        "cad_model",
+        "assembly_guide",
+        "test_plan",
+        "specification",
+        "firmware",
+        "other"
+      ],
+      "default": "specification",
+      "description": "Type of engineering artifact"
+    },
+    "version": {
+      "type": "string",
+      "description": "Version label (e.g., 1.0, Rev A)"
+    },
+    "file_uri": {
+      "type": "string",
+      "description": "URI of an uploaded file (from UploadPrivateFile)"
+    },
+    "description": {
+      "type": "string",
+      "description": "Description of the artifact contents",
+      "maxLength": 2000
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "in_review",
+        "approved",
+        "superseded"
+      ],
+      "default": "draft",
+      "description": "Review status of this artifact"
+    },
+    "related_build_project_id": {
+      "type": "string",
+      "description": "Optional cross-reference to an existing InventionBuildProject record"
+    }
+  },
+  "required": [
+    "artifact_name",
+    "artifact_type",
+    "status"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

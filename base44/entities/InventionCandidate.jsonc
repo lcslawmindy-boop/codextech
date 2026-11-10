@@ -1,0 +1,102 @@
+{
+  "name": "InventionCandidate",
+  "type": "object",
+  "properties": {
+    "project_id": {
+      "type": "string",
+      "description": "FK to the parent Project record"
+    },
+    "name": {
+      "type": "string",
+      "description": "Invention candidate name"
+    },
+    "concept_summary": {
+      "type": "string",
+      "description": "Brief summary of the invention concept",
+      "maxLength": 3000
+    },
+    "technical_description": {
+      "type": "string",
+      "description": "Detailed technical description"
+    },
+    "novelty_basis": {
+      "type": "string",
+      "description": "What makes this invention novel"
+    },
+    "proposed_mechanism": {
+      "type": "string",
+      "description": "Proposed operating mechanism"
+    },
+    "readiness_level": {
+      "type": "string",
+      "enum": [
+        "concept",
+        "feasibility",
+        "prototype",
+        "validated",
+        "commercialized"
+      ],
+      "default": "concept",
+      "description": "Technology readiness level"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "candidate",
+        "under_evaluation",
+        "selected",
+        "archived"
+      ],
+      "default": "candidate",
+      "description": "Evaluation status"
+    },
+    "related_hybrid_invention_id": {
+      "type": "string",
+      "description": "Optional cross-reference to an existing HybridInvention record"
+    }
+  },
+  "required": [
+    "project_id",
+    "name",
+    "concept_summary",
+    "readiness_level"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

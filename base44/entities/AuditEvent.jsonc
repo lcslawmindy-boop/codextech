@@ -1,0 +1,85 @@
+{
+  "name": "AuditEvent",
+  "type": "object",
+  "properties": {
+    "entity_type": {
+      "type": "string",
+      "enum": [
+        "project",
+        "research_document",
+        "evidence_claim",
+        "invention_candidate",
+        "ip_asset",
+        "engineering_artifact",
+        "approval_request",
+        "user",
+        "other"
+      ],
+      "description": "Which entity type this event pertains to"
+    },
+    "entity_id": {
+      "type": "string",
+      "description": "ID of the affected entity"
+    },
+    "event_type": {
+      "type": "string",
+      "enum": [
+        "created",
+        "updated",
+        "deleted",
+        "status_changed",
+        "approved",
+        "rejected",
+        "published",
+        "viewed",
+        "exported",
+        "other"
+      ],
+      "description": "What happened"
+    },
+    "event_description": {
+      "type": "string",
+      "description": "Human-readable description of the event",
+      "maxLength": 2000
+    },
+    "actor_email": {
+      "type": "string",
+      "description": "Email of the user who triggered the event"
+    },
+    "metadata": {
+      "type": "object",
+      "description": "Flexible key-value metadata for this event",
+      "additionalProperties": true
+    },
+    "ip_address": {
+      "type": "string",
+      "description": "IP address of the actor (if available)"
+    }
+  },
+  "required": [
+    "entity_type",
+    "event_type"
+  ],
+  "rls": {
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

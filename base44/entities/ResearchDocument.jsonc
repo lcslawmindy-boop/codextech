@@ -1,0 +1,115 @@
+{
+  "name": "ResearchDocument",
+  "type": "object",
+  "properties": {
+    "project_id": {
+      "type": "string",
+      "description": "FK to the parent Project record"
+    },
+    "title": {
+      "type": "string",
+      "description": "Document title"
+    },
+    "document_type": {
+      "type": "string",
+      "enum": [
+        "paper",
+        "patent",
+        "whitepaper",
+        "report",
+        "dataset",
+        "brief_pack",
+        "other"
+      ],
+      "default": "paper",
+      "description": "Type of research document"
+    },
+    "abstract": {
+      "type": "string",
+      "description": "Short summary or abstract",
+      "maxLength": 3000
+    },
+    "authors": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": [],
+      "description": "List of author names"
+    },
+    "source_url": {
+      "type": "string",
+      "description": "External URL to the source publication"
+    },
+    "publication_date": {
+      "type": "string",
+      "description": "ISO date of publication"
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": [],
+      "description": "Searchable tags"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "under_review",
+        "approved",
+        "rejected"
+      ],
+      "default": "draft",
+      "description": "Review status of this document"
+    },
+    "related_brief_pack_id": {
+      "type": "string",
+      "description": "Optional cross-reference to an existing BriefPackContent record"
+    }
+  },
+  "required": [
+    "project_id",
+    "title",
+    "document_type"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}
