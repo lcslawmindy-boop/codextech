@@ -1,0 +1,171 @@
+{
+  "name": "ResearchOpportunity",
+  "type": "object",
+  "properties": {
+    "evidence_claim_id": {
+      "type": "string",
+      "description": "FK to the EvidenceClaim this opportunity derives from"
+    },
+    "project_id": {
+      "type": "string",
+      "description": "FK to the parent Project for scoping"
+    },
+    "title": {
+      "type": "string",
+      "description": "Short title for this research opportunity"
+    },
+    "description": {
+      "type": "string",
+      "description": "Detailed description of the opportunity",
+      "maxLength": 3000
+    },
+    "opportunity_type": {
+      "type": "string",
+      "enum": [
+        "efficiency",
+        "novelty",
+        "gap",
+        "fusion",
+        "humanitarian",
+        "commercial",
+        "other"
+      ],
+      "default": "novelty",
+      "description": "Category of research opportunity"
+    },
+    "ai_generated": {
+      "type": "boolean",
+      "default": true,
+      "description": "Whether this opportunity was AI-discovered"
+    },
+    "ai_confidence_score": {
+      "type": "integer",
+      "description": "AI confidence 0-100 (advisory only, not a verified claim)"
+    },
+    "ai_reasoning": {
+      "type": "string",
+      "description": "AI reasoning for this opportunity (advisory only, not verified evidence)",
+      "maxLength": 2000
+    },
+    "supporting_evidence_summary": {
+      "type": "string",
+      "description": "Summary of supporting evidence from the linked EvidenceClaim"
+    },
+    "humanitarian_potential": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether this opportunity has humanitarian application potential"
+    },
+    "humanitarian_category": {
+      "type": "string",
+      "enum": [
+        "clean_water",
+        "environmental_monitoring",
+        "disaster_response",
+        "accessible_communication",
+        "assistive_technology",
+        "adaptive_learning",
+        "energy_efficiency",
+        "infrastructure_resilience",
+        "safety_technology",
+        "investigational_research",
+        "none"
+      ],
+      "default": "none",
+      "description": "Humanitarian technology category if applicable"
+    },
+    "review_status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "reviewed",
+        "promoted",
+        "rejected"
+      ],
+      "default": "pending",
+      "description": "Human review status \u2014 only human review can promote to InventionCandidate"
+    },
+    "reviewed_by_email": {
+      "type": "string",
+      "description": "Email of the human reviewer"
+    },
+    "review_notes": {
+      "type": "string",
+      "description": "Human reviewer notes",
+      "maxLength": 2000
+    },
+    "reviewed_date": {
+      "type": "string",
+      "description": "ISO date reviewed"
+    },
+    "promoted_invention_candidate_id": {
+      "type": "string",
+      "description": "FK to InventionCandidate created on promotion (set only by human approval)"
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": [],
+      "description": "Searchable tags"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "under_review",
+        "promoted",
+        "rejected",
+        "archived"
+      ],
+      "default": "draft",
+      "description": "Lifecycle status"
+    }
+  },
+  "required": [
+    "evidence_claim_id",
+    "title",
+    "opportunity_type",
+    "review_status",
+    "status"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

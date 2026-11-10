@@ -206,6 +206,8 @@ import ResonanceDashboard from './pages/ResonanceDashboard';
 import ExpandedResearchArchive from './pages/ExpandedResearchArchive';
 import TargetedTherapyPods from './pages/TargetedTherapyPods';
 import ResearchNetworkMap from './pages/ResearchNetworkMap';
+import ZARPPipeline from './pages/ZARPPipeline';
+import EvidenceLedger from './pages/EvidenceLedger';
 
 
 const AuthenticatedApp = () => {
@@ -238,7 +240,7 @@ const AuthenticatedApp = () => {
       <Routes>
         <Route path="/" element={<VaultNDALanding />} />
         <Route path="/free-vault" element={<FreeVault />} />
-        <Route path="/build-supplies-shop" element={<BuildSuppliesShop />} />
+
         <Route path="/emf-impact" element={<EMFImpact />} />
         <Route path="/vault" element={<ConceptGraph />} />
         <Route path="/paywall" element={<PaywallPage />} />
@@ -259,6 +261,8 @@ const AuthenticatedApp = () => {
         <Route element={<MobileLayout />}>
           <Route path="/" element={<ConceptGraph />} />
           <Route path="/research-network" element={<ResearchNetworkMap />} />
+          <Route path="/zarp-pipeline" element={<ZARPPipeline />} />
+          <Route path="/evidence-ledger" element={<EvidenceLedger />} />
           <Route path="/zarp-landing" element={<ZarpLanding />} />
           <Route path="/free-vault" element={<FreeVault />} />
           <Route path="/member-dashboard" element={<MemberDashboard />} />
@@ -266,7 +270,7 @@ const AuthenticatedApp = () => {
           <Route path="/business" element={<BusinessModels />} />
           <Route path="/pitch" element={<PitchBuilder />} />
           <Route path="/market-deck" element={<MarketDeck />} />
-          <Route path="/subscribe" element={<Subscribe />} />
+
           <Route path="/my-research" element={<MyResearch />} />
           <Route path="/courses" element={<CourseCatalog />} />
           <Route path="/simulator" element={<Simulator />} />
@@ -292,7 +296,7 @@ const AuthenticatedApp = () => {
           <Route path="/scalar-sim" element={<ScalarFieldSim />} />
           <Route path="/scalar-wave-sim" element={<ScalarWaveSimulatorPage />} />
           <Route path="/brand" element={<BrandArchitecture />} />
-          <Route path="/emf-shop" element={<EMFProtectionShop />} />
+
           <Route path="/emf-log" element={<EMFExposureLog />} />
           <Route path="/heavy-metal-detox" element={<HeavyMetalDetox />} />
           <Route path="/health-analytics" element={<HealthAnalytics />} />
@@ -315,7 +319,7 @@ const AuthenticatedApp = () => {
           <Route path="/course-plan" element={<CoursePlan />} />
           <Route path="/social-command" element={<SocialMediaCommand />} />
           <Route path="/social-agent" element={<SocialMediaAgent />} />
-          <Route path="/build-supplies-shop" element={<BuildSuppliesShop />} />
+
           <Route path="/troubleshooting" element={<TroubleshootingGuides />} />
           <Route path="/beginner-manual" element={<BeginnerManual />} />
           <Route path="/glossary" element={<Glossary />} />
@@ -344,14 +348,14 @@ const AuthenticatedApp = () => {
           <Route path="/ip-portfolio-health" element={<IPPortfolioHealth />} />
           <Route path="/build-milestone-ai" element={<BuildMilestoneAI />} />
           <Route path="/valuation-api" element={<ValuationAPI />} />
-          <Route path="/flash-sale" element={<FlashSale />} />
+
           <Route path="/vdr-nda" element={<VDRNdaSign />} />
           <Route path="/vdr-generator" element={<VDRDocumentGenerator />} />
           <Route path="/welcome" element={<Welcome />} />
           <Route path="/trial-onboarding" element={<TrialOnboarding />} />
           <Route path="/checkout" element={<PostPurchaseOnboarding />} />
           <Route path="/nda-onboarding" element={<PostNDAOnboarding />} />
-          <Route path="/build-plans" element={<BuildPlansMarketplace />} />
+
           <Route path="/preview" element={<PublicPreview />} />
           <Route path="/acquire" element={<AcquisitionPitchDeck />} />
           <Route path="/referrals" element={<ReferralDashboard />} />
@@ -419,10 +423,10 @@ const AuthenticatedApp = () => {
           <Route path="/institutional-licensing" element={<InstitutionalLicensing />} />
           <Route path="/my-vault" element={<MemberVault />} />
           <Route path="/research-lab" element={<ResearchLab />} />
-          <Route path="/kit-bundles" element={<KitBundle />} />
+
           <Route path="/my-library" element={<MyLibrary />} />
           <Route path="/hydromagnetopropulsion-course" element={<HydromagnetopropulsionCourse />} />
-          <Route path="/alacarte" element={<AlaCarteMenu />} />
+
           <Route path="/research-brief" element={<ResearchBriefLanding />} />
           <Route path="/technical-brief-pack" element={<TechnicalBriefPack />} />
           <Route path="/technical-brief-packs" element={<TechnicalBriefPacks />} />

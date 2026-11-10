@@ -39,12 +39,44 @@
       "default": "concept",
       "description": "Technology readiness level"
     },
+    "feasibility_summary": {
+      "type": "string",
+      "description": "Summary of feasibility analysis",
+      "maxLength": 3000
+    },
+    "research_opportunity_id": {
+      "type": "string",
+      "description": "FK to the ResearchOpportunity this candidate was promoted from"
+    },
+    "invention_family_id": {
+      "type": "string",
+      "description": "FK to InventionFamily for grouping related candidates"
+    },
+    "human_promotion_approved": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether a human has approved promotion to IPAsset \u2014 only human approval creates an IPAsset"
+    },
+    "promoted_by_email": {
+      "type": "string",
+      "description": "Email of the human who approved promotion to IPAsset"
+    },
+    "promotion_date": {
+      "type": "string",
+      "description": "ISO date the candidate was promoted to IPAsset"
+    },
+    "humanitarian_flag": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether this candidate has humanitarian application potential"
+    },
     "status": {
       "type": "string",
       "enum": [
         "candidate",
         "under_evaluation",
         "selected",
+        "promoted",
         "archived"
       ],
       "default": "candidate",

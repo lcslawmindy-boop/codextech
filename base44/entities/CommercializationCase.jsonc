@@ -1,0 +1,167 @@
+{
+  "name": "CommercializationCase",
+  "type": "object",
+  "properties": {
+    "ip_asset_id": {
+      "type": "string",
+      "description": "FK to the IPAsset this case concerns"
+    },
+    "project_id": {
+      "type": "string",
+      "description": "FK to the parent Project for scoping"
+    },
+    "title": {
+      "type": "string",
+      "description": "Title of the commercialization case"
+    },
+    "pathway": {
+      "type": "string",
+      "enum": [
+        "licensing",
+        "strategic_partnership",
+        "co_development",
+        "sponsored_research",
+        "grant_funded_rd",
+        "new_venture_spinout",
+        "humanitarian_deployment",
+        "manufacturing_partnership",
+        "defensive_publication",
+        "trade_secret_retention",
+        "continued_internal_rd",
+        "archive",
+        "no_action"
+      ],
+      "default": "continued_internal_rd",
+      "description": "Proposed commercialization pathway"
+    },
+    "description": {
+      "type": "string",
+      "description": "Detailed description of the commercialization case",
+      "maxLength": 3000
+    },
+    "rationale": {
+      "type": "string",
+      "description": "Why this pathway is recommended",
+      "maxLength": 2000
+    },
+    "ai_recommendation": {
+      "type": "string",
+      "description": "AI-suggested pathway reasoning (decision-support only, not a guaranteed outcome)",
+      "maxLength": 2000
+    },
+    "target_partners": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": [],
+      "description": "Potential partner organizations identified (not contacted without human authorization)"
+    },
+    "target_markets": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": [],
+      "description": "Target markets or applications"
+    },
+    "estimated_timeline": {
+      "type": "string",
+      "description": "Estimated timeline to execution (advisory only)"
+    },
+    "estimated_investment": {
+      "type": "number",
+      "description": "Estimated investment required in USD (advisory only, not guaranteed)"
+    },
+    "funding_source": {
+      "type": "string",
+      "description": "Identified funding source if applicable"
+    },
+    "risk_assessment": {
+      "type": "string",
+      "description": "Risk factors and assessment",
+      "maxLength": 2000
+    },
+    "success_criteria": {
+      "type": "string",
+      "description": "Criteria for measuring success",
+      "maxLength": 2000
+    },
+    "human_authorized": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether a human has authorized external action on this case"
+    },
+    "authorized_by_email": {
+      "type": "string",
+      "description": "Email of the authorizing human"
+    },
+    "authorized_date": {
+      "type": "string",
+      "description": "ISO date authorized"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "proposed",
+        "under_review",
+        "authorized",
+        "active",
+        "paused",
+        "completed",
+        "abandoned"
+      ],
+      "default": "proposed",
+      "description": "Lifecycle status"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Additional notes",
+      "maxLength": 2000
+    }
+  },
+  "required": [
+    "ip_asset_id",
+    "title",
+    "pathway",
+    "status"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

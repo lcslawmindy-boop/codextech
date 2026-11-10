@@ -23,6 +23,14 @@
         "trade_secret",
         "know_how",
         "design",
+        "software_ip",
+        "algorithm",
+        "dataset",
+        "research_method",
+        "engineering_design",
+        "humanitarian_technology",
+        "defensive_publication",
+        "archived_concept",
         "other"
       ],
       "default": "patent",
@@ -58,15 +66,115 @@
     },
     "valuation_low": {
       "type": "number",
-      "description": "Lower bound of estimated IP value in USD"
+      "description": "Lower bound of estimated IP value in USD (advisory only, not guaranteed)"
     },
     "valuation_high": {
       "type": "number",
-      "description": "Upper bound of estimated IP value in USD"
+      "description": "Upper bound of estimated IP value in USD (advisory only, not guaranteed)"
     },
     "related_patent_claim_id": {
       "type": "string",
       "description": "Optional cross-reference to an existing PatentClaim record"
+    },
+    "invention_family_id": {
+      "type": "string",
+      "description": "FK to InventionFamily for grouping related IP assets"
+    },
+    "ip_strategy": {
+      "type": "string",
+      "enum": [
+        "defensive",
+        "offensive",
+        "defensive_publication",
+        "trade_secret",
+        "humanitarian_open",
+        "standard"
+      ],
+      "default": "standard",
+      "description": "IP protection strategy"
+    },
+    "readiness_level": {
+      "type": "string",
+      "enum": [
+        "concept",
+        "feasibility",
+        "prototype",
+        "validated",
+        "commercialized"
+      ],
+      "default": "concept",
+      "description": "Technology readiness level"
+    },
+    "humanitarian_flag": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether this IP asset has humanitarian application"
+    },
+    "humanitarian_category": {
+      "type": "string",
+      "enum": [
+        "clean_water",
+        "environmental_monitoring",
+        "disaster_response",
+        "accessible_communication",
+        "assistive_technology",
+        "adaptive_learning",
+        "energy_efficiency",
+        "infrastructure_resilience",
+        "safety_technology",
+        "investigational_research",
+        "none"
+      ],
+      "default": "none",
+      "description": "Humanitarian technology category"
+    },
+    "confidential": {
+      "type": "boolean",
+      "default": true,
+      "description": "Whether this asset is confidential (restricts external disclosure without human authorization)"
+    },
+    "review_status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "under_review",
+        "approved",
+        "rejected"
+      ],
+      "default": "pending",
+      "description": "Human-controlled promotion status \u2014 only human approval promotes InventionCandidate to IPAsset"
+    },
+    "reviewed_by_email": {
+      "type": "string",
+      "description": "Email of the human reviewer who approved or rejected this IP asset"
+    },
+    "review_date": {
+      "type": "string",
+      "description": "ISO date reviewed"
+    },
+    "evidence_claim_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": [],
+      "description": "FKs to EvidenceClaim records for traceability to supporting evidence"
+    },
+    "research_document_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": [],
+      "description": "FKs to ResearchDocument records for traceability to originating research"
+    },
+    "engineering_artifact_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": [],
+      "description": "FKs to EngineeringArtifact records for traceability to engineering development"
     },
     "status": {
       "type": "string",
@@ -74,7 +182,8 @@
         "active",
         "under_review",
         "abandoned",
-        "sold"
+        "sold",
+        "archived"
       ],
       "default": "active",
       "description": "Lifecycle status of this IP asset"
