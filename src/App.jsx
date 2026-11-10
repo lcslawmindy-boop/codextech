@@ -205,6 +205,7 @@ import TherapyPodPro from './pages/TherapyPodPro';
 import ResonanceDashboard from './pages/ResonanceDashboard';
 import ExpandedResearchArchive from './pages/ExpandedResearchArchive';
 import TargetedTherapyPods from './pages/TargetedTherapyPods';
+import ResearchNetworkMap from './pages/ResearchNetworkMap';
 
 
 const AuthenticatedApp = () => {
@@ -257,6 +258,7 @@ const AuthenticatedApp = () => {
       <Routes>
         <Route element={<MobileLayout />}>
           <Route path="/" element={<ConceptGraph />} />
+          <Route path="/research-network" element={<ResearchNetworkMap />} />
           <Route path="/zarp-landing" element={<ZarpLanding />} />
           <Route path="/free-vault" element={<FreeVault />} />
           <Route path="/member-dashboard" element={<MemberDashboard />} />
