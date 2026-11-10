@@ -208,6 +208,7 @@ import TargetedTherapyPods from './pages/TargetedTherapyPods';
 import ResearchNetworkMap from './pages/ResearchNetworkMap';
 import ZARPPipeline from './pages/ZARPPipeline';
 import EvidenceLedger from './pages/EvidenceLedger';
+import CommandCenter from './pages/CommandCenter';
 
 
 const AuthenticatedApp = () => {
@@ -263,6 +264,7 @@ const AuthenticatedApp = () => {
           <Route path="/research-network" element={<ResearchNetworkMap />} />
           <Route path="/zarp-pipeline" element={<ZARPPipeline />} />
           <Route path="/evidence-ledger" element={<EvidenceLedger />} />
+          <Route path="/command" element={<CommandCenter />} />
           <Route path="/zarp-landing" element={<ZarpLanding />} />
           <Route path="/free-vault" element={<FreeVault />} />
           <Route path="/member-dashboard" element={<MemberDashboard />} />

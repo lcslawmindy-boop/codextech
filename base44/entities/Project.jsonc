@@ -2,9 +2,17 @@
   "name": "Project",
   "type": "object",
   "properties": {
+    "organization_id": {
+      "type": "string",
+      "description": "FK to the parent Organization (top-level ownership boundary)"
+    },
     "name": {
       "type": "string",
       "description": "Project title"
+    },
+    "project_code": {
+      "type": "string",
+      "description": "Unique project code identifier"
     },
     "description": {
       "type": "string",
@@ -18,10 +26,69 @@
         "product_development",
         "patent_filing",
         "commercialization",
+        "general_research",
+        "humanitarian_rd",
+        "ip_development",
+        "engineering",
+        "historical_research",
         "other"
       ],
       "default": "research",
-      "description": "Category of project"
+      "description": "Category of project (legacy values retained for backward compatibility)"
+    },
+    "program_type": {
+      "type": "string",
+      "enum": [
+        "general_research",
+        "humanitarian_rd",
+        "ip_development",
+        "engineering",
+        "commercialization",
+        "historical_research"
+      ],
+      "description": "Program type classification per ZARP v2.0 data model"
+    },
+    "research_domain": {
+      "type": "string",
+      "description": "Research domain or technical field (e.g., RF Systems, Bioelectromagnetics)"
+    },
+    "project_owner": {
+      "type": "string",
+      "description": "Email or ID of the project owner"
+    },
+    "confidentiality_level": {
+      "type": "string",
+      "enum": [
+        "public",
+        "internal",
+        "confidential",
+        "restricted"
+      ],
+      "default": "confidential",
+      "description": "Security classification level"
+    },
+    "lifecycle_stage": {
+      "type": "string",
+      "enum": [
+        "research",
+        "evidence",
+        "opportunity",
+        "invention",
+        "feasibility",
+        "ip_asset",
+        "rd",
+        "validation",
+        "ip_strategy",
+        "funding",
+        "partnership",
+        "commercialization"
+      ],
+      "description": "Current stage in the north-star lifecycle"
+    },
+    "humanitarian_flag": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether this project has humanitarian application"
     },
     "status": {
       "type": "string",
@@ -54,6 +121,10 @@
     "completed_date": {
       "type": "string",
       "description": "ISO date the project was completed"
+    },
+    "archived_at": {
+      "type": "string",
+      "description": "ISO date the project was archived"
     },
     "related_hybrid_invention_id": {
       "type": "string",
