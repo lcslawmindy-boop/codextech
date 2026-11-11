@@ -5,9 +5,11 @@ import AdminDashboard from "@/components/zds33/admin/AdminDashboard";
 import AdminClassify from "@/components/zds33/admin/AdminClassify";
 import AdminOpportunities from "@/components/zds33/admin/AdminOpportunities";
 import AdminInquiries from "@/components/zds33/admin/AdminInquiries";
+import ValuationSummary from "@/components/zds33/admin/ValuationSummary";
 
 const TABS = [
   ["dashboard", "Dashboard", AdminDashboard],
+  ["valuation", "Valuation Summary", ValuationSummary],
   ["classify", "Classify & Publish", AdminClassify],
   ["opps", "Opportunities", AdminOpportunities],
   ["inquiries", "Inquiries", AdminInquiries],
