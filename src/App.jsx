@@ -210,6 +210,7 @@ import ResearchNetworkMap from './pages/ResearchNetworkMap';
 import HumanitarianImpactMap from './pages/HumanitarianImpactMap';
 import AllPages from './pages/AllPages';
 import HybridDevPackages from './pages/HybridDevPackages';
+import NeuroRegenChamber from './pages/NeuroRegenChamber';
 import ZARPPipeline from './pages/ZARPPipeline';
 import EvidenceLedger from './pages/EvidenceLedger';
 import CommandCenter from './pages/CommandCenter';
@@ -269,6 +270,7 @@ const AuthenticatedApp = () => {
           <Route path="/humanitarian-impact" element={<HumanitarianImpactMap />} />
           <Route path="/all-pages" element={<AllPages />} />
           <Route path="/hybrid-dev-packages" element={<HybridDevPackages />} />
+          <Route path="/neuro-regen-chamber" element={<NeuroRegenChamber />} />
           <Route path="/zarp-pipeline" element={<ZARPPipeline />} />
           <Route path="/evidence-ledger" element={<EvidenceLedger />} />
           <Route path="/command" element={<CommandCenter />} />

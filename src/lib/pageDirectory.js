@@ -49,6 +49,7 @@ export const PAGE_GROUPS = [
       { emoji: "🤖", label: "Build Milestone AI", path: "/build-milestone-ai", desc: "Milestone AI" },
       { emoji: "🧪", label: "R&D Sandbox", path: "/rd-sandbox", desc: "R&D workspace" },
       { emoji: "📑", label: "Hybrid Dev Packages", path: "/hybrid-dev-packages", desc: "PRD/PDR/BOM/SOW/EVT/DVT per hybrid" },
+      { emoji: "🧠", label: "Pre-Birth Brain Reversal", path: "/neuro-regen-chamber", desc: "Synthesis toward a reprogramming chamber" },
     ],
   },
   {
