@@ -1,0 +1,119 @@
+{
+  "name": "PartnerOutreach",
+  "type": "object",
+  "properties": {
+    "partner_name": {
+      "type": "string",
+      "description": "Name of the partner organization or program"
+    },
+    "partner_type": {
+      "type": "string",
+      "enum": [
+        "patent_probono",
+        "university",
+        "oem",
+        "grant_agency",
+        "foundation",
+        "ip_broker",
+        "other"
+      ],
+      "default": "other",
+      "description": "Partner archetype"
+    },
+    "asset_focus": {
+      "type": "string",
+      "description": "Which IP asset(s) this outreach targets (e.g. SVRRD, MYTSA)"
+    },
+    "contact_name": {
+      "type": "string",
+      "description": "Person contacted"
+    },
+    "contact_email": {
+      "type": "string",
+      "description": "Contact email or handle"
+    },
+    "channel": {
+      "type": "string",
+      "enum": [
+        "email",
+        "linkedin",
+        "portal",
+        "referral",
+        "other"
+      ],
+      "default": "email",
+      "description": "How contact was made"
+    },
+    "ask": {
+      "type": "string",
+      "description": "What you are asking the partner to provide",
+      "maxLength": 1000
+    },
+    "offer": {
+      "type": "string",
+      "description": "What you offer in return (equity, license, royalty, success fee)",
+      "maxLength": 1000
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "identified",
+        "drafted",
+        "sent",
+        "replied",
+        "meeting",
+        "negotiating",
+        "closed",
+        "rejected"
+      ],
+      "default": "identified",
+      "description": "Outreach status"
+    },
+    "priority": {
+      "type": "string",
+      "enum": [
+        "high",
+        "normal",
+        "low"
+      ],
+      "default": "normal",
+      "description": "Priority"
+    },
+    "follow_up_date": {
+      "type": "string",
+      "description": "ISO date to follow up"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Additional notes",
+      "maxLength": 2000
+    }
+  },
+  "required": [
+    "partner_name",
+    "partner_type",
+    "status"
+  ],
+  "rls": {
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}
