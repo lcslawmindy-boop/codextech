@@ -4,7 +4,11 @@ import {
   ArrowLeft, Brain, ShieldAlert, Baby, Dna, Activity, HeartPulse,
   Beaker, Stethoscope, Lock, CheckCircle2, AlertTriangle, XCircle,
   Layers, Zap, FlaskConical, BookOpen, ChevronDown, ChevronUp, FileText,
+  Download, Loader2, Box,
 } from "lucide-react";
+import PrenatalPodRender from "@/components/PrenatalPodRender";
+import PrenatalEngineeringDocs from "@/components/PrenatalEngineeringDocs";
+import { generatePrenatalPodPdf } from "@/lib/generatePrenatalPodPdf";
 
 // Honest scope — autism is a neurodevelopmental difference, not "damage to reverse"
 const PRENATAL_INJURY_TYPES = [
@@ -75,6 +79,14 @@ function Section({ title, children, icon: Icon }) {
 }
 
 export default function PrenatalRepairPod() {
+  const [view, setView] = useState("overview");
+  const [exporting, setExporting] = useState(false);
+
+  const handleExport = async () => {
+    setExporting(true);
+    try { await generatePrenatalPodPdf(); } finally { setExporting(false); }
+  };
+
   return (
     <div className="min-h-screen bg-gray-950 text-white">
       <div className="border-b border-gray-800 bg-gray-900/80 px-5 py-4 sticky top-0 z-40 backdrop-blur">
@@ -96,6 +108,31 @@ export default function PrenatalRepairPod() {
         </div>
       </div>
 
+      {/* View tabs */}
+      <div className="bg-gray-900/50 border-b border-gray-800 px-5 py-2">
+        <div className="max-w-4xl mx-auto flex items-center gap-2">
+          {[
+            { id: "overview", label: "Overview", icon: <Baby size={14} /> },
+            { id: "engineering", label: "Engineering Package", icon: <Box size={14} /> },
+          ].map((t) => (
+            <button key={t.id} onClick={() => setView(t.id)} className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-bold transition-all ${view === t.id ? "bg-gray-800 text-white border border-gray-700" : "text-gray-500 hover:text-gray-300 border border-transparent"}`}>
+              {t.icon}{t.label}
+            </button>
+          ))}
+          {view === "engineering" && (
+            <button onClick={handleExport} disabled={exporting} className="ml-auto flex items-center gap-2 px-4 py-2 rounded-lg bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white text-sm font-bold transition-all disabled:opacity-50">
+              {exporting ? <Loader2 size={14} className="animate-spin" /> : <Download size={14} />}{exporting ? "Building PDF..." : "Export Full PDF"}
+            </button>
+          )}
+        </div>
+      </div>
+
+      {view === "engineering" ? (
+        <div className="max-w-4xl mx-auto px-5 py-6 space-y-5">
+          <PrenatalPodRender />
+          <PrenatalEngineeringDocs />
+        </div>
+      ) : (
       <div className="max-w-4xl mx-auto px-5 py-6 space-y-5">
         {/* Honest scope banner */}
         <div className="bg-amber-950/30 border border-amber-800/50 rounded-2xl p-4 flex gap-3">
@@ -219,6 +256,7 @@ export default function PrenatalRepairPod() {
           </div>
         </div>
       </div>
+      )}
     </div>
   );
 }
