@@ -4,10 +4,11 @@ import {
   ArrowLeft, Brain, ShieldAlert, Baby, Dna, Activity, HeartPulse,
   Beaker, Stethoscope, Lock, CheckCircle2, AlertTriangle, XCircle,
   Layers, Zap, FlaskConical, BookOpen, ChevronDown, ChevronUp, FileText,
-  Download, Loader2, Box,
+  Download, Loader2, Box, Wrench,
 } from "lucide-react";
 import PrenatalPodRender from "@/components/PrenatalPodRender";
 import PrenatalEngineeringDocs from "@/components/PrenatalEngineeringDocs";
+import PrenatalBuildPlan from "@/components/PrenatalBuildPlan";
 import { generatePrenatalPodPdf } from "@/lib/generatePrenatalPodPdf";
 
 // Honest scope — autism is a neurodevelopmental difference, not "damage to reverse"
@@ -114,12 +115,13 @@ export default function PrenatalRepairPod() {
           {[
             { id: "overview", label: "Overview", icon: <Baby size={14} /> },
             { id: "engineering", label: "Engineering Package", icon: <Box size={14} /> },
+            { id: "build", label: "Build Plan", icon: <Wrench size={14} /> },
           ].map((t) => (
             <button key={t.id} onClick={() => setView(t.id)} className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-bold transition-all ${view === t.id ? "bg-gray-800 text-white border border-gray-700" : "text-gray-500 hover:text-gray-300 border border-transparent"}`}>
               {t.icon}{t.label}
             </button>
           ))}
-          {view === "engineering" && (
+          {(view === "engineering" || view === "build") && (
             <button onClick={handleExport} disabled={exporting} className="ml-auto flex items-center gap-2 px-4 py-2 rounded-lg bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white text-sm font-bold transition-all disabled:opacity-50">
               {exporting ? <Loader2 size={14} className="animate-spin" /> : <Download size={14} />}{exporting ? "Building PDF..." : "Export Full PDF"}
             </button>
@@ -131,6 +133,10 @@ export default function PrenatalRepairPod() {
         <div className="max-w-4xl mx-auto px-5 py-6 space-y-5">
           <PrenatalPodRender />
           <PrenatalEngineeringDocs />
+        </div>
+      ) : view === "build" ? (
+        <div className="max-w-4xl mx-auto px-5 py-6 space-y-5">
+          <PrenatalBuildPlan />
         </div>
       ) : (
       <div className="max-w-4xl mx-auto px-5 py-6 space-y-5">
