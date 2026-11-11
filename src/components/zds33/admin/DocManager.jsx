@@ -11,19 +11,28 @@ export default function DocManager({ assetId }) {
   const [docs, setDocs] = useState(null);
   const [busy, setBusy] = useState(false);
   const [form, setForm] = useState({ artifact_name: "", artifact_type: "specification", status: "draft", access_level: "confidential" });
-  const [file, setFile] = useState(null);
+  const [files, setFiles] = useState([]);
+  const [error, setError] = useState("");
 
   const load = () => base44.entities.EngineeringArtifact.filter({ ip_asset_id: assetId }, { sort: "-created_date", limit: 50 }).then((r) => setDocs(r.items));
   useEffect(() => { load(); }, [assetId]);
 
   const add = async () => {
-    if (!form.artifact_name.trim()) return;
-    setBusy(true);
-    let file_uri;
-    if (file) file_uri = (await base44.integrations.Core.UploadPrivateFile({ file })).file_uri;
-    await base44.entities.EngineeringArtifact.create({ ...form, ip_asset_id: assetId, file_uri });
-    setForm({ ...form, artifact_name: "" }); setFile(null);
-    await load(); setBusy(false);
+    if (!files.length && !form.artifact_name.trim()) { setError("Choose a file or type a document title."); return; }
+    setBusy(true); setError("");
+    try {
+      const list = files.length ? files : [null];
+      for (const f of list) {
+        const file_uri = f ? (await base44.integrations.Core.UploadPrivateFile({ file: f })).file_uri : undefined;
+        const name = list.length === 1 && form.artifact_name.trim() ? form.artifact_name.trim() : (f ? f.name.replace(/\.[^.]+$/, "") : form.artifact_name.trim());
+        await base44.entities.EngineeringArtifact.create({ ...form, artifact_name: name, ip_asset_id: assetId, file_uri });
+      }
+      setForm({ ...form, artifact_name: "" }); setFiles([]);
+      await load();
+    } catch (e) {
+      setError(`Upload failed: ${e.message || "unknown error"}`);
+    }
+    setBusy(false);
   };
   const update = async (d, patch) => { await base44.entities.EngineeringArtifact.update(d.id, patch); load(); };
   const remove = async (d) => { await base44.entities.EngineeringArtifact.delete(d.id); load(); };
@@ -51,9 +60,10 @@ export default function DocManager({ assetId }) {
         <input className={`${sel} flex-1 min-w-[140px]`} placeholder="Document title" value={form.artifact_name} onChange={(e) => setForm({ ...form, artifact_name: e.target.value })} />
         <select className={sel} value={form.artifact_type} onChange={(e) => setForm({ ...form, artifact_type: e.target.value })}>{TYPES.map((s) => <option key={s}>{s}</option>)}</select>
         <select className={sel} value={form.access_level} onChange={(e) => setForm({ ...form, access_level: e.target.value })}>{ACCESS_LEVELS.map((s) => <option key={s}>{s}</option>)}</select>
-        <input type="file" className="text-[10px] text-slate-400 max-w-[150px]" onChange={(e) => setFile(e.target.files[0] || null)} />
-        <button disabled={busy} onClick={add} className="px-3 py-1.5 rounded bg-cyan-600 text-xs font-bold disabled:opacity-60">{busy ? "Adding…" : "Add (stored privately)"}</button>
+        <input type="file" multiple className="text-[10px] text-slate-400 max-w-[150px]" onChange={(e) => setFiles(Array.from(e.target.files || []))} />
+        <button disabled={busy} onClick={add} className="px-3 py-1.5 rounded bg-cyan-600 text-xs font-bold disabled:opacity-60">{busy ? "Uploading…" : "Add (stored privately)"}</button>
       </div>
+      {error && <p className="text-xs text-red-400">{error}</p>}
     </div>
   );
 }
