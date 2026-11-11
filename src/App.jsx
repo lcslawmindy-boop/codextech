@@ -218,6 +218,7 @@ import CommandCenter from './pages/CommandCenter';
 import InventionBuildPlans from './pages/InventionBuildPlans';
 import BuildCostEstimates from './pages/BuildCostEstimates';
 import PatentCostMaster from './pages/PatentCostMaster';
+import MasterBuildPackage from './pages/MasterBuildPackage';
 
 
 const AuthenticatedApp = () => {
@@ -283,6 +284,7 @@ const AuthenticatedApp = () => {
           <Route path="/invention-build-plans" element={<InventionBuildPlans />} />
           <Route path="/build-costs" element={<BuildCostEstimates />} />
           <Route path="/patent-costs" element={<PatentCostMaster />} />
+          <Route path="/master-build-package" element={<MasterBuildPackage />} />
           <Route path="/zarp-landing" element={<ZarpLanding />} />
           <Route path="/free-vault" element={<FreeVault />} />
           <Route path="/member-dashboard" element={<MemberDashboard />} />

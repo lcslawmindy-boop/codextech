@@ -54,6 +54,7 @@ export const PAGE_GROUPS = [
       { emoji: "📋", label: "Invention Build Plans", path: "/invention-build-plans", desc: "50 new inventions — 3-phase build plans" },
       { emoji: "💲", label: "Build Cost Estimates", path: "/build-costs", desc: "Materials + labor cost to build every device" },
       { emoji: "📋", label: "Patent Cost Master", path: "/patent-costs", desc: "All patents + build cost + total to market" },
+      { emoji: "📦", label: "Master Build Package", path: "/master-build-package", desc: "Full PRD/PDR/BOM/SOW/EVT/DVT + build plan + cost per patent" },
     ],
   },
   {
