@@ -39,6 +39,9 @@ export default function ZDS33Admin() {
           <Link to="/zero-capital-plan" className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-pink-600/20 border border-pink-600/40 text-pink-300 text-xs font-bold hover:bg-pink-600/30">
             🤝 Zero-Capital Partnership Plan — $0 to start, trade IP rights for resources →
           </Link>
+          <Link to="/angel-playbook" className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-rose-600/20 border border-rose-600/40 text-rose-300 text-xs font-bold hover:bg-rose-600/30">
+            🎯 Angel Investor Playbook — pitch deck (w/ notes) + locate angels + Startups.com profile →
+          </Link>
         </div>
         <div className="flex gap-1 border-b border-slate-800 mb-5 overflow-x-auto">
           {TABS.map(([k, l]) => (
