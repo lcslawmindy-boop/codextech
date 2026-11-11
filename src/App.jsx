@@ -273,6 +273,7 @@ const AuthenticatedApp = () => {
           <Route path="/hybrid-dev-packages" element={<HybridDevPackages />} />
           <Route path="/neuro-regen-chamber" element={<NeuroRegenChamber />} />
           <Route path="/prenatal-repair-pod" element={<PrenatalRepairPod />} />
+          <Route path="/prenatal" element={<PrenatalRepairPod />} />
           <Route path="/zarp-pipeline" element={<ZARPPipeline />} />
           <Route path="/evidence-ledger" element={<EvidenceLedger />} />
           <Route path="/command" element={<CommandCenter />} />
