@@ -21,7 +21,8 @@ function buildProposal(doc, opts) {
   const ink = (txt, size, o = {}) => {
     doc.setFont("helvetica", o.bold ? "bold" : o.italic ? "italic" : "normal");
     doc.setFontSize(size);
-    doc.setTextColor(...(o.color || [11, 17, 30]));
+    const _c = o.color || [11, 17, 30];
+    doc.setTextColor(_c[0], _c[1], _c[2]);
     const lines = doc.splitTextToSize(txt, W);
     lines.forEach((ln) => {
       if (y > doc.internal.pageSize.getHeight() - M) { doc.addPage(); y = M; }

@@ -11,7 +11,8 @@ export default function generateLegalReviewPdf() {
   const ink = (txt, size, opts = {}) => {
     doc.setFont("helvetica", opts.bold ? "bold" : "normal");
     doc.setFontSize(size);
-    doc.setTextColor(opts.color || [11, 17, 30]);
+    const _c = opts.color || [11, 17, 30];
+    doc.setTextColor(_c[0], _c[1], _c[2]);
     const lines = doc.splitTextToSize(txt, W);
     lines.forEach((ln) => {
       if (y > doc.internal.pageSize.getHeight() - M) { doc.addPage(); y = M; }
