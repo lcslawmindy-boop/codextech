@@ -26,6 +26,9 @@ export default function ZDS33Admin() {
           <h1 className="text-xl font-black tracking-wide">ZDS33 Integrated Systems · Control</h1>
         </div>
         <p className="text-xs text-slate-500 mb-4">Research → IP Asset → Invention → Build/Validation → Commercialization Readiness → Broker / License / Partner. One IP asset, many domains.</p>
+        <Link to="/filing-playbook" className="inline-flex items-center gap-1.5 mb-4 px-3 py-1.5 rounded-lg bg-cyan-600/20 border border-cyan-600/40 text-cyan-300 text-xs font-bold hover:bg-cyan-600/30">
+          📋 Filing & Equity-Raise Playbook — claims, steps, deck & grant drafts →
+        </Link>
         <div className="flex gap-1 border-b border-slate-800 mb-5 overflow-x-auto">
           {TABS.map(([k, l]) => (
             <button key={k} onClick={() => setTab(k)} className={`px-4 py-2 text-xs font-bold border-b-2 -mb-px whitespace-nowrap ${tab === k ? "border-cyan-400 text-cyan-300" : "border-transparent text-slate-500"}`}>{l}</button>
