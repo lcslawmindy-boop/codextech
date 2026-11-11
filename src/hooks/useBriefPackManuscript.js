@@ -14,6 +14,19 @@ const invoke = async payload => {
 const readPack = async pack => ({ ...pack, ...(await invoke({ action: 'read_pack', pack_id: pack.id })) });
 const metadata = pack => ({ pack_id: pack.id, pack_title: pack.title, pack_subtitle: pack.subtitle, category: pack.category, theory_basis: pack.theory_basis, sections: pack.sections });
 const message = error => error.response?.data?.error || error.message;
+const writeChapter = async (pack, index, onProgress, shouldStop) => {
+  let words = 0;
+  let minimum = 1100;
+  for (let step = 0; step < 5; step++) {
+    if (shouldStop()) return;
+    onProgress({ packId: pack.id, title: pack.title, chapter: index + 1, words });
+    const result = await invoke({ ...metadata(pack), chapter_index: index });
+    words = result.word_count;
+    minimum = result.minimum_words || minimum;
+    if (result.complete || result.cached) return;
+  }
+  if (!shouldStop()) throw new Error(`Chapter ${index + 1} is saved at ${words} words but still needs ${minimum}. Resume to expand the saved draft without starting over.`);
+};
 
 export default function useBriefPackManuscript() {
   const client = useQueryClient();
@@ -41,8 +54,7 @@ export default function useBriefPackManuscript() {
         for (let index = 0; index < state.requiredChapters; index++) {
           if (stop.current) break;
           if (saved.has(index)) continue;
-          setProgress({ packId: pack.id, title: pack.title, chapter: index + 1 });
-          await invoke({ ...metadata(pack), chapter_index: index });
+          await writeChapter(pack, index, setProgress, () => stop.current);
           await refresh();
         }
         if (stop.current) break;
@@ -51,8 +63,7 @@ export default function useBriefPackManuscript() {
         for (let index = state.requiredChapters; actual < state.targetPackPages && index < state.maximumChapters; index++) {
           if (stop.current) break;
           if (saved.has(index)) continue;
-          setProgress({ packId: pack.id, title: pack.title, chapter: index + 1 });
-          await invoke({ ...metadata(pack), chapter_index: index });
+          await writeChapter(pack, index, setProgress, () => stop.current);
           await refresh();
           manuscript = await readPack(pack);
           actual = buildChapterPDF([manuscript]).ranges[pack.id].pages;
