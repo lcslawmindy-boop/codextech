@@ -2,9 +2,10 @@ import { useState, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
 import {
   ArrowLeft, Loader2, Scroll, Database, Lightbulb, FlaskConical,
-  Shield, Wrench, TrendingUp, FileText, ChevronRight, X, AlertCircle
+  Shield, Wrench, TrendingUp, FileText, ChevronRight, X, AlertCircle, GitBranch, Layers
 } from "lucide-react";
 import { base44 } from "@/api/base44Client";
+import DocumentTraceabilityView from "../components/DocumentTraceabilityView";
 
 const CHAIN_STAGES = [
   { key: "source", label: "Source", entity: "EvidenceSource", icon: FileText, color: "#06b6d4", desc: "Original source material & citations" },
@@ -174,6 +175,7 @@ export default function EvidenceLedger() {
   const [stageData, setStageData] = useState({});
   const [selected, setSelected] = useState({});
   const [selectedStage, setSelectedStage] = useState(null);
+  const [view, setView] = useState("pipeline"); // "pipeline" | "traceability"
 
   const loadAll = useCallback(async () => {
     setLoading(true);
@@ -205,6 +207,16 @@ export default function EvidenceLedger() {
             <p className="text-slate-500 text-[11px]">Full provenance chain — navigate in both directions</p>
           </div>
         </div>
+        <div className="flex items-center gap-1 bg-slate-900 border border-slate-800 rounded-lg p-1">
+          <button onClick={() => setView("pipeline")}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-bold transition-all ${view === "pipeline" ? "bg-cyan-600 text-white" : "text-slate-400 hover:text-white"}`}>
+            <GitBranch size={12} /> Pipeline
+          </button>
+          <button onClick={() => setView("traceability")}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-bold transition-all ${view === "traceability" ? "bg-cyan-600 text-white" : "text-slate-400 hover:text-white"}`}>
+            <Layers size={12} /> Document Traceability
+          </button>
+        </div>
       </div>
 
       <div className="px-6 py-4">
@@ -224,24 +236,30 @@ export default function EvidenceLedger() {
         </div>
       </div>
 
-      <div className="px-6 pb-6 overflow-x-auto">
-        {loading ? (
-          <div className="flex items-center justify-center py-20"><Loader2 className="animate-spin text-cyan-400" size={32} /></div>
-        ) : (
-          <div className="flex gap-3 min-w-max">
-            {CHAIN_STAGES.map((stage) => (
-              <StageColumn
-                key={stage.key}
-                stage={stage}
-                items={stageData[stage.key] || []}
-                selected={selected}
-                onSelect={handleSelect}
-                loading={loading}
-              />
-            ))}
-          </div>
-        )}
-      </div>
+      {view === "traceability" ? (
+        <div className="px-6 pb-6">
+          <DocumentTraceabilityView />
+        </div>
+      ) : (
+        <div className="px-6 pb-6 overflow-x-auto">
+          {loading ? (
+            <div className="flex items-center justify-center py-20"><Loader2 className="animate-spin text-cyan-400" size={32} /></div>
+          ) : (
+            <div className="flex gap-3 min-w-max">
+              {CHAIN_STAGES.map((stage) => (
+                <StageColumn
+                  key={stage.key}
+                  stage={stage}
+                  items={stageData[stage.key] || []}
+                  selected={selected}
+                  onSelect={handleSelect}
+                  loading={loading}
+                />
+              ))}
+            </div>
+          )}
+        </div>
+      )}
 
       {selectedStage && selected[selectedStage] && (
         <DetailPanel
