@@ -61,6 +61,11 @@ async function loadApproved(base44) {
 export default async function (req) {
   try {
     const base44 = createClientFromRequest(req);
+    // ZDS33 assets are NEVER public: administrators only.
+    const user = await base44.auth.me().catch(() => null);
+    if (!user || user.role !== 'admin') {
+      return Response.json({ error: 'Administrator access required.' }, { status: 403 });
+    }
     const body = await req.json().catch(() => ({}));
     const { action } = body;
     const { ok, docs } = await loadApproved(base44);

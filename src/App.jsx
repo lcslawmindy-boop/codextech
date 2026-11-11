@@ -223,6 +223,7 @@ import ZDS33Hub from './pages/ZDS33Hub';
 import IntegratedSystems from './pages/IntegratedSystems';
 import TechnologyDetail from './pages/TechnologyDetail';
 import ZDS33Admin from './pages/ZDS33Admin';
+import ZDS33VDRShowcase from './pages/ZDS33VDRShowcase';
 
 
 const AuthenticatedApp = () => {
@@ -262,10 +263,6 @@ const AuthenticatedApp = () => {
         <Route path="/trial-onboarding" element={<TrialOnboarding />} />
         <Route path="/beta-apply" element={<BetaApply />} />
         <Route path="/pricing" element={<Pricing />} />
-        <Route path="/zds33" element={<ZDS33Hub />} />
-        <Route path="/zds33/systems" element={<IntegratedSystems />} />
-        <Route path="/zds33/portfolio/:slug" element={<IntegratedSystems />} />
-        <Route path="/zds33/tech/:id" element={<TechnologyDetail />} />
         <Route path="*" element={isTrial ? <TrialOnboarding /> : <VaultNDALanding />} />
       </Routes>
     );
@@ -277,10 +274,13 @@ const AuthenticatedApp = () => {
       <CopyProtection />
 
       <Routes>
-        <Route path="/zds33" element={<ZDS33Hub />} />
-        <Route path="/zds33/systems" element={<IntegratedSystems />} />
-        <Route path="/zds33/portfolio/:slug" element={<IntegratedSystems />} />
-        <Route path="/zds33/tech/:id" element={<TechnologyDetail />} />
+        <Route element={<AdminGuard />}>
+          <Route path="/zds33" element={<ZDS33Hub />} />
+          <Route path="/zds33/systems" element={<IntegratedSystems />} />
+          <Route path="/zds33/portfolio/:slug" element={<IntegratedSystems />} />
+          <Route path="/zds33/tech/:id" element={<TechnologyDetail />} />
+          <Route path="/zds33-vdr" element={<ZDS33VDRShowcase />} />
+        </Route>
         <Route element={<MobileLayout />}>
           <Route path="/" element={<ConceptGraph />} />
           <Route path="/research-network" element={<ResearchNetworkMap />} />
