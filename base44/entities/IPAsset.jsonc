@@ -38,17 +38,17 @@
     },
     "description": {
       "type": "string",
-      "description": "Brief explanation of what the asset is and how it works",
+      "description": "Brief explanation of what the asset is and how it works (internal)",
       "maxLength": 1000
     },
     "problem_solved": {
       "type": "string",
-      "description": "What problem this IP asset solves",
+      "description": "What problem this IP asset solves (internal)",
       "maxLength": 1000
     },
     "target_beneficiaries": {
       "type": "string",
-      "description": "Who this asset helps \u2014 target users, markets, or populations",
+      "description": "Who this asset helps",
       "maxLength": 1000
     },
     "jurisdiction": {
@@ -81,15 +81,15 @@
     },
     "valuation_low": {
       "type": "number",
-      "description": "Lower bound of estimated IP value in USD (advisory only, not guaranteed)"
+      "description": "Lower bound of estimated IP value in USD (advisory only)"
     },
     "valuation_high": {
       "type": "number",
-      "description": "Upper bound of estimated IP value in USD (advisory only, not guaranteed)"
+      "description": "Upper bound of estimated IP value in USD (advisory only)"
     },
     "valuation_basis": {
       "type": "string",
-      "description": "Basis for the valuation (e.g., cost approach, market comparable, claimed patent count)",
+      "description": "Basis for the valuation",
       "maxLength": 500
     },
     "related_patent_claim_id": {
@@ -123,7 +123,7 @@
         "commercialized"
       ],
       "default": "concept",
-      "description": "Technology readiness level"
+      "description": "Technology readiness level (legacy field)"
     },
     "humanitarian_flag": {
       "type": "boolean",
@@ -151,7 +151,7 @@
     "confidential": {
       "type": "boolean",
       "default": true,
-      "description": "Whether this asset is confidential (restricts external disclosure without human authorization)"
+      "description": "Whether this asset is confidential"
     },
     "review_status": {
       "type": "string",
@@ -162,11 +162,11 @@
         "rejected"
       ],
       "default": "pending",
-      "description": "Human-controlled promotion status \u2014 only human approval promotes InventionCandidate to IPAsset"
+      "description": "Human-controlled promotion status"
     },
     "reviewed_by_email": {
       "type": "string",
-      "description": "Email of the human reviewer who approved or rejected this IP asset"
+      "description": "Email of the human reviewer"
     },
     "review_date": {
       "type": "string",
@@ -178,7 +178,7 @@
         "type": "string"
       },
       "default": [],
-      "description": "FKs to EvidenceClaim records for traceability to supporting evidence"
+      "description": "FKs to EvidenceClaim records"
     },
     "research_document_ids": {
       "type": "array",
@@ -186,7 +186,7 @@
         "type": "string"
       },
       "default": [],
-      "description": "FKs to ResearchDocument records for traceability to originating research"
+      "description": "FKs to ResearchDocument records"
     },
     "engineering_artifact_ids": {
       "type": "array",
@@ -194,7 +194,7 @@
         "type": "string"
       },
       "default": [],
-      "description": "FKs to EngineeringArtifact records for traceability to engineering development"
+      "description": "FKs to EngineeringArtifact records"
     },
     "status": {
       "type": "string",
@@ -207,6 +207,154 @@
       ],
       "default": "active",
       "description": "Lifecycle status of this IP asset"
+    },
+    "tech_code": {
+      "type": "string",
+      "description": "ZDS33 technology ID shown publicly (e.g. ZDS-T-014)"
+    },
+    "domain_tags": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "HUMANITARIAN",
+          "DEFENSE_SECURITY",
+          "DEEP_SPACE",
+          "ASTEROID_MINING",
+          "DUAL_USE",
+          "MULTI_DOMAIN"
+        ]
+      },
+      "default": [],
+      "description": "Mission domain tags. One IP asset can carry several; no duplicate records per portfolio."
+    },
+    "technology_category": {
+      "type": "string",
+      "enum": [
+        "communications",
+        "robotics_autonomy",
+        "sensing",
+        "power_energy",
+        "navigation",
+        "materials_handling",
+        "infrastructure",
+        "medical_support",
+        "ai_decision_support",
+        "logistics",
+        "other"
+      ],
+      "description": "Technology category for discovery"
+    },
+    "subsystem": {
+      "type": "string",
+      "description": "System/subsystem this technology belongs to"
+    },
+    "development_stage": {
+      "type": "string",
+      "enum": [
+        "concept",
+        "research",
+        "design",
+        "prototype",
+        "validation"
+      ],
+      "default": "concept",
+      "description": "Honest development stage. Prototype/validation require stage_evidence."
+    },
+    "stage_evidence": {
+      "type": "string",
+      "description": "Evidence on file supporting prototype/validation stage",
+      "maxLength": 1500
+    },
+    "commercialization_readiness": {
+      "type": "string",
+      "enum": [
+        "not_assessed",
+        "research_only",
+        "developing",
+        "partner_ready",
+        "transfer_ready"
+      ],
+      "default": "not_assessed",
+      "description": "Commercialization readiness"
+    },
+    "partnership_pathways": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "ip_broker",
+          "licensing",
+          "manufacturing_partnership",
+          "co_development",
+          "research_partnership",
+          "strategic_partnership",
+          "investment_funding"
+        ]
+      },
+      "default": [],
+      "description": "Pathways open for this technology"
+    },
+    "showcase_status": {
+      "type": "string",
+      "enum": [
+        "hidden",
+        "approved_public"
+      ],
+      "default": "hidden",
+      "description": "Only approved_public assets appear in the public showcase, and only their public_* fields"
+    },
+    "defense_public_review_confirmed": {
+      "type": "boolean",
+      "default": false,
+      "description": "Human confirmation that public fields are high-level and non-operational (required for defense-tagged assets)"
+    },
+    "public_summary": {
+      "type": "string",
+      "description": "Approved public summary",
+      "maxLength": 1200
+    },
+    "public_problem": {
+      "type": "string",
+      "description": "Approved public problem statement",
+      "maxLength": 1200
+    },
+    "public_solution": {
+      "type": "string",
+      "description": "Approved public high-level solution concept",
+      "maxLength": 1200
+    },
+    "public_capabilities": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": [],
+      "description": "Approved public key capabilities"
+    },
+    "public_applications": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": [],
+      "description": "Approved public potential applications"
+    },
+    "public_gallery": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": [],
+      "description": "Approved public image URLs"
+    },
+    "related_asset_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": [],
+      "description": "Related IPAsset ids (cross-domain relationships)"
     }
   },
   "required": [

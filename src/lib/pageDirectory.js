@@ -14,6 +14,8 @@ export const PAGE_GROUPS = [
       { emoji: "💳", label: "Pricing", path: "/pricing", desc: "Plans & credit packs" },
       { emoji: "🗄️", label: "Vault", path: "/vault", desc: "Vault hero" },
       { emoji: "🧭", label: "Command Center", path: "/command", desc: "Pipeline command" },
+      { emoji: "🛰️", label: "ZDS33 Integrated Systems", path: "/zds33", desc: "Humanitarian, Defense, Deep Space portfolios" },
+      { emoji: "🧩", label: "ZDS33 Systems Explorer", path: "/zds33/systems", desc: "Discover technologies across domains" },
     ],
   },
   {
@@ -225,6 +227,7 @@ export const PAGE_GROUPS = [
       { emoji: "📄", label: "PDF Access", path: "/admin-pdf-access", desc: "PDF grants" },
       { emoji: "📦", label: "Forged IP", path: "/admin-forged-ip", desc: "Forged IP" },
       { emoji: "📦", label: "IP Inventory", path: "/admin-ip-inventory", desc: "IP inventory" },
+      { emoji: "🛰️", label: "ZDS33 Control", path: "/zds33-admin", desc: "Integrated systems dashboard, classification, vault, opportunities" },
       { emoji: "💳", label: "Stripe Catalog", path: "/admin-stripe-catalog", desc: "Stripe" },
       { emoji: "🏗️", label: "Build Tracker", path: "/build-tracker", desc: "Builds" },
       { emoji: "📜", label: "TRZ Patent", path: "/trz-patent", desc: "TRZ" },

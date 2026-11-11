@@ -10,6 +10,10 @@
       "type": "string",
       "description": "FK to the parent Project record"
     },
+    "ip_asset_id": {
+      "type": "string",
+      "description": "FK to the IPAsset this build/validation document belongs to"
+    },
     "artifact_name": {
       "type": "string",
       "description": "Name of the engineering artifact"
@@ -24,6 +28,8 @@
         "test_plan",
         "specification",
         "firmware",
+        "validation_report",
+        "design_review",
         "other"
       ],
       "default": "specification",
@@ -35,7 +41,7 @@
     },
     "file_uri": {
       "type": "string",
-      "description": "URI of an uploaded file (from UploadPrivateFile)"
+      "description": "URI of an uploaded private file (from UploadPrivateFile)"
     },
     "description": {
       "type": "string",
@@ -52,6 +58,17 @@
       ],
       "default": "draft",
       "description": "Review status of this artifact"
+    },
+    "access_level": {
+      "type": "string",
+      "enum": [
+        "public",
+        "partner",
+        "confidential",
+        "restricted"
+      ],
+      "default": "confidential",
+      "description": "Build Plan + Validation Vault access level"
     },
     "related_build_project_id": {
       "type": "string",

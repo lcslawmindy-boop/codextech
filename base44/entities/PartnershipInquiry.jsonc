@@ -1,0 +1,90 @@
+{
+  "name": "PartnershipInquiry",
+  "type": "object",
+  "properties": {
+    "ip_asset_id": {
+      "type": "string",
+      "description": "FK to the IPAsset the inquiry concerns"
+    },
+    "ip_asset_name": {
+      "type": "string",
+      "description": "Asset name at time of inquiry"
+    },
+    "name": {
+      "type": "string",
+      "description": "Inquirer name",
+      "maxLength": 200
+    },
+    "email": {
+      "type": "string",
+      "description": "Inquirer email",
+      "maxLength": 200
+    },
+    "organization": {
+      "type": "string",
+      "description": "Inquirer organization",
+      "maxLength": 200
+    },
+    "pathway": {
+      "type": "string",
+      "enum": [
+        "ip_broker",
+        "licensing",
+        "manufacturing_partnership",
+        "co_development",
+        "research_partnership",
+        "strategic_partnership",
+        "investment_funding"
+      ],
+      "description": "Requested partnership pathway"
+    },
+    "message": {
+      "type": "string",
+      "description": "Inquiry message",
+      "maxLength": 3000
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "new",
+        "reviewing",
+        "responded",
+        "closed"
+      ],
+      "default": "new",
+      "description": "Triage status"
+    },
+    "opportunity_id": {
+      "type": "string",
+      "description": "CommercializationCase created from this inquiry"
+    }
+  },
+  "required": [
+    "ip_asset_id",
+    "name",
+    "email",
+    "pathway"
+  ],
+  "rls": {
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}
