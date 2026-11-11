@@ -3,10 +3,11 @@ import { Link } from "react-router-dom";
 import {
   ArrowLeft, Brain, ShieldAlert, FlaskConical, Database, Zap, BookOpen,
   Layers, Activity, Stethoscope, CheckCircle2, AlertTriangle, XCircle,
-  Lock, Scroll, Beaker, HeartPulse, FileText, Box, Download, Loader2,
+  Lock, Scroll, Beaker, HeartPulse, FileText, Box, Download, Loader2, Wrench,
 } from "lucide-react";
 import NeuroRegenChamberRender from "../components/NeuroRegenChamberRender";
 import NeuroRegenEngineeringDocs from "../components/NeuroRegenEngineeringDocs";
+import NeuroRegenBuildPlan from "../components/NeuroRegenBuildPlan";
 import { generateNeuroRegenPdf } from "../lib/generateNeuroRegenPdf";
 
 // ── Synthesis content (existing) ──────────────────────────────────────────
@@ -306,6 +307,7 @@ export default function NeuroRegenChamber() {
           {[
             { id: "synthesis", label: "Synthesis", icon: <Brain size={14} /> },
             { id: "engineering", label: "Engineering Package", icon: <FileText size={14} /> },
+            { id: "build", label: "Build Plan", icon: <Wrench size={14} /> },
           ].map((tab) => (
             <button key={tab.id} onClick={() => setView(tab.id)}
               className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-bold transition-all ${view === tab.id ? "bg-gray-800 text-white border border-gray-700" : "text-gray-500 hover:text-gray-300 border border-transparent"}`}>
@@ -316,7 +318,7 @@ export default function NeuroRegenChamber() {
       </div>
 
       <div className="max-w-5xl mx-auto px-5 py-6">
-        {view === "synthesis" ? <SynthesisView /> : <EngineeringView />}
+        {view === "synthesis" ? <SynthesisView /> : view === "engineering" ? <EngineeringView /> : <NeuroRegenBuildPlan />}
         <div className="flex flex-wrap gap-3 mt-8 mb-10">
           <Link to="/targeted-therapy-pods" className="px-4 py-2.5 rounded-xl bg-gray-800 border border-gray-700 text-gray-200 text-xs font-bold hover:bg-gray-700">View AuraWell Pods</Link>
           <Link to="/therapy-pod-pro" className="px-4 py-2.5 rounded-xl bg-gray-800 border border-gray-700 text-gray-200 text-xs font-bold hover:bg-gray-700">Therapy Pod Pro (engineering)</Link>
