@@ -6,6 +6,7 @@ import {
 } from "lucide-react";
 import { FILING_SEQUENCE, CLAIMS, EQUITY_ASK, DECK_SLIDES, GRANT_PROPOSALS } from "@/lib/filingPlaybook";
 import generateFilingPlaybookPptx from "@/lib/generateFilingPlaybookPptx";
+import generateDavidsonPitchDeck from "@/lib/generateDavidsonPitchDeck";
 
 const TRACK_COLOR = { "Non-ITAR": "#06b6d4", ITAR: "#fbbf24" };
 
@@ -99,11 +100,18 @@ function GrantCard({ g }) {
 
 export default function FilingPlaybook() {
   const [exporting, setExporting] = useState(false);
+  const [davidsonBusy, setDavidsonBusy] = useState(false);
 
   const handleExport = async () => {
     setExporting(true);
     try { await generateFilingPlaybookPptx(); }
     finally { setExporting(false); }
+  };
+
+  const handleDavidson = async () => {
+    setDavidsonBusy(true);
+    try { await generateDavidsonPitchDeck(); }
+    finally { setDavidsonBusy(false); }
   };
 
   return (
@@ -116,11 +124,18 @@ export default function FilingPlaybook() {
             <p className="text-slate-500 text-[10px]">Claims, steps, investor deck & grant proposals</p>
           </div>
         </div>
-        <button onClick={handleExport} disabled={exporting}
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-cyan-600 hover:bg-cyan-500 disabled:opacity-50 text-white text-xs font-bold">
-          {exporting ? <Loader2 className="animate-spin" size={13} /> : <Download size={13} />}
-          {exporting ? "Building…" : "Export PPTX"}
-        </button>
+        <div className="flex items-center gap-2">
+          <button onClick={handleDavidson} disabled={davidsonBusy}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-amber-600 hover:bg-amber-500 disabled:opacity-50 text-white text-xs font-bold">
+            {davidsonBusy ? <Loader2 className="animate-spin" size={13} /> : <Shield size={13} />}
+            {davidsonBusy ? "Building…" : "Davidson Defense Pitch"}
+          </button>
+          <button onClick={handleExport} disabled={exporting}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-cyan-600 hover:bg-cyan-500 disabled:opacity-50 text-white text-xs font-bold">
+            {exporting ? <Loader2 className="animate-spin" size={13} /> : <Download size={13} />}
+            {exporting ? "Building…" : "Export Full Playbook"}
+          </button>
+        </div>
       </div>
 
       <div className="px-4 py-4">
