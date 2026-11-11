@@ -53,6 +53,7 @@ export const PAGE_GROUPS = [
       { emoji: "👶", label: "Prenatal Repair Pod", path: "/prenatal-repair-pod", desc: "Pediatric prenatal-injury variant (NRC-P)" },
       { emoji: "📋", label: "Invention Build Plans", path: "/invention-build-plans", desc: "50 new inventions — 3-phase build plans" },
       { emoji: "💲", label: "Build Cost Estimates", path: "/build-costs", desc: "Materials + labor cost to build every device" },
+      { emoji: "📋", label: "Patent Cost Master", path: "/patent-costs", desc: "All patents + build cost + total to market" },
     ],
   },
   {
