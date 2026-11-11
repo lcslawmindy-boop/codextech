@@ -225,6 +225,7 @@ import TechnologyDetail from './pages/TechnologyDetail';
 import ZDS33Admin from './pages/ZDS33Admin';
 import ZDS33VDRShowcase from './pages/ZDS33VDRShowcase';
 import FilingPlaybook from './pages/FilingPlaybook';
+import InvestorPortfolio from './pages/InvestorPortfolio';
 
 
 const AuthenticatedApp = () => {
@@ -428,6 +429,7 @@ const AuthenticatedApp = () => {
             <Route path="/admin-ip-inventory" element={<AdminIPInventory />} />
             <Route path="/zds33-admin" element={<ZDS33Admin />} />
             <Route path="/filing-playbook" element={<FilingPlaybook />} />
+            <Route path="/investor-portfolio" element={<InvestorPortfolio />} />
             <Route path="/wix-import" element={<WixCourseImport />} />
             <Route path="/email-funnel" element={<EmailFunnel />} />
             <Route path="/product-ladder" element={<ProductLadder />} />

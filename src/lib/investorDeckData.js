@@ -1,0 +1,280 @@
+// Investor deck + legal-review + viability data for the TOP 10 IP assets by valuation.
+// Sourced live from the Production IPAsset entity on 2026-11-11.
+// All claims are DRAFT scaffolds for a registered US patent attorney to finalize.
+// No patent is filed at the USPTO for any asset below.
+
+export const PORTFOLIO = {
+  totalAssets: 149,
+  provisionalFiled: 20,
+  notFiled: 129,
+  perDomain: [
+    { domain: "HUMANITARIAN", count: 58, color: "#10b981" },
+    { domain: "DEFENSE_SECURITY", count: 75, color: "#fbbf24" },
+    { domain: "DEEP_SPACE", count: 16, color: "#06b6d4" },
+  ],
+  top10Range: { low: 1550000, high: 4700000 },
+  basis: "Cost approach (claim count × $25k conservative floor). Advisory only — not an independent or market valuation.",
+};
+
+// Top 10 by valuation_high, live from the database.
+export const TOP10 = [
+  {
+    rank: 1, id: "6af3dded2cba6ccd5dd8b7f6", code: null,
+    name: "Unified Bio-Scalar Consciousness-Healing-Longevity Pod (UBSCHLP)",
+    domain: "Humanitarian / Medical", cat: "medical_support", filing: "not_filed",
+    confidential: true, stage: "design",
+    vLow: 200000, vHigh: 650000, basis: "Cost approach — 6 claims × $25k floor",
+    market: "Wellness, longevity, consciousness, integrative healing",
+    problem: "The entire wellness, longevity, consciousness, and healing market.",
+    desc: "Complete Therapy Pod Pro with every modality integrated — 9 BrightSteps healing modalities (PBM, PEMF, VAT, FIR, MCT, HIT, NIA, BIO, SFT), Vedic therapies, suppressed-tech modalities (Prioré, Rife, Reich, Schauberger, Tesla scalar), and esoteric systems under one canopy-enclosed closed-loop controller.",
+    claims: {
+      independent: ["1. A multi-modal therapeutic pod comprising: a canopy enclosure defining a treatment volume; a plurality of distinct modality emission modules disposed within the canopy enclosure, the plurality comprising at least a photobiomodulation module, a pulsed electromagnetic field module, a vibroacoustic module, a far-infrared module, and a scalar electromagnetic field module; and a closed-loop controller operatively coupled to each of the plurality of modality emission modules, the closed-loop controller configured to drive two or more of the modality emission modules simultaneously according to a selectable multi-modal protocol."],
+      dependent: [
+        "2. The pod of claim 1, wherein the plurality of modality emission modules comprises at least nine distinct modality modules.",
+        "3. The pod of claim 1, wherein the closed-loop controller modulates a frequency or intensity of at least one modality module in response to a measured physiological parameter.",
+        "4. The pod of claim 1, further comprising a bio-feedback sensor array in communication with the closed-loop controller.",
+        "5. The pod of claim 1, wherein the closed-loop controller drives the scalar electromagnetic field module and the pulsed electromagnetic field module in a phase-locked sequence.",
+      ],
+    },
+    viability: { score: 62, trl: "TRL 3-4 (design, no clinical data)", risk: "High — Class III device concept; broad modality fusion raises both infringement surface and prior-art exposure. No FDA/IRB. Scientific basis of several modalities contested." },
+  },
+  {
+    rank: 2, id: "6af3dded2cba6ccd5dd8b7eb", code: null,
+    name: "Naessens-Somatid Bio-Diagnostic Microscope (NSBDM)",
+    domain: "Humanitarian / Sensing", cat: "sensing", filing: "not_filed",
+    confidential: true, stage: "design",
+    vLow: 150000, vHigh: 450000, basis: "Cost approach — 4 claims × $25k floor",
+    market: "Diagnostic medicine, integrative health, longevity",
+    problem: "Diagnostic medicine, integrative health, longevity.",
+    desc: "A modern somatoscope (30,000× magnification, sub-virus resolution) combined with scalar-EM field analysis. Visualizes somatids in live blood and reads the bio-field signature of the sample for pleomorphic assessment, bio-field reading, and pre-symptomatic detection.",
+    claims: {
+      independent: ["1. A live-blood diagnostic apparatus comprising: a high-magnification optical imaging module configured to image a live blood sample at a magnification of at least 30,000×; an electromagnetic-field sensor configured to measure an electromagnetic signature of the blood sample; and a processor configured to combine the high-magnification image data and the electromagnetic signature into a fused diagnostic output."],
+      dependent: [
+        "2. The apparatus of claim 1, wherein the electromagnetic-field sensor is a scalar electromagnetic field sensor.",
+        "3. The apparatus of claim 1, further comprising a display rendering the fused diagnostic output as a combined morphological and field-intensity readout.",
+        "4. The apparatus of claim 1, wherein the processor performs a pleomorphic microbial assessment from the high-magnification image data.",
+      ],
+    },
+    viability: { score: 54, trl: "TRL 3 (design)", risk: "High — 'somatid' framework is not mainstream-accepted; diagnostic-claim validation requires clinical studies. IVD regulatory pathway if sold as a diagnostic." },
+  },
+  {
+    rank: 3, id: "6af3dded2cba6ccd5dd8b7df", code: null,
+    name: "Wim Hof-Scalar Autonomic Control Trainer (WHACT)",
+    domain: "Humanitarian / Medical", cat: "medical_support", filing: "not_filed",
+    confidential: true, stage: "design",
+    vLow: 150000, vHigh: 450000, basis: "Cost approach — 4 claims × $25k floor",
+    market: "Biohacking, athletic performance, immune health",
+    problem: "Biohacking, athletic performance, immune health.",
+    desc: "Training system combining cold exposure, breathing guidance, and scalar-EM bio-field enhancement. The scalar field amplifies autonomic-control training — user learns to modulate immune response, body temperature, and stress response.",
+    claims: {
+      independent: ["1. An autonomic-control training apparatus comprising: a cold-exposure module; a breath-guidance module; and a scalar electromagnetic field emission module; and a controller configured to drive the scalar electromagnetic field emission module in a selected sequence synchronized to the breath-guidance module."],
+      dependent: [
+        "2. The apparatus of claim 1, wherein the cold-exposure module is a cryo-chamber or cold-water immersion module.",
+        "3. The apparatus of claim 1, wherein the controller synchronizes the scalar electromagnetic field emission to a breathing cadence detected from the user.",
+        "4. The apparatus of claim 1, further comprising a physiological sensor measuring at least one of heart-rate variability or skin temperature.",
+      ],
+    },
+    viability: { score: 48, trl: "TRL 3 (design)", risk: "High — combines a known method (Wim Hof) with a contested modality (scalar field); 'amplifies' claim needs controlled study. Trademark exposure on 'Wim Hof' name — rename before filing." },
+  },
+  {
+    rank: 4, id: "6af3dded2cba6ccd5dd8b7e0", code: null,
+    name: "Ayahuasca-Scalar Integration Therapy System (ASITS)",
+    domain: "Humanitarian / Medical", cat: "medical_support", filing: "not_filed",
+    confidential: true, stage: "design",
+    vLow: 150000, vHigh: 450000, basis: "Cost approach — 4 claims × $25k floor",
+    market: "Plant medicine integration, psychedelic therapy",
+    problem: "Plant medicine integration, psychedelic therapy.",
+    desc: "Post-ayahuasca integration therapy using scalar-EM to consolidate bio-field changes — pre-ceremony preparation, optional ceremony support, post-ceremony integration (scalar + breath + nutrition).",
+    claims: {
+      independent: ["1. A therapy-support apparatus comprising: a scalar electromagnetic field emission module; a breath-guidance module; and a controller configured to drive the scalar electromagnetic field emission module in a selected post-ceremony integration protocol."],
+      dependent: [
+        "2. The apparatus of claim 1, wherein the controller drives the scalar electromagnetic field emission module in a pre-ceremony preparation protocol distinct from the post-ceremony integration protocol.",
+        "3. The apparatus of claim 1, further comprising a nutrition-tracking interface in communication with the controller.",
+        "4. The apparatus of claim 1, wherein the selected post-ceremony integration protocol is phase-locked to a detected breathing cadence.",
+      ],
+    },
+    viability: { score: 40, trl: "TRL 2-3 (concept/design)", risk: "Very high — psychedelic integration is a regulated emerging field; apparatus is adjunct only. Avoid any claim of treating a condition. Legal exposure on 'ayahuasca' naming in regulated jurisdictions." },
+  },
+  {
+    rank: 5, id: "6af3dded2cba6ccd5dd8b7e1", code: null,
+    name: "Astrological-Scalar Therapy Timing System (ASTTS)",
+    domain: "Humanitarian / Medical", cat: "medical_support", filing: "not_filed",
+    confidential: true, stage: "design",
+    vLow: 150000, vHigh: 450000, basis: "Cost approach — 4 claims × $25k floor",
+    market: "Integrative medicine, astrology-based wellness",
+    problem: "Integrative medicine, astrology-based wellness.",
+    desc: "Therapy-timing system scheduling scalar-EM treatments based on planetary hours, lunar phases, and zodiacal signs — calculating optimal treatment windows for specific conditions.",
+    claims: {
+      independent: ["1. A therapy-scheduling system comprising: an astronomical-clock module configured to compute at least one of a planetary-hour, lunar-phase, or zodiacal parameter; a scalar electromagnetic field emission module; and a controller configured to activate the scalar electromagnetic field emission module at a treatment time selected according to the computed astronomical parameter."],
+      dependent: [
+        "2. The system of claim 1, wherein the controller selects the treatment time by mapping a target condition to a corresponding astronomical parameter.",
+        "3. The system of claim 1, further comprising a user interface displaying the selected treatment time and the corresponding astronomical parameter.",
+        "4. The system of claim 1, wherein the controller activates the scalar electromagnetic field emission module at a plurality of treatment times distributed across a lunar cycle.",
+      ],
+    },
+    viability: { score: 30, trl: "TRL 2 (concept)", risk: "Very high — astrology-based efficacy is not scientifically established; patentability of the 'timing' step is questionable (abstract-idea risk under §101). Consider trade-secret retention over a patent." },
+  },
+  {
+    rank: 6, id: "6af3dded2cba6ccd5dd8b7e2", code: null,
+    name: "Runes-Galdr Scalar Vibrational Coder (RGSVC)",
+    domain: "Humanitarian / Esoteric", cat: "other", filing: "not_filed",
+    confidential: true, stage: "design",
+    vLow: 150000, vHigh: 450000, basis: "Cost approach — 4 claims × $25k floor",
+    market: "Esoteric research, Norse spirituality, consciousness work",
+    problem: "Esoteric research, Norse spirituality, consciousness work.",
+    desc: "Scalar-EM system translating the 24 Elder Futhark runes into frequency templates — each rune's galdr is a vibrational operator; the device converts the rune sound into a scalar-EM frequency.",
+    claims: {
+      independent: ["1. A vibrational-encoding apparatus comprising: an input interface configured to receive a selected rune identifier from a set of Elder Futhark runes; a scalar electromagnetic field emission module; and a controller configured to drive the scalar electromagnetic field emission module at a frequency mapped to the selected rune identifier."],
+      dependent: [
+        "2. The apparatus of claim 1, wherein the mapping associates each of the 24 Elder Futhark runes with a distinct frequency.",
+        "3. The apparatus of claim 1, further comprising an audio output emitting a galdr sound corresponding to the selected rune identifier.",
+        "4. The apparatus of claim 1, wherein the controller drives the scalar electromagnetic field emission module in a sequence corresponding to a selected rune sequence.",
+      ],
+    },
+    viability: { score: 25, trl: "TRL 2 (concept)", risk: "Very high — esoteric subject matter; unclear commercial demand. Strong abstract-idea / non-utility risk under §101. Trade-secret retention recommended over a patent." },
+  },
+  {
+    rank: 7, id: "6af3dded2cba6ccd5dd8b7e3", code: null,
+    name: "MorphoYield TRZ-Agri Scalar Array (MYTSA)",
+    domain: "Humanitarian / Agriculture", cat: "other", filing: "not_filed",
+    confidential: true, hum: true, stage: "design",
+    vLow: 150000, vHigh: 450000, basis: "Cost approach — 4 claims × $25k floor",
+    market: "Organic agriculture, regenerative farming",
+    problem: "Organic agriculture, regenerative farming.",
+    desc: "Agricultural scalar-EM array enhancing crop growth by broadcasting plant-specific resonance frequencies — scalar-EM towers at field corners, Vedic agnihotra, Schauberger vortex-structured irrigation water, plant species-specific frequency templates. Claims 20–40% yield increase without chemicals.",
+    claims: {
+      independent: ["1. An agricultural field-treatment system comprising: a plurality of electromagnetic field-emission towers positioned at perimeter locations of an agricultural field; and a controller configured to drive the plurality of towers to emit electromagnetic field patterns corresponding to a selected plant species across the field."],
+      dependent: [
+        "2. The system of claim 1, further comprising a vortex-structured irrigation-water treatment unit.",
+        "3. The system of claim 1, wherein the controller selects the electromagnetic field patterns from a library of plant-species-specific frequency templates.",
+        "4. The system of claim 1, wherein the controller drives the plurality of towers in a synchronized emission pattern.",
+      ],
+    },
+    viability: { score: 58, trl: "TRL 3 (design)", risk: "Medium-high — yield claims (20–40%) must be substantiated by field trials before any commercial or grant claim. Agnihotra and vortex-water components are folk-science; the apparatus claim is patentable but the efficacy claim is not yet supported." },
+  },
+  {
+    rank: 8, id: "6af3dded2cba6ccd5dd8b7e4", code: null,
+    name: "Schauberger-Vortex River Restoration Device (SVRRD)",
+    domain: "Humanitarian / Infrastructure", cat: "infrastructure", filing: "not_filed",
+    confidential: true, hum: true, stage: "design",
+    vLow: 150000, vHigh: 450000, basis: "Cost approach — 4 claims × $25k floor",
+    market: "Environmental restoration, water management",
+    problem: "Environmental restoration, water management.",
+    desc: "River-restoration device based on Schauberger's implosion principle — installed in degraded rivers, creates vortex flow patterns that oxygenate, structure, and cool the water, restoring fish habitat, using the river's own flow with no external power.",
+    claims: {
+      independent: ["1. A passive river-restoration device comprising: a body configured to be installed within a river flow; and a plurality of vortex-forming vanes disposed on the body, the vanes configured to induce a helical vortex flow pattern in water passing the body without external power input."],
+      dependent: [
+        "2. The device of claim 1, wherein the body is anchored to a riverbed.",
+        "3. The device of claim 1, wherein the plurality of vortex-forming vanes are arranged in an axial spiral configuration.",
+        "4. The device of claim 1, further comprising an outlet configured to discharge vortex-conditioned water downstream.",
+      ],
+    },
+    viability: { score: 66, trl: "TRL 3-4 (design, plausible)", risk: "Medium — hydrodynamics is a patentable, testable domain; the vortex-oxygenation effect is physically plausible and measurable. This is the strongest commercial candidate in the top 10. Needs field validation but low regulatory burden." },
+  },
+  {
+    rank: 9, id: "6af3dded2cba6ccd5dd8b7e5", code: null,
+    name: "Reich-Cloudbuster-Scalar Atmospheric Modulator (RCSAM)",
+    domain: "Humanitarian / Infrastructure", cat: "infrastructure", filing: "not_filed",
+    confidential: true, stage: "design",
+    vLow: 150000, vHigh: 450000, basis: "Cost approach — 4 claims × $25k floor",
+    market: "Agriculture, drought relief, fire prevention",
+    problem: "Agriculture, drought relief, fire prevention.",
+    desc: "Modern cloudbuster combining Reich's orgone-drawing principle with scalar-EM field generation — can draw orgone (creating rain) or broadcast orgone (dissipating clouds), with scalar-EM allowing precise control.",
+    claims: {
+      independent: ["1. An atmospheric-modulation apparatus comprising: an elongate directional antenna structure; an electromagnetic field generation module coupled to the antenna structure; and a controller configured to drive the electromagnetic field generation module in a selected one of a drawing mode and a broadcasting mode."],
+      dependent: [
+        "2. The apparatus of claim 1, wherein the controller reverses a polarity of the electromagnetic field generation module between the drawing mode and the broadcasting mode.",
+        "3. The apparatus of claim 1, wherein the antenna structure comprises a plurality of metallic tubes in a selected directional array.",
+        "4. The apparatus of claim 1, further comprising a grounding electrode coupled to the antenna structure.",
+      ],
+    },
+    viability: { score: 22, trl: "TRL 2 (concept)", risk: "Very high — orgone theory is pseudoscientific and discredited; weather-modulation efficacy is unverified. Patentability and commercial viability both doubtful. Strong reputational risk." },
+  },
+  {
+    rank: 10, id: "6af3dded2cba6ccd5dd8b7e6", code: null,
+    name: "Vedic-Homa Scalar Air Purification System (VHSAPS)",
+    domain: "Humanitarian / Infrastructure", cat: "infrastructure", filing: "not_filed",
+    confidential: true, stage: "design",
+    vLow: 150000, vHigh: 450000, basis: "Cost approach — 4 claims × $25k floor",
+    market: "Air purification, community wellness, pollution remediation",
+    problem: "Air purification, community wellness, pollution remediation.",
+    desc: "Air purification combining Vedic homa (ghee + rice + herbs fire ceremony) with scalar-EM field generation — homa fire produces purifying smoke and subtle energy; scalar-EM amplifies and distributes the effect over a wide area.",
+    claims: {
+      independent: ["1. An air-treatment apparatus comprising: a combustion chamber configured to burn a selected combustible material; an electromagnetic field emission module; and a controller configured to drive the electromagnetic field emission module in a selected distribution pattern during combustion in the combustion chamber."],
+      dependent: [
+        "2. The apparatus of claim 1, wherein the selected combustible material comprises ghee, rice, and a selected herb.",
+        "3. The apparatus of claim 1, further comprising an exhaust outlet configured to discharge combustion products through the selected distribution pattern.",
+        "4. The apparatus of claim 1, wherein the controller drives the electromagnetic field emission module at a frequency selected to correspond to a Vedic homa protocol.",
+      ],
+    },
+    viability: { score: 28, trl: "TRL 2 (concept)", risk: "Very high — combines combustion (real air-purification mechanism via particulate) with contested scalar distribution claim. The particulate-removal component is testable; the scalar-amplification claim is not. Strip to the combustion apparatus for a defensible patent." },
+  },
+];
+
+export const GRANT_DRAFTS = [
+  {
+    id: "nccih-ubschlp", target: "NIH NCCIH — Complementary & Integrative Health (R21)",
+    assets: ["UBSCHLP", "WHACT", "ASITS"],
+    amount: "$275,000 (R21 exploratory)",
+    deadline: "Standard NIH receipt dates; target Feb / Jun 2027 cycles",
+    rationale: "These three devices integrate known non-invasive modalities (PBM, PEMF, acoustic, cold/breath) under a closed-loop controller. NCCIH funds mechanistic studies of multi-modal integrative interventions. The apparatus is the vehicle; the study is mechanistic, not efficacy.",
+    objective: "Conduct a mechanistic pilot characterizing physiological response (HRV, vagal tone, sleep architecture) to a synchronized multi-modal pod vs. each modality alone, in healthy volunteers.",
+    honest_note: "No therapeutic-effect claim. Scalar-EM components studied as a non-specific field exposure, not as a verified mechanism. IRB required.",
+  },
+  {
+    id: "nsf-svrrd", target: "NSF — Environmental Engineering / Water Science (CBET)",
+    assets: ["SVRRD"],
+    amount: "$300,000 (EAGER / standard)",
+    deadline: "NSF unsolicited / CBET program; rolling, target March 2027",
+    rationale: "The Schauberger-vortex river device is the strongest commercial and scientific candidate — hydrodynamic vortex flow, oxygenation, and passive cooling are measurable and physically grounded. NSF funds novel environmental-engineering hardware with field-validation potential.",
+    objective: "Build and field-test passive vortex river-restoration devices in a degraded stream reach; measure dissolved oxygen, temperature, and benthic habitat recovery vs. a control reach over 6 months.",
+    honest_note: "Drop any 'implosion' / 'structured water' framing; present as passive vortex hydrodynamics. Strong, fundable as-is.",
+  },
+  {
+    id: "usda-mysa", target: "USDA NIFA — Agriculture and Food Research Initiative (AFRI)",
+    assets: ["MYTSA"],
+    amount: "$500,000 (Foundational Program)",
+    deadline: "USDA NIFA AFRI; target annual cycle",
+    rationale: "The agricultural array targets yield improvement without chemicals — squarely in USDA NIFA's mission. The apparatus is patentable; the yield claim must be substantiated by replicated field trials, which is exactly what AFRI funds.",
+    objective: "Run replicated split-field trials of the electromagnetic array on two crop species over two seasons; measure yield, soil microbiome, and input reduction vs. control plots.",
+    honest_note: "Drop agnihotra and vortex-water framing from the grant; present the EM-array component alone. Yield claim (20–40%) is the hypothesis to test, not a stated result.",
+  },
+  {
+    id: "nsbdiagnostic", target: "NIH NIBIB — Diagnostic Imaging (R21)",
+    assets: ["NSBDM"],
+    amount: "$250,000 (R21)",
+    deadline: "Standard NIH receipt dates",
+    rationale: "The high-magnification live-blood imaging is a legitimate imaging-instrumentation topic. NIBIB funds novel diagnostic instrumentation. The 'somatid' framing should be dropped; the apparatus (high-mag + EM-field sensing fusion) is the fundable core.",
+    objective: "Develop a benchtop fused high-magnification / electromagnetic-sensing live-blood imaging instrument and characterize its repeatability and resolution against a reference flow-cytometer.",
+    honest_note: "Drop 'somatid' / 'pleomorphic' interpretive framing. Instrument development only; no diagnostic-efficacy claim.",
+  },
+  {
+    id: "gates-mysa-svrrd", target: "Gates Foundation — Global Health & Development (agriculture + water)",
+    assets: ["MYTSA", "SVRRD"],
+    amount: "$250,000–$1,000,000",
+    deadline: "Gates Foundation Grand Challenges; rolling letters of inquiry",
+    rationale: "Two humanitarian-tagged assets with real developing-world relevance: low-input agriculture (MYTSA) and passive river restoration (SVRRD). Gates funds agricultural productivity and water/sanitation in low-resource settings.",
+    objective: "Adapt and pilot the passive vortex river device and the low-input agricultural array in two low-resource field sites; measure water-quality and crop-yield outcomes with local partners.",
+    honest_note: "Reframe both for low-resource deployability and local-partner operation. Emphasize passive / low-power design. No contested-modality framing.",
+  },
+];
+
+export const VIABILITY_REPORT = {
+  generated: "2026-11-11",
+  scope: "Top 10 IP assets by valuation_high, sourced live from the IPAsset entity (Production).",
+  method: "Each asset scored 0–100 on weighted factors: filing status (25%), valuation (15%), technical plausibility (25%), regulatory clarity (20%), commercial demand (15%). Scores are advisory heuristics, not certified.",
+  headline: "The top 10 carry an aggregate advisory valuation of $1.55M–$4.70M using the cost approach. NONE are filed at the USPTO. The two strongest commercial candidates are the Schauberger-vortex river device (SVRRD, score 66) and the agricultural array (MYTSA, score 58) — both are non-medical, low-regulation, and have fundable grant pathways (NSF, USDA). The therapeutic pods (UBSCHLP and others) are higher-value conceptually but carry the highest regulatory and scientific-acceptance risk.",
+  recommendations: [
+    "File provisional applications on SVRRD, MYTSA, NSBDM, and UBSCHLP first — these four have the strongest combined patentability and fundability.",
+    "Pursue NSF (SVRRD), USDA NIFA (MYTSA), and NIH NIBIB (NSBDM) grants immediately — these are the fundable, defensible pathways.",
+    "For the therapeutic pods, file apparatus-only provisionals (no therapeutic-effect claims) and route to NCCIH mechanistic studies rather than efficacy trials.",
+    "Retain ASTTS, RGSVC, RCSAM, and VHSAPS as trade secrets or defer filing — their §101 patentability and commercial demand are weak; a public filing may destroy option value without granting a defensible right.",
+    "Commission an independent IP valuation before any investor disclosure; the cost-approach figures here are a floor, not a market valuation.",
+  ],
+  risks: [
+    "Zero filed patents — any disclosure today destroys novelty.",
+    "Several assets rest on contested scientific frameworks (orgone, scalar-EM efficacy, somatids) — patentability and commercial viability both exposed.",
+    "Trademark exposure (Wim Hof, Ayahuasca naming) on certain assets — rename before any filing or marketing.",
+    "Therapeutic devices are Class III concepts requiring FDA clearance; all are 'investigational' until cleared.",
+  ],
+};
