@@ -2,8 +2,9 @@ import { useState, useMemo } from "react";
 import { Link } from "react-router-dom";
 import {
   ArrowLeft, Search, FileText, Download, Package, Layers, Cpu,
-  ClipboardList, DollarSign, Loader2, AlertTriangle, ChevronRight,
+  ClipboardList, DollarSign, Loader2, AlertTriangle, ChevronRight, Archive,
 } from "lucide-react";
+import JSZip from "jszip";
 import { NEW_INVENTIONS } from "../lib/newInventions";
 import {
   generatePRD, generatePDR, generateBOM, generateSOW, generateTestPlan,
@@ -11,13 +12,46 @@ import {
 import {
   estimateInvention, inventionMarket, LABOR_FACTOR,
 } from "../lib/patentCostModel";
-import { generateMasterBuildPackagePdf } from "../lib/generateMasterBuildPackagePdf";
+import { generateMasterBuildPackagePdf, generateMasterBuildPackageBlob } from "../lib/generateMasterBuildPackagePdf";
 
 const fmt = (n) => {
   if (n >= 1_000_000) return `$${(n / 1_000_000).toFixed(2)}M`;
   if (n >= 1000) return `$${(n / 1000).toFixed(1)}k`;
   return `$${Math.round(n)}`;
 };
+
+// Shared bundle + cost builders (used by both detail view and zip-all)
+function buildBundleFor(inv) {
+  return {
+    prd: generatePRD(inv),
+    pdr: generatePDR(inv),
+    bom: generateBOM(inv),
+    sow: generateSOW(inv),
+    testPlan: generateTestPlan(inv),
+  };
+}
+
+function buildCostFor(inv) {
+  const est = estimateInvention(inv);
+  const market = inventionMarket(inv);
+  return {
+    materials: est.materials,
+    labor: est.labor,
+    buildTotal: est.total,
+    softwareDev: market.softwareDev,
+    irbRegulatory: market.irbRegulatory,
+    pilot: market.pilot,
+    toMarket: est.total + market.softwareDev + market.irbRegulatory + market.pilot,
+  };
+}
+
+function sanitizeFolderName(name) {
+  return (name || "Untitled")
+    .replace(/[\\/:*?"<>|]/g, "-")
+    .replace(/\s+/g, " ")
+    .trim()
+    .slice(0, 80);
+}
 
 const TABS = [
   { id: "prd", label: "PRD", icon: FileText, color: "#06b6d4" },
@@ -71,25 +105,9 @@ function InventionDetail({ inv }) {
   const [tab, setTab] = useState("prd");
   const [exporting, setExporting] = useState(false);
 
-  const bundle = useMemo(() => ({
-    prd: generatePRD(inv),
-    pdr: generatePDR(inv),
-    bom: generateBOM(inv),
-    sow: generateSOW(inv),
-    testPlan: generateTestPlan(inv),
-  }), [inv]);
-
-  const est = useMemo(() => estimateInvention(inv), [inv]);
-  const market = useMemo(() => inventionMarket(inv), [inv]);
-  const cost = {
-    materials: est.materials,
-    labor: est.labor,
-    buildTotal: est.total,
-    softwareDev: market.softwareDev,
-    irbRegulatory: market.irbRegulatory,
-    pilot: market.pilot,
-    toMarket: est.total + market.softwareDev + market.irbRegulatory + market.pilot,
-  };
+  const bundle = useMemo(() => buildBundleFor(inv), [inv]);
+  const cost = useMemo(() => buildCostFor(inv), [inv]);
+  const market = inventionMarket(inv);
 
   const handleExport = () => {
     setExporting(true);
@@ -269,6 +287,50 @@ const FLAGSHIPS = [
 export default function MasterBuildPackage() {
   const [search, setSearch] = useState("");
   const [selectedId, setSelectedId] = useState(NEW_INVENTIONS[0]?.id);
+  const [zipping, setZipping] = useState(false);
+  const [zipProgress, setZipProgress] = useState(0);
+
+  const handleDownloadAllZip = async () => {
+    setZipping(true);
+    setZipProgress(0);
+    try {
+      const zip = new JSZip();
+      const root = zip.folder("ZARP Master Build Packages");
+      const usedFolders = new Set();
+      NEW_INVENTIONS.forEach((inv, i) => {
+        const bundle = buildBundleFor(inv);
+        const cost = buildCostFor(inv);
+        const blob = generateMasterBuildPackageBlob({
+          invention: inv, ...bundle, buildPlan: inv.buildPlan, cost,
+        });
+        let folder = sanitizeFolderName(inv.name);
+        // Ensure unique folder name
+        let f = folder, n = 2;
+        while (usedFolders.has(f.toLowerCase())) { f = `${folder} (${n++})`; }
+        usedFolders.add(f.toLowerCase());
+        const code = (inv.id || "INV").toUpperCase();
+        root.folder(f).file(`Master-Build-Package-${code}.pdf`, blob);
+        setZipProgress(Math.round(((i + 1) / NEW_INVENTIONS.length) * 100));
+      });
+      const zipBlob = await zip.generateAsync({ type: "blob" }, (meta) => {
+        // generation compression progress (overwrites build progress in last phase)
+        setZipProgress(Math.round(meta.percent));
+      });
+      const url = URL.createObjectURL(zipBlob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "ZARP-Master-Build-Packages.zip";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    } catch (e) {
+      console.error("zip failed", e);
+      alert("Zip export failed: " + (e.message || e));
+    }
+    setZipping(false);
+    setZipProgress(0);
+  };
 
   const filtered = useMemo(() => {
     if (!search) return NEW_INVENTIONS;
@@ -294,7 +356,14 @@ export default function MasterBuildPackage() {
               <p className="text-gray-500 text-xs">Full PRD · PDR · BOM · SOW · EVT/DVT/PVT · Build Plan · Cost to Market — per patent</p>
             </div>
           </div>
-          <span className="px-2.5 py-1 rounded-lg text-[10px] font-bold bg-red-950/60 border border-red-800 text-red-400 uppercase tracking-wider">Not for Sale</span>
+          <div className="flex items-center gap-2">
+            <button onClick={handleDownloadAllZip} disabled={zipping}
+              className="flex items-center gap-2 px-4 py-2 rounded-lg bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white text-xs font-bold transition-all disabled:opacity-60">
+              {zipping ? <Loader2 size={13} className="animate-spin" /> : <Archive size={13} />}
+              {zipping ? `Zipping… ${zipProgress}%` : "Download All (ZIP)"}
+            </button>
+            <span className="px-2.5 py-1 rounded-lg text-[10px] font-bold bg-red-950/60 border border-red-800 text-red-400 uppercase tracking-wider">Not for Sale</span>
+          </div>
         </div>
       </div>
 

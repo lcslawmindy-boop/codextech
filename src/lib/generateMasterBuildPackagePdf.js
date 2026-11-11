@@ -93,7 +93,7 @@ function table(doc, y, headers, rows, colWidths) {
   return y + 2;
 }
 
-export function generateMasterBuildPackagePdf({ invention, prd, pdr, bom, sow, testPlan, buildPlan, cost }) {
+export function buildMasterBuildPackageDoc({ invention, prd, pdr, bom, sow, testPlan, buildPlan, cost }) {
   const doc = new jsPDF({ unit: "mm", format: "a4" });
   const code = (invention.id || "INV").toUpperCase();
   const color = [6, 182, 212];
@@ -244,5 +244,16 @@ export function generateMasterBuildPackagePdf({ invention, prd, pdr, bom, sow, t
     footer(doc, i, total, code);
   }
 
+  return doc;
+}
+
+export function generateMasterBuildPackagePdf({ invention, prd, pdr, bom, sow, testPlan, buildPlan, cost }) {
+  const doc = buildMasterBuildPackageDoc({ invention, prd, pdr, bom, sow, testPlan, buildPlan, cost });
+  const code = (invention.id || "INV").toUpperCase();
   doc.save(`ZARP-Master-Build-Package-${code}.pdf`);
+}
+
+export function generateMasterBuildPackageBlob({ invention, prd, pdr, bom, sow, testPlan, buildPlan, cost }) {
+  const doc = buildMasterBuildPackageDoc({ invention, prd, pdr, bom, sow, testPlan, buildPlan, cost });
+  return doc.output("blob");
 }
