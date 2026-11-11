@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import { Vault, Wrench, Zap, BookOpen, FlaskConical } from "lucide-react";
+import { Vault, Wrench, Zap, BookOpen, FlaskConical, LayoutGrid } from "lucide-react";
 import { useState } from "react";
 
 const TABS = [
@@ -26,6 +26,12 @@ const TABS = [
     path: "/invention-forge",
     icon: FlaskConical,
     match: (p) => ["/invention-forge", "/patent-hub", "/patent-intelligence"].includes(p),
+  },
+  {
+    label: "Pages",
+    path: "/all-pages",
+    icon: LayoutGrid,
+    match: (p) => p === "/all-pages",
   },
   {
     label: "Join",

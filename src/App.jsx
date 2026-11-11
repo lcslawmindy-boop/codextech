@@ -208,6 +208,7 @@ import ExpandedResearchArchive from './pages/ExpandedResearchArchive';
 import TargetedTherapyPods from './pages/TargetedTherapyPods';
 import ResearchNetworkMap from './pages/ResearchNetworkMap';
 import HumanitarianImpactMap from './pages/HumanitarianImpactMap';
+import AllPages from './pages/AllPages';
 import ZARPPipeline from './pages/ZARPPipeline';
 import EvidenceLedger from './pages/EvidenceLedger';
 import CommandCenter from './pages/CommandCenter';
@@ -265,6 +266,7 @@ const AuthenticatedApp = () => {
           <Route path="/" element={<ConceptGraph />} />
           <Route path="/research-network" element={<ResearchNetworkMap />} />
           <Route path="/humanitarian-impact" element={<HumanitarianImpactMap />} />
+          <Route path="/all-pages" element={<AllPages />} />
           <Route path="/zarp-pipeline" element={<ZARPPipeline />} />
           <Route path="/evidence-ledger" element={<EvidenceLedger />} />
           <Route path="/command" element={<CommandCenter />} />
