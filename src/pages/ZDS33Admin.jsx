@@ -36,6 +36,9 @@ export default function ZDS33Admin() {
           <Link to="/grant-templates" className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-violet-600/20 border border-violet-600/40 text-violet-300 text-xs font-bold hover:bg-violet-600/30">
             📝 Grant Templates — AFWERX · Army ARL · NSF · USDA NIFA (submission-ready) →
           </Link>
+          <Link to="/zero-capital-plan" className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-pink-600/20 border border-pink-600/40 text-pink-300 text-xs font-bold hover:bg-pink-600/30">
+            🤝 Zero-Capital Partnership Plan — $0 to start, trade IP rights for resources →
+          </Link>
         </div>
         <div className="flex gap-1 border-b border-slate-800 mb-5 overflow-x-auto">
           {TABS.map(([k, l]) => (
