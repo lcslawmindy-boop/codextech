@@ -42,6 +42,9 @@ export default function ZDS33Admin() {
           <Link to="/angel-playbook" className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-rose-600/20 border border-rose-600/40 text-rose-300 text-xs font-bold hover:bg-rose-600/30">
             🎯 Angel Investor Playbook — pitch deck (w/ notes) + locate angels + Startups.com profile →
           </Link>
+          <Link to="/handoff-checklist" className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-red-600/20 border border-red-600/40 text-red-300 text-xs font-bold hover:bg-red-600/30">
+            ✅ Handoff Checklist — what's ready, what's blocking the check →
+          </Link>
         </div>
         <div className="flex gap-1 border-b border-slate-800 mb-5 overflow-x-auto">
           {TABS.map(([k, l]) => (
