@@ -216,6 +216,7 @@ import ZARPPipeline from './pages/ZARPPipeline';
 import EvidenceLedger from './pages/EvidenceLedger';
 import CommandCenter from './pages/CommandCenter';
 import InventionBuildPlans from './pages/InventionBuildPlans';
+import BuildCostEstimates from './pages/BuildCostEstimates';
 
 
 const AuthenticatedApp = () => {
@@ -279,6 +280,7 @@ const AuthenticatedApp = () => {
           <Route path="/evidence-ledger" element={<EvidenceLedger />} />
           <Route path="/command" element={<CommandCenter />} />
           <Route path="/invention-build-plans" element={<InventionBuildPlans />} />
+          <Route path="/build-costs" element={<BuildCostEstimates />} />
           <Route path="/zarp-landing" element={<ZarpLanding />} />
           <Route path="/free-vault" element={<FreeVault />} />
           <Route path="/member-dashboard" element={<MemberDashboard />} />

@@ -52,6 +52,7 @@ export const PAGE_GROUPS = [
       { emoji: "🧠", label: "Pre-Birth Brain Reversal", path: "/neuro-regen-chamber", desc: "Synthesis toward a reprogramming chamber" },
       { emoji: "👶", label: "Prenatal Repair Pod", path: "/prenatal-repair-pod", desc: "Pediatric prenatal-injury variant (NRC-P)" },
       { emoji: "📋", label: "Invention Build Plans", path: "/invention-build-plans", desc: "50 new inventions — 3-phase build plans" },
+      { emoji: "💲", label: "Build Cost Estimates", path: "/build-costs", desc: "Materials + labor cost to build every device" },
     ],
   },
   {
