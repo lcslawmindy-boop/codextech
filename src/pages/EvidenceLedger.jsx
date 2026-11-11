@@ -228,6 +228,7 @@ export default function EvidenceLedger() {
                 <div className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg" style={{ background: s.color + "10" }}>
                   <Icon size={13} style={{ color: s.color }} />
                   <span className="text-[10px] font-bold whitespace-nowrap" style={{ color: s.color }}>{s.label}</span>
+                  <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-slate-800 text-slate-300">{(stageData[s.key] || []).length}</span>
                 </div>
                 {i < CHAIN_STAGES.length - 1 && <ChevronRight size={12} className="text-slate-700 mx-0.5" />}
               </div>
@@ -242,6 +243,9 @@ export default function EvidenceLedger() {
         </div>
       ) : (
         <div className="px-6 pb-6 overflow-x-auto">
+          <div className="text-slate-500 text-[11px] mb-2 flex items-center gap-1.5">
+            <ChevronRight size={12} className="text-cyan-400" /> Scroll right to see all 7 stages of the provenance chain
+          </div>
           {loading ? (
             <div className="flex items-center justify-center py-20"><Loader2 className="animate-spin text-cyan-400" size={32} /></div>
           ) : (
