@@ -37,7 +37,7 @@ export default function BriefPackContentGenerator() {
     setGeneratingIds(prev => new Set([...prev, pack.id]));
     setError(null);
     try {
-      await base44.functions.invoke('generateBriefPackContentFast', {
+      await base44.functions.invoke('generateBriefPackContent', {
         pack_id: pack.id,
         pack_title: pack.title,
         pack_subtitle: pack.subtitle,
@@ -54,11 +54,12 @@ export default function BriefPackContentGenerator() {
     setGeneratingIds(prev => { const s = new Set(prev); s.delete(pack.id); return s; });
   };
 
-  const generateAll = async () => {
+  const generateAll = async (regenerate = false) => {
     setBulkRunning(true);
     setError(null);
     const toGenerate = BRIEF_PACKS.filter(p => {
       const c = contentMap[p.id];
+      if (regenerate) return true; // regenerate all regardless of status
       return !c || c.status !== 'complete';
     });
 
@@ -68,7 +69,7 @@ export default function BriefPackContentGenerator() {
       const pack = toGenerate[i];
       setBulkProgress({ current: i + 1, total: toGenerate.length, currentTitle: pack.title });
       try {
-        await base44.functions.invoke('generateBriefPackContentFast', {
+        await base44.functions.invoke('generateBriefPackContent', {
           pack_id: pack.id,
           pack_title: pack.title,
           pack_subtitle: pack.subtitle,
@@ -122,19 +123,29 @@ export default function BriefPackContentGenerator() {
         <div className="px-5 pb-5 pt-3 space-y-4">
           {/* Warning */}
           <div className="bg-amber-950/20 border border-amber-800/40 rounded-xl px-4 py-3 text-xs text-amber-200/80">
-            <strong className="text-amber-300">Note:</strong> Each pack uses Claude Sonnet (non-default model) and generates ~40–60 pages of real engineering content. Generating all 33 takes ~5–10 minutes and uses significant integration credits. Generated content is saved permanently — you only pay once per pack.
+            <strong className="text-amber-300">Note:</strong> Each pack uses Claude Sonnet (non-default model) and generates ~40–60 pages of real engineering content. Generating all 33 takes ~5–10 minutes and uses significant integration credits. Generated content is saved permanently — you only pay once per pack. If existing packs show only ~8 pages each, click "Regenerate All" below to replace mock content with full AI-generated content.
           </div>
 
           {/* Bulk controls */}
           <div className="flex items-center gap-3 flex-wrap">
             <button
-              onClick={generateAll}
+              onClick={() => generateAll(false)}
               disabled={bulkRunning || completeCount === 33}
               className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-purple-700 hover:bg-purple-600 text-white font-black text-sm disabled:opacity-50 transition-all"
             >
               {bulkRunning ? <Loader2 size={14} className="animate-spin" /> : <Zap size={14} />}
               {completeCount === 33 ? 'All Generated ✓' : bulkRunning ? `Generating ${bulkProgress?.current}/${bulkProgress?.total}…` : `Generate All ${33 - completeCount} Remaining`}
             </button>
+            {completeCount > 0 && (
+              <button
+                onClick={() => generateAll(true)}
+                disabled={bulkRunning}
+                className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-amber-700 hover:bg-amber-600 text-white font-black text-sm disabled:opacity-50 transition-all"
+              >
+                {bulkRunning ? <Loader2 size={14} className="animate-spin" /> : <RefreshCw size={14} />}
+                {bulkRunning ? `Regenerating ${bulkProgress?.current}/${bulkProgress?.total}…` : 'Regenerate All (Full AI)'}
+              </button>
+            )}
             <button onClick={loadContent} className="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-gray-800 hover:bg-gray-700 text-gray-400 text-xs transition-colors">
               <RefreshCw size={11} /> Refresh
             </button>
