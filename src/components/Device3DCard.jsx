@@ -1,7 +1,8 @@
 import { useState } from "react";
-import { ShoppingCart, Loader2, Zap, Lock, Layers } from "lucide-react";
+import { ShoppingCart, Loader2, Zap, Lock, Layers, FileDown } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import InventionExplodedViewer from "./InventionExplodedViewer";
+import { generateDevicePlanPdf } from "@/lib/generateDevicePlanPdf";
 
 function getPriceNum(priceStr) {
   return Math.round(parseFloat((priceStr || "$0").replace(/[$,]/g, "")));
@@ -158,13 +159,23 @@ export default function Device3DCard({ invention, isHighlight }) {
       {/* ── CTA ── */}
       <div className="px-5 pb-5 pt-2 space-y-2">
         {/* 3D Explore button */}
-        <button
-          onClick={() => setShowViewer(true)}
-          className="w-full py-2 rounded-xl text-xs font-black border transition-all flex items-center justify-center gap-2 hover:opacity-90"
-          style={{ borderColor: `${color}60`, color, background: `${color}12` }}
-        >
-          <Layers size={12} /> Explore 3D · Exploded View
-        </button>
+        <div className="flex gap-2">
+          <button
+            onClick={() => setShowViewer(true)}
+            className="flex-1 py-2 rounded-xl text-xs font-black border transition-all flex items-center justify-center gap-1.5 hover:opacity-90"
+            style={{ borderColor: `${color}60`, color, background: `${color}12` }}
+          >
+            <Layers size={12} /> 3D
+          </button>
+          <button
+            onClick={() => generateDevicePlanPdf(invention)}
+            className="flex-1 py-2 rounded-xl text-xs font-black border transition-all flex items-center justify-center gap-1.5 hover:opacity-90"
+            style={{ borderColor: `${color}60`, color, background: `${color}12` }}
+            title="Preview the master plan PDF a paying customer receives"
+          >
+            <FileDown size={12} /> Plan PDF
+          </button>
+        </div>
         <BuyButton invention={invention} color={color} />
         <div className="flex items-center justify-center gap-1.5">
           <Lock size={9} className="text-slate-700" />
