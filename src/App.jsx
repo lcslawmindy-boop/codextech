@@ -230,6 +230,8 @@ import GrantTemplates from './pages/GrantTemplates';
 import ZeroCapitalPlan from './pages/ZeroCapitalPlan';
 import AngelInvestorPlaybook from './pages/AngelInvestorPlaybook';
 import HandoffChecklist from './pages/HandoffChecklist';
+import InvestorStatus from './pages/InvestorStatus';
+import ExecutiveSummary from './pages/ExecutiveSummary';
 
 
 const AuthenticatedApp = () => {
@@ -438,6 +440,8 @@ const AuthenticatedApp = () => {
             <Route path="/zero-capital-plan" element={<ZeroCapitalPlan />} />
             <Route path="/angel-playbook" element={<AngelInvestorPlaybook />} />
             <Route path="/handoff-checklist" element={<HandoffChecklist />} />
+            <Route path="/investor-status" element={<InvestorStatus />} />
+            <Route path="/executive-summary" element={<ExecutiveSummary />} />
             <Route path="/wix-import" element={<WixCourseImport />} />
             <Route path="/email-funnel" element={<EmailFunnel />} />
             <Route path="/product-ladder" element={<ProductLadder />} />

@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
 import {
   ArrowLeft, Landmark, Gavel, GraduationCap, Building2, Handshake,
-  Coins, AlertTriangle, Rocket, CheckCircle2, Link2, Loader2, Plus, Trash2, FileDown, X,
+  Coins, AlertTriangle, Rocket, CheckCircle2, Link2, Loader2, Plus, Trash2, FileDown, X, Send,
 } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import generatePartnerOnePager from "@/lib/generatePartnerOnePager";
@@ -163,6 +163,20 @@ function OutreachTracker() {
     finally { setBusy(false); }
   };
 
+  const [sending, setSending] = useState(null);
+  const sendGmail = async (r) => {
+    if (!r.contact_email) { alert("Add a contact email before sending."); return; }
+    if (!confirm(`Send a personalized intro email to ${r.contact_email}?`)) return;
+    setSending(r.id);
+    try {
+      const res = await base44.functions.invoke("sendPartnerOutreach", { outreach_id: r.id });
+      alert(res.data?.success ? `Sent to ${res.data.sent_to}` : (res.data?.error || "Send failed"));
+      await load();
+    } catch (e) {
+      alert(e.message || "Send failed — is Gmail connected?");
+    } finally { setSending(null); }
+  };
+
   return (
     <div>
       <div className="flex items-center justify-between mb-3">
@@ -206,7 +220,15 @@ function OutreachTracker() {
                   {r.follow_up_date && <p className="text-amber-400 text-[10px] mt-1">Follow up: {r.follow_up_date}</p>}
                 </div>
               </div>
-              <div className="flex gap-1 mt-2">
+              <div className="flex gap-1 mt-2 flex-wrap">
+                <button
+                  onClick={() => sendGmail(r)}
+                  disabled={sending === r.id}
+                  className="flex items-center gap-1 text-[10px] px-2 py-1 rounded bg-emerald-600/20 text-emerald-300 hover:bg-emerald-600/30 font-bold disabled:opacity-50"
+                >
+                  {sending === r.id ? <Loader2 className="animate-spin" size={11} /> : <Send size={11} />}
+                  {sending === r.id ? "Sending…" : "Send Gmail"}
+                </button>
                 <button onClick={() => generatePartnerOnePager(r)} className="flex items-center gap-1 text-[10px] px-2 py-1 rounded bg-cyan-600/20 text-cyan-300 hover:bg-cyan-600/30 font-bold">
                   <FileDown size={11} /> One-pager
                 </button>

@@ -45,6 +45,12 @@ export default function ZDS33Admin() {
           <Link to="/handoff-checklist" className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-red-600/20 border border-red-600/40 text-red-300 text-xs font-bold hover:bg-red-600/30">
             ✅ Handoff Checklist — what's ready, what's blocking the check →
           </Link>
+          <Link to="/investor-status" className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-indigo-600/20 border border-indigo-600/40 text-indigo-300 text-xs font-bold hover:bg-indigo-600/30">
+            📈 Investor Status — partners contacted, deck reviews, deal status per asset →
+          </Link>
+          <Link to="/executive-summary" className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-teal-600/20 border border-teal-600/40 text-teal-300 text-xs font-bold hover:bg-teal-600/30">
+            📄 Executive Summary — one-page valuation + viability (PDF) →
+          </Link>
         </div>
         <div className="flex gap-1 border-b border-slate-800 mb-5 overflow-x-auto">
           {TABS.map(([k, l]) => (
