@@ -5,8 +5,7 @@ import ActionSheet from "../components/ActionSheet";
 import { base44 } from "@/api/base44Client";
 import { BRIEF_PACKS } from "../lib/briefPackData";
 import { jsPDF } from "jspdf";
-import BriefPackContentGenerator from "../components/admin/BriefPackContentGenerator";
-import { generateFullMasterPDF } from "../lib/generateFullBriefPDF";
+import BriefPackManuscript from '@/components/admin/BriefPackManuscript';
 
 function generateMasterPDF() {
   const doc = new jsPDF({ orientation: "portrait", unit: "mm", format: "a4" });
@@ -212,55 +211,6 @@ function generateMasterPDF() {
   });
 
   doc.save("Aethon-Apex-Master-Brief-Pack-All-33.pdf");
-}
-
-function AdminMasterPdfButton() {
-  const [generating, setGenerating] = useState(false);
-  const [contentMap, setContentMap] = useState({});
-  const [loaded, setLoaded] = useState(false);
-
-  useEffect(() => {
-    base44.entities.BriefPackContent.list().then(records => {
-      const map = {};
-      (records || []).forEach(r => { map[r.pack_id] = r; });
-      setContentMap(map);
-      setLoaded(true);
-    }).catch(() => setLoaded(true));
-  }, []);
-
-  const completeCount = loaded ? BRIEF_PACKS.filter(p => contentMap[p.id]?.status === 'complete').length : 0;
-  const hasFullContent = completeCount === 33;
-
-  const handleGenerate = () => {
-    setGenerating(true);
-    setTimeout(() => {
-      generateFullMasterPDF(contentMap);
-      setGenerating(false);
-    }, 100);
-  };
-
-  return (
-    <div className="bg-gray-900 border-2 border-green-700/60 rounded-2xl p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-      <div>
-        <p className="text-white font-black text-lg flex items-center gap-2">🔓 Admin Master PDF — All 33 Brief Packs</p>
-        <p className="text-gray-400 text-sm mt-1">
-          {hasFullContent
-            ? "Full AI-generated content ready — downloads ~1,400+ pages with complete BOM tables, assembly steps, measurement protocols, and references."
-            : `${completeCount}/33 packs have full AI content. The full PDF downloads now — packs without AI content show metadata only (clearly marked). Generate all packs below to fill every page.`}
-        </p>
-        <div className="flex flex-wrap gap-2 mt-3">
-          {["33 Device Plans", hasFullContent ? "1,400+ Pages (Full)" : `1,400+ Pages (${completeCount}/33 full)`, "All Sections", "All Categories", "Admin Only"].map(tag => (
-            <span key={tag} className="text-xs px-2 py-1 rounded-full bg-green-950/60 border border-green-800 text-green-300 font-bold">{tag}</span>
-          ))}
-        </div>
-      </div>
-      <button onClick={handleGenerate} disabled={generating || !loaded}
-        className="flex-shrink-0 flex items-center gap-2 px-6 py-3 rounded-xl bg-green-700 hover:bg-green-600 text-white font-black text-sm transition-all disabled:opacity-60 min-w-[180px] justify-center">
-        <Download size={16} />
-        {generating ? "Generating…" : "Download Full PDF (1,400p+)"}
-      </button>
-    </div>
-  );
 }
 
 // Brief pack PDF definitions — update download_url fields with real hosted PDF links
@@ -953,11 +903,8 @@ export default function AdminPdfAccess() {
           />
         </div>
 
-        {/* Admin Master PDF Download */}
-        <AdminMasterPdfButton />
-
-        {/* AI Content Generator */}
-        <BriefPackContentGenerator />
+        {/* Master manuscript generation and measured PDF download */}
+        <BriefPackManuscript />
 
         {/* Master Bundle Section */}
         <MasterBundlePanel adminEmail={adminEmail} />

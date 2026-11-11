@@ -1,0 +1,59 @@
+{
+  "name": "BriefPackChapter",
+  "type": "object",
+  "properties": {
+    "pack_id": {
+      "type": "string"
+    },
+    "chapter_key": {
+      "type": "string"
+    },
+    "chapter_title": {
+      "type": "string"
+    },
+    "chapter_index": {
+      "type": "integer"
+    },
+    "generation_version": {
+      "type": "string"
+    },
+    "file_uri": {
+      "type": "string",
+      "description": "Private file containing the full chapter text"
+    },
+    "word_count": {
+      "type": "integer"
+    }
+  },
+  "required": [
+    "pack_id",
+    "chapter_key",
+    "chapter_title",
+    "chapter_index",
+    "generation_version",
+    "file_uri",
+    "word_count"
+  ],
+  "rls": {
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

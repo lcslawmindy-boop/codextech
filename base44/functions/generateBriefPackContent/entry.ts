@@ -1,121 +1,70 @@
-import { createClientFromRequest } from 'npm:@base44/sdk@0.8.25';
+import { createClientFromRequest } from 'npm:@base44/sdk@0.8.54';
+import { chapterPlan, countWords, generationVersion, minimumWords, readChapters, requiredChapters, targetPackPages } from '../../shared/briefPackChapterPlan.js';
 
-Deno.serve(async (req) => {
+export default async function(req) {
   try {
     const base44 = createClientFromRequest(req);
-    const user = await base44.auth.me();
-    if (user?.role !== 'admin') {
-      return Response.json({ error: 'Admin only' }, { status: 403 });
-    }
-
-    const { pack_id, pack_title, pack_subtitle, category, theory_basis, sections, difficulty, icon } = await req.json();
-
-    if (!pack_id || !pack_title) {
-      return Response.json({ error: 'pack_id and pack_title required' }, { status: 400 });
-    }
-
-    console.log(`Generating FULL content for: ${pack_title}`);
-
-    // Mark as generating
-    const existing = await base44.asServiceRole.entities.BriefPackContent.filter({ pack_id });
-    if (existing.length > 0) {
-      await base44.asServiceRole.entities.BriefPackContent.update(existing[0].id, { status: 'generating' });
-    } else {
-      await base44.asServiceRole.entities.BriefPackContent.create({
-        pack_id, pack_title, status: 'generating'
+    const user = await base44.auth.me().catch(e => e.status === 401 ? null : Promise.reject(e));
+    if (!user) return Response.json({ error: 'Sign in required' }, { status: 401 });
+    if (user.role !== 'admin') return Response.json({ error: 'Admin only' }, { status: 403 });
+    const input = await req.json().catch(() => ({}));
+    const action = input.action || 'generate';
+    if (!['status', 'read_pack', 'generate'].includes(action)) return Response.json({ error: 'Unknown action' }, { status: 400 });
+    if (action === 'status') {
+      const result = await base44.entities.BriefPackChapter.aggregate({
+        query: { generation_version: generationVersion, word_count: { $gte: minimumWords } },
+        groupBy: 'pack_id', sum: ['word_count']
       });
+      return Response.json({ rows: result.rows, requiredChapters, targetPackPages, maximumChapters: chapterPlan.length });
     }
-
-    const prompt = `You are a senior research engineer writing a COMPREHENSIVE, DETAILED technical engineering brief for the device: "${pack_title}".
-
-DEVICE: ${pack_title}
-SUBTITLE: ${pack_subtitle || 'N/A'}
-CATEGORY: ${category || 'Research'}
-DIFFICULTY: ${difficulty || 'Advanced'}
-THEORETICAL BASIS: ${theory_basis || 'Advanced electromagnetics and experimental physics'}
-DOCUMENT SECTIONS TO COVER: ${sections ? sections.join(', ') : 'Full engineering brief'}
-
-This document must be EXTREMELY detailed — the target is 12,000+ words total to fill approximately 40 pages of an A4 engineering document. Write in a professional, technical engineering style. Be specific with part numbers, values, tolerances, and procedures. Cite real patents and publications where applicable.
-
-Return ONLY valid JSON with these exact keys and the following depth requirements:
-
-{
-  "overview": "Write 600+ words. Comprehensive introduction covering: what the device is, its historical context, the problem it addresses, key innovators, a summary of operating principles, and the significance of this research. Reference specific patents and publications by number and author.",
-  "theory_deep": "Write 2,500+ words. Deep multi-section theoretical foundation covering: (1) the fundamental physics and electromagnetic principles, (2) historical prior art with patent numbers and dates, (3) mathematical framework and key equations, (4) energy transduction mechanisms, (5) deviations from conventional theory, (6) peer-reviewed evidence supporting or challenging the approach. Cite at least 8 specific references by patent number or publication.",
-  "system_architecture": "Write 2,000+ words. Detailed system architecture covering: all major subsystems with their functions, block-level interconnections, signal and power flow paths, control loops, feedback mechanisms, thermal management, EMI shielding strategy, and packaging considerations. Describe each subsystem in its own paragraph.",
-  "circuit_description": "Write 1,500+ words. Complete electrical/circuit description covering: the core topology, coil winding specifications (wire gauge, turns, core material, geometry), resonant frequency calculations, driver circuit design, output stage configuration, protection circuits, and signal conditioning. Include specific component values and calculations.",
-  "bom": "Provide 25-30 line items. Each with ref (designator), component (name), spec (detailed spec with value, voltage, tolerance, package), qty (quantity), source (specific supplier like Mouser/Digi-Key/McMaster-Carr with part number), and notes (why this part was chosen and installation notes).",
-  "assembly_steps": "Provide 20-25 steps. Each with step (number), title (short), detail (200+ word detailed procedure for that step), and caution (safety warning specific to that step). Cover the entire assembly from component preparation through final testing.",
-  "measurement_protocols": "Provide 10-15 test protocols. Each with test (name), equipment (specific instruments and models), procedure (detailed step-by-step measurement procedure, 100+ words), and expected_result (specific numeric values or ranges with units).",
-  "safety_guidelines": "Write 1,000+ words. Comprehensive safety section covering: electrical hazards and mitigation, RF/EM exposure limits and shielding, thermal risks, mechanical safety, grounding requirements, ESD precautions, fire safety, recommended PPE, and emergency procedures. Reference relevant safety standards (IEEE, IEC, OSHA).",
-  "troubleshooting": "Provide 15-20 entries. Each with symptom (what's wrong), likely_cause (technical explanation of why), and remedy (detailed fix procedure, 50+ words). Cover common assembly errors, component failures, and operational issues.",
-  "references": "Provide 15-20 citations. Mix of US patent numbers with titles, peer-reviewed journal papers with DOIs, technical books with ISBNs, and standards documents. Format each as a full citation string."
-}
-
-CRITICAL: Every text field must be substantial and specific to THIS device. Do not write generic placeholder text. Use real patent numbers, real part numbers, and real measurement values. The total word count across all fields must exceed 12,000 words.`;
-
-    const result = await base44.asServiceRole.integrations.Core.InvokeLLM({
-      prompt,
-      model: 'claude_sonnet_4_6',
-      response_json_schema: {
-        type: 'object',
-        properties: {
-          overview: { type: 'string' },
-          theory_deep: { type: 'string' },
-          system_architecture: { type: 'string' },
-          circuit_description: { type: 'string' },
-          bom: { type: 'array', items: { type: 'object' } },
-          assembly_steps: { type: 'array', items: { type: 'object' } },
-          measurement_protocols: { type: 'array', items: { type: 'object' } },
-          safety_guidelines: { type: 'string' },
-          troubleshooting: { type: 'array', items: { type: 'object' } },
-          references: { type: 'array', items: { type: 'string' } }
-        }
+    const { pack_id } = input;
+    if (typeof pack_id !== 'string' || !/^bp-(00[1-9]|0[12][0-9]|03[0-3])$/.test(pack_id)) return Response.json({ error: 'A valid brief pack is required' }, { status: 400 });
+    const existing = await readChapters(base44, pack_id);
+    if (action === 'read_pack') {
+      const chapters = [];
+      for (let i = 0; i < existing.length; i += 6) {
+        const batch = await Promise.all(existing.slice(i, i + 6).map(async record => {
+          const { signed_url } = await base44.integrations.Core.CreateFileSignedUrl({ file_uri: record.file_uri, expires_in: 300 });
+          const response = await fetch(signed_url, { signal: AbortSignal.timeout(20000) });
+          if (!response.ok) throw new Error(`Could not read saved chapter: ${record.chapter_title}`);
+          const stored = await response.json();
+          if (countWords(stored.text) < minimumWords) throw new Error(`Saved chapter is incomplete: ${record.chapter_title}`);
+          return { chapter_index: record.chapter_index, chapter_title: record.chapter_title, text: stored.text, word_count: record.word_count };
+        }));
+        chapters.push(...batch);
       }
-    });
-
-    // Calculate word count — include text fields AND array items
-    const textContent = [result.overview, result.theory_deep, result.system_architecture, result.circuit_description, result.safety_guidelines].join(' ');
-    const textWords = textContent.split(/\s+/).filter(w => w.length > 0).length;
-    const bomWords = (result.bom || []).reduce((s, item) => s + Object.values(item || {}).join(' ').split(/\s+/).filter(w => w.length > 0).length, 0);
-    const assemblyWords = (result.assembly_steps || []).reduce((s, item) => s + Object.values(item || {}).join(' ').split(/\s+/).filter(w => w.length > 0).length, 0);
-    const measureWords = (result.measurement_protocols || []).reduce((s, item) => s + Object.values(item || {}).join(' ').split(/\s+/).filter(w => w.length > 0).length, 0);
-    const troubleshootWords = (result.troubleshooting || []).reduce((s, item) => s + Object.values(item || {}).join(' ').split(/\s+/).filter(w => w.length > 0).length, 0);
-    const refWords = (result.references || []).reduce((s, r) => s + (typeof r === 'string' ? r.split(/\s+/).filter(w => w.length > 0).length : 0), 0);
-    const wordCount = textWords + bomWords + assemblyWords + measureWords + troubleshootWords + refWords;
-
-    // Estimate pages: ~300 words per page for text, plus tables and formatting
-    const estimatedPages = Math.ceil(wordCount / 300) + Math.ceil((result.bom?.length || 0) / 6) + Math.ceil((result.assembly_steps?.length || 0) / 2) + Math.ceil((result.measurement_protocols?.length || 0) / 1.5) + Math.ceil((result.troubleshooting?.length || 0) / 2) + 2;
-
-    const updateData = {
-      pack_title,
-      overview: result.overview || '',
-      theory_deep: result.theory_deep || '',
-      system_architecture: result.system_architecture || '',
-      circuit_description: result.circuit_description || '',
-      bom: result.bom || [],
-      assembly_steps: result.assembly_steps || [],
-      measurement_protocols: result.measurement_protocols || [],
-      safety_guidelines: result.safety_guidelines || '',
-      troubleshooting: result.troubleshooting || [],
-      references: result.references || [],
-      status: 'complete',
-      word_count: wordCount,
-      estimated_pages: estimatedPages
-    };
-
-    const records = await base44.asServiceRole.entities.BriefPackContent.filter({ pack_id });
-    if (records.length > 0) {
-      await base44.asServiceRole.entities.BriefPackContent.update(records[0].id, updateData);
-    } else {
-      await base44.asServiceRole.entities.BriefPackContent.create({ pack_id, ...updateData });
+      return Response.json({ pack_id, chapters });
     }
-
-    console.log(`Done: ${pack_title} — ~${estimatedPages} pages, ${wordCount} words`);
-    return Response.json({ success: true, pack_id, estimated_pages: estimatedPages, word_count: wordCount });
-
+    const index = input.chapter_index === undefined ? chapterPlan.slice(0, requiredChapters).findIndex(chapter => !existing.some(record => record.chapter_key === chapter.key)) : input.chapter_index;
+    if (index === -1) return Response.json({ success: true, done: true, pack_id });
+    if (!Number.isInteger(index) || index < 0 || index >= chapterPlan.length) return Response.json({ error: 'Invalid chapter index' }, { status: 400 });
+    const planned = chapterPlan[index];
+    const saved = existing.find(record => record.chapter_key === planned.key);
+    if (saved) return Response.json({ success: true, cached: true, pack_id, chapter_index: index });
+    const legacy = await base44.entities.BriefPackContent.filter({ pack_id }, { sort: '-updated_date', limit: 1 });
+    const packTitle = legacy.items[0]?.pack_title || input.pack_title;
+    if (typeof packTitle !== 'string' || !packTitle.trim()) return Response.json({ error: 'Pack title required' }, { status: 400 });
+    console.log(`Writing ${pack_id}, chapter ${index + 1}: ${planned.title}`);
+    const result = await base44.integrations.Core.InvokeLLM({
+      prompt: `Write ONE substantial chapter for an internal engineering RESEARCH DRAFT. Return a JSON object with a text string containing the chapter, in paragraphs with descriptive subheadings. Aim for 1,600-1,900 words; a chapter below ${minimumWords} words will be rejected, not called complete. Do not summarize the entire dossier. Develop this chapter's analysis in depth, specific to this device. Do not repeat generic material just to meet length.\n\nDEVICE: ${packTitle}\nSUBTITLE: ${String(input.pack_subtitle || '')}\nCATEGORY: ${String(input.category || '')}\nSUPPLIED SOURCE DESCRIPTION (not independently verified): ${String(input.theory_basis || 'No independently verified source supplied')}\nDEVICE TOPICS: ${Array.isArray(input.sections) ? input.sections.join('; ') : ''}\nCHAPTER ${index + 1}: ${planned.title}\nTASK: ${planned.instructions}\n\nEVIDENCE RULES: Clearly separate source statements, established physics, AI design proposals, illustrative calculations and unverified hypotheses. Do not invent experimental results, patent validity, exact supplier parts, citations, prices, clinical effectiveness or regulatory approvals. Say what is unknown and how to verify it. An existing patent or historical claim does not prove that a proposed device works. Do not give human/animal treatment, disease induction, cloning, weapons or hazardous nuclear construction procedures. For those topics limit the chapter to critical evidence review, passive measurement and professional safety/governance requirements. Do not invent claims to fill pages.`,
+      response_json_schema: { type: 'object', properties: { text: { type: 'string' } }, required: ['text'] }
+    });
+    const words = countWords(result.text);
+    if (words < minimumWords) {
+      console.warn(`Rejected short chapter ${pack_id}/${planned.key}: ${words} words`);
+      return Response.json({ error: `Chapter ${index + 1} returned only ${words} words; ${minimumWords} are required. It was not marked complete. Resume to retry this chapter.` }, { status: 422 });
+    }
+    const file = new File([JSON.stringify({ text: result.text })], `${pack_id}-${planned.key}.json`, { type: 'application/json' });
+    const { file_uri } = await base44.integrations.Core.UploadPrivateFile({ file });
+    if (!file_uri) throw new Error('The generated chapter could not be saved privately.');
+    const data = { pack_id, chapter_key: planned.key, chapter_title: planned.title, chapter_index: index, generation_version: generationVersion, file_uri, word_count: words };
+    const latest = await readChapters(base44, pack_id);
+    const duplicate = latest.find(record => record.chapter_key === planned.key);
+    if (!duplicate) await base44.entities.BriefPackChapter.create(data);
+    console.log(`Saved ${pack_id}/${planned.key}: ${words} counted words`);
+    return Response.json({ success: true, pack_id, chapter_index: index, chapter_title: planned.title, word_count: words });
   } catch (error) {
-    console.error('generateBriefPackContent error:', error.message);
+    console.error('Brief pack chapter generation failed:', error.message);
     return Response.json({ error: error.message }, { status: 500 });
   }
-});
+}
