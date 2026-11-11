@@ -289,8 +289,14 @@ export default function AdminIPInventory() {
   const loadAssets = async () => {
     setLoading(true);
     try {
-      const page = await base44.entities.IPAsset.list({ sort: "-created_date", limit: 100 });
-      setAssets(page.items || []);
+      const all = [];
+      let cursor = null;
+      do {
+        const page = await base44.entities.IPAsset.filter({}, { limit: 200, cursor, sort: "-created_date" });
+        all.push(...(page.items || []));
+        cursor = page.has_more ? page.next_cursor : null;
+      } while (cursor);
+      setAssets(all);
     } catch (e) {
       console.error("Failed to load IP assets", e);
     }
@@ -350,37 +356,56 @@ export default function AdminIPInventory() {
   };
 
   const handleSeed = async () => {
-    if (!confirm(`Create IPAsset records from ${NEW_INVENTIONS.length} inventions? This adds ${NEW_INVENTIONS.length} assets to the repository.`)) return;
+    if (!confirm(`Create IPAsset records from ${NEW_INVENTIONS.length} inventions? Duplicates are skipped automatically.`)) return;
     setSeeding(true);
-    setSeedMsg("Generating IP assets from invention library...");
+    setSeedMsg("Checking existing assets to avoid duplicates...");
     try {
-      const records = NEW_INVENTIONS.map(inv => {
-        const claimsCount = inv.patentClaims?.length || 1;
-        const isHumanitarian = inv.tags?.some(t => /conscious|healing|therapy|detox|longevity|wellness|water|safety/i.test(t));
-        const valLow = 50000 + claimsCount * 25000;
-        const valHigh = 50000 + claimsCount * 100000;
-        return {
-          asset_name: inv.name,
-          asset_type: "patent",
-          description: inv.mechanism?.slice(0, 500) || inv.fusion,
-          problem_solved: inv.market?.split(".")[0] + "." || "Addresses an unmet need in " + inv.category,
-          target_beneficiaries: inv.market || inv.category,
-          jurisdiction: "US",
-          filing_status: "not_filed",
-          valuation_low: valLow,
-          valuation_high: valHigh,
-          valuation_basis: `Cost approach — ${claimsCount} patent claim(s) × $25K conservative floor`,
-          ip_strategy: isHumanitarian ? "humanitarian_open" : "standard",
-          readiness_level: inv.buildPlan?.toLowerCase().includes("phase 3") ? "validated" : inv.buildPlan?.toLowerCase().includes("phase 2") ? "prototype" : "concept",
-          humanitarian_flag: isHumanitarian,
-          humanitarian_category: isHumanitarian ? "assistive_technology" : "none",
-          confidential: true,
-          review_status: "pending",
-          status: "active",
-        };
-      });
+      // Load every existing asset name (paginated) so seeding never creates duplicates
+      const existing = new Set();
+      let cursor = null;
+      do {
+        const page = await base44.entities.IPAsset.filter({}, { limit: 200, cursor, sort: "asset_name" });
+        (page.items || []).forEach(a => existing.add((a.asset_name || "").trim().toLowerCase()));
+        cursor = page.has_more ? page.next_cursor : null;
+      } while (cursor);
+
+      const records = NEW_INVENTIONS
+        .filter(inv => !existing.has((inv.name || "").trim().toLowerCase()))
+        .map(inv => {
+          const claimsCount = inv.patentClaims?.length || 1;
+          const isHumanitarian = inv.tags?.some(t => /conscious|healing|therapy|detox|longevity|wellness|water|safety/i.test(t));
+          const valLow = 50000 + claimsCount * 25000;
+          const valHigh = 50000 + claimsCount * 100000;
+          return {
+            asset_name: inv.name,
+            asset_type: "patent",
+            description: inv.mechanism?.slice(0, 500) || inv.fusion,
+            problem_solved: inv.market?.split(".")[0] + "." || "Addresses an unmet need in " + inv.category,
+            target_beneficiaries: inv.market || inv.category,
+            jurisdiction: "US",
+            filing_status: "not_filed",
+            valuation_low: valLow,
+            valuation_high: valHigh,
+            valuation_basis: `Cost approach — ${claimsCount} patent claim(s) × $25K conservative floor`,
+            ip_strategy: isHumanitarian ? "humanitarian_open" : "standard",
+            readiness_level: inv.buildPlan?.toLowerCase().includes("phase 3") ? "validated" : inv.buildPlan?.toLowerCase().includes("phase 2") ? "prototype" : "concept",
+            humanitarian_flag: isHumanitarian,
+            humanitarian_category: isHumanitarian ? "assistive_technology" : "none",
+            confidential: true,
+            review_status: "pending",
+            status: "active",
+          };
+        });
+
+      const skipped = NEW_INVENTIONS.length - records.length;
+      if (records.length === 0) {
+        setSeedMsg(`All ${NEW_INVENTIONS.length} inventions already exist as IP assets — nothing new to add.`);
+        setSeeding(false);
+        setTimeout(() => setSeedMsg(""), 4000);
+        return;
+      }
       await base44.entities.IPAsset.bulkCreate(records);
-      setSeedMsg(`Created ${records.length} IP assets from invention library.`);
+      setSeedMsg(`Added ${records.length} new IP asset${records.length === 1 ? "" : "s"}${skipped > 0 ? ` · skipped ${skipped} duplicate${skipped === 1 ? "" : "s"}` : ""}.`);
       await loadAssets();
       setTimeout(() => setSeedMsg(""), 4000);
     } catch (e) {
