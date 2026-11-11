@@ -211,6 +211,7 @@ import HumanitarianImpactMap from './pages/HumanitarianImpactMap';
 import AllPages from './pages/AllPages';
 import HybridDevPackages from './pages/HybridDevPackages';
 import NeuroRegenChamber from './pages/NeuroRegenChamber';
+import PrenatalRepairPod from './pages/PrenatalRepairPod';
 import ZARPPipeline from './pages/ZARPPipeline';
 import EvidenceLedger from './pages/EvidenceLedger';
 import CommandCenter from './pages/CommandCenter';
@@ -271,6 +272,7 @@ const AuthenticatedApp = () => {
           <Route path="/all-pages" element={<AllPages />} />
           <Route path="/hybrid-dev-packages" element={<HybridDevPackages />} />
           <Route path="/neuro-regen-chamber" element={<NeuroRegenChamber />} />
+          <Route path="/prenatal-repair-pod" element={<PrenatalRepairPod />} />
           <Route path="/zarp-pipeline" element={<ZARPPipeline />} />
           <Route path="/evidence-ledger" element={<EvidenceLedger />} />
           <Route path="/command" element={<CommandCenter />} />
