@@ -51,6 +51,7 @@ export const PAGE_GROUPS = [
       { emoji: "📑", label: "Hybrid Dev Packages", path: "/hybrid-dev-packages", desc: "PRD/PDR/BOM/SOW/EVT/DVT per hybrid" },
       { emoji: "🧠", label: "Pre-Birth Brain Reversal", path: "/neuro-regen-chamber", desc: "Synthesis toward a reprogramming chamber" },
       { emoji: "👶", label: "Prenatal Repair Pod", path: "/prenatal-repair-pod", desc: "Pediatric prenatal-injury variant (NRC-P)" },
+      { emoji: "📋", label: "Invention Build Plans", path: "/invention-build-plans", desc: "50 new inventions — 3-phase build plans" },
     ],
   },
   {

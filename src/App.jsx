@@ -215,6 +215,7 @@ import PrenatalRepairPod from './pages/PrenatalRepairPod';
 import ZARPPipeline from './pages/ZARPPipeline';
 import EvidenceLedger from './pages/EvidenceLedger';
 import CommandCenter from './pages/CommandCenter';
+import InventionBuildPlans from './pages/InventionBuildPlans';
 
 
 const AuthenticatedApp = () => {
@@ -277,6 +278,7 @@ const AuthenticatedApp = () => {
           <Route path="/zarp-pipeline" element={<ZARPPipeline />} />
           <Route path="/evidence-ledger" element={<EvidenceLedger />} />
           <Route path="/command" element={<CommandCenter />} />
+          <Route path="/invention-build-plans" element={<InventionBuildPlans />} />
           <Route path="/zarp-landing" element={<ZarpLanding />} />
           <Route path="/free-vault" element={<FreeVault />} />
           <Route path="/member-dashboard" element={<MemberDashboard />} />
